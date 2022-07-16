@@ -28,6 +28,7 @@ pub struct Parser {
 
 }
 
+#[allow(dead_code)]
 impl Parser {
     pub fn new() -> Self {
         Self {}
@@ -134,7 +135,7 @@ impl Parser {
     }
 
     fn expression(&self, tokens: &mut Peekable<IntoIter<Token>>, bp: u8) -> Result<Expression, ParseError> {
-        if let None = tokens.peek() {
+        if tokens.peek().is_none() {
             return Err(ParseError::UnexpectedEndOfFile);
         }
 
@@ -148,8 +149,6 @@ impl Parser {
         };
 
         loop {
-            let t = tokens.peek();
-
             let kind = match tokens.peek() {
                 Some(Token { kind: TokenKind::SemiColon, .. }) | None => break,
                 Some(Token { kind, .. }) => kind.clone(),

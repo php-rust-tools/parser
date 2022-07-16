@@ -8,16 +8,13 @@ pub enum LexerState {
     Scripting,
 }
 
+#[allow(dead_code)]
+#[derive(Default)]
 pub struct LexerConfig {
     short_tags: bool,
 }
 
-impl Default for LexerConfig {
-    fn default() -> Self {
-        Self { short_tags: false }
-    }
-}
-
+#[allow(dead_code)]
 pub struct Lexer {
     config: LexerConfig,
     state: LexerState,
@@ -26,7 +23,7 @@ pub struct Lexer {
 impl Lexer {
     pub fn new(config: Option<LexerConfig>) -> Self {
         Self {
-            config: config.unwrap_or(LexerConfig::default()),
+            config: config.unwrap_or_default(),
             state: LexerState::Initial,
         }
     }
@@ -35,7 +32,7 @@ impl Lexer {
         let mut tokens = Vec::new();
         let mut it = input.chars().peekable();
 
-        while let Some(_) = it.peek() {
+        while it.peek().is_some() {
             match self.state {
                 // The "Initial" state is used to parse inline HTML. It is essentially a catch-all
                 // state that will build up a single token buffer until it encounters an open tag
@@ -55,7 +52,7 @@ impl Lexer {
                     }
 
                     // If we have consumed whitespace and then reached the end of the file, we should break.
-                    if let None = it.peek() {
+                    if it.peek().is_none() {
                         break;
                     }
 
@@ -131,7 +128,7 @@ impl Lexer {
     fn scripting(&mut self, it: &mut Peekable<Chars>) -> Result<Token, LexerError> {
         // We should never reach this point since we have the empty checks surrounding
         // the call to this function, but it's better to be safe than sorry.
-        if let None = it.peek() {
+        if it.peek().is_none() {
             return Err(LexerError::UnexpectedEndOfFile);
         }
 
