@@ -24,11 +24,12 @@ pub enum TokenKind {
     OpenTag(OpenTagKind),
     CloseTag,
     SemiColon,
+    Comma,
     InlineHtml(String),
 }
 
 #[derive(Debug)]
 pub struct Token {
-    pub(crate) kind: TokenKind,
-    pub(crate) span: Span,
+    pub kind: TokenKind,
+    pub span: Span,
 }

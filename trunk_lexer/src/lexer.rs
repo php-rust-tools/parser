@@ -215,6 +215,7 @@ impl Lexer {
             '+' => TokenKind::Plus,
             '-' => TokenKind::Minus,
             '<' => TokenKind::LessThan,
+            ',' => TokenKind::Comma,
             _ => unimplemented!("<scripting> char: {}", char),
         };
 
@@ -320,13 +321,14 @@ mod tests {
 
     #[test]
     fn punct() {
-        assert_tokens("<?php {}();", &[
+        assert_tokens("<?php {}();,", &[
             open!(),
             TokenKind::LeftBrace,
             TokenKind::RightBrace,
             TokenKind::LeftParen,
             TokenKind::RightParen,
             TokenKind::SemiColon, 
+            TokenKind::Comma,
         ]);
     }
 
