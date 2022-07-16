@@ -152,6 +152,20 @@ impl Lexer {
                     todo!();
                 }
             },
+            _ if char.is_alphabetic() => {
+                let mut buffer = String::from(char);
+
+                while let Some(n) = it.peek() {
+                    if n.is_alphanumeric() || n == &'_' {
+                        buffer.push(*n);
+                        it.next();
+                    } else {
+                        break;
+                    }
+                }
+
+                identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer))
+            },
             _ => unimplemented!("<scripting> char: {}", char),
         };
 
@@ -166,6 +180,15 @@ impl Lexer {
     }
 }
 
+fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
+    Some(match ident {
+        "function" => TokenKind::Function,
+        "if" => TokenKind::If,
+        "echo" => TokenKind::Echo,
+        _ => return None,
+    })
+}
+
 #[derive(Debug)]
 pub enum LexerError {
     UnexpectedEndOfFile,
@@ -176,10 +199,19 @@ mod tests {
     use crate::{TokenKind, OpenTagKind};
     use super::Lexer;
 
+    macro_rules! open {
+        () => {
+            TokenKind::OpenTag(OpenTagKind::Full)
+        };
+        ($kind:expr) => {
+            TokenKind::OpenTag($kind)
+        }
+    }
+
     #[test]
     fn basic_tokens() {
         assert_tokens("<?php ?>", &[
-            TokenKind::OpenTag(OpenTagKind::Full),
+            open!(),
             TokenKind::CloseTag,
         ]);
     }
@@ -188,7 +220,17 @@ mod tests {
     fn inline_html() {
         assert_tokens("Hello, world!\n<?php", &[
             TokenKind::InlineHtml("Hello, world!\n".into()),
-            TokenKind::OpenTag(OpenTagKind::Full),
+            open!(),
+        ]);
+    }
+
+    #[test]
+    fn keywords() {
+        assert_tokens("<?php function if echo", &[
+            open!(),
+            TokenKind::Function,
+            TokenKind::If,
+            TokenKind::Echo,
         ]);
     }
 

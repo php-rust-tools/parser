@@ -10,6 +10,7 @@ pub enum TokenKind {
     Identifier(String),
     Variable(String),
     Function,
+    If,
     Return,
     Echo,
     Int(i64),
