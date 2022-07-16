@@ -152,6 +152,21 @@ impl Lexer {
                     todo!();
                 }
             },
+            '$' => {
+                let mut buffer = String::new();
+
+                while let Some(n) = it.peek() {
+                    match n {
+                        'a'..='z' | 'A'..='Z' | '\u{80}'..='\u{ff}' | '_' => {
+                            buffer.push(*n);
+                            it.next();
+                        }
+                        _ => break,
+                    }
+                }
+
+                TokenKind::Variable(buffer)
+            },
             _ if char.is_alphabetic() => {
                 let mut buffer = String::from(char);
 
@@ -216,6 +231,11 @@ mod tests {
             TokenKind::OpenTag($kind)
         }
     }
+    macro_rules! var {
+        ($v:expr) => {
+            TokenKind::Variable($v.into())
+        };
+    }
 
     #[test]
     fn basic_tokens() {
@@ -240,6 +260,17 @@ mod tests {
             TokenKind::Function,
             TokenKind::If,
             TokenKind::Echo,
+        ]);
+    }
+
+    #[test]
+    fn vars() {
+        assert_tokens("<?php $one $_one $One $one_one", &[
+            open!(),
+            var!("one"),
+            var!("_one"),
+            var!("One"),
+            var!("one_one"),
         ]);
     }
 
