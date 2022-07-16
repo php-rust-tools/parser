@@ -1,3 +1,5 @@
+use trunk_lexer::TokenKind;
+
 pub type Block = Vec<Statement>;
 pub type Program = Block;
 
@@ -48,5 +50,27 @@ pub enum Statement {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
+    Int(i64),
     Variable(String),
+    Infix(Box<Self>, InfixOp, Box<Self>),
+    Call(Box<Self>, Vec<Self>),
+    Identifier(String),
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum InfixOp {
+    Add,
+    Sub,
+    LessThan,
+}
+
+impl From<TokenKind> for InfixOp {
+    fn from(k: TokenKind) -> Self {
+        match k {
+            TokenKind::Plus => Self::Add,
+            TokenKind::Minus => Self::Sub,
+            TokenKind::LessThan => Self::LessThan,
+            _ => unreachable!()
+        }
+    }
 }

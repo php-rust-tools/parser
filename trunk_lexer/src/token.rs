@@ -1,11 +1,11 @@
 pub type Span = (usize, usize);
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum OpenTagKind {
     Full,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum TokenKind {
     Identifier(String),
     Variable(String),
