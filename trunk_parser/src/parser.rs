@@ -72,12 +72,28 @@ impl Parser {
 
                 Statement::If { condition, then }
             },
+            TokenKind::Echo => {
+                let mut values = Vec::new();
+                while let Some(t) = tokens.peek() && t.kind != TokenKind::SemiColon {
+                    values.push(self.expression(tokens, 0)?);
+
+                    // `echo` supports multiple expressions separated by a comma.
+                    // TODO: Disallow trailing commas when the next token is a semi-colon.
+                    if let Some(t) = tokens.peek() && t.kind == TokenKind::Comma {
+                        tokens.next();
+                    }
+                }
+                expect!(tokens.next(), TokenKind::SemiColon, "expected semi-colon at the end of an echo statement");
+                Statement::Echo { values }
+            },
             TokenKind::Return => {
                 if let Some(Token { kind: TokenKind::SemiColon, .. }) = tokens.peek() {
-                    Statement::Return { value: None }
+                    let ret = Statement::Return { value: None };
+                    expect!(tokens.next(), TokenKind::SemiColon, "expected semi-colon at the end of return statement.");
+                    ret
                 } else {
                     let ret = Statement::Return { value: self.expression(tokens, 0).ok() };
-                    expect!(tokens.next(), TokenKind::SemiColon, "expected semi-colon");
+                    expect!(tokens.next(), TokenKind::SemiColon, "expected semi-colon at the end of return statement.");
                     ret
                 }
             },
@@ -301,6 +317,17 @@ mod tests {
                     ))
                 }
             ])
+        ]);
+    }
+
+    #[test]
+    fn echo() {
+        assert_ast("<?php echo 1;", &[
+            Statement::Echo {
+                values: vec![
+                    Expression::Int(1),
+                ]
+            }
         ]);
     }
 

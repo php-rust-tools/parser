@@ -46,6 +46,9 @@ pub enum Statement {
     Return {
         value: Option<Expression>,
     },
+    Echo {
+        values: Vec<Expression>,
+    },
 }
 
 #[derive(Debug, PartialEq, Clone)]
