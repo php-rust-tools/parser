@@ -166,6 +166,14 @@ impl Lexer {
 
                 identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer))
             },
+            '{' => TokenKind::LeftBrace,
+            '}' => TokenKind::RightBrace,
+            '(' => TokenKind::LeftParen,
+            ')' => TokenKind::RightParen,
+            ';' => TokenKind::SemiColon,
+            '+' => TokenKind::Plus,
+            '-' => TokenKind::Minus,
+            '<' => TokenKind::LessThan,
             _ => unimplemented!("<scripting> char: {}", char),
         };
 
@@ -180,6 +188,7 @@ impl Lexer {
     }
 }
 
+#[allow(dead_code)]
 fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
     Some(match ident {
         "function" => TokenKind::Function,
@@ -231,6 +240,28 @@ mod tests {
             TokenKind::Function,
             TokenKind::If,
             TokenKind::Echo,
+        ]);
+    }
+
+    #[test]
+    fn punct() {
+        assert_tokens("<?php {}();", &[
+            open!(),
+            TokenKind::LeftBrace,
+            TokenKind::RightBrace,
+            TokenKind::LeftParen,
+            TokenKind::RightParen,
+            TokenKind::SemiColon, 
+        ]);
+    }
+
+    #[test]
+    fn math() {
+        assert_tokens("<?php + - <", &[
+            open!(),
+            TokenKind::Plus,
+            TokenKind::Minus,
+            TokenKind::LessThan,
         ]);
     }
 
