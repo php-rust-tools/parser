@@ -1,4 +1,4 @@
-use std::{iter::Peekable, str::Chars};
+use std::{iter::Peekable, str::Chars, char};
 
 use crate::{Token, TokenKind, OpenTagKind};
 
@@ -167,6 +167,32 @@ impl Lexer {
 
                 TokenKind::Variable(buffer)
             },
+            '0'..='9' => {
+                let mut buffer = String::from(char);
+                let mut underscore = false;
+
+                while let Some(n) = it.peek() {
+                    match n {
+                        '0'..='9' => {
+                            underscore = false;
+                            buffer.push(*n);
+                            it.next();
+                        },
+                        '_' => {
+                            if underscore {
+                                return Err(LexerError::UnexpectedCharacter(*n));
+                            }
+
+                            underscore = true;
+                            it.next();
+                        },
+                        _ => break,
+                    }
+                }
+
+                // TODO: Support tokenizing floats.
+                TokenKind::Int(buffer.parse().unwrap())
+            },
             _ if char.is_alphabetic() => {
                 let mut buffer = String::from(char);
 
@@ -216,6 +242,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
 #[derive(Debug)]
 pub enum LexerError {
     UnexpectedEndOfFile,
+    UnexpectedCharacter(char),
 }
 
 #[cfg(test)]
@@ -234,6 +261,11 @@ mod tests {
     macro_rules! var {
         ($v:expr) => {
             TokenKind::Variable($v.into())
+        };
+    }
+    macro_rules! int {
+        ($i:expr) => {
+            TokenKind::Int($i)
         };
     }
 
@@ -271,6 +303,16 @@ mod tests {
             var!("_one"),
             var!("One"),
             var!("one_one"),
+        ]);
+    }
+
+    #[test]
+    fn nums() {
+        assert_tokens("<?php 1 1_000 1_000_000", &[
+            open!(),
+            int!(1),
+            int!(1_000),
+            int!(1_000_000),
         ]);
     }
 
