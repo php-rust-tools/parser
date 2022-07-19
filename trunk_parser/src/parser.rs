@@ -105,7 +105,7 @@ impl Parser {
                             Statement::Property { var }
                         },
                         s @ Statement::Method { .. } => s,
-                        _ => return Err(ParseError::InvalidClassStatement(format!("Classes can only contain properties, constants and methods."), self.current.span))
+                        _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".to_string(), self.current.span))
                     };
 
                     body.push(statement);

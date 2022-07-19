@@ -103,7 +103,7 @@ impl Lexer {
                                     if !buffer.is_empty() {
                                         tokens.push(Token {
                                             kind: TokenKind::InlineHtml(buffer),
-                                            span: (self.line, self.col.checked_sub(5).unwrap_or(0)),
+                                            span: (self.line, self.col.saturating_sub(5)),
                                         });
                                     }
                                     
