@@ -31,6 +31,14 @@ impl From<&str> for Param {
     }
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum MethodFlags {
+    Public,
+    Protected,
+    Private,
+    Static,
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(String),
@@ -38,6 +46,16 @@ pub enum Statement {
         name: Identifier,
         params: Vec<Param>,
         body: Block,
+    },
+    Class {
+        name: Identifier,
+        body: Block,
+    },
+    Method {
+        name: Identifier,
+        params: Vec<Param>,
+        body: Block,
+        flags: Vec<MethodFlags>,
     },
     If {
         condition: Expression,

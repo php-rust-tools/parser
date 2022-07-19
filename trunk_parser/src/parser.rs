@@ -71,6 +71,18 @@ impl Parser {
 
                 Statement::If { condition, then }
             },
+            TokenKind::Class => {
+                let name = expect!(tokens.next(), TokenKind::Identifier(i), i, "expected class name");
+                expect!(tokens.next(), TokenKind::LeftBrace, "expected left-brace");
+
+                while let Some(t) = tokens.peek() && t.kind != TokenKind::RightBrace {
+                    // ...
+                }
+
+                expect!(tokens.next(), TokenKind::RightBrace, "expected right-brace");
+
+                Statement::Class { name: name.into(), body: vec![] }
+            },
             TokenKind::Echo => {
                 let mut values = Vec::new();
                 while let Some(t) = tokens.peek() && t.kind != TokenKind::SemiColon {
@@ -247,6 +259,31 @@ mod tests {
         };
     }
 
+    macro_rules! class {
+        ($name:literal) => {
+            Statement::Class {
+                name: $name.to_string().into(),
+                body: vec![],
+            }
+        };
+        ($name:literal, $body:expr) => {
+            Statement::Class {
+                name: $name.to_string().into(),
+                body: $body.to_vec(),
+            }
+        };
+    }
+
+    macro_rules! method {
+        ($name:literal, $flags:expr, $body:expr) => {
+            Statement::Method {
+                name: $name.to_string().into(),
+                flags: $flags.to_vec(),
+                body: $body.to_vec(),
+            }
+        };
+    }
+
     #[test]
     fn empty_fn() {
         assert_ast("<?php function foo() {}", &[
@@ -325,6 +362,13 @@ mod tests {
                     Expression::Int(1),
                 ]
             }
+        ]);
+    }
+
+    #[test]
+    fn empty_class() {
+        assert_ast("<?php class Foo {}", &[
+            class!("Foo")
         ]);
     }
 
