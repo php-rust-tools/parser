@@ -93,6 +93,7 @@ pub enum Expression {
     Infix(Box<Self>, InfixOp, Box<Self>),
     Call(Box<Self>, Vec<Self>),
     Identifier(String),
+    Assign(Box<Self>, Box<Self>),
 }
 
 #[derive(Debug, PartialEq, Clone)]

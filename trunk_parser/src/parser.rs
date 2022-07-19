@@ -194,6 +194,8 @@ impl Parser {
             _ => {
                 let expr = self.expression(0)?;
 
+                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
                 Statement::Expression { expr }
             }
         })
@@ -312,6 +314,10 @@ fn visibility_token_to_flag(kind: &TokenKind) -> MethodFlag {
 }
 
 fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
+    if op == TokenKind::Equals {
+        return Expression::Assign(Box::new(lhs), Box::new(rhs));
+    }
+
     Expression::Infix(Box::new(lhs), op.into(), Box::new(rhs))
 }
 
@@ -319,6 +325,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
     Some(match t {
         TokenKind::Plus | TokenKind::Minus => (11, 12),
         TokenKind::LessThan => (9, 10),
+        TokenKind::Equals => (2, 1),
         _ => return None,
     })
 }
