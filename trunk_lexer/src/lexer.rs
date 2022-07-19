@@ -339,6 +339,8 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "static" => TokenKind::Static,
         "extends" => TokenKind::Extends,
         "implements" => TokenKind::Implements,
+        "final" => TokenKind::Final,
+        "abstract" => TokenKind::Abstract,
         _ => return None,
     })
 }

@@ -52,6 +52,12 @@ pub enum MethodFlag {
     Static,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub enum ClassFlag {
+    Final,
+    Abstract,
+}
+
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
     InlineHtml(String),
@@ -71,6 +77,7 @@ pub enum Statement {
         extends: Option<Identifier>,
         implements: Vec<Identifier>,
         body: Block,
+        flag: Option<ClassFlag>,
     },
     Method {
         name: Identifier,

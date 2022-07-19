@@ -17,6 +17,8 @@ pub enum TokenKind {
     Protected,
     Private,
     Static,
+    Final,
+    Abstract,
     If,
     Else,
     ElseIf,

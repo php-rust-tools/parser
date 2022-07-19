@@ -69,52 +69,7 @@ impl Parser {
 
                 Statement::If { condition, then }
             },
-            TokenKind::Class => {
-                self.next();
-
-                let name = expect!(self, TokenKind::Identifier(i), i, "expected class name");
-                let mut extends: Option<Identifier> = None;
-
-                if self.current.kind == TokenKind::Extends {
-                    self.next();
-                    extends = expect!(self, TokenKind::Identifier(i), Some(i.into()), "expected identifier");
-                }
-
-                let mut implements = Vec::new();
-                if self.current.kind == TokenKind::Implements {
-                    self.next();
-
-                    while self.current.kind != TokenKind::LeftBrace {
-                        if self.current.kind == TokenKind::Comma {
-                            self.next();
-                        }
-
-                        implements.push(expect!(self, TokenKind::Identifier(i), i.into(), "expected identifier"));
-                    }
-                }
-
-                expect!(self, TokenKind::LeftBrace, "expected left-brace");
-
-                let mut body = Vec::new();
-                while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
-                    let statement = match self.statement()? {
-                        Statement::Function { name, params, body } => {
-                            Statement::Method { name, params, body, flags: vec![] }
-                        },
-                        Statement::Var { var } => {
-                            Statement::Property { var }
-                        },
-                        s @ Statement::Method { .. } => s,
-                        _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".to_string(), self.current.span))
-                    };
-
-                    body.push(statement);
-                }
-
-                expect!(self, TokenKind::RightBrace, "expected right-brace");
-
-                Statement::Class { name: name.into(), extends, implements, body }
-            },
+            TokenKind::Class => self.class()?,
             TokenKind::Echo => {
                 self.next();
 
@@ -178,22 +133,6 @@ impl Parser {
 
                 Statement::Function { name: name.into(), params, body }
             },
-            _ if is_method_visibility_modifier(&self.current.kind) => {
-                let mut flags = vec![visibility_token_to_flag(&self.current.kind)];
-                self.next();
-
-                while ! self.is_eof() && is_method_visibility_modifier(&self.current.kind) {
-                    flags.push(visibility_token_to_flag(&self.current.kind));
-                    self.next();
-                }
-
-                match self.statement()? {
-                    Statement::Function { name, params, body } => {
-                        Statement::Method { name, params, body, flags }
-                    },
-                    _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".into(), self.current.span))
-                }
-            },
             TokenKind::Var => {
                 self.next();
 
@@ -213,6 +152,53 @@ impl Parser {
         })
     }
 
+    fn class(&mut self) -> Result<Statement, ParseError> {
+        self.next();
+
+        let name = expect!(self, TokenKind::Identifier(i), i, "expected class name");
+        let mut extends: Option<Identifier> = None;
+
+        if self.current.kind == TokenKind::Extends {
+            self.next();
+            extends = expect!(self, TokenKind::Identifier(i), Some(i.into()), "expected identifier");
+        }
+
+        let mut implements = Vec::new();
+        if self.current.kind == TokenKind::Implements {
+            self.next();
+
+            while self.current.kind != TokenKind::LeftBrace {
+                if self.current.kind == TokenKind::Comma {
+                    self.next();
+                }
+
+                implements.push(expect!(self, TokenKind::Identifier(i), i.into(), "expected identifier"));
+            }
+        }
+
+        expect!(self, TokenKind::LeftBrace, "expected left-brace");
+
+        let mut body = Vec::new();
+        while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
+            let statement = match self.statement()? {
+                Statement::Function { name, params, body } => {
+                    Statement::Method { name, params, body, flags: vec![] }
+                },
+                Statement::Var { var } => {
+                    Statement::Property { var }
+                },
+                s @ Statement::Method { .. } => s,
+                _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".to_string(), self.current.span))
+            };
+
+            body.push(statement);
+        }
+
+        expect!(self, TokenKind::RightBrace, "expected right-brace");
+
+        Ok(Statement::Class { name: name.into(), extends, implements, body, flag: None })
+    }
+    
     fn expression(&mut self, bp: u8) -> Result<Expression, ParseError> {
         if self.is_eof() {
             return Err(ParseError::UnexpectedEndOfFile);
@@ -335,20 +321,6 @@ impl Parser {
     }
 }
 
-fn is_method_visibility_modifier(kind: &TokenKind) -> bool {
-    [TokenKind::Public, TokenKind::Protected, TokenKind::Private, TokenKind::Static].contains(kind)
-}
-
-fn visibility_token_to_flag(kind: &TokenKind) -> MethodFlag {
-    match kind {
-        TokenKind::Public => MethodFlag::Public,
-        TokenKind::Protected => MethodFlag::Protected,
-        TokenKind::Private => MethodFlag::Private,
-        TokenKind::Static => MethodFlag::Static,
-        _ => unreachable!("{:?}", kind)
-    }
-}
-
 fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
     if op == TokenKind::Equals {
         return Expression::Assign(Box::new(lhs), Box::new(rhs));
@@ -413,6 +385,7 @@ mod tests {
                 body: vec![],
                 extends: None,
                 implements: vec![],
+                flag: None,
             }
         };
         ($name:literal, $body:expr) => {
@@ -421,6 +394,7 @@ mod tests {
                 body: $body.to_vec(),
                 extends: None,
                 implements: vec![],
+                flag: None,
             }
         };
         ($name:literal, $extends:expr, $implements:expr, $body:expr) => {
@@ -429,6 +403,7 @@ mod tests {
                 body: $body.to_vec(),
                 extends: $extends,
                 implements: $implements.to_vec(),
+                flag: None,
             }
         };
     }
