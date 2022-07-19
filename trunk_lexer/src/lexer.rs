@@ -185,6 +185,10 @@ impl Lexer {
 
                         TokenKind::DoubleEquals
                     }
+                } else if let Some('>') = it.peek() {
+                    it.next();
+                    self.col += 1;
+                    TokenKind::DoubleArrow
                 } else {
                     self.col += 1;
 

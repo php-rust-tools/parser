@@ -42,6 +42,7 @@ pub enum TokenKind {
     InlineHtml(String),
     Eof,
     Var,
+    DoubleArrow,
 }
 
 #[derive(Debug, Clone)]

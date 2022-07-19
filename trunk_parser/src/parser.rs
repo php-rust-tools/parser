@@ -227,12 +227,17 @@ impl Parser {
                 self.next();
 
                 while self.current.kind != TokenKind::RightBracket {
-                    let item = self.expression(0)?;
+                    let mut key = None;
+                    let mut value = self.expression(0)?;
 
-                    items.push(ArrayItem {
-                        key: None,
-                        value: item,
-                    });
+                    if self.current.kind == TokenKind::DoubleArrow {
+                        self.next();
+
+                        key = Some(value);
+                        value = self.expression(0)?;
+                    }
+
+                    items.push(ArrayItem { key, value });
 
                     if self.current.kind == TokenKind::Comma {
                         self.next();
