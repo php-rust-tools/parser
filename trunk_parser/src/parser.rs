@@ -24,14 +24,12 @@ macro_rules! expect {
     };
 }
 
-pub struct Parser {
-
-}
+pub struct Parser;
 
 #[allow(dead_code)]
 impl Parser {
     pub fn new() -> Self {
-        Self {}
+        Self
     }
 
     pub fn parse(&self, tokens: Vec<Token>) -> Result<Program, ParseError> {
