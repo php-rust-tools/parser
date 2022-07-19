@@ -16,6 +16,8 @@ pub enum TokenKind {
     Private,
     Static,
     If,
+    Else,
+    ElseIf,
     Return,
     Echo,
     Int(i64),

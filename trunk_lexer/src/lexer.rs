@@ -315,6 +315,8 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
     Some(match ident {
         "function" => TokenKind::Function,
         "if" => TokenKind::If,
+        "else" => TokenKind::Else,
+        "elseif" => TokenKind::ElseIf,
         "echo" => TokenKind::Echo,
         "return" => TokenKind::Return,
         "class" => TokenKind::Class,
@@ -374,10 +376,12 @@ mod tests {
 
     #[test]
     fn keywords() {
-        assert_tokens("<?php function if echo return class public protected private static", &[
+        assert_tokens("<?php function if else elseif echo return class public protected private static", &[
             open!(),
             TokenKind::Function,
             TokenKind::If,
+            TokenKind::Else,
+            TokenKind::ElseIf,
             TokenKind::Echo,
             TokenKind::Return,
             TokenKind::Class,
