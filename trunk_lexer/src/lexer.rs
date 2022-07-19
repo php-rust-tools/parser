@@ -234,6 +234,10 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "if" => TokenKind::If,
         "echo" => TokenKind::Echo,
         "return" => TokenKind::Return,
+        "class" => TokenKind::Class,
+        "public" => TokenKind::Public,
+        "protected" => TokenKind::Protected,
+        "private" => TokenKind::Private,
         _ => return None,
     })
 }
@@ -286,12 +290,16 @@ mod tests {
 
     #[test]
     fn keywords() {
-        assert_tokens("<?php function if echo return", &[
+        assert_tokens("<?php function if echo return class public protected private", &[
             open!(),
             TokenKind::Function,
             TokenKind::If,
             TokenKind::Echo,
             TokenKind::Return,
+            TokenKind::Class,
+            TokenKind::Public,
+            TokenKind::Protected,
+            TokenKind::Private,
         ]);
     }
 
