@@ -1,7 +1,7 @@
-use std::vec::IntoIter;
+use std::{vec::IntoIter};
 use std::iter::Peekable;
 use trunk_lexer::{Token, TokenKind};
-use crate::{Program, Statement, Block, Expression};
+use crate::{Program, Statement, Block, Expression, ast::MethodFlag};
 
 macro_rules! expect {
     ($actual:expr, $expected:pat, $out:expr, $message:literal) => {
@@ -81,6 +81,7 @@ impl Parser {
                         Statement::Function { name, params, body } => {
                             Statement::Method { name, params, body, flags: vec![] }
                         },
+                        s @ Statement::Method { .. } => s,
                         _ => return Err(ParseError::InvalidClassStatement(format!("Classes can only contain properties, constants and methods.")))
                     };
 
@@ -147,6 +148,22 @@ impl Parser {
                 expect!(tokens.next(), TokenKind::RightBrace, "expected }");
 
                 Statement::Function { name: name.into(), params, body }
+            },
+            _ if is_method_visibility_modifier(&t.kind) => {
+                let mut flags = vec![visibility_token_to_flag(&t.kind)];
+
+                while let Some(t) = tokens.peek() && is_method_visibility_modifier(&t.kind) {
+                    let next = tokens.next().unwrap();
+
+                    flags.push(visibility_token_to_flag(&next.kind));
+                }
+
+                match self.statement(tokens.next().unwrap(), tokens)? {
+                    Statement::Function { name, params, body } => {
+                        Statement::Method { name, params, body, flags }
+                    },
+                    _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".into()))
+                }
             },
             _ => todo!("unhandled token: {:?}", t)
         })
@@ -226,6 +243,20 @@ impl Parser {
     }
 }
 
+fn is_method_visibility_modifier(kind: &TokenKind) -> bool {
+    [TokenKind::Public, TokenKind::Protected, TokenKind::Private, TokenKind::Static].contains(kind)
+}
+
+fn visibility_token_to_flag(kind: &TokenKind) -> MethodFlag {
+    match kind {
+        TokenKind::Public => MethodFlag::Public,
+        TokenKind::Protected => MethodFlag::Protected,
+        TokenKind::Private => MethodFlag::Private,
+        TokenKind::Static => MethodFlag::Static,
+        _ => unreachable!()
+    }
+}
+
 fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
     Expression::Infix(Box::new(lhs), op.into(), Box::new(rhs))
 }
@@ -255,7 +286,7 @@ pub enum ParseError {
 #[cfg(test)]
 mod tests {
     use trunk_lexer::Lexer;
-    use crate::{Statement, Block, Param, Expression, ast::InfixOp};
+    use crate::{Statement, Block, Param, Expression, ast::{InfixOp, MethodFlag}};
     use super::Parser;
 
     macro_rules! function {
@@ -399,6 +430,35 @@ mod tests {
                         Expression::Int(1),
                     ] }
                 ])
+            ])
+        ]);
+    }
+
+    #[test]
+    fn class_with_method_visibility() {
+        assert_ast("\
+        <?php
+        
+        class Foo {
+            public function bar() {
+                echo 1;
+            }
+
+            private static function baz() {}
+        }
+        ", &[
+            class!("Foo", &[
+                method!("bar", &[], &[
+                    MethodFlag::Public,
+                ], &[
+                    Statement::Echo { values: vec![
+                        Expression::Int(1),
+                    ] }
+                ]),
+                method!("baz", &[], &[
+                    MethodFlag::Private,
+                    MethodFlag::Static,
+                ], &[])
             ])
         ]);
     }

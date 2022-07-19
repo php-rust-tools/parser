@@ -32,7 +32,7 @@ impl From<&str> for Param {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum MethodFlags {
+pub enum MethodFlag {
     Public,
     Protected,
     Private,
@@ -55,7 +55,7 @@ pub enum Statement {
         name: Identifier,
         params: Vec<Param>,
         body: Block,
-        flags: Vec<MethodFlags>,
+        flags: Vec<MethodFlag>,
     },
     If {
         condition: Expression,

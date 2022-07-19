@@ -14,6 +14,7 @@ pub enum TokenKind {
     Public,
     Protected,
     Private,
+    Static,
     If,
     Return,
     Echo,
