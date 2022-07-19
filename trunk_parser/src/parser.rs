@@ -1,5 +1,5 @@
-use std::{vec::IntoIter};
-use trunk_lexer::{Token, TokenKind};
+use std::{vec::IntoIter, fmt::Display};
+use trunk_lexer::{Token, TokenKind, Span};
 use crate::{Program, Statement, Block, Expression, ast::MethodFlag};
 
 macro_rules! expect {
@@ -9,13 +9,13 @@ macro_rules! expect {
                 $parser.next();
                 $out
             },
-            _ => return Err(ParseError::ExpectedToken($message.into())),
+            _ => return Err(ParseError::ExpectedToken($message.into(), $parser.current.span)),
         }
     };
     ($parser:expr, $expected:pat, $message:literal) => {
         match $parser.current.kind.clone() {
             $expected => { $parser.next(); },
-            _ => return Err(ParseError::ExpectedToken($message.into())),
+            _ => return Err(ParseError::ExpectedToken($message.into(), $parser.current.span)),
         }
     };
 }
@@ -82,7 +82,7 @@ impl Parser {
                             Statement::Method { name, params, body, flags: vec![] }
                         },
                         s @ Statement::Method { .. } => s,
-                        _ => return Err(ParseError::InvalidClassStatement(format!("Classes can only contain properties, constants and methods.")))
+                        _ => return Err(ParseError::InvalidClassStatement(format!("Classes can only contain properties, constants and methods."), self.current.span))
                     };
 
                     body.push(statement);
@@ -168,7 +168,7 @@ impl Parser {
                     Statement::Function { name, params, body } => {
                         Statement::Method { name, params, body, flags }
                     },
-                    _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".into()))
+                    _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".into(), self.current.span))
                 }
             },
             _ => {
@@ -312,9 +312,19 @@ fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
 
 #[derive(Debug)]
 pub enum ParseError {
-    ExpectedToken(String),
+    ExpectedToken(String, Span),
     UnexpectedEndOfFile,
-    InvalidClassStatement(String),
+    InvalidClassStatement(String, Span),
+}
+
+impl Display for ParseError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::ExpectedToken(message, span) => write!(f, "Parse error: {} on line {} column {}", message, span.0, span.1),
+            Self::InvalidClassStatement(message, span) => write!(f, "Parse error: {} on line {} column {}", message, span.0, span.1),
+            Self::UnexpectedEndOfFile => write!(f, "Parse error: unexpected end of file.")
+        }
+    }
 }
 
 #[cfg(test)]
@@ -502,8 +512,12 @@ mod tests {
         let tokens = lexer.tokenize(source).unwrap();
 
         let mut parser = Parser::new(tokens);
-        let ast = parser.parse().unwrap();
+        let ast = parser.parse();
 
-        assert_eq!(ast, expected);
+        if ast.is_err() {
+            panic!("{}", ast.err().unwrap());
+        } else {
+            assert_eq!(ast.unwrap(), expected);
+        }
     }
 }
