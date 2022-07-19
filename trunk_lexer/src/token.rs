@@ -32,6 +32,8 @@ pub enum TokenKind {
     LeftParen,
     RightParen,
     LeftBrace,
+    LeftBracket,
+    RightBracket,
     RightBrace,
     OpenTag(OpenTagKind),
     CloseTag,

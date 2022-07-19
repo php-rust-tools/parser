@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::Display};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::MethodFlag, Identifier};
+use crate::{Program, Statement, Block, Expression, ast::{MethodFlag, ArrayItem}, Identifier};
 
 macro_rules! expect {
     ($parser:expr, $expected:pat, $out:expr, $message:literal) => {
@@ -222,6 +222,25 @@ impl Parser {
             TokenKind::Variable(v) => Expression::Variable(v.to_string()),
             TokenKind::Int(i) => Expression::Int(*i),
             TokenKind::Identifier(i) => Expression::Identifier(i.to_string()),
+            TokenKind::LeftBracket => {
+                let mut items = Vec::new();
+                self.next();
+
+                while self.current.kind != TokenKind::RightBracket {
+                    let item = self.expression(0)?;
+
+                    items.push(ArrayItem {
+                        key: None,
+                        value: item,
+                    });
+
+                    if self.current.kind == TokenKind::Comma {
+                        self.next();
+                    }
+                }
+
+                Expression::Array(items)
+            },
             _ => todo!("expr lhs: {:?}", self.current.kind),
         };
 

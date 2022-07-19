@@ -296,6 +296,14 @@ impl Lexer {
                 self.col += 1;
                 TokenKind::Comma
             },
+            '[' => {
+                self.col += 1;
+                TokenKind::LeftBracket
+            },
+            ']' => {
+                self.col += 1;
+                TokenKind::RightBracket
+            },
             _ => unimplemented!("<scripting> char: {}", char),
         };
 

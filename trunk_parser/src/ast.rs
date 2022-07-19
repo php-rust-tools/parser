@@ -100,6 +100,13 @@ pub enum Expression {
     Call(Box<Self>, Vec<Self>),
     Identifier(String),
     Assign(Box<Self>, Box<Self>),
+    Array(Vec<ArrayItem>),
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ArrayItem {
+    pub key: Option<Expression>,
+    pub value: Expression,
 }
 
 #[derive(Debug, PartialEq, Clone)]
