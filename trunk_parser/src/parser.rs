@@ -101,6 +101,9 @@ impl Parser {
                         Statement::Function { name, params, body } => {
                             Statement::Method { name, params, body, flags: vec![] }
                         },
+                        Statement::Var { var } => {
+                            Statement::Property { var }
+                        },
                         s @ Statement::Method { .. } => s,
                         _ => return Err(ParseError::InvalidClassStatement(format!("Classes can only contain properties, constants and methods."), self.current.span))
                     };
@@ -190,6 +193,15 @@ impl Parser {
                     },
                     _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".into(), self.current.span))
                 }
+            },
+            TokenKind::Var => {
+                self.next();
+
+                let var = expect!(self, TokenKind::Variable(i), i, "expected variable name");
+
+                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                Statement::Var { var }
             },
             _ => {
                 let expr = self.expression(0)?;

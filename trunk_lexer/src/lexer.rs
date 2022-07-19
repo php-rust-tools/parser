@@ -313,6 +313,7 @@ impl Lexer {
 #[allow(dead_code)]
 fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
     Some(match ident {
+        "var" => TokenKind::Var,
         "function" => TokenKind::Function,
         "if" => TokenKind::If,
         "else" => TokenKind::Else,

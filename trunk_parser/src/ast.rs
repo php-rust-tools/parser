@@ -54,6 +54,12 @@ pub enum MethodFlag {
 #[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(String),
+    Var {
+        var: String,
+    },
+    Property {
+        var: String,
+    },
     Function {
         name: Identifier,
         params: Vec<Param>,

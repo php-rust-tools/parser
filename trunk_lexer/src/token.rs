@@ -39,6 +39,7 @@ pub enum TokenKind {
     Comma,
     InlineHtml(String),
     Eof,
+    Var,
 }
 
 #[derive(Debug, Clone)]
