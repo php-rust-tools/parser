@@ -389,12 +389,16 @@ mod tests {
         
         class Foo {
             function bar() {
-
+                echo 1;
             }
         }
         ", &[
             class!("Foo", &[
-                method!("bar", &[], &[], &[])
+                method!("bar", &[], &[], &[
+                    Statement::Echo { values: vec![
+                        Expression::Int(1),
+                    ] }
+                ])
             ])
         ]);
     }
