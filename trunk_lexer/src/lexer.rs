@@ -18,6 +18,8 @@ pub struct LexerConfig {
 pub struct Lexer {
     config: LexerConfig,
     state: LexerState,
+    col: usize,
+    line: usize,
 }
 
 impl Lexer {
@@ -25,12 +27,14 @@ impl Lexer {
         Self {
             config: config.unwrap_or_default(),
             state: LexerState::Initial,
+            line: 1,
+            col: 0,
         }
     }
 
     pub fn tokenize(&mut self, input: &str) -> Result<Vec<Token>, LexerError> {
         let mut tokens = Vec::new();
-        let mut it = input.chars().peekable();
+        let mut it = input[..].chars().peekable();
 
         while it.peek().is_some() {
             match self.state {
@@ -44,10 +48,17 @@ impl Lexer {
                 // This tells the lexer to start analysing characters at PHP tokens instead of inline HTML.
                 LexerState::Scripting => {
                     while let Some(c) = it.peek() {
-                        if ! c.is_whitespace() {
+                        if ! c.is_whitespace() && ! ['\n', '\t', '\r'].contains(c) {
                             break;
                         }
                 
+                        if *c == '\n' {
+                            self.line += 1;
+                            self.col = 0;
+                        } else {
+                            self.col += 1;
+                        }
+
                         it.next();
                     }
 
@@ -83,6 +94,8 @@ impl Lexer {
                                 if let Some('p') = it.peek() {
                                     it.next();
 
+                                    self.col += 4;
+
                                     self.enter_state(LexerState::Scripting);
 
                                     let mut tokens = vec!();
@@ -90,24 +103,30 @@ impl Lexer {
                                     if !buffer.is_empty() {
                                         tokens.push(Token {
                                             kind: TokenKind::InlineHtml(buffer),
-                                            span: (0, 0),
+                                            span: (self.line, self.col.checked_sub(5).unwrap_or(0)),
                                         });
                                     }
                                     
                                     tokens.push(Token {
                                         kind: TokenKind::OpenTag(OpenTagKind::Full),
-                                        span: (0, 0)
+                                        span: (self.line, self.col)
                                     });
 
                                     return Ok(tokens);
                                 }
                             } else {
+                                self.col += 3;
+
                                 buffer.push('h');
                             }
                         } else {
+                            self.col += 2;
+
                             buffer.push('?');
                         }
                     } else {
+                        self.col += 1;
+
                         buffer.push(char);
                     }
                 },
@@ -120,7 +139,7 @@ impl Lexer {
         Ok(vec![
             Token {
                 kind: TokenKind::InlineHtml(buffer),
-                span: (0, 0) // TODO: Actually track spans.
+                span: (self.line, self.col)
             }
         ])
     }
@@ -142,6 +161,8 @@ impl Lexer {
                 if let Some('>') = it.peek() {
                     it.next();
 
+                    self.col += 2;
+
                     self.enter_state(LexerState::Initial);
 
                     TokenKind::CloseTag
@@ -156,20 +177,30 @@ impl Lexer {
                     if let Some('=') = it.peek() {
                         it.next();
 
+                        self.col += 3;
+
                         TokenKind::TripleEquals
                     } else {
+                        self.col += 2;
+
                         TokenKind::DoubleEquals
                     }
                 } else {
+                    self.col += 1;
+
                     TokenKind::Equals
                 }
             },
             '$' => {
                 let mut buffer = String::new();
 
+                self.col += 1;
+
                 while let Some(n) = it.peek() {
                     match n {
                         'a'..='z' | 'A'..='Z' | '\u{80}'..='\u{ff}' | '_' => {
+                            self.col += 1;
+
                             buffer.push(*n);
                             it.next();
                         }
@@ -183,12 +214,16 @@ impl Lexer {
                 let mut buffer = String::from(char);
                 let mut underscore = false;
 
+                self.col += 1;
+
                 while let Some(n) = it.peek() {
                     match n {
                         '0'..='9' => {
                             underscore = false;
                             buffer.push(*n);
                             it.next();
+
+                            self.col += 1;
                         },
                         '_' => {
                             if underscore {
@@ -197,6 +232,8 @@ impl Lexer {
 
                             underscore = true;
                             it.next();
+
+                            self.col += 1;
                         },
                         _ => break,
                     }
@@ -205,13 +242,17 @@ impl Lexer {
                 // TODO: Support tokenizing floats.
                 TokenKind::Int(buffer.parse().unwrap())
             },
-            _ if char.is_alphabetic() => {
+            _ if char.is_alphabetic() || char == '_' => {
                 let mut buffer = String::from(char);
+
+                self.col += 1;
 
                 while let Some(n) = it.peek() {
                     if n.is_alphanumeric() || n == &'_' {
                         buffer.push(*n);
                         it.next();
+
+                        self.col += 1;
                     } else {
                         break;
                     }
@@ -219,21 +260,48 @@ impl Lexer {
 
                 identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer))
             },
-            '{' => TokenKind::LeftBrace,
-            '}' => TokenKind::RightBrace,
-            '(' => TokenKind::LeftParen,
-            ')' => TokenKind::RightParen,
-            ';' => TokenKind::SemiColon,
-            '+' => TokenKind::Plus,
-            '-' => TokenKind::Minus,
-            '<' => TokenKind::LessThan,
-            ',' => TokenKind::Comma,
+            '{' => {
+                self.col += 1;
+                TokenKind::LeftBrace
+            },
+            '}' => {
+                self.col += 1;
+                TokenKind::RightBrace
+            },
+            '(' => {
+                self.col += 1;
+                TokenKind::LeftParen
+            },
+            ')' => {
+                self.col += 1;
+                TokenKind::RightParen
+            },
+            ';' => {
+                self.col += 1;
+                TokenKind::SemiColon
+            },
+            '+' => {
+                self.col += 1;
+                TokenKind::Plus
+            },
+            '-' => {
+                self.col += 1;
+                TokenKind::Minus
+            },
+            '<' => {
+                self.col += 1;
+                TokenKind::LessThan
+            },
+            ',' => {
+                self.col += 1;
+                TokenKind::Comma
+            },
             _ => unimplemented!("<scripting> char: {}", char),
         };
 
         Ok(Token {
             kind,
-            span: (0, 0)
+            span: (self.line, self.col)
         })
     }
 
@@ -266,7 +334,7 @@ pub enum LexerError {
 
 #[cfg(test)]
 mod tests {
-    use crate::{TokenKind, OpenTagKind};
+    use crate::{TokenKind, OpenTagKind, Token};
     use super::Lexer;
 
     macro_rules! open {
@@ -374,14 +442,57 @@ mod tests {
         ]);
     }
 
+    #[test]
+    fn span_tracking() {
+        let spans = get_spans("<?php hello_world()");
+
+        assert_eq!(spans, &[
+            (1, 4),
+            (1, 16),
+            (1, 17),
+            (1, 18),
+        ]);
+
+        let spans = get_spans(r#"<?php
+        
+function hello_world() {
+
+}"#);
+        
+        assert_eq!(spans, &[
+            (1, 4),
+            (3, 8),
+            (3, 20),
+            (3, 21),
+            (3, 22),
+            (3, 24),
+            (5, 1),
+        ]);
+    }
+
     fn assert_tokens(source: &str, expected: &[TokenKind]) {
-        let mut lexer = Lexer::new(None);
         let mut kinds = vec!();
 
-        for token in lexer.tokenize(source).unwrap() {
+        for token in get_tokens(source) {
             kinds.push(token.kind);
         }
 
         assert_eq!(kinds, expected);
+    }
+
+    fn get_spans(source: &str) -> Vec<(usize, usize)> {
+        let tokens = get_tokens(source);
+        let mut spans = vec!();
+        
+        for token in tokens {
+            spans.push(token.span);
+        }
+
+        spans
+    }
+
+    fn get_tokens(source: &str) -> Vec<Token> {
+        let mut lexer = Lexer::new(None);
+        lexer.tokenize(source).unwrap()
     }
 }
