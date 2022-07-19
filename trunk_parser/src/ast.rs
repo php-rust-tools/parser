@@ -1,9 +1,10 @@
+use serde::Serialize;
 use trunk_lexer::TokenKind;
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Identifier {
     name: String,
 }
@@ -20,7 +21,7 @@ impl From<&String> for Identifier {
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Param {
     name: Expression,
 }
@@ -43,7 +44,7 @@ impl From<&str> for Param {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub enum MethodFlag {
     Public,
     Protected,
@@ -51,7 +52,7 @@ pub enum MethodFlag {
     Static,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
     InlineHtml(String),
     Var {
@@ -92,7 +93,7 @@ pub enum Statement {
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Expression {
     Int(i64),
     Variable(String),
@@ -103,13 +104,13 @@ pub enum Expression {
     Array(Vec<ArrayItem>),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct ArrayItem {
     pub key: Option<Expression>,
     pub value: Expression,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum InfixOp {
     Add,
     Sub,

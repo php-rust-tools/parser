@@ -1,4 +1,5 @@
 use std::{path::PathBuf, process::exit};
+use serde_json::to_string;
 use structopt::StructOpt;
 use trunk_lexer::Lexer;
 use trunk_parser::Parser;
@@ -8,6 +9,9 @@ use trunk_parser::Parser;
 struct Args {
     #[structopt(parse(from_os_str), help = "The input file to use.")]
     file: PathBuf,
+
+    #[structopt(short, long, help = "Output the abstract syntax tree as JSON.")]
+    json: bool,
 }
 
 fn main() {
@@ -33,5 +37,15 @@ fn main() {
         },
     };
 
-    println!("{:#?}", ast);    
+    if args.json {
+        match to_string(&ast) {
+            Ok(json) => println!("{}", json),
+            Err(e) => {
+                eprintln!("Failed to generate JSON, error: {}", e);
+                exit(1);
+            }
+        };
+    } else {
+        println!("{:#?}", ast);
+    }
 }
