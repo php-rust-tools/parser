@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::Display};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::MethodFlag};
+use crate::{Program, Statement, Block, Expression, ast::MethodFlag, Identifier};
 
 macro_rules! expect {
     ($parser:expr, $expected:pat, $out:expr, $message:literal) => {
@@ -73,6 +73,26 @@ impl Parser {
                 self.next();
 
                 let name = expect!(self, TokenKind::Identifier(i), i, "expected class name");
+                let mut extends: Option<Identifier> = None;
+
+                if self.current.kind == TokenKind::Extends {
+                    self.next();
+                    extends = expect!(self, TokenKind::Identifier(i), Some(i.into()), "expected identifier");
+                }
+
+                let mut implements = Vec::new();
+                if self.current.kind == TokenKind::Implements {
+                    self.next();
+
+                    while self.current.kind != TokenKind::LeftBrace {
+                        if self.current.kind == TokenKind::Comma {
+                            self.next();
+                        }
+
+                        implements.push(expect!(self, TokenKind::Identifier(i), i.into(), "expected identifier"));
+                    }
+                }
+
                 expect!(self, TokenKind::LeftBrace, "expected left-brace");
 
                 let mut body = Vec::new();
@@ -90,7 +110,7 @@ impl Parser {
 
                 expect!(self, TokenKind::RightBrace, "expected right-brace");
 
-                Statement::Class { name: name.into(), body }
+                Statement::Class { name: name.into(), extends, implements, body }
             },
             TokenKind::Echo => {
                 self.next();
@@ -348,12 +368,24 @@ mod tests {
             Statement::Class {
                 name: $name.to_string().into(),
                 body: vec![],
+                extends: None,
+                implements: vec![],
             }
         };
         ($name:literal, $body:expr) => {
             Statement::Class {
                 name: $name.to_string().into(),
                 body: $body.to_vec(),
+                extends: None,
+                implements: vec![],
+            }
+        };
+        ($name:literal, $extends:expr, $implements:expr, $body:expr) => {
+            Statement::Class {
+                name: $name.to_string().into(),
+                body: $body.to_vec(),
+                extends: $extends,
+                implements: $implements.to_vec(),
             }
         };
     }
@@ -504,6 +536,28 @@ mod tests {
                     MethodFlag::Static,
                 ], &[])
             ])
+        ]);
+    }
+
+    #[test]
+    fn class_with_extends() {
+        assert_ast("\
+        <?php
+        
+        class Foo extends Bar {}
+        ", &[
+            class!("Foo", Some("Bar".to_string().into()), &[], &[]),
+        ]);
+    }
+    
+    #[test]
+    fn class_with_implements() {
+        assert_ast("\
+        <?php
+        
+        class Foo implements Bar, Baz {}
+        ", &[
+            class!("Foo", None, &["Bar".to_string().into(), "Baz".to_string().into()], &[]),
         ]);
     }
 

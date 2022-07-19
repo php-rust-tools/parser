@@ -61,6 +61,8 @@ pub enum Statement {
     },
     Class {
         name: Identifier,
+        extends: Option<Identifier>,
+        implements: Vec<Identifier>,
         body: Block,
     },
     Method {
