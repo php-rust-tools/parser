@@ -149,6 +149,21 @@ impl Lexer {
                     todo!();
                 }
             },
+            '=' => {
+                if let Some('=') = it.peek() {
+                    it.next();
+
+                    if let Some('=') = it.peek() {
+                        it.next();
+
+                        TokenKind::TripleEquals
+                    } else {
+                        TokenKind::DoubleEquals
+                    }
+                } else {
+                    TokenKind::Equals
+                }
+            },
             '$' => {
                 let mut buffer = String::new();
 
@@ -346,6 +361,16 @@ mod tests {
             TokenKind::Plus,
             TokenKind::Minus,
             TokenKind::LessThan,
+        ]);
+    }
+
+    #[test]
+    fn equals() {
+        assert_tokens("<?php = == ===", &[
+            open!(),
+            TokenKind::Equals,
+            TokenKind::DoubleEquals,
+            TokenKind::TripleEquals,
         ]);
     }
 
