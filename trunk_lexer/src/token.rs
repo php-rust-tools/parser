@@ -11,6 +11,8 @@ pub enum TokenKind {
     Variable(String),
     Function,
     Class,
+    Extends,
+    Implements,
     Public,
     Protected,
     Private,

@@ -324,6 +324,8 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "protected" => TokenKind::Protected,
         "private" => TokenKind::Private,
         "static" => TokenKind::Static,
+        "extends" => TokenKind::Extends,
+        "implements" => TokenKind::Implements,
         _ => return None,
     })
 }
@@ -376,7 +378,7 @@ mod tests {
 
     #[test]
     fn keywords() {
-        assert_tokens("<?php function if else elseif echo return class public protected private static", &[
+        assert_tokens("<?php function if else elseif echo return class extends implements public protected private static", &[
             open!(),
             TokenKind::Function,
             TokenKind::If,
@@ -385,6 +387,8 @@ mod tests {
             TokenKind::Echo,
             TokenKind::Return,
             TokenKind::Class,
+            TokenKind::Extends,
+            TokenKind::Implements,
             TokenKind::Public,
             TokenKind::Protected,
             TokenKind::Private,
