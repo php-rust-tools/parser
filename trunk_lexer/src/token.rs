@@ -34,10 +34,17 @@ pub enum TokenKind {
     SemiColon,
     Comma,
     InlineHtml(String),
+    Eof,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Token {
     pub kind: TokenKind,
     pub span: Span,
+}
+
+impl Default for Token {
+    fn default() -> Self {
+        Self { kind: TokenKind::Eof, span: (0, 0) }
+    }
 }

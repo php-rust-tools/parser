@@ -1,83 +1,83 @@
 use std::{vec::IntoIter};
-use std::iter::Peekable;
 use trunk_lexer::{Token, TokenKind};
 use crate::{Program, Statement, Block, Expression, ast::MethodFlag};
 
 macro_rules! expect {
-    ($actual:expr, $expected:pat, $out:expr, $message:literal) => {
-        match $actual {
-            Some(token) => match token.kind {
-                $expected => $out,
-                _ => return Err(ParseError::ExpectedToken($message.into()))
+    ($parser:expr, $expected:pat, $out:expr, $message:literal) => {
+        match $parser.current.kind.clone() {
+            $expected => {
+                $parser.next();
+                $out
             },
-            None => return Err(ParseError::ExpectedToken($message.into()))
+            _ => return Err(ParseError::ExpectedToken($message.into())),
         }
     };
-    ($actual:expr, $expected:pat, $message:literal) => {
-        match $actual {
-            Some(token) => match token.kind {
-                $expected => (),
-                _ => return Err(ParseError::ExpectedToken($message.into()))
-            },
-            None => return Err(ParseError::ExpectedToken($message.into()))
+    ($parser:expr, $expected:pat, $message:literal) => {
+        match $parser.current.kind.clone() {
+            $expected => { $parser.next(); },
+            _ => return Err(ParseError::ExpectedToken($message.into())),
         }
     };
 }
 
-pub struct Parser;
+pub struct Parser {
+    pub current: Token,
+    pub peek: Token,
+    iter: IntoIter<Token>,
+}
 
 #[allow(dead_code)]
 impl Parser {
-    pub fn new() -> Self {
-        Self
+    pub fn new(tokens: Vec<Token>) -> Self {
+        let mut this = Self {
+            current: Token::default(),
+            peek: Token::default(),
+            iter: tokens.into_iter(),
+        };
+
+        this.next();
+        this.next();
+        this
     }
 
-    pub fn parse(&self, tokens: Vec<Token>) -> Result<Program, ParseError> {
-        let mut program = Program::new();
-        let mut iter = tokens.into_iter().peekable();
-
-        while let Some(t) = iter.next() {
-            if let TokenKind::OpenTag(_) = t.kind {
-                continue;
-            }
-
-            program.push(self.statement(t, &mut iter)?);
-        }
-
-        Ok(program)
-    }
-
-    #[allow(dead_code)]
-    fn statement(&self, t: Token, tokens: &mut Peekable<IntoIter<Token>>) -> Result<Statement, ParseError> {
-        Ok(match t.kind {
-            TokenKind::InlineHtml(html) => Statement::InlineHtml(html),
+    fn statement(&mut self) -> Result<Statement, ParseError> {
+        Ok(match &self.current.kind {
+            TokenKind::InlineHtml(html) => {
+                let s = Statement::InlineHtml(html.to_string());
+                self.next();
+                s
+            },
             TokenKind::If => {
-                expect!(tokens.next(), TokenKind::LeftParen, "expected (");
+                self.next();
 
-                let condition = self.expression(tokens, 0)?;
+                expect!(self, TokenKind::LeftParen, "expected (");
 
-                expect!(tokens.next(), TokenKind::RightParen, "expected )");
+                let condition = self.expression(0)?;
+
+                expect!(self, TokenKind::RightParen, "expected )");
 
                 // TODO: Support one-liner if statements.
-                expect!(tokens.next(), TokenKind::LeftBrace, "expected {");
+                expect!(self, TokenKind::LeftBrace, "expected {");
 
                 let mut then = Block::new();
-                while let Some(t) = tokens.peek() && t.kind != TokenKind::RightBrace {
-                    then.push(self.statement(tokens.next().unwrap(), tokens)?);
+                while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
+                    then.push(self.statement()?);
                 }
 
                 // TODO: Support one-liner if statements.
-                expect!(tokens.next(), TokenKind::RightBrace, "expected }");
+                expect!(self, TokenKind::RightBrace, "expected }");
 
                 Statement::If { condition, then }
             },
             TokenKind::Class => {
-                let name = expect!(tokens.next(), TokenKind::Identifier(i), i, "expected class name");
-                expect!(tokens.next(), TokenKind::LeftBrace, "expected left-brace");
+                self.next();
+
+                let name = expect!(self, TokenKind::Identifier(i), i, "expected class name");
+                expect!(self, TokenKind::LeftBrace, "expected left-brace");
 
                 let mut body = Vec::new();
-                while let Some(t) = tokens.peek() && t.kind != TokenKind::RightBrace {
-                    let statement = match self.statement(tokens.next().unwrap(), tokens)? {
+                while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
+                    let statement = match self.statement()? {
                         Statement::Function { name, params, body } => {
                             Statement::Method { name, params, body, flags: vec![] }
                         },
@@ -88,105 +88,115 @@ impl Parser {
                     body.push(statement);
                 }
 
-                expect!(tokens.next(), TokenKind::RightBrace, "expected right-brace");
+                expect!(self, TokenKind::RightBrace, "expected right-brace");
 
                 Statement::Class { name: name.into(), body }
             },
             TokenKind::Echo => {
+                self.next();
+
                 let mut values = Vec::new();
-                while let Some(t) = tokens.peek() && t.kind != TokenKind::SemiColon {
-                    values.push(self.expression(tokens, 0)?);
+                while ! self.is_eof() && self.current.kind != TokenKind::SemiColon {
+                    values.push(self.expression(0)?);
 
                     // `echo` supports multiple expressions separated by a comma.
                     // TODO: Disallow trailing commas when the next token is a semi-colon.
-                    if let Some(t) = tokens.peek() && t.kind == TokenKind::Comma {
-                        tokens.next();
+                    if ! self.is_eof() && self.current.kind == TokenKind::Comma {
+                        self.next();
                     }
                 }
-                expect!(tokens.next(), TokenKind::SemiColon, "expected semi-colon at the end of an echo statement");
+                expect!(self, TokenKind::SemiColon, "expected semi-colon at the end of an echo statement");
                 Statement::Echo { values }
             },
             TokenKind::Return => {
-                if let Some(Token { kind: TokenKind::SemiColon, .. }) = tokens.peek() {
+                self.next();
+
+                if let Token { kind: TokenKind::SemiColon, .. } = self.current {
                     let ret = Statement::Return { value: None };
-                    expect!(tokens.next(), TokenKind::SemiColon, "expected semi-colon at the end of return statement.");
+                    expect!(self, TokenKind::SemiColon, "expected semi-colon at the end of return statement.");
                     ret
                 } else {
-                    let ret = Statement::Return { value: self.expression(tokens, 0).ok() };
-                    expect!(tokens.next(), TokenKind::SemiColon, "expected semi-colon at the end of return statement.");
+                    let ret = Statement::Return { value: self.expression(0).ok() };
+                    expect!(self, TokenKind::SemiColon, "expected semi-colon at the end of return statement.");
                     ret
                 }
             },
             TokenKind::Function => {
-                let name = expect!(tokens.next(), TokenKind::Identifier(i), i, "expected identifier");
+                self.next();
 
-                expect!(tokens.next(), TokenKind::LeftParen, "expected (");
+                let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+
+                expect!(self, TokenKind::LeftParen, "expected (");
 
                 let mut params = Vec::new();
 
-                while let Some(n) = tokens.peek() && n.kind != TokenKind::RightParen {
+                while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
                     // TODO: Support variable types and default values.
-                    params.push(expect!(tokens.next(), TokenKind::Variable(v), v, "expected variable").into());
+                    params.push(expect!(self, TokenKind::Variable(v), v, "expected variable").into());
                     
-                    if let Some(Token { kind: TokenKind::Comma, .. }) = tokens.peek() {
-                        tokens.next();
+                    if let Token { kind: TokenKind::Comma, .. } = self.current {
+                        self.next();
                     }
                 }
 
-                expect!(tokens.next(), TokenKind::RightParen, "expected )");
+                expect!(self, TokenKind::RightParen, "expected )");
 
                 // TODO: Support return types here.
 
-                expect!(tokens.next(), TokenKind::LeftBrace, "expected {");
+                expect!(self, TokenKind::LeftBrace, "expected {");
 
                 let mut body = Block::new();
 
-                while let Some(n) = tokens.peek() && n.kind != TokenKind::RightBrace {
-                    body.push(self.statement(tokens.next().unwrap(), tokens)?);
+                while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
+                    body.push(self.statement()?);
                 }
 
-                expect!(tokens.next(), TokenKind::RightBrace, "expected }");
+                expect!(self, TokenKind::RightBrace, "expected }");
 
                 Statement::Function { name: name.into(), params, body }
             },
-            _ if is_method_visibility_modifier(&t.kind) => {
-                let mut flags = vec![visibility_token_to_flag(&t.kind)];
+            _ if is_method_visibility_modifier(&self.current.kind) => {
+                let mut flags = vec![visibility_token_to_flag(&self.current.kind)];
+                self.next();
 
-                while let Some(t) = tokens.peek() && is_method_visibility_modifier(&t.kind) {
-                    let next = tokens.next().unwrap();
-
-                    flags.push(visibility_token_to_flag(&next.kind));
+                while ! self.is_eof() && is_method_visibility_modifier(&self.current.kind) {
+                    flags.push(visibility_token_to_flag(&self.current.kind));
+                    self.next();
                 }
 
-                match self.statement(tokens.next().unwrap(), tokens)? {
+                match self.statement()? {
                     Statement::Function { name, params, body } => {
                         Statement::Method { name, params, body, flags }
                     },
                     _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".into()))
                 }
             },
-            _ => todo!("unhandled token: {:?}", t)
+            _ => {
+                let expr = self.expression(0)?;
+
+                Statement::Expression { expr }
+            }
         })
     }
 
-    fn expression(&self, tokens: &mut Peekable<IntoIter<Token>>, bp: u8) -> Result<Expression, ParseError> {
-        if tokens.peek().is_none() {
+    fn expression(&mut self, bp: u8) -> Result<Expression, ParseError> {
+        if self.is_eof() {
             return Err(ParseError::UnexpectedEndOfFile);
         }
 
-        let t = tokens.next().unwrap();
-
-        let mut lhs = match t.kind {
-            TokenKind::Variable(v) => Expression::Variable(v),
-            TokenKind::Int(i) => Expression::Int(i),
-            TokenKind::Identifier(i) => Expression::Identifier(i),
-            _ => todo!("lhs: {:?}", t.kind),
+        let mut lhs = match &self.current.kind {
+            TokenKind::Variable(v) => Expression::Variable(v.to_string()),
+            TokenKind::Int(i) => Expression::Int(*i),
+            TokenKind::Identifier(i) => Expression::Identifier(i.to_string()),
+            _ => todo!("expr lhs: {:?}", self.current.kind),
         };
 
+        self.next();
+
         loop {
-            let kind = match tokens.peek() {
-                Some(Token { kind: TokenKind::SemiColon, .. }) | None => break,
-                Some(Token { kind, .. }) => kind.clone(),
+            let kind = match &self.current {
+                Token { kind: TokenKind::SemiColon | TokenKind::Eof, .. }  => break,
+                Token { kind, .. } => kind.clone()
             };
 
             if let Some(lbp) = postfix_binding_power(&kind) {
@@ -194,10 +204,10 @@ impl Parser {
                     break;
                 }
 
-                tokens.next();
+                self.next();
 
                 let op = kind.clone();
-                lhs = self.postfix(tokens, lhs, &op)?;
+                lhs = self.postfix(lhs, &op)?;
 
                 continue;
             }
@@ -207,10 +217,10 @@ impl Parser {
                     break;
                 }
 
-                tokens.next();
+                self.next();
 
                 let op = kind.clone();
-                let rhs = self.expression(tokens, rbp)?;
+                let rhs = self.expression(rbp)?;
 
                 lhs = infix(lhs, op, rhs);
                 continue;
@@ -222,24 +232,48 @@ impl Parser {
         Ok(lhs)
     }
 
-    fn postfix(&self, tokens: &mut Peekable<IntoIter<Token>>, lhs: Expression, op: &TokenKind) -> Result<Expression, ParseError> {
+    fn postfix(&mut self, lhs: Expression, op: &TokenKind) -> Result<Expression, ParseError> {
         Ok(match op {
             TokenKind::LeftParen => {
                 let mut args = Vec::new();
-                while let Some(t) = tokens.peek() && t.kind != TokenKind::RightParen {
-                    args.push(self.expression(tokens, 0)?);
+                while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                    args.push(self.expression(0)?);
 
-                    if let Some(Token { kind: TokenKind::Comma, .. }) = tokens.peek() {
-                        tokens.next();
+                    if let Token { kind: TokenKind::Comma, .. } = self.current {
+                        self.next();
                     }
                 }
 
-                expect!(tokens.next(), TokenKind::RightParen, "expected )");
+                expect!(self, TokenKind::RightParen, "expected )");
     
                 Expression::Call(Box::new(lhs), args)
             },
             _ => todo!("postfix: {:?}", op),
         })
+    }
+
+    fn is_eof(&self) -> bool {
+        self.current.kind == TokenKind::Eof
+    }
+
+    pub fn next(&mut self) {
+        self.current = self.peek.clone();
+        self.peek = self.iter.next().unwrap_or_default()
+    }
+
+    pub fn parse(&mut self) -> Result<Program, ParseError> {
+        let mut ast = Program::new();
+
+        while self.current.kind != TokenKind::Eof {
+            if let TokenKind::OpenTag(_) = self.current.kind {
+                self.next();
+                continue;
+            }
+
+            ast.push(self.statement()?);
+        }
+
+        Ok(ast.to_vec())
     }
 }
 
@@ -253,7 +287,7 @@ fn visibility_token_to_flag(kind: &TokenKind) -> MethodFlag {
         TokenKind::Protected => MethodFlag::Protected,
         TokenKind::Private => MethodFlag::Private,
         TokenKind::Static => MethodFlag::Static,
-        _ => unreachable!()
+        _ => unreachable!("{:?}", kind)
     }
 }
 
@@ -286,7 +320,7 @@ pub enum ParseError {
 #[cfg(test)]
 mod tests {
     use trunk_lexer::Lexer;
-    use crate::{Statement, Block, Param, Expression, ast::{InfixOp, MethodFlag}};
+    use crate::{Statement, Param, Expression, ast::{InfixOp, MethodFlag}};
     use super::Parser;
 
     macro_rules! function {
@@ -467,8 +501,8 @@ mod tests {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();
 
-        let parser = Parser::new();
-        let ast = parser.parse(tokens).unwrap();
+        let mut parser = Parser::new(tokens);
+        let ast = parser.parse().unwrap();
 
         assert_eq!(ast, expected);
     }

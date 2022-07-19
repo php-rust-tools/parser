@@ -14,6 +14,12 @@ impl From<String> for Identifier {
     }
 }
 
+impl From<&String> for Identifier {
+    fn from(name: &String) -> Self {
+        Self::from(name.to_string())
+    }
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct Param {
     name: Expression,
@@ -22,6 +28,12 @@ pub struct Param {
 impl From<String> for Param {
     fn from(name: String) -> Self {
         Self { name: Expression::Variable(name) }
+    }
+}
+
+impl From<&String> for Param {
+    fn from(name: &String) -> Self {
+        Self::from(name.to_string())
     }
 }
 
@@ -67,6 +79,9 @@ pub enum Statement {
     Echo {
         values: Vec<Expression>,
     },
+    Expression {
+        expr: Expression,
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]
