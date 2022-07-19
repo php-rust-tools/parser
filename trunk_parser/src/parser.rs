@@ -75,13 +75,21 @@ impl Parser {
                 let name = expect!(tokens.next(), TokenKind::Identifier(i), i, "expected class name");
                 expect!(tokens.next(), TokenKind::LeftBrace, "expected left-brace");
 
+                let mut body = Vec::new();
                 while let Some(t) = tokens.peek() && t.kind != TokenKind::RightBrace {
-                    // ...
+                    let statement = match self.statement(tokens.next().unwrap(), tokens)? {
+                        Statement::Function { name, params, body } => {
+                            Statement::Method { name, params, body, flags: vec![] }
+                        },
+                        _ => return Err(ParseError::InvalidClassStatement(format!("Classes can only contain properties, constants and methods.")))
+                    };
+
+                    body.push(statement);
                 }
 
                 expect!(tokens.next(), TokenKind::RightBrace, "expected right-brace");
 
-                Statement::Class { name: name.into(), body: vec![] }
+                Statement::Class { name: name.into(), body }
             },
             TokenKind::Echo => {
                 let mut values = Vec::new();
@@ -241,6 +249,7 @@ fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
 pub enum ParseError {
     ExpectedToken(String),
     UnexpectedEndOfFile,
+    InvalidClassStatement(String),
 }
 
 #[cfg(test)]
@@ -275,9 +284,10 @@ mod tests {
     }
 
     macro_rules! method {
-        ($name:literal, $flags:expr, $body:expr) => {
+        ($name:literal, $params:expr, $flags:expr, $body:expr) => {
             Statement::Method {
                 name: $name.to_string().into(),
+                params: $params.to_vec().into_iter().map(|p: &str| Param::from(p)).collect::<Vec<Param>>(),
                 flags: $flags.to_vec(),
                 body: $body.to_vec(),
             }
@@ -369,6 +379,23 @@ mod tests {
     fn empty_class() {
         assert_ast("<?php class Foo {}", &[
             class!("Foo")
+        ]);
+    }
+
+    #[test]
+    fn class_with_basic_method() {
+        assert_ast("\
+        <?php
+        
+        class Foo {
+            function bar() {
+
+            }
+        }
+        ", &[
+            class!("Foo", &[
+                method!("bar", &[], &[], &[])
+            ])
         ]);
     }
 
