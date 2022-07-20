@@ -142,6 +142,11 @@ impl Parser {
 
                 Statement::Var { var }
             },
+            TokenKind::SemiColon => {
+                self.next();
+
+                Statement::Noop
+            },
             _ => {
                 let expr = self.expression(0)?;
 
@@ -529,35 +534,6 @@ mod tests {
     }
 
     #[test]
-    fn class_with_method_visibility() {
-        assert_ast("\
-        <?php
-        
-        class Foo {
-            public function bar() {
-                echo 1;
-            }
-
-            private static function baz() {}
-        }
-        ", &[
-            class!("Foo", &[
-                method!("bar", &[], &[
-                    MethodFlag::Public,
-                ], &[
-                    Statement::Echo { values: vec![
-                        Expression::Int(1),
-                    ] }
-                ]),
-                method!("baz", &[], &[
-                    MethodFlag::Private,
-                    MethodFlag::Static,
-                ], &[])
-            ])
-        ]);
-    }
-
-    #[test]
     fn class_with_extends() {
         assert_ast("\
         <?php
@@ -576,6 +552,13 @@ mod tests {
         class Foo implements Bar, Baz {}
         ", &[
             class!("Foo", None, &["Bar".to_string().into(), "Baz".to_string().into()], &[]),
+        ]);
+    }
+
+    #[test]
+    fn noop() {
+        assert_ast("<?php ;", &[
+            Statement::Noop,
         ]);
     }
 

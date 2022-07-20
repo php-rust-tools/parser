@@ -97,7 +97,8 @@ pub enum Statement {
     },
     Expression {
         expr: Expression,
-    }
+    },
+    Noop
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
