@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::Display};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{MethodFlag, ArrayItem}, Identifier};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem}, Identifier};
 
 macro_rules! expect {
     ($parser:expr, $expected:pat, $out:expr, $message:literal) => {
@@ -370,7 +370,7 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use trunk_lexer::Lexer;
-    use crate::{Statement, Param, Expression, ast::{InfixOp, MethodFlag}};
+    use crate::{Statement, Param, Expression, ast::{InfixOp}};
     use super::Parser;
 
     macro_rules! function {
