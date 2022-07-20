@@ -10,9 +10,11 @@ The goal was to have a set of tools that I could use to write my own utilities. 
 
 ## Goals
 
-* [ ] A full-featured lexer and parser for PHP 8.1+
+* [ ] **A full-featured lexer and parser for PHP 8.1+**
 * [ ] An experimental runtime for PHP (excl. extensions)
 * [ ] A static-analyser for PHP code.
+
+> Bold text indicates the current goal.
 
 ## Contributing
 
