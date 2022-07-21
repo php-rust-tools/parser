@@ -31,7 +31,7 @@ pub enum TokenKind {
     Comma,
     ConcatEqual,
     Const,
-    ConstantString,
+    ConstantString(String),
     Continue,
     CurlyOpen,
     Decrement,
@@ -98,6 +98,7 @@ pub enum TokenKind {
     TripleEquals,
     Var,
     Variable(String),
+
 }
 
 #[derive(Debug, Clone)]

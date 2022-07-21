@@ -195,6 +195,46 @@ impl Lexer {
                     TokenKind::Equals
                 }
             },
+            // Single quoted string.
+            '\'' => {
+                self.col += 1;
+
+                let mut buffer = String::new();
+                let mut escaping = false;
+
+                while let Some(n) = it.peek() {
+                    if ! escaping && *n == '\'' {
+                        it.next();
+
+                        break;
+                    }
+
+                    if *n == '\\' && !escaping {
+                        escaping = true;
+                        it.next();
+                        continue;
+                    }
+
+                    if escaping && ['\\', '\''].contains(n) {
+                        escaping = false;
+                        buffer.push(*n);
+                        it.next();
+                        continue;
+                    }
+
+                    if *n == '\n' {
+                        self.line += 1;
+                        self.col = 0;
+                    } else {
+                        self.col += 1;
+                    }
+
+                    buffer.push(*n);
+                    it.next();
+                }
+
+                TokenKind::ConstantString(buffer)
+            },
             '$' => {
                 let mut buffer = String::new();
 
@@ -470,6 +510,18 @@ mod tests {
             TokenKind::False,
             TokenKind::False,
             TokenKind::Use,
+        ]);
+    }
+
+    #[test]
+    fn constant_single_quote_strings() {
+        assert_tokens(r#"<?php 'Hello, world!' 'I\'m a developer.' 'This is a backslash \\.' 'This is a multi-line
+string.'"#, &[
+            open!(),
+            TokenKind::ConstantString("Hello, world!".into()),
+            TokenKind::ConstantString("I'm a developer.".into()),
+            TokenKind::ConstantString("This is a backslash \\.".into()),
+            TokenKind::ConstantString("This is a multi-line\nstring.".into()),
         ]);
     }
 
