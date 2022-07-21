@@ -27,7 +27,7 @@ pub enum TokenKind {
     CloseTag,
     Coalesce,
     CoalesceEqual,
-    Comment,
+    Comment(String),
     Comma,
     ConcatEqual,
     Const,

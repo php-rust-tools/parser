@@ -353,6 +353,38 @@ impl Lexer {
 
                 identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer))
             },
+            '/' | '#' => {
+                self.col += 1;
+
+                fn read_till_end_of_line(s: &mut Lexer, it: &mut Peekable<Chars>) -> String {
+                    s.col += 1;
+
+                    let mut buffer = String::new();
+
+                    while let Some(c) = it.peek() {
+                        if *c == '\n' {
+                            break;
+                        }
+
+                        buffer.push(*c);
+                        it.next();
+                    }
+
+                    buffer
+                }
+
+                if char == '/' && let Some(t) = it.peek() && *t != '/' {
+                    TokenKind::Slash
+                } else if char == '#' && let Some(t) = it.peek() && *t != '[' {
+                    TokenKind::Attribute
+                } else {
+                    it.next();
+
+                    let buffer = read_till_end_of_line(self, it);
+
+                    TokenKind::Comment(buffer)
+                }
+            },
             '{' => {
                 self.col += 1;
                 TokenKind::LeftBrace
@@ -522,6 +554,17 @@ string.'"#, &[
             TokenKind::ConstantString("I'm a developer.".into()),
             TokenKind::ConstantString("This is a backslash \\.".into()),
             TokenKind::ConstantString("This is a multi-line\nstring.".into()),
+        ]);
+    }
+
+    #[test]
+    fn single_line_comments() {
+        assert_tokens(r#"<?php
+        // Single line comment.
+        # Another single line comment.
+        "#, &[
+            TokenKind::Comment("Single line comment.".into()),
+            TokenKind::Comment("Another single line comment.".into()),
         ]);
     }
 

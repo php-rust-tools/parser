@@ -1,3 +1,5 @@
+#![feature(let_chains)]
+
 mod token;
 mod lexer;
 
