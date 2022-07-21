@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -xe
+
 dir=$(realpath $1)
 
 for file in $(find $dir -name "*.php")

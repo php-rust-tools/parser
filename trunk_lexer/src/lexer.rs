@@ -429,7 +429,7 @@ impl Lexer {
                 self.col += 1;
                 TokenKind::RightBracket
             },
-            _ => unimplemented!("<scripting> char: {}", char),
+            _ => unimplemented!("<scripting> char: {}, line: {}, col: {}", char, self.line, self.col),
         };
 
         Ok(Token {
