@@ -12,6 +12,9 @@ struct Args {
 
     #[structopt(short, long, help = "Output the abstract syntax tree as JSON.")]
     json: bool,
+
+    #[structopt(short, long, help = "Only execute the lexer on the source file.")]
+    lexer: bool,
 }
 
 fn main() {
@@ -27,6 +30,10 @@ fn main() {
 
     let mut lexer = Lexer::new(None);
     let tokens = lexer.tokenize(&input[..]).unwrap();
+
+    if args.lexer {
+        return;
+    }
 
     let mut parser = Parser::new(tokens);
     let ast = match parser.parse() {
