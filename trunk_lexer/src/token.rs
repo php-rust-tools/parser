@@ -67,6 +67,8 @@ pub enum TokenKind {
     Identifier(String),
     Dot,
     Null,
+    True,
+    False,
     If,
     Implements,
     InlineHtml(String),

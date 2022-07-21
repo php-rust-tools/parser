@@ -393,6 +393,8 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "return" => TokenKind::Return,
         "static" => TokenKind::Static,
         "var" => TokenKind::Var,
+        "true" | "TRUE" => TokenKind::True,
+        "false" | "FALSE" => TokenKind::False,
         _ => return None,
     })
 }
@@ -445,7 +447,7 @@ mod tests {
 
     #[test]
     fn keywords() {
-        assert_tokens("<?php function if else elseif echo return class extends implements public protected private static", &[
+        assert_tokens("<?php function if else elseif echo return class extends implements public protected private static null NULL true TRUE false FALSE", &[
             open!(),
             TokenKind::Function,
             TokenKind::If,
@@ -460,6 +462,12 @@ mod tests {
             TokenKind::Protected,
             TokenKind::Private,
             TokenKind::Static,
+            TokenKind::Null,
+            TokenKind::Null,
+            TokenKind::True,
+            TokenKind::True,
+            TokenKind::False,
+            TokenKind::False,
         ]);
     }
 
