@@ -214,9 +214,45 @@ impl Lexer {
 
                 TokenKind::Variable(buffer)
             },
+            '.' => {
+                self.col += 1;
+
+                if let Some('0'..='9') = it.peek() {
+                    let mut buffer = String::from("0.");
+                    let mut underscore = false;
+
+                    while let Some(n) = it.peek() {
+                        match n {
+                            '0'..='9' => {
+                                underscore = false;
+                                buffer.push(*n);
+                                it.next();
+    
+                                self.col += 1;
+                            },
+                            '_' => {
+                                if underscore {
+                                    return Err(LexerError::UnexpectedCharacter(*n));
+                                }
+    
+                                underscore = true;
+                                it.next();
+    
+                                self.col += 1;
+                            },
+                            _ => break,
+                        }
+                    }
+
+                    TokenKind::Float(buffer.parse().unwrap())
+                } else {
+                    TokenKind::Dot
+                }
+            },
             '0'..='9' => {
                 let mut buffer = String::from(char);
                 let mut underscore = false;
+                let mut is_float = false;
 
                 self.col += 1;
 
@@ -227,6 +263,16 @@ impl Lexer {
                             buffer.push(*n);
                             it.next();
 
+                            self.col += 1;
+                        },
+                        '.' => {
+                            if is_float {
+                                return Err(LexerError::UnexpectedCharacter(*n));
+                            }
+
+                            is_float = true;
+                            buffer.push(*n);
+                            it.next();
                             self.col += 1;
                         },
                         '_' => {
@@ -243,8 +289,11 @@ impl Lexer {
                     }
                 }
 
-                // TODO: Support tokenizing floats.
-                TokenKind::Int(buffer.parse().unwrap())
+                if (is_float) {
+                    TokenKind::Float(buffer.parse().unwrap())
+                } else {
+                    TokenKind::Int(buffer.parse().unwrap())
+                }
             },
             _ if char.is_alphabetic() || char == '_' => {
                 let mut buffer = String::from(char);
@@ -492,6 +541,15 @@ function hello_world() {
             (3, 22),
             (3, 24),
             (5, 1),
+        ]);
+    }
+
+    #[test]
+    fn floats() {
+        assert_tokens("<?php 200.5 .05", &[
+            open!(),
+            TokenKind::Float(200.5),
+            TokenKind::Float(0.05),
         ]);
     }
 
