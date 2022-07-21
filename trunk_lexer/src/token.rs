@@ -66,6 +66,7 @@ pub enum TokenKind {
     GreaterThanEquals,
     Identifier(String),
     Dot,
+    Null,
     If,
     Implements,
     InlineHtml(String),

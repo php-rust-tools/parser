@@ -374,6 +374,7 @@ impl Lexer {
 #[allow(dead_code)]
 fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
     Some(match ident {
+        "null" => TokenKind::Null,
         "abstract" => TokenKind::Abstract,
         "class" => TokenKind::Class,
         "declare" => TokenKind::Declare,
