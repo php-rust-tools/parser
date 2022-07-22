@@ -98,7 +98,11 @@ pub enum Statement {
     Expression {
         expr: Expression,
     },
-    Noop
+    Namespace {
+        name: String,
+        body: Block,
+    },
+    Noop,
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]

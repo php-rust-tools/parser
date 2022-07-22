@@ -47,6 +47,34 @@ impl Parser {
                 self.next();
                 s
             },
+            TokenKind::Namespace => {
+                self.next();
+                
+                let name = expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i), i, "expected identifier after namespace");
+
+                let mut braced = false;
+                if self.current.kind == TokenKind::LeftBrace {
+                    braced = true;
+                    self.next();
+                } else {
+                    expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                }
+
+                let mut body = Block::new();
+                while ! self.is_eof() {
+                    if braced && self.current.kind == TokenKind::RightBrace {
+                        break;
+                    }
+                    
+                    body.push(self.statement()?);
+                }
+
+                if braced {
+                    expect!(self, TokenKind::RightBrace, "expected }");
+                }
+
+                Statement::Namespace { name, body }
+            },
             TokenKind::If => {
                 self.next();
 

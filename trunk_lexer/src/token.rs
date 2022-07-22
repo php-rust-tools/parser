@@ -109,6 +109,7 @@ pub enum TokenKind {
     And,
     BitAnd,
     DocOpen(String),
+    Namespace,
 }
 
 #[derive(Debug, Clone)]

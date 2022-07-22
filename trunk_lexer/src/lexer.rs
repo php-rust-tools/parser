@@ -593,6 +593,7 @@ impl Lexer {
 #[allow(dead_code)]
 fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
     Some(match ident {
+        "namespace" => TokenKind::Namespace,
         "use" => TokenKind::Use,
         "null" | "NULL" => TokenKind::Null,
         "abstract" => TokenKind::Abstract,
@@ -668,7 +669,7 @@ mod tests {
 
     #[test]
     fn keywords() {
-        assert_tokens("<?php function if else elseif echo return class extends implements public protected private static null NULL true TRUE false FALSE use const", &[
+        assert_tokens("<?php function if else elseif echo return class extends implements public protected private static null NULL true TRUE false FALSE use const namespace", &[
             open!(),
             TokenKind::Function,
             TokenKind::If,
@@ -691,6 +692,7 @@ mod tests {
             TokenKind::False,
             TokenKind::Use,
             TokenKind::Const,
+            TokenKind::Namespace,
         ]);
     }
 
