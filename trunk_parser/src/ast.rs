@@ -105,6 +105,9 @@ pub enum Statement {
     Use {
         uses: Vec<Use>,
     },
+    Comment {
+        comment: String,
+    },
     Noop,
 }
 

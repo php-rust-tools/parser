@@ -24,6 +24,7 @@ pub struct Parser {
     pub current: Token,
     pub peek: Token,
     iter: IntoIter<Token>,
+    comments: Vec<String>,
 }
 
 #[allow(dead_code)]
@@ -33,6 +34,7 @@ impl Parser {
             current: Token::default(),
             peek: Token::default(),
             iter: tokens.into_iter(),
+            comments: Vec::new(),
         };
 
         this.next();
@@ -44,6 +46,11 @@ impl Parser {
         Ok(match &self.current.kind {
             TokenKind::InlineHtml(html) => {
                 let s = Statement::InlineHtml(html.to_string());
+                self.next();
+                s
+            },
+            TokenKind::Comment(comment) => {
+                let s = Statement::Comment { comment: comment.to_string() };
                 self.next();
                 s
             },
