@@ -245,16 +245,20 @@ impl Parser {
         expect!(self, TokenKind::LeftBrace, "expected left-brace");
 
         let mut body = Vec::new();
-        while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
-            let statement = match self.statement()? {
+        while self.current.kind != TokenKind::RightBrace && ! self.is_eof() {
+            let s = self.statement()?;
+
+            let statement = match s {
                 Statement::Function { name, params, body } => {
                     Statement::Method { name, params, body, flags: vec![] }
                 },
                 Statement::Var { var } => {
                     Statement::Property { var }
                 },
-                s @ Statement::Method { .. } => s,
-                _ => return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".to_string(), self.current.span))
+                Statement::Method { .. } | Statement::Comment { .. } => s,
+                _ => {
+                    return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".to_string(), self.current.span))
+                }
             };
 
             body.push(statement);
