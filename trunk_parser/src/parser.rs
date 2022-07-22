@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::Display};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem}, Identifier};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use}, Identifier};
 
 macro_rules! expect {
     ($parser:expr, $expected:pat, $out:expr, $message:literal) => {
@@ -46,6 +46,32 @@ impl Parser {
                 let s = Statement::InlineHtml(html.to_string());
                 self.next();
                 s
+            },
+            TokenKind::Use => {
+                self.next();
+
+                let mut uses = Vec::new();
+                while ! self.is_eof() {
+                    let name = expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i), i, "expected identifier in use statement");
+                    let mut alias = None;
+
+                    if self.current.kind == TokenKind::As {
+                        self.next();
+                        alias = Some(expect!(self, TokenKind::Identifier(i), i, "expected identifier after as").into());
+                    }
+
+                    uses.push(Use { name: name.into(), alias });
+
+                    if self.current.kind == TokenKind::Comma {
+                        self.next();
+                        continue;
+                    }
+
+                    expect!(self, TokenKind::SemiColon, "expected semi-colon as end of use statement");
+                    break;
+                }
+
+                Statement::Use { uses }
             },
             TokenKind::Namespace => {
                 self.next();

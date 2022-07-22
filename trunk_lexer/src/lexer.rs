@@ -617,6 +617,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "true" | "TRUE" => TokenKind::True,
         "false" | "FALSE" => TokenKind::False,
         "const" => TokenKind::Const,
+        "as" => TokenKind::As,
         _ => return None,
     })
 }

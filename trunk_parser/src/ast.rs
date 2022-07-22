@@ -102,7 +102,16 @@ pub enum Statement {
         name: String,
         body: Block,
     },
+    Use {
+        uses: Vec<Use>,
+    },
     Noop,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct Use {
+    pub name: Identifier,
+    pub alias: Option<Identifier>,
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
