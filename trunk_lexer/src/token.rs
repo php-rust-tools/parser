@@ -101,6 +101,7 @@ pub enum TokenKind {
     Variable(String),
     FullyQualifiedIdentifier(String),
     QualifiedIdentifier(String),
+    Colon,
 }
 
 #[derive(Debug, Clone)]

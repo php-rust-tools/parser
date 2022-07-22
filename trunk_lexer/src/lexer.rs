@@ -479,6 +479,10 @@ impl Lexer {
                 self.col += 1;
                 TokenKind::RightBracket
             },
+            ':' => {
+                self.col += 1;
+                TokenKind::Colon
+            },
             _ => unimplemented!("<scripting> char: {}, line: {}, col: {}", char, self.line, self.col),
         };
 
@@ -518,6 +522,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "var" => TokenKind::Var,
         "true" | "TRUE" => TokenKind::True,
         "false" | "FALSE" => TokenKind::False,
+        "const" => TokenKind::Const,
         _ => return None,
     })
 }
@@ -570,7 +575,7 @@ mod tests {
 
     #[test]
     fn keywords() {
-        assert_tokens("<?php function if else elseif echo return class extends implements public protected private static null NULL true TRUE false FALSE use", &[
+        assert_tokens("<?php function if else elseif echo return class extends implements public protected private static null NULL true TRUE false FALSE use const", &[
             open!(),
             TokenKind::Function,
             TokenKind::If,
@@ -592,6 +597,7 @@ mod tests {
             TokenKind::False,
             TokenKind::False,
             TokenKind::Use,
+            TokenKind::Const,
         ]);
     }
 
