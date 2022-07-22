@@ -393,7 +393,39 @@ impl Lexer {
                     buffer
                 }
 
-                if char == '/' && let Some(t) = it.peek() && *t != '/' {
+                if char == '/' && let Some(t) = it.peek() && *t == '*' {
+                    let mut buffer = String::from(char);
+
+                    while let Some(_) = it.peek() {
+                        let t = it.next().unwrap();
+
+                        match t {
+                            '*' => {                                
+                                if let Some('/') = it.peek() {
+                                    self.col += 2;
+                                    buffer.push_str("*/");
+                                    it.next();
+                                } else {
+                                    self.col += 1;
+                                    buffer.push(t);
+                                }
+                            },
+                            '\n' => {
+                                self.line += 1;
+                                self.col = 0;
+
+                                buffer.push('\n');
+                            },
+                            _ => {
+                                self.col += 1;
+
+                                buffer.push(t);
+                            }
+                        }
+                    }
+
+                    TokenKind::Comment(buffer)
+                } else if char == '/' && let Some(t) = it.peek() && *t != '/' {
                     TokenKind::Slash
                 } else if char == '#' && let Some(t) = it.peek() && *t == '[' {
                     TokenKind::Attribute
@@ -585,6 +617,17 @@ string.'"#, &[
             TokenKind::Comment("// Single line comment.".into()),
             TokenKind::Comment("# Another single line comment.".into()),
         ]);
+    }
+
+    #[test]
+    fn multi_line_comments() {
+        assert_tokens(r#"<?php
+/*
+Hello
+*/"#, &[
+            open!(),
+            TokenKind::Comment("/*\nHello\n*/".into()),
+        ])
     }
 
     #[test]
