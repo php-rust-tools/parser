@@ -395,12 +395,10 @@ impl Lexer {
 
                 if char == '/' && let Some(t) = it.peek() && *t != '/' {
                     TokenKind::Slash
-                } else if char == '#' && let Some(t) = it.peek() && *t != '[' {
+                } else if char == '#' && let Some(t) = it.peek() && *t == '[' {
                     TokenKind::Attribute
                 } else {
-                    it.next();
-
-                    let buffer = read_till_end_of_line(self, it);
+                    let buffer = format!("{}{}{}", char, it.next().unwrap(), read_till_end_of_line(self, it));
 
                     TokenKind::Comment(buffer)
                 }
@@ -583,8 +581,9 @@ string.'"#, &[
         // Single line comment.
         # Another single line comment.
         "#, &[
-            TokenKind::Comment("Single line comment.".into()),
-            TokenKind::Comment("Another single line comment.".into()),
+            open!(),
+            TokenKind::Comment("// Single line comment.".into()),
+            TokenKind::Comment("# Another single line comment.".into()),
         ]);
     }
 
