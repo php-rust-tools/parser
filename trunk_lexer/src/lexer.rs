@@ -254,6 +254,47 @@ impl Lexer {
 
                 TokenKind::ConstantString(buffer)
             },
+            '"' => {
+                self.col += 1;
+
+                let mut buffer = String::new();
+                let mut escaping = false;
+
+                while let Some(n) = it.peek() {
+                    if ! escaping && *n == '"' {
+                        it.next();
+
+                        break;
+                    }
+
+                    if *n == '\\' && !escaping {
+                        escaping = true;
+                        it.next();
+                        continue;
+                    }
+
+                    if escaping && ['\\', '"'].contains(n) {
+                        escaping = false;
+                        buffer.push(*n);
+                        it.next();
+                        continue;
+                    }
+
+                    if *n == '\n' {
+                        self.line += 1;
+                        self.col = 0;
+                    } else {
+                        self.col += 1;
+                    }
+
+                    escaping = false;
+
+                    buffer.push(*n);
+                    it.next();
+                }
+
+                TokenKind::ConstantString(buffer)
+            },
             '$' => {
                 let mut buffer = String::new();
 
@@ -491,6 +532,17 @@ impl Lexer {
                     self.col += 1;
 
                     TokenKind::LessThanEquals
+                } else if let Some('<') = it.peek() {
+                    it.next();
+
+                    if let Some('<') = it.peek() {
+                        // TODO: Handle both heredocs and nowdocs.
+                        it.next();
+
+                        todo!("heredocs & nowdocs");
+                    } else {
+                        TokenKind::LeftShift
+                    }                 
                 } else {
                     TokenKind::LessThan
                 }

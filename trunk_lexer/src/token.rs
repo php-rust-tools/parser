@@ -11,6 +11,7 @@ pub enum TokenKind {
     AndEqual,
     Array,
     ArrayCast,
+    LeftShift,
     As,
     Asterisk,
     Attribute,
@@ -107,6 +108,7 @@ pub enum TokenKind {
     Bang,
     And,
     BitAnd,
+    DocOpen(String),
 }
 
 #[derive(Debug, Clone)]
