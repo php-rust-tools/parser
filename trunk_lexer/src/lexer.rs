@@ -460,11 +460,12 @@ impl Lexer {
                         let t = it.next().unwrap();
 
                         match t {
-                            '*' => {                                
+                            '*' => {                     
                                 if let Some('/') = it.peek() {
                                     self.col += 2;
                                     buffer.push_str("*/");
                                     it.next();
+                                    break;
                                 } else {
                                     self.col += 1;
                                     buffer.push(t);
@@ -729,6 +730,19 @@ Hello
 */"#, &[
             open!(),
             TokenKind::Comment("/*\nHello\n*/".into()),
+        ])
+    }
+
+    #[test]
+    fn multi_line_comments_before_structure() {
+        assert_tokens(r#"<?php
+/*
+Hello
+*/
+function"#, &[
+            open!(),
+            TokenKind::Comment("/*\nHello\n*/".into()),
+            TokenKind::Function,
         ])
     }
 
