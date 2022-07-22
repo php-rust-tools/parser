@@ -16,6 +16,7 @@ pub enum TokenKind {
     Attribute,
     BoolCast,
     BooleanAnd,
+    NamespaceSeparator,
     BooleanOr,
     Break,
     Callable,
@@ -98,7 +99,8 @@ pub enum TokenKind {
     TripleEquals,
     Var,
     Variable(String),
-
+    FullyQualifiedIdentifier(String),
+    QualifiedIdentifier(String),
 }
 
 #[derive(Debug, Clone)]

@@ -335,23 +335,43 @@ impl Lexer {
                     TokenKind::Int(buffer.parse().unwrap())
                 }
             },
+            '\\' => {
+                // TODO: Handle fully-qualified identifiers here.
+                TokenKind::NamespaceSeparator
+            },
             _ if char.is_alphabetic() || char == '_' => {
-                let mut buffer = String::from(char);
-
                 self.col += 1;
 
-                while let Some(n) = it.peek() {
-                    if n.is_alphanumeric() || n == &'_' {
-                        buffer.push(*n);
-                        it.next();
+                let mut qualified = false;
+                let mut last_was_slash = false;
 
+                let mut buffer = String::from(char);
+                while let Some(next) = it.peek() {
+                    if next.is_alphabetic() || *next == '_' {
+                        buffer.push(*next);
+                        it.next();
                         self.col += 1;
-                    } else {
-                        break;
+                        last_was_slash = false;
+                        continue;
                     }
+
+                    if *next == '\\' && ! last_was_slash {
+                        qualified = true;
+                        last_was_slash = true;
+                        buffer.push(*next);
+                        it.next();
+                        self.col += 1;
+                        continue;
+                    }
+
+                    break;
                 }
 
-                identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer))
+                if qualified {
+                    TokenKind::QualifiedIdentifier(buffer)
+                } else {
+                    identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer))
+                }
             },
             '/' | '#' => {
                 self.col += 1;
@@ -609,6 +629,16 @@ string.'"#, &[
             TokenKind::Plus,
             TokenKind::Minus,
             TokenKind::LessThan,
+        ]);
+    }
+
+    #[test]
+    fn identifiers() {
+        assert_tokens("<?php \\ Unqualified Is\\Qualified", &[
+            open!(),
+            TokenKind::NamespaceSeparator,
+            TokenKind::Identifier("Unqualified".into()),
+            TokenKind::QualifiedIdentifier("Is\\Qualified".into()),
         ]);
     }
 
