@@ -102,6 +102,11 @@ pub enum TokenKind {
     FullyQualifiedIdentifier(String),
     QualifiedIdentifier(String),
     Colon,
+    Caret,
+    Question,
+    Bang,
+    And,
+    BitAnd,
 }
 
 #[derive(Debug, Clone)]

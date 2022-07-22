@@ -156,6 +156,23 @@ impl Lexer {
         let char = it.next().unwrap();
 
         let kind = match char {
+            '!' => {
+                self.col += 1;
+                TokenKind::Bang
+            },
+            '&' => {
+                self.col += 1;
+
+                if let Some('&') = it.peek() {
+                    self.col += 1;
+
+                    it.next();
+
+                    TokenKind::BooleanAnd
+                } else {
+                    TokenKind::BitAnd
+                }
+            },
             '?' => {
                 // This is a close tag, we can enter "Initial" mode again.
                 if let Some('>') = it.peek() {
@@ -167,7 +184,7 @@ impl Lexer {
 
                     TokenKind::CloseTag
                 } else {
-                    todo!();
+                    TokenKind::Question
                 }
             },
             '=' => {
@@ -228,6 +245,8 @@ impl Lexer {
                     } else {
                         self.col += 1;
                     }
+
+                    escaping = false;
 
                     buffer.push(*n);
                     it.next();
@@ -329,7 +348,7 @@ impl Lexer {
                     }
                 }
 
-                if (is_float) {
+                if is_float {
                     TokenKind::Float(buffer.parse().unwrap())
                 } else {
                     TokenKind::Int(buffer.parse().unwrap())
@@ -465,7 +484,29 @@ impl Lexer {
             },
             '<' => {
                 self.col += 1;
-                TokenKind::LessThan
+
+                if let Some('=') = it.peek() {
+                    it.next();
+
+                    self.col += 1;
+
+                    TokenKind::LessThanEquals
+                } else {
+                    TokenKind::LessThan
+                }
+            },
+            '>' => {
+                self.col += 1;
+
+                if let Some('=') = it.peek() {
+                    it.next();
+
+                    self.col += 1;
+
+                    TokenKind::GreaterThanEquals
+                } else {
+                    TokenKind::GreaterThan
+                }
             },
             ',' => {
                 self.col += 1;

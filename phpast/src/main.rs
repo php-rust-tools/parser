@@ -8,28 +8,44 @@ use trunk_parser::Parser;
 #[structopt(name = "phpast", about = "Generate an abstract syntax tree from a PHP file.")]
 struct Args {
     #[structopt(parse(from_os_str), help = "The input file to use.")]
-    file: PathBuf,
+    file: Option<PathBuf>,
 
     #[structopt(short, long, help = "Output the abstract syntax tree as JSON.")]
     json: bool,
 
     #[structopt(short, long, help = "Only execute the lexer on the source file.")]
     lexer: bool,
+
+    #[structopt(short, long, help = "Provide a string to execute.")]
+    run: Option<String>,
+
+    #[structopt(short, long, help = "Dump tokens.")]
+    dump_tokens: bool,
 }
 
 fn main() {
     let args = Args::from_args();
     
-    let input = match std::fs::read_to_string(args.file) {
-        Ok(contents) => contents,
-        Err(e) => {
-            eprintln!("{}", e);
-            exit(1);
-        },
+    let input = if args.file.is_some() {
+        match std::fs::read_to_string(args.file.unwrap()) {
+            Ok(contents) => contents,
+            Err(e) => {
+                eprintln!("{}", e);
+                exit(1);
+            },
+        }
+    } else if args.run.is_some() {
+        args.run.unwrap()
+    } else {
+        panic!("boo!");
     };
 
     let mut lexer = Lexer::new(None);
     let tokens = lexer.tokenize(&input[..]).unwrap();
+
+    if args.dump_tokens {
+        dbg!(&tokens);
+    }
 
     if args.lexer {
         return;
