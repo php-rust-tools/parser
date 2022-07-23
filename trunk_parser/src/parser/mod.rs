@@ -493,7 +493,7 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use trunk_lexer::Lexer;
-    use crate::{Statement, Param, Expression, ast::{InfixOp}};
+    use crate::{Statement, Param, Expression, ast::{InfixOp}, Type};
     use super::Parser;
 
     macro_rules! function {
@@ -677,6 +677,77 @@ mod tests {
             class!("Foo", None, &["Bar".to_string().into(), "Baz".to_string().into()], &[]),
         ]);
     }
+
+    #[test]
+    fn plain_typestrings_test() {
+        assert_ast("<?php function foo(string $b) {}", &[
+            Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![
+                    Param {
+                        name: Expression::Variable("b".into()),
+                        r#type: Some(Type::Plain("string".into()))
+                    }
+                ],
+                body: vec![]
+            }
+        ]);
+    }
+
+    #[test]
+    fn nullable_typestrings_test() {
+        assert_ast("<?php function foo(?string $b) {}", &[
+            Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![
+                    Param {
+                        name: Expression::Variable("b".into()),
+                        r#type: Some(Type::Nullable("string".into()))
+                    }
+                ],
+                body: vec![]
+            }
+        ]);
+    }
+
+    #[test]
+    fn union_typestrings_test() {
+        assert_ast("<?php function foo(int|float $b) {}", &[
+            Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![
+                    Param {
+                        name: Expression::Variable("b".into()),
+                        r#type: Some(Type::Union(vec![
+                            "int".into(),
+                            "float".into()
+                        ]))
+                    }
+                ],
+                body: vec![]
+            }
+        ]);
+    }
+
+    #[test]
+    fn intersection_typestrings_test() {
+        assert_ast("<?php function foo(Foo&Bar $b) {}", &[
+            Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![
+                    Param {
+                        name: Expression::Variable("b".into()),
+                        r#type: Some(Type::Intersection(vec![
+                            "Foo".into(),
+                            "Bar".into()
+                        ]))
+                    }
+                ],
+                body: vec![]
+            }
+        ]);
+    }
+
 
     #[test]
     fn noop() {
