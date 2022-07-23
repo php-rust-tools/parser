@@ -66,6 +66,23 @@ impl Parser {
             return Ok(Type::Union(types))
         }
 
+        if self.current.kind == TokenKind::Ampersand {
+            self.next();
+
+            let mut types = vec![id];
+
+            while ! self.is_eof() {
+                let id = expect!(self, TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s), s, "expected identifier");
+                types.push(id);
+
+                if self.current.kind != TokenKind::Ampersand {
+                    break;
+                }
+            }
+
+            return Ok(Type::Intersection(types))
+        }
+
         return Ok(Type::Plain(id));
     }
 

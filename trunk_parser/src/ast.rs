@@ -9,6 +9,7 @@ pub enum Type {
     Plain(String),
     Nullable(String),
     Union(Vec<String>),
+    Intersection(Vec<String>),
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
