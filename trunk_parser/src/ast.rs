@@ -80,6 +80,7 @@ pub enum Statement {
         name: Identifier,
         params: Vec<Param>,
         body: Block,
+        return_type: Option<Type>,
     },
     Class {
         name: Identifier,

@@ -238,7 +238,13 @@ impl Parser {
 
                 expect!(self, TokenKind::RightParen, "expected )");
 
-                // TODO: Support return types here.
+                let mut return_type = None;
+
+                if self.current.kind == TokenKind::Colon {
+                    self.next();
+
+                    return_type = Some(self.type_string()?);
+                }
 
                 expect!(self, TokenKind::LeftBrace, "expected {");
 
@@ -250,7 +256,7 @@ impl Parser {
 
                 expect!(self, TokenKind::RightBrace, "expected }");
 
-                Statement::Function { name: name.into(), params, body }
+                Statement::Function { name: name.into(), params, body, return_type }
             },
             TokenKind::Var => {
                 self.next();
@@ -307,7 +313,7 @@ impl Parser {
             let s = self.statement()?;
 
             let statement = match s {
-                Statement::Function { name, params, body } => {
+                Statement::Function { name, params, body, .. } => {
                     Statement::Method { name, params, body, flags: vec![] }
                 },
                 Statement::Var { var } => {
@@ -502,6 +508,7 @@ mod tests {
                 name: $name.to_string().into(),
                 params: $params.to_vec().into_iter().map(|p: &str| Param::from(p)).collect::<Vec<Param>>(),
                 body: $body.to_vec(),
+                return_type: None,
             }
         };
     }
@@ -689,7 +696,8 @@ mod tests {
                         r#type: Some(Type::Plain("string".into()))
                     }
                 ],
-                body: vec![]
+                body: vec![],
+                return_type: None,
             }
         ]);
     }
@@ -705,7 +713,8 @@ mod tests {
                         r#type: Some(Type::Nullable("string".into()))
                     }
                 ],
-                body: vec![]
+                body: vec![],
+                return_type: None,
             }
         ]);
     }
@@ -724,8 +733,9 @@ mod tests {
                         ]))
                     }
                 ],
-                body: vec![]
-            }
+                body: vec![],
+                return_type: None,
+            },
         ]);
     }
 
@@ -743,11 +753,23 @@ mod tests {
                         ]))
                     }
                 ],
-                body: vec![]
+                body: vec![],
+                return_type: None,
             }
         ]);
     }
 
+    #[test]
+    fn function_return_types() {
+        assert_ast("<?php function foo(): string {}", &[
+            Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![],
+                body: vec![],
+                return_type: Some(Type::Plain("string".into()))
+            }
+        ]);
+    }
 
     #[test]
     fn noop() {
