@@ -496,6 +496,11 @@ impl Lexer {
                     TokenKind::Comment(buffer)
                 }
             },
+            '|' => {
+                self.col += 1;
+                // TODO: Handle boolean or || tokens.
+                TokenKind::Pipe
+            },  
             '{' => {
                 self.col += 1;
                 TokenKind::LeftBrace
