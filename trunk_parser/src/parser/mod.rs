@@ -48,6 +48,11 @@ impl Parser {
                     self.next();
                     return Ok(t);
                 },
+                TokenKind::Question => {
+                    self.next();
+                    let t = self.type_string()?;
+                    return Ok(Type::Nullable(Box::new(t)));
+                },
                 _ => todo!()
             }
         };
