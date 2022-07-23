@@ -342,6 +342,17 @@ impl Parser {
             TokenKind::Variable(v) => Expression::Variable(v.to_string()),
             TokenKind::Int(i) => Expression::Int(*i),
             TokenKind::Identifier(i) => Expression::Identifier(i.to_string()),
+            TokenKind::LeftParen => {
+                self.next();
+
+                let e = self.expression(0)?;
+
+                if self.current.kind != TokenKind::RightParen {
+                    return Err(ParseError::ExpectedToken("expected right paren".into(), self.current.span));
+                }
+
+                e
+            },
             TokenKind::LeftBracket => {
                 let mut items = Vec::new();
                 self.next();
@@ -552,6 +563,17 @@ mod tests {
                 body: $body.to_vec(),
             }
         };
+    }
+
+    #[test]
+    fn paren_expression() {
+        assert_ast("<?php (1 + 2);", &[
+            Statement::Expression { expr: Expression::Infix(
+                Box::new(Expression::Int(1)),
+                InfixOp::Add,
+                Box::new(Expression::Int(2))
+            ) }
+        ]);
     }
 
     #[test]
