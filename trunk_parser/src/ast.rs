@@ -5,6 +5,12 @@ pub type Block = Vec<Statement>;
 pub type Program = Block;
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
+pub enum Type {
+    Plain(String),
+    Nullable(Box<Type>),
+}
+
+#[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Identifier {
     name: String,
 }
@@ -23,12 +29,13 @@ impl From<&String> for Identifier {
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Param {
-    name: Expression,
+    pub(crate) name: Expression,
+    pub(crate) r#type: Option<Type>,
 }
 
 impl From<String> for Param {
     fn from(name: String) -> Self {
-        Self { name: Expression::Variable(name) }
+        Self { name: Expression::Variable(name), r#type: None }
     }
 }
 

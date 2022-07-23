@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::Display};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use}, Identifier};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use}, Identifier, Type, Param};
 
 macro_rules! expect {
     ($parser:expr, $expected:pat, $out:expr, $message:literal) => {
@@ -38,6 +38,21 @@ impl Parser {
         this.next();
         this.next();
         this
+    }
+
+    fn type_string(&mut self) -> Result<Type, ParseError> {
+        while ! self.is_eof() {
+            match &self.current.kind {
+                TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s) => {
+                    let t = Type::Plain(s.to_string());
+                    self.next();
+                    return Ok(t);
+                },
+                _ => todo!()
+            }
+        };
+
+        todo!();
     }
 
     fn statement(&mut self) -> Result<Statement, ParseError> {
@@ -168,8 +183,22 @@ impl Parser {
                 let mut params = Vec::new();
 
                 while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                    let mut param_type = None;
+
+                    // 1. If we don't see a variable, we should expect a type-string.
+                    if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+                        // 1a. Try to parse the type.
+                        param_type = Some(self.type_string()?);
+                    }
+
+                    // 2. Then expect a variable.
+                    let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
+
                     // TODO: Support variable types and default values.
-                    params.push(expect!(self, TokenKind::Variable(v), v, "expected variable").into());
+                    params.push(Param {
+                        name: Expression::Variable(var),
+                        r#type: param_type,
+                    });
                     
                     if let Token { kind: TokenKind::Comma, .. } = self.current {
                         self.next();
