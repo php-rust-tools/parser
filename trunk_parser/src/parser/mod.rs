@@ -41,23 +41,32 @@ impl Parser {
     }
 
     fn type_string(&mut self) -> Result<Type, ParseError> {
-        while ! self.is_eof() {
-            match &self.current.kind {
-                TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s) => {
-                    let t = Type::Plain(s.to_string());
-                    self.next();
-                    return Ok(t);
-                },
-                TokenKind::Question => {
-                    self.next();
-                    let t = self.type_string()?;
-                    return Ok(Type::Nullable(Box::new(t)));
-                },
-                _ => todo!()
-            }
-        };
+        if self.current.kind == TokenKind::Question {
+            self.next();
+            let t = expect!(self, TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s), s, "expected identifier");
+            return Ok(Type::Nullable(t));
+        }
 
-        todo!();
+        let id = expect!(self, TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s), s, "expected identifier");
+
+        if self.current.kind == TokenKind::Pipe {
+            self.next();
+
+            let mut types = vec![id];
+
+            while ! self.is_eof() {
+                let id = expect!(self, TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s), s, "expected identifier");
+                types.push(id);
+
+                if self.current.kind != TokenKind::Pipe {
+                    break;
+                }
+            }
+
+            return Ok(Type::Union(types))
+        }
+
+        return Ok(Type::Plain(id));
     }
 
     fn statement(&mut self) -> Result<Statement, ParseError> {

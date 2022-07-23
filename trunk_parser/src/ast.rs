@@ -7,7 +7,8 @@ pub type Program = Block;
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Type {
     Plain(String),
-    Nullable(Box<Type>),
+    Nullable(String),
+    Union(Vec<String>),
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]

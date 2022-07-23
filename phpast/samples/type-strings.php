@@ -1,9 +1,13 @@
 <?php
 
-function foo(string $bar) {
+function plain(string $b) {
+    
+}
+
+function nullable(?string $f) {
 
 }
 
-function bar(?string $baz) {
-    
+function foo(int|float $bar) {
+
 }
