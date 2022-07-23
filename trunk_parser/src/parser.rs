@@ -24,7 +24,6 @@ pub struct Parser {
     pub current: Token,
     pub peek: Token,
     iter: IntoIter<Token>,
-    comments: Vec<String>,
 }
 
 #[allow(dead_code)]
@@ -34,7 +33,6 @@ impl Parser {
             current: Token::default(),
             peek: Token::default(),
             iter: tokens.into_iter(),
-            comments: Vec::new(),
         };
 
         this.next();
