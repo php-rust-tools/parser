@@ -170,7 +170,7 @@ impl Lexer {
 
                     TokenKind::BooleanAnd
                 } else {
-                    TokenKind::BitAnd
+                    TokenKind::Ampersand
                 }
             },
             '?' => {
@@ -500,7 +500,7 @@ impl Lexer {
                 self.col += 1;
                 // TODO: Handle boolean or || tokens.
                 TokenKind::Pipe
-            },  
+            },
             '{' => {
                 self.col += 1;
                 TokenKind::LeftBrace

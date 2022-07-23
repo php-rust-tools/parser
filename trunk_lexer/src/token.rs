@@ -74,6 +74,7 @@ pub enum TokenKind {
     Use,
     If,
     Pipe,
+    Ampersand,
     Implements,
     InlineHtml(String),
     Int(i64),
@@ -108,7 +109,6 @@ pub enum TokenKind {
     Question,
     Bang,
     And,
-    BitAnd,
     DocOpen(String),
     Namespace,
 }
