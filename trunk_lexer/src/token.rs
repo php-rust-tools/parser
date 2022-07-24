@@ -81,6 +81,7 @@ pub enum TokenKind {
     Implements,
     InlineHtml(String),
     Int(i64),
+    Interface,
     LeftBrace,
     LeftBracket,
     LeftParen,
