@@ -1,6 +1,8 @@
 use std::{vec::IntoIter, fmt::Display};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use}, Identifier, Type, Param};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag}, Identifier, Type, Param};
+
+type ParseResult<T> = Result<T, ParseError>;
 
 macro_rules! expect {
     ($parser:expr, $expected:pat, $out:expr, $message:literal) => {
@@ -40,7 +42,7 @@ impl Parser {
         this
     }
 
-    fn type_string(&mut self) -> Result<Type, ParseError> {
+    fn type_string(&mut self) -> ParseResult<Type> {
         if self.current.kind == TokenKind::Question {
             self.next();
             let t = expect!(self, TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s), s, "expected identifier");
@@ -86,7 +88,7 @@ impl Parser {
         return Ok(Type::Plain(id));
     }
 
-    fn statement(&mut self) -> Result<Statement, ParseError> {
+    fn statement(&mut self) -> ParseResult<Statement> {
         Ok(match &self.current.kind {
             TokenKind::InlineHtml(html) => {
                 let s = Statement::InlineHtml(html.to_string());
@@ -97,6 +99,26 @@ impl Parser {
                 let s = Statement::Comment { comment: comment.to_string() };
                 self.next();
                 s
+            },
+            TokenKind::Abstract => {
+                self.next();  
+
+                match self.class()? {
+                    Statement::Class { name, extends, implements, body, .. } => {
+                        Statement::Class { name, extends, implements, body, flag: Some(ClassFlag::Abstract) }
+                    },
+                    _ => unreachable!(),
+                }
+            },
+            TokenKind::Final => {
+                self.next();  
+
+                match self.class()? {
+                    Statement::Class { name, extends, implements, body, .. } => {
+                        Statement::Class { name, extends, implements, body, flag: Some(ClassFlag::Final) }
+                    },
+                    _ => unreachable!(),
+                }
             },
             TokenKind::Use => {
                 self.next();
@@ -204,75 +226,7 @@ impl Parser {
                     ret
                 }
             },
-            TokenKind::Function => {
-                self.next();
-
-                let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
-
-                expect!(self, TokenKind::LeftParen, "expected (");
-
-                let mut params = Vec::new();
-
-                while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
-                    let mut param_type = None;
-
-                    // 1. If we don't see a variable, we should expect a type-string.
-                    if ! matches!(self.current.kind, TokenKind::Variable(_)) {
-                        // 1a. Try to parse the type.
-                        param_type = Some(self.type_string()?);
-                    }
-
-                    // 2. Then expect a variable.
-                    let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
-
-                    // TODO: Support variable types and default values.
-                    params.push(Param {
-                        name: Expression::Variable(var),
-                        r#type: param_type,
-                    });
-                    
-                    if let Token { kind: TokenKind::Comma, .. } = self.current {
-                        self.next();
-                    }
-                }
-
-                expect!(self, TokenKind::RightParen, "expected )");
-
-                let mut return_type = None;
-
-                if self.current.kind == TokenKind::Colon {
-                    self.next();
-
-                    return_type = Some(self.type_string()?);
-                }
-
-                expect!(self, TokenKind::LeftBrace, "expected {");
-
-                let mut body = Block::new();
-
-                while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
-                    body.push(self.statement()?);
-                }
-
-                expect!(self, TokenKind::RightBrace, "expected }");
-
-                Statement::Function { name: name.into(), params, body, return_type }
-            },
-            TokenKind::Var => {
-                self.next();
-
-                let mut var_type = None;
-
-                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
-                    var_type = Some(self.type_string()?);
-                }
-
-                let var = expect!(self, TokenKind::Variable(i), i, "expected variable name");
-
-                expect!(self, TokenKind::SemiColon, "expected semi-colon");
-
-                Statement::Var { var, r#type: var_type }
-            },
+            TokenKind::Function => self.function()?,
             TokenKind::SemiColon => {
                 self.next();
 
@@ -288,7 +242,62 @@ impl Parser {
         })
     }
 
-    fn class(&mut self) -> Result<Statement, ParseError> {
+    fn function(&mut self) -> ParseResult<Statement> {
+        self.next();
+
+        let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+
+        expect!(self, TokenKind::LeftParen, "expected (");
+
+        let mut params = Vec::new();
+
+        while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+            let mut param_type = None;
+
+            // 1. If we don't see a variable, we should expect a type-string.
+            if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+                // 1a. Try to parse the type.
+                param_type = Some(self.type_string()?);
+            }
+
+            // 2. Then expect a variable.
+            let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
+
+            // TODO: Support variable types and default values.
+            params.push(Param {
+                name: Expression::Variable(var),
+                r#type: param_type,
+            });
+            
+            if let Token { kind: TokenKind::Comma, .. } = self.current {
+                self.next();
+            }
+        }
+
+        expect!(self, TokenKind::RightParen, "expected )");
+
+        let mut return_type = None;
+
+        if self.current.kind == TokenKind::Colon {
+            self.next();
+
+            return_type = Some(self.type_string()?);
+        }
+
+        expect!(self, TokenKind::LeftBrace, "expected {");
+
+        let mut body = Block::new();
+
+        while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
+            body.push(self.statement()?);
+        }
+
+        expect!(self, TokenKind::RightBrace, "expected }");
+
+        Ok(Statement::Function { name: name.into(), params, body, return_type })
+    }
+
+    fn class(&mut self) -> ParseResult<Statement> {
         self.next();
 
         let name = expect!(self, TokenKind::Identifier(i), i, "expected class name");
@@ -316,22 +325,7 @@ impl Parser {
 
         let mut body = Vec::new();
         while self.current.kind != TokenKind::RightBrace && ! self.is_eof() {
-            let s = self.statement()?;
-
-            let statement = match s {
-                Statement::Function { name, params, body, .. } => {
-                    Statement::Method { name, params, body, flags: vec![] }
-                },
-                Statement::Var { var, r#type } => {
-                    Statement::Property { var, r#type }
-                },
-                Statement::Method { .. } | Statement::Comment { .. } => s,
-                _ => {
-                    return Err(ParseError::InvalidClassStatement("Classes can only contain properties, constants and methods.".to_string(), self.current.span))
-                }
-            };
-
-            body.push(statement);
+            body.push(self.class_statement()?);
         }
 
         expect!(self, TokenKind::RightBrace, "expected right-brace");
@@ -339,6 +333,178 @@ impl Parser {
         Ok(Statement::Class { name: name.into(), extends, implements, body, flag: None })
     }
     
+    fn class_statement(&mut self) -> ParseResult<Statement> {
+        match self.current.kind {
+            TokenKind::Const => {
+                self.next();
+
+                let name = expect!(self, TokenKind::Identifier(c), c, "expected constant name");
+
+                expect!(self, TokenKind::Equals, "expected =");
+
+                let value = self.expression(0)?;
+
+                expect!(self, TokenKind::SemiColon, "expected ;");
+
+                Ok(Statement::Constant { name: name.into(), value, flags: vec![] })
+            },
+            TokenKind::Var => {
+                self.next();
+
+                let mut var_type = None;
+
+                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+                    var_type = Some(self.type_string()?);
+                }
+
+                let var = expect!(self, TokenKind::Variable(i), i, "expected variable name");
+                let mut value = None;
+
+                if self.current.kind == TokenKind::Equals {
+                    self.next();
+
+                    value = Some(self.expression(0)?);
+                }
+
+                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                Ok(Statement::Var { var, value, r#type: var_type })
+            },
+            TokenKind::Final | TokenKind::Abstract | TokenKind::Public | TokenKind::Private | TokenKind::Protected | TokenKind::Static => {
+                let mut flags = vec![self.current.kind.clone()];
+                self.next();
+
+                while ! self.is_eof() && [TokenKind::Final, TokenKind::Abstract, TokenKind::Public, TokenKind::Private, TokenKind::Protected, TokenKind::Static].contains(&self.current.kind) {
+                    if flags.contains(&self.current.kind) {
+                        return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span));
+                    }
+
+                    flags.push(self.current.kind.clone());
+                    self.next();
+                }
+
+                if flags.contains(&TokenKind::Final) && flags.contains(&TokenKind::Abstract) {
+                    return Err(ParseError::InvalidAbstractFinalFlagCombination(self.current.span));
+                }
+
+                match self.current.kind {
+                    TokenKind::Const => {
+                        if flags.contains(&TokenKind::Static) {
+                            return Err(ParseError::ConstantCannotBeStatic(self.current.span));
+                        }
+
+                        if flags.contains(&TokenKind::Final) && flags.contains(&TokenKind::Private) {
+                            return Err(ParseError::ConstantCannotBePrivateFinal(self.current.span));
+                        }
+
+                        self.next();
+
+                        let name = expect!(self, TokenKind::Identifier(c), c, "expected constant name");
+
+                        expect!(self, TokenKind::Equals, "expected =");
+        
+                        let value = self.expression(0)?;
+        
+                        expect!(self, TokenKind::SemiColon, "expected ;");
+        
+                        Ok(Statement::Constant { name: name.into(), value, flags: flags.into_iter().map(|f| f.clone().into()).collect() })
+                    },
+                    TokenKind::Function => {
+                        if flags.contains(&TokenKind::Abstract) {
+                            self.next();
+
+                            let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+
+                            expect!(self, TokenKind::LeftParen, "expected (");
+
+                            let mut params = Vec::new();
+                            while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                                let mut param_type = None;
+
+                                // 1. If we don't see a variable, we should expect a type-string.
+                                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+                                    // 1a. Try to parse the type.
+                                    param_type = Some(self.type_string()?);
+                                }
+
+                                // 2. Then expect a variable.
+                                let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
+
+                                // TODO: Support variable types and default values.
+                                params.push(Param {
+                                    name: Expression::Variable(var),
+                                    r#type: param_type,
+                                });
+                                
+                                if let Token { kind: TokenKind::Comma, .. } = self.current {
+                                    self.next();
+                                }
+                            }
+
+                            expect!(self, TokenKind::RightParen, "expected )");
+
+                            let mut return_type = None;
+
+                            if self.current.kind == TokenKind::Colon {
+                                self.next();
+
+                                return_type = Some(self.type_string()?);
+                            }
+
+                            expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                            Ok(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: flags.iter().map(|t| t.clone().into()).collect() })
+                        } else {
+                            match self.function()? {
+                                Statement::Function { name, params, body, return_type } => {
+                                    Ok(Statement::Method { name, params, body, flags: flags.iter().map(|t| t.clone().into()).collect(), return_type })
+                                },
+                                _ => unreachable!()
+                            }
+                        }
+                    },
+                    TokenKind::Question | TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_) => {
+                        let prop_type = self.type_string()?;
+                        let var = expect!(self, TokenKind::Variable(v), v, "expected variable name");
+                        let mut value = None;
+
+                        if self.current.kind == TokenKind::Equals {
+                            self.next();
+                            value = Some(self.expression(0)?);
+                        }
+
+                        expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                        Ok(Statement::Property { var: var.into(), value, r#type: Some(prop_type), flags: flags.into_iter().map(|f| f.clone().into()).collect() })
+                    },
+                    TokenKind::Variable(_) => {
+                        let var = expect!(self, TokenKind::Variable(v), v, "expected variable name");
+                        let mut value = None;
+
+                        if self.current.kind == TokenKind::Equals {
+                            self.next();
+                            value = Some(self.expression(0)?);
+                        }
+
+                        expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                        Ok(Statement::Property { var, value, r#type:None, flags: flags.into_iter().map(|f| f.clone().into()).collect() })
+                    },
+                    _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
+                }
+            },
+            TokenKind::Function => {
+                match self.function()? {
+                    Statement::Function { name, params, body, return_type } => {
+                        Ok(Statement::Method { name, params, body, flags: vec![], return_type })
+                    },
+                    _ => unreachable!(),
+                }
+            },
+            _ => return Err(ParseError::UnexpectedToken(format!("{}", self.current.kind), self.current.span))
+        }
+    }
+
     fn expression(&mut self, bp: u8) -> Result<Expression, ParseError> {
         if self.is_eof() {
             return Err(ParseError::UnexpectedEndOfFile);
@@ -499,8 +665,12 @@ fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
 #[derive(Debug)]
 pub enum ParseError {
     ExpectedToken(String, Span),
+    UnexpectedToken(String, Span),
     UnexpectedEndOfFile,
     InvalidClassStatement(String, Span),
+    InvalidAbstractFinalFlagCombination(Span),
+    ConstantCannotBeStatic(Span),
+    ConstantCannotBePrivateFinal(Span),
 }
 
 impl Display for ParseError {
@@ -508,7 +678,11 @@ impl Display for ParseError {
         match self {
             Self::ExpectedToken(message, span) => write!(f, "Parse error: {} on line {} column {}", message, span.0, span.1),
             Self::InvalidClassStatement(message, span) => write!(f, "Parse error: {} on line {} column {}", message, span.0, span.1),
-            Self::UnexpectedEndOfFile => write!(f, "Parse error: unexpected end of file.")
+            Self::UnexpectedEndOfFile => write!(f, "Parse error: unexpected end of file."),
+            Self::UnexpectedToken(message, span) => write!(f, "Parse error: unexpected token {} on line {} column {}", message, span.0, span.1),
+            Self::InvalidAbstractFinalFlagCombination(span) => write!(f, "Parse error: final cannot be used on an abstract class member on line {}", span.0),
+            Self::ConstantCannotBeStatic(span) => write!(f, "Parse error: class constant cannot be marked static on line {}", span.0),
+            Self::ConstantCannotBePrivateFinal(span) => write!(f, "Parse error: private class constant cannot be marked final since it is not visible to other classes on line {}", span.0),
         }
     }
 }
@@ -567,6 +741,7 @@ mod tests {
                 params: $params.to_vec().into_iter().map(|p: &str| Param::from(p)).collect::<Vec<Param>>(),
                 flags: $flags.to_vec(),
                 body: $body.to_vec(),
+                return_type: None,
             }
         };
     }

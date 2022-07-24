@@ -54,11 +54,47 @@ impl From<&str> for Param {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
-pub enum MethodFlag {
+pub enum PropertyFlag {
     Public,
     Protected,
     Private,
     Static,
+}
+
+impl From<TokenKind> for PropertyFlag {
+    fn from(k: TokenKind) -> Self {
+        match k {
+            TokenKind::Public => Self::Public,
+            TokenKind::Protected => Self::Protected,
+            TokenKind::Private => Self::Private,
+            TokenKind::Static => Self::Static,
+            _ => unreachable!("token {:?} can't be converted into property flag.", k),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub enum MethodFlag {
+    Final,
+    Abstract,
+    Public,
+    Protected,
+    Private,
+    Static,
+}
+
+impl From<TokenKind> for MethodFlag {
+    fn from(k: TokenKind) -> Self {
+        match k {
+            TokenKind::Final => Self::Final,
+            TokenKind::Abstract => Self::Abstract,
+            TokenKind::Public => Self::Public,
+            TokenKind::Protected => Self::Protected,
+            TokenKind::Private => Self::Private,
+            TokenKind::Static => Self::Static,
+            _ => unreachable!("token {:?} can't be converted into method flag.", k),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
@@ -67,16 +103,35 @@ pub enum ClassFlag {
     Abstract,
 }
 
+impl From<TokenKind> for ClassFlag {
+    fn from(k: TokenKind) -> Self {
+        match k {
+            TokenKind::Final => Self::Final,
+            TokenKind::Abstract => Self::Abstract,
+            _ => unreachable!("token {:?} can't be converted into class flag.", k),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
     InlineHtml(String),
+    // TODO: Look at removing this and unifying with Property.
     Var {
         var: String,
+        value: Option<Expression>,
         r#type: Option<Type>,
     },
     Property {
         var: String,
+        value: Option<Expression>,
         r#type: Option<Type>,
+        flags: Vec<PropertyFlag>,
+    },
+    Constant {
+        name: Identifier,
+        value: Expression,
+        flags: Vec<ConstFlag>,
     },
     Function {
         name: Identifier,
@@ -96,6 +151,7 @@ pub enum Statement {
         params: Vec<Param>,
         body: Block,
         flags: Vec<MethodFlag>,
+        return_type: Option<Type>,
     },
     If {
         condition: Expression,
@@ -121,6 +177,26 @@ pub enum Statement {
         comment: String,
     },
     Noop,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub enum ConstFlag {
+    Final,
+    Public,
+    Protected,
+    Private,
+}
+
+impl From<TokenKind> for ConstFlag {
+    fn from(k: TokenKind) -> Self {
+        match k {
+            TokenKind::Final => Self::Final,
+            TokenKind::Public => Self::Public,
+            TokenKind::Protected => Self::Protected,
+            TokenKind::Private => Self::Private,
+            _ => unreachable!("token {:?} can't be converted into const flag.", k),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
