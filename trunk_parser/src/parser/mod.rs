@@ -473,6 +473,9 @@ impl Parser {
                             value = Some(self.expression(0)?);
                         }
 
+                        // TODO: Support comma-separated property declarations.
+                        //       nikic/php-parser does this with a single Property statement
+                        //       that is capable of holding multiple property declarations.
                         expect!(self, TokenKind::SemiColon, "expected semi-colon");
 
                         Ok(Statement::Property { var: var.into(), value, r#type: Some(prop_type), flags: flags.into_iter().map(|f| f.clone().into()).collect() })
@@ -501,6 +504,7 @@ impl Parser {
                     _ => unreachable!(),
                 }
             },
+            // TODO: Support use statements.
             _ => return Err(ParseError::UnexpectedToken(format!("{}", self.current.kind), self.current.span))
         }
     }
