@@ -72,9 +72,11 @@ pub enum Statement {
     InlineHtml(String),
     Var {
         var: String,
+        r#type: Option<Type>,
     },
     Property {
         var: String,
+        r#type: Option<Type>,
     },
     Function {
         name: Identifier,

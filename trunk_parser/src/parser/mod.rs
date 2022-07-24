@@ -261,11 +261,17 @@ impl Parser {
             TokenKind::Var => {
                 self.next();
 
+                let mut var_type = None;
+
+                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+                    var_type = Some(self.type_string()?);
+                }
+
                 let var = expect!(self, TokenKind::Variable(i), i, "expected variable name");
 
                 expect!(self, TokenKind::SemiColon, "expected semi-colon");
 
-                Statement::Var { var }
+                Statement::Var { var, r#type: var_type }
             },
             TokenKind::SemiColon => {
                 self.next();
@@ -316,8 +322,8 @@ impl Parser {
                 Statement::Function { name, params, body, .. } => {
                     Statement::Method { name, params, body, flags: vec![] }
                 },
-                Statement::Var { var } => {
-                    Statement::Property { var }
+                Statement::Var { var, r#type } => {
+                    Statement::Property { var, r#type }
                 },
                 Statement::Method { .. } | Statement::Comment { .. } => s,
                 _ => {
