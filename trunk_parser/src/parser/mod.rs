@@ -120,6 +120,131 @@ impl Parser {
                     _ => unreachable!(),
                 }
             },
+            TokenKind::Interface => {
+                self.next();
+
+                let name = expect!(self, TokenKind::Identifier(n), n, "expected identifier");
+
+                let mut extends = vec![];
+                if self.current.kind == TokenKind::Extends {
+                    self.next();
+
+                    while self.current.kind != TokenKind::LeftBrace {
+                        if self.current.kind == TokenKind::Comma {
+                            self.next();
+                        }
+
+                        let e = expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i), i, "expected identifier");
+
+                        extends.push(e.into());
+                    }
+                }
+
+                expect!(self, TokenKind::LeftBrace, "expected {");
+
+                let mut body = Block::new();
+                while self.current.kind != TokenKind::RightBrace {
+                    match self.current.kind {
+                        TokenKind::Public => {
+                            self.next();
+
+                            self.next();
+
+                            let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+
+                            expect!(self, TokenKind::LeftParen, "expected (");
+
+                            let mut params = Vec::new();
+                            while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                                let mut param_type = None;
+
+                                // 1. If we don't see a variable, we should expect a type-string.
+                                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+                                    // 1a. Try to parse the type.
+                                    param_type = Some(self.type_string()?);
+                                }
+
+                                // 2. Then expect a variable.
+                                let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
+
+                                // TODO: Support variable types and default values.
+                                params.push(Param {
+                                    name: Expression::Variable(var),
+                                    r#type: param_type,
+                                });
+                                
+                                if let Token { kind: TokenKind::Comma, .. } = self.current {
+                                    self.next();
+                                }
+                            }
+
+                            expect!(self, TokenKind::RightParen, "expected )");
+
+                            let mut return_type = None;
+
+                            if self.current.kind == TokenKind::Colon {
+                                self.next();
+
+                                return_type = Some(self.type_string()?);
+                            }
+
+                            expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                            body.push(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: vec![MethodFlag::Public] })
+                        },
+                        TokenKind::Function => {
+                            self.next();
+
+                            let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+
+                            expect!(self, TokenKind::LeftParen, "expected (");
+
+                            let mut params = Vec::new();
+                            while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                                let mut param_type = None;
+
+                                // 1. If we don't see a variable, we should expect a type-string.
+                                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+                                    // 1a. Try to parse the type.
+                                    param_type = Some(self.type_string()?);
+                                }
+
+                                // 2. Then expect a variable.
+                                let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
+
+                                // TODO: Support variable types and default values.
+                                params.push(Param {
+                                    name: Expression::Variable(var),
+                                    r#type: param_type,
+                                });
+                                
+                                if let Token { kind: TokenKind::Comma, .. } = self.current {
+                                    self.next();
+                                }
+                            }
+
+                            expect!(self, TokenKind::RightParen, "expected )");
+
+                            let mut return_type = None;
+
+                            if self.current.kind == TokenKind::Colon {
+                                self.next();
+
+                                return_type = Some(self.type_string()?);
+                            }
+
+                            expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                            body.push(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: vec![] })
+                        },
+                        _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span)),
+                    }
+                }
+
+                expect!(self, TokenKind::RightBrace, "expected }");
+
+                Statement::Interface { name: name.into(), extends, body }
+            },
             TokenKind::Use => {
                 self.next();
 
