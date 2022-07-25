@@ -730,6 +730,7 @@ impl Parser {
                 Expression::Array(items)
             },
             TokenKind::Function => {
+                // TODO: Support `use (...)` as part of long closure.
                 match self.function(FunctionKind::Closure)? {
                     Statement::Function { params, body, return_type, .. } => {
                         Expression::Closure(params, return_type, body)
