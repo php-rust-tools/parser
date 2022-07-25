@@ -483,6 +483,24 @@ impl Parser {
     
     fn class_statement(&mut self) -> ParseResult<Statement> {
         match self.current.kind {
+            TokenKind::Use => {
+                self.next();
+
+                let mut traits = Vec::new();
+
+                while self.current.kind != TokenKind::SemiColon {
+                    if self.current.kind == TokenKind::Comma {
+                        self.next();
+                    }
+
+                    let t = expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i), i, "expected identifier");
+                    traits.push(t.into());
+                }
+
+                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                Ok(Statement::TraitUse { traits })
+            },
             TokenKind::Const => {
                 self.next();
 

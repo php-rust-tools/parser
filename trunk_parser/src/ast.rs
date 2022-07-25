@@ -113,6 +113,8 @@ impl From<TokenKind> for ClassFlag {
     }
 }
 
+
+
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
     InlineHtml(String),
@@ -149,6 +151,9 @@ pub enum Statement {
     Trait {
         name: Identifier,
         body: Block,
+    },
+    TraitUse {
+        traits: Vec<Identifier>,
     },
     Interface {
         name: Identifier,
