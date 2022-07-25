@@ -22,6 +22,12 @@ macro_rules! expect {
     };
 }
 
+#[derive(PartialEq)]
+enum FunctionKind {
+    Named,
+    Closure,
+}
+
 pub struct Parser {
     pub current: Token,
     pub peek: Token,
@@ -374,7 +380,7 @@ impl Parser {
                     ret
                 }
             },
-            TokenKind::Function => self.function()?,
+            TokenKind::Function => self.function(FunctionKind::Named)?,
             TokenKind::SemiColon => {
                 self.next();
 
@@ -390,10 +396,14 @@ impl Parser {
         })
     }
 
-    fn function(&mut self) -> ParseResult<Statement> {
+    fn function(&mut self, kind: FunctionKind) -> ParseResult<Statement> {
         self.next();
 
-        let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+        let name = if kind == FunctionKind::Named {
+            expect!(self, TokenKind::Identifier(i), i, "expected identifier")
+        } else {
+            String::new()
+        };
 
         expect!(self, TokenKind::LeftParen, "expected (");
 
@@ -621,7 +631,7 @@ impl Parser {
 
                             Ok(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: flags.iter().map(|t| t.clone().into()).collect() })
                         } else {
-                            match self.function()? {
+                            match self.function(FunctionKind::Named)? {
                                 Statement::Function { name, params, body, return_type } => {
                                     Ok(Statement::Method { name, params, body, flags: flags.iter().map(|t| t.clone().into()).collect(), return_type })
                                 },
@@ -663,7 +673,7 @@ impl Parser {
                 }
             },
             TokenKind::Function => {
-                match self.function()? {
+                match self.function(FunctionKind::Named)? {
                     Statement::Function { name, params, body, return_type } => {
                         Ok(Statement::Method { name, params, body, flags: vec![], return_type })
                     },
@@ -719,8 +729,65 @@ impl Parser {
 
                 Expression::Array(items)
             },
+            TokenKind::Function => {
+                match self.function(FunctionKind::Closure)? {
+                    Statement::Function { params, body, return_type, .. } => {
+                        Expression::Closure(params, return_type, body)
+                    },
+                    _ => unreachable!()
+                }
+            },
+            TokenKind::Fn => {
+                self.next();
+
+                expect!(self, TokenKind::LeftParen, "expected (");
+
+                let mut params = Vec::new();
+                while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                    let mut param_type = None;
+        
+                    // 1. If we don't see a variable, we should expect a type-string.
+                    if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+                        // 1a. Try to parse the type.
+                        param_type = Some(self.type_string()?);
+                    }
+        
+                    // 2. Then expect a variable.
+                    let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
+        
+                    // TODO: Support variable types and default values.
+                    params.push(Param {
+                        name: Expression::Variable(var),
+                        r#type: param_type,
+                    });
+                    
+                    if let Token { kind: TokenKind::Comma, .. } = self.current {
+                        self.next();
+                    }
+                }
+        
+                expect!(self, TokenKind::RightParen, "expected )");
+        
+                let mut return_type = None;
+        
+                if self.current.kind == TokenKind::Colon {
+                    self.next();
+        
+                    return_type = Some(self.type_string()?);
+                }
+                
+                expect!(self, TokenKind::DoubleArrow, "expected =>");
+
+                let value = self.expression(0)?;
+
+                Expression::ArrowFunction(params, return_type, Box::new(value))
+            },
             _ => todo!("expr lhs: {:?}", self.current.kind),
         };
+
+        if self.current.kind == TokenKind::SemiColon {
+            return Ok(lhs);
+        }
 
         self.next();
 

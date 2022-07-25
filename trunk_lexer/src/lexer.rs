@@ -611,6 +611,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "extends" => TokenKind::Extends,
         "false" | "FALSE" => TokenKind::False,
         "final" => TokenKind::Final,
+        "fn" => TokenKind::Fn,
         "function" => TokenKind::Function,
         "if" => TokenKind::If,
         "implements" => TokenKind::Implements,

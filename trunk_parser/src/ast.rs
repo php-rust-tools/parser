@@ -228,6 +228,8 @@ pub enum Expression {
     Identifier(String),
     Assign(Box<Self>, Box<Self>),
     Array(Vec<ArrayItem>),
+    Closure(Vec<Param>, Option<Type>, Block),
+    ArrowFunction(Vec<Param>, Option<Type>, Box<Self>)
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
