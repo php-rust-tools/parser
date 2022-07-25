@@ -783,6 +783,31 @@ impl Parser {
 
                 Expression::ArrowFunction(params, return_type, Box::new(value))
             },
+            TokenKind::New => {
+                self.next();
+
+                // TODO: Support dynamic instantiation targets here.
+                let target = self.expression(20)?;
+
+                let mut args = vec![];
+                if self.current.kind == TokenKind::LeftParen {
+                    expect!(self, TokenKind::LeftParen, "expected (");
+
+                    while self.current.kind != TokenKind::RightParen {
+                        let value = self.expression(0)?;
+
+                        args.push(value);
+
+                        if self.current.kind == TokenKind::Comma {
+                            self.next();
+                        }
+                    }
+
+                    expect!(self, TokenKind::RightParen, "expected )");
+                }
+
+                Expression::New(Box::new(target), args)
+            },
             _ => todo!("expr lhs: {:?}", self.current.kind),
         };
 
