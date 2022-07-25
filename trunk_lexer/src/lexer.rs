@@ -617,6 +617,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "implements" => TokenKind::Implements,
         "interface" => TokenKind::Interface,
         "namespace" => TokenKind::Namespace,
+        "new" => TokenKind::New,
         "null" | "NULL" => TokenKind::Null,
         "private" => TokenKind::Private,
         "protected" => TokenKind::Protected,
@@ -679,7 +680,7 @@ mod tests {
 
     #[test]
     fn keywords() {
-        assert_tokens("<?php function if else elseif echo return class extends implements public protected private static null NULL true TRUE false FALSE use const namespace interface", &[
+        assert_tokens("<?php function if else elseif echo return class extends implements public protected private static null NULL true TRUE false FALSE use const namespace interface new", &[
             open!(),
             TokenKind::Function,
             TokenKind::If,
@@ -704,6 +705,7 @@ mod tests {
             TokenKind::Const,
             TokenKind::Namespace,
             TokenKind::Interface,
+            TokenKind::New,
         ]);
     }
 

@@ -92,6 +92,7 @@ pub enum TokenKind {
     Minus,
     Namespace,
     NamespaceSeparator,
+    New,
     Null,
     OpenTag(OpenTagKind),
     Percent,
@@ -215,6 +216,7 @@ impl Display for TokenKind {
             Self::Minus => "-",
             Self::Namespace => "namespace",
             Self::NamespaceSeparator => "\\",
+            Self::New => "new",
             Self::Null => "null",
             Self::OpenTag(kind) => match kind {
                 OpenTagKind::Full => "<?php",
