@@ -120,6 +120,18 @@ impl Parser {
                     _ => unreachable!(),
                 }
             },
+            TokenKind::Trait => {
+                self.next();
+
+                let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+
+                let mut body = Block::new();
+
+                expect!(self, TokenKind::LeftBrace, "expected {");
+                expect!(self, TokenKind::RightBrace, "expected }");
+
+                Statement::Trait { name: name.into(), body }
+            },
             TokenKind::Interface => {
                 self.next();
 

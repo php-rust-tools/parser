@@ -146,6 +146,10 @@ pub enum Statement {
         body: Block,
         flag: Option<ClassFlag>,
     },
+    Trait {
+        name: Identifier,
+        body: Block,
+    },
     Interface {
         name: Identifier,
         extends: Vec<Identifier>,
