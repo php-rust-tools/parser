@@ -1,4 +1,4 @@
-use std::{vec::IntoIter, fmt::Display};
+use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
 use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag}, Identifier, Type, Param};
 
@@ -125,9 +125,20 @@ impl Parser {
 
                 let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
 
-                let mut body = Block::new();
-
                 expect!(self, TokenKind::LeftBrace, "expected {");
+
+                let mut body = Block::new();
+                while self.current.kind != TokenKind::RightBrace {
+                    match self.class_statement()? {
+                        Statement::Constant { .. } => {
+                            return Err(ParseError::TraitCannotContainConstant(self.current.span))
+                        },
+                        s @ _ => {
+                            body.push(s);
+                        },
+                    }
+                }
+
                 expect!(self, TokenKind::RightBrace, "expected }");
 
                 Statement::Trait { name: name.into(), body }
@@ -812,6 +823,7 @@ pub enum ParseError {
     InvalidAbstractFinalFlagCombination(Span),
     ConstantCannotBeStatic(Span),
     ConstantCannotBePrivateFinal(Span),
+    TraitCannotContainConstant(Span),
 }
 
 impl Display for ParseError {
@@ -824,6 +836,7 @@ impl Display for ParseError {
             Self::InvalidAbstractFinalFlagCombination(span) => write!(f, "Parse error: final cannot be used on an abstract class member on line {}", span.0),
             Self::ConstantCannotBeStatic(span) => write!(f, "Parse error: class constant cannot be marked static on line {}", span.0),
             Self::ConstantCannotBePrivateFinal(span) => write!(f, "Parse error: private class constant cannot be marked final since it is not visible to other classes on line {}", span.0),
+            Self::TraitCannotContainConstant(span) => write!(f, "Parse error: traits cannot contain constants on line {}", span.0),
         }
     }
 }
