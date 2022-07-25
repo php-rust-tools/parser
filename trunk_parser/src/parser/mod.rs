@@ -911,6 +911,7 @@ fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
 
 fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
     Some(match t {
+        TokenKind::Asterisk | TokenKind::Slash => (13, 14),
         TokenKind::Plus | TokenKind::Minus => (11, 12),
         TokenKind::LessThan => (9, 10),
         TokenKind::Equals => (2, 1),
@@ -1011,6 +1012,14 @@ mod tests {
         };
     }
 
+    macro_rules! expr {
+        ($expr:expr) => {
+            Statement::Expression {
+                expr: $expr,
+            }
+        };
+    }
+
     #[test]
     fn paren_expression() {
         assert_ast("<?php (1 + 2);", &[
@@ -1019,6 +1028,29 @@ mod tests {
                 InfixOp::Add,
                 Box::new(Expression::Int(2))
             ) }
+        ]);
+    }
+
+    #[test]
+    fn math_precedence() {
+        assert_ast("<?php 1 + 2 * 3 / 4 - 5;", &[
+            expr!(Expression::Infix(
+                Box::new(Expression::Infix(
+                    Box::new(Expression::Int(1)),
+                    InfixOp::Add,
+                    Box::new(Expression::Infix(
+                        Box::new(Expression::Infix(
+                            Box::new(Expression::Int(2)),
+                            InfixOp::Mul,
+                            Box::new(Expression::Int(3))
+                        )),
+                        InfixOp::Div,
+                        Box::new(Expression::Int(4))
+                    ))
+                )),
+                InfixOp::Sub,
+                Box::new(Expression::Int(5))
+            ))
         ]);
     }
 

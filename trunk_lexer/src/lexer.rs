@@ -496,6 +496,17 @@ impl Lexer {
                     TokenKind::Comment(buffer)
                 }
             },
+            '*' => {
+                self.col += 1;
+
+                if let Some('*') = it.peek() {
+                    self.col += 1;
+                    it.next();
+                    TokenKind::Pow
+                } else {
+                    TokenKind::Asterisk
+                }
+            },
             '|' => {
                 self.col += 1;
                 // TODO: Handle boolean or || tokens.

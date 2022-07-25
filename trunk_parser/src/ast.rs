@@ -243,6 +243,8 @@ pub struct ArrayItem {
 pub enum InfixOp {
     Add,
     Sub,
+    Div,
+    Mul,
     LessThan,
 }
 
@@ -251,6 +253,8 @@ impl From<TokenKind> for InfixOp {
         match k {
             TokenKind::Plus => Self::Add,
             TokenKind::Minus => Self::Sub,
+            TokenKind::Asterisk => Self::Mul,
+            TokenKind::Slash => Self::Div,
             TokenKind::LessThan => Self::LessThan,
             _ => unreachable!()
         }
