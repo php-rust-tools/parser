@@ -85,7 +85,7 @@ impl Parser {
             return Ok(Type::Intersection(types))
         }
 
-        return Ok(Type::Plain(id));
+        Ok(Type::Plain(id))
     }
 
     fn statement(&mut self) -> ParseResult<Statement> {
@@ -532,7 +532,7 @@ impl Parser {
         
                         expect!(self, TokenKind::SemiColon, "expected ;");
         
-                        Ok(Statement::Constant { name: name.into(), value, flags: flags.into_iter().map(|f| f.clone().into()).collect() })
+                        Ok(Statement::Constant { name: name.into(), value, flags: flags.into_iter().map(|f| f.into()).collect() })
                     },
                     TokenKind::Function => {
                         if flags.contains(&TokenKind::Abstract) {
@@ -603,7 +603,7 @@ impl Parser {
                         //       that is capable of holding multiple property declarations.
                         expect!(self, TokenKind::SemiColon, "expected semi-colon");
 
-                        Ok(Statement::Property { var: var.into(), value, r#type: Some(prop_type), flags: flags.into_iter().map(|f| f.clone().into()).collect() })
+                        Ok(Statement::Property { var, value, r#type: Some(prop_type), flags: flags.into_iter().map(|f| f.into()).collect() })
                     },
                     TokenKind::Variable(_) => {
                         let var = expect!(self, TokenKind::Variable(v), v, "expected variable name");
@@ -616,9 +616,9 @@ impl Parser {
 
                         expect!(self, TokenKind::SemiColon, "expected semi-colon");
 
-                        Ok(Statement::Property { var, value, r#type:None, flags: flags.into_iter().map(|f| f.clone().into()).collect() })
+                        Ok(Statement::Property { var, value, r#type:None, flags: flags.into_iter().map(|f| f.into()).collect() })
                     },
-                    _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
+                    _ => Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
                 }
             },
             TokenKind::Function => {

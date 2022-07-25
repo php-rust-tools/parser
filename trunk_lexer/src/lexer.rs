@@ -456,7 +456,7 @@ impl Lexer {
                 if char == '/' && let Some(t) = it.peek() && *t == '*' {
                     let mut buffer = String::from(char);
 
-                    while let Some(_) = it.peek() {
+                    while it.peek().is_some() {
                         let t = it.next().unwrap();
 
                         match t {
