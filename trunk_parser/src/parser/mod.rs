@@ -139,7 +139,7 @@ impl Parser {
                         Statement::Constant { .. } => {
                             return Err(ParseError::TraitCannotContainConstant(self.current.span))
                         },
-                        s @ _ => {
+                        s => {
                             body.push(s);
                         },
                     }
