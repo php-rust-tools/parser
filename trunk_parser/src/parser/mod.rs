@@ -694,6 +694,7 @@ impl Parser {
             TokenKind::Variable(v) => Expression::Variable(v.to_string()),
             TokenKind::Int(i) => Expression::Int(*i),
             TokenKind::Identifier(i) => Expression::Identifier(i.to_string()),
+            TokenKind::ConstantString(s) => Expression::ConstantString(s.to_string()),
             TokenKind::LeftParen => {
                 self.next();
 
@@ -913,6 +914,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
     Some(match t {
         TokenKind::Asterisk | TokenKind::Slash => (13, 14),
         TokenKind::Plus | TokenKind::Minus => (11, 12),
+        TokenKind::Dot => (11, 11),
         TokenKind::LessThan => (9, 10),
         TokenKind::Equals => (2, 1),
         _ => return None,
@@ -1050,6 +1052,21 @@ mod tests {
                 )),
                 InfixOp::Sub,
                 Box::new(Expression::Int(5))
+            ))
+        ]);
+    }
+
+    #[test]
+    fn concat() {
+        assert_ast("<?php 'foo' . 'bar' . 'baz';", &[
+            expr!(Expression::Infix(
+                Box::new(Expression::ConstantString("foo".into())),
+                InfixOp::Concat,
+                Box::new(Expression::Infix(
+                    Box::new(Expression::ConstantString("bar".into())),
+                    InfixOp::Concat,
+                    Box::new(Expression::ConstantString("baz".into())),
+                ))
             ))
         ]);
     }

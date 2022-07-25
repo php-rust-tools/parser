@@ -231,6 +231,7 @@ pub enum Expression {
     Closure(Vec<Param>, Option<Type>, Block),
     ArrowFunction(Vec<Param>, Option<Type>, Box<Self>),
     New(Box<Self>, Vec<Self>),
+    ConstantString(String),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
@@ -245,6 +246,7 @@ pub enum InfixOp {
     Sub,
     Div,
     Mul,
+    Concat,
     LessThan,
 }
 
@@ -256,6 +258,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::Asterisk => Self::Mul,
             TokenKind::Slash => Self::Div,
             TokenKind::LessThan => Self::LessThan,
+            TokenKind::Dot => Self::Concat,
             _ => unreachable!()
         }
     }
