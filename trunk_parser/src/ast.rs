@@ -239,6 +239,7 @@ pub enum Expression {
     New(Box<Self>, Vec<Self>),
     ConstantString(String),
     PropertyFetch(Box<Self>, Identifier),
+    MethodCall(Box<Self>, Identifier, Vec<Self>),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]

@@ -884,7 +884,22 @@ impl Parser {
                 let property = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
 
                 if self.current.kind == TokenKind::LeftParen {
-                    todo!("parse method calls");
+                    self.next();
+
+                    let mut args = Vec::new();
+                    while self.current.kind != TokenKind::RightParen {
+                        let arg = self.expression(0)?;
+
+                        if self.current.kind == TokenKind::Comma {
+                            self.next();
+                        }
+
+                        args.push(arg);
+                    }
+
+                    expect!(self, TokenKind::RightParen, "expected )");
+
+                    Expression::MethodCall(Box::new(lhs), property.into(), args)
                 } else {
                     Expression::PropertyFetch(Box::new(lhs), property.into())
                 }
@@ -1086,6 +1101,40 @@ mod tests {
                     Identifier::from("bar")
                 )),
                 Identifier::from("baz")
+            ))
+        ]);
+    }
+
+    #[test]
+    fn method_calls() {
+        assert_ast("<?php $foo->bar();", &[
+            expr!(Expression::MethodCall(
+                Box::new(Expression::Variable("foo".into())),
+                Identifier::from("bar"),
+                vec![]
+            ))
+        ]);
+
+        assert_ast("<?php $foo->bar()->baz();", &[
+            expr!(Expression::MethodCall(
+                Box::new(Expression::MethodCall(
+                    Box::new(Expression::Variable("foo".into())),
+                    Identifier::from("bar"),
+                    vec![]
+                )),
+                Identifier::from("baz"),
+                vec![]
+            ))
+        ]);
+
+        assert_ast("<?php $foo->bar()();", &[
+            expr!(Expression::Call(
+                Box::new(Expression::MethodCall(
+                    Box::new(Expression::Variable("foo".into())),
+                    Identifier::from("bar"),
+                    vec![]
+                )),
+                vec![]
             ))
         ]);
     }
