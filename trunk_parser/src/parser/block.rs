@@ -5,7 +5,7 @@ use crate::Block;
 use super::{Parser, ParseResult};
 
 impl Parser {
-    pub fn block(&mut self, until: &TokenKind) -> ParseResult<Block> {
+    pub(crate) fn block(&mut self, until: &TokenKind) -> ParseResult<Block> {
         let mut block = Block::new();
 
         while ! self.is_eof() && &self.current.kind != until {
