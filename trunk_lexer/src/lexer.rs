@@ -538,7 +538,16 @@ impl Lexer {
             },
             '-' => {
                 self.col += 1;
-                TokenKind::Minus
+                
+                if let Some('>') = it.peek() {
+                    self.col += 1;
+
+                    it.next();
+
+                    TokenKind::Arrow
+                } else {
+                    TokenKind::Minus
+                }
             },
             '<' => {
                 self.col += 1;
@@ -799,6 +808,14 @@ function"#, &[
             TokenKind::RightParen,
             TokenKind::SemiColon, 
             TokenKind::Comma,
+        ]);
+    }
+
+    #[test]
+    fn sigils() {
+        assert_tokens("<?php ->", &[
+            open!(),
+            TokenKind::Arrow,
         ]);
     }
 
