@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag}, Identifier, Type, Param};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf}, Identifier, Type, Param};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -354,8 +354,34 @@ impl Parser {
                     expect!(self, TokenKind::RightBrace, "expected }");
                 }
 
+                let mut else_ifs: Vec<ElseIf> = Vec::new();
+                loop {
+                    if self.current.kind == TokenKind::ElseIf {
+                        self.next();
+
+                        expect!(self, TokenKind::LeftParen, "expected (");
+
+                        let condition = self.expression(0)?;
+
+                        expect!(self, TokenKind::RightParen, "expected )");
+
+                        expect!(self, TokenKind::LeftBrace, "expected {");
+
+                        let mut body = Block::new();
+                        while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
+                            body.push(self.statement()?);
+                        }
+
+                        expect!(self, TokenKind::RightBrace, "expected }");
+
+                        else_ifs.push(ElseIf { condition, body });
+                    } else {
+                        break;
+                    }
+                }
+
                 if self.current.kind != TokenKind::Else {
-                    return Ok(Statement::If { condition, then, r#else: None });
+                    return Ok(Statement::If { condition, then, else_ifs, r#else: None });
                 }
 
                 expect!(self, TokenKind::Else, "expected else");
@@ -369,7 +395,7 @@ impl Parser {
 
                 expect!(self, TokenKind::RightBrace, "expected }");
 
-                Statement::If { condition, then, r#else: Some(r#else) }
+                Statement::If { condition, then, else_ifs, r#else: Some(r#else) }
             },
             TokenKind::Class => self.class()?,
             TokenKind::Echo => {
@@ -1005,7 +1031,7 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use trunk_lexer::Lexer;
-    use crate::{Statement, Param, Expression, ast::{InfixOp}, Type, Identifier};
+    use crate::{Statement, Param, Expression, ast::{InfixOp, ElseIf}, Type, Identifier};
     use super::Parser;
 
     macro_rules! function {
@@ -1209,6 +1235,7 @@ mod tests {
                     then: vec![
                         Statement::Return { value: Some(Expression::Variable("n".into())) }
                     ],
+                    else_ifs: vec![],
                     r#else: None
                 },
                 Statement::Return {
@@ -1248,6 +1275,7 @@ mod tests {
                     then: vec![
                         Statement::Return { value: Some(Expression::Variable("foo".into())) }
                     ],
+                    else_ifs: vec![],
                     r#else: None
                 },
         ]);
@@ -1260,6 +1288,30 @@ mod tests {
                     condition: Expression::Variable("foo".into()),
                     then: vec![
                         Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                    ],
+                    else_ifs: vec![],
+                    r#else: Some(vec![
+                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                    ])
+                },
+        ]);
+    }
+
+    #[test]
+    fn if_elseif_else_statement() {
+        assert_ast("<?php if($foo) { return $foo; } elseif($foo) { return $foo; } else { return $foo; }", &[
+                Statement::If {
+                    condition: Expression::Variable("foo".into()),
+                    then: vec![
+                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                    ],
+                    else_ifs: vec![
+                        ElseIf {
+                            condition: Expression::Variable("foo".into()),
+                            body: vec![
+                                Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                            ]
+                        }
                     ],
                     r#else: Some(vec![
                         Statement::Return { value: Some(Expression::Variable("foo".into())) }

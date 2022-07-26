@@ -176,6 +176,7 @@ pub enum Statement {
     If {
         condition: Expression,
         then: Block,
+        else_ifs: Vec<ElseIf>,
         r#else: Option<Block>
     },
     Return {
@@ -271,4 +272,10 @@ impl From<TokenKind> for InfixOp {
             _ => unreachable!()
         }
     }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct ElseIf {
+    pub condition: Expression,
+    pub body: Block,
 }
