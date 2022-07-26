@@ -4,7 +4,7 @@ use trunk_lexer::TokenKind;
 pub type Block = Vec<Statement>;
 pub type Program = Block;
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
 pub enum Type {
     Plain(String),
     Nullable(String),
@@ -12,7 +12,7 @@ pub enum Type {
     Intersection(Vec<String>),
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
 pub struct Identifier {
     name: String,
 }
@@ -61,7 +61,7 @@ impl From<&str> for Param {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
 pub enum PropertyFlag {
     Public,
     Protected,
@@ -81,7 +81,7 @@ impl From<TokenKind> for PropertyFlag {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
 pub enum MethodFlag {
     Final,
     Abstract,
@@ -105,7 +105,7 @@ impl From<TokenKind> for MethodFlag {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
 pub enum ClassFlag {
     Final,
     Abstract,
@@ -203,7 +203,7 @@ pub enum Statement {
     Noop,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
 pub enum ConstFlag {
     Final,
     Public,
@@ -223,7 +223,7 @@ impl From<TokenKind> for ConstFlag {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
 pub struct Use {
     pub name: Identifier,
     pub alias: Option<Identifier>,
@@ -252,7 +252,7 @@ pub struct ArrayItem {
     pub value: Expression,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
 pub enum InfixOp {
     Add,
     Sub,

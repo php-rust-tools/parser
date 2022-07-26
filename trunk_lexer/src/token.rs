@@ -2,7 +2,7 @@ use std::fmt::Display;
 
 pub type Span = (usize, usize);
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub enum OpenTagKind {
     Full,
 }

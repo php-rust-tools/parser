@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf}, Identifier, Type, Param};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf}, Identifier, Type};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -338,7 +338,7 @@ impl Parser {
 
                 expect!(self, TokenKind::LeftBrace, "expected {");
 
-                let mut r#else = self.block(&TokenKind::RightBrace)?;
+                let r#else = self.block(&TokenKind::RightBrace)?;
 
                 expect!(self, TokenKind::RightBrace, "expected }");
 
@@ -415,7 +415,7 @@ impl Parser {
 
         expect!(self, TokenKind::LeftBrace, "expected {");
 
-        let mut body = self.block(&TokenKind::RightBrace)?;
+        let body = self.block(&TokenKind::RightBrace)?;
 
         expect!(self, TokenKind::RightBrace, "expected }");
 
@@ -626,7 +626,7 @@ impl Parser {
                 }
             },
             // TODO: Support use statements.
-            _ => return Err(ParseError::UnexpectedToken(format!("{}", self.current.kind), self.current.span))
+            _ => Err(ParseError::UnexpectedToken(format!("{}", self.current.kind), self.current.span))
         }
     }
 
