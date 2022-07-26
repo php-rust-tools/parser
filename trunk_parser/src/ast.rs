@@ -35,6 +35,8 @@ impl From<&str> for Identifier {
     }
 }
 
+pub type ParamList = Vec<Param>;
+
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Param {
     pub(crate) name: Expression,

@@ -22,6 +22,8 @@ macro_rules! expect {
     };
 }
 
+mod params;
+
 #[derive(PartialEq)]
 enum FunctionKind {
     Named,
@@ -183,29 +185,7 @@ impl Parser {
 
                             expect!(self, TokenKind::LeftParen, "expected (");
 
-                            let mut params = Vec::new();
-                            while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
-                                let mut param_type = None;
-
-                                // 1. If we don't see a variable, we should expect a type-string.
-                                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
-                                    // 1a. Try to parse the type.
-                                    param_type = Some(self.type_string()?);
-                                }
-
-                                // 2. Then expect a variable.
-                                let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
-
-                                // TODO: Support variable types and default values.
-                                params.push(Param {
-                                    name: Expression::Variable(var),
-                                    r#type: param_type,
-                                });
-                                
-                                if let Token { kind: TokenKind::Comma, .. } = self.current {
-                                    self.next();
-                                }
-                            }
+                            let params = self.param_list()?;
 
                             expect!(self, TokenKind::RightParen, "expected )");
 
@@ -228,29 +208,7 @@ impl Parser {
 
                             expect!(self, TokenKind::LeftParen, "expected (");
 
-                            let mut params = Vec::new();
-                            while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
-                                let mut param_type = None;
-
-                                // 1. If we don't see a variable, we should expect a type-string.
-                                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
-                                    // 1a. Try to parse the type.
-                                    param_type = Some(self.type_string()?);
-                                }
-
-                                // 2. Then expect a variable.
-                                let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
-
-                                // TODO: Support variable types and default values.
-                                params.push(Param {
-                                    name: Expression::Variable(var),
-                                    r#type: param_type,
-                                });
-                                
-                                if let Token { kind: TokenKind::Comma, .. } = self.current {
-                                    self.next();
-                                }
-                            }
+                            let params = self.param_list()?;
 
                             expect!(self, TokenKind::RightParen, "expected )");
 
@@ -454,30 +412,7 @@ impl Parser {
 
         expect!(self, TokenKind::LeftParen, "expected (");
 
-        let mut params = Vec::new();
-
-        while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
-            let mut param_type = None;
-
-            // 1. If we don't see a variable, we should expect a type-string.
-            if ! matches!(self.current.kind, TokenKind::Variable(_)) {
-                // 1a. Try to parse the type.
-                param_type = Some(self.type_string()?);
-            }
-
-            // 2. Then expect a variable.
-            let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
-
-            // TODO: Support variable types and default values.
-            params.push(Param {
-                name: Expression::Variable(var),
-                r#type: param_type,
-            });
-            
-            if let Token { kind: TokenKind::Comma, .. } = self.current {
-                self.next();
-            }
-        }
+        let params = self.param_list()?;
 
         expect!(self, TokenKind::RightParen, "expected )");
 
@@ -640,29 +575,7 @@ impl Parser {
 
                             expect!(self, TokenKind::LeftParen, "expected (");
 
-                            let mut params = Vec::new();
-                            while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
-                                let mut param_type = None;
-
-                                // 1. If we don't see a variable, we should expect a type-string.
-                                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
-                                    // 1a. Try to parse the type.
-                                    param_type = Some(self.type_string()?);
-                                }
-
-                                // 2. Then expect a variable.
-                                let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
-
-                                // TODO: Support variable types and default values.
-                                params.push(Param {
-                                    name: Expression::Variable(var),
-                                    r#type: param_type,
-                                });
-                                
-                                if let Token { kind: TokenKind::Comma, .. } = self.current {
-                                    self.next();
-                                }
-                            }
+                            let params = self.param_list()?;
 
                             expect!(self, TokenKind::RightParen, "expected )");
 
@@ -791,30 +704,8 @@ impl Parser {
 
                 expect!(self, TokenKind::LeftParen, "expected (");
 
-                let mut params = Vec::new();
-                while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
-                    let mut param_type = None;
-        
-                    // 1. If we don't see a variable, we should expect a type-string.
-                    if ! matches!(self.current.kind, TokenKind::Variable(_)) {
-                        // 1a. Try to parse the type.
-                        param_type = Some(self.type_string()?);
-                    }
-        
-                    // 2. Then expect a variable.
-                    let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
-        
-                    // TODO: Support variable types and default values.
-                    params.push(Param {
-                        name: Expression::Variable(var),
-                        r#type: param_type,
-                    });
-                    
-                    if let Token { kind: TokenKind::Comma, .. } = self.current {
-                        self.next();
-                    }
-                }
-        
+                let params = self.param_list()?;
+
                 expect!(self, TokenKind::RightParen, "expected )");
         
                 let mut return_type = None;
