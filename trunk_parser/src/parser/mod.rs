@@ -337,16 +337,22 @@ impl Parser {
 
                 expect!(self, TokenKind::RightParen, "expected )");
 
-                // TODO: Support one-liner if statements.
-                expect!(self, TokenKind::LeftBrace, "expected {");
+                let body_end_token = if self.current.kind == TokenKind::LeftBrace {
+                    self.next();
+
+                    TokenKind::RightBrace
+                } else {
+                    TokenKind::SemiColon
+                };
 
                 let mut then = Block::new();
-                while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
+                while ! self.is_eof() && self.current.kind != body_end_token {
                     then.push(self.statement()?);
                 }
 
-                // TODO: Support one-liner if statements.
-                expect!(self, TokenKind::RightBrace, "expected }");
+                if body_end_token == TokenKind::RightBrace {
+                    expect!(self, TokenKind::RightBrace, "expected }");
+                }
 
                 Statement::If { condition, then }
             },
@@ -1138,6 +1144,22 @@ mod tests {
                     ))
                 }
             ])
+        ]);
+    }
+
+    #[test]
+    fn one_liner_if_statement() {
+        assert_ast("\
+        <?php
+
+        if($name)
+            return $name;", &[
+                Statement::If {
+                    condition: Expression::Variable("name".into()),
+                    then: vec![
+                        Statement::Return { value: Some(Expression::Variable("name".into())) }
+                    ],
+                },
         ]);
     }
 
