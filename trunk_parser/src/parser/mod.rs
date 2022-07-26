@@ -23,6 +23,7 @@ macro_rules! expect {
 }
 
 mod params;
+mod block;
 
 #[derive(PartialEq)]
 enum FunctionKind {
@@ -271,14 +272,11 @@ impl Parser {
                     expect!(self, TokenKind::SemiColon, "expected semi-colon");
                 }
 
-                let mut body = Block::new();
-                while ! self.is_eof() {
-                    if braced && self.current.kind == TokenKind::RightBrace {
-                        break;
-                    }
-                    
-                    body.push(self.statement()?);
-                }
+                let body = if braced {
+                    self.block(&TokenKind::RightBrace)?
+                } else {
+                    Block::new()
+                };
 
                 if braced {
                     expect!(self, TokenKind::RightBrace, "expected }");
@@ -303,10 +301,7 @@ impl Parser {
                     TokenKind::SemiColon
                 };
 
-                let mut then = Block::new();
-                while ! self.is_eof() && self.current.kind != body_end_token {
-                    then.push(self.statement()?);
-                }
+                let then = self.block(&body_end_token)?;
 
                 if body_end_token == TokenKind::RightBrace {
                     expect!(self, TokenKind::RightBrace, "expected }");
@@ -325,10 +320,7 @@ impl Parser {
 
                         expect!(self, TokenKind::LeftBrace, "expected {");
 
-                        let mut body = Block::new();
-                        while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
-                            body.push(self.statement()?);
-                        }
+                        let body = self.block(&TokenKind::RightBrace)?;
 
                         expect!(self, TokenKind::RightBrace, "expected }");
 
@@ -346,10 +338,7 @@ impl Parser {
 
                 expect!(self, TokenKind::LeftBrace, "expected {");
 
-                let mut r#else = Block::new();
-                while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
-                    r#else.push(self.statement()?);
-                }
+                let mut r#else = self.block(&TokenKind::RightBrace)?;
 
                 expect!(self, TokenKind::RightBrace, "expected }");
 
@@ -426,11 +415,7 @@ impl Parser {
 
         expect!(self, TokenKind::LeftBrace, "expected {");
 
-        let mut body = Block::new();
-
-        while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
-            body.push(self.statement()?);
-        }
+        let mut body = self.block(&TokenKind::RightBrace)?;
 
         expect!(self, TokenKind::RightBrace, "expected }");
 
