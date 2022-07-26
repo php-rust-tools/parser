@@ -1031,7 +1031,7 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use trunk_lexer::Lexer;
-    use crate::{Statement, Param, Expression, ast::{InfixOp}, Type, Identifier};
+    use crate::{Statement, Param, Expression, ast::{InfixOp, ElseIf}, Type, Identifier};
     use super::Parser;
 
     macro_rules! function {
@@ -1290,6 +1290,29 @@ mod tests {
                         Statement::Return { value: Some(Expression::Variable("foo".into())) }
                     ],
                     else_ifs: vec![],
+                    r#else: Some(vec![
+                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                    ])
+                },
+        ]);
+    }
+
+    #[test]
+    fn if_elseif_else_statement() {
+        assert_ast("<?php if($foo) { return $foo; } elseif($foo) { return $foo; } else { return $foo; }", &[
+                Statement::If {
+                    condition: Expression::Variable("foo".into()),
+                    then: vec![
+                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                    ],
+                    else_ifs: vec![
+                        ElseIf {
+                            condition: Expression::Variable("foo".into()),
+                            body: vec![
+                                Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                            ]
+                        }
+                    ],
                     r#else: Some(vec![
                         Statement::Return { value: Some(Expression::Variable("foo".into())) }
                     ])
