@@ -29,6 +29,12 @@ impl From<&String> for Identifier {
     }
 }
 
+impl From<&str> for Identifier {
+    fn from(name: &str) -> Self {
+        Self::from(name.to_string())
+    }
+}
+
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Param {
     pub(crate) name: Expression,
@@ -232,6 +238,7 @@ pub enum Expression {
     ArrowFunction(Vec<Param>, Option<Type>, Box<Self>),
     New(Box<Self>, Vec<Self>),
     ConstantString(String),
+    PropertyFetch(Box<Self>, Identifier),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]

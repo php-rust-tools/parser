@@ -879,6 +879,16 @@ impl Parser {
     
                 Expression::Call(Box::new(lhs), args)
             },
+            TokenKind::Arrow => {
+                // TODO: Add support for dynamic property fetch or method call here.
+                let property = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+
+                if self.current.kind == TokenKind::LeftParen {
+                    todo!("parse method calls");
+                } else {
+                    Expression::PropertyFetch(Box::new(lhs), property.into())
+                }
+            },
             _ => todo!("postfix: {:?}", op),
         })
     }
@@ -930,6 +940,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
 fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
     Some(match t {
         TokenKind::LeftParen => 19,
+        TokenKind::Arrow => 18,
         _ => return None
     })
 }
@@ -964,7 +975,7 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use trunk_lexer::Lexer;
-    use crate::{Statement, Param, Expression, ast::{InfixOp}, Type};
+    use crate::{Statement, Param, Expression, ast::{InfixOp}, Type, Identifier};
     use super::Parser;
 
     macro_rules! function {
@@ -1058,6 +1069,23 @@ mod tests {
                 )),
                 InfixOp::Sub,
                 Box::new(Expression::Int(5))
+            ))
+        ]);
+    }
+
+    #[test]
+    fn property_fetch() {
+        assert_ast("<?php $foo->bar; $foo->bar->baz;", &[
+            expr!(Expression::PropertyFetch(
+                Box::new(Expression::Variable("foo".into())),
+                Identifier::from("bar")
+            )),
+            expr!(Expression::PropertyFetch(
+                Box::new(Expression::PropertyFetch(
+                    Box::new(Expression::Variable("foo".into())),
+                    Identifier::from("bar")
+                )),
+                Identifier::from("baz")
             ))
         ]);
     }
