@@ -354,7 +354,22 @@ impl Parser {
                     expect!(self, TokenKind::RightBrace, "expected }");
                 }
 
-                Statement::If { condition, then }
+                if self.current.kind != TokenKind::Else {
+                    return Ok(Statement::If { condition, then, r#else: None });
+                }
+
+                expect!(self, TokenKind::Else, "expected else");
+
+                expect!(self, TokenKind::LeftBrace, "expected {");
+
+                let mut r#else = Block::new();
+                while ! self.is_eof() && self.current.kind != TokenKind::RightBrace {
+                    r#else.push(self.statement()?);
+                }
+
+                expect!(self, TokenKind::RightBrace, "expected }");
+
+                Statement::If { condition, then, r#else: Some(r#else) }
             },
             TokenKind::Class => self.class()?,
             TokenKind::Echo => {
@@ -1117,6 +1132,7 @@ mod tests {
                     then: vec![
                         Statement::Return { value: Some(Expression::Variable("n".into())) }
                     ],
+                    r#else: None
                 },
                 Statement::Return {
                     value: Some(Expression::Infix(
@@ -1149,16 +1165,28 @@ mod tests {
 
     #[test]
     fn one_liner_if_statement() {
-        assert_ast("\
-        <?php
-
-        if($name)
-            return $name;", &[
+        assert_ast("<?php if($foo) return $foo;", &[
                 Statement::If {
-                    condition: Expression::Variable("name".into()),
+                    condition: Expression::Variable("foo".into()),
                     then: vec![
-                        Statement::Return { value: Some(Expression::Variable("name".into())) }
+                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
                     ],
+                    r#else: None
+                },
+        ]);
+    }
+
+    #[test]
+    fn if_else_statement() {
+        assert_ast("<?php if($foo) { return $foo; } else { return $foo; }", &[
+                Statement::If {
+                    condition: Expression::Variable("foo".into()),
+                    then: vec![
+                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                    ],
+                    r#else: Some(vec![
+                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                    ])
                 },
         ]);
     }

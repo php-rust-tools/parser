@@ -170,6 +170,7 @@ pub enum Statement {
     If {
         condition: Expression,
         then: Block,
+        r#else: Option<Block>
     },
     Return {
         value: Option<Expression>,
