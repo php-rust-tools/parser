@@ -121,7 +121,12 @@ impl From<TokenKind> for ClassFlag {
     }
 }
 
-
+#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
+pub enum UseKind {
+    Normal,
+    Function,
+    Const,
+}
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
@@ -202,6 +207,7 @@ pub enum Statement {
     },
     Use {
         uses: Vec<Use>,
+        kind: UseKind,
     },
     Comment {
         comment: String,

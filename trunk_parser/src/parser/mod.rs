@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf}, Identifier, Type};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind}, Identifier, Type};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -257,7 +257,7 @@ impl Parser {
                     break;
                 }
 
-                Statement::Use { uses }
+                Statement::Use { uses, kind: UseKind::Normal }
             },
             TokenKind::Namespace => {
                 self.next();
