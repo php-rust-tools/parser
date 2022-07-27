@@ -259,6 +259,21 @@ impl Parser {
 
                 Statement::Use { uses, kind: UseKind::Normal }
             },
+            TokenKind::Switch => {
+                self.next();
+
+                expect!(self, TokenKind::LeftParen, "expected (");
+
+                let condition = self.expression(0)?;
+
+                expect!(self, TokenKind::RightParen, "expected )");
+
+                expect!(self, TokenKind::LeftBrace, "expected {");
+                expect!(self, TokenKind::RightBrace, "expected }");
+                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                Statement::Switch { condition }
+            },
             TokenKind::Namespace => {
                 self.next();
                 

@@ -646,6 +646,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "public" => TokenKind::Public,
         "return" => TokenKind::Return,
         "static" => TokenKind::Static,
+        "switch" => TokenKind::Switch,
         "trait" => TokenKind::Trait,
         "true" | "TRUE" => TokenKind::True,
         "use" => TokenKind::Use,

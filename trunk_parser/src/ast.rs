@@ -189,6 +189,9 @@ pub enum Statement {
     Return {
         value: Option<Expression>,
     },
+    Switch {
+        condition: Expression,
+    },
     Break {
         num: Option<Expression>,
     },
