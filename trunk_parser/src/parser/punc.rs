@@ -16,4 +16,12 @@ impl Parser {
     pub(crate) fn rbrace(&mut self) -> ParseResult<()> {
         Ok(expect!(self, TokenKind::RightBrace, "expected }"))
     }
+
+    pub(crate) fn lparen(&mut self) -> ParseResult<()> {
+        Ok(expect!(self, TokenKind::LeftParen, "expected ("))
+    }
+
+    pub(crate) fn rparen(&mut self) -> ParseResult<()> {
+        Ok(expect!(self, TokenKind::RightParen, "expected )"))
+    }
 }

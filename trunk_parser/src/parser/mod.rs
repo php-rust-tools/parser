@@ -186,11 +186,11 @@ impl Parser {
 
                             let name = self.ident()?;
 
-                            expect!(self, TokenKind::LeftParen, "expected (");
+                            self.lparen()?;
 
                             let params = self.param_list()?;
 
-                            expect!(self, TokenKind::RightParen, "expected )");
+                            self.rparen()?;
 
                             let mut return_type = None;
 
@@ -209,11 +209,11 @@ impl Parser {
 
                             let name = self.ident()?;
 
-                            expect!(self, TokenKind::LeftParen, "expected (");
+                            self.lparen()?;
 
                             let params = self.param_list()?;
 
-                            expect!(self, TokenKind::RightParen, "expected )");
+                            self.rparen()?;
 
                             let mut return_type = None;
 
@@ -264,11 +264,11 @@ impl Parser {
             TokenKind::Switch => {
                 self.next();
 
-                expect!(self, TokenKind::LeftParen, "expected (");
+                self.lparen()?;
 
                 let condition = self.expression(0)?;
 
-                expect!(self, TokenKind::RightParen, "expected )");
+                self.rparen()?;
 
                 self.lbrace()?;
                 self.rbrace()?;
@@ -304,11 +304,11 @@ impl Parser {
             TokenKind::If => {
                 self.next();
 
-                expect!(self, TokenKind::LeftParen, "expected (");
+                self.lparen()?;
 
                 let condition = self.expression(0)?;
 
-                expect!(self, TokenKind::RightParen, "expected )");
+                self.rparen()?;
 
                 let body_end_token = if self.current.kind == TokenKind::LeftBrace {
                     self.next();
@@ -329,11 +329,11 @@ impl Parser {
                     if self.current.kind == TokenKind::ElseIf {
                         self.next();
 
-                        expect!(self, TokenKind::LeftParen, "expected (");
+                        self.lparen()?;
 
                         let condition = self.expression(0)?;
 
-                        expect!(self, TokenKind::RightParen, "expected )");
+                        self.rparen()?;
 
                         self.lbrace()?;
 
@@ -444,11 +444,11 @@ impl Parser {
             String::new()
         };
 
-        expect!(self, TokenKind::LeftParen, "expected (");
+        self.lparen()?;
 
         let params = self.param_list()?;
 
-        expect!(self, TokenKind::RightParen, "expected )");
+        self.rparen()?;
 
         let mut return_type = None;
 
@@ -603,11 +603,11 @@ impl Parser {
 
                             let name = self.ident()?;
 
-                            expect!(self, TokenKind::LeftParen, "expected (");
+                            self.lparen()?;
 
                             let params = self.param_list()?;
 
-                            expect!(self, TokenKind::RightParen, "expected )");
+                            self.rparen()?;
 
                             let mut return_type = None;
 
@@ -732,11 +732,11 @@ impl Parser {
             TokenKind::Fn => {
                 self.next();
 
-                expect!(self, TokenKind::LeftParen, "expected (");
+                self.lparen()?;
 
                 let params = self.param_list()?;
 
-                expect!(self, TokenKind::RightParen, "expected )");
+                self.rparen()?;
         
                 let mut return_type = None;
         
@@ -760,7 +760,7 @@ impl Parser {
 
                 let mut args = vec![];
                 if self.current.kind == TokenKind::LeftParen {
-                    expect!(self, TokenKind::LeftParen, "expected (");
+                    self.lparen()?;
 
                     while self.current.kind != TokenKind::RightParen {
                         let value = self.expression(0)?;
@@ -772,7 +772,7 @@ impl Parser {
                         }
                     }
 
-                    expect!(self, TokenKind::RightParen, "expected )");
+                    self.rparen()?;
                 }
 
                 Expression::New(Box::new(target), args)
@@ -837,7 +837,7 @@ impl Parser {
                     }
                 }
 
-                expect!(self, TokenKind::RightParen, "expected )");
+                self.rparen()?;
     
                 Expression::Call(Box::new(lhs), args)
             },
@@ -859,7 +859,7 @@ impl Parser {
                         args.push(arg);
                     }
 
-                    expect!(self, TokenKind::RightParen, "expected )");
+                    self.rparen()?;
 
                     Expression::MethodCall(Box::new(lhs), property.into(), args)
                 } else {
