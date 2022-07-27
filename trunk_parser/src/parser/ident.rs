@@ -6,4 +6,12 @@ impl Parser {
     pub(crate) fn ident(&mut self) -> ParseResult<String> {
         Ok(expect!(self, TokenKind::Identifier(i), i, "expected identifier"))
     }
+
+    pub(crate) fn name(&mut self) -> ParseResult<String> {
+        Ok(expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i), i, "expected identifier"))
+    }
+
+    pub(crate) fn full_name(&mut self) -> ParseResult<String> {
+        Ok(expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i), i, "expected identifier"))
+    }
 }

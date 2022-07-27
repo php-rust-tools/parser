@@ -56,11 +56,11 @@ impl Parser {
     fn type_string(&mut self) -> ParseResult<Type> {
         if self.current.kind == TokenKind::Question {
             self.next();
-            let t = expect!(self, TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s), s, "expected identifier");
+            let t = self.full_name()?;
             return Ok(Type::Nullable(t));
         }
 
-        let id = expect!(self, TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s), s, "expected identifier");
+        let id = self.full_name()?;
 
         if self.current.kind == TokenKind::Pipe {
             self.next();
@@ -68,7 +68,7 @@ impl Parser {
             let mut types = vec![id];
 
             while ! self.is_eof() {
-                let id = expect!(self, TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s), s, "expected identifier");
+                let id = self.full_name()?;
                 types.push(id);
 
                 if self.current.kind != TokenKind::Pipe {
@@ -85,7 +85,7 @@ impl Parser {
             let mut types = vec![id];
 
             while ! self.is_eof() {
-                let id = expect!(self, TokenKind::Identifier(s) | TokenKind::QualifiedIdentifier(s) | TokenKind::FullyQualifiedIdentifier(s), s, "expected identifier");
+                let id = self.full_name()?;
                 types.push(id);
 
                 if self.current.kind != TokenKind::Ampersand {
@@ -157,7 +157,7 @@ impl Parser {
             TokenKind::Interface => {
                 self.next();
 
-                let name = expect!(self, TokenKind::Identifier(n), n, "expected identifier");
+                let name = self.ident()?;
 
                 let mut extends = vec![];
                 if self.current.kind == TokenKind::Extends {
@@ -168,7 +168,7 @@ impl Parser {
                             self.next();
                         }
 
-                        let e = expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i), i, "expected identifier");
+                        let e = self.full_name()?;
 
                         extends.push(e.into());
                     }
@@ -240,7 +240,7 @@ impl Parser {
 
                 let mut uses = Vec::new();
                 while ! self.is_eof() {
-                    let name = expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i), i, "expected identifier in use statement");
+                    let name = self.full_name()?;
                     let mut alias = None;
 
                     if self.current.kind == TokenKind::As {
@@ -279,7 +279,7 @@ impl Parser {
             TokenKind::Namespace => {
                 self.next();
                 
-                let name = expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i), i, "expected identifier after namespace");
+                let name = self.name()?;
 
                 let mut braced = false;
                 if self.current.kind == TokenKind::LeftBrace {
@@ -515,7 +515,7 @@ impl Parser {
                         self.next();
                     }
 
-                    let t = expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i), i, "expected identifier");
+                    let t = self.full_name()?;
                     traits.push(t.into());
                 }
 
@@ -526,7 +526,7 @@ impl Parser {
             TokenKind::Const => {
                 self.next();
 
-                let name = expect!(self, TokenKind::Identifier(c), c, "expected constant name");
+                let name = self.ident()?;
 
                 expect!(self, TokenKind::Equals, "expected =");
 
@@ -587,7 +587,7 @@ impl Parser {
 
                         self.next();
 
-                        let name = expect!(self, TokenKind::Identifier(c), c, "expected constant name");
+                        let name = self.ident()?;
 
                         expect!(self, TokenKind::Equals, "expected =");
         
