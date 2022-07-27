@@ -621,6 +621,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
     Some(match ident {
         "abstract" => TokenKind::Abstract,
         "as" => TokenKind::As,
+        "break" => TokenKind::Break,
         "class" => TokenKind::Class,
         "const" => TokenKind::Const,
         "declare" => TokenKind::Declare,

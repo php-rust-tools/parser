@@ -361,6 +361,20 @@ impl Parser {
                 expect!(self, TokenKind::SemiColon, "expected semi-colon at the end of an echo statement");
                 Statement::Echo { values }
             },
+            TokenKind::Break => {
+                self.next();
+
+                let mut num = None;
+                if self.current.kind != TokenKind::SemiColon {
+                    num = Some(self.expression(0)?);
+                }
+
+                dbg!(&self.current.kind);
+
+                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+
+                Statement::Break { num }
+            },
             TokenKind::Return => {
                 self.next();
 
@@ -979,6 +993,17 @@ mod tests {
                 InfixOp::Add,
                 Box::new(Expression::Int(2))
             ) }
+        ]);
+    }
+
+    #[test]
+    fn breaks() {
+        assert_ast("<?php break;", &[
+            Statement::Break { num: None }
+        ]);
+
+        assert_ast("<?php break 2;", &[
+            Statement::Break { num: Some(Expression::Int(2)) }
         ]);
     }
 

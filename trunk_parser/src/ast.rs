@@ -184,6 +184,9 @@ pub enum Statement {
     Return {
         value: Option<Expression>,
     },
+    Break {
+        num: Option<Expression>,
+    },
     Echo {
         values: Vec<Expression>,
     },
