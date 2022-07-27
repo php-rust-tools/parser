@@ -135,7 +135,7 @@ impl Parser {
 
                 let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
 
-                expect!(self, TokenKind::LeftBrace, "expected {");
+                self.lbrace()?;
 
                 let mut body = Block::new();
                 while self.current.kind != TokenKind::RightBrace {
@@ -149,7 +149,7 @@ impl Parser {
                     }
                 }
 
-                expect!(self, TokenKind::RightBrace, "expected }");
+                self.rbrace()?;
 
                 Statement::Trait { name: name.into(), body }
             },
@@ -173,7 +173,7 @@ impl Parser {
                     }
                 }
 
-                expect!(self, TokenKind::LeftBrace, "expected {");
+                self.lbrace()?;
 
                 let mut body = Block::new();
                 while self.current.kind != TokenKind::RightBrace {
@@ -230,7 +230,7 @@ impl Parser {
                     }
                 }
 
-                expect!(self, TokenKind::RightBrace, "expected }");
+                self.rbrace()?;
 
                 Statement::Interface { name: name.into(), extends, body }
             },
@@ -269,8 +269,8 @@ impl Parser {
 
                 expect!(self, TokenKind::RightParen, "expected )");
 
-                expect!(self, TokenKind::LeftBrace, "expected {");
-                expect!(self, TokenKind::RightBrace, "expected }");
+                self.lbrace()?;
+                self.rbrace()?;
                 self.semi()?;
 
                 Statement::Switch { condition }
@@ -295,7 +295,7 @@ impl Parser {
                 };
 
                 if braced {
-                    expect!(self, TokenKind::RightBrace, "expected }");
+                    self.rbrace()?;
                 }
 
                 Statement::Namespace { name, body }
@@ -320,7 +320,7 @@ impl Parser {
                 let then = self.block(&body_end_token)?;
 
                 if body_end_token == TokenKind::RightBrace {
-                    expect!(self, TokenKind::RightBrace, "expected }");
+                    self.rbrace()?;
                 }
 
                 let mut else_ifs: Vec<ElseIf> = Vec::new();
@@ -334,11 +334,11 @@ impl Parser {
 
                         expect!(self, TokenKind::RightParen, "expected )");
 
-                        expect!(self, TokenKind::LeftBrace, "expected {");
+                        self.lbrace()?;
 
                         let body = self.block(&TokenKind::RightBrace)?;
 
-                        expect!(self, TokenKind::RightBrace, "expected }");
+                        self.rbrace()?;
 
                         else_ifs.push(ElseIf { condition, body });
                     } else {
@@ -352,11 +352,11 @@ impl Parser {
 
                 expect!(self, TokenKind::Else, "expected else");
 
-                expect!(self, TokenKind::LeftBrace, "expected {");
+                self.lbrace()?;
 
                 let r#else = self.block(&TokenKind::RightBrace)?;
 
-                expect!(self, TokenKind::RightBrace, "expected }");
+                self.rbrace()?;
 
                 Statement::If { condition, then, else_ifs, r#else: Some(r#else) }
             },
@@ -457,11 +457,11 @@ impl Parser {
             return_type = Some(self.type_string()?);
         }
 
-        expect!(self, TokenKind::LeftBrace, "expected {");
+        self.lbrace()?;
 
         let body = self.block(&TokenKind::RightBrace)?;
 
-        expect!(self, TokenKind::RightBrace, "expected }");
+        self.rbrace()?;
 
         Ok(Statement::Function { name: name.into(), params, body, return_type })
     }
@@ -490,14 +490,14 @@ impl Parser {
             }
         }
 
-        expect!(self, TokenKind::LeftBrace, "expected left-brace");
+        self.lbrace()?;
 
         let mut body = Vec::new();
         while self.current.kind != TokenKind::RightBrace && ! self.is_eof() {
             body.push(self.class_statement()?);
         }
 
-        expect!(self, TokenKind::RightBrace, "expected right-brace");
+        self.rbrace()?;
 
         Ok(Statement::Class { name: name.into(), extends, implements, body, flag: None })
     }
