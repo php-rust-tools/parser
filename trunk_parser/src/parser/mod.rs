@@ -24,6 +24,7 @@ macro_rules! expect {
 
 mod params;
 mod block;
+mod punc;
 
 #[derive(PartialEq)]
 enum FunctionKind {
@@ -198,7 +199,7 @@ impl Parser {
                                 return_type = Some(self.type_string()?);
                             }
 
-                            expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                            self.semi()?;
 
                             body.push(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: vec![MethodFlag::Public] })
                         },
@@ -221,7 +222,7 @@ impl Parser {
                                 return_type = Some(self.type_string()?);
                             }
 
-                            expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                            self.semi()?;
 
                             body.push(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: vec![] })
                         },
@@ -253,7 +254,7 @@ impl Parser {
                         continue;
                     }
 
-                    expect!(self, TokenKind::SemiColon, "expected semi-colon as end of use statement");
+                    self.semi()?;
                     break;
                 }
 
@@ -270,7 +271,7 @@ impl Parser {
 
                 expect!(self, TokenKind::LeftBrace, "expected {");
                 expect!(self, TokenKind::RightBrace, "expected }");
-                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                self.semi()?;
 
                 Statement::Switch { condition }
             },
@@ -284,7 +285,7 @@ impl Parser {
                     braced = true;
                     self.next();
                 } else {
-                    expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                    self.semi()?;
                 }
 
                 let body = if braced {
@@ -373,7 +374,7 @@ impl Parser {
                         self.next();
                     }
                 }
-                expect!(self, TokenKind::SemiColon, "expected semi-colon at the end of an echo statement");
+                self.semi()?;
                 Statement::Echo { values }
             },
             TokenKind::Continue => {
@@ -386,7 +387,7 @@ impl Parser {
 
                 dbg!(&self.current.kind);
 
-                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                self.semi()?;
 
                 Statement::Continue { num }
             },
@@ -400,7 +401,7 @@ impl Parser {
 
                 dbg!(&self.current.kind);
 
-                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                self.semi()?;
 
                 Statement::Break { num }
             },
@@ -409,11 +410,11 @@ impl Parser {
 
                 if let Token { kind: TokenKind::SemiColon, .. } = self.current {
                     let ret = Statement::Return { value: None };
-                    expect!(self, TokenKind::SemiColon, "expected semi-colon at the end of return statement.");
+                    self.semi()?;
                     ret
                 } else {
                     let ret = Statement::Return { value: self.expression(0).ok() };
-                    expect!(self, TokenKind::SemiColon, "expected semi-colon at the end of return statement.");
+                    self.semi()?;
                     ret
                 }
             },
@@ -426,7 +427,7 @@ impl Parser {
             _ => {
                 let expr = self.expression(0)?;
 
-                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                self.semi()?;
 
                 Statement::Expression { expr }
             }
@@ -517,7 +518,7 @@ impl Parser {
                     traits.push(t.into());
                 }
 
-                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                self.semi()?;
 
                 Ok(Statement::TraitUse { traits })
             },
@@ -530,7 +531,7 @@ impl Parser {
 
                 let value = self.expression(0)?;
 
-                expect!(self, TokenKind::SemiColon, "expected ;");
+                self.semi()?;
 
                 Ok(Statement::Constant { name: name.into(), value, flags: vec![] })
             },
@@ -552,7 +553,7 @@ impl Parser {
                     value = Some(self.expression(0)?);
                 }
 
-                expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                self.semi()?;
 
                 Ok(Statement::Var { var, value, r#type: var_type })
             },
@@ -591,7 +592,7 @@ impl Parser {
         
                         let value = self.expression(0)?;
         
-                        expect!(self, TokenKind::SemiColon, "expected ;");
+                        self.semi()?;
         
                         Ok(Statement::Constant { name: name.into(), value, flags: flags.into_iter().map(|f| f.into()).collect() })
                     },
@@ -615,7 +616,7 @@ impl Parser {
                                 return_type = Some(self.type_string()?);
                             }
 
-                            expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                            self.semi()?;
 
                             Ok(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: flags.iter().map(|t| t.clone().into()).collect() })
                         } else {
@@ -640,7 +641,7 @@ impl Parser {
                         // TODO: Support comma-separated property declarations.
                         //       nikic/php-parser does this with a single Property statement
                         //       that is capable of holding multiple property declarations.
-                        expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                        self.semi()?;
 
                         Ok(Statement::Property { var, value, r#type: Some(prop_type), flags: flags.into_iter().map(|f| f.into()).collect() })
                     },
@@ -653,7 +654,7 @@ impl Parser {
                             value = Some(self.expression(0)?);
                         }
 
-                        expect!(self, TokenKind::SemiColon, "expected semi-colon");
+                        self.semi()?;
 
                         Ok(Statement::Property { var, value, r#type:None, flags: flags.into_iter().map(|f| f.into()).collect() })
                     },
