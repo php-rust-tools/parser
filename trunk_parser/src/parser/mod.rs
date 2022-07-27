@@ -25,6 +25,7 @@ macro_rules! expect {
 mod params;
 mod block;
 mod punc;
+mod ident;
 
 #[derive(PartialEq)]
 enum FunctionKind {
@@ -133,7 +134,7 @@ impl Parser {
             TokenKind::Trait => {
                 self.next();
 
-                let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+                let name = self.ident()?;
 
                 self.lbrace()?;
 
@@ -183,7 +184,7 @@ impl Parser {
 
                             self.next();
 
-                            let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+                            let name = self.ident()?;
 
                             expect!(self, TokenKind::LeftParen, "expected (");
 
@@ -206,7 +207,7 @@ impl Parser {
                         TokenKind::Function => {
                             self.next();
 
-                            let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+                            let name = self.ident()?;
 
                             expect!(self, TokenKind::LeftParen, "expected (");
 
@@ -244,7 +245,7 @@ impl Parser {
 
                     if self.current.kind == TokenKind::As {
                         self.next();
-                        alias = Some(expect!(self, TokenKind::Identifier(i), i, "expected identifier after as").into());
+                        alias = Some(self.ident()?.into());
                     }
 
                     uses.push(Use { name: name.into(), alias });
@@ -438,7 +439,7 @@ impl Parser {
         self.next();
 
         let name = if kind == FunctionKind::Named {
-            expect!(self, TokenKind::Identifier(i), i, "expected identifier")
+            self.ident()?
         } else {
             String::new()
         };
@@ -469,12 +470,12 @@ impl Parser {
     fn class(&mut self) -> ParseResult<Statement> {
         self.next();
 
-        let name = expect!(self, TokenKind::Identifier(i), i, "expected class name");
+        let name = self.ident()?;
         let mut extends: Option<Identifier> = None;
 
         if self.current.kind == TokenKind::Extends {
             self.next();
-            extends = expect!(self, TokenKind::Identifier(i), Some(i.into()), "expected identifier");
+            extends = Some(self.ident()?.into());
         }
 
         let mut implements = Vec::new();
@@ -486,7 +487,7 @@ impl Parser {
                     self.next();
                 }
 
-                implements.push(expect!(self, TokenKind::Identifier(i), i.into(), "expected identifier"));
+                implements.push(self.ident()?.into());
             }
         }
 
@@ -600,7 +601,7 @@ impl Parser {
                         if flags.contains(&TokenKind::Abstract) {
                             self.next();
 
-                            let name = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+                            let name = self.ident()?;
 
                             expect!(self, TokenKind::LeftParen, "expected (");
 
@@ -842,7 +843,7 @@ impl Parser {
             },
             TokenKind::Arrow => {
                 // TODO: Add support for dynamic property fetch or method call here.
-                let property = expect!(self, TokenKind::Identifier(i), i, "expected identifier");
+                let property = self.ident()?;
 
                 if self.current.kind == TokenKind::LeftParen {
                     self.next();
