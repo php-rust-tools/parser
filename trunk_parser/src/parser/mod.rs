@@ -545,7 +545,7 @@ impl Parser {
                     var_type = Some(self.type_string()?);
                 }
 
-                let var = expect!(self, TokenKind::Variable(i), i, "expected variable name");
+                let var = self.var()?;
                 let mut value = None;
 
                 if self.current.kind == TokenKind::Equals {
@@ -631,7 +631,7 @@ impl Parser {
                     },
                     TokenKind::Question | TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_) => {
                         let prop_type = self.type_string()?;
-                        let var = expect!(self, TokenKind::Variable(v), v, "expected variable name");
+                        let var = self.var()?;
                         let mut value = None;
 
                         if self.current.kind == TokenKind::Equals {
@@ -647,7 +647,7 @@ impl Parser {
                         Ok(Statement::Property { var, value, r#type: Some(prop_type), flags: flags.into_iter().map(|f| f.into()).collect() })
                     },
                     TokenKind::Variable(_) => {
-                        let var = expect!(self, TokenKind::Variable(v), v, "expected variable name");
+                        let var = self.var()?;
                         let mut value = None;
 
                         if self.current.kind == TokenKind::Equals {

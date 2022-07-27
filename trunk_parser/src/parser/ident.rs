@@ -14,4 +14,8 @@ impl Parser {
     pub(crate) fn full_name(&mut self) -> ParseResult<String> {
         Ok(expect!(self, TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i), i, "expected identifier"))
     }
+
+    pub(crate) fn var(&mut self) -> ParseResult<String> {
+        Ok(expect!(self, TokenKind::Variable(v), v, "expected variable name"))
+    }
 }
