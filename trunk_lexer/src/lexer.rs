@@ -623,6 +623,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "as" => TokenKind::As,
         "break" => TokenKind::Break,
         "class" => TokenKind::Class,
+        "continue" => TokenKind::Continue,
         "const" => TokenKind::Const,
         "declare" => TokenKind::Declare,
         "echo" => TokenKind::Echo,

@@ -187,6 +187,9 @@ pub enum Statement {
     Break {
         num: Option<Expression>,
     },
+    Continue {
+        num: Option<Expression>,
+    },
     Echo {
         values: Vec<Expression>,
     },
