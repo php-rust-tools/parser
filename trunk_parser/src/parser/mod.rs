@@ -757,6 +757,28 @@ impl Parser {
 
                 self.rparen()?;
 
+                let mut uses = vec![];
+                if self.current.kind == TokenKind::Use {
+                    self.next();
+
+                    self.lparen()?;
+
+                    while self.current.kind != TokenKind::RightParen {
+                        let var = match self.expression(0)? {
+                            s @ Expression::Variable(_) => s,
+                            _ => return Err(ParseError::UnexpectedToken("expected variable".into(), self.current.span))
+                        };
+
+                        uses.push(var);
+
+                        if self.current.kind == TokenKind::Comma {
+                            self.next();
+                        }
+                    }
+
+                    self.rparen()?;
+                }
+
                 let mut return_type = None;
                 if self.current.kind == TokenKind::Colon {
                     self.next();
@@ -770,7 +792,7 @@ impl Parser {
 
                 self.rbrace()?;
 
-                Expression::Closure(params, return_type, body)
+                Expression::Closure(params, uses, return_type, body)
             },
             TokenKind::Fn => {
                 self.next();

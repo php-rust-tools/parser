@@ -260,7 +260,7 @@ pub enum Expression {
     Identifier(String),
     Assign(Box<Self>, Box<Self>),
     Array(Vec<ArrayItem>),
-    Closure(Vec<Param>, Option<Type>, Block),
+    Closure(Vec<Param>, Vec<Expression>, Option<Type>, Block),
     ArrowFunction(Vec<Param>, Option<Type>, Box<Self>),
     New(Box<Self>, Vec<Self>),
     ConstantString(String),
