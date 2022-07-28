@@ -614,7 +614,15 @@ impl Lexer {
             },
             ':' => {
                 self.col += 1;
-                TokenKind::Colon
+
+                if let Some(':') = it.peek() {
+                    self.col += 1;
+                    
+                    it.next();
+                    TokenKind::DoubleColon
+                } else {
+                    TokenKind::Colon
+                }
             },
             _ => unimplemented!("<scripting> char: {}, line: {}, col: {}", char, self.line, self.col),
         };
@@ -819,7 +827,7 @@ function"#, &[
 
     #[test]
     fn punct() {
-        assert_tokens("<?php {}();,", &[
+        assert_tokens("<?php {}();, :: :", &[
             open!(),
             TokenKind::LeftBrace,
             TokenKind::RightBrace,
@@ -827,6 +835,8 @@ function"#, &[
             TokenKind::RightParen,
             TokenKind::SemiColon, 
             TokenKind::Comma,
+            TokenKind::DoubleColon,
+            TokenKind::Colon,
         ]);
     }
 
