@@ -290,6 +290,10 @@ pub enum InfixOp {
     Mul,
     Concat,
     LessThan,
+    Equals,
+    Identical,
+    NotEquals,
+    NotIdentical,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -301,6 +305,10 @@ impl From<TokenKind> for InfixOp {
             TokenKind::Slash => Self::Div,
             TokenKind::LessThan => Self::LessThan,
             TokenKind::Dot => Self::Concat,
+            TokenKind::DoubleEquals => Self::Equals,
+            TokenKind::TripleEquals => Self::Identical,
+            TokenKind::BangEquals => Self::NotEquals,
+            TokenKind::BangDoubleEquals => Self::NotIdentical,
             _ => unreachable!()
         }
     }

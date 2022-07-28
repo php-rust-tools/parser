@@ -20,6 +20,8 @@ pub enum TokenKind {
     Asterisk,
     Attribute,
     Bang,
+    BangEquals,
+    BangDoubleEquals,
     BoolCast,
     BooleanAnd,
     BooleanOr,

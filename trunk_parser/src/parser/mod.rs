@@ -1122,6 +1122,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
         TokenKind::Plus | TokenKind::Minus => (11, 12),
         TokenKind::Dot => (11, 11),
         TokenKind::LessThan => (9, 10),
+        TokenKind::DoubleEquals | TokenKind::TripleEquals | TokenKind::BangEquals | TokenKind::BangDoubleEquals => (7, 8),
         TokenKind::Equals => (2, 1),
         _ => return None,
     })
@@ -1258,6 +1259,41 @@ mod tests {
                     Some(Box::new(Expression::ConstantString("bar".into())))
                 )),
                 Box::new(Expression::ConstantString("baz".into()))
+            ))
+        ]);
+    }
+
+    #[test]
+    fn comparisons() {
+        assert_ast("<?php 1 == 1;", &[
+            expr!(Expression::Infix(
+                Box::new(Expression::Int(1)),
+                InfixOp::Equals,
+                Box::new(Expression::Int(1))
+            ))
+        ]);
+
+        assert_ast("<?php 1 === 1;", &[
+            expr!(Expression::Infix(
+                Box::new(Expression::Int(1)),
+                InfixOp::Identical,
+                Box::new(Expression::Int(1))
+            ))
+        ]);
+
+        assert_ast("<?php 1 != 1;", &[
+            expr!(Expression::Infix(
+                Box::new(Expression::Int(1)),
+                InfixOp::NotEquals,
+                Box::new(Expression::Int(1))
+            ))
+        ]);
+
+        assert_ast("<?php 1 !== 1;", &[
+            expr!(Expression::Infix(
+                Box::new(Expression::Int(1)),
+                InfixOp::NotIdentical,
+                Box::new(Expression::Int(1))
             ))
         ]);
     }

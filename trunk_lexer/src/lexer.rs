@@ -158,7 +158,24 @@ impl Lexer {
         let kind = match char {
             '!' => {
                 self.col += 1;
-                TokenKind::Bang
+
+                if let Some('=') = it.peek() {
+                    self.col += 1;
+
+                    it.next();
+
+                    if let Some('=') = it.peek() {
+                        self.col += 1;
+
+                        it.next();
+
+                        TokenKind::BangDoubleEquals
+                    } else {
+                        TokenKind::BangEquals
+                    }
+                } else {
+                    TokenKind::Bang
+                }
             },
             '&' => {
                 self.col += 1;
