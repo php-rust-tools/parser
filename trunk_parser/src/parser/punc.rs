@@ -6,22 +6,27 @@ use super::ParseResult;
 
 impl Parser {
     pub(crate) fn semi(&mut self) -> ParseResult<()> {
-        Ok(expect!(self, TokenKind::SemiColon, "expected semi colon"))
+        expect!(self, TokenKind::SemiColon, (), "expected semi colon");
+        Ok(())
     }
 
     pub(crate) fn lbrace(&mut self) -> ParseResult<()> {
-        Ok(expect!(self, TokenKind::LeftBrace, "expected {"))
+        expect!(self, TokenKind::LeftBrace, (), "expected {");
+        Ok(())
     }
 
     pub(crate) fn rbrace(&mut self) -> ParseResult<()> {
-        Ok(expect!(self, TokenKind::RightBrace, "expected }"))
+        expect!(self, TokenKind::RightBrace, (), "expected }");
+        Ok(())
     }
 
     pub(crate) fn lparen(&mut self) -> ParseResult<()> {
-        Ok(expect!(self, TokenKind::LeftParen, "expected ("))
+        expect!(self, TokenKind::LeftParen, (), "expected (");
+        Ok(())
     }
 
     pub(crate) fn rparen(&mut self) -> ParseResult<()> {
-        Ok(expect!(self, TokenKind::RightParen, "expected )"))
+        expect!(self, TokenKind::RightParen, (), "expected )");
+        Ok(())
     }
 }
