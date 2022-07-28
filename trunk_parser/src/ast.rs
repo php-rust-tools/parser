@@ -271,6 +271,7 @@ pub enum Expression {
     StaticMethodCall(Box<Self>, Identifier, Vec<Self>),
     AnonymousClass(Option<Identifier>, Vec<Identifier>, Block),
     Bool(bool),
+    ArrayIndex(Box<Self>, Option<Box<Self>>),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]

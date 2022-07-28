@@ -897,7 +897,7 @@ impl Parser {
             _ => todo!("expr lhs: {:?}", self.current.kind),
         };
 
-        if self.current.kind == TokenKind::SemiColon || self.current.kind == TokenKind::RightParen {
+        if self.current.kind == TokenKind::SemiColon {
             return Ok(lhs);
         }
 
@@ -957,6 +957,19 @@ impl Parser {
                 self.rparen()?;
     
                 Expression::Call(Box::new(lhs), args)
+            },
+            TokenKind::LeftBracket => {
+                if self.current.kind == TokenKind::RightBracket {
+                    self.next();
+
+                    Expression::ArrayIndex(Box::new(lhs), None)
+                } else {
+                    let index = self.expression(0)?;
+
+                    expect!(self, TokenKind::RightBracket, "expected ]");
+
+                    Expression::ArrayIndex(Box::new(lhs), Some(Box::new(index)))
+                }
             },
             TokenKind::DoubleColon => {
                 match self.current.kind.clone() {
@@ -1067,7 +1080,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
 
 fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
     Some(match t {
-        TokenKind::LeftParen => 19,
+        TokenKind::LeftParen | TokenKind::LeftBracket => 19,
         TokenKind::Arrow | TokenKind::DoubleColon => 18,
         _ => return None
     })
@@ -1165,6 +1178,39 @@ mod tests {
                 expr: $expr,
             }
         };
+    }
+
+    #[test]
+    fn array_index() {
+        assert_ast("<?php $foo['bar'];", &[
+            expr!(Expression::ArrayIndex(
+                Box::new(Expression::Variable("foo".into())),
+                Some(Box::new(Expression::ConstantString("bar".into())))
+            ))
+        ]);
+
+        assert_ast("<?php $foo['bar']['baz'];", &[
+            expr!(Expression::ArrayIndex(
+                Box::new(Expression::ArrayIndex(
+                    Box::new(Expression::Variable("foo".into())),
+                    Some(Box::new(Expression::ConstantString("bar".into())))
+                )),
+                Some(Box::new(Expression::ConstantString("baz".into())))
+            ))
+        ]);
+    }
+
+    #[test]
+    fn array_index_assign() {
+        assert_ast("<?php $foo['bar'] = 'baz';", &[
+            expr!(Expression::Assign(
+                Box::new(Expression::ArrayIndex(
+                    Box::new(Expression::Variable("foo".into())),
+                    Some(Box::new(Expression::ConstantString("bar".into())))
+                )),
+                Box::new(Expression::ConstantString("baz".into()))
+            ))
+        ]);
     }
 
     #[test]
