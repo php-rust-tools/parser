@@ -597,7 +597,16 @@ impl Lexer {
             },
             '+' => {
                 self.col += 1;
-                TokenKind::Plus
+
+                if let Some('=') = it.peek() {
+                    self.col += 1;
+
+                    it.next();
+                    
+                    TokenKind::PlusEquals
+                } else {
+                    TokenKind::Plus
+                }
             },
             '-' => {
                 self.col += 1;

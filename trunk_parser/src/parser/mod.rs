@@ -723,8 +723,6 @@ impl Parser {
 
                 let target = self.expression(0)?;
 
-                dbg!(&self.current.kind);
-
                 Expression::Clone(Box::new(target))
             },
             TokenKind::Variable(v) => {
@@ -1217,7 +1215,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
         TokenKind::DoubleEquals | TokenKind::TripleEquals | TokenKind::BangEquals | TokenKind::BangDoubleEquals => (7, 8),
         TokenKind::BooleanAnd => (5, 6),
         TokenKind::BooleanOr => (3, 4),
-        TokenKind::Equals => (2, 1),
+        TokenKind::Equals | TokenKind::PlusEquals => (2, 1),
         _ => return None,
     })
 }
