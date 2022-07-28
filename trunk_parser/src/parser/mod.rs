@@ -912,6 +912,16 @@ impl Parser {
 
                 Expression::New(Box::new(target), args)
             },
+            _ if is_prefix(&self.current.kind) => {
+                let op = self.current.kind.clone();
+
+                self.next();
+
+                let rbp = prefix_binding_power(&op);
+                let rhs = self.expression(rbp)?;
+
+                prefix(&op, rhs)
+            },
             _ => todo!("expr lhs: {:?}", self.current.kind),
         };
 
@@ -1074,6 +1084,27 @@ impl Parser {
         }
 
         Ok(ast.to_vec())
+    }
+}
+
+fn is_prefix(op: &TokenKind) -> bool {
+    match op {
+        TokenKind::Bang => true,
+        _ => false
+    }
+}
+
+fn prefix_binding_power(op: &TokenKind) -> u8 {
+    match op {
+        TokenKind::Bang => 99,
+        _ => unreachable!()
+    }
+}
+
+fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
+    match op {
+        TokenKind::Bang => Expression::BooleanNot(Box::new(rhs)),
+        _ => unreachable!()
     }
 }
 

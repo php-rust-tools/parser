@@ -273,6 +273,7 @@ pub enum Expression {
     Bool(bool),
     ArrayIndex(Box<Self>, Option<Box<Self>>),
     Null,
+    BooleanNot(Box<Self>),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
