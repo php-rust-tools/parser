@@ -1242,7 +1242,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
         TokenKind::Asterisk | TokenKind::Slash => (13, 14),
         TokenKind::Plus | TokenKind::Minus => (11, 12),
         TokenKind::Dot => (11, 11),
-        TokenKind::LessThan | TokenKind::GreaterThan => (9, 10),
+        TokenKind::LessThan | TokenKind::GreaterThan | TokenKind::LessThanEquals | TokenKind::GreaterThanEquals => (9, 10),
         TokenKind::DoubleEquals | TokenKind::TripleEquals | TokenKind::BangEquals | TokenKind::BangDoubleEquals => (7, 8),
         TokenKind::BooleanAnd => (5, 6),
         TokenKind::BooleanOr => (3, 4),
