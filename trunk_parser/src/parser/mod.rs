@@ -429,8 +429,6 @@ impl Parser {
                     num = Some(self.expression(0)?);
                 }
 
-                dbg!(&self.current.kind);
-
                 self.semi()?;
 
                 Statement::Continue { num }
@@ -442,8 +440,6 @@ impl Parser {
                 if self.current.kind != TokenKind::SemiColon {
                     num = Some(self.expression(0)?);
                 }
-
-                dbg!(&self.current.kind);
 
                 self.semi()?;
 
@@ -989,8 +985,6 @@ impl Parser {
             return Ok(lhs);
         }
 
-        // self.next();
-
         loop {
             let kind = match &self.current {
                 Token { kind: TokenKind::SemiColon | TokenKind::Eof, .. }  => break,
@@ -1032,6 +1026,11 @@ impl Parser {
 
     fn postfix(&mut self, lhs: Expression, op: &TokenKind) -> Result<Expression, ParseError> {
         Ok(match op {
+            TokenKind::Coalesce => {
+                let rhs = self.expression(11)?;
+
+                Expression::Coalesce(Box::new(lhs), Box::new(rhs))
+            },
             TokenKind::LeftParen => {
                 let mut args = Vec::new();
                 while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
@@ -1219,6 +1218,7 @@ fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
         TokenKind::Question => 20,
         TokenKind::LeftParen | TokenKind::LeftBracket => 19,
         TokenKind::Arrow | TokenKind::DoubleColon => 18,
+        TokenKind::Coalesce => 11,
         _ => return None
     })
 }

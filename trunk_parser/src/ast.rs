@@ -282,7 +282,8 @@ pub enum Expression {
     Null,
     BooleanNot(Box<Self>),
     MagicConst(MagicConst),
-    Ternary(Box<Self>, Box<Self>, Box<Self>)
+    Ternary(Box<Self>, Box<Self>, Box<Self>),
+    Coalesce(Box<Self>, Box<Self>),
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Serialize)]

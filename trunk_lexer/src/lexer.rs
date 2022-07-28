@@ -200,6 +200,20 @@ impl Lexer {
                     self.enter_state(LexerState::Initial);
 
                     TokenKind::CloseTag
+                } else if let Some('?') = it.peek() {
+                    self.col += 1;
+
+                    it.next();
+
+                    if let Some('=') = it.peek() {
+                        self.col += 1;
+
+                        it.next();
+
+                        TokenKind::CoalesceEqual
+                    } else {
+                        TokenKind::Coalesce
+                    }
                 } else {
                     TokenKind::Question
                 }
