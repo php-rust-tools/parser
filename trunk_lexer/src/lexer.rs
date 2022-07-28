@@ -427,8 +427,18 @@ impl Lexer {
                 }
             },
             '\\' => {
-                // TODO: Handle fully-qualified identifiers here.
-                TokenKind::NamespaceSeparator
+                self.col += 1;
+
+                if let Some(n) = it.peek() && (n.is_alphabetic() || *n == '_') {
+                    match self.scripting(it)? {
+                        Token { kind: TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i), .. } => {
+                            TokenKind::FullyQualifiedIdentifier(format!("\\{}", i))
+                        },
+                        s @ _ => unreachable!("{:?}", s)
+                    }
+                } else {
+                    TokenKind::NamespaceSeparator
+                }
             },
             _ if char.is_alphabetic() || char == '_' => {
                 self.col += 1;
@@ -540,8 +550,16 @@ impl Lexer {
             },
             '|' => {
                 self.col += 1;
-                // TODO: Handle boolean or || tokens.
-                TokenKind::Pipe
+                
+                if let Some('|') = it.peek() {
+                    self.col += 1;
+
+                    it.next();
+
+                    TokenKind::BooleanOr
+                } else {
+                    TokenKind::Pipe
+                }
             },
             '{' => {
                 self.col += 1;
