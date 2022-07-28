@@ -695,6 +695,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "as" => TokenKind::As,
         "break" => TokenKind::Break,
         "class" => TokenKind::Class,
+        "clone" => TokenKind::Clone,
         "continue" => TokenKind::Continue,
         "const" => TokenKind::Const,
         "declare" => TokenKind::Declare,

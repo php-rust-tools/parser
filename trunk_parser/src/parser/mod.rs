@@ -718,6 +718,15 @@ impl Parser {
         }
 
         let mut lhs = match &self.current.kind {
+            TokenKind::Clone => {
+                self.next();
+
+                let target = self.expression(0)?;
+
+                dbg!(&self.current.kind);
+
+                Expression::Clone(Box::new(target))
+            },
             TokenKind::Variable(v) => {
                 let e = Expression::Variable(v.to_string());
                 self.next();
