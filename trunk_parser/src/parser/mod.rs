@@ -749,13 +749,28 @@ impl Parser {
                 Expression::Array(items)
             },
             TokenKind::Function => {
-                // TODO: Support `use (...)` as part of long closure.
-                match self.function(FunctionKind::Closure)? {
-                    Statement::Function { params, body, return_type, .. } => {
-                        Expression::Closure(params, return_type, body)
-                    },
-                    _ => unreachable!()
+                self.next();
+
+                self.lparen()?;
+
+                let params = self.param_list()?;
+
+                self.rparen()?;
+
+                let mut return_type = None;
+                if self.current.kind == TokenKind::Colon {
+                    self.next();
+
+                    return_type = Some(self.type_string()?);
                 }
+
+                self.lbrace()?;
+
+                let body = self.block(&TokenKind::RightBrace)?;
+
+                self.rbrace()?;
+
+                Expression::Closure(params, return_type, body)
             },
             TokenKind::Fn => {
                 self.next();
