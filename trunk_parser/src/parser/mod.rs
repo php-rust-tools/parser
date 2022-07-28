@@ -713,6 +713,8 @@ impl Parser {
             TokenKind::Int(i) => Expression::Int(*i),
             TokenKind::Identifier(i) => Expression::Identifier(i.to_string()),
             TokenKind::ConstantString(s) => Expression::ConstantString(s.to_string()),
+            TokenKind::True => Expression::Bool(true),
+            TokenKind::False => Expression::Bool(false),
             TokenKind::LeftParen => {
                 self.next();
 

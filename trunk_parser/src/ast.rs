@@ -269,7 +269,8 @@ pub enum Expression {
     ConstFetch(Box<Self>, Identifier),
     MethodCall(Box<Self>, Identifier, Vec<Self>),
     StaticMethodCall(Box<Self>, Identifier, Vec<Self>),
-    AnonymousClass(Option<Identifier>, Vec<Identifier>, Block)
+    AnonymousClass(Option<Identifier>, Vec<Identifier>, Block),
+    Bool(bool),
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
