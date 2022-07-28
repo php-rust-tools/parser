@@ -29,4 +29,14 @@ impl Parser {
         expect!(self, TokenKind::RightParen, (), "expected )");
         Ok(())
     }
+
+    pub(crate) fn lbracket(&mut self) -> ParseResult<()> {
+        expect!(self, TokenKind::LeftBracket, (), "expected [");
+        Ok(())
+    }
+
+    pub(crate) fn rbracket(&mut self) -> ParseResult<()> {
+        expect!(self, TokenKind::RightBracket, (), "expected ]");
+        Ok(())
+    }
 }
