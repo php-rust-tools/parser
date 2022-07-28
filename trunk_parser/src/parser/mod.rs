@@ -1059,6 +1059,16 @@ impl Parser {
                     Expression::ArrayIndex(Box::new(lhs), Some(Box::new(index)))
                 }
             },
+            TokenKind::Question => {
+                // TODO: Handle short-hand ternaries here too.
+                let then = self.expression(0)?;
+
+                expect!(self, TokenKind::Colon, "expected :");
+
+                let otherwise = self.expression(0)?;
+
+                Expression::Ternary(Box::new(lhs), Box::new(then), Box::new(otherwise))
+            },
             TokenKind::DoubleColon => {
                 match self.current.kind.clone() {
                     TokenKind::Variable(_) => {
@@ -1206,6 +1216,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
 
 fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
     Some(match t {
+        TokenKind::Question => 20,
         TokenKind::LeftParen | TokenKind::LeftBracket => 19,
         TokenKind::Arrow | TokenKind::DoubleColon => 18,
         _ => return None
