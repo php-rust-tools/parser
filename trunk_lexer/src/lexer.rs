@@ -345,6 +345,20 @@ impl Lexer {
                     }
 
                     TokenKind::Float(buffer.parse().unwrap())
+                } else if let Some('.') = it.peek() {
+                    it.next();
+
+                    self.col += 1;
+
+                    if let Some('.') = it.peek() {
+                        it.next();
+
+                        self.col += 1;
+
+                        TokenKind::Ellipsis
+                    } else {
+                        todo!("don't know how to handle this case yet, it should just be 2 Dot tokens...")
+                    }
                 } else {
                     TokenKind::Dot
                 }

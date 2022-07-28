@@ -1332,7 +1332,66 @@ mod tests {
                 params: vec![
                     Param {
                         name: Expression::Variable("b".into()),
-                        r#type: Some(Type::Plain("string".into()))
+                        r#type: Some(Type::Plain("string".into())),
+                        variadic: false,
+                    }
+                ],
+                body: vec![],
+                return_type: None,
+            }
+        ]);
+    }
+
+    #[test]
+    fn variadic_params() {
+        assert_ast("<?php function foo(...$bar) {}", &[
+            Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![
+                    Param {
+                        name: Expression::Variable("bar".into()),
+                        r#type: None,
+                        variadic: true,
+                    }
+                ],
+                body: vec![],
+                return_type: None,
+            }
+        ]);
+
+        assert_ast("<?php function foo(string ...$bar) {}", &[
+            Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![
+                    Param {
+                        name: Expression::Variable("bar".into()),
+                        r#type: Some(Type::Plain("string".into())),
+                        variadic: true,
+                    }
+                ],
+                body: vec![],
+                return_type: None,
+            }
+        ]);
+
+        assert_ast("<?php function foo($bar, $baz, ...$car) {}", &[
+            Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![
+                    Param {
+                        name: Expression::Variable("bar".into()),
+                        r#type: None,
+                        variadic: false,
+                    },
+                    Param {
+                        name: Expression::Variable("baz".into()),
+                        r#type: None,
+                        variadic: false,
+                    },
+                    Param {
+                        name: Expression::Variable("car".into()),
+                        r#type: None,
+                        variadic: true,
                     }
                 ],
                 body: vec![],
@@ -1349,7 +1408,8 @@ mod tests {
                 params: vec![
                     Param {
                         name: Expression::Variable("b".into()),
-                        r#type: Some(Type::Nullable("string".into()))
+                        r#type: Some(Type::Nullable("string".into())),
+                        variadic: false,
                     }
                 ],
                 body: vec![],
@@ -1369,7 +1429,8 @@ mod tests {
                         r#type: Some(Type::Union(vec![
                             "int".into(),
                             "float".into()
-                        ]))
+                        ])),
+                        variadic: false,
                     }
                 ],
                 body: vec![],
@@ -1389,7 +1450,8 @@ mod tests {
                         r#type: Some(Type::Intersection(vec![
                             "Foo".into(),
                             "Bar".into()
-                        ]))
+                        ])),
+                        variadic: false
                     }
                 ],
                 body: vec![],

@@ -41,11 +41,12 @@ pub type ParamList = Vec<Param>;
 pub struct Param {
     pub(crate) name: Expression,
     pub(crate) r#type: Option<Type>,
+    pub(crate) variadic: bool,
 }
 
 impl From<String> for Param {
     fn from(name: String) -> Self {
-        Self { name: Expression::Variable(name), r#type: None }
+        Self { name: Expression::Variable(name), r#type: None, variadic: false }
     }
 }
 

@@ -11,10 +11,15 @@ impl Parser {
             let mut param_type = None;
 
             // 1. If we don't see a variable, we should expect a type-string.
-            if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+            if ! matches!(self.current.kind, TokenKind::Variable(_) | TokenKind::Ellipsis) {
                 // 1a. Try to parse the type.
                 param_type = Some(self.type_string()?);
             }
+
+            let variadic = if self.current.kind == TokenKind::Ellipsis {
+                self.next();
+                true
+            } else { false };
 
             // 2. Then expect a variable.
             let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
@@ -23,6 +28,7 @@ impl Parser {
             params.push(Param {
                 name: Expression::Variable(var),
                 r#type: param_type,
+                variadic
             });
             
             if self.current.kind == TokenKind::Comma {
