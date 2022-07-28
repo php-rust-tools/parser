@@ -111,6 +111,34 @@ impl Parser {
                 self.next();
                 s
             },
+            TokenKind::Foreach => {
+                self.next();
+
+                self.lparen()?;
+
+                let expr = self.expression(0)?;
+
+                expect!(self, TokenKind::As, "expected 'as'");
+
+                let mut key_var = None;
+                let mut value_var = self.expression(0)?;
+
+                if self.current.kind == TokenKind::DoubleArrow {
+                    self.next();
+
+                    key_var = Some(value_var.clone());
+                    value_var = self.expression(0)?;
+                }
+
+                self.rparen()?;
+                self.lbrace()?;
+
+                let body = self.block(&TokenKind::RightBrace)?;
+
+                self.rbrace()?;
+
+                Statement::Foreach { expr, key_var, value_var, body }
+            },
             TokenKind::Abstract => {
                 self.next();  
 
@@ -755,10 +783,60 @@ impl Parser {
             TokenKind::New => {
                 self.next();
 
-                // TODO: Support dynamic instantiation targets here.
-                let target = self.expression(20)?;
-
                 let mut args = vec![];
+                let target = if self.current.kind == TokenKind::Class {
+                    self.next();
+
+                    if self.current.kind == TokenKind::LeftParen {
+                        self.lparen()?;
+    
+                        while self.current.kind != TokenKind::RightParen {
+                            let value = self.expression(0)?;
+    
+                            args.push(value);
+    
+                            if self.current.kind == TokenKind::Comma {
+                                self.next();
+                            }
+                        }
+    
+                        self.rparen()?;
+                    }
+
+                    let mut extends: Option<Identifier> = None;
+
+                    if self.current.kind == TokenKind::Extends {
+                        self.next();
+                        extends = Some(self.ident()?.into());
+                    }
+
+                    let mut implements = Vec::new();
+                    if self.current.kind == TokenKind::Implements {
+                        self.next();
+
+                        while self.current.kind != TokenKind::LeftBrace {
+                            if self.current.kind == TokenKind::Comma {
+                                self.next();
+                            }
+
+                            implements.push(self.ident()?.into());
+                        }
+                    }
+
+                    self.lbrace()?;
+
+                    let mut body = Vec::new();
+                    while self.current.kind != TokenKind::RightBrace && ! self.is_eof() {
+                        body.push(self.class_statement()?);
+                    }
+
+                    self.rbrace()?;
+
+                    Expression::AnonymousClass(extends, implements, body)
+                } else {
+                    self.expression(20)?
+                };
+
                 if self.current.kind == TokenKind::LeftParen {
                     self.lparen()?;
 
@@ -952,7 +1030,7 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use trunk_lexer::Lexer;
-    use crate::{Statement, Param, Expression, ast::{InfixOp, ElseIf}, Type, Identifier};
+    use crate::{Statement, Param, Expression, ast::{InfixOp, ElseIf, MethodFlag, ArrayItem}, Type, Identifier};
     use super::Parser;
 
     macro_rules! function {
@@ -1468,6 +1546,121 @@ mod tests {
                 params: vec![],
                 body: vec![],
                 return_type: Some(Type::Plain("string".into()))
+            }
+        ]);
+    }
+
+    #[test]
+    fn new_anon_class() {
+        assert_ast("<?php new class{};", &[
+            expr!(Expression::New(
+                Box::new(Expression::AnonymousClass(
+                    None,
+                    vec![],
+                    vec![]
+                )),
+                vec![],
+            ))
+        ]);
+
+        assert_ast("<?php new class(1, 2) {};", &[
+            expr!(Expression::New(
+                Box::new(Expression::AnonymousClass(
+                    None,
+                    vec![],
+                    vec![]
+                )),
+                vec![
+                    Expression::Int(1),
+                    Expression::Int(2),
+                ],
+            ))
+        ]);
+
+        assert_ast("<?php new class extends Foo {};", &[
+            expr!(Expression::New(
+                Box::new(Expression::AnonymousClass(
+                    Some(Identifier::from("Foo")),
+                    vec![],
+                    vec![]
+                )),
+                vec![]
+            ))
+        ]);
+
+        assert_ast("<?php new class implements Foo, Bar {};", &[
+            expr!(Expression::New(
+                Box::new(Expression::AnonymousClass(
+                    None,
+                    vec![
+                        Identifier::from("Foo"),
+                        Identifier::from("Bar"),
+                    ],
+                    vec![]
+                )),
+                vec![]
+            ))
+        ]);
+
+        assert_ast("<?php new class {
+            public function foo() {}
+        };", &[
+            expr!(Expression::New(
+                Box::new(Expression::AnonymousClass(
+                    None,
+                    vec![],
+                    vec![
+                        Statement::Method {
+                            name: "foo".into(),
+                            params: vec![],
+                            body: vec![],
+                            return_type: None,
+                            flags: vec![
+                                MethodFlag::Public,
+                            ]
+                        }
+                    ]
+                )),
+                vec![]
+            ))
+        ]);
+    }
+
+    #[test]
+    fn foreach() {
+        assert_ast("<?php foreach ($foo as $bar) {}", &[
+            Statement::Foreach {
+                expr: Expression::Variable("foo".into()),
+                key_var: None,
+                value_var: Expression::Variable("bar".into()),
+                body: vec![],
+            }
+        ]);
+
+        assert_ast("<?php foreach ($foo as $bar => $baz) {}", &[
+            Statement::Foreach {
+                expr: Expression::Variable("foo".into()),
+                key_var: Some(Expression::Variable("bar".into())),
+                value_var: Expression::Variable("baz".into()),
+                body: vec![],
+            }
+        ]);
+
+        assert_ast("<?php foreach ($foo as [$baz, $car]) {}", &[
+            Statement::Foreach {
+                expr: Expression::Variable("foo".into()),
+                key_var: None,
+                value_var: Expression::Array(vec![
+                    ArrayItem {
+                        key: None,
+                        value: Expression::Variable("baz".into())
+                    },
+                    ArrayItem {
+                        key: None,
+                        value: Expression::Variable("car".into())
+                    }
+                ]),
+                body: vec![],
             }
         ]);
     }

@@ -133,6 +133,12 @@ pub enum UseKind {
 pub enum Statement {
     InlineHtml(String),
     // TODO: Look at removing this and unifying with Property.
+    Foreach {
+        expr: Expression,
+        key_var: Option<Expression>,
+        value_var: Expression,
+        body: Block,
+    },
     Var {
         var: String,
         value: Option<Expression>,
@@ -260,6 +266,7 @@ pub enum Expression {
     ConstantString(String),
     PropertyFetch(Box<Self>, Identifier),
     MethodCall(Box<Self>, Identifier, Vec<Self>),
+    AnonymousClass(Option<Identifier>, Vec<Identifier>, Block)
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
