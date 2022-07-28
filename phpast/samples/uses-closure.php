@@ -1,3 +1,3 @@
 <?php
 
-$foo = function () use ($bar) {};
+function () use ($bar) {};

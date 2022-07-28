@@ -447,7 +447,7 @@ impl Parser {
                     ret
                 }
             },
-            TokenKind::Function => self.function(FunctionKind::Named)?,
+            TokenKind::Function if matches!(self.peek.kind, TokenKind::Identifier(_)) => self.function(FunctionKind::Named)?,
             TokenKind::SemiColon => {
                 self.next();
 
