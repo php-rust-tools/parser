@@ -1692,6 +1692,7 @@ mod tests {
                         name: Expression::Variable("b".into()),
                         r#type: Some(Type::Plain("string".into())),
                         variadic: false,
+                        default: None,
                     }
                 ],
                 body: vec![],
@@ -1710,6 +1711,7 @@ mod tests {
                         name: Expression::Variable("bar".into()),
                         r#type: None,
                         variadic: true,
+                        default: None,
                     }
                 ],
                 body: vec![],
@@ -1725,6 +1727,7 @@ mod tests {
                         name: Expression::Variable("bar".into()),
                         r#type: Some(Type::Plain("string".into())),
                         variadic: true,
+                        default: None,
                     }
                 ],
                 body: vec![],
@@ -1740,16 +1743,19 @@ mod tests {
                         name: Expression::Variable("bar".into()),
                         r#type: None,
                         variadic: false,
+                        default: None,
                     },
                     Param {
                         name: Expression::Variable("baz".into()),
                         r#type: None,
                         variadic: false,
+                        default: None,
                     },
                     Param {
                         name: Expression::Variable("car".into()),
                         r#type: None,
                         variadic: true,
+                        default: None,
                     }
                 ],
                 body: vec![],
@@ -1768,6 +1774,7 @@ mod tests {
                         name: Expression::Variable("b".into()),
                         r#type: Some(Type::Nullable("string".into())),
                         variadic: false,
+                        default: None,
                     }
                 ],
                 body: vec![],
@@ -1789,6 +1796,7 @@ mod tests {
                             "float".into()
                         ])),
                         variadic: false,
+                        default: None,
                     }
                 ],
                 body: vec![],
@@ -1809,7 +1817,8 @@ mod tests {
                             "Foo".into(),
                             "Bar".into()
                         ])),
-                        variadic: false
+                        variadic: false,
+                        default: None,
                     }
                 ],
                 body: vec![],
