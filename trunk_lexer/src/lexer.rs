@@ -604,6 +604,12 @@ impl Lexer {
                     it.next();
                     
                     TokenKind::PlusEquals
+                } else if let Some('+') = it.peek() {
+                    self.col += 1;
+
+                    it.next();
+
+                    TokenKind::Increment
                 } else {
                     TokenKind::Plus
                 }
