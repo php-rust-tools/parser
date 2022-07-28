@@ -272,6 +272,7 @@ pub enum Expression {
     AnonymousClass(Option<Identifier>, Vec<Identifier>, Block),
     Bool(bool),
     ArrayIndex(Box<Self>, Option<Box<Self>>),
+    Null,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]

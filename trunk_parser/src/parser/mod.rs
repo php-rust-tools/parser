@@ -739,6 +739,10 @@ impl Parser {
                 self.next();
                 e
             },
+            TokenKind::Null => {
+                self.next();
+                Expression::Null
+            },
             TokenKind::LeftParen => {
                 self.next();
 
