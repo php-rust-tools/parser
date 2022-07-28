@@ -895,7 +895,7 @@ impl Parser {
             _ => todo!("expr lhs: {:?}", self.current.kind),
         };
 
-        if self.current.kind == TokenKind::SemiColon {
+        if self.current.kind == TokenKind::SemiColon || self.current.kind == TokenKind::RightParen {
             return Ok(lhs);
         }
 
@@ -955,6 +955,40 @@ impl Parser {
                 self.rparen()?;
     
                 Expression::Call(Box::new(lhs), args)
+            },
+            TokenKind::DoubleColon => {
+                match self.current.kind.clone() {
+                    TokenKind::Variable(_) => {
+                        let var = self.expression(0)?;
+
+                        Expression::StaticPropertyFetch(Box::new(lhs), Box::new(var))
+                    },
+                    TokenKind::Identifier(i) => {
+                        let ident = self.ident()?;
+
+                        if self.current.kind == TokenKind::LeftParen {
+                            self.lparen()?;
+
+                            let mut args = vec![];
+                            while self.current.kind != TokenKind::RightParen {
+                                let arg = self.expression(0)?;
+    
+                                args.push(arg);
+
+                                if self.current.kind == TokenKind::Comma {
+                                    self.next();
+                                }
+                            }
+
+                            self.rparen()?;
+
+                            Expression::StaticMethodCall(Box::new(lhs), ident.into(), args)
+                        } else {
+                            Expression::ConstFetch(Box::new(lhs), i.into())
+                        }
+                    },
+                    _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
+                }
             },
             TokenKind::Arrow => {
                 // TODO: Add support for dynamic property fetch or method call here.
@@ -1032,7 +1066,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
 fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
     Some(match t {
         TokenKind::LeftParen => 19,
-        TokenKind::Arrow => 18,
+        TokenKind::Arrow | TokenKind::DoubleColon => 18,
         _ => return None
     })
 }
