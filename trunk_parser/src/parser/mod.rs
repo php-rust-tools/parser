@@ -27,12 +27,6 @@ mod block;
 mod punc;
 mod ident;
 
-#[derive(PartialEq)]
-enum FunctionKind {
-    Named,
-    Closure,
-}
-
 pub struct Parser {
     pub current: Token,
     pub peek: Token,
@@ -447,7 +441,7 @@ impl Parser {
                     ret
                 }
             },
-            TokenKind::Function if matches!(self.peek.kind, TokenKind::Identifier(_)) => self.function(FunctionKind::Named)?,
+            TokenKind::Function if matches!(self.peek.kind, TokenKind::Identifier(_)) => self.function()?,
             TokenKind::SemiColon => {
                 self.next();
 
@@ -463,14 +457,10 @@ impl Parser {
         })
     }
 
-    fn function(&mut self, kind: FunctionKind) -> ParseResult<Statement> {
+    fn function(&mut self) -> ParseResult<Statement> {
         self.next();
 
-        let name = if kind == FunctionKind::Named {
-            self.ident()?
-        } else {
-            String::new()
-        };
+        let name = self.ident()?;
 
         self.lparen()?;
 
@@ -649,7 +639,7 @@ impl Parser {
 
                             Ok(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: flags.iter().map(|t| t.clone().into()).collect() })
                         } else {
-                            match self.function(FunctionKind::Named)? {
+                            match self.function()? {
                                 Statement::Function { name, params, body, return_type } => {
                                     Ok(Statement::Method { name, params, body, flags: flags.iter().map(|t| t.clone().into()).collect(), return_type })
                                 },
@@ -691,7 +681,7 @@ impl Parser {
                 }
             },
             TokenKind::Function => {
-                match self.function(FunctionKind::Named)? {
+                match self.function()? {
                     Statement::Function { name, params, body, return_type } => {
                         Ok(Statement::Method { name, params, body, flags: vec![], return_type })
                     },
