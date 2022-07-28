@@ -24,11 +24,18 @@ impl Parser {
             // 2. Then expect a variable.
             let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
 
+            let mut default = None;
+            if self.current.kind == TokenKind::Equals {
+                self.next();
+                default = Some(self.expression(0)?);
+            }
+
             // TODO: Support variable types and default values.
             params.push(Param {
                 name: Expression::Variable(var),
                 r#type: param_type,
-                variadic
+                variadic,
+                default
             });
             
             if self.current.kind == TokenKind::Comma {

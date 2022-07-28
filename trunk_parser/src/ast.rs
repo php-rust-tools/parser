@@ -42,11 +42,12 @@ pub struct Param {
     pub(crate) name: Expression,
     pub(crate) r#type: Option<Type>,
     pub(crate) variadic: bool,
+    pub(crate) default: Option<Expression>,
 }
 
 impl From<String> for Param {
     fn from(name: String) -> Self {
-        Self { name: Expression::Variable(name), r#type: None, variadic: false }
+        Self { name: Expression::Variable(name), r#type: None, variadic: false, default: None }
     }
 }
 
@@ -138,6 +139,12 @@ pub enum Statement {
         key_var: Option<Expression>,
         value_var: Expression,
         body: Block,
+    },
+    Require {
+        path: Expression,
+    },
+    RequireOnce {
+        path: Expression,
     },
     Var {
         var: String,
@@ -274,6 +281,12 @@ pub enum Expression {
     ArrayIndex(Box<Self>, Option<Box<Self>>),
     Null,
     BooleanNot(Box<Self>),
+    MagicConst(MagicConst),
+}
+
+#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
+pub enum MagicConst {
+    Dir,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
@@ -294,6 +307,8 @@ pub enum InfixOp {
     Identical,
     NotEquals,
     NotIdentical,
+    And,
+    Or,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -309,6 +324,8 @@ impl From<TokenKind> for InfixOp {
             TokenKind::TripleEquals => Self::Identical,
             TokenKind::BangEquals => Self::NotEquals,
             TokenKind::BangDoubleEquals => Self::NotIdentical,
+            TokenKind::BooleanAnd => Self::And,
+            TokenKind::BooleanOr => Self::Or,
             _ => unreachable!()
         }
     }

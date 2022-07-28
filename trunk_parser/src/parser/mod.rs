@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind}, Identifier, Type};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst}, Identifier, Type};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -26,11 +26,13 @@ mod params;
 mod block;
 mod punc;
 mod ident;
+mod comments;
 
 pub struct Parser {
     pub current: Token,
     pub peek: Token,
     iter: IntoIter<Token>,
+    comments: Vec<Token>,
 }
 
 #[allow(dead_code)]
@@ -40,6 +42,7 @@ impl Parser {
             current: Token::default(),
             peek: Token::default(),
             iter: tokens.into_iter(),
+            comments: vec![],
         };
 
         this.next();
@@ -104,6 +107,24 @@ impl Parser {
                 let s = Statement::Comment { comment: comment.to_string() };
                 self.next();
                 s
+            },
+            TokenKind::Require => {
+                self.next();
+
+                let path = self.expression(0)?;
+
+                self.semi()?;
+
+                Statement::Require { path }
+            },
+            TokenKind::RequireOnce => {
+                self.next();
+
+                let path = self.expression(0)?;
+
+                self.semi()?;
+
+                Statement::RequireOnce { path }
             },
             TokenKind::Foreach => {
                 self.next();
@@ -522,6 +543,8 @@ impl Parser {
     }
     
     fn class_statement(&mut self) -> ParseResult<Statement> {
+        self.gather_comments();
+
         match self.current.kind {
             TokenKind::Use => {
                 self.next();
@@ -709,7 +732,7 @@ impl Parser {
                 self.next();
                 e
             },
-            TokenKind::Identifier(i) => {
+            TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i) => {
                 let e = Expression::Identifier(i.to_string());
                 self.next();
                 e
@@ -742,6 +765,37 @@ impl Parser {
 
                 e
             },
+            TokenKind::Array => {
+                let mut items = vec![];
+
+                self.next();
+
+                self.lparen()?;
+
+                while self.current.kind != TokenKind::RightParen {
+                    let mut key = None;
+                    let mut value = self.expression(0)?;
+
+                    if self.current.kind == TokenKind::DoubleArrow {
+                        self.next();
+
+                        key = Some(value);
+                        value = self.expression(0)?;
+                    }
+
+                    items.push(ArrayItem { key, value });
+
+                    if self.current.kind == TokenKind::Comma {
+                        self.next();
+                    }
+
+                    self.skip_comments();
+                }
+
+                self.rparen()?;
+
+                Expression::Array(items)
+            },
             TokenKind::LeftBracket => {
                 let mut items = Vec::new();
                 self.next();
@@ -762,6 +816,8 @@ impl Parser {
                     if self.current.kind == TokenKind::Comma {
                         self.next();
                     }
+
+                    self.skip_comments();
                 }
                 
                 self.rbracket()?;
@@ -912,6 +968,10 @@ impl Parser {
 
                 Expression::New(Box::new(target), args)
             },
+            TokenKind::DirConstant => {
+                self.next();
+                Expression::MagicConst(MagicConst::Dir)
+            },
             _ if is_prefix(&self.current.kind) => {
                 let op = self.current.kind.clone();
 
@@ -922,7 +982,7 @@ impl Parser {
 
                 prefix(&op, rhs)
             },
-            _ => todo!("expr lhs: {:?}", self.current.kind),
+            _ => todo!("expr lhs: {:?}, line {} col {}", self.current.kind, self.current.span.0, self.current.span.1),
         };
 
         if self.current.kind == TokenKind::SemiColon {
@@ -1006,8 +1066,14 @@ impl Parser {
 
                         Expression::StaticPropertyFetch(Box::new(lhs), Box::new(var))
                     },
-                    TokenKind::Identifier(i) => {
-                        let ident = self.ident()?;
+                    TokenKind::Class | TokenKind::Identifier(_) => {
+                        let ident = if self.current.kind == TokenKind::Class {
+                            self.next();
+
+                            String::from("class")
+                        } else {
+                            self.ident()?
+                        };
 
                         if self.current.kind == TokenKind::LeftParen {
                             self.lparen()?;
@@ -1027,7 +1093,7 @@ impl Parser {
 
                             Expression::StaticMethodCall(Box::new(lhs), ident.into(), args)
                         } else {
-                            Expression::ConstFetch(Box::new(lhs), i.into())
+                            Expression::ConstFetch(Box::new(lhs), ident.into())
                         }
                     },
                     _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
@@ -1080,7 +1146,15 @@ impl Parser {
                 continue;
             }
 
+            self.gather_comments();
+
+            if self.is_eof() {
+                break;
+            }
+
             ast.push(self.statement()?);
+            
+            self.clear_comments();
         }
 
         Ok(ast.to_vec())
@@ -1123,6 +1197,8 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
         TokenKind::Dot => (11, 11),
         TokenKind::LessThan => (9, 10),
         TokenKind::DoubleEquals | TokenKind::TripleEquals | TokenKind::BangEquals | TokenKind::BangDoubleEquals => (7, 8),
+        TokenKind::BooleanAnd => (5, 6),
+        TokenKind::BooleanOr => (3, 4),
         TokenKind::Equals => (2, 1),
         _ => return None,
     })

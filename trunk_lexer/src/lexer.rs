@@ -659,6 +659,7 @@ impl Lexer {
 fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
     Some(match ident {
         "abstract" => TokenKind::Abstract,
+        "array" => TokenKind::Array,
         "as" => TokenKind::As,
         "break" => TokenKind::Break,
         "class" => TokenKind::Class,
@@ -684,6 +685,8 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "private" => TokenKind::Private,
         "protected" => TokenKind::Protected,
         "public" => TokenKind::Public,
+        "require" => TokenKind::Require,
+        "require_once" => TokenKind::RequireOnce,
         "return" => TokenKind::Return,
         "static" => TokenKind::Static,
         "switch" => TokenKind::Switch,
@@ -691,6 +694,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "true" | "TRUE" => TokenKind::True,
         "use" => TokenKind::Use,
         "var" => TokenKind::Var,
+        "__DIR__" => TokenKind::DirConstant,
         _ => return None,
     })
 }
