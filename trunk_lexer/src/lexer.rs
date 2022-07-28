@@ -716,6 +716,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "false" | "FALSE" => TokenKind::False,
         "final" => TokenKind::Final,
         "fn" => TokenKind::Fn,
+        "for" => TokenKind::For,
         "foreach" => TokenKind::Foreach,
         "function" => TokenKind::Function,
         "if" => TokenKind::If,

@@ -76,6 +76,7 @@ pub enum TokenKind {
     Final,
     Float(f64),
     Fn,
+    For,
     Foreach,
     FullyQualifiedIdentifier(String),
     Function,

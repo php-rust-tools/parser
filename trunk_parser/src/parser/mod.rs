@@ -126,6 +126,37 @@ impl Parser {
 
                 Statement::RequireOnce { path }
             },
+            TokenKind::For => {
+                self.next();
+
+                self.lparen()?;
+
+                let mut init = None;
+                if self.current.kind != TokenKind::SemiColon {
+                    init = Some(self.expression(0)?);
+                }
+                self.semi()?;
+
+                let mut condition = None;
+                if self.current.kind != TokenKind::SemiColon {
+                    condition = Some(self.expression(0)?);
+                }
+                self.semi()?;
+
+                let mut r#loop = None;
+                if self.current.kind != TokenKind::RightParen {
+                    r#loop = Some(self.expression(0)?);
+                }
+
+                self.rparen()?;
+                self.lbrace()?;
+
+                let then = self.block(&TokenKind::RightBrace)?;
+
+                self.rbrace()?;
+
+                Statement::For { init, condition, r#loop, then }
+            },
             TokenKind::Foreach => {
                 self.next();
 

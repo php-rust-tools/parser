@@ -133,7 +133,12 @@ pub enum UseKind {
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
     InlineHtml(String),
-    // TODO: Look at removing this and unifying with Property.
+    For {
+        init: Option<Expression>,
+        condition: Option<Expression>,
+        r#loop: Option<Expression>,
+        then: Block,
+    },
     Foreach {
         expr: Expression,
         key_var: Option<Expression>,
