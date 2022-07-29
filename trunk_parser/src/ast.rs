@@ -14,7 +14,7 @@ pub enum Type {
 
 #[derive(Debug, Eq, PartialEq, Clone, Serialize)]
 pub struct Identifier {
-    name: String,
+    pub name: String,
 }
 
 impl From<String> for Identifier {
@@ -39,10 +39,10 @@ pub type ParamList = Vec<Param>;
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Param {
-    pub(crate) name: Expression,
-    pub(crate) r#type: Option<Type>,
-    pub(crate) variadic: bool,
-    pub(crate) default: Option<Expression>,
+    pub name: Expression,
+    pub r#type: Option<Type>,
+    pub variadic: bool,
+    pub default: Option<Expression>,
 }
 
 impl From<String> for Param {
