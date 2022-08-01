@@ -436,3 +436,5 @@ Here's a list of the things that accomplished:
 * Migrate project compilation to Cargo to allow use of external crates.
 
 All in all this was a pretty successful article. Again, if you made it to the end then thank you.
+
+Until next time.
