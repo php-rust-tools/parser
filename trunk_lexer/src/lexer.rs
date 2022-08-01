@@ -540,7 +540,11 @@ impl Lexer {
                         }
                     }
 
-                    TokenKind::Comment(buffer)
+                    if buffer.starts_with("/**") {
+                        TokenKind::DocComment(buffer)
+                    } else {
+                        TokenKind::Comment(buffer)
+                    }
                 } else if char == '/' && let Some(t) = it.peek() && *t != '/' {
                     TokenKind::Slash
                 } else if char == '#' && let Some(t) = it.peek() && *t == '[' {
