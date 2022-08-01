@@ -1,7 +1,5 @@
 use trunk_lexer::Lexer;
-use trunk_parser::{Parser, Statement, Expression};
-
-mod runtime;
+use trunk_parser::{Parser, Statement, Expression, InfixOp};
 
 pub fn compile(file: String) -> Result<String, CompileError> {
     let contents = match std::fs::read_to_string(file) {
@@ -21,7 +19,7 @@ pub fn compile(file: String) -> Result<String, CompileError> {
     });
 
     let mut source = String::new();
-    source.push_str(include_str!("./runtime.rs"));
+    source.push_str("mod runtime;\nuse runtime::*;");
 
     for function in fns {
         compile_function(function, &mut source)?;
@@ -86,6 +84,28 @@ fn compile_statement(statement: &Statement, source: &mut String) -> Result<(), C
                 source.push_str(");");
             }
         },
+        Statement::If { condition, then, else_ifs, r#else } => {
+            source.push_str("if ");
+            source.push_str(&compile_expression(condition)?);
+            source.push('{');
+
+            for statement in then {
+                compile_statement(statement, source)?;
+            }
+
+            source.push('}');
+
+            if let Some(r#else) = r#else {
+                source.push_str("else {");
+                for statement in r#else {
+                    compile_statement(statement, source)?;
+                }
+                source.push('}');
+            }
+        },
+        Statement::Expression { expr } => {
+            source.push_str(&compile_expression(expr)?);
+        },
         _ => todo!(),
     };
 
@@ -112,6 +132,21 @@ fn compile_expression(expression: &Expression) -> Result<String, CompileError> {
             buffer
         },
         Expression::Identifier(i) => i.to_string(),
+        Expression::Assign(target, value) => {
+            format!("let {} = {};", compile_expression(target)?, compile_expression(value)?)
+        },
+        Expression::Int(i) => format!("PhpValue::from({})", i),
+        Expression::Infix(lhs, op, rhs) => {
+            let lhs = compile_expression(lhs)?;
+            let rhs = compile_expression(rhs)?;
+
+            match op {
+                InfixOp::Equals => format!("{}.eq(({}).clone())", lhs, rhs),
+                InfixOp::Concat => format!("_php_concat({}, {})", lhs, rhs),
+                _ => todo!(),
+            }
+        },
+        Expression::Variable(var) => var.to_string(),
         _ => todo!(),
     };
 

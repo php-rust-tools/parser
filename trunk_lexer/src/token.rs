@@ -88,6 +88,7 @@ pub enum TokenKind {
     Increment,
     InlineHtml(String),
     Int(i64),
+    IntCast,
     Interface,
     LeftBrace,
     LeftBracket,
