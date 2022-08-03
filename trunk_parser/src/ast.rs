@@ -354,7 +354,17 @@ pub enum Expression {
     },
     Clone {
         target: Box<Self>
-    }
+    },
+    Match {
+        condition: Box<Self>,
+        arms: Vec<MatchArm>,
+    },
+}
+
+#[derive(Debug, PartialEq, Clone, Serialize)]
+pub struct MatchArm {
+    pub conditions: Option<Vec<Expression>>,
+    pub body: Expression,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Serialize)]

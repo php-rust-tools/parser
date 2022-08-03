@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst}, Identifier, Type};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst}, Identifier, Type, MatchArm};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -788,6 +788,46 @@ impl Parser {
                 self.rparen()?;
 
                 e
+            },
+            TokenKind::Match => {
+                self.next();
+                self.lparen()?;
+
+                let condition = Box::new(self.expression(0)?);
+
+                self.rparen()?;
+                self.lbrace()?;
+
+                let mut arms = Vec::new();
+                while self.current.kind != TokenKind::RightBrace {
+                    let mut conditions = Vec::new();
+
+                    while self.current.kind != TokenKind::DoubleArrow {
+                        if self.current.kind == TokenKind::Default {
+                            self.next();
+                            break;
+                        }
+
+                        conditions.push(self.expression(0)?);
+
+                        self.optional_comma()?;
+                    }
+
+                    expect!(self, TokenKind::DoubleArrow, "expected =>");
+
+                    let body = self.expression(0)?;
+
+                    self.optional_comma()?;
+
+                    arms.push(MatchArm {
+                        conditions: if conditions.is_empty() { None } else { Some(conditions) },
+                        body,
+                    })
+                }
+
+                self.rbrace()?;
+
+                Expression::Match { condition, arms }
             },
             TokenKind::Array => {
                 let mut items = vec![];

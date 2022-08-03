@@ -709,6 +709,7 @@ impl Lexer {
 #[allow(dead_code)]
 fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
     Some(match ident {
+        "match" => TokenKind::Match,
         "abstract" => TokenKind::Abstract,
         "array" => TokenKind::Array,
         "as" => TokenKind::As,
@@ -718,6 +719,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "continue" => TokenKind::Continue,
         "const" => TokenKind::Const,
         "declare" => TokenKind::Declare,
+        "default" => TokenKind::Default,
         "echo" => TokenKind::Echo,
         "else" => TokenKind::Else,
         "elseif" => TokenKind::ElseIf,
