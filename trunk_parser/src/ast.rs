@@ -234,7 +234,19 @@ pub enum Statement {
     Comment {
         comment: String,
     },
+    Try {
+        body: Block,
+        catches: Vec<Catch>,
+        finally: Option<Block>,
+    },
     Noop,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct Catch {
+    pub types: Vec<Identifier>,
+    pub var: Expression,
+    pub body: Block,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Serialize)]

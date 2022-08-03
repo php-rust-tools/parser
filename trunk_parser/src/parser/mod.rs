@@ -1,6 +1,6 @@
-use std::{vec::IntoIter, fmt::{Display}};
+use std::{vec::IntoIter, fmt::{Display, write}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst}, Identifier, Type, MatchArm};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst}, Identifier, Type, MatchArm, Catch};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -488,6 +488,63 @@ impl Parser {
                 self.next();
 
                 Statement::Noop
+            },
+            TokenKind::Try => {
+                let start_span = self.current.span;
+
+                self.next();
+                self.lbrace()?;
+
+                let body = self.block(&TokenKind::RightBrace)?;
+
+                self.rbrace()?;
+
+                let mut catches = Vec::new();
+                loop {
+                    if self.current.kind != TokenKind::Catch {
+                        break;
+                    }
+
+                    self.next();
+                    self.lparen()?;
+
+                    let types = match self.type_string()? {
+                        Type::Plain(t) => vec![t.into()],
+                        Type::Union(ts) => ts.into_iter().map(|t| t.into()).collect::<Vec<Identifier>>(),
+                        _ => return Err(ParseError::InvalidCatchArgumentType(self.current.span)),
+                    };
+
+                    let var = self.expression(0)?;
+
+                    self.rparen()?;
+                    self.lbrace()?;
+                    
+                    let body = self.block(&TokenKind::RightBrace)?;
+
+                    self.rbrace()?;
+
+                    catches.push(Catch {
+                        types,
+                        var,
+                        body,
+                    })
+                }
+
+                let mut finally = None;
+                if self.current.kind == TokenKind::Finally {
+                    self.next();
+                    self.lbrace()?;
+
+                    finally = Some(self.block(&TokenKind::RightBrace)?);
+
+                    self.rbrace()?;
+                }
+
+                if catches.is_empty() && finally == None {
+                    return Err(ParseError::TryWithoutCatchOrFinally(start_span));
+                }
+
+                Statement::Try { body, catches, finally }
             },
             _ => {
                 let expr = self.expression(0)?;
@@ -1283,6 +1340,8 @@ pub enum ParseError {
     ConstantCannotBeStatic(Span),
     ConstantCannotBePrivateFinal(Span),
     TraitCannotContainConstant(Span),
+    TryWithoutCatchOrFinally(Span),
+    InvalidCatchArgumentType(Span),
 }
 
 impl Display for ParseError {
@@ -1296,6 +1355,8 @@ impl Display for ParseError {
             Self::ConstantCannotBeStatic(span) => write!(f, "Parse error: class constant cannot be marked static on line {}", span.0),
             Self::ConstantCannotBePrivateFinal(span) => write!(f, "Parse error: private class constant cannot be marked final since it is not visible to other classes on line {}", span.0),
             Self::TraitCannotContainConstant(span) => write!(f, "Parse error: traits cannot contain constants on line {}", span.0),
+            Self::TryWithoutCatchOrFinally(span) => write!(f, "Parse error: cannot use try without catch or finally on line {}", span.0),
+            Self::InvalidCatchArgumentType(span) => write!(f, "Parse error: catch types must either describe a single type or union of types on line {}", span.0)
         }
     }
 }
