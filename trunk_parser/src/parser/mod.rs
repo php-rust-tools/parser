@@ -1202,10 +1202,6 @@ fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
 }
 
 fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
-    if op == TokenKind::Equals {
-        return Expression::Assign(Box::new(lhs), Box::new(rhs));
-    }
-
     Expression::Infix(Box::new(lhs), op.into(), Box::new(rhs))
 }
 
@@ -1350,11 +1346,12 @@ mod tests {
     #[test]
     fn array_index_assign() {
         assert_ast("<?php $foo['bar'] = 'baz';", &[
-            expr!(Expression::Assign(
+            expr!(Expression::Infix(
                 Box::new(Expression::ArrayIndex(
                     Box::new(Expression::Variable("foo".into())),
                     Some(Box::new(Expression::ConstantString("bar".into())))
                 )),
+                InfixOp::Assign,
                 Box::new(Expression::ConstantString("baz".into()))
             ))
         ]);

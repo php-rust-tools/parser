@@ -320,6 +320,7 @@ pub enum InfixOp {
     NotIdentical,
     And,
     Or,
+    Assign,
     AddAssign,
 }
 
@@ -341,6 +342,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::BangDoubleEquals => Self::NotIdentical,
             TokenKind::BooleanAnd => Self::And,
             TokenKind::BooleanOr => Self::Or,
+            TokenKind::Equals => Self::Assign,
             TokenKind::PlusEquals => Self::AddAssign,
             _ => unreachable!()
         }
