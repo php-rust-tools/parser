@@ -34,4 +34,12 @@ impl Parser {
         expect!(self, TokenKind::RightBracket, (), "expected ]");
         Ok(())
     }
+
+    pub(crate) fn optional_comma(&mut self) -> ParseResult<()> {
+        if self.current.kind == TokenKind::Comma {
+            expect!(self, TokenKind::Comma, (), "expected ,");
+        }
+        
+        Ok(())
+    }
 }

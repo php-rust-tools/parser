@@ -238,9 +238,7 @@ impl Parser {
                     self.next();
 
                     while self.current.kind != TokenKind::LeftBrace {
-                        if self.current.kind == TokenKind::Comma {
-                            self.next();
-                        }
+                        self.optional_comma()?;
 
                         let e = self.full_name()?;
 
@@ -443,11 +441,7 @@ impl Parser {
                 while ! self.is_eof() && self.current.kind != TokenKind::SemiColon {
                     values.push(self.expression(0)?);
 
-                    // `echo` supports multiple expressions separated by a comma.
-                    // TODO: Disallow trailing commas when the next token is a semi-colon.
-                    if ! self.is_eof() && self.current.kind == TokenKind::Comma {
-                        self.next();
-                    }
+                    self.optional_comma()?;
                 }
                 self.semi()?;
                 Statement::Echo { values }
@@ -549,9 +543,7 @@ impl Parser {
             self.next();
 
             while self.current.kind != TokenKind::LeftBrace {
-                if self.current.kind == TokenKind::Comma {
-                    self.next();
-                }
+                self.optional_comma()?;
 
                 implements.push(self.ident()?.into());
             }
@@ -579,9 +571,7 @@ impl Parser {
                 let mut traits = Vec::new();
 
                 while self.current.kind != TokenKind::SemiColon {
-                    if self.current.kind == TokenKind::Comma {
-                        self.next();
-                    }
+                    self.optional_comma()?;
 
                     let t = self.full_name()?;
                     traits.push(t.into());
@@ -819,9 +809,7 @@ impl Parser {
 
                     items.push(ArrayItem { key, value });
 
-                    if self.current.kind == TokenKind::Comma {
-                        self.next();
-                    }
+                    self.optional_comma()?;
 
                     self.skip_comments();
                 }
@@ -847,9 +835,7 @@ impl Parser {
 
                     items.push(ArrayItem { key, value });
 
-                    if self.current.kind == TokenKind::Comma {
-                        self.next();
-                    }
+                    self.optional_comma()?;
 
                     self.skip_comments();
                 }
@@ -881,9 +867,7 @@ impl Parser {
 
                         uses.push(var);
 
-                        if self.current.kind == TokenKind::Comma {
-                            self.next();
-                        }
+                        self.optional_comma()?;
                     }
 
                     self.rparen()?;
@@ -942,9 +926,7 @@ impl Parser {
     
                             args.push(value);
     
-                            if self.current.kind == TokenKind::Comma {
-                                self.next();
-                            }
+                            self.optional_comma()?;
                         }
     
                         self.rparen()?;
@@ -962,9 +944,7 @@ impl Parser {
                         self.next();
 
                         while self.current.kind != TokenKind::LeftBrace {
-                            if self.current.kind == TokenKind::Comma {
-                                self.next();
-                            }
+                            self.optional_comma()?;
 
                             implements.push(self.ident()?.into());
                         }
@@ -992,9 +972,7 @@ impl Parser {
 
                         args.push(value);
 
-                        if self.current.kind == TokenKind::Comma {
-                            self.next();
-                        }
+                        self.optional_comma()?;
                     }
 
                     self.rparen()?;
@@ -1074,9 +1052,7 @@ impl Parser {
                 while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
                     args.push(self.expression(0)?);
 
-                    if let Token { kind: TokenKind::Comma, .. } = self.current {
-                        self.next();
-                    }
+                    self.optional_comma()?;
                 }
 
                 self.rparen()?;
@@ -1131,9 +1107,7 @@ impl Parser {
     
                                 args.push(arg);
 
-                                if self.current.kind == TokenKind::Comma {
-                                    self.next();
-                                }
+                                self.optional_comma()?;
                             }
 
                             self.rparen()?;
@@ -1157,9 +1131,7 @@ impl Parser {
                     while self.current.kind != TokenKind::RightParen {
                         let arg = self.expression(0)?;
 
-                        if self.current.kind == TokenKind::Comma {
-                            self.next();
-                        }
+                        self.optional_comma()?;
 
                         args.push(arg);
                     }

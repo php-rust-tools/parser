@@ -38,9 +38,7 @@ impl Parser {
                 default
             });
             
-            if self.current.kind == TokenKind::Comma {
-                self.next();
-            }
+            self.optional_comma()?;
         }
 
         Ok(params)
