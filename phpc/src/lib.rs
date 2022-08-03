@@ -48,7 +48,7 @@ fn compile_function(function: &Statement, source: &mut String) -> Result<(), Com
 
     for param in params {
         source.push_str(match &param.name {
-            Expression::Variable(n) => &n,
+            Expression::Variable { name } => &name,
             _ => unreachable!(),
         });
         source.push_str(": PhpValue, ");
@@ -114,10 +114,10 @@ fn compile_statement(statement: &Statement, source: &mut String) -> Result<(), C
 
 fn compile_expression(expression: &Expression) -> Result<String, CompileError> {
     let result = match expression {
-        Expression::ConstantString(value) => {
+        Expression::ConstantString { value } => {
             format!(r#"PhpValue::from("{}")"#, value)
         },
-        Expression::Call(target, args) => {
+        Expression::Call { target, args } => {
             let mut buffer = String::new();
 
             buffer.push_str(&compile_expression(target)?);
@@ -131,22 +131,20 @@ fn compile_expression(expression: &Expression) -> Result<String, CompileError> {
             buffer.push(')');
             buffer
         },
-        Expression::Identifier(i) => i.to_string(),
-        Expression::Assign(target, value) => {
-            format!("let {} = {};", compile_expression(target)?, compile_expression(value)?)
-        },
-        Expression::Int(i) => format!("PhpValue::from({})", i),
-        Expression::Infix(lhs, op, rhs) => {
+        Expression::Identifier { name } => name.to_string(),
+        Expression::Int { i } => format!("PhpValue::from({})", i),
+        Expression::Infix { lhs, op, rhs } => {
             let lhs = compile_expression(lhs)?;
             let rhs = compile_expression(rhs)?;
 
             match op {
+                InfixOp::Assign => format!("let {} = {};", lhs, rhs),
                 InfixOp::Equals => format!("{}.eq(({}).clone())", lhs, rhs),
                 InfixOp::Concat => format!("_php_concat({}, {})", lhs, rhs),
                 _ => todo!(),
             }
         },
-        Expression::Variable(var) => var.to_string(),
+        Expression::Variable { name } => name.to_string(),
         _ => todo!(),
     };
 

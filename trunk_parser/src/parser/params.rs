@@ -32,7 +32,7 @@ impl Parser {
 
             // TODO: Support variable types and default values.
             params.push(Param {
-                name: Expression::Variable(var),
+                name: Expression::Variable { name: var },
                 r#type: param_type,
                 variadic,
                 default

@@ -744,35 +744,35 @@ impl Parser {
 
                 let target = self.expression(0)?;
 
-                Expression::Clone(Box::new(target))
+                Expression::Clone { target: Box::new(target) }
             },
             TokenKind::Variable(v) => {
-                let e = Expression::Variable(v.to_string());
+                let e = Expression::Variable { name: v.to_string() };
                 self.next();
                 e
             },
             TokenKind::Int(i) => {
-                let e = Expression::Int(*i);
+                let e = Expression::Int{ i: *i };
                 self.next();
                 e
             },
             TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i) => {
-                let e = Expression::Identifier(i.to_string());
+                let e = Expression::Identifier { name: i.to_string() };
                 self.next();
                 e
             },
             TokenKind::ConstantString(s) => {
-                let e = Expression::ConstantString(s.to_string());
+                let e = Expression::ConstantString { value: s.to_string() };
                 self.next();
                 e
             },
             TokenKind::True => {
-                let e = Expression::Bool(true);
+                let e = Expression::Bool { value: true };
                 self.next();
                 e
             },
             TokenKind::False => {
-                let e = Expression::Bool(false);
+                let e = Expression::Bool { value: false };
                 self.next();
                 e
             },
@@ -816,7 +816,7 @@ impl Parser {
 
                 self.rparen()?;
 
-                Expression::Array(items)
+                Expression::Array { items }
             },
             TokenKind::LeftBracket => {
                 let mut items = Vec::new();
@@ -842,7 +842,7 @@ impl Parser {
                 
                 self.rbracket()?;
 
-                Expression::Array(items)
+                Expression::Array { items }
             },
             TokenKind::Function => {
                 self.next();
@@ -861,7 +861,7 @@ impl Parser {
 
                     while self.current.kind != TokenKind::RightParen {
                         let var = match self.expression(0)? {
-                            s @ Expression::Variable(_) => s,
+                            s @ Expression::Variable { .. } => s,
                             _ => return Err(ParseError::UnexpectedToken("expected variable".into(), self.current.span))
                         };
 
@@ -886,7 +886,7 @@ impl Parser {
 
                 self.rbrace()?;
 
-                Expression::Closure(params, uses, return_type, body)
+                Expression::Closure { params, uses, return_type, body }
             },
             TokenKind::Fn => {
                 self.next();
@@ -909,7 +909,7 @@ impl Parser {
 
                 let value = self.expression(0)?;
 
-                Expression::ArrowFunction(params, return_type, Box::new(value))
+                Expression::ArrowFunction { params, return_type, expr: Box::new(value) }
             },
             TokenKind::New => {
                 self.next();
@@ -959,7 +959,7 @@ impl Parser {
 
                     self.rbrace()?;
 
-                    Expression::AnonymousClass(extends, implements, body)
+                    Expression::AnonymousClass { extends, implements, body }
                 } else {
                     self.expression(20)?
                 };
@@ -978,11 +978,11 @@ impl Parser {
                     self.rparen()?;
                 }
 
-                Expression::New(Box::new(target), args)
+                Expression::New { target: Box::new(target), args }
             },
             TokenKind::DirConstant => {
                 self.next();
-                Expression::MagicConst(MagicConst::Dir)
+                Expression::MagicConst { constant: MagicConst::Dir }
             },
             _ if is_prefix(&self.current.kind) => {
                 let op = self.current.kind.clone();
@@ -1045,7 +1045,7 @@ impl Parser {
             TokenKind::Coalesce => {
                 let rhs = self.expression(11)?;
 
-                Expression::Coalesce(Box::new(lhs), Box::new(rhs))
+                Expression::Coalesce { lhs: Box::new(lhs), rhs: Box::new(rhs) }
             },
             TokenKind::LeftParen => {
                 let mut args = Vec::new();
@@ -1057,19 +1057,19 @@ impl Parser {
 
                 self.rparen()?;
     
-                Expression::Call(Box::new(lhs), args)
+                Expression::Call { target: Box::new(lhs), args }
             },
             TokenKind::LeftBracket => {
                 if self.current.kind == TokenKind::RightBracket {
                     self.next();
 
-                    Expression::ArrayIndex(Box::new(lhs), None)
+                    Expression::ArrayIndex { array: Box::new(lhs), index: None }
                 } else {
                     let index = self.expression(0)?;
 
                     expect!(self, TokenKind::RightBracket, "expected ]");
 
-                    Expression::ArrayIndex(Box::new(lhs), Some(Box::new(index)))
+                    Expression::ArrayIndex { array: Box::new(lhs), index: Some(Box::new(index)) }
                 }
             },
             TokenKind::Question => {
@@ -1080,14 +1080,14 @@ impl Parser {
 
                 let otherwise = self.expression(0)?;
 
-                Expression::Ternary(Box::new(lhs), Box::new(then), Box::new(otherwise))
+                Expression::Ternary { condition: Box::new(lhs), then: Box::new(then), r#else: Box::new(otherwise) }
             },
             TokenKind::DoubleColon => {
                 match self.current.kind.clone() {
                     TokenKind::Variable(_) => {
                         let var = self.expression(0)?;
 
-                        Expression::StaticPropertyFetch(Box::new(lhs), Box::new(var))
+                        Expression::StaticPropertyFetch { target: Box::new(lhs), property: Box::new(var) }
                     },
                     TokenKind::Class | TokenKind::Identifier(_) => {
                         let ident = if self.current.kind == TokenKind::Class {
@@ -1112,9 +1112,9 @@ impl Parser {
 
                             self.rparen()?;
 
-                            Expression::StaticMethodCall(Box::new(lhs), ident.into(), args)
+                            Expression::StaticMethodCall { target: Box::new(lhs), method: ident.into(), args }
                         } else {
-                            Expression::ConstFetch(Box::new(lhs), ident.into())
+                            Expression::ConstFetch { target: Box::new(lhs), constant: ident.into() }
                         }
                     },
                     _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
@@ -1138,9 +1138,9 @@ impl Parser {
 
                     self.rparen()?;
 
-                    Expression::MethodCall(Box::new(lhs), property.into(), args)
+                    Expression::MethodCall { target: Box::new(lhs), method: property.into(), args }
                 } else {
-                    Expression::PropertyFetch(Box::new(lhs), property.into())
+                    Expression::PropertyFetch { target: Box::new(lhs), property: property.into() }
                 }
             },
             _ => todo!("postfix: {:?}", op),
@@ -1196,13 +1196,17 @@ fn prefix_binding_power(op: &TokenKind) -> u8 {
 
 fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
     match op {
-        TokenKind::Bang => Expression::BooleanNot(Box::new(rhs)),
+        TokenKind::Bang => Expression::BooleanNot { value: Box::new(rhs) },
         _ => unreachable!()
     }
 }
 
 fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
-    Expression::Infix(Box::new(lhs), op.into(), Box::new(rhs))
+    Expression::Infix {
+        lhs: Box::new(lhs), 
+        op: op.into(),
+        rhs: Box::new(rhs)
+    }
 }
 
 fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
@@ -1326,80 +1330,80 @@ mod tests {
     #[test]
     fn array_index() {
         assert_ast("<?php $foo['bar'];", &[
-            expr!(Expression::ArrayIndex(
-                Box::new(Expression::Variable("foo".into())),
-                Some(Box::new(Expression::ConstantString("bar".into())))
-            ))
+            expr!(Expression::ArrayIndex {
+                array: Box::new(Expression::Variable { name: "foo".into() }),
+                index: Some(Box::new(Expression::ConstantString { value: "bar".into() }))
+            })
         ]);
 
         assert_ast("<?php $foo['bar']['baz'];", &[
-            expr!(Expression::ArrayIndex(
-                Box::new(Expression::ArrayIndex(
-                    Box::new(Expression::Variable("foo".into())),
-                    Some(Box::new(Expression::ConstantString("bar".into())))
-                )),
-                Some(Box::new(Expression::ConstantString("baz".into())))
-            ))
+            expr!(Expression::ArrayIndex {
+                array: Box::new(Expression::ArrayIndex {
+                    array: Box::new(Expression::Variable { name: "foo".into() }),
+                    index: Some(Box::new(Expression::ConstantString { value: "bar".into() }))
+                }),
+                index: Some(Box::new(Expression::ConstantString { value: "baz".into() }))
+            })
         ]);
     }
 
     #[test]
     fn array_index_assign() {
         assert_ast("<?php $foo['bar'] = 'baz';", &[
-            expr!(Expression::Infix(
-                Box::new(Expression::ArrayIndex(
-                    Box::new(Expression::Variable("foo".into())),
-                    Some(Box::new(Expression::ConstantString("bar".into())))
-                )),
-                InfixOp::Assign,
-                Box::new(Expression::ConstantString("baz".into()))
-            ))
+            expr!(Expression::Infix{
+                lhs: Box::new(Expression::ArrayIndex {
+                    array: Box::new(Expression::Variable { name: "foo".into() }),
+                    index: Some(Box::new(Expression::ConstantString { value: "bar".into() }))
+                }),
+                op: InfixOp::Assign,
+                rhs: Box::new(Expression::ConstantString { value: "baz".into() })
+            })
         ]);
     }
 
     #[test]
     fn comparisons() {
         assert_ast("<?php 1 == 1;", &[
-            expr!(Expression::Infix(
-                Box::new(Expression::Int(1)),
-                InfixOp::Equals,
-                Box::new(Expression::Int(1))
-            ))
+            expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 1 }),
+                op: InfixOp::Equals,
+                rhs: Box::new(Expression::Int { i: 1 })
+            })
         ]);
 
         assert_ast("<?php 1 === 1;", &[
-            expr!(Expression::Infix(
-                Box::new(Expression::Int(1)),
-                InfixOp::Identical,
-                Box::new(Expression::Int(1))
-            ))
+            expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 1 }),
+                op: InfixOp::Identical,
+                rhs: Box::new(Expression::Int { i: 1 })
+            })
         ]);
 
         assert_ast("<?php 1 != 1;", &[
-            expr!(Expression::Infix(
-                Box::new(Expression::Int(1)),
-                InfixOp::NotEquals,
-                Box::new(Expression::Int(1))
-            ))
+            expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 1 }),
+                op: InfixOp::NotEquals,
+                rhs: Box::new(Expression::Int { i: 1 })
+            })
         ]);
 
         assert_ast("<?php 1 !== 1;", &[
-            expr!(Expression::Infix(
-                Box::new(Expression::Int(1)),
-                InfixOp::NotIdentical,
-                Box::new(Expression::Int(1))
-            ))
+            expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 1 }),
+                op: InfixOp::NotIdentical,
+                rhs: Box::new(Expression::Int { i: 1 })
+            })
         ]);
     }
 
     #[test]
     fn paren_expression() {
         assert_ast("<?php (1 + 2);", &[
-            Statement::Expression { expr: Expression::Infix(
-                Box::new(Expression::Int(1)),
-                InfixOp::Add,
-                Box::new(Expression::Int(2))
-            ) }
+            Statement::Expression { expr: Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 1 }),
+                op: InfixOp::Add,
+                rhs: Box::new(Expression::Int { i: 2 })
+            }}
         ]);
     }
 
@@ -1410,7 +1414,7 @@ mod tests {
         ]);
 
         assert_ast("<?php break 2;", &[
-            Statement::Break { num: Some(Expression::Int(2)) }
+            Statement::Break { num: Some(Expression::Int { i: 2 }) }
         ]);
     }
 
@@ -1421,96 +1425,96 @@ mod tests {
         ]);
 
         assert_ast("<?php continue 2;", &[
-            Statement::Continue { num: Some(Expression::Int(2)) }
+            Statement::Continue { num: Some(Expression::Int { i: 2 }) }
         ]);
     }
 
     #[test]
     fn math_precedence() {
         assert_ast("<?php 1 + 2 * 3 / 4 - 5;", &[
-            expr!(Expression::Infix(
-                Box::new(Expression::Infix(
-                    Box::new(Expression::Int(1)),
-                    InfixOp::Add,
-                    Box::new(Expression::Infix(
-                        Box::new(Expression::Infix(
-                            Box::new(Expression::Int(2)),
-                            InfixOp::Mul,
-                            Box::new(Expression::Int(3))
-                        )),
-                        InfixOp::Div,
-                        Box::new(Expression::Int(4))
-                    ))
-                )),
-                InfixOp::Sub,
-                Box::new(Expression::Int(5))
-            ))
+            expr!(Expression::Infix {
+                lhs: Box::new(Expression::Infix {
+                    lhs: Box::new(Expression::Int { i: 1 }),
+                    op: InfixOp::Add,
+                    rhs: Box::new(Expression::Infix {
+                        lhs: Box::new(Expression::Infix {
+                            lhs: Box::new(Expression::Int { i: 2 }),
+                            op: InfixOp::Mul,
+                            rhs: Box::new(Expression::Int { i: 3 })
+                        }),
+                        op: InfixOp::Div,
+                        rhs: Box::new(Expression::Int { i: 4 })
+                    })
+                }),
+                op: InfixOp::Sub,
+                rhs: Box::new(Expression::Int { i: 5 })
+            })
         ]);
     }
 
     #[test]
     fn property_fetch() {
         assert_ast("<?php $foo->bar; $foo->bar->baz;", &[
-            expr!(Expression::PropertyFetch(
-                Box::new(Expression::Variable("foo".into())),
-                Identifier::from("bar")
-            )),
-            expr!(Expression::PropertyFetch(
-                Box::new(Expression::PropertyFetch(
-                    Box::new(Expression::Variable("foo".into())),
-                    Identifier::from("bar")
-                )),
-                Identifier::from("baz")
-            ))
+            expr!(Expression::PropertyFetch {
+                target: Box::new(Expression::Variable { name: "foo".into() }),
+                property: Identifier::from("bar")
+            }),
+            expr!(Expression::PropertyFetch {
+                target: Box::new(Expression::PropertyFetch {
+                    target: Box::new(Expression::Variable { name: "foo".into() }),
+                    property: Identifier::from("bar")
+                }),
+                property: Identifier::from("baz")
+            })
         ]);
     }
 
     #[test]
     fn method_calls() {
         assert_ast("<?php $foo->bar();", &[
-            expr!(Expression::MethodCall(
-                Box::new(Expression::Variable("foo".into())),
-                Identifier::from("bar"),
-                vec![]
-            ))
+            expr!(Expression::MethodCall {
+                target: Box::new(Expression::Variable { name: "foo".into() }),
+                method: Identifier::from("bar"),
+                args: vec![]
+            })
         ]);
 
         assert_ast("<?php $foo->bar()->baz();", &[
-            expr!(Expression::MethodCall(
-                Box::new(Expression::MethodCall(
-                    Box::new(Expression::Variable("foo".into())),
-                    Identifier::from("bar"),
-                    vec![]
-                )),
-                Identifier::from("baz"),
-                vec![]
-            ))
+            expr!(Expression::MethodCall {
+                target: Box::new(Expression::MethodCall {
+                    target: Box::new(Expression::Variable { name: "foo".into() }),
+                    method: Identifier::from("bar"),
+                    args: vec![]
+                }),
+                method: Identifier::from("baz"),
+                args: vec![]
+            })
         ]);
 
         assert_ast("<?php $foo->bar()();", &[
-            expr!(Expression::Call(
-                Box::new(Expression::MethodCall(
-                    Box::new(Expression::Variable("foo".into())),
-                    Identifier::from("bar"),
-                    vec![]
-                )),
-                vec![]
-            ))
+            expr!(Expression::Call {
+                target: Box::new(Expression::MethodCall {
+                    target: Box::new(Expression::Variable{ name: "foo".into() }),
+                    method: Identifier::from("bar"),
+                    args: vec![]
+                }),
+                args: vec![]
+            })
         ]);
     }
 
     #[test]
     fn concat() {
         assert_ast("<?php 'foo' . 'bar' . 'baz';", &[
-            expr!(Expression::Infix(
-                Box::new(Expression::ConstantString("foo".into())),
-                InfixOp::Concat,
-                Box::new(Expression::Infix(
-                    Box::new(Expression::ConstantString("bar".into())),
-                    InfixOp::Concat,
-                    Box::new(Expression::ConstantString("baz".into())),
-                ))
-            ))
+            expr!(Expression::Infix {
+                lhs: Box::new(Expression::ConstantString { value: "foo".into() }),
+                op: InfixOp::Concat,
+                rhs: Box::new(Expression::Infix {
+                    lhs: Box::new(Expression::ConstantString { value: "bar".into() }),
+                    op: InfixOp::Concat,
+                    rhs: Box::new(Expression::ConstantString { value: "baz".into() }),
+                })
+            })
         ]);
     }
 
@@ -1546,41 +1550,41 @@ mod tests {
         }", &[
             function!("fib", &["n"], &[
                 Statement::If {
-                    condition: Expression::Infix(
-                        Box::new(Expression::Variable("n".into())),
-                        InfixOp::LessThan,
-                        Box::new(Expression::Int(2)),
-                    ),
+                    condition: Expression::Infix {
+                        lhs: Box::new(Expression::Variable { name: "n".into() }),
+                        op: InfixOp::LessThan,
+                        rhs: Box::new(Expression::Int { i: 2 }),
+                    },
                     then: vec![
-                        Statement::Return { value: Some(Expression::Variable("n".into())) }
+                        Statement::Return { value: Some(Expression::Variable { name: "n".into() }) }
                     ],
                     else_ifs: vec![],
                     r#else: None
                 },
                 Statement::Return {
-                    value: Some(Expression::Infix(
-                        Box::new(Expression::Call(
-                            Box::new(Expression::Identifier("fib".into())),
-                            vec![
-                                Expression::Infix(
-                                    Box::new(Expression::Variable("n".into())),
-                                    InfixOp::Sub,
-                                    Box::new(Expression::Int(1)),
-                                )
+                    value: Some(Expression::Infix {
+                        lhs: Box::new(Expression::Call {
+                            target: Box::new(Expression::Identifier { name: "fib".into() }),
+                            args: vec![
+                                Expression::Infix {
+                                    lhs: Box::new(Expression::Variable { name: "n".into() }),
+                                    op: InfixOp::Sub,
+                                    rhs: Box::new(Expression::Int { i: 1 }),
+                                }
                             ]
-                        )),
-                        InfixOp::Add,
-                        Box::new(Expression::Call(
-                            Box::new(Expression::Identifier("fib".into())),
-                            vec![
-                                Expression::Infix(
-                                    Box::new(Expression::Variable("n".into())),
-                                    InfixOp::Sub,
-                                    Box::new(Expression::Int(2)),
-                                )
+                        }),
+                        op: InfixOp::Add,
+                        rhs: Box::new(Expression::Call {
+                            target: Box::new(Expression::Identifier { name: "fib".into() }),
+                            args: vec![
+                                Expression::Infix {
+                                    lhs: Box::new(Expression::Variable { name: "n".into() }),
+                                    op: InfixOp::Sub,
+                                    rhs: Box::new(Expression::Int { i: 2 }),
+                                }
                             ]
-                        )),
-                    ))
+                        }),
+                    })
                 }
             ])
         ]);
@@ -1590,9 +1594,9 @@ mod tests {
     fn one_liner_if_statement() {
         assert_ast("<?php if($foo) return $foo;", &[
                 Statement::If {
-                    condition: Expression::Variable("foo".into()),
+                    condition: Expression::Variable { name: "foo".into() },
                     then: vec![
-                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
                     ],
                     else_ifs: vec![],
                     r#else: None
@@ -1604,13 +1608,13 @@ mod tests {
     fn if_else_statement() {
         assert_ast("<?php if($foo) { return $foo; } else { return $foo; }", &[
                 Statement::If {
-                    condition: Expression::Variable("foo".into()),
+                    condition: Expression::Variable { name: "foo".into() },
                     then: vec![
-                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
                     ],
                     else_ifs: vec![],
                     r#else: Some(vec![
-                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
                     ])
                 },
         ]);
@@ -1620,20 +1624,20 @@ mod tests {
     fn if_elseif_else_statement() {
         assert_ast("<?php if($foo) { return $foo; } elseif($foo) { return $foo; } else { return $foo; }", &[
                 Statement::If {
-                    condition: Expression::Variable("foo".into()),
+                    condition: Expression::Variable { name: "foo".into() },
                     then: vec![
-                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
                     ],
                     else_ifs: vec![
                         ElseIf {
-                            condition: Expression::Variable("foo".into()),
+                            condition: Expression::Variable { name: "foo".into() },
                             body: vec![
-                                Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                                Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
                             ]
                         }
                     ],
                     r#else: Some(vec![
-                        Statement::Return { value: Some(Expression::Variable("foo".into())) }
+                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
                     ])
                 },
         ]);
@@ -1644,7 +1648,7 @@ mod tests {
         assert_ast("<?php echo 1;", &[
             Statement::Echo {
                 values: vec![
-                    Expression::Int(1),
+                    Expression::Int { i: 1 },
                 ]
             }
         ]);
@@ -1671,7 +1675,7 @@ mod tests {
             class!("Foo", &[
                 method!("bar", &[], &[], &[
                     Statement::Echo { values: vec![
-                        Expression::Int(1),
+                        Expression::Int { i: 1 },
                     ] }
                 ])
             ])
@@ -1707,7 +1711,7 @@ mod tests {
                 name: "foo".to_string().into(),
                 params: vec![
                     Param {
-                        name: Expression::Variable("b".into()),
+                        name: Expression::Variable { name: "b".into() },
                         r#type: Some(Type::Plain("string".into())),
                         variadic: false,
                         default: None,
@@ -1726,7 +1730,7 @@ mod tests {
                 name: "foo".to_string().into(),
                 params: vec![
                     Param {
-                        name: Expression::Variable("bar".into()),
+                        name: Expression::Variable { name: "bar".into() },
                         r#type: None,
                         variadic: true,
                         default: None,
@@ -1742,7 +1746,7 @@ mod tests {
                 name: "foo".to_string().into(),
                 params: vec![
                     Param {
-                        name: Expression::Variable("bar".into()),
+                        name: Expression::Variable { name: "bar".into() },
                         r#type: Some(Type::Plain("string".into())),
                         variadic: true,
                         default: None,
@@ -1758,19 +1762,19 @@ mod tests {
                 name: "foo".to_string().into(),
                 params: vec![
                     Param {
-                        name: Expression::Variable("bar".into()),
+                        name: Expression::Variable { name: "bar".into() },
                         r#type: None,
                         variadic: false,
                         default: None,
                     },
                     Param {
-                        name: Expression::Variable("baz".into()),
+                        name: Expression::Variable { name: "baz".into() },
                         r#type: None,
                         variadic: false,
                         default: None,
                     },
                     Param {
-                        name: Expression::Variable("car".into()),
+                        name: Expression::Variable { name: "car".into() },
                         r#type: None,
                         variadic: true,
                         default: None,
@@ -1789,7 +1793,7 @@ mod tests {
                 name: "foo".to_string().into(),
                 params: vec![
                     Param {
-                        name: Expression::Variable("b".into()),
+                        name: Expression::Variable { name: "b".into() },
                         r#type: Some(Type::Nullable("string".into())),
                         variadic: false,
                         default: None,
@@ -1808,7 +1812,7 @@ mod tests {
                 name: "foo".to_string().into(),
                 params: vec![
                     Param {
-                        name: Expression::Variable("b".into()),
+                        name: Expression::Variable { name: "b".into() },
                         r#type: Some(Type::Union(vec![
                             "int".into(),
                             "float".into()
@@ -1830,7 +1834,7 @@ mod tests {
                 name: "foo".to_string().into(),
                 params: vec![
                     Param {
-                        name: Expression::Variable("b".into()),
+                        name: Expression::Variable { name: "b".into() },
                         r#type: Some(Type::Intersection(vec![
                             "Foo".into(),
                             "Bar".into()
@@ -1860,63 +1864,63 @@ mod tests {
     #[test]
     fn new_anon_class() {
         assert_ast("<?php new class{};", &[
-            expr!(Expression::New(
-                Box::new(Expression::AnonymousClass(
-                    None,
-                    vec![],
-                    vec![]
-                )),
-                vec![],
-            ))
+            expr!(Expression::New {
+                target: Box::new(Expression::AnonymousClass {
+                    extends: None,
+                    implements: vec![],
+                    body: vec![]
+                }),
+                args: vec![],
+            })
         ]);
 
         assert_ast("<?php new class(1, 2) {};", &[
-            expr!(Expression::New(
-                Box::new(Expression::AnonymousClass(
-                    None,
-                    vec![],
-                    vec![]
-                )),
-                vec![
-                    Expression::Int(1),
-                    Expression::Int(2),
+            expr!(Expression::New {
+                target: Box::new(Expression::AnonymousClass {
+                    extends: None,
+                    implements: vec![],
+                    body: vec![]
+                }),
+                args: vec![
+                    Expression::Int { i: 1 },
+                    Expression::Int { i: 2 },
                 ],
-            ))
+            })
         ]);
 
         assert_ast("<?php new class extends Foo {};", &[
-            expr!(Expression::New(
-                Box::new(Expression::AnonymousClass(
-                    Some(Identifier::from("Foo")),
-                    vec![],
-                    vec![]
-                )),
-                vec![]
-            ))
+            expr!(Expression::New {
+                target: Box::new(Expression::AnonymousClass {
+                    extends: Some(Identifier::from("Foo")),
+                    implements: vec![],
+                    body: vec![]
+                }),
+                args: vec![]
+            })
         ]);
 
         assert_ast("<?php new class implements Foo, Bar {};", &[
-            expr!(Expression::New(
-                Box::new(Expression::AnonymousClass(
-                    None,
-                    vec![
+            expr!(Expression::New {
+                target: Box::new(Expression::AnonymousClass {
+                    extends: None,
+                    implements: vec![
                         Identifier::from("Foo"),
                         Identifier::from("Bar"),
                     ],
-                    vec![]
-                )),
-                vec![]
-            ))
+                    body: vec![]
+                }),
+                args: vec![]
+            })
         ]);
 
         assert_ast("<?php new class {
             public function foo() {}
         };", &[
-            expr!(Expression::New(
-                Box::new(Expression::AnonymousClass(
-                    None,
-                    vec![],
-                    vec![
+            expr!(Expression::New {
+                target: Box::new(Expression::AnonymousClass {
+                    extends: None,
+                    implements: vec![],
+                    body: vec![
                         Statement::Method {
                             name: "foo".into(),
                             params: vec![],
@@ -1927,9 +1931,9 @@ mod tests {
                             ]
                         }
                     ]
-                )),
-                vec![]
-            ))
+                }),
+                args: vec![]
+            })
         ]);
     }
 
@@ -1937,36 +1941,38 @@ mod tests {
     fn foreach() {
         assert_ast("<?php foreach ($foo as $bar) {}", &[
             Statement::Foreach {
-                expr: Expression::Variable("foo".into()),
+                expr: Expression::Variable { name: "foo".into() },
                 key_var: None,
-                value_var: Expression::Variable("bar".into()),
+                value_var: Expression::Variable { name: "bar".into() },
                 body: vec![],
             }
         ]);
 
         assert_ast("<?php foreach ($foo as $bar => $baz) {}", &[
             Statement::Foreach {
-                expr: Expression::Variable("foo".into()),
-                key_var: Some(Expression::Variable("bar".into())),
-                value_var: Expression::Variable("baz".into()),
+                expr: Expression::Variable { name: "foo".into() },
+                key_var: Some(Expression::Variable { name: "bar".into() }),
+                value_var: Expression::Variable { name: "baz".into() },
                 body: vec![],
             }
         ]);
 
         assert_ast("<?php foreach ($foo as [$baz, $car]) {}", &[
             Statement::Foreach {
-                expr: Expression::Variable("foo".into()),
+                expr: Expression::Variable { name: "foo".into() },
                 key_var: None,
-                value_var: Expression::Array(vec![
-                    ArrayItem {
-                        key: None,
-                        value: Expression::Variable("baz".into())
-                    },
-                    ArrayItem {
-                        key: None,
-                        value: Expression::Variable("car".into())
-                    }
-                ]),
+                value_var: Expression::Array {
+                    items: vec![
+                        ArrayItem {
+                            key: None,
+                            value: Expression::Variable { name: "baz".into() }
+                        },
+                        ArrayItem {
+                            key: None,
+                            value: Expression::Variable { name: "car".into() }
+                        }
+                    ]
+                },
                 body: vec![],
             }
         ]);

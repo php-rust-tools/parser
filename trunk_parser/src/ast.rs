@@ -47,7 +47,7 @@ pub struct Param {
 
 impl From<String> for Param {
     fn from(name: String) -> Self {
-        Self { name: Expression::Variable(name), r#type: None, variadic: false, default: None }
+        Self { name: Expression::Variable { name }, r#type: None, variadic: false, default: None }
     }
 }
 
@@ -265,31 +265,96 @@ pub struct Use {
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Expression {
-    Int(i64),
-    Variable(String),
-    Infix(Box<Self>, InfixOp, Box<Self>),
-    Call(Box<Self>, Vec<Self>),
-    Identifier(String),
-    Assign(Box<Self>, Box<Self>),
-    Array(Vec<ArrayItem>),
-    Closure(Vec<Param>, Vec<Expression>, Option<Type>, Block),
-    ArrowFunction(Vec<Param>, Option<Type>, Box<Self>),
-    New(Box<Self>, Vec<Self>),
-    ConstantString(String),
-    PropertyFetch(Box<Self>, Identifier),
-    StaticPropertyFetch(Box<Self>, Box<Self>),
-    ConstFetch(Box<Self>, Identifier),
-    MethodCall(Box<Self>, Identifier, Vec<Self>),
-    StaticMethodCall(Box<Self>, Identifier, Vec<Self>),
-    AnonymousClass(Option<Identifier>, Vec<Identifier>, Block),
-    Bool(bool),
-    ArrayIndex(Box<Self>, Option<Box<Self>>),
+    Int {
+        i: i64
+    },
+    Variable {
+        name: String
+    },
+    Infix {
+        lhs: Box<Self>,
+        op: InfixOp,
+        rhs: Box<Self>
+    },
+    Call {
+        target: Box<Self>,
+        args: Vec<Self>
+    },
+    Identifier {
+        name: String
+    },
+    Array {
+        items: Vec<ArrayItem>
+    },
+    Closure {
+        params: Vec<Param>,
+        uses: Vec<Expression>,
+        return_type: Option<Type>,
+        body: Block
+    },
+    ArrowFunction {
+        params: Vec<Param>,
+        return_type: Option<Type>,
+        expr: Box<Self>
+    },
+    New {
+        target: Box<Self>,
+        args: Vec<Self>
+    },
+    ConstantString {
+        value: String,
+    },
+    PropertyFetch {
+        target: Box<Self>,
+        property: Identifier,
+    },
+    StaticPropertyFetch {
+        target: Box<Self>,
+        property: Box<Self>
+    },
+    ConstFetch {
+        target: Box<Self>,
+        constant: Identifier
+    },
+    MethodCall {
+        target: Box<Self>,
+        method: Identifier,
+        args: Vec<Self>
+    },
+    StaticMethodCall {
+        target: Box<Self>,
+        method: Identifier,
+        args: Vec<Self>
+    },
+    AnonymousClass {
+        extends: Option<Identifier>,
+        implements: Vec<Identifier>,
+        body: Block
+    },
+    Bool { value: bool },
+    ArrayIndex {
+        array: Box<Self>, 
+        index: Option<Box<Self>>
+    },
     Null,
-    BooleanNot(Box<Self>),
-    MagicConst(MagicConst),
-    Ternary(Box<Self>, Box<Self>, Box<Self>),
-    Coalesce(Box<Self>, Box<Self>),
-    Clone(Box<Self>)
+    BooleanNot {
+        value: Box<Self>
+    },
+    MagicConst {
+        constant: MagicConst
+    },
+    Ternary {
+        condition: Box<Self>,
+        then: Box<Self>,
+        r#else: Box<Self>
+    },
+    Coalesce {
+        lhs: Box<Self>, 
+        rhs: Box<Self>
+    },
+    Clone {
+        target: Box<Self>
+    }
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Serialize)]
