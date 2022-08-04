@@ -1,6 +1,6 @@
-use std::{vec::IntoIter, fmt::{Display, write}};
+use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst}, Identifier, Type, MatchArm, Catch};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst}, Identifier, Type, MatchArm, Catch, Case};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -343,10 +343,55 @@ impl Parser {
                 self.rparen()?;
 
                 self.lbrace()?;
-                self.rbrace()?;
-                self.semi()?;
 
-                Statement::Switch { condition }
+                let mut cases = Vec::new();
+                loop {
+                    if self.current.kind == TokenKind::RightBrace {
+                        break;
+                    }
+
+                    match self.current.kind {
+                        TokenKind::Case => {
+                            self.next();
+
+                            let condition = self.expression(0)?;
+
+                            expect!(self, TokenKind::Colon, "expected :");
+
+                            let mut body = Block::new();
+
+                            while self.current.kind != TokenKind::Case && self.current.kind != TokenKind::Default && self.current.kind != TokenKind::RightBrace {
+                                body.push(self.statement()?);
+                            }
+
+                            cases.push(Case {
+                                condition: Some(condition),
+                                body
+                            });
+                        },
+                        TokenKind::Default => {
+                            self.next();
+
+                            expect!(self, TokenKind::Colon, "expected :");
+
+                            let mut body = Block::new();
+
+                            while self.current.kind != TokenKind::Case && self.current.kind != TokenKind::Default && self.current.kind != TokenKind::RightBrace {
+                                body.push(self.statement()?);
+                            }
+
+                            cases.push(Case {
+                                condition: None,
+                                body
+                            });
+                        },
+                        _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
+                    }
+                }
+
+                self.rbrace()?;
+
+                Statement::Switch { condition, cases }
             },
             TokenKind::Namespace => {
                 self.next();

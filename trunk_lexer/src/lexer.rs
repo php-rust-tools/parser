@@ -714,6 +714,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "array" => TokenKind::Array,
         "as" => TokenKind::As,
         "break" => TokenKind::Break,
+        "case" => TokenKind::Case,
         "catch" => TokenKind::Catch,
         "class" => TokenKind::Class,
         "clone" => TokenKind::Clone,

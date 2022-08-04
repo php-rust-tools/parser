@@ -210,6 +210,7 @@ pub enum Statement {
     },
     Switch {
         condition: Expression,
+        cases: Vec<Case>,
     },
     Break {
         num: Option<Expression>,
@@ -240,6 +241,12 @@ pub enum Statement {
         finally: Option<Block>,
     },
     Noop,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct Case {
+    pub condition: Option<Expression>,
+    pub body: Block,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
