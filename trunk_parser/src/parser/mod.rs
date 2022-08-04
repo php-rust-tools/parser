@@ -302,7 +302,7 @@ impl Parser {
                             let mut return_type = None;
 
                             if self.current.kind == TokenKind::Colon {
-                                self.next();
+                                expect!(self, TokenKind::Colon, "expected :");
 
                                 return_type = Some(self.type_string()?);
                             }
@@ -325,7 +325,7 @@ impl Parser {
                             let mut return_type = None;
 
                             if self.current.kind == TokenKind::Colon {
-                                self.next();
+                                expect!(self, TokenKind::Colon, "expected :");
 
                                 return_type = Some(self.type_string()?);
                             }
@@ -650,7 +650,7 @@ impl Parser {
         let mut return_type = None;
 
         if self.current.kind == TokenKind::Colon {
-            self.next();
+            expect!(self, TokenKind::Colon, "expected :");
 
             return_type = Some(self.type_string()?);
         }
@@ -807,7 +807,7 @@ impl Parser {
                             let mut return_type = None;
 
                             if self.current.kind == TokenKind::Colon {
-                                self.next();
+                                expect!(self, TokenKind::Colon, "expected :");
 
                                 return_type = Some(self.type_string()?);
                             }
@@ -1052,7 +1052,7 @@ impl Parser {
 
                 let mut return_type = None;
                 if self.current.kind == TokenKind::Colon {
-                    self.next();
+                    expect!(self, TokenKind::Colon, "expected :");
 
                     return_type = Some(self.type_string()?);
                 }
@@ -1077,7 +1077,7 @@ impl Parser {
                 let mut return_type = None;
         
                 if self.current.kind == TokenKind::Colon {
-                    self.next();
+                    expect!(self, TokenKind::Colon, "expected :");
         
                     return_type = Some(self.type_string()?);
                 }
