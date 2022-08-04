@@ -301,7 +301,7 @@ impl Parser {
 
                             let mut return_type = None;
 
-                            if self.current.kind == TokenKind::Colon {
+                            if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
                                 expect!(self, TokenKind::Colon, "expected :");
 
                                 return_type = Some(self.type_string()?);
@@ -324,7 +324,7 @@ impl Parser {
 
                             let mut return_type = None;
 
-                            if self.current.kind == TokenKind::Colon {
+                            if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
                                 expect!(self, TokenKind::Colon, "expected :");
 
                                 return_type = Some(self.type_string()?);
@@ -649,7 +649,7 @@ impl Parser {
 
         let mut return_type = None;
 
-        if self.current.kind == TokenKind::Colon {
+        if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
             expect!(self, TokenKind::Colon, "expected :");
 
             return_type = Some(self.type_string()?);
@@ -736,7 +736,7 @@ impl Parser {
 
                 let mut var_type = None;
 
-                if ! matches!(self.current.kind, TokenKind::Variable(_)) {
+                if ! matches!(self.current.kind, TokenKind::Variable(_)) || self.config.force_type_strings {
                     var_type = Some(self.type_string()?);
                 }
 
@@ -806,7 +806,7 @@ impl Parser {
 
                             let mut return_type = None;
 
-                            if self.current.kind == TokenKind::Colon {
+                            if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
                                 expect!(self, TokenKind::Colon, "expected :");
 
                                 return_type = Some(self.type_string()?);
@@ -1051,7 +1051,7 @@ impl Parser {
                 }
 
                 let mut return_type = None;
-                if self.current.kind == TokenKind::Colon {
+                if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
                     expect!(self, TokenKind::Colon, "expected :");
 
                     return_type = Some(self.type_string()?);
@@ -1076,7 +1076,7 @@ impl Parser {
         
                 let mut return_type = None;
         
-                if self.current.kind == TokenKind::Colon {
+                if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
                     expect!(self, TokenKind::Colon, "expected :");
         
                     return_type = Some(self.type_string()?);

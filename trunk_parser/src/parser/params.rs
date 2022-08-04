@@ -11,7 +11,7 @@ impl Parser {
             let mut param_type = None;
 
             // 1. If we don't see a variable, we should expect a type-string.
-            if ! matches!(self.current.kind, TokenKind::Variable(_) | TokenKind::Ellipsis) {
+            if ! matches!(self.current.kind, TokenKind::Variable(_) | TokenKind::Ellipsis) || self.config.force_type_strings {
                 // 1a. Try to parse the type.
                 param_type = Some(self.type_string()?);
             }
