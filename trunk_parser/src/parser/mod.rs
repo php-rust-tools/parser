@@ -28,7 +28,18 @@ mod punc;
 mod ident;
 mod comments;
 
+pub struct ParserConfig {
+    force_type_strings: bool,
+}
+
+impl Default for ParserConfig {
+    fn default() -> Self {
+        Self { force_type_strings: false }
+    }
+}
+
 pub struct Parser {
+    config: ParserConfig,
     pub current: Token,
     pub peek: Token,
     iter: IntoIter<Token>,
@@ -37,17 +48,41 @@ pub struct Parser {
 
 #[allow(dead_code)]
 impl Parser {
-    pub fn new(tokens: Vec<Token>) -> Self {
-        let mut this = Self {
+    pub fn new(config: Option<ParserConfig>) -> Self {
+        Self {
+            config: config.unwrap_or_default(),
             current: Token::default(),
             peek: Token::default(),
-            iter: tokens.into_iter(),
+            iter: vec![].into_iter(),
             comments: vec![],
-        };
+        }
+    }
 
-        this.next();
-        this.next();
-        this
+    pub fn parse(&mut self, tokens: Vec<Token>) -> Result<Program, ParseError> {
+        self.iter = tokens.into_iter();
+        self.next();
+        self.next();
+
+        let mut ast = Program::new();
+
+        while self.current.kind != TokenKind::Eof {
+            if let TokenKind::OpenTag(_) = self.current.kind {
+                self.next();
+                continue;
+            }
+
+            self.gather_comments();
+
+            if self.is_eof() {
+                break;
+            }
+
+            ast.push(self.statement()?);
+            
+            self.clear_comments();
+        }
+
+        Ok(ast.to_vec())
     }
 
     fn type_string(&mut self) -> ParseResult<Type> {
@@ -1297,29 +1332,6 @@ impl Parser {
         self.current = self.peek.clone();
         self.peek = self.iter.next().unwrap_or_default()
     }
-
-    pub fn parse(&mut self) -> Result<Program, ParseError> {
-        let mut ast = Program::new();
-
-        while self.current.kind != TokenKind::Eof {
-            if let TokenKind::OpenTag(_) = self.current.kind {
-                self.next();
-                continue;
-            }
-
-            self.gather_comments();
-
-            if self.is_eof() {
-                break;
-            }
-
-            ast.push(self.statement()?);
-            
-            self.clear_comments();
-        }
-
-        Ok(ast.to_vec())
-    }
 }
 
 fn is_prefix(op: &TokenKind) -> bool {
@@ -2135,8 +2147,8 @@ mod tests {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();
 
-        let mut parser = Parser::new(tokens);
-        let ast = parser.parse();
+        let mut parser = Parser::new(None);
+        let ast = parser.parse(tokens);
 
         if ast.is_err() {
             panic!("{}", ast.err().unwrap());

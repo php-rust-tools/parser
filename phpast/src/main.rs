@@ -51,8 +51,8 @@ fn main() {
         return;
     }
 
-    let mut parser = Parser::new(tokens);
-    let ast = match parser.parse() {
+    let mut parser = Parser::new(None);
+    let ast = match parser.parse(tokens) {
         Ok(a) => a,
         Err(e) => {
             eprintln!("{}", e);

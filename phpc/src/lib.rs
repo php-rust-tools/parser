@@ -10,8 +10,8 @@ pub fn compile(file: String) -> Result<String, CompileError> {
     let mut lexer = Lexer::new(None);
     let tokens = lexer.tokenize(&contents).unwrap();
 
-    let mut parser = Parser::new(tokens);
-    let ast = parser.parse().unwrap();
+    let mut parser = Parser::new(None);
+    let ast = parser.parse(tokens).unwrap();
     
     let (fns, main): (Vec<_>, Vec<_>) = ast.iter().partition(|statement| match statement {
         Statement::Function { .. } => true,
