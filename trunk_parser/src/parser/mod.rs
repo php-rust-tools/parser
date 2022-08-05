@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst}, Identifier, Type, MatchArm, Catch, Case};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst, BackedEnumType}, Identifier, Type, MatchArm, Catch, Case};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -341,6 +341,75 @@ impl Parser {
                 self.rbrace()?;
 
                 Statement::Interface { name: name.into(), extends, body }
+            },
+            TokenKind::Enum if matches!(self.peek.kind, TokenKind::Identifier(_)) => {
+                self.next();
+
+                let name = self.ident()?;
+
+                let mut is_backed = false;
+                let backed_type: Option<BackedEnumType> = if self.current.kind == TokenKind::Colon {
+                    expect!(self, TokenKind::Colon, "expected :");
+                    
+                    match self.current.kind.clone() {
+                        TokenKind::Identifier(s) if s == String::from("string") || s == String::from("int") => {
+                            self.next();
+
+                            is_backed = true;
+
+                            Some(match s.as_str() {
+                                "string" => BackedEnumType::String,
+                                "int" => BackedEnumType::Int,
+                                _ => unreachable!()
+                            })
+                        },
+                        _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
+                    }
+                } else {
+                    None
+                };
+
+                let mut implements = Vec::new();
+                if self.current.kind == TokenKind::Implements {
+                    self.next();
+
+                    while self.current.kind != TokenKind::LeftBrace {
+                        implements.push(self.full_name()?.into());
+
+                        self.optional_comma()?;
+                    }
+                }
+                
+                self.lbrace()?;
+
+                let mut body = Block::new();
+                while self.current.kind != TokenKind::RightBrace {
+                    match self.current.kind {
+                        TokenKind::Case => {
+                            self.next();
+
+                            let name = self.ident()?;
+                            let mut value = None;
+
+                            if is_backed {
+                                expect!(self, TokenKind::Equals, "expected =");
+
+                                value = Some(self.expression(0)?);
+                            }
+
+                            self.semi()?;
+                            
+                            body.push(Statement::EnumCase { name: name.into(), value })
+                        },
+                        _ => {
+                            body.push(self.class_statement()?);
+                        }
+                    }
+                }
+
+                self.rbrace()?;
+
+                Statement::Enum { name: name.into(), backed_type, implements, body }
             },
             TokenKind::Use => {
                 self.next();

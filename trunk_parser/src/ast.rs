@@ -240,7 +240,23 @@ pub enum Statement {
         catches: Vec<Catch>,
         finally: Option<Block>,
     },
+    Enum {
+        name: Identifier,
+        implements: Vec<Identifier>,
+        backed_type: Option<BackedEnumType>,
+        body: Block,
+    },
+    EnumCase {
+        name: Identifier,
+        value: Option<Expression>,
+    },
     Noop,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub enum BackedEnumType {
+    String,
+    Int,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
