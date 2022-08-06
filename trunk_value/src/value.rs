@@ -1,6 +1,6 @@
 use indexmap::IndexMap;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum PhpValue {
     Int(i64),
     Float(f64),
