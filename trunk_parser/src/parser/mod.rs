@@ -1274,9 +1274,19 @@ impl Parser {
                 self.next();
 
                 let op = kind.clone();
-                let rhs = self.expression(rbp)?;
+                match op {
+                    TokenKind::Question => {
+                        let then = self.expression(0)?;
+                        expect!(self, TokenKind::Colon, "expected :");
+                        let otherwise = self.expression(rbp)?;
+                        lhs = Expression::Ternary { condition: Box::new(lhs), then: Box::new(then), r#else: Box::new(otherwise) }
+                    },
+                    _ => {
+                        let rhs = self.expression(rbp)?;
+                        lhs = infix(lhs, op, rhs);
+                    },
+                }
 
-                lhs = infix(lhs, op, rhs);
                 continue;
             }
 
@@ -1434,21 +1444,21 @@ fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
 
 fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
     Some(match t {
-        TokenKind::Asterisk | TokenKind::Slash => (13, 14),
-        TokenKind::Plus | TokenKind::Minus => (11, 12),
-        TokenKind::Dot => (11, 11),
-        TokenKind::LessThan | TokenKind::GreaterThan | TokenKind::LessThanEquals | TokenKind::GreaterThanEquals => (9, 10),
-        TokenKind::DoubleEquals | TokenKind::TripleEquals | TokenKind::BangEquals | TokenKind::BangDoubleEquals => (7, 8),
-        TokenKind::BooleanAnd => (5, 6),
-        TokenKind::BooleanOr => (3, 4),
-        TokenKind::Equals | TokenKind::PlusEquals => (2, 1),
+        TokenKind::Asterisk | TokenKind::Slash => (14, 15),
+        TokenKind::Plus | TokenKind::Minus => (12, 13),
+        TokenKind::Dot => (12, 12),
+        TokenKind::LessThan | TokenKind::GreaterThan | TokenKind::LessThanEquals | TokenKind::GreaterThanEquals => (10, 11),
+        TokenKind::DoubleEquals | TokenKind::TripleEquals | TokenKind::BangEquals | TokenKind::BangDoubleEquals => (8, 9),
+        TokenKind::Question => (6, 7),
+        TokenKind::BooleanAnd => (4, 5),
+        TokenKind::BooleanOr => (2, 3),
+        TokenKind::Equals | TokenKind::PlusEquals => (0, 1),
         _ => return None,
     })
 }
 
 fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
     Some(match t {
-        TokenKind::Question => 20,
         TokenKind::LeftParen | TokenKind::LeftBracket => 19,
         TokenKind::Arrow | TokenKind::DoubleColon => 18,
         TokenKind::Coalesce => 11,
@@ -1552,6 +1562,49 @@ mod tests {
                 expr: $expr,
             }
         };
+    }
+
+    #[test]
+    fn ternary() {
+        assert_ast("<?php 1 ? 2 : 3;", &[
+            expr!(Expression::Ternary {
+                condition: Box::new(Expression::Int { i: 1 }),
+                then: Box::new(Expression::Int { i: 2 }),
+                r#else: Box::new(Expression::Int { i: 3 }),
+            })
+        ]);
+
+        assert_ast("<?php 1 ? 2 ? 3 : 4 : 5;", &[
+            expr!(Expression::Ternary {
+                condition: Box::new(Expression::Int { i: 1 }),
+                then: Box::new(Expression::Ternary {
+                    condition: Box::new(Expression::Int { i: 2 }),
+                    then: Box::new(Expression::Int { i: 3 }),
+                    r#else: Box::new(Expression::Int { i: 4 }),
+                }),
+                r#else: Box::new(Expression::Int { i: 5 }),
+            })
+        ]);
+    }
+
+    #[test]
+    fn coalesce() {
+        assert_ast("<?php 1 ?? 2;", &[
+            expr!(Expression::Coalesce {
+                lhs: Box::new(Expression::Int { i: 1 }),
+                rhs: Box::new(Expression::Int { i: 2 })
+            })
+        ]);
+
+        assert_ast("<?php 1 ?? 2 ?? 3;", &[
+            expr!(Expression::Coalesce {
+                lhs: Box::new(Expression::Int { i: 1 }),
+                rhs: Box::new(Expression::Coalesce {
+                    lhs: Box::new(Expression::Int { i: 2 }),
+                    rhs: Box::new(Expression::Int { i: 3 })
+                })
+            })
+        ]);
     }
 
     #[test]
