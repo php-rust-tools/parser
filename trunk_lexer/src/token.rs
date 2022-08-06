@@ -88,6 +88,7 @@ pub enum TokenKind {
     Implements,
     Increment,
     InlineHtml(String),
+    Instanceof,
     Int(i64),
     IntCast,
     Interface,
