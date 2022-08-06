@@ -433,6 +433,7 @@ pub enum InfixOp {
     Assign,
     AddAssign,
     Pow,
+    Instanceof,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -456,6 +457,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::Equals => Self::Assign,
             TokenKind::PlusEquals => Self::AddAssign,
             TokenKind::Pow => Self::Pow,
+            TokenKind::Instanceof => Self::Instanceof,
             _ => unreachable!()
         }
     }

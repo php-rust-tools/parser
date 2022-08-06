@@ -1444,7 +1444,8 @@ fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
 
 fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
     Some(match t {
-        TokenKind::Pow => (16, 17),
+        TokenKind::Pow => (18, 19),
+        TokenKind::Instanceof => (16, 17),
         TokenKind::Asterisk | TokenKind::Slash => (14, 15),
         TokenKind::Plus | TokenKind::Minus => (12, 13),
         TokenKind::Dot => (12, 12),
@@ -1563,6 +1564,33 @@ mod tests {
                 expr: $expr,
             }
         };
+    }
+
+    #[test]
+    fn instanceof() {
+        assert_ast("<?php $foo instanceof Foo;", &[
+            expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "foo".into() }),
+                op: InfixOp::Instanceof,
+                rhs: Box::new(Expression::Identifier { name: "Foo".into() })
+            })
+        ]);
+
+        assert_ast("<?php $foo instanceof Foo && $foo instanceof Foo;", &[
+            expr!(Expression::Infix {
+                lhs: Box::new(Expression::Infix {
+                    lhs: Box::new(Expression::Variable { name: "foo".into() }),
+                    op: InfixOp::Instanceof,
+                    rhs: Box::new(Expression::Identifier { name: "Foo".into() })
+                }),
+                op: InfixOp::And,
+                rhs: Box::new(Expression::Infix {
+                    lhs: Box::new(Expression::Variable { name: "foo".into() }),
+                    op: InfixOp::Instanceof,
+                    rhs: Box::new(Expression::Identifier { name: "Foo".into() })
+                })
+            })
+        ]);
     }
 
     #[test]
