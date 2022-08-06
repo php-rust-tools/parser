@@ -432,6 +432,7 @@ pub enum InfixOp {
     Or,
     Assign,
     AddAssign,
+    Pow,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -454,6 +455,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::BooleanOr => Self::Or,
             TokenKind::Equals => Self::Assign,
             TokenKind::PlusEquals => Self::AddAssign,
+            TokenKind::Pow => Self::Pow,
             _ => unreachable!()
         }
     }

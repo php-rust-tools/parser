@@ -1444,6 +1444,7 @@ fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
 
 fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
     Some(match t {
+        TokenKind::Pow => (16, 17),
         TokenKind::Asterisk | TokenKind::Slash => (14, 15),
         TokenKind::Plus | TokenKind::Minus => (12, 13),
         TokenKind::Dot => (12, 12),
@@ -1562,6 +1563,17 @@ mod tests {
                 expr: $expr,
             }
         };
+    }
+
+    #[test]
+    fn pow() {
+        assert_ast("<?php 2 ** 2;", &[
+            expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 2 }),
+                op: InfixOp::Pow,
+                rhs: Box::new(Expression::Int { i: 2 }),
+            })
+        ]);
     }
 
     #[test]
