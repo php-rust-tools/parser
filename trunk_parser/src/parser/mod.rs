@@ -1451,13 +1451,14 @@ impl Parser {
 
 fn is_prefix(op: &TokenKind) -> bool {
     match op {
-        TokenKind::Bang => true,
+        TokenKind::Bang | TokenKind::Minus => true,
         _ => false
     }
 }
 
 fn prefix_binding_power(op: &TokenKind) -> u8 {
     match op {
+        TokenKind::Minus => 100,
         TokenKind::Bang => 99,
         _ => unreachable!()
     }
@@ -1466,6 +1467,7 @@ fn prefix_binding_power(op: &TokenKind) -> u8 {
 fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
     match op {
         TokenKind::Bang => Expression::BooleanNot { value: Box::new(rhs) },
+        TokenKind::Minus => Expression::Negate { value: Box::new(rhs) },
         _ => unreachable!()
     }
 }

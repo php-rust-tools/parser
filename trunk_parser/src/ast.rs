@@ -402,6 +402,9 @@ pub enum Expression {
     },
     Yield {
         value: Box<Expression>,
+    },
+    Negate {
+        value: Box<Expression>,
     }
 }
 
