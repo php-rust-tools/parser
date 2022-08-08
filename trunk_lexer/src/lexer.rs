@@ -605,7 +605,15 @@ impl Lexer {
             },
             '(' => {
                 self.col += 1;
-                TokenKind::LeftParen
+
+                if self.try_read("string)") {
+                    self.col += 7;
+                    self.skip(8);
+                    
+                    TokenKind::StringCast 
+                } else {
+                    TokenKind::LeftParen
+                }
             },
             ')' => {
                 self.col += 1;
@@ -719,6 +727,34 @@ impl Lexer {
 
     fn enter_state(&mut self, state: LexerState) {
         self.state = state;
+    }
+
+    fn char_at(&self, idx: usize) -> Option<&char> {
+        self.chars.get(idx)
+    }
+
+    fn try_read(&self, search: &'static str) -> bool {
+        if self.current.is_none() || self.peek.is_none() {
+            return false;
+        }
+
+        let start = self.cursor.saturating_sub(1);
+        let mut buffer = String::new();
+
+        for i in 0..search.len() {
+            match self.char_at(start + i) {
+                Some(char) => buffer.push(char.clone()),
+                _ => return false,
+            };
+        }
+
+        buffer.as_str() == search
+    }
+
+    fn skip(&mut self, count: usize) {
+        for _ in 0..count {
+            self.next();
+        }
     }
 
     fn next(&mut self) {
@@ -859,6 +895,14 @@ mod tests {
             TokenKind::New,
             TokenKind::Foreach,
             TokenKind::Instanceof,
+        ]);
+    }
+
+    #[test]
+    fn casts() {
+        assert_tokens("<?php (string)", &[
+            open!(),
+            TokenKind::StringCast,
         ]);
     }
 
