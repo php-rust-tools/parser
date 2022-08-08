@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+/// A wrapper-type pointing to a unique string in the [`Interner`].
 #[derive(Debug, PartialEq)]
 #[repr(transparent)]
 pub struct Symbol(u32);
@@ -18,7 +19,7 @@ pub struct Interner {
 }
 
 impl Interner {
-    /// Intern a `&str` and retrieve a unique `Symbol`.
+    /// Intern a `&str` and retrieve a unique [`Symbol`].
     pub fn intern(&mut self, name: &str) -> Symbol {
         if let Some(&index) = self.map.get(name) {
             return Symbol(index);
@@ -32,7 +33,7 @@ impl Interner {
         Symbol(index)
     }
 
-    /// Retrieve tyhe `&str` for a given `Symbol`.
+    /// Retrieve tyhe `&str` for a given [`Symbol`].
     pub fn get(&self, symbol: Symbol) -> &str {
         self.storage[symbol.0 as usize].as_str()
     }
