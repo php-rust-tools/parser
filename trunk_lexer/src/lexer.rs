@@ -1,4 +1,4 @@
-use std::{iter::Peekable, str::Chars, char};
+use std::{iter::Peekable, str::Chars, char, vec::IntoIter, thread::sleep, time::Duration};
 
 use crate::{Token, TokenKind, OpenTagKind};
 
@@ -18,6 +18,10 @@ pub struct LexerConfig {
 pub struct Lexer {
     config: LexerConfig,
     state: LexerState,
+    chars: Vec<char>,
+    cursor: usize,
+    current: Option<char>,
+    peek: Option<char>,
     col: usize,
     line: usize,
 }
@@ -27,6 +31,10 @@ impl Lexer {
         Self {
             config: config.unwrap_or_default(),
             state: LexerState::Initial,
+            chars: "".chars().collect(),
+            cursor: 0,
+            current: None,
+            peek: None,
             line: 1,
             col: 0,
         }
@@ -34,40 +42,43 @@ impl Lexer {
 
     pub fn tokenize(&mut self, input: &str) -> Result<Vec<Token>, LexerError> {
         let mut tokens = Vec::new();
-        let mut it = input[..].chars().peekable();
+        self.chars = input.chars().collect();
 
-        while it.peek().is_some() {
+        self.next();
+        self.next();
+
+        while self.peek.is_some() {
             match self.state {
                 // The "Initial" state is used to parse inline HTML. It is essentially a catch-all
                 // state that will build up a single token buffer until it encounters an open tag
                 // of some description.
                 LexerState::Initial => {
-                    tokens.append(&mut self.initial(&mut it)?);
+                    tokens.append(&mut self.initial()?);
                 },
                 // The scripting state is entered when an open tag is encountered in the source code.
                 // This tells the lexer to start analysing characters at PHP tokens instead of inline HTML.
                 LexerState::Scripting => {
-                    while let Some(c) = it.peek() {
-                        if ! c.is_whitespace() && ! ['\n', '\t', '\r'].contains(c) {
+                    while let Some(c) = self.peek {
+                        if ! c.is_whitespace() && ! ['\n', '\t', '\r'].contains(&c) {
                             break;
                         }
                 
-                        if *c == '\n' {
+                        if c == '\n' {
                             self.line += 1;
                             self.col = 0;
                         } else {
                             self.col += 1;
                         }
 
-                        it.next();
+                        self.next();
                     }
 
                     // If we have consumed whitespace and then reached the end of the file, we should break.
-                    if it.peek().is_none() {
+                    if self.peek.is_none() {
                         break;
                     }
 
-                    tokens.push(self.scripting(&mut it)?);
+                    tokens.push(self.scripting()?);
                 },
             }
         }
@@ -76,23 +87,23 @@ impl Lexer {
     }
 
     #[allow(dead_code)]
-    fn initial(&mut self, it: &mut Peekable<Chars>) -> Result<Vec<Token>, LexerError> {
+    fn initial(&mut self) -> Result<Vec<Token>, LexerError> {
         let mut buffer = String::new();
-        while let Some(char) = it.next() {
+        while let Some(char) = self.current {
             match char {
                 '<' => {
                     // This is disgusting and can most definitely be tidied up with a multi-peek iterator.
-                    if let Some('?') = it.peek() {
-                        it.next();
+                    if let Some('?') = self.peek {
+                        self.next();
 
-                        if let Some('p') = it.peek() {
-                            it.next();
+                        if let Some('p') = self.peek {
+                            self.next();
 
-                            if let Some('h') = it.peek() {
-                                it.next();
+                            if let Some('h') = self.peek {
+                                self.next();
 
-                                if let Some('p') = it.peek() {
-                                    it.next();
+                                if let Some('p') = self.peek {
+                                    self.next();
 
                                     self.col += 4;
 
@@ -131,6 +142,7 @@ impl Lexer {
                     }
                 },
                 _ => {
+                    self.next();
                     buffer.push(char);
                 },
             }
@@ -144,30 +156,31 @@ impl Lexer {
         ])
     }
 
-    fn scripting(&mut self, it: &mut Peekable<Chars>) -> Result<Token, LexerError> {
+    fn scripting(&mut self) -> Result<Token, LexerError> {
         // We should never reach this point since we have the empty checks surrounding
         // the call to this function, but it's better to be safe than sorry.
-        if it.peek().is_none() {
+        if self.peek.is_none() {
             return Err(LexerError::UnexpectedEndOfFile);
         }
 
         // Since we have the check above, we can safely unwrap the result of `.next()`
         // to help reduce the amount of indentation.
-        let char = it.next().unwrap();
+        self.next();
+        let char = self.current.unwrap();
 
         let kind = match char {
             '!' => {
                 self.col += 1;
 
-                if let Some('=') = it.peek() {
+                if let Some('=') = self.peek {
                     self.col += 1;
 
-                    it.next();
+                    self.next();
 
-                    if let Some('=') = it.peek() {
+                    if let Some('=') = self.peek {
                         self.col += 1;
 
-                        it.next();
+                        self.next();
 
                         TokenKind::BangDoubleEquals
                     } else {
@@ -180,10 +193,10 @@ impl Lexer {
             '&' => {
                 self.col += 1;
 
-                if let Some('&') = it.peek() {
+                if let Some('&') = self.peek {
                     self.col += 1;
 
-                    it.next();
+                    self.next();
 
                     TokenKind::BooleanAnd
                 } else {
@@ -192,23 +205,23 @@ impl Lexer {
             },
             '?' => {
                 // This is a close tag, we can enter "Initial" mode again.
-                if let Some('>') = it.peek() {
-                    it.next();
+                if let Some('>') = self.peek {
+                    self.next();
 
                     self.col += 2;
 
                     self.enter_state(LexerState::Initial);
 
                     TokenKind::CloseTag
-                } else if let Some('?') = it.peek() {
+                } else if let Some('?') = self.peek {
                     self.col += 1;
 
-                    it.next();
+                    self.next();
 
-                    if let Some('=') = it.peek() {
+                    if let Some('=') = self.peek {
                         self.col += 1;
 
-                        it.next();
+                        self.next();
 
                         TokenKind::CoalesceEqual
                     } else {
@@ -219,11 +232,11 @@ impl Lexer {
                 }
             },
             '=' => {
-                if let Some('=') = it.peek() {
-                    it.next();
+                if let Some('=') = self.peek {
+                    self.next();
 
-                    if let Some('=') = it.peek() {
-                        it.next();
+                    if let Some('=') = self.peek {
+                        self.next();
 
                         self.col += 3;
 
@@ -233,8 +246,8 @@ impl Lexer {
 
                         TokenKind::DoubleEquals
                     }
-                } else if let Some('>') = it.peek() {
-                    it.next();
+                } else if let Some('>') = self.peek {
+                    self.next();
                     self.col += 1;
                     TokenKind::DoubleArrow
                 } else {
@@ -250,27 +263,27 @@ impl Lexer {
                 let mut buffer = String::new();
                 let mut escaping = false;
 
-                while let Some(n) = it.peek() {
-                    if ! escaping && *n == '\'' {
-                        it.next();
+                while let Some(n) = self.peek {
+                    if ! escaping && n == '\'' {
+                        self.next();
 
                         break;
                     }
 
-                    if *n == '\\' && !escaping {
+                    if n == '\\' && !escaping {
                         escaping = true;
-                        it.next();
+                        self.next();
                         continue;
                     }
 
-                    if escaping && ['\\', '\''].contains(n) {
+                    if escaping && ['\\', '\''].contains(&n) {
                         escaping = false;
-                        buffer.push(*n);
-                        it.next();
+                        buffer.push(n);
+                        self.next();
                         continue;
                     }
 
-                    if *n == '\n' {
+                    if n == '\n' {
                         self.line += 1;
                         self.col = 0;
                     } else {
@@ -279,8 +292,8 @@ impl Lexer {
 
                     escaping = false;
 
-                    buffer.push(*n);
-                    it.next();
+                    buffer.push(n);
+                    self.next();
                 }
 
                 TokenKind::ConstantString(buffer)
@@ -291,27 +304,27 @@ impl Lexer {
                 let mut buffer = String::new();
                 let mut escaping = false;
 
-                while let Some(n) = it.peek() {
-                    if ! escaping && *n == '"' {
-                        it.next();
+                while let Some(n) = self.peek {
+                    if ! escaping && n == '"' {
+                        self.next();
 
                         break;
                     }
 
-                    if *n == '\\' && !escaping {
+                    if n == '\\' && !escaping {
                         escaping = true;
-                        it.next();
+                        self.next();
                         continue;
                     }
 
-                    if escaping && ['\\', '"'].contains(n) {
+                    if escaping && ['\\', '"'].contains(&n) {
                         escaping = false;
-                        buffer.push(*n);
-                        it.next();
+                        buffer.push(n);
+                        self.next();
                         continue;
                     }
 
-                    if *n == '\n' {
+                    if n == '\n' {
                         self.line += 1;
                         self.col = 0;
                     } else {
@@ -320,8 +333,8 @@ impl Lexer {
 
                     escaping = false;
 
-                    buffer.push(*n);
-                    it.next();
+                    buffer.push(n);
+                    self.next();
                 }
 
                 TokenKind::ConstantString(buffer)
@@ -331,13 +344,13 @@ impl Lexer {
 
                 self.col += 1;
 
-                while let Some(n) = it.peek() {
+                while let Some(n) = self.peek {
                     match n {
                         'a'..='z' | 'A'..='Z' | '\u{80}'..='\u{ff}' | '_' => {
                             self.col += 1;
 
-                            buffer.push(*n);
-                            it.next();
+                            buffer.push(n);
+                            self.next();
                         }
                         _ => break,
                     }
@@ -348,26 +361,26 @@ impl Lexer {
             '.' => {
                 self.col += 1;
 
-                if let Some('0'..='9') = it.peek() {
+                if let Some('0'..='9') = self.peek {
                     let mut buffer = String::from("0.");
                     let mut underscore = false;
 
-                    while let Some(n) = it.peek() {
+                    while let Some(n) = self.peek {
                         match n {
                             '0'..='9' => {
                                 underscore = false;
-                                buffer.push(*n);
-                                it.next();
+                                buffer.push(n);
+                                self.next();
     
                                 self.col += 1;
                             },
                             '_' => {
                                 if underscore {
-                                    return Err(LexerError::UnexpectedCharacter(*n));
+                                    return Err(LexerError::UnexpectedCharacter(n));
                                 }
     
                                 underscore = true;
-                                it.next();
+                                self.next();
     
                                 self.col += 1;
                             },
@@ -376,13 +389,13 @@ impl Lexer {
                     }
 
                     TokenKind::Float(buffer.parse().unwrap())
-                } else if let Some('.') = it.peek() {
-                    it.next();
+                } else if let Some('.') = self.peek {
+                    self.next();
 
                     self.col += 1;
 
-                    if let Some('.') = it.peek() {
-                        it.next();
+                    if let Some('.') = self.peek {
+                        self.next();
 
                         self.col += 1;
 
@@ -401,32 +414,32 @@ impl Lexer {
 
                 self.col += 1;
 
-                while let Some(n) = it.peek() {
+                while let Some(n) = self.peek {
                     match n {
                         '0'..='9' => {
                             underscore = false;
-                            buffer.push(*n);
-                            it.next();
+                            buffer.push(n);
+                            self.next();
 
                             self.col += 1;
                         },
                         '.' => {
                             if is_float {
-                                return Err(LexerError::UnexpectedCharacter(*n));
+                                return Err(LexerError::UnexpectedCharacter(n));
                             }
 
                             is_float = true;
-                            buffer.push(*n);
-                            it.next();
+                            buffer.push(n);
+                            self.next();
                             self.col += 1;
                         },
                         '_' => {
                             if underscore {
-                                return Err(LexerError::UnexpectedCharacter(*n));
+                                return Err(LexerError::UnexpectedCharacter(n));
                             }
 
                             underscore = true;
-                            it.next();
+                            self.next();
 
                             self.col += 1;
                         },
@@ -443,8 +456,8 @@ impl Lexer {
             '\\' => {
                 self.col += 1;
 
-                if let Some(n) = it.peek() && (n.is_alphabetic() || *n == '_') {
-                    match self.scripting(it)? {
+                if let Some(n) = self.peek && (n.is_alphabetic() || n == '_') {
+                    match self.scripting()? {
                         Token { kind: TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i), .. } => {
                             TokenKind::FullyQualifiedIdentifier(format!("\\{}", i))
                         },
@@ -461,20 +474,20 @@ impl Lexer {
                 let mut last_was_slash = false;
 
                 let mut buffer = String::from(char);
-                while let Some(next) = it.peek() {
-                    if next.is_alphabetic() || *next == '_' {
-                        buffer.push(*next);
-                        it.next();
+                while let Some(next) = self.peek {
+                    if next.is_alphabetic() || next == '_' {
+                        buffer.push(next);
+                        self.next();
                         self.col += 1;
                         last_was_slash = false;
                         continue;
                     }
 
-                    if *next == '\\' && ! last_was_slash {
+                    if next == '\\' && ! last_was_slash {
                         qualified = true;
                         last_was_slash = true;
-                        buffer.push(*next);
-                        it.next();
+                        buffer.push(next);
+                        self.next();
                         self.col += 1;
                         continue;
                     }
@@ -491,35 +504,37 @@ impl Lexer {
             '/' | '#' => {
                 self.col += 1;
 
-                fn read_till_end_of_line(s: &mut Lexer, it: &mut Peekable<Chars>) -> String {
+                fn read_till_end_of_line(s: &mut Lexer) -> String {
                     s.col += 1;
 
                     let mut buffer = String::new();
 
-                    while let Some(c) = it.peek() {
-                        if *c == '\n' {
+                    while let Some(c) = s.peek {
+                        if c == '\n' {
                             break;
                         }
 
-                        buffer.push(*c);
-                        it.next();
+                        buffer.push(c);
+                        s.next();
                     }
 
                     buffer
                 }
 
-                if char == '/' && let Some(t) = it.peek() && *t == '*' {
+                if char == '/' && let Some(t) = self.peek && t == '*' {
                     let mut buffer = String::from(char);
 
-                    while it.peek().is_some() {
-                        let t = it.next().unwrap();
+                    while self.peek.is_some() {
+                        self.next();
+
+                        let t = self.current.unwrap();
 
                         match t {
                             '*' => {                     
-                                if let Some('/') = it.peek() {
+                                if let Some('/') = self.peek {
                                     self.col += 2;
                                     buffer.push_str("*/");
-                                    it.next();
+                                    self.next();
                                     break;
                                 } else {
                                     self.col += 1;
@@ -545,12 +560,13 @@ impl Lexer {
                     } else {
                         TokenKind::Comment(buffer)
                     }
-                } else if char == '/' && let Some(t) = it.peek() && *t != '/' {
+                } else if char == '/' && let Some(t) = self.peek && t != '/' {
                     TokenKind::Slash
-                } else if char == '#' && let Some(t) = it.peek() && *t == '[' {
+                } else if char == '#' && let Some(t) = self.peek && t == '[' {
                     TokenKind::Attribute
                 } else {
-                    let buffer = format!("{}{}{}", char, it.next().unwrap(), read_till_end_of_line(self, it));
+                    self.next();
+                    let buffer = format!("{}{}{}", char, &self.current.unwrap(), read_till_end_of_line(self));
 
                     TokenKind::Comment(buffer)
                 }
@@ -558,9 +574,9 @@ impl Lexer {
             '*' => {
                 self.col += 1;
 
-                if let Some('*') = it.peek() {
+                if let Some('*') = self.peek {
                     self.col += 1;
-                    it.next();
+                    self.next();
                     TokenKind::Pow
                 } else {
                     TokenKind::Asterisk
@@ -569,10 +585,10 @@ impl Lexer {
             '|' => {
                 self.col += 1;
                 
-                if let Some('|') = it.peek() {
+                if let Some('|') = self.peek {
                     self.col += 1;
 
-                    it.next();
+                    self.next();
 
                     TokenKind::BooleanOr
                 } else {
@@ -602,16 +618,16 @@ impl Lexer {
             '+' => {
                 self.col += 1;
 
-                if let Some('=') = it.peek() {
+                if let Some('=') = self.peek {
                     self.col += 1;
 
-                    it.next();
+                    self.next();
                     
                     TokenKind::PlusEquals
-                } else if let Some('+') = it.peek() {
+                } else if let Some('+') = self.peek {
                     self.col += 1;
 
-                    it.next();
+                    self.next();
 
                     TokenKind::Increment
                 } else {
@@ -621,10 +637,10 @@ impl Lexer {
             '-' => {
                 self.col += 1;
                 
-                if let Some('>') = it.peek() {
+                if let Some('>') = self.peek {
                     self.col += 1;
 
-                    it.next();
+                    self.next();
 
                     TokenKind::Arrow
                 } else {
@@ -634,18 +650,18 @@ impl Lexer {
             '<' => {
                 self.col += 1;
 
-                if let Some('=') = it.peek() {
-                    it.next();
+                if let Some('=') = self.peek {
+                    self.next();
 
                     self.col += 1;
 
                     TokenKind::LessThanEquals
-                } else if let Some('<') = it.peek() {
-                    it.next();
+                } else if let Some('<') = self.peek {
+                    self.next();
 
-                    if let Some('<') = it.peek() {
+                    if let Some('<') = self.peek {
                         // TODO: Handle both heredocs and nowdocs.
-                        it.next();
+                        self.next();
 
                         todo!("heredocs & nowdocs");
                     } else {
@@ -658,8 +674,8 @@ impl Lexer {
             '>' => {
                 self.col += 1;
 
-                if let Some('=') = it.peek() {
-                    it.next();
+                if let Some('=') = self.peek {
+                    self.next();
 
                     self.col += 1;
 
@@ -683,10 +699,10 @@ impl Lexer {
             ':' => {
                 self.col += 1;
 
-                if let Some(':') = it.peek() {
+                if let Some(':') = self.peek {
                     self.col += 1;
                     
-                    it.next();
+                    self.next();
                     TokenKind::DoubleColon
                 } else {
                     TokenKind::Colon
@@ -703,6 +719,12 @@ impl Lexer {
 
     fn enter_state(&mut self, state: LexerState) {
         self.state = state;
+    }
+
+    fn next(&mut self) {
+        self.current = self.peek.clone();
+        self.peek = self.chars.get(self.cursor).cloned();
+        self.cursor += 1;
     }
 }
 
