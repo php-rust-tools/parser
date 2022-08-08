@@ -959,6 +959,13 @@ impl Parser {
         self.skip_comments();
 
         let mut lhs = match &self.current.kind {
+            TokenKind::Throw => {
+                self.next();
+
+                let value = self.expression(0)?;
+
+                Expression::Throw { value: Box::new(value) }
+            },
             TokenKind::Clone => {
                 self.next();
 

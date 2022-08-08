@@ -394,6 +394,9 @@ pub enum Expression {
         condition: Box<Self>,
         arms: Vec<MatchArm>,
     },
+    Throw {
+        value: Box<Expression>,
+    },
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]

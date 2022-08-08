@@ -749,6 +749,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "return" => TokenKind::Return,
         "static" => TokenKind::Static,
         "switch" => TokenKind::Switch,
+        "throw" => TokenKind::Throw,
         "trait" => TokenKind::Trait,
         "true" | "TRUE" => TokenKind::True,
         "try" => TokenKind::Try,
