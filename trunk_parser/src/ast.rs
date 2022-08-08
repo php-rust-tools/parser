@@ -397,6 +397,9 @@ pub enum Expression {
     Throw {
         value: Box<Expression>,
     },
+    Yield {
+        value: Box<Expression>,
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]

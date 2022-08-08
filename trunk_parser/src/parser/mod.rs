@@ -966,6 +966,15 @@ impl Parser {
 
                 Expression::Throw { value: Box::new(value) }
             },
+            TokenKind::Yield => {
+                self.next();
+
+                let value = self.expression(0)?;
+
+                // FIXME: Check for presence of => here to allow yielding key and value.
+
+                Expression::Yield { value: Box::new(value) }
+            },
             TokenKind::Clone => {
                 self.next();
 

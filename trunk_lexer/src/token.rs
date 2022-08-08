@@ -133,6 +133,7 @@ pub enum TokenKind {
     Use,
     Var,
     Variable(String),
+    Yield,
 }
 
 #[derive(Debug, Clone)]
@@ -270,6 +271,7 @@ impl Display for TokenKind {
             Self::Use => "use",
             Self::Var => "var",
             Self::Variable(var) => &var[..],
+            Self::Yield => "yield",
             _ => todo!("format token: {:?}", self)
         })
     }
