@@ -956,6 +956,8 @@ impl Parser {
             return Err(ParseError::UnexpectedEndOfFile);
         }
 
+        self.skip_comments();
+
         let mut lhs = match &self.current.kind {
             TokenKind::Clone => {
                 self.next();
