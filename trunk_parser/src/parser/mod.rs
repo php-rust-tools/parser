@@ -1361,13 +1361,13 @@ impl Parser {
 
                         Expression::StaticPropertyFetch { target: Box::new(lhs), property: Box::new(var) }
                     },
-                    TokenKind::Class | TokenKind::Identifier(_) => {
+                    _ => {
                         let ident = if self.current.kind == TokenKind::Class {
                             self.next();
 
                             String::from("class")
                         } else {
-                            self.ident()?
+                            self.ident_maybe_reserved()?
                         };
 
                         if self.current.kind == TokenKind::LeftParen {
@@ -1389,12 +1389,11 @@ impl Parser {
                             Expression::ConstFetch { target: Box::new(lhs), constant: ident.into() }
                         }
                     },
-                    _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
                 }
             },
             TokenKind::Arrow => {
                 // TODO: Add support for dynamic property fetch or method call here.
-                let property = self.ident()?;
+                let property = self.ident_maybe_reserved()?;
 
                 if self.current.kind == TokenKind::LeftParen {
                     self.next();

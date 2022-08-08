@@ -215,6 +215,7 @@ impl Display for TokenKind {
             Self::Finally => "finally",
             Self::Float(_) => "float",
             Self::Fn => "fn",
+            Self::For => "for",
             Self::FullyQualifiedIdentifier(id) => &id[..],
             Self::Function => "function",
             Self::GreaterThan => ">",
