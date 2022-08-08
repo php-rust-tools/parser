@@ -1082,6 +1082,8 @@ impl Parser {
                 let mut items = Vec::new();
                 self.next();
 
+                self.skip_comments();
+
                 while self.current.kind != TokenKind::RightBracket {
                     let mut key = None;
                     let mut value = self.expression(0)?;
