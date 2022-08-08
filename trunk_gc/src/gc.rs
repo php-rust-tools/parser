@@ -1,13 +1,13 @@
 use std::{collections::{HashSet, HashMap}, hash::Hash};
 use std::rc::Rc;
 
-pub struct Gc<T: Trace<T>> {
+pub struct Gc<T> {
     sweep: usize,
     heap: HashSet<GBox<T>>,
     roots: HashMap<GBox<T>, Rc<()>>,
 }
 
-impl<T: Trace<T>> Gc<T> {
+impl<T> Gc<T> {
     pub fn new() -> Self {
         Self {
             sweep: 0,
@@ -52,12 +52,8 @@ impl<T: Trace<T>> Gc<T> {
     pub fn collect(&mut self) {
         let sweep = self.sweep + 1;
 
-        let mut tracer = Tracer { sweep, heap: &self.heap };
-
         for gbox in &self.heap {
-            tracer.mark(*gbox);
-            // 1. Mark the object.
-            // 2. Trace the object.
+            
         }
 
         self.sweep = sweep;
@@ -91,23 +87,5 @@ impl<T> Copy for GBox<T> {}
 impl<T> Hash for GBox<T> {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.ptr.hash(state);
-    }
-}
-
-pub trait Trace<T> {
-    fn trace();
-}
-
-pub struct Tracer<'t, T: Trace<T>> {
-    sweep: usize,
-    heap: &'t HashSet<GBox<T>>,
-}
-
-impl<'t, T: Trace<T>> Tracer<'t, T> {
-    pub fn mark(&mut self, gbox: GBox<T>) {
-        // 1. Has the provided GBox already been swept?
-        // 2. If it has, and the current sweep is not 
-        //    equal to the last sweep the GBox was found in,
-        //    trace the T value inside of the GBox.
     }
 }
