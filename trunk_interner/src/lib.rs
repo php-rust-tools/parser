@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 /// A wrapper-type pointing to a unique string in the [`Interner`].
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 #[repr(transparent)]
 pub struct Symbol(u32);
 

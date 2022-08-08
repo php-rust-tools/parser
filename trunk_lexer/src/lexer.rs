@@ -1,5 +1,3 @@
-use std::{iter::Peekable, str::Chars, char, vec::IntoIter, thread::sleep, time::Duration};
-
 use crate::{Token, TokenKind, OpenTagKind};
 
 #[derive(Debug)]
@@ -461,7 +459,7 @@ impl Lexer {
                         Token { kind: TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i), .. } => {
                             TokenKind::FullyQualifiedIdentifier(format!("\\{}", i))
                         },
-                        s @ _ => unreachable!("{:?}", s)
+                        s => unreachable!("{:?}", s)
                     }
                 } else {
                     TokenKind::NamespaceSeparator
@@ -743,7 +741,7 @@ impl Lexer {
 
         for i in 0..search.len() {
             match self.char_at(start + i) {
-                Some(char) => buffer.push(char.clone()),
+                Some(char) => buffer.push(*char),
                 _ => return false,
             };
         }
@@ -758,7 +756,7 @@ impl Lexer {
     }
 
     fn next(&mut self) {
-        self.current = self.peek.clone();
+        self.current = self.peek;
         self.peek = self.chars.get(self.cursor).cloned();
         self.cursor += 1;
     }

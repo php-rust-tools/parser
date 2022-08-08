@@ -32,6 +32,7 @@ pub struct ParserConfig {
     force_type_strings: bool,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for ParserConfig {
     fn default() -> Self {
         Self { force_type_strings: false }
@@ -352,7 +353,7 @@ impl Parser {
                     expect!(self, TokenKind::Colon, "expected :");
                     
                     match self.current.kind.clone() {
-                        TokenKind::Identifier(s) if s == String::from("string") || s == String::from("int") => {
+                        TokenKind::Identifier(s) if s == *"string" || s == *"int" => {
                             self.next();
 
                             is_backed = true;
@@ -1450,10 +1451,7 @@ impl Parser {
 }
 
 fn is_prefix(op: &TokenKind) -> bool {
-    match op {
-        TokenKind::Bang | TokenKind::Minus | TokenKind::StringCast => true,
-        _ => false
-    }
+    matches!(op, TokenKind::Bang | TokenKind::Minus | TokenKind::StringCast)
 }
 
 fn prefix_binding_power(op: &TokenKind) -> u8 {

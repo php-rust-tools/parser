@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum TypeError {
     UnsupportedOperandTypes {
         lhs: String,

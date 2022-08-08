@@ -253,7 +253,7 @@ pub enum Statement {
     Noop,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
 pub enum CastKind {
     String,
 }
@@ -273,7 +273,7 @@ impl From<&TokenKind> for CastKind {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
 pub enum BackedEnumType {
     String,
     Int,
