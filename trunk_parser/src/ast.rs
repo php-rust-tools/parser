@@ -254,6 +254,26 @@ pub enum Statement {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
+pub enum CastKind {
+    String,
+}
+
+impl From<TokenKind> for CastKind {
+    fn from(kind: TokenKind) -> Self {
+        match kind {
+            TokenKind::StringCast => Self::String,
+            _ => unreachable!()
+        }
+    }
+}
+
+impl From<&TokenKind> for CastKind {
+    fn from(kind: &TokenKind) -> Self {
+        kind.clone().into()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub enum BackedEnumType {
     String,
     Int,
@@ -405,7 +425,11 @@ pub enum Expression {
     },
     Negate {
         value: Box<Expression>,
-    }
+    },
+    Cast {
+        kind: CastKind,
+        value: Box<Self>,
+    },
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
