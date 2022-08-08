@@ -303,6 +303,9 @@ pub enum Expression {
     Int {
         i: i64
     },
+    Float {
+        f: f64,
+    },
     Variable {
         name: String
     },

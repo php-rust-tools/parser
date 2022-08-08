@@ -992,6 +992,11 @@ impl Parser {
                 self.next();
                 e
             },
+            TokenKind::Float(f) => {
+                let f = Expression::Float { f: *f };
+                self.next();
+                f
+            },
             TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i) => {
                 let e = Expression::Identifier { name: i.to_string() };
                 self.next();
