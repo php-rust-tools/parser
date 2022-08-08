@@ -414,6 +414,18 @@ impl Parser {
             TokenKind::Use => {
                 self.next();
 
+                let kind = match self.current.kind {
+                    TokenKind::Function => {
+                        self.next();
+                        UseKind::Function
+                    },
+                    TokenKind::Const => {
+                        self.next();
+                        UseKind::Const
+                    },
+                    _ => UseKind::Normal,
+                };
+
                 let mut uses = Vec::new();
                 while ! self.is_eof() {
                     let name = self.full_name()?;
@@ -435,7 +447,7 @@ impl Parser {
                     break;
                 }
 
-                Statement::Use { uses, kind: UseKind::Normal }
+                Statement::Use { uses, kind }
             },
             TokenKind::Switch => {
                 self.next();
