@@ -323,6 +323,7 @@ pub struct Use {
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Expression {
+    Static,
     Increment {
         value: Box<Self>,
     },

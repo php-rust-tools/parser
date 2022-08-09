@@ -1015,6 +1015,10 @@ impl Parser {
                 self.next();
                 e
             },
+            TokenKind::Static => {
+                self.next();
+                Expression::Static
+            },
             TokenKind::ConstantString(s) => {
                 let e = Expression::ConstantString { value: s.to_string() };
                 self.next();
@@ -1311,7 +1315,7 @@ impl Parser {
 
         loop {
             self.skip_comments();
-            
+
             let kind = match &self.current {
                 Token { kind: TokenKind::SemiColon | TokenKind::Eof, .. }  => break,
                 Token { kind, .. } => kind.clone()
