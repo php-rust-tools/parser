@@ -521,6 +521,7 @@ pub enum InfixOp {
     CoalesceAssign,
     MulAssign,
     SubAssign,
+    DivAssign,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -549,6 +550,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::CoalesceEqual => Self::CoalesceAssign,
             TokenKind::AsteriskEqual => Self::MulAssign,
             TokenKind::MinusEquals => Self::SubAssign,
+            TokenKind::SlashEquals => Self::DivAssign,
             _ => unreachable!()
         }
     }

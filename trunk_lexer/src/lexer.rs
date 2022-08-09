@@ -575,9 +575,13 @@ impl Lexer {
                     } else {
                         TokenKind::Comment(buffer)
                     }
+                } else if let Some('=') = self.peek {
+                    self.col += 1;
+                    self.next();
+                    TokenKind::SlashEquals
                 } else if char == '/' && let Some(t) = self.peek && t != '/' {
                     TokenKind::Slash
-                } else if char == '#' && let Some(t) = self.peek && t == '[' {
+                } else if char == '#' && let Some('[') = self.peek {
                     TokenKind::Attribute
                 } else {
                     self.next();
