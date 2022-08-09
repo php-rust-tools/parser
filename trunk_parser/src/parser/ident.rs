@@ -33,6 +33,16 @@ impl Parser {
         }
     }
 
+    pub(crate) fn type_with_static(&mut self) -> ParseResult<String> {
+        Ok(match self.current.kind {
+            TokenKind::Static => {
+                self.next();
+                "static".into()
+            },
+            _ => self.full_name_maybe_type_keyword()?
+        })
+    }
+
     pub(crate) fn ident_maybe_reserved(&mut self) -> ParseResult<String> {
         match self.current.kind {
             TokenKind::Static | TokenKind::Abstract | TokenKind::Final | TokenKind::For |
