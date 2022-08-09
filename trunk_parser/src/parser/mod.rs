@@ -1307,7 +1307,11 @@ impl Parser {
             return Ok(lhs);
         }
 
+        self.skip_comments();
+
         loop {
+            self.skip_comments();
+            
             let kind = match &self.current {
                 Token { kind: TokenKind::SemiColon | TokenKind::Eof, .. }  => break,
                 Token { kind, .. } => kind.clone()
