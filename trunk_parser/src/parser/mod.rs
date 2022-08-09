@@ -133,6 +133,8 @@ impl Parser {
     }
 
     fn statement(&mut self) -> ParseResult<Statement> {
+        self.skip_comments();
+        
         Ok(match &self.current.kind {
             TokenKind::InlineHtml(html) => {
                 let s = Statement::InlineHtml(html.to_string());
