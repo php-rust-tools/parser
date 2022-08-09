@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst, BackedEnumType, ClosureUse}, Identifier, Type, MatchArm, Catch, Case};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst, BackedEnumType, ClosureUse, Arg}, Identifier, Type, MatchArm, Catch, Case};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -1378,7 +1378,18 @@ impl Parser {
             TokenKind::LeftParen => {
                 let mut args = Vec::new();
                 while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
-                    args.push(self.expression(0)?);
+                    let mut name = None;
+                    if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
+                        name = Some(self.ident_maybe_reserved()?);
+                        self.next();
+                    }
+
+                    let value = self.expression(0)?;
+
+                    args.push(Arg {
+                        name,
+                        value
+                    });
 
                     self.optional_comma()?;
                 }
@@ -1420,11 +1431,20 @@ impl Parser {
                             self.lparen()?;
 
                             let mut args = vec![];
-                            while self.current.kind != TokenKind::RightParen {
-                                let arg = self.expression(0)?;
-    
-                                args.push(arg);
-
+                            while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                                let mut name = None;
+                                if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
+                                    name = Some(self.ident_maybe_reserved()?);
+                                    self.next();
+                                }
+            
+                                let value = self.expression(0)?;
+            
+                                args.push(Arg {
+                                    name,
+                                    value
+                                });
+            
                                 self.optional_comma()?;
                             }
 
@@ -1445,12 +1465,21 @@ impl Parser {
                     self.next();
 
                     let mut args = Vec::new();
-                    while self.current.kind != TokenKind::RightParen {
-                        let arg = self.expression(0)?;
-
+                    while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                        let mut name = None;
+                        if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
+                            name = Some(self.ident_maybe_reserved()?);
+                            self.next();
+                        }
+    
+                        let value = self.expression(0)?;
+    
+                        args.push(Arg {
+                            name,
+                            value
+                        });
+    
                         self.optional_comma()?;
-
-                        args.push(arg);
                     }
 
                     self.rparen()?;
@@ -1571,7 +1600,7 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use trunk_lexer::Lexer;
-    use crate::{Statement, Param, Expression, ast::{InfixOp, ElseIf, MethodFlag, ArrayItem}, Type, Identifier};
+    use crate::{Statement, Param, Expression, ast::{InfixOp, ElseIf, MethodFlag, ArrayItem, Arg}, Type, Identifier};
     use super::Parser;
 
     macro_rules! function {
@@ -1955,10 +1984,13 @@ mod tests {
                         lhs: Box::new(Expression::Call {
                             target: Box::new(Expression::Identifier { name: "fib".into() }),
                             args: vec![
-                                Expression::Infix {
-                                    lhs: Box::new(Expression::Variable { name: "n".into() }),
-                                    op: InfixOp::Sub,
-                                    rhs: Box::new(Expression::Int { i: 1 }),
+                                Arg {
+                                    name: None,
+                                    value: Expression::Infix {
+                                        lhs: Box::new(Expression::Variable { name: "n".into() }),
+                                        op: InfixOp::Sub,
+                                        rhs: Box::new(Expression::Int { i: 1 }),
+                                    }
                                 }
                             ]
                         }),
@@ -1966,10 +1998,13 @@ mod tests {
                         rhs: Box::new(Expression::Call {
                             target: Box::new(Expression::Identifier { name: "fib".into() }),
                             args: vec![
-                                Expression::Infix {
-                                    lhs: Box::new(Expression::Variable { name: "n".into() }),
-                                    op: InfixOp::Sub,
-                                    rhs: Box::new(Expression::Int { i: 2 }),
+                                Arg {
+                                    name: None,
+                                    value: Expression::Infix {
+                                        lhs: Box::new(Expression::Variable { name: "n".into() }),
+                                        op: InfixOp::Sub,
+                                        rhs: Box::new(Expression::Int { i: 2 }),
+                                    }
                                 }
                             ]
                         }),

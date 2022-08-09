@@ -346,7 +346,7 @@ pub enum Expression {
     },
     Call {
         target: Box<Self>,
-        args: Vec<Self>
+        args: Vec<Arg>
     },
     Identifier {
         name: String
@@ -387,12 +387,12 @@ pub enum Expression {
     MethodCall {
         target: Box<Self>,
         method: Identifier,
-        args: Vec<Self>
+        args: Vec<Arg>
     },
     StaticMethodCall {
         target: Box<Self>,
         method: Identifier,
-        args: Vec<Self>
+        args: Vec<Arg>
     },
     AnonymousClass {
         extends: Option<Identifier>,
@@ -440,6 +440,12 @@ pub enum Expression {
         kind: CastKind,
         value: Box<Self>,
     },
+}
+
+#[derive(Debug, PartialEq, Clone, Serialize)]
+pub struct Arg {
+    pub name: Option<String>,
+    pub value: Expression,
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
