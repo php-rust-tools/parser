@@ -965,7 +965,7 @@ impl Parser {
                             }
                         }
                     },
-                    TokenKind::Question | TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_) => {
+                    TokenKind::Question | TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_) | TokenKind::Array => {
                         let prop_type = self.type_string()?;
                         let var = self.var()?;
                         let mut value = None;
