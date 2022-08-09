@@ -789,7 +789,7 @@ impl Parser {
 
         if self.current.kind == TokenKind::Extends {
             self.next();
-            extends = Some(self.ident()?.into());
+            extends = Some(self.full_name()?.into());
         }
 
         let mut implements = Vec::new();
@@ -799,7 +799,7 @@ impl Parser {
             while self.current.kind != TokenKind::LeftBrace {
                 self.optional_comma()?;
 
-                implements.push(self.ident()?.into());
+                implements.push(self.full_name()?.into());
             }
         }
 
@@ -1270,7 +1270,7 @@ impl Parser {
 
                     if self.current.kind == TokenKind::Extends {
                         self.next();
-                        extends = Some(self.ident()?.into());
+                        extends = Some(self.full_name()?.into());
                     }
 
                     let mut implements = Vec::new();
@@ -1280,7 +1280,7 @@ impl Parser {
                         while self.current.kind != TokenKind::LeftBrace {
                             self.optional_comma()?;
 
-                            implements.push(self.ident()?.into());
+                            implements.push(self.full_name()?.into());
                         }
                     }
 
