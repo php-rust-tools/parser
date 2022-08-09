@@ -344,7 +344,12 @@ impl Lexer {
 
                 while let Some(n) = self.peek {
                     match n {
-                        'a'..='z' | 'A'..='Z' | '\u{80}'..='\u{ff}' | '_' => {
+                        '0'..='9' if buffer.len() > 1 => {
+                            self.col += 1;
+                            buffer.push(n);
+                            self.next();
+                        },
+                        'a'..='z' | 'A'..='Z' | '\u{80}'..='\u{ff}' | '_'  => {
                             self.col += 1;
 
                             buffer.push(n);
