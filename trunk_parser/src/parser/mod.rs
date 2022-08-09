@@ -135,7 +135,7 @@ impl Parser {
     fn statement(&mut self) -> ParseResult<Statement> {
         self.skip_comments();
         
-        Ok(match &self.current.kind {
+        let statement = match &self.current.kind {
             TokenKind::InlineHtml(html) => {
                 let s = Statement::InlineHtml(html.to_string());
                 self.next();
@@ -152,7 +152,7 @@ impl Parser {
 
                 let condition = self.expression(0)?;
 
-                self.rparen();
+                self.rparen()?;
                 self.lbrace()?;
 
                 let body = self.block(&TokenKind::RightBrace)?;
@@ -746,7 +746,11 @@ impl Parser {
 
                 Statement::Expression { expr }
             }
-        })
+        };
+
+        self.skip_comments();
+
+        Ok(statement)
     }
 
     fn function(&mut self) -> ParseResult<Statement> {
@@ -1384,6 +1388,8 @@ impl Parser {
 
             break;
         }
+
+        self.skip_comments();
 
         Ok(lhs)
     }
