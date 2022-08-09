@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst, BackedEnumType}, Identifier, Type, MatchArm, Catch, Case};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst, BackedEnumType, ClosureUse}, Identifier, Type, MatchArm, Catch, Case};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -1144,9 +1144,19 @@ impl Parser {
                     self.lparen()?;
 
                     while self.current.kind != TokenKind::RightParen {
-                        let var = match self.expression(0)? {
-                            s @ Expression::Variable { .. } => s,
-                            _ => return Err(ParseError::UnexpectedToken("expected variable".into(), self.current.span))
+                        let var = match self.current.kind {
+                            TokenKind::Ampersand => {
+                                self.next();
+
+                                match self.expression(0)? {
+                                    s @ Expression::Variable { .. } => ClosureUse { var: s, by_ref: true },
+                                    _ => return Err(ParseError::UnexpectedToken("expected variable".into(), self.current.span))
+                                }
+                            },
+                            _ => match self.expression(0)? {
+                                s @ Expression::Variable { .. } => ClosureUse { var: s, by_ref: false },
+                                _ => return Err(ParseError::UnexpectedToken("expected variable".into(), self.current.span))
+                            }
                         };
 
                         uses.push(var);

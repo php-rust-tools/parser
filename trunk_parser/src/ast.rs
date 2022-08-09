@@ -352,7 +352,7 @@ pub enum Expression {
     },
     Closure {
         params: Vec<Param>,
-        uses: Vec<Expression>,
+        uses: Vec<ClosureUse>,
         return_type: Option<Type>,
         body: Block
     },
@@ -436,6 +436,12 @@ pub enum Expression {
         kind: CastKind,
         value: Box<Self>,
     },
+}
+
+#[derive(Debug, PartialEq, Clone, Serialize)]
+pub struct ClosureUse {
+    pub var: Expression,
+    pub by_ref: bool,
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
