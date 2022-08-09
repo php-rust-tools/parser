@@ -138,6 +138,7 @@ pub enum TokenKind {
     Var,
     Variable(String),
     Yield,
+    While,
 }
 
 #[derive(Debug, Clone)]
@@ -280,6 +281,7 @@ impl Display for TokenKind {
             Self::Var => "var",
             Self::Variable(var) => &var[..],
             Self::Yield => "yield",
+            Self::While => "while",
             _ => todo!("format token: {:?}", self)
         })
     }

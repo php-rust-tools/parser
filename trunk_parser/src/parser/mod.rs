@@ -144,6 +144,21 @@ impl Parser {
                 self.next();
                 s
             },
+            TokenKind::While => {
+                self.next();
+                self.lparen()?;
+
+                let condition = self.expression(0)?;
+
+                self.rparen();
+                self.lbrace()?;
+
+                let body = self.block(&TokenKind::RightBrace)?;
+                
+                self.rbrace()?;
+
+                Statement::While { condition, body }
+            },
             TokenKind::Require => {
                 self.next();
 

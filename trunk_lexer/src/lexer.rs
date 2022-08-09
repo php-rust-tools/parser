@@ -831,6 +831,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "var" => TokenKind::Var,
         "yield" => TokenKind::Yield,
         "__DIR__" => TokenKind::DirConstant,
+        "while" => TokenKind::While,
         _ => return None,
     })
 }

@@ -133,6 +133,10 @@ pub enum UseKind {
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
     InlineHtml(String),
+    While {
+        condition: Expression,
+        body: Block,
+    },
     For {
         init: Option<Expression>,
         condition: Option<Expression>,
