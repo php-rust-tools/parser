@@ -1524,6 +1524,11 @@ impl Parser {
                         self.rbrace()?;
                         expr
                     },
+                    TokenKind::Variable(ref var) => {
+                        let var = Expression::Variable { name: var.to_string() };
+                        self.next();
+                        var
+                    },
                     _ => {
                         Expression::Identifier { name: self.ident_maybe_reserved()? }
                     }
