@@ -194,6 +194,7 @@ impl Display for TokenKind {
             Self::Const => "const",
             Self::ConstantString(comment) => &comment[..],
             Self::Continue => "continue",
+            Self::IntCast => "(int)",
             Self::CurlyOpen => "{$",
             Self::Declare => "declare",
             Self::Decrement => "--",
