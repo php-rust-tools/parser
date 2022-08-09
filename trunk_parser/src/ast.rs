@@ -141,6 +141,7 @@ pub enum Statement {
     },
     Foreach {
         expr: Expression,
+        by_ref: bool,
         key_var: Option<Expression>,
         value_var: Expression,
         body: Block,

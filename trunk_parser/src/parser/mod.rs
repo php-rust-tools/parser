@@ -202,6 +202,11 @@ impl Parser {
 
                 expect!(self, TokenKind::As, "expected 'as'");
 
+                let mut by_ref = self.current.kind == TokenKind::Ampersand;
+                if by_ref {
+                    self.next();
+                }
+
                 let mut key_var = None;
                 let mut value_var = self.expression(0)?;
 
@@ -209,6 +214,12 @@ impl Parser {
                     self.next();
 
                     key_var = Some(value_var.clone());
+                    
+                    by_ref = self.current.kind == TokenKind::Ampersand;
+                    if by_ref {
+                        self.next();
+                    }
+                    
                     value_var = self.expression(0)?;
                 }
 
@@ -219,7 +230,7 @@ impl Parser {
 
                 self.rbrace()?;
 
-                Statement::Foreach { expr, key_var, value_var, body }
+                Statement::Foreach { expr, by_ref, key_var, value_var, body }
             },
             TokenKind::Abstract => {
                 self.next();  
@@ -2317,6 +2328,7 @@ mod tests {
         assert_ast("<?php foreach ($foo as $bar) {}", &[
             Statement::Foreach {
                 expr: Expression::Variable { name: "foo".into() },
+                by_ref: false,
                 key_var: None,
                 value_var: Expression::Variable { name: "bar".into() },
                 body: vec![],
@@ -2326,6 +2338,7 @@ mod tests {
         assert_ast("<?php foreach ($foo as $bar => $baz) {}", &[
             Statement::Foreach {
                 expr: Expression::Variable { name: "foo".into() },
+                by_ref: false,
                 key_var: Some(Expression::Variable { name: "bar".into() }),
                 value_var: Expression::Variable { name: "baz".into() },
                 body: vec![],
@@ -2335,6 +2348,7 @@ mod tests {
         assert_ast("<?php foreach ($foo as [$baz, $car]) {}", &[
             Statement::Foreach {
                 expr: Expression::Variable { name: "foo".into() },
+                by_ref: false,
                 key_var: None,
                 value_var: Expression::Array {
                     items: vec![
