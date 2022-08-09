@@ -21,6 +21,9 @@ struct Args {
 
     #[structopt(short, long, help = "Dump tokens.")]
     dump_tokens: bool,
+
+    #[structopt(short, long, help = "Print the AST.")]
+    print: bool,
 }
 
 fn main() {
@@ -68,7 +71,7 @@ fn main() {
                 exit(1);
             }
         };
-    } else {
+    } else if args.print {
         println!("{:#?}", ast);
     }
 }
