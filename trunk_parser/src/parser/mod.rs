@@ -1493,7 +1493,7 @@ impl Parser {
                     },
                 }
             },
-            TokenKind::Arrow => {
+            TokenKind::Arrow | TokenKind::NullsafeArrow => {
                 let property = match self.current.kind {
                     TokenKind::LeftBrace => {
                         self.lbrace()?;
@@ -1536,7 +1536,11 @@ impl Parser {
 
                     Expression::MethodCall { target: Box::new(lhs), method: Box::new(property), args }
                 } else {
-                    Expression::PropertyFetch { target: Box::new(lhs), property: Box::new(property) }
+                    if op == &TokenKind::NullsafeArrow {
+                        Expression::NullsafePropertyFetch { target: Box::new(lhs), property: Box::new(property) }
+                    } else {
+                        Expression::PropertyFetch { target: Box::new(lhs), property: Box::new(property) }
+                    }
                 }
             },
             TokenKind::Increment => {
@@ -1610,7 +1614,7 @@ fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
     Some(match t {
         TokenKind::Increment | TokenKind::Decrement => 77,
         TokenKind::LeftParen | TokenKind::LeftBracket => 19,
-        TokenKind::Arrow | TokenKind::DoubleColon => 18,
+        TokenKind::Arrow | TokenKind::NullsafeArrow | TokenKind::DoubleColon => 18,
         TokenKind::Coalesce => 11,
         _ => return None
     })

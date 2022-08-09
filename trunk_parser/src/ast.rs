@@ -380,6 +380,10 @@ pub enum Expression {
         target: Box<Self>,
         property: Box<Self>,
     },
+    NullsafePropertyFetch {
+        target: Box<Self>,
+        property: Box<Self>,
+    },
     StaticPropertyFetch {
         target: Box<Self>,
         property: Box<Self>
