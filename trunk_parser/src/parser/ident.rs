@@ -38,7 +38,7 @@ impl Parser {
             TokenKind::Static | TokenKind::Abstract | TokenKind::Final | TokenKind::For |
             TokenKind::Private | TokenKind::Protected | TokenKind::Public | TokenKind::Require |
             TokenKind::RequireOnce | TokenKind::New | TokenKind::Clone | TokenKind::If |
-            TokenKind::Else | TokenKind::ElseIf | TokenKind::Default | TokenKind::Enum => {
+            TokenKind::Else | TokenKind::ElseIf | TokenKind::Default | TokenKind::Enum | TokenKind::Match => {
                 let string = self.current.kind.to_string();
                 self.next();
                 Ok(string)
