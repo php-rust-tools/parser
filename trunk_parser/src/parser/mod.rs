@@ -1279,9 +1279,23 @@ impl Parser {
                         self.lparen()?;
     
                         while self.current.kind != TokenKind::RightParen {
+                            let mut name = None;
+                            let mut unpack = false;
+                            if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
+                                name = Some(self.ident_maybe_reserved()?);
+                                self.next();
+                            } else if self.current.kind == TokenKind::Ellipsis {
+                                self.next();
+                                unpack = true;
+                            }
+
                             let value = self.expression(0)?;
     
-                            args.push(value);
+                            args.push(Arg {
+                                name,
+                                unpack,
+                                value
+                            });
     
                             self.optional_comma()?;
                         }
@@ -1325,9 +1339,23 @@ impl Parser {
                     self.lparen()?;
 
                     while self.current.kind != TokenKind::RightParen {
+                        let mut name = None;
+                        let mut unpack = false;
+                        if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
+                            name = Some(self.ident_maybe_reserved()?);
+                            self.next();
+                        } else if self.current.kind == TokenKind::Ellipsis {
+                            self.next();
+                            unpack = true;
+                        }
+
                         let value = self.expression(0)?;
 
-                        args.push(value);
+                        args.push(Arg {
+                            name,
+                            unpack,
+                            value
+                        });
 
                         self.optional_comma()?;
                     }
@@ -2399,8 +2427,16 @@ mod tests {
                     body: vec![]
                 }),
                 args: vec![
-                    Expression::Int { i: 1 },
-                    Expression::Int { i: 2 },
+                    Arg {
+                        name: None,
+                        value: Expression::Int { i: 1 },
+                        unpack: false,
+                    },
+                    Arg {
+                        name: None,
+                        value: Expression::Int { i: 2 },
+                        unpack: false,
+                    },
                 ],
             })
         ]);

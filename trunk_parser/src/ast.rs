@@ -383,7 +383,7 @@ pub enum Expression {
     },
     New {
         target: Box<Self>,
-        args: Vec<Self>
+        args: Vec<Arg>,
     },
     ConstantString {
         value: String,
