@@ -675,6 +675,10 @@ impl Lexer {
                     self.next();
 
                     TokenKind::Arrow
+                } else if let Some('=') = self.peek {
+                    self.col += 1;
+                    self.next();
+                    TokenKind::MinusEquals
                 } else {
                     TokenKind::Minus
                 }
