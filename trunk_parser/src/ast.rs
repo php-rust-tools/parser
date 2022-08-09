@@ -132,8 +132,17 @@ pub enum UseKind {
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
+pub struct StaticVar {
+    pub var: Expression,
+    pub default: Option<Expression>,
+}
+
+#[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
     InlineHtml(String),
+    Static {
+        vars: Vec<StaticVar>,
+    },
     While {
         condition: Expression,
         body: Block,

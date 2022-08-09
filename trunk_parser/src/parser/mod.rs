@@ -1,6 +1,6 @@
 use std::{vec::IntoIter, fmt::{Display}};
 use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst, BackedEnumType, ClosureUse, Arg}, Identifier, Type, MatchArm, Catch, Case};
+use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst, BackedEnumType, ClosureUse, Arg, StaticVar}, Identifier, Type, MatchArm, Catch, Case};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -136,6 +136,29 @@ impl Parser {
         self.skip_comments();
         
         let statement = match &self.current.kind {
+            TokenKind::Static if matches!(self.peek.kind, TokenKind::Variable(_)) => {
+                self.next();
+
+                let mut vars = vec![];
+
+                while self.current.kind != TokenKind::SemiColon {
+                    let var = Expression::Variable { name: self.var()? };
+                    let mut default = None;
+                    
+                    if self.current.kind == TokenKind::Equals {
+                        expect!(self, TokenKind::Equals, "expected =");
+                        default = Some(self.expression(0)?);
+                    }
+
+                    self.optional_comma()?;
+
+                    vars.push(StaticVar { var, default })
+                }
+
+                self.semi()?;
+                
+                Statement::Static { vars }
+            },
             TokenKind::InlineHtml(html) => {
                 let s = Statement::InlineHtml(html.to_string());
                 self.next();
