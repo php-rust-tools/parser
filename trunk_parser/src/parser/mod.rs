@@ -313,6 +313,7 @@ impl Parser {
                 self.lbrace()?;
 
                 let mut body = Block::new();
+                self.skip_comments();
                 while self.current.kind != TokenKind::RightBrace {
                     match self.current.kind {
                         TokenKind::Public => {
@@ -364,7 +365,9 @@ impl Parser {
                             body.push(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: vec![] })
                         },
                         _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span)),
-                    }
+                    };
+
+                    self.skip_comments();
                 }
 
                 self.rbrace()?;
