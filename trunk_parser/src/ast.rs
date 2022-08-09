@@ -378,7 +378,7 @@ pub enum Expression {
     },
     PropertyFetch {
         target: Box<Self>,
-        property: Identifier,
+        property: Box<Self>,
     },
     StaticPropertyFetch {
         target: Box<Self>,
@@ -390,7 +390,7 @@ pub enum Expression {
     },
     MethodCall {
         target: Box<Self>,
-        method: Identifier,
+        method: Box<Self>,
         args: Vec<Arg>
     },
     StaticMethodCall {
@@ -450,6 +450,7 @@ pub enum Expression {
 pub struct Arg {
     pub name: Option<String>,
     pub value: Expression,
+    pub unpack: bool,
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]

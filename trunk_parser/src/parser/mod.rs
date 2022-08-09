@@ -1394,15 +1394,20 @@ impl Parser {
                 let mut args = Vec::new();
                 while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
                     let mut name = None;
+                    let mut unpack = false;
                     if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
                         name = Some(self.ident_maybe_reserved()?);
                         self.next();
+                    } else if self.current.kind == TokenKind::Ellipsis {
+                        self.next();
+                        unpack = true;
                     }
 
                     let value = self.expression(0)?;
 
                     args.push(Arg {
                         name,
+                        unpack,
                         value
                     });
 
@@ -1448,15 +1453,20 @@ impl Parser {
                             let mut args = vec![];
                             while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
                                 let mut name = None;
+                                let mut unpack = false;
                                 if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
                                     name = Some(self.ident_maybe_reserved()?);
                                     self.next();
+                                } else if self.current.kind == TokenKind::Ellipsis {
+                                    self.next();
+                                    unpack = true;
                                 }
             
                                 let value = self.expression(0)?;
             
                                 args.push(Arg {
                                     name,
+                                    unpack,
                                     value
                                 });
             
@@ -1473,8 +1483,17 @@ impl Parser {
                 }
             },
             TokenKind::Arrow => {
-                // TODO: Add support for dynamic property fetch or method call here.
-                let property = self.ident_maybe_reserved()?;
+                let property = match self.current.kind {
+                    TokenKind::LeftBrace => {
+                        self.lbrace()?;
+                        let expr = self.expression(0)?;
+                        self.rbrace()?;
+                        expr
+                    },
+                    _ => {
+                        Expression::Identifier { name: self.ident_maybe_reserved()? }
+                    }
+                };
 
                 if self.current.kind == TokenKind::LeftParen {
                     self.next();
@@ -1482,16 +1501,21 @@ impl Parser {
                     let mut args = Vec::new();
                     while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
                         let mut name = None;
+                        let mut unpack = false;
                         if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
                             name = Some(self.ident_maybe_reserved()?);
                             self.next();
+                        } else if self.current.kind == TokenKind::Ellipsis {
+                            self.next();
+                            unpack = true;
                         }
     
                         let value = self.expression(0)?;
     
                         args.push(Arg {
                             name,
-                            value
+                            value,
+                            unpack
                         });
     
                         self.optional_comma()?;
@@ -1499,9 +1523,9 @@ impl Parser {
 
                     self.rparen()?;
 
-                    Expression::MethodCall { target: Box::new(lhs), method: property.into(), args }
+                    Expression::MethodCall { target: Box::new(lhs), method: Box::new(property), args }
                 } else {
-                    Expression::PropertyFetch { target: Box::new(lhs), property: property.into() }
+                    Expression::PropertyFetch { target: Box::new(lhs), property: Box::new(property) }
                 }
             },
             TokenKind::Increment => {
@@ -1890,14 +1914,14 @@ mod tests {
         assert_ast("<?php $foo->bar; $foo->bar->baz;", &[
             expr!(Expression::PropertyFetch {
                 target: Box::new(Expression::Variable { name: "foo".into() }),
-                property: Identifier::from("bar")
+                property: Box::new(Expression::Identifier { name: "bar".into() })
             }),
             expr!(Expression::PropertyFetch {
                 target: Box::new(Expression::PropertyFetch {
                     target: Box::new(Expression::Variable { name: "foo".into() }),
-                    property: Identifier::from("bar")
+                    property: Box::new(Expression::Identifier { name: "bar".into() })
                 }),
-                property: Identifier::from("baz")
+                property: Box::new(Expression::Identifier { name: "baz".into() })
             })
         ]);
     }
@@ -1907,7 +1931,7 @@ mod tests {
         assert_ast("<?php $foo->bar();", &[
             expr!(Expression::MethodCall {
                 target: Box::new(Expression::Variable { name: "foo".into() }),
-                method: Identifier::from("bar"),
+                method: Box::new(Expression::Identifier { name: "bar".into() }),
                 args: vec![]
             })
         ]);
@@ -1916,10 +1940,10 @@ mod tests {
             expr!(Expression::MethodCall {
                 target: Box::new(Expression::MethodCall {
                     target: Box::new(Expression::Variable { name: "foo".into() }),
-                    method: Identifier::from("bar"),
+                    method: Box::new(Expression::Identifier { name: "bar".into() }),
                     args: vec![]
                 }),
-                method: Identifier::from("baz"),
+                method: Box::new(Expression::Identifier { name: "baz".into() }),
                 args: vec![]
             })
         ]);
@@ -1928,7 +1952,7 @@ mod tests {
             expr!(Expression::Call {
                 target: Box::new(Expression::MethodCall {
                     target: Box::new(Expression::Variable{ name: "foo".into() }),
-                    method: Identifier::from("bar"),
+                    method: Box::new(Expression::Identifier { name: "bar".into() }),
                     args: vec![]
                 }),
                 args: vec![]
@@ -2005,7 +2029,8 @@ mod tests {
                                         lhs: Box::new(Expression::Variable { name: "n".into() }),
                                         op: InfixOp::Sub,
                                         rhs: Box::new(Expression::Int { i: 1 }),
-                                    }
+                                    },
+                                    unpack: false,
                                 }
                             ]
                         }),
@@ -2019,7 +2044,8 @@ mod tests {
                                         lhs: Box::new(Expression::Variable { name: "n".into() }),
                                         op: InfixOp::Sub,
                                         rhs: Box::new(Expression::Int { i: 2 }),
-                                    }
+                                    },
+                                    unpack: false,
                                 }
                             ]
                         }),
