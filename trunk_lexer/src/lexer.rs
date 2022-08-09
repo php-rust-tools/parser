@@ -643,6 +643,10 @@ impl Lexer {
                     self.col += 4;
                     self.skip(5);
                     TokenKind::IntCast
+                } else if self.try_read("float)") {
+                    self.col += 6;
+                    self.skip(7);
+                    TokenKind::DoubleCast
                 } else {
                     TokenKind::LeftParen
                 }

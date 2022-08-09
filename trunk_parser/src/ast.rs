@@ -274,6 +274,7 @@ pub enum CastKind {
     Object,
     Bool,
     Int,
+    Double,
 }
 
 impl From<TokenKind> for CastKind {
@@ -283,6 +284,7 @@ impl From<TokenKind> for CastKind {
             TokenKind::ObjectCast => Self::Object,
             TokenKind::BoolCast => Self::Bool,
             TokenKind::IntCast => Self::Int,
+            TokenKind::DoubleCast => Self::Double,
             _ => unreachable!()
         }
     }

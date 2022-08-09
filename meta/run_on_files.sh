@@ -4,9 +4,11 @@ set -xe
 
 dir=$(realpath $1)
 
+cargo build --release
+
 for file in $(find $dir -name "*.php")
 do
-    cargo run -q -- $file
+    ./target/release/phpast $file
 
     if [ $? -ne 0 ]
     then
