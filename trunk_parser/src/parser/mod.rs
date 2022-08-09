@@ -1628,7 +1628,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
         TokenKind::Question | TokenKind::QuestionColon => (6, 7),
         TokenKind::BooleanAnd => (4, 5),
         TokenKind::BooleanOr => (2, 3),
-        TokenKind::Equals | TokenKind::PlusEquals | TokenKind::DotEquals => (0, 1),
+        TokenKind::Equals | TokenKind::PlusEquals | TokenKind::DotEquals | TokenKind::CoalesceEqual => (0, 1),
         _ => return None,
     })
 }
@@ -2218,6 +2218,7 @@ mod tests {
                         r#type: Some(Type::Plain("string".into())),
                         variadic: false,
                         default: None,
+                        flag: None,
                     }
                 ],
                 body: vec![],
@@ -2237,6 +2238,7 @@ mod tests {
                         r#type: None,
                         variadic: true,
                         default: None,
+                        flag: None,
                     }
                 ],
                 body: vec![],
@@ -2253,6 +2255,7 @@ mod tests {
                         r#type: Some(Type::Plain("string".into())),
                         variadic: true,
                         default: None,
+                        flag: None,
                     }
                 ],
                 body: vec![],
@@ -2269,18 +2272,21 @@ mod tests {
                         r#type: None,
                         variadic: false,
                         default: None,
+                        flag: None,
                     },
                     Param {
                         name: Expression::Variable { name: "baz".into() },
                         r#type: None,
                         variadic: false,
                         default: None,
+                        flag: None,
                     },
                     Param {
                         name: Expression::Variable { name: "car".into() },
                         r#type: None,
                         variadic: true,
                         default: None,
+                        flag: None,
                     }
                 ],
                 body: vec![],
@@ -2300,6 +2306,7 @@ mod tests {
                         r#type: Some(Type::Nullable("string".into())),
                         variadic: false,
                         default: None,
+                        flag: None,
                     }
                 ],
                 body: vec![],
@@ -2322,6 +2329,7 @@ mod tests {
                         ])),
                         variadic: false,
                         default: None,
+                        flag: None,
                     }
                 ],
                 body: vec![],
@@ -2344,6 +2352,7 @@ mod tests {
                         ])),
                         variadic: false,
                         default: None,
+                        flag: None,
                     }
                 ],
                 body: vec![],

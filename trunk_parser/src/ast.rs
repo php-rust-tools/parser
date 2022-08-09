@@ -512,6 +512,7 @@ pub enum InfixOp {
     AddAssign,
     Pow,
     Instanceof,
+    CoalesceAssign,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -537,6 +538,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::PlusEquals => Self::AddAssign,
             TokenKind::Pow => Self::Pow,
             TokenKind::Instanceof => Self::Instanceof,
+            TokenKind::CoalesceEqual => Self::CoalesceAssign,
             _ => unreachable!()
         }
     }
