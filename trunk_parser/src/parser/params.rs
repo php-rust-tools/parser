@@ -1,4 +1,4 @@
-use crate::{ast::ParamList, ParseError, Param, Expression};
+use crate::{ast::{ParamList, PropertyFlag}, ParseError, Param, Expression};
 use trunk_lexer::TokenKind;
 
 use super::Parser;
@@ -9,6 +9,14 @@ impl Parser {
 
         while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
             let mut param_type = None;
+
+            let flag: Option<PropertyFlag> = if matches!(self.current.kind, TokenKind::Public | TokenKind::Protected | TokenKind::Private) {
+                let flag = self.current.kind.clone().into();
+                self.next();
+                Some(flag)
+            } else {
+                None
+            };
 
             // 1. If we don't see a variable, we should expect a type-string.
             if ! matches!(self.current.kind, TokenKind::Variable(_) | TokenKind::Ellipsis) || self.config.force_type_strings {
@@ -35,7 +43,8 @@ impl Parser {
                 name: Expression::Variable { name: var },
                 r#type: param_type,
                 variadic,
-                default
+                default,
+                flag
             });
             
             self.optional_comma()?;

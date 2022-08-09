@@ -43,11 +43,12 @@ pub struct Param {
     pub r#type: Option<Type>,
     pub variadic: bool,
     pub default: Option<Expression>,
+    pub flag: Option<PropertyFlag>,
 }
 
 impl From<String> for Param {
     fn from(name: String) -> Self {
-        Self { name: Expression::Variable { name }, r#type: None, variadic: false, default: None }
+        Self { name: Expression::Variable { name }, r#type: None, variadic: false, default: None, flag: None }
     }
 }
 
