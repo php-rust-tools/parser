@@ -1498,7 +1498,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
         TokenKind::Question => (6, 7),
         TokenKind::BooleanAnd => (4, 5),
         TokenKind::BooleanOr => (2, 3),
-        TokenKind::Equals | TokenKind::PlusEquals => (0, 1),
+        TokenKind::Equals | TokenKind::PlusEquals | TokenKind::DotEquals => (0, 1),
         _ => return None,
     })
 }

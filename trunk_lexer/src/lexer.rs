@@ -401,6 +401,10 @@ impl Lexer {
                     } else {
                         todo!("don't know how to handle this case yet, it should just be 2 Dot tokens...")
                     }
+                } else if let Some('=') = self.peek {
+                    self.next();
+                    self.col += 1;
+                    TokenKind::DotEquals
                 } else {
                     TokenKind::Dot
                 }
