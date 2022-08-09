@@ -37,6 +37,7 @@ pub enum TokenKind {
     CloseTag,
     Coalesce,
     CoalesceEqual,
+    AsteriskEqual,
     Colon,
     Comma,
     Comment(String),
@@ -157,6 +158,7 @@ impl Default for Token {
 impl Display for TokenKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", match self {
+            Self::AsteriskEqual => "*=",
             Self::ObjectCast => "(object)",
             Self::Abstract => "abstract",
             Self::Ampersand => "&",

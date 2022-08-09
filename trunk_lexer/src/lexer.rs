@@ -593,6 +593,10 @@ impl Lexer {
                     self.col += 1;
                     self.next();
                     TokenKind::Pow
+                } else if let Some('=') = self.peek {
+                    self.col += 1;
+                    self.next();
+                    TokenKind::AsteriskEqual
                 } else {
                     TokenKind::Asterisk
                 }
