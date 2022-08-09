@@ -473,7 +473,7 @@ impl Lexer {
 
                 let mut buffer = String::from(char);
                 while let Some(next) = self.peek {
-                    if next.is_alphabetic() || next == '_' {
+                    if next.is_alphanumeric() || next == '_' {
                         buffer.push(next);
                         self.next();
                         self.col += 1;
