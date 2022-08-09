@@ -257,12 +257,14 @@ pub enum Statement {
 #[derive(Debug, Clone, Eq, PartialEq, Serialize)]
 pub enum CastKind {
     String,
+    Object,
 }
 
 impl From<TokenKind> for CastKind {
     fn from(kind: TokenKind) -> Self {
         match kind {
             TokenKind::StringCast => Self::String,
+            TokenKind::ObjectCast => Self::Object,
             _ => unreachable!()
         }
     }
