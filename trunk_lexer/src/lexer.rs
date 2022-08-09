@@ -225,6 +225,10 @@ impl Lexer {
                     } else {
                         TokenKind::Coalesce
                     }
+                } else if let Some(':') = self.peek {
+                    self.col += 1;
+                    self.next();
+                    TokenKind::QuestionColon
                 } else {
                     TokenKind::Question
                 }
