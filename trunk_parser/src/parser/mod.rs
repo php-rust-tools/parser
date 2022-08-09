@@ -89,11 +89,11 @@ impl Parser {
     fn type_string(&mut self) -> ParseResult<Type> {
         if self.current.kind == TokenKind::Question {
             self.next();
-            let t = self.full_name()?;
+            let t = self.full_name_maybe_type_keyword()?;
             return Ok(Type::Nullable(t));
         }
 
-        let id = self.full_name()?;
+        let id = self.full_name_maybe_type_keyword()?;
 
         if self.current.kind == TokenKind::Pipe {
             self.next();
@@ -101,7 +101,7 @@ impl Parser {
             let mut types = vec![id];
 
             while ! self.is_eof() {
-                let id = self.full_name()?;
+                let id = self.full_name_maybe_type_keyword()?;
                 types.push(id);
 
                 if self.current.kind != TokenKind::Pipe {
@@ -118,7 +118,7 @@ impl Parser {
             let mut types = vec![id];
 
             while ! self.is_eof() {
-                let id = self.full_name()?;
+                let id = self.full_name_maybe_type_keyword()?;
                 types.push(id);
 
                 if self.current.kind != TokenKind::Ampersand {

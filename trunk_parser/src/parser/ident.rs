@@ -22,6 +22,17 @@ impl Parser {
         Ok(expect!(self, TokenKind::Variable(v), v, "expected variable name"))
     }
 
+    pub(crate) fn full_name_maybe_type_keyword(&mut self) -> ParseResult<String> {
+        match self.current.kind {
+            TokenKind::Array | TokenKind::Callable => {
+                let r = Ok(self.current.kind.to_string());
+                self.next();
+                r
+            },
+            _ => self.full_name()
+        }
+    }
+
     pub(crate) fn ident_maybe_reserved(&mut self) -> ParseResult<String> {
         match self.current.kind {
             TokenKind::Static | TokenKind::Abstract | TokenKind::Final | TokenKind::For |
