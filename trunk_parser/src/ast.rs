@@ -412,7 +412,7 @@ pub enum Expression {
     },
     Ternary {
         condition: Box<Self>,
-        then: Box<Self>,
+        then: Option<Box<Self>>,
         r#else: Box<Self>
     },
     Coalesce {

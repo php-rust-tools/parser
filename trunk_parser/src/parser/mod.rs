@@ -1339,7 +1339,11 @@ impl Parser {
                         let then = self.expression(0)?;
                         expect!(self, TokenKind::Colon, "expected :");
                         let otherwise = self.expression(rbp)?;
-                        lhs = Expression::Ternary { condition: Box::new(lhs), then: Box::new(then), r#else: Box::new(otherwise) }
+                        lhs = Expression::Ternary { condition: Box::new(lhs), then: Some(Box::new(then)), r#else: Box::new(otherwise) }
+                    },
+                    TokenKind::QuestionColon => {
+                        let r#else = self.expression(0)?;
+                        lhs = Expression::Ternary { condition: Box::new(lhs), then: None, r#else: Box::new(r#else) }
                     },
                     _ => {
                         let rhs = self.expression(rbp)?;
@@ -1387,16 +1391,6 @@ impl Parser {
 
                     Expression::ArrayIndex { array: Box::new(lhs), index: Some(Box::new(index)) }
                 }
-            },
-            TokenKind::Question => {
-                // TODO: Handle short-hand ternaries here too.
-                let then = self.expression(0)?;
-
-                expect!(self, TokenKind::Colon, "expected :");
-
-                let otherwise = self.expression(0)?;
-
-                Expression::Ternary { condition: Box::new(lhs), then: Box::new(then), r#else: Box::new(otherwise) }
             },
             TokenKind::DoubleColon => {
                 match self.current.kind.clone() {
@@ -1517,7 +1511,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
         TokenKind::Dot => (12, 12),
         TokenKind::LessThan | TokenKind::GreaterThan | TokenKind::LessThanEquals | TokenKind::GreaterThanEquals => (10, 11),
         TokenKind::DoubleEquals | TokenKind::TripleEquals | TokenKind::BangEquals | TokenKind::BangDoubleEquals => (8, 9),
-        TokenKind::Question => (6, 7),
+        TokenKind::Question | TokenKind::QuestionColon => (6, 7),
         TokenKind::BooleanAnd => (4, 5),
         TokenKind::BooleanOr => (2, 3),
         TokenKind::Equals | TokenKind::PlusEquals | TokenKind::DotEquals => (0, 1),
@@ -1676,7 +1670,7 @@ mod tests {
         assert_ast("<?php 1 ? 2 : 3;", &[
             expr!(Expression::Ternary {
                 condition: Box::new(Expression::Int { i: 1 }),
-                then: Box::new(Expression::Int { i: 2 }),
+                then: Some(Box::new(Expression::Int { i: 2 })),
                 r#else: Box::new(Expression::Int { i: 3 }),
             })
         ]);
@@ -1684,11 +1678,11 @@ mod tests {
         assert_ast("<?php 1 ? 2 ? 3 : 4 : 5;", &[
             expr!(Expression::Ternary {
                 condition: Box::new(Expression::Int { i: 1 }),
-                then: Box::new(Expression::Ternary {
+                then: Some(Box::new(Expression::Ternary {
                     condition: Box::new(Expression::Int { i: 2 }),
-                    then: Box::new(Expression::Int { i: 3 }),
+                    then: Some(Box::new(Expression::Int { i: 3 })),
                     r#else: Box::new(Expression::Int { i: 4 }),
-                }),
+                })),
                 r#else: Box::new(Expression::Int { i: 5 }),
             })
         ]);
