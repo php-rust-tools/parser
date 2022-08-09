@@ -1436,6 +1436,12 @@ impl Parser {
                     Expression::PropertyFetch { target: Box::new(lhs), property: property.into() }
                 }
             },
+            TokenKind::Increment => {
+                Expression::Increment { value: Box::new(lhs) }
+            },
+            TokenKind::Decrement => {
+                Expression::Decrement { value: Box::new(lhs) }
+            },
             _ => todo!("postfix: {:?}", op),
         })
     }
@@ -1499,6 +1505,7 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
 
 fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
     Some(match t {
+        TokenKind::Increment | TokenKind::Decrement => 77,
         TokenKind::LeftParen | TokenKind::LeftBracket => 19,
         TokenKind::Arrow | TokenKind::DoubleColon => 18,
         TokenKind::Coalesce => 11,

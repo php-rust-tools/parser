@@ -320,6 +320,12 @@ pub struct Use {
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Expression {
+    Increment {
+        value: Box<Self>,
+    },
+    Decrement {
+        value: Box<Self>,
+    },
     Int {
         i: i64
     },
