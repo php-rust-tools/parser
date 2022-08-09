@@ -782,6 +782,7 @@ impl Parser {
         self.lbrace()?;
 
         let mut body = Vec::new();
+        self.gather_comments();
         while self.current.kind != TokenKind::RightBrace && ! self.is_eof() {
             body.push(self.class_statement()?);
         }
