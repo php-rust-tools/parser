@@ -635,6 +635,10 @@ impl Lexer {
                     self.skip(8);
 
                     TokenKind::ObjectCast
+                } else if self.try_read("bool)") {
+                    self.col += 5;
+                    self.skip(6);
+                    TokenKind::BoolCast
                 } else {
                     TokenKind::LeftParen
                 }

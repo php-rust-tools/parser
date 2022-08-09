@@ -1592,12 +1592,12 @@ impl Parser {
 }
 
 fn is_prefix(op: &TokenKind) -> bool {
-    matches!(op, TokenKind::Bang | TokenKind::Minus | TokenKind::StringCast | TokenKind::ObjectCast)
+    matches!(op, TokenKind::Bang | TokenKind::Minus | TokenKind::StringCast | TokenKind::ObjectCast | TokenKind::BoolCast)
 }
 
 fn prefix_binding_power(op: &TokenKind) -> u8 {
     match op {
-        TokenKind::StringCast | TokenKind::ObjectCast => 101,
+        TokenKind::StringCast | TokenKind::ObjectCast | TokenKind::BoolCast => 101,
         TokenKind::Minus => 100,
         TokenKind::Bang => 99,
         _ => unreachable!()
@@ -1608,7 +1608,7 @@ fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
     match op {
         TokenKind::Bang => Expression::BooleanNot { value: Box::new(rhs) },
         TokenKind::Minus => Expression::Negate { value: Box::new(rhs) },
-        TokenKind::StringCast | TokenKind::ObjectCast => Expression::Cast { kind: op.into(), value: Box::new(rhs) },
+        TokenKind::StringCast | TokenKind::ObjectCast | TokenKind::BoolCast => Expression::Cast { kind: op.into(), value: Box::new(rhs) },
         _ => unreachable!()
     }
 }

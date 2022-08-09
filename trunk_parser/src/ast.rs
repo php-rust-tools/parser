@@ -272,6 +272,7 @@ pub enum Statement {
 pub enum CastKind {
     String,
     Object,
+    Bool,
 }
 
 impl From<TokenKind> for CastKind {
@@ -279,6 +280,7 @@ impl From<TokenKind> for CastKind {
         match kind {
             TokenKind::StringCast => Self::String,
             TokenKind::ObjectCast => Self::Object,
+            TokenKind::BoolCast => Self::Bool,
             _ => unreachable!()
         }
     }
