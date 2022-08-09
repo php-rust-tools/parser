@@ -5,7 +5,8 @@ use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodF
 type ParseResult<T> = Result<T, ParseError>;
 
 macro_rules! expect {
-    ($parser:expr, $expected:pat, $out:expr, $message:literal) => {
+    ($parser:expr, $expected:pat, $out:expr, $message:literal) => {{
+        $parser.skip_comments();
         match $parser.current.kind.clone() {
             $expected => {
                 $parser.next();
@@ -13,13 +14,14 @@ macro_rules! expect {
             },
             _ => return Err(ParseError::ExpectedToken($message.into(), $parser.current.span)),
         }
-    };
-    ($parser:expr, $expected:pat, $message:literal) => {
+    }};
+    ($parser:expr, $expected:pat, $message:literal) => {{
+        $parser.skip_comments();
         match $parser.current.kind.clone() {
             $expected => { $parser.next(); },
             _ => return Err(ParseError::ExpectedToken($message.into(), $parser.current.span)),
         }
-    };
+    }};
 }
 
 mod params;
