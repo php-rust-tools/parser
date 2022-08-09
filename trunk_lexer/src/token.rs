@@ -105,6 +105,7 @@ pub enum TokenKind {
     NamespaceSeparator,
     New,
     Null,
+    ObjectCast,
     OpenTag(OpenTagKind),
     Percent,
     Pipe,
@@ -153,6 +154,7 @@ impl Default for Token {
 impl Display for TokenKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", match self {
+            Self::ObjectCast => "(object)",
             Self::Abstract => "abstract",
             Self::Ampersand => "&",
             Self::And => "&&",

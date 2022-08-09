@@ -618,6 +618,11 @@ impl Lexer {
                     self.skip(8);
                     
                     TokenKind::StringCast 
+                } else if self.try_read("object)") {
+                    self.col += 7;
+                    self.skip(8);
+
+                    TokenKind::ObjectCast
                 } else {
                     TokenKind::LeftParen
                 }
@@ -907,8 +912,9 @@ mod tests {
 
     #[test]
     fn casts() {
-        assert_tokens("<?php (string)", &[
+        assert_tokens("<?php (object) (string)", &[
             open!(),
+            TokenKind::ObjectCast,
             TokenKind::StringCast,
         ]);
     }
