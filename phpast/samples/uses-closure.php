@@ -1,3 +1,0 @@
-<?php
-
-function () use ($bar) {};
