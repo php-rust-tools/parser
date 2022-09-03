@@ -1,6 +1,9 @@
 package value
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 type String struct {
 	value string
@@ -25,4 +28,8 @@ func (s *String) IsString() bool {
 
 func (s *String) IsInt() bool {
 	return false
+}
+
+func (s *String) Dump() string {
+	return fmt.Sprintf("string(%d) \"%s\"", len(s.value), s.value)
 }

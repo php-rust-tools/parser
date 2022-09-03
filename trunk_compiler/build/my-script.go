@@ -3,11 +3,10 @@ package main
 import (
     "github.com/ryangjchandler/trunk/value"
     "github.com/ryangjchandler/trunk/runtime"
-    "github.com/ryangjchandler/trunk/constructs"
-    "github.com/ryangjchandler/trunk/math"
+    "github.com/ryangjchandler/trunk/debug"
 )
 
 func main() {
     value.Init()
-    constructs.Echo(math.Rand(runtime.NewArgs(value.NewInt(0), value.NewInt(5)))) 
+    debug.VarDump(runtime.NewArgs(value.NewInt(1), value.NewInt(2), value.NewInt(3))) 
 }

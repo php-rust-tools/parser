@@ -21,3 +21,7 @@ func (args *Args) IsEmpty() bool {
 func (args *Args) Count() int {
 	return len(args.values)
 }
+
+func (args *Args) All() []value.Value {
+	return args.values
+}

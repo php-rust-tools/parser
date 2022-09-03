@@ -6,6 +6,8 @@ type Value interface {
 
 	IsString() bool
 	IsInt() bool
+
+	Dump() string
 }
 
 func Init() {

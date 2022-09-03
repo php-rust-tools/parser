@@ -11,6 +11,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
 use Trunk\Intermediate\Instruction;
 use Trunk\Intermediate\EchoInstruction;
 use Trunk\Intermediate\IntegerInstruction;
@@ -65,6 +66,10 @@ class Compiler
 
     protected function toInstruction(Node $node): Instruction
     {
+        if ($node instanceof Expression) {
+            return $this->toInstruction($node->expr);
+        }
+
         if ($node instanceof Echo_) {
             $values = [];
             
