@@ -2,6 +2,8 @@
 
 A set of libraries for working with PHP in Rust.
 
+[![Discord](https://img.shields.io/badge/Trunk-%237289DA.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/49vgTdE6mb)
+
 ## Overview
 
 I originally started with this repository as an experiment. I wanted to see how feasible a handwritten PHP parser would be.
