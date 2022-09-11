@@ -469,12 +469,13 @@ impl Lexer {
             '\\' => {
                 self.col += 1;
 
-                if let Some(n) = self.peek && (n.is_alphabetic() || n == '_') {
+                if self.peek.map_or(false, |n| n == '_' || n.is_alphabetic()) {
                     match self.scripting()? {
-                        Token { kind: TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i), .. } => {
-                            TokenKind::FullyQualifiedIdentifier(format!("\\{}", i))
-                        },
-                        s => unreachable!("{:?}", s)
+                        Token {
+                            kind: TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i),
+                            ..
+                        } => TokenKind::FullyQualifiedIdentifier(format!("\\{}", i)),
+                        s => unreachable!("{:?}", s),
                     }
                 } else {
                     TokenKind::NamespaceSeparator
@@ -534,7 +535,7 @@ impl Lexer {
                     buffer
                 }
 
-                if char == '/' && let Some(t) = self.peek && t == '*' {
+                if char == '/' && self.peek == Some('*') {
                     let mut buffer = String::from(char);
 
                     while self.peek.is_some() {
@@ -553,13 +554,13 @@ impl Lexer {
                                     self.col += 1;
                                     buffer.push(t);
                                 }
-                            },
+                            }
                             '\n' => {
                                 self.line += 1;
                                 self.col = 0;
 
                                 buffer.push('\n');
-                            },
+                            }
                             _ => {
                                 self.col += 1;
 
@@ -577,13 +578,18 @@ impl Lexer {
                     self.col += 1;
                     self.next();
                     TokenKind::SlashEquals
-                } else if char == '/' && let Some(t) = self.peek && t != '/' {
+                } else if char == '/' && self.peek != Some('/') {
                     TokenKind::Slash
-                } else if char == '#' && let Some('[') = self.peek {
+                } else if char == '#' && self.peek == Some('[') {
                     TokenKind::Attribute
                 } else {
                     self.next();
-                    let buffer = format!("{}{}{}", char, &self.current.unwrap(), read_till_end_of_line(self));
+                    let buffer = format!(
+                        "{}{}{}",
+                        char,
+                        &self.current.unwrap(),
+                        read_till_end_of_line(self)
+                    );
 
                     TokenKind::Comment(buffer)
                 }
