@@ -1,6 +1,12 @@
-use std::{vec::IntoIter, fmt::{Display}};
-use trunk_lexer::{Token, TokenKind, Span};
-use crate::{Program, Statement, Block, Expression, ast::{ArrayItem, Use, MethodFlag, ClassFlag, ElseIf, UseKind, MagicConst, BackedEnumType, ClosureUse, Arg, StaticVar}, Identifier, Type, MatchArm, Catch, Case};
+use crate::{
+    ast::{
+        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, ElseIf, MagicConst, MethodFlag,
+        StaticVar, Use, UseKind,
+    },
+    Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
+};
+use std::{fmt::Display, vec::IntoIter};
+use trunk_lexer::{Span, Token, TokenKind};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -11,24 +17,36 @@ macro_rules! expect {
             $expected => {
                 $parser.next();
                 $out
-            },
-            _ => return Err(ParseError::ExpectedToken($message.into(), $parser.current.span)),
+            }
+            _ => {
+                return Err(ParseError::ExpectedToken(
+                    $message.into(),
+                    $parser.current.span,
+                ))
+            }
         }
     }};
     ($parser:expr, $expected:pat, $message:literal) => {{
         $parser.skip_comments();
         match $parser.current.kind.clone() {
-            $expected => { $parser.next(); },
-            _ => return Err(ParseError::ExpectedToken($message.into(), $parser.current.span)),
+            $expected => {
+                $parser.next();
+            }
+            _ => {
+                return Err(ParseError::ExpectedToken(
+                    $message.into(),
+                    $parser.current.span,
+                ))
+            }
         }
     }};
 }
 
-mod params;
 mod block;
-mod punc;
-mod ident;
 mod comments;
+mod ident;
+mod params;
+mod punc;
 
 pub struct ParserConfig {
     force_type_strings: bool,
@@ -37,7 +55,9 @@ pub struct ParserConfig {
 #[allow(clippy::derivable_impls)]
 impl Default for ParserConfig {
     fn default() -> Self {
-        Self { force_type_strings: false }
+        Self {
+            force_type_strings: false,
+        }
     }
 }
 
@@ -81,7 +101,7 @@ impl Parser {
             }
 
             ast.push(self.statement()?);
-            
+
             self.clear_comments();
         }
 
@@ -102,7 +122,7 @@ impl Parser {
 
             let mut types = vec![id];
 
-            while ! self.is_eof() {
+            while !self.is_eof() {
                 let id = self.type_with_static()?;
                 types.push(id);
 
@@ -111,7 +131,7 @@ impl Parser {
                 }
             }
 
-            return Ok(Type::Union(types))
+            return Ok(Type::Union(types));
         }
 
         if self.current.kind == TokenKind::Ampersand {
@@ -119,7 +139,7 @@ impl Parser {
 
             let mut types = vec![id];
 
-            while ! self.is_eof() {
+            while !self.is_eof() {
                 let id = self.type_with_static()?;
                 types.push(id);
 
@@ -128,7 +148,7 @@ impl Parser {
                 }
             }
 
-            return Ok(Type::Intersection(types))
+            return Ok(Type::Intersection(types));
         }
 
         Ok(Type::Plain(id))
@@ -136,7 +156,7 @@ impl Parser {
 
     fn statement(&mut self) -> ParseResult<Statement> {
         self.skip_comments();
-        
+
         let statement = match &self.current.kind {
             TokenKind::Static if matches!(self.peek.kind, TokenKind::Variable(_)) => {
                 self.next();
@@ -146,7 +166,7 @@ impl Parser {
                 while self.current.kind != TokenKind::SemiColon {
                     let var = Expression::Variable { name: self.var()? };
                     let mut default = None;
-                    
+
                     if self.current.kind == TokenKind::Equals {
                         expect!(self, TokenKind::Equals, "expected =");
                         default = Some(self.expression(0)?);
@@ -158,19 +178,21 @@ impl Parser {
                 }
 
                 self.semi()?;
-                
+
                 Statement::Static { vars }
-            },
+            }
             TokenKind::InlineHtml(html) => {
                 let s = Statement::InlineHtml(html.to_string());
                 self.next();
                 s
-            },
+            }
             TokenKind::Comment(comment) => {
-                let s = Statement::Comment { comment: comment.to_string() };
+                let s = Statement::Comment {
+                    comment: comment.to_string(),
+                };
                 self.next();
                 s
-            },
+            }
             TokenKind::While => {
                 self.next();
                 self.lparen()?;
@@ -181,11 +203,11 @@ impl Parser {
                 self.lbrace()?;
 
                 let body = self.block(&TokenKind::RightBrace)?;
-                
+
                 self.rbrace()?;
 
                 Statement::While { condition, body }
-            },
+            }
             TokenKind::Require => {
                 self.next();
 
@@ -194,7 +216,7 @@ impl Parser {
                 self.semi()?;
 
                 Statement::Require { path }
-            },
+            }
             TokenKind::RequireOnce => {
                 self.next();
 
@@ -203,7 +225,7 @@ impl Parser {
                 self.semi()?;
 
                 Statement::RequireOnce { path }
-            },
+            }
             TokenKind::For => {
                 self.next();
 
@@ -233,8 +255,13 @@ impl Parser {
 
                 self.rbrace()?;
 
-                Statement::For { init, condition, r#loop, then }
-            },
+                Statement::For {
+                    init,
+                    condition,
+                    r#loop,
+                    then,
+                }
+            }
             TokenKind::Foreach => {
                 self.next();
 
@@ -256,7 +283,7 @@ impl Parser {
                     self.next();
 
                     key_var = Some(value_var.clone());
-                    
+
                     by_ref = self.current.kind == TokenKind::Ampersand;
                     if by_ref {
                         self.next();
@@ -272,28 +299,54 @@ impl Parser {
 
                 self.rbrace()?;
 
-                Statement::Foreach { expr, by_ref, key_var, value_var, body }
-            },
+                Statement::Foreach {
+                    expr,
+                    by_ref,
+                    key_var,
+                    value_var,
+                    body,
+                }
+            }
             TokenKind::Abstract => {
-                self.next();  
+                self.next();
 
                 match self.class()? {
-                    Statement::Class { name, extends, implements, body, .. } => {
-                        Statement::Class { name, extends, implements, body, flag: Some(ClassFlag::Abstract) }
+                    Statement::Class {
+                        name,
+                        extends,
+                        implements,
+                        body,
+                        ..
+                    } => Statement::Class {
+                        name,
+                        extends,
+                        implements,
+                        body,
+                        flag: Some(ClassFlag::Abstract),
                     },
                     _ => unreachable!(),
                 }
-            },
+            }
             TokenKind::Final => {
-                self.next();  
+                self.next();
 
                 match self.class()? {
-                    Statement::Class { name, extends, implements, body, .. } => {
-                        Statement::Class { name, extends, implements, body, flag: Some(ClassFlag::Final) }
+                    Statement::Class {
+                        name,
+                        extends,
+                        implements,
+                        body,
+                        ..
+                    } => Statement::Class {
+                        name,
+                        extends,
+                        implements,
+                        body,
+                        flag: Some(ClassFlag::Final),
                     },
                     _ => unreachable!(),
                 }
-            },
+            }
             TokenKind::Trait => {
                 self.next();
 
@@ -306,17 +359,20 @@ impl Parser {
                     match self.class_statement()? {
                         Statement::Constant { .. } => {
                             return Err(ParseError::TraitCannotContainConstant(self.current.span))
-                        },
+                        }
                         s => {
                             body.push(s);
-                        },
+                        }
                     }
                 }
 
                 self.rbrace()?;
 
-                Statement::Trait { name: name.into(), body }
-            },
+                Statement::Trait {
+                    name: name.into(),
+                    body,
+                }
+            }
             TokenKind::Interface => {
                 self.next();
 
@@ -356,7 +412,9 @@ impl Parser {
 
                             let mut return_type = None;
 
-                            if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
+                            if self.current.kind == TokenKind::Colon
+                                || self.config.force_type_strings
+                            {
                                 expect!(self, TokenKind::Colon, "expected :");
 
                                 return_type = Some(self.type_string()?);
@@ -364,8 +422,14 @@ impl Parser {
 
                             self.semi()?;
 
-                            body.push(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: vec![MethodFlag::Public] })
-                        },
+                            body.push(Statement::Method {
+                                name: name.into(),
+                                params,
+                                body: vec![],
+                                return_type,
+                                flags: vec![MethodFlag::Public],
+                            })
+                        }
                         TokenKind::Function => {
                             self.next();
 
@@ -379,7 +443,9 @@ impl Parser {
 
                             let mut return_type = None;
 
-                            if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
+                            if self.current.kind == TokenKind::Colon
+                                || self.config.force_type_strings
+                            {
                                 expect!(self, TokenKind::Colon, "expected :");
 
                                 return_type = Some(self.type_string()?);
@@ -387,9 +453,20 @@ impl Parser {
 
                             self.semi()?;
 
-                            body.push(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: vec![] })
-                        },
-                        _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span)),
+                            body.push(Statement::Method {
+                                name: name.into(),
+                                params,
+                                body: vec![],
+                                return_type,
+                                flags: vec![],
+                            })
+                        }
+                        _ => {
+                            return Err(ParseError::UnexpectedToken(
+                                self.current.kind.to_string(),
+                                self.current.span,
+                            ))
+                        }
                     };
 
                     self.skip_comments();
@@ -397,8 +474,12 @@ impl Parser {
 
                 self.rbrace()?;
 
-                Statement::Interface { name: name.into(), extends, body }
-            },
+                Statement::Interface {
+                    name: name.into(),
+                    extends,
+                    body,
+                }
+            }
             TokenKind::Enum if matches!(self.peek.kind, TokenKind::Identifier(_)) => {
                 self.next();
 
@@ -407,7 +488,7 @@ impl Parser {
                 let mut is_backed = false;
                 let backed_type: Option<BackedEnumType> = if self.current.kind == TokenKind::Colon {
                     expect!(self, TokenKind::Colon, "expected :");
-                    
+
                     match self.current.kind.clone() {
                         TokenKind::Identifier(s) if s == *"string" || s == *"int" => {
                             self.next();
@@ -417,10 +498,15 @@ impl Parser {
                             Some(match s.as_str() {
                                 "string" => BackedEnumType::String,
                                 "int" => BackedEnumType::Int,
-                                _ => unreachable!()
+                                _ => unreachable!(),
                             })
-                        },
-                        _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
+                        }
+                        _ => {
+                            return Err(ParseError::UnexpectedToken(
+                                self.current.kind.to_string(),
+                                self.current.span,
+                            ))
+                        }
                     }
                 } else {
                     None
@@ -436,7 +522,7 @@ impl Parser {
                         self.optional_comma()?;
                     }
                 }
-                
+
                 self.lbrace()?;
 
                 let mut body = Block::new();
@@ -455,9 +541,12 @@ impl Parser {
                             }
 
                             self.semi()?;
-                            
-                            body.push(Statement::EnumCase { name: name.into(), value })
-                        },
+
+                            body.push(Statement::EnumCase {
+                                name: name.into(),
+                                value,
+                            })
+                        }
                         _ => {
                             body.push(self.class_statement()?);
                         }
@@ -466,8 +555,13 @@ impl Parser {
 
                 self.rbrace()?;
 
-                Statement::Enum { name: name.into(), backed_type, implements, body }
-            },
+                Statement::Enum {
+                    name: name.into(),
+                    backed_type,
+                    implements,
+                    body,
+                }
+            }
             TokenKind::Use => {
                 self.next();
 
@@ -475,16 +569,16 @@ impl Parser {
                     TokenKind::Function => {
                         self.next();
                         UseKind::Function
-                    },
+                    }
                     TokenKind::Const => {
                         self.next();
                         UseKind::Const
-                    },
+                    }
                     _ => UseKind::Normal,
                 };
 
                 let mut uses = Vec::new();
-                while ! self.is_eof() {
+                while !self.is_eof() {
                     let name = self.full_name()?;
                     let mut alias = None;
 
@@ -493,7 +587,10 @@ impl Parser {
                         alias = Some(self.ident()?.into());
                     }
 
-                    uses.push(Use { name: name.into(), alias });
+                    uses.push(Use {
+                        name: name.into(),
+                        alias,
+                    });
 
                     if self.current.kind == TokenKind::Comma {
                         self.next();
@@ -505,7 +602,7 @@ impl Parser {
                 }
 
                 Statement::Use { uses, kind }
-            },
+            }
             TokenKind::Switch => {
                 self.next();
 
@@ -533,15 +630,18 @@ impl Parser {
 
                             let mut body = Block::new();
 
-                            while self.current.kind != TokenKind::Case && self.current.kind != TokenKind::Default && self.current.kind != TokenKind::RightBrace {
+                            while self.current.kind != TokenKind::Case
+                                && self.current.kind != TokenKind::Default
+                                && self.current.kind != TokenKind::RightBrace
+                            {
                                 body.push(self.statement()?);
                             }
 
                             cases.push(Case {
                                 condition: Some(condition),
-                                body
+                                body,
                             });
-                        },
+                        }
                         TokenKind::Default => {
                             self.next();
 
@@ -549,26 +649,34 @@ impl Parser {
 
                             let mut body = Block::new();
 
-                            while self.current.kind != TokenKind::Case && self.current.kind != TokenKind::Default && self.current.kind != TokenKind::RightBrace {
+                            while self.current.kind != TokenKind::Case
+                                && self.current.kind != TokenKind::Default
+                                && self.current.kind != TokenKind::RightBrace
+                            {
                                 body.push(self.statement()?);
                             }
 
                             cases.push(Case {
                                 condition: None,
-                                body
+                                body,
                             });
-                        },
-                        _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
+                        }
+                        _ => {
+                            return Err(ParseError::UnexpectedToken(
+                                self.current.kind.to_string(),
+                                self.current.span,
+                            ))
+                        }
                     }
                 }
 
                 self.rbrace()?;
 
                 Statement::Switch { condition, cases }
-            },
+            }
             TokenKind::Namespace => {
                 self.next();
-                
+
                 let name = self.name()?;
 
                 let mut braced = false;
@@ -590,7 +698,7 @@ impl Parser {
                 }
 
                 Statement::Namespace { name, body }
-            },
+            }
             TokenKind::If => {
                 self.next();
 
@@ -638,7 +746,12 @@ impl Parser {
                 }
 
                 if self.current.kind != TokenKind::Else {
-                    return Ok(Statement::If { condition, then, else_ifs, r#else: None });
+                    return Ok(Statement::If {
+                        condition,
+                        then,
+                        else_ifs,
+                        r#else: None,
+                    });
                 }
 
                 expect!(self, TokenKind::Else, "expected else");
@@ -649,21 +762,26 @@ impl Parser {
 
                 self.rbrace()?;
 
-                Statement::If { condition, then, else_ifs, r#else: Some(r#else) }
-            },
+                Statement::If {
+                    condition,
+                    then,
+                    else_ifs,
+                    r#else: Some(r#else),
+                }
+            }
             TokenKind::Class => self.class()?,
             TokenKind::Echo => {
                 self.next();
 
                 let mut values = Vec::new();
-                while ! self.is_eof() && self.current.kind != TokenKind::SemiColon {
+                while !self.is_eof() && self.current.kind != TokenKind::SemiColon {
                     values.push(self.expression(0)?);
 
                     self.optional_comma()?;
                 }
                 self.semi()?;
                 Statement::Echo { values }
-            },
+            }
             TokenKind::Continue => {
                 self.next();
 
@@ -675,7 +793,7 @@ impl Parser {
                 self.semi()?;
 
                 Statement::Continue { num }
-            },
+            }
             TokenKind::Break => {
                 self.next();
 
@@ -687,26 +805,34 @@ impl Parser {
                 self.semi()?;
 
                 Statement::Break { num }
-            },
+            }
             TokenKind::Return => {
                 self.next();
 
-                if let Token { kind: TokenKind::SemiColon, .. } = self.current {
+                if let Token {
+                    kind: TokenKind::SemiColon,
+                    ..
+                } = self.current
+                {
                     let ret = Statement::Return { value: None };
                     self.semi()?;
                     ret
                 } else {
-                    let ret = Statement::Return { value: self.expression(0).ok() };
+                    let ret = Statement::Return {
+                        value: self.expression(0).ok(),
+                    };
                     self.semi()?;
                     ret
                 }
-            },
-            TokenKind::Function if matches!(self.peek.kind, TokenKind::Identifier(_)) => self.function()?,
+            }
+            TokenKind::Function if matches!(self.peek.kind, TokenKind::Identifier(_)) => {
+                self.function()?
+            }
             TokenKind::SemiColon => {
                 self.next();
 
                 Statement::Noop
-            },
+            }
             TokenKind::Try => {
                 let start_span = self.current.span;
 
@@ -728,7 +854,10 @@ impl Parser {
 
                     let types = match self.type_string()? {
                         Type::Plain(t) => vec![t.into()],
-                        Type::Union(ts) => ts.into_iter().map(|t| t.into()).collect::<Vec<Identifier>>(),
+                        Type::Union(ts) => ts
+                            .into_iter()
+                            .map(|t| t.into())
+                            .collect::<Vec<Identifier>>(),
                         _ => return Err(ParseError::InvalidCatchArgumentType(self.current.span)),
                     };
 
@@ -736,16 +865,12 @@ impl Parser {
 
                     self.rparen()?;
                     self.lbrace()?;
-                    
+
                     let body = self.block(&TokenKind::RightBrace)?;
 
                     self.rbrace()?;
 
-                    catches.push(Catch {
-                        types,
-                        var,
-                        body,
-                    })
+                    catches.push(Catch { types, var, body })
                 }
 
                 let mut finally = None;
@@ -762,8 +887,12 @@ impl Parser {
                     return Err(ParseError::TryWithoutCatchOrFinally(start_span));
                 }
 
-                Statement::Try { body, catches, finally }
-            },
+                Statement::Try {
+                    body,
+                    catches,
+                    finally,
+                }
+            }
             _ => {
                 let expr = self.expression(0)?;
 
@@ -803,7 +932,12 @@ impl Parser {
 
         self.rbrace()?;
 
-        Ok(Statement::Function { name: name.into(), params, body, return_type })
+        Ok(Statement::Function {
+            name: name.into(),
+            params,
+            body,
+            return_type,
+        })
     }
 
     fn class(&mut self) -> ParseResult<Statement> {
@@ -832,15 +966,21 @@ impl Parser {
 
         let mut body = Vec::new();
         self.gather_comments();
-        while self.current.kind != TokenKind::RightBrace && ! self.is_eof() {
+        while self.current.kind != TokenKind::RightBrace && !self.is_eof() {
             body.push(self.class_statement()?);
         }
 
         self.rbrace()?;
 
-        Ok(Statement::Class { name: name.into(), extends, implements, body, flag: None })
+        Ok(Statement::Class {
+            name: name.into(),
+            extends,
+            implements,
+            body,
+            flag: None,
+        })
     }
-    
+
     fn class_statement(&mut self) -> ParseResult<Statement> {
         self.gather_comments();
 
@@ -860,7 +1000,7 @@ impl Parser {
                 self.semi()?;
 
                 Ok(Statement::TraitUse { traits })
-            },
+            }
             TokenKind::Const => {
                 self.next();
 
@@ -872,14 +1012,20 @@ impl Parser {
 
                 self.semi()?;
 
-                Ok(Statement::Constant { name: name.into(), value, flags: vec![] })
-            },
+                Ok(Statement::Constant {
+                    name: name.into(),
+                    value,
+                    flags: vec![],
+                })
+            }
             TokenKind::Var => {
                 self.next();
 
                 let mut var_type = None;
 
-                if ! matches!(self.current.kind, TokenKind::Variable(_)) || self.config.force_type_strings {
+                if !matches!(self.current.kind, TokenKind::Variable(_))
+                    || self.config.force_type_strings
+                {
                     var_type = Some(self.type_string()?);
                 }
 
@@ -894,15 +1040,37 @@ impl Parser {
 
                 self.semi()?;
 
-                Ok(Statement::Var { var, value, r#type: var_type })
-            },
-            TokenKind::Final | TokenKind::Abstract | TokenKind::Public | TokenKind::Private | TokenKind::Protected | TokenKind::Static => {
+                Ok(Statement::Var {
+                    var,
+                    value,
+                    r#type: var_type,
+                })
+            }
+            TokenKind::Final
+            | TokenKind::Abstract
+            | TokenKind::Public
+            | TokenKind::Private
+            | TokenKind::Protected
+            | TokenKind::Static => {
                 let mut flags = vec![self.current.kind.clone()];
                 self.next();
 
-                while ! self.is_eof() && [TokenKind::Final, TokenKind::Abstract, TokenKind::Public, TokenKind::Private, TokenKind::Protected, TokenKind::Static].contains(&self.current.kind) {
+                while !self.is_eof()
+                    && [
+                        TokenKind::Final,
+                        TokenKind::Abstract,
+                        TokenKind::Public,
+                        TokenKind::Private,
+                        TokenKind::Protected,
+                        TokenKind::Static,
+                    ]
+                    .contains(&self.current.kind)
+                {
                     if flags.contains(&self.current.kind) {
-                        return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span));
+                        return Err(ParseError::UnexpectedToken(
+                            self.current.kind.to_string(),
+                            self.current.span,
+                        ));
                     }
 
                     flags.push(self.current.kind.clone());
@@ -910,7 +1078,9 @@ impl Parser {
                 }
 
                 if flags.contains(&TokenKind::Final) && flags.contains(&TokenKind::Abstract) {
-                    return Err(ParseError::InvalidAbstractFinalFlagCombination(self.current.span));
+                    return Err(ParseError::InvalidAbstractFinalFlagCombination(
+                        self.current.span,
+                    ));
                 }
 
                 match self.current.kind {
@@ -919,8 +1089,11 @@ impl Parser {
                             return Err(ParseError::ConstantCannotBeStatic(self.current.span));
                         }
 
-                        if flags.contains(&TokenKind::Final) && flags.contains(&TokenKind::Private) {
-                            return Err(ParseError::ConstantCannotBePrivateFinal(self.current.span));
+                        if flags.contains(&TokenKind::Final) && flags.contains(&TokenKind::Private)
+                        {
+                            return Err(ParseError::ConstantCannotBePrivateFinal(
+                                self.current.span,
+                            ));
                         }
 
                         self.next();
@@ -928,13 +1101,17 @@ impl Parser {
                         let name = self.ident()?;
 
                         expect!(self, TokenKind::Equals, "expected =");
-        
+
                         let value = self.expression(0)?;
-        
+
                         self.semi()?;
-        
-                        Ok(Statement::Constant { name: name.into(), value, flags: flags.into_iter().map(|f| f.into()).collect() })
-                    },
+
+                        Ok(Statement::Constant {
+                            name: name.into(),
+                            value,
+                            flags: flags.into_iter().map(|f| f.into()).collect(),
+                        })
+                    }
                     TokenKind::Function => {
                         if flags.contains(&TokenKind::Abstract) {
                             self.next();
@@ -949,7 +1126,9 @@ impl Parser {
 
                             let mut return_type = None;
 
-                            if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
+                            if self.current.kind == TokenKind::Colon
+                                || self.config.force_type_strings
+                            {
                                 expect!(self, TokenKind::Colon, "expected :");
 
                                 return_type = Some(self.type_string()?);
@@ -957,17 +1136,36 @@ impl Parser {
 
                             self.semi()?;
 
-                            Ok(Statement::Method { name: name.into(), params, body: vec![], return_type, flags: flags.iter().map(|t| t.clone().into()).collect() })
+                            Ok(Statement::Method {
+                                name: name.into(),
+                                params,
+                                body: vec![],
+                                return_type,
+                                flags: flags.iter().map(|t| t.clone().into()).collect(),
+                            })
                         } else {
                             match self.function()? {
-                                Statement::Function { name, params, body, return_type } => {
-                                    Ok(Statement::Method { name, params, body, flags: flags.iter().map(|t| t.clone().into()).collect(), return_type })
-                                },
-                                _ => unreachable!()
+                                Statement::Function {
+                                    name,
+                                    params,
+                                    body,
+                                    return_type,
+                                } => Ok(Statement::Method {
+                                    name,
+                                    params,
+                                    body,
+                                    flags: flags.iter().map(|t| t.clone().into()).collect(),
+                                    return_type,
+                                }),
+                                _ => unreachable!(),
                             }
                         }
-                    },
-                    TokenKind::Question | TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_) | TokenKind::Array => {
+                    }
+                    TokenKind::Question
+                    | TokenKind::Identifier(_)
+                    | TokenKind::QualifiedIdentifier(_)
+                    | TokenKind::FullyQualifiedIdentifier(_)
+                    | TokenKind::Array => {
                         let prop_type = self.type_string()?;
                         let var = self.var()?;
                         let mut value = None;
@@ -982,8 +1180,13 @@ impl Parser {
                         //       that is capable of holding multiple property declarations.
                         self.semi()?;
 
-                        Ok(Statement::Property { var, value, r#type: Some(prop_type), flags: flags.into_iter().map(|f| f.into()).collect() })
-                    },
+                        Ok(Statement::Property {
+                            var,
+                            value,
+                            r#type: Some(prop_type),
+                            flags: flags.into_iter().map(|f| f.into()).collect(),
+                        })
+                    }
                     TokenKind::Variable(_) => {
                         let var = self.var()?;
                         let mut value = None;
@@ -995,21 +1198,39 @@ impl Parser {
 
                         self.semi()?;
 
-                        Ok(Statement::Property { var, value, r#type:None, flags: flags.into_iter().map(|f| f.into()).collect() })
-                    },
-                    _ => Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
+                        Ok(Statement::Property {
+                            var,
+                            value,
+                            r#type: None,
+                            flags: flags.into_iter().map(|f| f.into()).collect(),
+                        })
+                    }
+                    _ => Err(ParseError::UnexpectedToken(
+                        self.current.kind.to_string(),
+                        self.current.span,
+                    )),
                 }
-            },
-            TokenKind::Function => {
-                match self.function()? {
-                    Statement::Function { name, params, body, return_type } => {
-                        Ok(Statement::Method { name, params, body, flags: vec![], return_type })
-                    },
-                    _ => unreachable!(),
-                }
+            }
+            TokenKind::Function => match self.function()? {
+                Statement::Function {
+                    name,
+                    params,
+                    body,
+                    return_type,
+                } => Ok(Statement::Method {
+                    name,
+                    params,
+                    body,
+                    flags: vec![],
+                    return_type,
+                }),
+                _ => unreachable!(),
             },
             // TODO: Support use statements.
-            _ => Err(ParseError::UnexpectedToken(format!("{}", self.current.kind), self.current.span))
+            _ => Err(ParseError::UnexpectedToken(
+                format!("{}", self.current.kind),
+                self.current.span,
+            )),
         }
     }
 
@@ -1026,8 +1247,10 @@ impl Parser {
 
                 let value = self.expression(0)?;
 
-                Expression::Throw { value: Box::new(value) }
-            },
+                Expression::Throw {
+                    value: Box::new(value),
+                }
+            }
             TokenKind::Yield => {
                 self.next();
 
@@ -1035,58 +1258,70 @@ impl Parser {
 
                 // FIXME: Check for presence of => here to allow yielding key and value.
 
-                Expression::Yield { value: Box::new(value) }
-            },
+                Expression::Yield {
+                    value: Box::new(value),
+                }
+            }
             TokenKind::Clone => {
                 self.next();
 
                 let target = self.expression(0)?;
 
-                Expression::Clone { target: Box::new(target) }
-            },
+                Expression::Clone {
+                    target: Box::new(target),
+                }
+            }
             TokenKind::Variable(v) => {
-                let e = Expression::Variable { name: v.to_string() };
+                let e = Expression::Variable {
+                    name: v.to_string(),
+                };
                 self.next();
                 e
-            },
+            }
             TokenKind::Int(i) => {
-                let e = Expression::Int{ i: *i };
+                let e = Expression::Int { i: *i };
                 self.next();
                 e
-            },
+            }
             TokenKind::Float(f) => {
                 let f = Expression::Float { f: *f };
                 self.next();
                 f
-            },
-            TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i) | TokenKind::FullyQualifiedIdentifier(i) => {
-                let e = Expression::Identifier { name: i.to_string() };
+            }
+            TokenKind::Identifier(i)
+            | TokenKind::QualifiedIdentifier(i)
+            | TokenKind::FullyQualifiedIdentifier(i) => {
+                let e = Expression::Identifier {
+                    name: i.to_string(),
+                };
                 self.next();
                 e
-            },
+            }
             TokenKind::Static => {
                 self.next();
                 Expression::Static
-            },
+            }
             TokenKind::ConstantString(s) => {
-                let e = Expression::ConstantString { value: s.to_string() };
+                let e = Expression::ConstantString {
+                    value: s.to_string(),
+                };
                 self.next();
                 e
-            },
+            }
             TokenKind::True => {
                 let e = Expression::Bool { value: true };
                 self.next();
                 e
-            },
+            }
             TokenKind::False => {
                 let e = Expression::Bool { value: false };
                 self.next();
                 e
-            },
+            }
             TokenKind::Null => {
                 self.next();
                 Expression::Null
-            },
+            }
             TokenKind::LeftParen => {
                 self.next();
 
@@ -1095,7 +1330,7 @@ impl Parser {
                 self.rparen()?;
 
                 e
-            },
+            }
             TokenKind::Match => {
                 self.next();
                 self.lparen()?;
@@ -1127,7 +1362,11 @@ impl Parser {
                     self.optional_comma()?;
 
                     arms.push(MatchArm {
-                        conditions: if conditions.is_empty() { None } else { Some(conditions) },
+                        conditions: if conditions.is_empty() {
+                            None
+                        } else {
+                            Some(conditions)
+                        },
                         body,
                     })
                 }
@@ -1135,7 +1374,7 @@ impl Parser {
                 self.rbrace()?;
 
                 Expression::Match { condition, arms }
-            },
+            }
             TokenKind::Array => {
                 let mut items = vec![];
 
@@ -1164,7 +1403,7 @@ impl Parser {
                 self.rparen()?;
 
                 Expression::Array { items }
-            },
+            }
             TokenKind::LeftBracket => {
                 let mut items = Vec::new();
                 self.next();
@@ -1188,11 +1427,11 @@ impl Parser {
 
                     self.skip_comments();
                 }
-                
+
                 self.rbracket()?;
 
                 Expression::Array { items }
-            },
+            }
             TokenKind::Function => {
                 self.next();
 
@@ -1214,14 +1453,30 @@ impl Parser {
                                 self.next();
 
                                 match self.expression(0)? {
-                                    s @ Expression::Variable { .. } => ClosureUse { var: s, by_ref: true },
-                                    _ => return Err(ParseError::UnexpectedToken("expected variable".into(), self.current.span))
+                                    s @ Expression::Variable { .. } => ClosureUse {
+                                        var: s,
+                                        by_ref: true,
+                                    },
+                                    _ => {
+                                        return Err(ParseError::UnexpectedToken(
+                                            "expected variable".into(),
+                                            self.current.span,
+                                        ))
+                                    }
+                                }
+                            }
+                            _ => match self.expression(0)? {
+                                s @ Expression::Variable { .. } => ClosureUse {
+                                    var: s,
+                                    by_ref: false,
+                                },
+                                _ => {
+                                    return Err(ParseError::UnexpectedToken(
+                                        "expected variable".into(),
+                                        self.current.span,
+                                    ))
                                 }
                             },
-                            _ => match self.expression(0)? {
-                                s @ Expression::Variable { .. } => ClosureUse { var: s, by_ref: false },
-                                _ => return Err(ParseError::UnexpectedToken("expected variable".into(), self.current.span))
-                            }
                         };
 
                         uses.push(var);
@@ -1245,8 +1500,13 @@ impl Parser {
 
                 self.rbrace()?;
 
-                Expression::Closure { params, uses, return_type, body }
-            },
+                Expression::Closure {
+                    params,
+                    uses,
+                    return_type,
+                    body,
+                }
+            }
             TokenKind::Fn => {
                 self.next();
 
@@ -1255,21 +1515,25 @@ impl Parser {
                 let params = self.param_list()?;
 
                 self.rparen()?;
-        
+
                 let mut return_type = None;
-        
+
                 if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
                     expect!(self, TokenKind::Colon, "expected :");
-        
+
                     return_type = Some(self.type_string()?);
                 }
-                
+
                 expect!(self, TokenKind::DoubleArrow, "expected =>");
 
                 let value = self.expression(0)?;
 
-                Expression::ArrowFunction { params, return_type, expr: Box::new(value) }
-            },
+                Expression::ArrowFunction {
+                    params,
+                    return_type,
+                    expr: Box::new(value),
+                }
+            }
             TokenKind::New => {
                 self.next();
 
@@ -1279,11 +1543,13 @@ impl Parser {
 
                     if self.current.kind == TokenKind::LeftParen {
                         self.lparen()?;
-    
+
                         while self.current.kind != TokenKind::RightParen {
                             let mut name = None;
                             let mut unpack = false;
-                            if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
+                            if matches!(self.current.kind, TokenKind::Identifier(_))
+                                && self.peek.kind == TokenKind::Colon
+                            {
                                 name = Some(self.ident_maybe_reserved()?);
                                 self.next();
                             } else if self.current.kind == TokenKind::Ellipsis {
@@ -1292,16 +1558,16 @@ impl Parser {
                             }
 
                             let value = self.expression(0)?;
-    
+
                             args.push(Arg {
                                 name,
                                 unpack,
-                                value
+                                value,
                             });
-    
+
                             self.optional_comma()?;
                         }
-    
+
                         self.rparen()?;
                     }
 
@@ -1326,13 +1592,17 @@ impl Parser {
                     self.lbrace()?;
 
                     let mut body = Vec::new();
-                    while self.current.kind != TokenKind::RightBrace && ! self.is_eof() {
+                    while self.current.kind != TokenKind::RightBrace && !self.is_eof() {
                         body.push(self.class_statement()?);
                     }
 
                     self.rbrace()?;
 
-                    Expression::AnonymousClass { extends, implements, body }
+                    Expression::AnonymousClass {
+                        extends,
+                        implements,
+                        body,
+                    }
                 } else {
                     self.expression(20)?
                 };
@@ -1343,7 +1613,9 @@ impl Parser {
                     while self.current.kind != TokenKind::RightParen {
                         let mut name = None;
                         let mut unpack = false;
-                        if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
+                        if matches!(self.current.kind, TokenKind::Identifier(_))
+                            && self.peek.kind == TokenKind::Colon
+                        {
                             name = Some(self.ident_maybe_reserved()?);
                             self.next();
                         } else if self.current.kind == TokenKind::Ellipsis {
@@ -1356,7 +1628,7 @@ impl Parser {
                         args.push(Arg {
                             name,
                             unpack,
-                            value
+                            value,
                         });
 
                         self.optional_comma()?;
@@ -1365,12 +1637,17 @@ impl Parser {
                     self.rparen()?;
                 }
 
-                Expression::New { target: Box::new(target), args }
-            },
+                Expression::New {
+                    target: Box::new(target),
+                    args,
+                }
+            }
             TokenKind::DirConstant => {
                 self.next();
-                Expression::MagicConst { constant: MagicConst::Dir }
-            },
+                Expression::MagicConst {
+                    constant: MagicConst::Dir,
+                }
+            }
             _ if is_prefix(&self.current.kind) => {
                 let op = self.current.kind.clone();
 
@@ -1380,8 +1657,13 @@ impl Parser {
                 let rhs = self.expression(rbp)?;
 
                 prefix(&op, rhs)
-            },
-            _ => todo!("expr lhs: {:?}, line {} col {}", self.current.kind, self.current.span.0, self.current.span.1),
+            }
+            _ => todo!(
+                "expr lhs: {:?}, line {} col {}",
+                self.current.kind,
+                self.current.span.0,
+                self.current.span.1
+            ),
         };
 
         if self.current.kind == TokenKind::SemiColon {
@@ -1394,8 +1676,11 @@ impl Parser {
             self.skip_comments();
 
             let kind = match &self.current {
-                Token { kind: TokenKind::SemiColon | TokenKind::Eof, .. }  => break,
-                Token { kind, .. } => kind.clone()
+                Token {
+                    kind: TokenKind::SemiColon | TokenKind::Eof,
+                    ..
+                } => break,
+                Token { kind, .. } => kind.clone(),
             };
 
             if let Some(lbp) = postfix_binding_power(&kind) {
@@ -1424,16 +1709,24 @@ impl Parser {
                         let then = self.expression(0)?;
                         expect!(self, TokenKind::Colon, "expected :");
                         let otherwise = self.expression(rbp)?;
-                        lhs = Expression::Ternary { condition: Box::new(lhs), then: Some(Box::new(then)), r#else: Box::new(otherwise) }
-                    },
+                        lhs = Expression::Ternary {
+                            condition: Box::new(lhs),
+                            then: Some(Box::new(then)),
+                            r#else: Box::new(otherwise),
+                        }
+                    }
                     TokenKind::QuestionColon => {
                         let r#else = self.expression(0)?;
-                        lhs = Expression::Ternary { condition: Box::new(lhs), then: None, r#else: Box::new(r#else) }
-                    },
+                        lhs = Expression::Ternary {
+                            condition: Box::new(lhs),
+                            then: None,
+                            r#else: Box::new(r#else),
+                        }
+                    }
                     _ => {
                         let rhs = self.expression(rbp)?;
                         lhs = infix(lhs, op, rhs);
-                    },
+                    }
                 }
 
                 continue;
@@ -1452,14 +1745,19 @@ impl Parser {
             TokenKind::Coalesce => {
                 let rhs = self.expression(11)?;
 
-                Expression::Coalesce { lhs: Box::new(lhs), rhs: Box::new(rhs) }
-            },
+                Expression::Coalesce {
+                    lhs: Box::new(lhs),
+                    rhs: Box::new(rhs),
+                }
+            }
             TokenKind::LeftParen => {
                 let mut args = Vec::new();
-                while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                while !self.is_eof() && self.current.kind != TokenKind::RightParen {
                     let mut name = None;
                     let mut unpack = false;
-                    if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
+                    if matches!(self.current.kind, TokenKind::Identifier(_))
+                        && self.peek.kind == TokenKind::Colon
+                    {
                         name = Some(self.ident_maybe_reserved()?);
                         self.next();
                     } else if self.current.kind == TokenKind::Ellipsis {
@@ -1472,78 +1770,97 @@ impl Parser {
                     args.push(Arg {
                         name,
                         unpack,
-                        value
+                        value,
                     });
 
                     self.optional_comma()?;
                 }
 
                 self.rparen()?;
-    
-                Expression::Call { target: Box::new(lhs), args }
-            },
+
+                Expression::Call {
+                    target: Box::new(lhs),
+                    args,
+                }
+            }
             TokenKind::LeftBracket => {
                 if self.current.kind == TokenKind::RightBracket {
                     self.next();
 
-                    Expression::ArrayIndex { array: Box::new(lhs), index: None }
+                    Expression::ArrayIndex {
+                        array: Box::new(lhs),
+                        index: None,
+                    }
                 } else {
                     let index = self.expression(0)?;
 
                     expect!(self, TokenKind::RightBracket, "expected ]");
 
-                    Expression::ArrayIndex { array: Box::new(lhs), index: Some(Box::new(index)) }
+                    Expression::ArrayIndex {
+                        array: Box::new(lhs),
+                        index: Some(Box::new(index)),
+                    }
                 }
-            },
-            TokenKind::DoubleColon => {
-                match self.current.kind.clone() {
-                    TokenKind::Variable(_) => {
-                        let var = self.expression(0)?;
+            }
+            TokenKind::DoubleColon => match self.current.kind.clone() {
+                TokenKind::Variable(_) => {
+                    let var = self.expression(0)?;
 
-                        Expression::StaticPropertyFetch { target: Box::new(lhs), property: Box::new(var) }
-                    },
-                    _ => {
-                        let ident = if self.current.kind == TokenKind::Class {
-                            self.next();
+                    Expression::StaticPropertyFetch {
+                        target: Box::new(lhs),
+                        property: Box::new(var),
+                    }
+                }
+                _ => {
+                    let ident = if self.current.kind == TokenKind::Class {
+                        self.next();
 
-                            String::from("class")
-                        } else {
-                            self.ident_maybe_reserved()?
-                        };
+                        String::from("class")
+                    } else {
+                        self.ident_maybe_reserved()?
+                    };
 
-                        if self.current.kind == TokenKind::LeftParen {
-                            self.lparen()?;
+                    if self.current.kind == TokenKind::LeftParen {
+                        self.lparen()?;
 
-                            let mut args = vec![];
-                            while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
-                                let mut name = None;
-                                let mut unpack = false;
-                                if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
-                                    name = Some(self.ident_maybe_reserved()?);
-                                    self.next();
-                                } else if self.current.kind == TokenKind::Ellipsis {
-                                    self.next();
-                                    unpack = true;
-                                }
-            
-                                let value = self.expression(0)?;
-            
-                                args.push(Arg {
-                                    name,
-                                    unpack,
-                                    value
-                                });
-            
-                                self.optional_comma()?;
+                        let mut args = vec![];
+                        while !self.is_eof() && self.current.kind != TokenKind::RightParen {
+                            let mut name = None;
+                            let mut unpack = false;
+                            if matches!(self.current.kind, TokenKind::Identifier(_))
+                                && self.peek.kind == TokenKind::Colon
+                            {
+                                name = Some(self.ident_maybe_reserved()?);
+                                self.next();
+                            } else if self.current.kind == TokenKind::Ellipsis {
+                                self.next();
+                                unpack = true;
                             }
 
-                            self.rparen()?;
+                            let value = self.expression(0)?;
 
-                            Expression::StaticMethodCall { target: Box::new(lhs), method: ident.into(), args }
-                        } else {
-                            Expression::ConstFetch { target: Box::new(lhs), constant: ident.into() }
+                            args.push(Arg {
+                                name,
+                                unpack,
+                                value,
+                            });
+
+                            self.optional_comma()?;
                         }
-                    },
+
+                        self.rparen()?;
+
+                        Expression::StaticMethodCall {
+                            target: Box::new(lhs),
+                            method: ident.into(),
+                            args,
+                        }
+                    } else {
+                        Expression::ConstFetch {
+                            target: Box::new(lhs),
+                            constant: ident.into(),
+                        }
+                    }
                 }
             },
             TokenKind::Arrow | TokenKind::NullsafeArrow => {
@@ -1553,59 +1870,73 @@ impl Parser {
                         let expr = self.expression(0)?;
                         self.rbrace()?;
                         expr
-                    },
+                    }
                     TokenKind::Variable(ref var) => {
-                        let var = Expression::Variable { name: var.to_string() };
+                        let var = Expression::Variable {
+                            name: var.to_string(),
+                        };
                         self.next();
                         var
-                    },
-                    _ => {
-                        Expression::Identifier { name: self.ident_maybe_reserved()? }
                     }
+                    _ => Expression::Identifier {
+                        name: self.ident_maybe_reserved()?,
+                    },
                 };
 
                 if self.current.kind == TokenKind::LeftParen {
                     self.next();
 
                     let mut args = Vec::new();
-                    while ! self.is_eof() && self.current.kind != TokenKind::RightParen {
+                    while !self.is_eof() && self.current.kind != TokenKind::RightParen {
                         let mut name = None;
                         let mut unpack = false;
-                        if matches!(self.current.kind, TokenKind::Identifier(_)) && self.peek.kind == TokenKind::Colon {
+                        if matches!(self.current.kind, TokenKind::Identifier(_))
+                            && self.peek.kind == TokenKind::Colon
+                        {
                             name = Some(self.ident_maybe_reserved()?);
                             self.next();
                         } else if self.current.kind == TokenKind::Ellipsis {
                             self.next();
                             unpack = true;
                         }
-    
+
                         let value = self.expression(0)?;
-    
+
                         args.push(Arg {
                             name,
                             value,
-                            unpack
+                            unpack,
                         });
-    
+
                         self.optional_comma()?;
                     }
 
                     self.rparen()?;
 
-                    Expression::MethodCall { target: Box::new(lhs), method: Box::new(property), args }
+                    Expression::MethodCall {
+                        target: Box::new(lhs),
+                        method: Box::new(property),
+                        args,
+                    }
                 } else {
                     if op == &TokenKind::NullsafeArrow {
-                        Expression::NullsafePropertyFetch { target: Box::new(lhs), property: Box::new(property) }
+                        Expression::NullsafePropertyFetch {
+                            target: Box::new(lhs),
+                            property: Box::new(property),
+                        }
                     } else {
-                        Expression::PropertyFetch { target: Box::new(lhs), property: Box::new(property) }
+                        Expression::PropertyFetch {
+                            target: Box::new(lhs),
+                            property: Box::new(property),
+                        }
                     }
                 }
+            }
+            TokenKind::Increment => Expression::Increment {
+                value: Box::new(lhs),
             },
-            TokenKind::Increment => {
-                Expression::Increment { value: Box::new(lhs) }
-            },
-            TokenKind::Decrement => {
-                Expression::Decrement { value: Box::new(lhs) }
+            TokenKind::Decrement => Expression::Decrement {
+                value: Box::new(lhs),
             },
             _ => todo!("postfix: {:?}", op),
         })
@@ -1622,33 +1953,56 @@ impl Parser {
 }
 
 fn is_prefix(op: &TokenKind) -> bool {
-    matches!(op, TokenKind::Bang | TokenKind::Minus | TokenKind::StringCast | TokenKind::ObjectCast | TokenKind::BoolCast | TokenKind::IntCast | TokenKind::DoubleCast)
+    matches!(
+        op,
+        TokenKind::Bang
+            | TokenKind::Minus
+            | TokenKind::StringCast
+            | TokenKind::ObjectCast
+            | TokenKind::BoolCast
+            | TokenKind::IntCast
+            | TokenKind::DoubleCast
+    )
 }
 
 fn prefix_binding_power(op: &TokenKind) -> u8 {
     match op {
-        TokenKind::StringCast | TokenKind::ObjectCast | TokenKind::BoolCast | TokenKind::IntCast | TokenKind::DoubleCast => 101,
+        TokenKind::StringCast
+        | TokenKind::ObjectCast
+        | TokenKind::BoolCast
+        | TokenKind::IntCast
+        | TokenKind::DoubleCast => 101,
         TokenKind::Minus => 100,
         TokenKind::Bang => 99,
-        _ => unreachable!()
+        _ => unreachable!(),
     }
 }
 
 fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
     match op {
-        TokenKind::Bang => Expression::BooleanNot { value: Box::new(rhs) },
-        TokenKind::Minus => Expression::Negate { value: Box::new(rhs) },
-        TokenKind::StringCast | TokenKind::ObjectCast | TokenKind::BoolCast | TokenKind::IntCast |
-        TokenKind::DoubleCast => Expression::Cast { kind: op.into(), value: Box::new(rhs) },
-        _ => unreachable!()
+        TokenKind::Bang => Expression::BooleanNot {
+            value: Box::new(rhs),
+        },
+        TokenKind::Minus => Expression::Negate {
+            value: Box::new(rhs),
+        },
+        TokenKind::StringCast
+        | TokenKind::ObjectCast
+        | TokenKind::BoolCast
+        | TokenKind::IntCast
+        | TokenKind::DoubleCast => Expression::Cast {
+            kind: op.into(),
+            value: Box::new(rhs),
+        },
+        _ => unreachable!(),
     }
 }
 
 fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
     Expression::Infix {
-        lhs: Box::new(lhs), 
+        lhs: Box::new(lhs),
         op: op.into(),
-        rhs: Box::new(rhs)
+        rhs: Box::new(rhs),
     }
 }
 
@@ -1659,12 +2013,24 @@ fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
         TokenKind::Asterisk | TokenKind::Slash => (14, 15),
         TokenKind::Plus | TokenKind::Minus => (12, 13),
         TokenKind::Dot => (12, 12),
-        TokenKind::LessThan | TokenKind::GreaterThan | TokenKind::LessThanEquals | TokenKind::GreaterThanEquals => (10, 11),
-        TokenKind::DoubleEquals | TokenKind::TripleEquals | TokenKind::BangEquals | TokenKind::BangDoubleEquals => (8, 9),
+        TokenKind::LessThan
+        | TokenKind::GreaterThan
+        | TokenKind::LessThanEquals
+        | TokenKind::GreaterThanEquals => (10, 11),
+        TokenKind::DoubleEquals
+        | TokenKind::TripleEquals
+        | TokenKind::BangEquals
+        | TokenKind::BangDoubleEquals => (8, 9),
         TokenKind::Question | TokenKind::QuestionColon => (6, 7),
         TokenKind::BooleanAnd => (4, 5),
         TokenKind::BooleanOr => (2, 3),
-        TokenKind::Equals | TokenKind::PlusEquals | TokenKind::MinusEquals | TokenKind::DotEquals | TokenKind::CoalesceEqual | TokenKind::AsteriskEqual | TokenKind::SlashEquals => (0, 1),
+        TokenKind::Equals
+        | TokenKind::PlusEquals
+        | TokenKind::MinusEquals
+        | TokenKind::DotEquals
+        | TokenKind::CoalesceEqual
+        | TokenKind::AsteriskEqual
+        | TokenKind::SlashEquals => (0, 1),
         _ => return None,
     })
 }
@@ -1675,7 +2041,7 @@ fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
         TokenKind::LeftParen | TokenKind::LeftBracket => 19,
         TokenKind::Arrow | TokenKind::NullsafeArrow | TokenKind::DoubleColon => 18,
         TokenKind::Coalesce => 11,
-        _ => return None
+        _ => return None,
     })
 }
 
@@ -1712,15 +2078,22 @@ impl Display for ParseError {
 
 #[cfg(test)]
 mod tests {
-    use trunk_lexer::Lexer;
-    use crate::{Statement, Param, Expression, ast::{InfixOp, ElseIf, MethodFlag, ArrayItem, Arg}, Type, Identifier};
     use super::Parser;
+    use crate::{
+        ast::{Arg, ArrayItem, ElseIf, InfixOp, MethodFlag},
+        Expression, Identifier, Param, Statement, Type,
+    };
+    use trunk_lexer::Lexer;
 
     macro_rules! function {
         ($name:literal, $params:expr, $body:expr) => {
             Statement::Function {
                 name: $name.to_string().into(),
-                params: $params.to_vec().into_iter().map(|p: &str| Param::from(p)).collect::<Vec<Param>>(),
+                params: $params
+                    .to_vec()
+                    .into_iter()
+                    .map(|p: &str| Param::from(p))
+                    .collect::<Vec<Param>>(),
                 body: $body.to_vec(),
                 return_type: None,
             }
@@ -1761,7 +2134,11 @@ mod tests {
         ($name:literal, $params:expr, $flags:expr, $body:expr) => {
             Statement::Method {
                 name: $name.to_string().into(),
-                params: $params.to_vec().into_iter().map(|p: &str| Param::from(p)).collect::<Vec<Param>>(),
+                params: $params
+                    .to_vec()
+                    .into_iter()
+                    .map(|p: &str| Param::from(p))
+                    .collect::<Vec<Param>>(),
                 flags: $flags.to_vec(),
                 body: $body.to_vec(),
                 return_type: None,
@@ -1771,24 +2148,24 @@ mod tests {
 
     macro_rules! expr {
         ($expr:expr) => {
-            Statement::Expression {
-                expr: $expr,
-            }
+            Statement::Expression { expr: $expr }
         };
     }
 
     #[test]
     fn instanceof() {
-        assert_ast("<?php $foo instanceof Foo;", &[
-            expr!(Expression::Infix {
+        assert_ast(
+            "<?php $foo instanceof Foo;",
+            &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::Variable { name: "foo".into() }),
                 op: InfixOp::Instanceof,
                 rhs: Box::new(Expression::Identifier { name: "Foo".into() })
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php $foo instanceof Foo && $foo instanceof Foo;", &[
-            expr!(Expression::Infix {
+        assert_ast(
+            "<?php $foo instanceof Foo && $foo instanceof Foo;",
+            &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::Infix {
                     lhs: Box::new(Expression::Variable { name: "foo".into() }),
                     op: InfixOp::Instanceof,
@@ -1800,33 +2177,36 @@ mod tests {
                     op: InfixOp::Instanceof,
                     rhs: Box::new(Expression::Identifier { name: "Foo".into() })
                 })
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn pow() {
-        assert_ast("<?php 2 ** 2;", &[
-            expr!(Expression::Infix {
+        assert_ast(
+            "<?php 2 ** 2;",
+            &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::Int { i: 2 }),
                 op: InfixOp::Pow,
                 rhs: Box::new(Expression::Int { i: 2 }),
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn ternary() {
-        assert_ast("<?php 1 ? 2 : 3;", &[
-            expr!(Expression::Ternary {
+        assert_ast(
+            "<?php 1 ? 2 : 3;",
+            &[expr!(Expression::Ternary {
                 condition: Box::new(Expression::Int { i: 1 }),
                 then: Some(Box::new(Expression::Int { i: 2 })),
                 r#else: Box::new(Expression::Int { i: 3 }),
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php 1 ? 2 ? 3 : 4 : 5;", &[
-            expr!(Expression::Ternary {
+        assert_ast(
+            "<?php 1 ? 2 ? 3 : 4 : 5;",
+            &[expr!(Expression::Ternary {
                 condition: Box::new(Expression::Int { i: 1 }),
                 then: Some(Box::new(Expression::Ternary {
                     condition: Box::new(Expression::Int { i: 2 }),
@@ -1834,136 +2214,161 @@ mod tests {
                     r#else: Box::new(Expression::Int { i: 4 }),
                 })),
                 r#else: Box::new(Expression::Int { i: 5 }),
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn coalesce() {
-        assert_ast("<?php 1 ?? 2;", &[
-            expr!(Expression::Coalesce {
+        assert_ast(
+            "<?php 1 ?? 2;",
+            &[expr!(Expression::Coalesce {
                 lhs: Box::new(Expression::Int { i: 1 }),
                 rhs: Box::new(Expression::Int { i: 2 })
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php 1 ?? 2 ?? 3;", &[
-            expr!(Expression::Coalesce {
+        assert_ast(
+            "<?php 1 ?? 2 ?? 3;",
+            &[expr!(Expression::Coalesce {
                 lhs: Box::new(Expression::Int { i: 1 }),
                 rhs: Box::new(Expression::Coalesce {
                     lhs: Box::new(Expression::Int { i: 2 }),
                     rhs: Box::new(Expression::Int { i: 3 })
                 })
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn array_index() {
-        assert_ast("<?php $foo['bar'];", &[
-            expr!(Expression::ArrayIndex {
+        assert_ast(
+            "<?php $foo['bar'];",
+            &[expr!(Expression::ArrayIndex {
                 array: Box::new(Expression::Variable { name: "foo".into() }),
-                index: Some(Box::new(Expression::ConstantString { value: "bar".into() }))
-            })
-        ]);
+                index: Some(Box::new(Expression::ConstantString {
+                    value: "bar".into()
+                }))
+            })],
+        );
 
-        assert_ast("<?php $foo['bar']['baz'];", &[
-            expr!(Expression::ArrayIndex {
+        assert_ast(
+            "<?php $foo['bar']['baz'];",
+            &[expr!(Expression::ArrayIndex {
                 array: Box::new(Expression::ArrayIndex {
                     array: Box::new(Expression::Variable { name: "foo".into() }),
-                    index: Some(Box::new(Expression::ConstantString { value: "bar".into() }))
+                    index: Some(Box::new(Expression::ConstantString {
+                        value: "bar".into()
+                    }))
                 }),
-                index: Some(Box::new(Expression::ConstantString { value: "baz".into() }))
-            })
-        ]);
+                index: Some(Box::new(Expression::ConstantString {
+                    value: "baz".into()
+                }))
+            })],
+        );
     }
 
     #[test]
     fn array_index_assign() {
-        assert_ast("<?php $foo['bar'] = 'baz';", &[
-            expr!(Expression::Infix{
+        assert_ast(
+            "<?php $foo['bar'] = 'baz';",
+            &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::ArrayIndex {
                     array: Box::new(Expression::Variable { name: "foo".into() }),
-                    index: Some(Box::new(Expression::ConstantString { value: "bar".into() }))
+                    index: Some(Box::new(Expression::ConstantString {
+                        value: "bar".into()
+                    }))
                 }),
                 op: InfixOp::Assign,
-                rhs: Box::new(Expression::ConstantString { value: "baz".into() })
-            })
-        ]);
+                rhs: Box::new(Expression::ConstantString {
+                    value: "baz".into()
+                })
+            })],
+        );
     }
 
     #[test]
     fn comparisons() {
-        assert_ast("<?php 1 == 1;", &[
-            expr!(Expression::Infix {
+        assert_ast(
+            "<?php 1 == 1;",
+            &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::Int { i: 1 }),
                 op: InfixOp::Equals,
                 rhs: Box::new(Expression::Int { i: 1 })
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php 1 === 1;", &[
-            expr!(Expression::Infix {
+        assert_ast(
+            "<?php 1 === 1;",
+            &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::Int { i: 1 }),
                 op: InfixOp::Identical,
                 rhs: Box::new(Expression::Int { i: 1 })
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php 1 != 1;", &[
-            expr!(Expression::Infix {
+        assert_ast(
+            "<?php 1 != 1;",
+            &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::Int { i: 1 }),
                 op: InfixOp::NotEquals,
                 rhs: Box::new(Expression::Int { i: 1 })
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php 1 !== 1;", &[
-            expr!(Expression::Infix {
+        assert_ast(
+            "<?php 1 !== 1;",
+            &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::Int { i: 1 }),
                 op: InfixOp::NotIdentical,
                 rhs: Box::new(Expression::Int { i: 1 })
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn paren_expression() {
-        assert_ast("<?php (1 + 2);", &[
-            Statement::Expression { expr: Expression::Infix {
-                lhs: Box::new(Expression::Int { i: 1 }),
-                op: InfixOp::Add,
-                rhs: Box::new(Expression::Int { i: 2 })
-            }}
-        ]);
+        assert_ast(
+            "<?php (1 + 2);",
+            &[Statement::Expression {
+                expr: Expression::Infix {
+                    lhs: Box::new(Expression::Int { i: 1 }),
+                    op: InfixOp::Add,
+                    rhs: Box::new(Expression::Int { i: 2 }),
+                },
+            }],
+        );
     }
 
     #[test]
     fn breaks() {
-        assert_ast("<?php break;", &[
-            Statement::Break { num: None }
-        ]);
+        assert_ast("<?php break;", &[Statement::Break { num: None }]);
 
-        assert_ast("<?php break 2;", &[
-            Statement::Break { num: Some(Expression::Int { i: 2 }) }
-        ]);
+        assert_ast(
+            "<?php break 2;",
+            &[Statement::Break {
+                num: Some(Expression::Int { i: 2 }),
+            }],
+        );
     }
 
     #[test]
     fn continues() {
-        assert_ast("<?php continue;", &[
-            Statement::Continue { num: None }
-        ]);
+        assert_ast("<?php continue;", &[Statement::Continue { num: None }]);
 
-        assert_ast("<?php continue 2;", &[
-            Statement::Continue { num: Some(Expression::Int { i: 2 }) }
-        ]);
+        assert_ast(
+            "<?php continue 2;",
+            &[Statement::Continue {
+                num: Some(Expression::Int { i: 2 }),
+            }],
+        );
     }
 
     #[test]
     fn math_precedence() {
-        assert_ast("<?php 1 + 2 * 3 / 4 - 5;", &[
-            expr!(Expression::Infix {
+        assert_ast(
+            "<?php 1 + 2 * 3 / 4 - 5;",
+            &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::Infix {
                     lhs: Box::new(Expression::Int { i: 1 }),
                     op: InfixOp::Add,
@@ -1979,39 +2384,44 @@ mod tests {
                 }),
                 op: InfixOp::Sub,
                 rhs: Box::new(Expression::Int { i: 5 })
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn property_fetch() {
-        assert_ast("<?php $foo->bar; $foo->bar->baz;", &[
-            expr!(Expression::PropertyFetch {
-                target: Box::new(Expression::Variable { name: "foo".into() }),
-                property: Box::new(Expression::Identifier { name: "bar".into() })
-            }),
-            expr!(Expression::PropertyFetch {
-                target: Box::new(Expression::PropertyFetch {
+        assert_ast(
+            "<?php $foo->bar; $foo->bar->baz;",
+            &[
+                expr!(Expression::PropertyFetch {
                     target: Box::new(Expression::Variable { name: "foo".into() }),
                     property: Box::new(Expression::Identifier { name: "bar".into() })
                 }),
-                property: Box::new(Expression::Identifier { name: "baz".into() })
-            })
-        ]);
+                expr!(Expression::PropertyFetch {
+                    target: Box::new(Expression::PropertyFetch {
+                        target: Box::new(Expression::Variable { name: "foo".into() }),
+                        property: Box::new(Expression::Identifier { name: "bar".into() })
+                    }),
+                    property: Box::new(Expression::Identifier { name: "baz".into() })
+                }),
+            ],
+        );
     }
 
     #[test]
     fn method_calls() {
-        assert_ast("<?php $foo->bar();", &[
-            expr!(Expression::MethodCall {
+        assert_ast(
+            "<?php $foo->bar();",
+            &[expr!(Expression::MethodCall {
                 target: Box::new(Expression::Variable { name: "foo".into() }),
                 method: Box::new(Expression::Identifier { name: "bar".into() }),
                 args: vec![]
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php $foo->bar()->baz();", &[
-            expr!(Expression::MethodCall {
+        assert_ast(
+            "<?php $foo->bar()->baz();",
+            &[expr!(Expression::MethodCall {
                 target: Box::new(Expression::MethodCall {
                     target: Box::new(Expression::Variable { name: "foo".into() }),
                     method: Box::new(Expression::Identifier { name: "bar".into() }),
@@ -2019,57 +2429,66 @@ mod tests {
                 }),
                 method: Box::new(Expression::Identifier { name: "baz".into() }),
                 args: vec![]
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php $foo->bar()();", &[
-            expr!(Expression::Call {
+        assert_ast(
+            "<?php $foo->bar()();",
+            &[expr!(Expression::Call {
                 target: Box::new(Expression::MethodCall {
-                    target: Box::new(Expression::Variable{ name: "foo".into() }),
+                    target: Box::new(Expression::Variable { name: "foo".into() }),
                     method: Box::new(Expression::Identifier { name: "bar".into() }),
                     args: vec![]
                 }),
                 args: vec![]
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn concat() {
-        assert_ast("<?php 'foo' . 'bar' . 'baz';", &[
-            expr!(Expression::Infix {
-                lhs: Box::new(Expression::ConstantString { value: "foo".into() }),
+        assert_ast(
+            "<?php 'foo' . 'bar' . 'baz';",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::ConstantString {
+                    value: "foo".into()
+                }),
                 op: InfixOp::Concat,
                 rhs: Box::new(Expression::Infix {
-                    lhs: Box::new(Expression::ConstantString { value: "bar".into() }),
+                    lhs: Box::new(Expression::ConstantString {
+                        value: "bar".into()
+                    }),
                     op: InfixOp::Concat,
-                    rhs: Box::new(Expression::ConstantString { value: "baz".into() }),
+                    rhs: Box::new(Expression::ConstantString {
+                        value: "baz".into()
+                    }),
                 })
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn empty_fn() {
-        assert_ast("<?php function foo() {}", &[
-            function!("foo", &[], &[]),
-        ]);
+        assert_ast("<?php function foo() {}", &[function!("foo", &[], &[])]);
     }
 
     #[test]
     fn empty_fn_with_params() {
-        assert_ast("<?php function foo($n) {}", &[
-            function!("foo", &["n"], &[]),
-        ]);
+        assert_ast(
+            "<?php function foo($n) {}",
+            &[function!("foo", &["n"], &[])],
+        );
 
-        assert_ast("<?php function foo($n, $m) {}", &[
-            function!("foo", &["n", "m"], &[]),
-        ]);
+        assert_ast(
+            "<?php function foo($n, $m) {}",
+            &[function!("foo", &["n", "m"], &[])],
+        );
     }
 
     #[test]
     fn fib() {
-        assert_ast("\
+        assert_ast(
+            "\
         <?php
 
         function fib($n) {
@@ -2078,26 +2497,28 @@ mod tests {
             }
 
             return fib($n - 1) + fib($n - 2);
-        }", &[
-            function!("fib", &["n"], &[
-                Statement::If {
-                    condition: Expression::Infix {
-                        lhs: Box::new(Expression::Variable { name: "n".into() }),
-                        op: InfixOp::LessThan,
-                        rhs: Box::new(Expression::Int { i: 2 }),
+        }",
+            &[function!(
+                "fib",
+                &["n"],
+                &[
+                    Statement::If {
+                        condition: Expression::Infix {
+                            lhs: Box::new(Expression::Variable { name: "n".into() }),
+                            op: InfixOp::LessThan,
+                            rhs: Box::new(Expression::Int { i: 2 }),
+                        },
+                        then: vec![Statement::Return {
+                            value: Some(Expression::Variable { name: "n".into() })
+                        }],
+                        else_ifs: vec![],
+                        r#else: None
                     },
-                    then: vec![
-                        Statement::Return { value: Some(Expression::Variable { name: "n".into() }) }
-                    ],
-                    else_ifs: vec![],
-                    r#else: None
-                },
-                Statement::Return {
-                    value: Some(Expression::Infix {
-                        lhs: Box::new(Expression::Call {
-                            target: Box::new(Expression::Identifier { name: "fib".into() }),
-                            args: vec![
-                                Arg {
+                    Statement::Return {
+                        value: Some(Expression::Infix {
+                            lhs: Box::new(Expression::Call {
+                                target: Box::new(Expression::Identifier { name: "fib".into() }),
+                                args: vec![Arg {
                                     name: None,
                                     value: Expression::Infix {
                                         lhs: Box::new(Expression::Variable { name: "n".into() }),
@@ -2105,14 +2526,12 @@ mod tests {
                                         rhs: Box::new(Expression::Int { i: 1 }),
                                     },
                                     unpack: false,
-                                }
-                            ]
-                        }),
-                        op: InfixOp::Add,
-                        rhs: Box::new(Expression::Call {
-                            target: Box::new(Expression::Identifier { name: "fib".into() }),
-                            args: vec![
-                                Arg {
+                                }]
+                            }),
+                            op: InfixOp::Add,
+                            rhs: Box::new(Expression::Call {
+                                target: Box::new(Expression::Identifier { name: "fib".into() }),
+                                args: vec![Arg {
                                     name: None,
                                     value: Expression::Infix {
                                         lhs: Box::new(Expression::Variable { name: "n".into() }),
@@ -2120,89 +2539,88 @@ mod tests {
                                         rhs: Box::new(Expression::Int { i: 2 }),
                                     },
                                     unpack: false,
-                                }
-                            ]
-                        }),
-                    })
-                }
-            ])
-        ]);
+                                }]
+                            }),
+                        })
+                    }
+                ]
+            )],
+        );
     }
 
     #[test]
     fn one_liner_if_statement() {
-        assert_ast("<?php if($foo) return $foo;", &[
-                Statement::If {
-                    condition: Expression::Variable { name: "foo".into() },
-                    then: vec![
-                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
-                    ],
-                    else_ifs: vec![],
-                    r#else: None
-                },
-        ]);
+        assert_ast(
+            "<?php if($foo) return $foo;",
+            &[Statement::If {
+                condition: Expression::Variable { name: "foo".into() },
+                then: vec![Statement::Return {
+                    value: Some(Expression::Variable { name: "foo".into() }),
+                }],
+                else_ifs: vec![],
+                r#else: None,
+            }],
+        );
     }
 
     #[test]
     fn if_else_statement() {
-        assert_ast("<?php if($foo) { return $foo; } else { return $foo; }", &[
-                Statement::If {
-                    condition: Expression::Variable { name: "foo".into() },
-                    then: vec![
-                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
-                    ],
-                    else_ifs: vec![],
-                    r#else: Some(vec![
-                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
-                    ])
-                },
-        ]);
+        assert_ast(
+            "<?php if($foo) { return $foo; } else { return $foo; }",
+            &[Statement::If {
+                condition: Expression::Variable { name: "foo".into() },
+                then: vec![Statement::Return {
+                    value: Some(Expression::Variable { name: "foo".into() }),
+                }],
+                else_ifs: vec![],
+                r#else: Some(vec![Statement::Return {
+                    value: Some(Expression::Variable { name: "foo".into() }),
+                }]),
+            }],
+        );
     }
 
     #[test]
     fn if_elseif_else_statement() {
-        assert_ast("<?php if($foo) { return $foo; } elseif($foo) { return $foo; } else { return $foo; }", &[
-                Statement::If {
+        assert_ast(
+            "<?php if($foo) { return $foo; } elseif($foo) { return $foo; } else { return $foo; }",
+            &[Statement::If {
+                condition: Expression::Variable { name: "foo".into() },
+                then: vec![Statement::Return {
+                    value: Some(Expression::Variable { name: "foo".into() }),
+                }],
+                else_ifs: vec![ElseIf {
                     condition: Expression::Variable { name: "foo".into() },
-                    then: vec![
-                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
-                    ],
-                    else_ifs: vec![
-                        ElseIf {
-                            condition: Expression::Variable { name: "foo".into() },
-                            body: vec![
-                                Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
-                            ]
-                        }
-                    ],
-                    r#else: Some(vec![
-                        Statement::Return { value: Some(Expression::Variable { name: "foo".into() }) }
-                    ])
-                },
-        ]);
+                    body: vec![Statement::Return {
+                        value: Some(Expression::Variable { name: "foo".into() }),
+                    }],
+                }],
+                r#else: Some(vec![Statement::Return {
+                    value: Some(Expression::Variable { name: "foo".into() }),
+                }]),
+            }],
+        );
     }
 
     #[test]
     fn echo() {
-        assert_ast("<?php echo 1;", &[
-            Statement::Echo {
-                values: vec![
-                    Expression::Int { i: 1 },
-                ]
-            }
-        ]);
+        assert_ast(
+            "<?php echo 1;",
+            &[Statement::Echo {
+                values: vec![Expression::Int { i: 1 }],
+            }],
+        );
     }
 
     #[test]
     fn empty_class() {
-        assert_ast("<?php class Foo {}", &[
-            class!("Foo")
-        ]);
+        assert_ast("<?php class Foo {}", &[class!("Foo")]);
     }
 
     #[test]
     fn class_with_basic_method() {
-        assert_ast("\
+        assert_ast(
+            "\
         <?php
         
         class Foo {
@@ -2210,97 +2628,106 @@ mod tests {
                 echo 1;
             }
         }
-        ", &[
-            class!("Foo", &[
-                method!("bar", &[], &[], &[
-                    Statement::Echo { values: vec![
-                        Expression::Int { i: 1 },
-                    ] }
-                ])
-            ])
-        ]);
+        ",
+            &[class!(
+                "Foo",
+                &[method!(
+                    "bar",
+                    &[],
+                    &[],
+                    &[Statement::Echo {
+                        values: vec![Expression::Int { i: 1 },]
+                    }]
+                )]
+            )],
+        );
     }
 
     #[test]
     fn class_with_extends() {
-        assert_ast("\
+        assert_ast(
+            "\
         <?php
         
         class Foo extends Bar {}
-        ", &[
-            class!("Foo", Some("Bar".to_string().into()), &[], &[]),
-        ]);
+        ",
+            &[class!("Foo", Some("Bar".to_string().into()), &[], &[])],
+        );
     }
-    
+
     #[test]
     fn class_with_implements() {
-        assert_ast("\
+        assert_ast(
+            "\
         <?php
         
         class Foo implements Bar, Baz {}
-        ", &[
-            class!("Foo", None, &["Bar".to_string().into(), "Baz".to_string().into()], &[]),
-        ]);
+        ",
+            &[class!(
+                "Foo",
+                None,
+                &["Bar".to_string().into(), "Baz".to_string().into()],
+                &[]
+            )],
+        );
     }
 
     #[test]
     fn plain_typestrings_test() {
-        assert_ast("<?php function foo(string $b) {}", &[
-            Statement::Function {
+        assert_ast(
+            "<?php function foo(string $b) {}",
+            &[Statement::Function {
                 name: "foo".to_string().into(),
-                params: vec![
-                    Param {
-                        name: Expression::Variable { name: "b".into() },
-                        r#type: Some(Type::Plain("string".into())),
-                        variadic: false,
-                        default: None,
-                        flag: None,
-                    }
-                ],
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: Some(Type::Plain("string".into())),
+                    variadic: false,
+                    default: None,
+                    flag: None,
+                }],
                 body: vec![],
                 return_type: None,
-            }
-        ]);
+            }],
+        );
     }
 
     #[test]
     fn variadic_params() {
-        assert_ast("<?php function foo(...$bar) {}", &[
-            Statement::Function {
+        assert_ast(
+            "<?php function foo(...$bar) {}",
+            &[Statement::Function {
                 name: "foo".to_string().into(),
-                params: vec![
-                    Param {
-                        name: Expression::Variable { name: "bar".into() },
-                        r#type: None,
-                        variadic: true,
-                        default: None,
-                        flag: None,
-                    }
-                ],
+                params: vec![Param {
+                    name: Expression::Variable { name: "bar".into() },
+                    r#type: None,
+                    variadic: true,
+                    default: None,
+                    flag: None,
+                }],
                 body: vec![],
                 return_type: None,
-            }
-        ]);
+            }],
+        );
 
-        assert_ast("<?php function foo(string ...$bar) {}", &[
-            Statement::Function {
+        assert_ast(
+            "<?php function foo(string ...$bar) {}",
+            &[Statement::Function {
                 name: "foo".to_string().into(),
-                params: vec![
-                    Param {
-                        name: Expression::Variable { name: "bar".into() },
-                        r#type: Some(Type::Plain("string".into())),
-                        variadic: true,
-                        default: None,
-                        flag: None,
-                    }
-                ],
+                params: vec![Param {
+                    name: Expression::Variable { name: "bar".into() },
+                    r#type: Some(Type::Plain("string".into())),
+                    variadic: true,
+                    default: None,
+                    flag: None,
+                }],
                 body: vec![],
                 return_type: None,
-            }
-        ]);
+            }],
+        );
 
-        assert_ast("<?php function foo($bar, $baz, ...$car) {}", &[
-            Statement::Function {
+        assert_ast(
+            "<?php function foo($bar, $baz, ...$car) {}",
+            &[Statement::Function {
                 name: "foo".to_string().into(),
                 params: vec![
                     Param {
@@ -2323,107 +2750,101 @@ mod tests {
                         variadic: true,
                         default: None,
                         flag: None,
-                    }
+                    },
                 ],
                 body: vec![],
                 return_type: None,
-            }
-        ]);
+            }],
+        );
     }
 
     #[test]
     fn nullable_typestrings_test() {
-        assert_ast("<?php function foo(?string $b) {}", &[
-            Statement::Function {
+        assert_ast(
+            "<?php function foo(?string $b) {}",
+            &[Statement::Function {
                 name: "foo".to_string().into(),
-                params: vec![
-                    Param {
-                        name: Expression::Variable { name: "b".into() },
-                        r#type: Some(Type::Nullable("string".into())),
-                        variadic: false,
-                        default: None,
-                        flag: None,
-                    }
-                ],
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: Some(Type::Nullable("string".into())),
+                    variadic: false,
+                    default: None,
+                    flag: None,
+                }],
                 body: vec![],
                 return_type: None,
-            }
-        ]);
+            }],
+        );
     }
 
     #[test]
     fn union_typestrings_test() {
-        assert_ast("<?php function foo(int|float $b) {}", &[
-            Statement::Function {
+        assert_ast(
+            "<?php function foo(int|float $b) {}",
+            &[Statement::Function {
                 name: "foo".to_string().into(),
-                params: vec![
-                    Param {
-                        name: Expression::Variable { name: "b".into() },
-                        r#type: Some(Type::Union(vec![
-                            "int".into(),
-                            "float".into()
-                        ])),
-                        variadic: false,
-                        default: None,
-                        flag: None,
-                    }
-                ],
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: Some(Type::Union(vec!["int".into(), "float".into()])),
+                    variadic: false,
+                    default: None,
+                    flag: None,
+                }],
                 body: vec![],
                 return_type: None,
-            },
-        ]);
+            }],
+        );
     }
 
     #[test]
     fn intersection_typestrings_test() {
-        assert_ast("<?php function foo(Foo&Bar $b) {}", &[
-            Statement::Function {
+        assert_ast(
+            "<?php function foo(Foo&Bar $b) {}",
+            &[Statement::Function {
                 name: "foo".to_string().into(),
-                params: vec![
-                    Param {
-                        name: Expression::Variable { name: "b".into() },
-                        r#type: Some(Type::Intersection(vec![
-                            "Foo".into(),
-                            "Bar".into()
-                        ])),
-                        variadic: false,
-                        default: None,
-                        flag: None,
-                    }
-                ],
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: Some(Type::Intersection(vec!["Foo".into(), "Bar".into()])),
+                    variadic: false,
+                    default: None,
+                    flag: None,
+                }],
                 body: vec![],
                 return_type: None,
-            }
-        ]);
+            }],
+        );
     }
 
     #[test]
     fn function_return_types() {
-        assert_ast("<?php function foo(): string {}", &[
-            Statement::Function {
+        assert_ast(
+            "<?php function foo(): string {}",
+            &[Statement::Function {
                 name: "foo".to_string().into(),
                 params: vec![],
                 body: vec![],
-                return_type: Some(Type::Plain("string".into()))
-            }
-        ]);
+                return_type: Some(Type::Plain("string".into())),
+            }],
+        );
     }
 
     #[test]
     fn new_anon_class() {
-        assert_ast("<?php new class{};", &[
-            expr!(Expression::New {
+        assert_ast(
+            "<?php new class{};",
+            &[expr!(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
                     extends: None,
                     implements: vec![],
                     body: vec![]
                 }),
                 args: vec![],
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php new class(1, 2) {};", &[
-            expr!(Expression::New {
+        assert_ast(
+            "<?php new class(1, 2) {};",
+            &[expr!(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
                     extends: None,
                     implements: vec![],
@@ -2441,82 +2862,81 @@ mod tests {
                         unpack: false,
                     },
                 ],
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php new class extends Foo {};", &[
-            expr!(Expression::New {
+        assert_ast(
+            "<?php new class extends Foo {};",
+            &[expr!(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
                     extends: Some(Identifier::from("Foo")),
                     implements: vec![],
                     body: vec![]
                 }),
                 args: vec![]
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php new class implements Foo, Bar {};", &[
-            expr!(Expression::New {
+        assert_ast(
+            "<?php new class implements Foo, Bar {};",
+            &[expr!(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
                     extends: None,
-                    implements: vec![
-                        Identifier::from("Foo"),
-                        Identifier::from("Bar"),
-                    ],
+                    implements: vec![Identifier::from("Foo"), Identifier::from("Bar"),],
                     body: vec![]
                 }),
                 args: vec![]
-            })
-        ]);
+            })],
+        );
 
-        assert_ast("<?php new class {
+        assert_ast(
+            "<?php new class {
             public function foo() {}
-        };", &[
-            expr!(Expression::New {
+        };",
+            &[expr!(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
                     extends: None,
                     implements: vec![],
-                    body: vec![
-                        Statement::Method {
-                            name: "foo".into(),
-                            params: vec![],
-                            body: vec![],
-                            return_type: None,
-                            flags: vec![
-                                MethodFlag::Public,
-                            ]
-                        }
-                    ]
+                    body: vec![Statement::Method {
+                        name: "foo".into(),
+                        params: vec![],
+                        body: vec![],
+                        return_type: None,
+                        flags: vec![MethodFlag::Public,]
+                    }]
                 }),
                 args: vec![]
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn foreach() {
-        assert_ast("<?php foreach ($foo as $bar) {}", &[
-            Statement::Foreach {
+        assert_ast(
+            "<?php foreach ($foo as $bar) {}",
+            &[Statement::Foreach {
                 expr: Expression::Variable { name: "foo".into() },
                 by_ref: false,
                 key_var: None,
                 value_var: Expression::Variable { name: "bar".into() },
                 body: vec![],
-            }
-        ]);
+            }],
+        );
 
-        assert_ast("<?php foreach ($foo as $bar => $baz) {}", &[
-            Statement::Foreach {
+        assert_ast(
+            "<?php foreach ($foo as $bar => $baz) {}",
+            &[Statement::Foreach {
                 expr: Expression::Variable { name: "foo".into() },
                 by_ref: false,
                 key_var: Some(Expression::Variable { name: "bar".into() }),
                 value_var: Expression::Variable { name: "baz".into() },
                 body: vec![],
-            }
-        ]);
+            }],
+        );
 
-        assert_ast("<?php foreach ($foo as [$baz, $car]) {}", &[
-            Statement::Foreach {
+        assert_ast(
+            "<?php foreach ($foo as [$baz, $car]) {}",
+            &[Statement::Foreach {
                 expr: Expression::Variable { name: "foo".into() },
                 by_ref: false,
                 key_var: None,
@@ -2524,24 +2944,22 @@ mod tests {
                     items: vec![
                         ArrayItem {
                             key: None,
-                            value: Expression::Variable { name: "baz".into() }
+                            value: Expression::Variable { name: "baz".into() },
                         },
                         ArrayItem {
                             key: None,
-                            value: Expression::Variable { name: "car".into() }
-                        }
-                    ]
+                            value: Expression::Variable { name: "car".into() },
+                        },
+                    ],
                 },
                 body: vec![],
-            }
-        ]);
+            }],
+        );
     }
 
     #[test]
     fn noop() {
-        assert_ast("<?php ;", &[
-            Statement::Noop,
-        ]);
+        assert_ast("<?php ;", &[Statement::Noop]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

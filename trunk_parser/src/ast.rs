@@ -48,7 +48,13 @@ pub struct Param {
 
 impl From<String> for Param {
     fn from(name: String) -> Self {
-        Self { name: Expression::Variable { name }, r#type: None, variadic: false, default: None, flag: None }
+        Self {
+            name: Expression::Variable { name },
+            r#type: None,
+            variadic: false,
+            default: None,
+            flag: None,
+        }
     }
 }
 
@@ -218,7 +224,7 @@ pub enum Statement {
         condition: Expression,
         then: Block,
         else_ifs: Vec<ElseIf>,
-        r#else: Option<Block>
+        r#else: Option<Block>,
     },
     Return {
         value: Option<Expression>,
@@ -285,7 +291,7 @@ impl From<TokenKind> for CastKind {
             TokenKind::BoolCast => Self::Bool,
             TokenKind::IntCast => Self::Int,
             TokenKind::DoubleCast => Self::Double,
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 }
@@ -351,39 +357,39 @@ pub enum Expression {
         value: Box<Self>,
     },
     Int {
-        i: i64
+        i: i64,
     },
     Float {
         f: f64,
     },
     Variable {
-        name: String
+        name: String,
     },
     Infix {
         lhs: Box<Self>,
         op: InfixOp,
-        rhs: Box<Self>
+        rhs: Box<Self>,
     },
     Call {
         target: Box<Self>,
-        args: Vec<Arg>
+        args: Vec<Arg>,
     },
     Identifier {
-        name: String
+        name: String,
     },
     Array {
-        items: Vec<ArrayItem>
+        items: Vec<ArrayItem>,
     },
     Closure {
         params: Vec<Param>,
         uses: Vec<ClosureUse>,
         return_type: Option<Type>,
-        body: Block
+        body: Block,
     },
     ArrowFunction {
         params: Vec<Param>,
         return_type: Option<Type>,
-        expr: Box<Self>
+        expr: Box<Self>,
     },
     New {
         target: Box<Self>,
@@ -402,50 +408,52 @@ pub enum Expression {
     },
     StaticPropertyFetch {
         target: Box<Self>,
-        property: Box<Self>
+        property: Box<Self>,
     },
     ConstFetch {
         target: Box<Self>,
-        constant: Identifier
+        constant: Identifier,
     },
     MethodCall {
         target: Box<Self>,
         method: Box<Self>,
-        args: Vec<Arg>
+        args: Vec<Arg>,
     },
     StaticMethodCall {
         target: Box<Self>,
         method: Identifier,
-        args: Vec<Arg>
+        args: Vec<Arg>,
     },
     AnonymousClass {
         extends: Option<Identifier>,
         implements: Vec<Identifier>,
-        body: Block
+        body: Block,
     },
-    Bool { value: bool },
+    Bool {
+        value: bool,
+    },
     ArrayIndex {
-        array: Box<Self>, 
-        index: Option<Box<Self>>
+        array: Box<Self>,
+        index: Option<Box<Self>>,
     },
     Null,
     BooleanNot {
-        value: Box<Self>
+        value: Box<Self>,
     },
     MagicConst {
-        constant: MagicConst
+        constant: MagicConst,
     },
     Ternary {
         condition: Box<Self>,
         then: Option<Box<Self>>,
-        r#else: Box<Self>
+        r#else: Box<Self>,
     },
     Coalesce {
-        lhs: Box<Self>, 
-        rhs: Box<Self>
+        lhs: Box<Self>,
+        rhs: Box<Self>,
     },
     Clone {
-        target: Box<Self>
+        target: Box<Self>,
     },
     Match {
         condition: Box<Self>,
@@ -551,7 +559,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::AsteriskEqual => Self::MulAssign,
             TokenKind::MinusEquals => Self::SubAssign,
             TokenKind::SlashEquals => Self::DivAssign,
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 }

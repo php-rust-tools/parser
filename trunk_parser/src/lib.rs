@@ -2,6 +2,8 @@ mod ast;
 mod parser;
 mod traverser;
 
-pub use ast::{Statement, Expression, Program, Block, Param, Identifier, Type, InfixOp, MatchArm, Catch, Case};
-pub use parser::{Parser, ParseError};
+pub use ast::{
+    Block, Case, Catch, Expression, Identifier, InfixOp, MatchArm, Param, Program, Statement, Type,
+};
+pub use parser::{ParseError, Parser};
 pub use traverser::*;
