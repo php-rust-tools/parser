@@ -971,11 +971,16 @@ impl Parser {
         self.lbrace()?;
 
         let mut body = Vec::new();
-        self.gather_comments();
         while self.current.kind != TokenKind::RightBrace && !self.is_eof() {
+            self.gather_comments();
+
+            if self.current.kind == TokenKind::RightBrace {
+                self.clear_comments();
+                break;
+            }
+
             body.push(self.class_statement()?);
         }
-
         self.rbrace()?;
 
         Ok(Statement::Class {
@@ -988,8 +993,6 @@ impl Parser {
     }
 
     fn class_statement(&mut self) -> ParseResult<Statement> {
-        self.gather_comments();
-
         match self.current.kind {
             TokenKind::Use => {
                 self.next();
@@ -2086,7 +2089,7 @@ impl Display for ParseError {
 mod tests {
     use super::Parser;
     use crate::{
-        ast::{Arg, ArrayItem, ElseIf, InfixOp, MethodFlag},
+        ast::{Arg, ArrayItem, ElseIf, InfixOp, MethodFlag, PropertyFlag},
         Expression, Identifier, Param, Statement, Type,
     };
     use trunk_lexer::Lexer;
@@ -2979,6 +2982,19 @@ mod tests {
     #[test]
     fn noop() {
         assert_ast("<?php ;", &[Statement::Noop]);
+    }
+
+    #[test]
+    fn comment_at_end_of_class() {
+        assert_ast("<?php
+        class MyClass {
+            protected $a;
+            // my comment
+        }", &[
+            Statement::Class { name: "MyClass".into(), extends: None, implements: vec![], body: vec![
+                Statement::Property { var: "a".into(), value: None, r#type: None, flags: vec![PropertyFlag::Protected] }
+            ], flag: None }
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
