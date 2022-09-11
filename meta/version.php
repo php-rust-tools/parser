@@ -5,8 +5,6 @@ $files = [
     __DIR__ . '/../trunk_compiler/Cargo.toml',
     __DIR__ . '/../trunk_parser/Cargo.toml',
     __DIR__ . '/../trunk_lexer/Cargo.toml',
-    __DIR__ . '/../trunk_bytecode/Cargo.toml',
-    __DIR__ . '/../phpast/Cargo.toml',
 ];
 
 $version = readline('What would you like the new version to be?     ');
