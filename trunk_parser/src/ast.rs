@@ -271,6 +271,9 @@ pub enum Statement {
         name: Identifier,
         value: Option<Expression>,
     },
+    Block {
+        body: Block,
+    },
     Noop,
 }
 

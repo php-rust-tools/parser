@@ -893,6 +893,12 @@ impl Parser {
                     finally,
                 }
             }
+            TokenKind::LeftBrace => {
+                self.next();
+                let body = self.block(&TokenKind::RightBrace)?;
+                self.rbrace()?;
+                Statement::Block { body }
+            }
             _ => {
                 let expr = self.expression(0)?;
 
@@ -2953,6 +2959,19 @@ mod tests {
                     ],
                 },
                 body: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn block() {
+        assert_ast("<?php {}", &[Statement::Block { body: vec![] }]);
+        assert_ast(
+            "<?php { $a; }",
+            &[Statement::Block {
+                body: vec![Statement::Expression {
+                    expr: Expression::Variable { name: "a".into() },
+                }],
             }],
         );
     }
