@@ -20,7 +20,7 @@ The Trunk project originally started with me ([Ryan](https://github.com/ryangjch
 
 Once I had something worth sharing, I created this GitHub repository and some people were interested in what I was doing. Since then, it's become a hobby project for myself and I tend to work on it in my spare time.
 
-The current goal for Trunk is to get a fully functional parser up and running so that it can be used in some meaningful projects, aimed at bringing the speed and performance of modern PHP tooling closer to that of [our](https://deno.land) [cousins](https://bun.sh) [JavaScript](https://swc.rs/) [land](https://esbuild.github.io).
+The current goal for Trunk is to get a fully functional parser up and running so that it can be used in some meaningful projects, aimed at bringing the speed and performance of modern PHP tooling closer to that of [our](https://deno.land) [cousins](https://bun.sh) in [JavaScript](https://swc.rs/) [land](https://esbuild.github.io).
 
 #### Libraries and Tools
 
