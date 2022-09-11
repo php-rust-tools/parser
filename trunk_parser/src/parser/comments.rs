@@ -1,16 +1,22 @@
-use trunk_lexer::{TokenKind, Token};
+use trunk_lexer::{Token, TokenKind};
 
 use crate::Parser;
 
 impl Parser {
     pub(crate) fn skip_comments(&mut self) {
-        while matches!(self.current.kind, TokenKind::Comment(_) | TokenKind::DocComment(_)) {
+        while matches!(
+            self.current.kind,
+            TokenKind::Comment(_) | TokenKind::DocComment(_)
+        ) {
             self.next();
         }
     }
 
     pub(crate) fn gather_comments(&mut self) {
-        while matches!(self.current.kind, TokenKind::Comment(_) | TokenKind::DocComment(_)) {
+        while matches!(
+            self.current.kind,
+            TokenKind::Comment(_) | TokenKind::DocComment(_)
+        ) {
             self.comments.push(self.current.clone());
             self.next();
         }

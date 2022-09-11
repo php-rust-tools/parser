@@ -1,6 +1,6 @@
 use trunk_lexer::TokenKind;
 
-use crate::{Parser, ParseError};
+use crate::{ParseError, Parser};
 
 use super::ParseResult;
 
@@ -39,7 +39,7 @@ impl Parser {
         if self.current.kind == TokenKind::Comma {
             expect!(self, TokenKind::Comma, (), "expected ,");
         }
-        
+
         Ok(())
     }
 }

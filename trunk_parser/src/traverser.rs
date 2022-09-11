@@ -1,4 +1,4 @@
-use crate::{Statement, Program};
+use crate::{Program, Statement};
 
 pub trait Visitor {
     fn visit(&mut self, statement: &Statement);
