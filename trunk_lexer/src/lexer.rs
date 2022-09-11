@@ -1,4 +1,4 @@
-use crate::{Token, TokenKind, OpenTagKind};
+use crate::{OpenTagKind, Token, TokenKind};
 
 #[derive(Debug)]
 pub enum LexerState {
@@ -52,15 +52,15 @@ impl Lexer {
                 // of some description.
                 LexerState::Initial => {
                     tokens.append(&mut self.initial()?);
-                },
+                }
                 // The scripting state is entered when an open tag is encountered in the source code.
                 // This tells the lexer to start analysing characters at PHP tokens instead of inline HTML.
                 LexerState::Scripting => {
                     while let Some(c) = self.peek {
-                        if ! c.is_whitespace() && ! ['\n', '\t', '\r'].contains(&c) {
+                        if !c.is_whitespace() && !['\n', '\t', '\r'].contains(&c) {
                             break;
                         }
-                
+
                         if c == '\n' {
                             self.line += 1;
                             self.col = 0;
@@ -77,7 +77,7 @@ impl Lexer {
                     }
 
                     tokens.push(self.scripting()?);
-                },
+                }
             }
         }
 
@@ -107,7 +107,7 @@ impl Lexer {
 
                                     self.enter_state(LexerState::Scripting);
 
-                                    let mut tokens = vec!();
+                                    let mut tokens = vec![];
 
                                     if !buffer.is_empty() {
                                         tokens.push(Token {
@@ -115,10 +115,10 @@ impl Lexer {
                                             span: (self.line, self.col.saturating_sub(5)),
                                         });
                                     }
-                                    
+
                                     tokens.push(Token {
                                         kind: TokenKind::OpenTag(OpenTagKind::Full),
-                                        span: (self.line, self.col)
+                                        span: (self.line, self.col),
                                     });
 
                                     return Ok(tokens);
@@ -138,20 +138,18 @@ impl Lexer {
 
                         buffer.push(char);
                     }
-                },
+                }
                 _ => {
                     self.next();
                     buffer.push(char);
-                },
+                }
             }
         }
 
-        Ok(vec![
-            Token {
-                kind: TokenKind::InlineHtml(buffer),
-                span: (self.line, self.col)
-            }
-        ])
+        Ok(vec![Token {
+            kind: TokenKind::InlineHtml(buffer),
+            span: (self.line, self.col),
+        }])
     }
 
     fn scripting(&mut self) -> Result<Token, LexerError> {
@@ -187,7 +185,7 @@ impl Lexer {
                 } else {
                     TokenKind::Bang
                 }
-            },
+            }
             '&' => {
                 self.col += 1;
 
@@ -200,7 +198,7 @@ impl Lexer {
                 } else {
                     TokenKind::Ampersand
                 }
-            },
+            }
             '?' => {
                 // This is a close tag, we can enter "Initial" mode again.
                 if let Some('>') = self.peek {
@@ -236,7 +234,7 @@ impl Lexer {
                 } else {
                     TokenKind::Question
                 }
-            },
+            }
             '=' => {
                 if let Some('=') = self.peek {
                     self.next();
@@ -261,7 +259,7 @@ impl Lexer {
 
                     TokenKind::Equals
                 }
-            },
+            }
             // Single quoted string.
             '\'' => {
                 self.col += 1;
@@ -270,7 +268,7 @@ impl Lexer {
                 let mut escaping = false;
 
                 while let Some(n) = self.peek {
-                    if ! escaping && n == '\'' {
+                    if !escaping && n == '\'' {
                         self.next();
 
                         break;
@@ -303,7 +301,7 @@ impl Lexer {
                 }
 
                 TokenKind::ConstantString(buffer)
-            },
+            }
             '"' => {
                 self.col += 1;
 
@@ -311,7 +309,7 @@ impl Lexer {
                 let mut escaping = false;
 
                 while let Some(n) = self.peek {
-                    if ! escaping && n == '"' {
+                    if !escaping && n == '"' {
                         self.next();
 
                         break;
@@ -344,7 +342,7 @@ impl Lexer {
                 }
 
                 TokenKind::ConstantString(buffer)
-            },
+            }
             '$' => {
                 let mut buffer = String::new();
 
@@ -356,8 +354,8 @@ impl Lexer {
                             self.col += 1;
                             buffer.push(n);
                             self.next();
-                        },
-                        'a'..='z' | 'A'..='Z' | '\u{80}'..='\u{ff}' | '_'  => {
+                        }
+                        'a'..='z' | 'A'..='Z' | '\u{80}'..='\u{ff}' | '_' => {
                             self.col += 1;
 
                             buffer.push(n);
@@ -368,7 +366,7 @@ impl Lexer {
                 }
 
                 TokenKind::Variable(buffer)
-            },
+            }
             '.' => {
                 self.col += 1;
 
@@ -382,19 +380,19 @@ impl Lexer {
                                 underscore = false;
                                 buffer.push(n);
                                 self.next();
-    
+
                                 self.col += 1;
-                            },
+                            }
                             '_' => {
                                 if underscore {
                                     return Err(LexerError::UnexpectedCharacter(n));
                                 }
-    
+
                                 underscore = true;
                                 self.next();
-    
+
                                 self.col += 1;
-                            },
+                            }
                             _ => break,
                         }
                     }
@@ -421,7 +419,7 @@ impl Lexer {
                 } else {
                     TokenKind::Dot
                 }
-            },
+            }
             '0'..='9' => {
                 let mut buffer = String::from(char);
                 let mut underscore = false;
@@ -437,7 +435,7 @@ impl Lexer {
                             self.next();
 
                             self.col += 1;
-                        },
+                        }
                         '.' => {
                             if is_float {
                                 return Err(LexerError::UnexpectedCharacter(n));
@@ -447,7 +445,7 @@ impl Lexer {
                             buffer.push(n);
                             self.next();
                             self.col += 1;
-                        },
+                        }
                         '_' => {
                             if underscore {
                                 return Err(LexerError::UnexpectedCharacter(n));
@@ -457,7 +455,7 @@ impl Lexer {
                             self.next();
 
                             self.col += 1;
-                        },
+                        }
                         _ => break,
                     }
                 }
@@ -467,7 +465,7 @@ impl Lexer {
                 } else {
                     TokenKind::Int(buffer.parse().unwrap())
                 }
-            },
+            }
             '\\' => {
                 self.col += 1;
 
@@ -481,7 +479,7 @@ impl Lexer {
                 } else {
                     TokenKind::NamespaceSeparator
                 }
-            },
+            }
             _ if char.is_alphabetic() || char == '_' => {
                 self.col += 1;
 
@@ -498,7 +496,7 @@ impl Lexer {
                         continue;
                     }
 
-                    if next == '\\' && ! last_was_slash {
+                    if next == '\\' && !last_was_slash {
                         qualified = true;
                         last_was_slash = true;
                         buffer.push(next);
@@ -515,7 +513,7 @@ impl Lexer {
                 } else {
                     identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer))
                 }
-            },
+            }
             '/' | '#' => {
                 self.col += 1;
 
@@ -545,7 +543,7 @@ impl Lexer {
                         let t = self.current.unwrap();
 
                         match t {
-                            '*' => {                     
+                            '*' => {
                                 if let Some('/') = self.peek {
                                     self.col += 2;
                                     buffer.push_str("*/");
@@ -589,7 +587,7 @@ impl Lexer {
 
                     TokenKind::Comment(buffer)
                 }
-            },
+            }
             '*' => {
                 self.col += 1;
 
@@ -604,10 +602,10 @@ impl Lexer {
                 } else {
                     TokenKind::Asterisk
                 }
-            },
+            }
             '|' => {
                 self.col += 1;
-                
+
                 if let Some('|') = self.peek {
                     self.col += 1;
 
@@ -617,23 +615,23 @@ impl Lexer {
                 } else {
                     TokenKind::Pipe
                 }
-            },
+            }
             '{' => {
                 self.col += 1;
                 TokenKind::LeftBrace
-            },
+            }
             '}' => {
                 self.col += 1;
                 TokenKind::RightBrace
-            },
+            }
             '(' => {
                 self.col += 1;
 
                 if self.try_read("string)") {
                     self.col += 7;
                     self.skip(8);
-                    
-                    TokenKind::StringCast 
+
+                    TokenKind::StringCast
                 } else if self.try_read("object)") {
                     self.col += 7;
                     self.skip(8);
@@ -654,15 +652,15 @@ impl Lexer {
                 } else {
                     TokenKind::LeftParen
                 }
-            },
+            }
             ')' => {
                 self.col += 1;
                 TokenKind::RightParen
-            },
+            }
             ';' => {
                 self.col += 1;
                 TokenKind::SemiColon
-            },
+            }
             '+' => {
                 self.col += 1;
 
@@ -670,7 +668,7 @@ impl Lexer {
                     self.col += 1;
 
                     self.next();
-                    
+
                     TokenKind::PlusEquals
                 } else if let Some('+') = self.peek {
                     self.col += 1;
@@ -681,10 +679,10 @@ impl Lexer {
                 } else {
                     TokenKind::Plus
                 }
-            },
+            }
             '-' => {
                 self.col += 1;
-                
+
                 if let Some('>') = self.peek {
                     self.col += 1;
 
@@ -698,7 +696,7 @@ impl Lexer {
                 } else {
                     TokenKind::Minus
                 }
-            },
+            }
             '<' => {
                 self.col += 1;
 
@@ -718,11 +716,11 @@ impl Lexer {
                         todo!("heredocs & nowdocs");
                     } else {
                         TokenKind::LeftShift
-                    }                 
+                    }
                 } else {
                     TokenKind::LessThan
                 }
-            },
+            }
             '>' => {
                 self.col += 1;
 
@@ -735,37 +733,42 @@ impl Lexer {
                 } else {
                     TokenKind::GreaterThan
                 }
-            },
+            }
             ',' => {
                 self.col += 1;
                 TokenKind::Comma
-            },
+            }
             '[' => {
                 self.col += 1;
                 TokenKind::LeftBracket
-            },
+            }
             ']' => {
                 self.col += 1;
                 TokenKind::RightBracket
-            },
+            }
             ':' => {
                 self.col += 1;
 
                 if let Some(':') = self.peek {
                     self.col += 1;
-                    
+
                     self.next();
                     TokenKind::DoubleColon
                 } else {
                     TokenKind::Colon
                 }
-            },
-            _ => unimplemented!("<scripting> char: {}, line: {}, col: {}", char, self.line, self.col),
+            }
+            _ => unimplemented!(
+                "<scripting> char: {}, line: {}, col: {}",
+                char,
+                self.line,
+                self.col
+            ),
         };
 
         Ok(Token {
             kind,
-            span: (self.line, self.col)
+            span: (self.line, self.col),
         })
     }
 
@@ -872,8 +875,8 @@ pub enum LexerError {
 
 #[cfg(test)]
 mod tests {
-    use crate::{TokenKind, OpenTagKind, Token};
     use super::Lexer;
+    use crate::{OpenTagKind, Token, TokenKind};
 
     macro_rules! open {
         () => {
@@ -881,7 +884,7 @@ mod tests {
         };
         ($kind:expr) => {
             TokenKind::OpenTag($kind)
-        }
+        };
     }
     macro_rules! var {
         ($v:expr) => {
@@ -896,18 +899,15 @@ mod tests {
 
     #[test]
     fn basic_tokens() {
-        assert_tokens("<?php ?>", &[
-            open!(),
-            TokenKind::CloseTag,
-        ]);
+        assert_tokens("<?php ?>", &[open!(), TokenKind::CloseTag]);
     }
 
     #[test]
     fn inline_html() {
-        assert_tokens("Hello, world!\n<?php", &[
-            TokenKind::InlineHtml("Hello, world!\n".into()),
-            open!(),
-        ]);
+        assert_tokens(
+            "Hello, world!\n<?php",
+            &[TokenKind::InlineHtml("Hello, world!\n".into()), open!()],
+        );
     }
 
     #[test]
@@ -945,174 +945,183 @@ mod tests {
 
     #[test]
     fn casts() {
-        assert_tokens("<?php (object) (string)", &[
-            open!(),
-            TokenKind::ObjectCast,
-            TokenKind::StringCast,
-        ]);
+        assert_tokens(
+            "<?php (object) (string)",
+            &[open!(), TokenKind::ObjectCast, TokenKind::StringCast],
+        );
     }
 
     #[test]
     fn constant_single_quote_strings() {
-        assert_tokens(r#"<?php 'Hello, world!' 'I\'m a developer.' 'This is a backslash \\.' 'This is a multi-line
-string.'"#, &[
-            open!(),
-            TokenKind::ConstantString("Hello, world!".into()),
-            TokenKind::ConstantString("I'm a developer.".into()),
-            TokenKind::ConstantString("This is a backslash \\.".into()),
-            TokenKind::ConstantString("This is a multi-line\nstring.".into()),
-        ]);
+        assert_tokens(
+            r#"<?php 'Hello, world!' 'I\'m a developer.' 'This is a backslash \\.' 'This is a multi-line
+string.'"#,
+            &[
+                open!(),
+                TokenKind::ConstantString("Hello, world!".into()),
+                TokenKind::ConstantString("I'm a developer.".into()),
+                TokenKind::ConstantString("This is a backslash \\.".into()),
+                TokenKind::ConstantString("This is a multi-line\nstring.".into()),
+            ],
+        );
     }
 
     #[test]
     fn single_line_comments() {
-        assert_tokens(r#"<?php
+        assert_tokens(
+            r#"<?php
         // Single line comment.
         # Another single line comment.
-        "#, &[
-            open!(),
-            TokenKind::Comment("// Single line comment.".into()),
-            TokenKind::Comment("# Another single line comment.".into()),
-        ]);
+        "#,
+            &[
+                open!(),
+                TokenKind::Comment("// Single line comment.".into()),
+                TokenKind::Comment("# Another single line comment.".into()),
+            ],
+        );
     }
 
     #[test]
     fn multi_line_comments() {
-        assert_tokens(r#"<?php
+        assert_tokens(
+            r#"<?php
 /*
 Hello
-*/"#, &[
-            open!(),
-            TokenKind::Comment("/*\nHello\n*/".into()),
-        ])
+*/"#,
+            &[open!(), TokenKind::Comment("/*\nHello\n*/".into())],
+        )
     }
 
     #[test]
     fn multi_line_comments_before_structure() {
-        assert_tokens(r#"<?php
+        assert_tokens(
+            r#"<?php
 /*
 Hello
 */
-function"#, &[
-            open!(),
-            TokenKind::Comment("/*\nHello\n*/".into()),
-            TokenKind::Function,
-        ])
+function"#,
+            &[
+                open!(),
+                TokenKind::Comment("/*\nHello\n*/".into()),
+                TokenKind::Function,
+            ],
+        )
     }
 
     #[test]
     fn vars() {
-        assert_tokens("<?php $one $_one $One $one_one", &[
-            open!(),
-            var!("one"),
-            var!("_one"),
-            var!("One"),
-            var!("one_one"),
-        ]);
+        assert_tokens(
+            "<?php $one $_one $One $one_one",
+            &[
+                open!(),
+                var!("one"),
+                var!("_one"),
+                var!("One"),
+                var!("one_one"),
+            ],
+        );
     }
 
     #[test]
     fn nums() {
-        assert_tokens("<?php 1 1_000 1_000_000", &[
-            open!(),
-            int!(1),
-            int!(1_000),
-            int!(1_000_000),
-        ]);
+        assert_tokens(
+            "<?php 1 1_000 1_000_000",
+            &[open!(), int!(1), int!(1_000), int!(1_000_000)],
+        );
     }
 
     #[test]
     fn punct() {
-        assert_tokens("<?php {}();, :: :", &[
-            open!(),
-            TokenKind::LeftBrace,
-            TokenKind::RightBrace,
-            TokenKind::LeftParen,
-            TokenKind::RightParen,
-            TokenKind::SemiColon, 
-            TokenKind::Comma,
-            TokenKind::DoubleColon,
-            TokenKind::Colon,
-        ]);
+        assert_tokens(
+            "<?php {}();, :: :",
+            &[
+                open!(),
+                TokenKind::LeftBrace,
+                TokenKind::RightBrace,
+                TokenKind::LeftParen,
+                TokenKind::RightParen,
+                TokenKind::SemiColon,
+                TokenKind::Comma,
+                TokenKind::DoubleColon,
+                TokenKind::Colon,
+            ],
+        );
     }
 
     #[test]
     fn sigils() {
-        assert_tokens("<?php ->", &[
-            open!(),
-            TokenKind::Arrow,
-        ]);
+        assert_tokens("<?php ->", &[open!(), TokenKind::Arrow]);
     }
 
     #[test]
     fn math() {
-        assert_tokens("<?php + - <", &[
-            open!(),
-            TokenKind::Plus,
-            TokenKind::Minus,
-            TokenKind::LessThan,
-        ]);
+        assert_tokens(
+            "<?php + - <",
+            &[
+                open!(),
+                TokenKind::Plus,
+                TokenKind::Minus,
+                TokenKind::LessThan,
+            ],
+        );
     }
 
     #[test]
     fn identifiers() {
-        assert_tokens("<?php \\ Unqualified Is\\Qualified", &[
-            open!(),
-            TokenKind::NamespaceSeparator,
-            TokenKind::Identifier("Unqualified".into()),
-            TokenKind::QualifiedIdentifier("Is\\Qualified".into()),
-        ]);
+        assert_tokens(
+            "<?php \\ Unqualified Is\\Qualified",
+            &[
+                open!(),
+                TokenKind::NamespaceSeparator,
+                TokenKind::Identifier("Unqualified".into()),
+                TokenKind::QualifiedIdentifier("Is\\Qualified".into()),
+            ],
+        );
     }
 
     #[test]
     fn equals() {
-        assert_tokens("<?php = == ===", &[
-            open!(),
-            TokenKind::Equals,
-            TokenKind::DoubleEquals,
-            TokenKind::TripleEquals,
-        ]);
+        assert_tokens(
+            "<?php = == ===",
+            &[
+                open!(),
+                TokenKind::Equals,
+                TokenKind::DoubleEquals,
+                TokenKind::TripleEquals,
+            ],
+        );
     }
 
     #[test]
     fn span_tracking() {
         let spans = get_spans("<?php hello_world()");
 
-        assert_eq!(spans, &[
-            (1, 4),
-            (1, 16),
-            (1, 17),
-            (1, 18),
-        ]);
+        assert_eq!(spans, &[(1, 4), (1, 16), (1, 17), (1, 18),]);
 
-        let spans = get_spans(r#"<?php
-        
+        let spans = get_spans(
+            r#"<?php
+
 function hello_world() {
 
-}"#);
-        
-        assert_eq!(spans, &[
-            (1, 4),
-            (3, 8),
-            (3, 20),
-            (3, 21),
-            (3, 22),
-            (3, 24),
-            (5, 1),
-        ]);
+}"#,
+        );
+
+        assert_eq!(
+            spans,
+            &[(1, 4), (3, 8), (3, 20), (3, 21), (3, 22), (3, 24), (5, 1),]
+        );
     }
 
     #[test]
     fn floats() {
-        assert_tokens("<?php 200.5 .05", &[
-            open!(),
-            TokenKind::Float(200.5),
-            TokenKind::Float(0.05),
-        ]);
+        assert_tokens(
+            "<?php 200.5 .05",
+            &[open!(), TokenKind::Float(200.5), TokenKind::Float(0.05)],
+        );
     }
 
     fn assert_tokens(source: &str, expected: &[TokenKind]) {
-        let mut kinds = vec!();
+        let mut kinds = vec![];
 
         for token in get_tokens(source) {
             kinds.push(token.kind);
@@ -1123,8 +1132,8 @@ function hello_world() {
 
     fn get_spans(source: &str) -> Vec<(usize, usize)> {
         let tokens = get_tokens(source);
-        let mut spans = vec!();
-        
+        let mut spans = vec![];
+
         for token in tokens {
             spans.push(token.span);
         }
