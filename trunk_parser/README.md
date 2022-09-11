@@ -1,14 +1,18 @@
-# Trunk Parser
+<h3 align="center">
+    Trunk Parser
+</h3>
 
-This crate provides a handwritten recursive descent parser targeting versions of PHP >=8.0.
+<p align="center">
+    A handwritten recursive-descent parser for PHP code.
+</p>
 
-It produces an abstract syntax tree containing `Statement` and `Expression` types which can be traversed to analyse code, compile into a lower level language, or reconstructed back into PHP code.
+---
 
-Alongside the regular PHP mode, there will be an additional Trunk compatibility mode that introduces some extra niceties to help support the development of the Trunk project. This will include things such as:
-* Variable type declarations using a familiar `var [type] $name` syntax.
-* Optionally enforce type declarations where appropriate (class properties, function parameters, return types).
+#### Overview
 
-## Usage
+The parser produces an abstract syntax tree containing `Statement` and `Expression` types describing the PHP code provided.
+
+#### Usage
 
 ```rust
 use trunk_lexer::*;
