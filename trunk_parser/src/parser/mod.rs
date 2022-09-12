@@ -181,7 +181,7 @@ impl Parser {
 
                 self.semi()?;
                 Statement::Global { vars }
-            },
+            }
             TokenKind::Static if matches!(self.peek.kind, TokenKind::Variable(_)) => {
                 self.next();
 
@@ -3320,16 +3320,22 @@ mod tests {
 
     #[test]
     fn global_statements() {
-        assert_ast("<?php global $a;", &[
-            Statement::Global { vars: vec!["a".into()] }
-        ]);
+        assert_ast(
+            "<?php global $a;",
+            &[Statement::Global {
+                vars: vec!["a".into()],
+            }],
+        );
     }
 
     #[test]
     fn multiple_global_vars_in_statement() {
-        assert_ast("<?php global $a, $b;", &[
-            Statement::Global { vars: vec!["a".into(), "b".into()] }
-        ]);
+        assert_ast(
+            "<?php global $a, $b;",
+            &[Statement::Global {
+                vars: vec!["a".into(), "b".into()],
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
