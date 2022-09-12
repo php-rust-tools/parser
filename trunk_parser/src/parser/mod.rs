@@ -925,6 +925,20 @@ impl Parser {
                 self.rbrace()?;
                 Statement::Block { body }
             }
+            TokenKind::Const => {
+                self.next();
+
+                // TODO: Support defining multiple constants in one go.
+                let name = self.ident()?;
+
+                expect!(self, TokenKind::Equals, "expected =");
+
+                let value = self.expression(0)?;
+
+                self.semi()?;
+
+                Statement::Constant { name: name.into(), value, flags: vec![] }
+            },
             _ => {
                 let expr = self.expression(0)?;
 
@@ -3273,6 +3287,13 @@ mod tests {
                 finally: Some(vec![]),
             }],
         );
+    }
+
+    #[test]
+    fn top_level_constant() {
+        assert_ast("<?php const FOO = 1;", &[
+            Statement::Constant { name: "FOO".into(), value: Expression::Int { i: 1 }, flags: vec![] }
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
