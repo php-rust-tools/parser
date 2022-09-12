@@ -1,7 +1,7 @@
 use crate::{
     ast::{
-        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, ElseIf, MagicConst, MethodFlag,
-        StaticVar, Use, UseKind,
+        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, ElseIf, IncludeKind, MagicConst,
+        MethodFlag, StaticVar, Use, UseKind,
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
@@ -208,23 +208,18 @@ impl Parser {
 
                 Statement::While { condition, body }
             }
-            TokenKind::Require => {
+            TokenKind::Include
+            | TokenKind::IncludeOnce
+            | TokenKind::Require
+            | TokenKind::RequireOnce => {
+                let kind: IncludeKind = (&self.current.kind).into();
                 self.next();
 
                 let path = self.expression(0)?;
 
                 self.semi()?;
 
-                Statement::Require { path }
-            }
-            TokenKind::RequireOnce => {
-                self.next();
-
-                let path = self.expression(0)?;
-
-                self.semi()?;
-
-                Statement::RequireOnce { path }
+                Statement::Include { kind, path }
             }
             TokenKind::For => {
                 self.next();
@@ -2089,7 +2084,7 @@ impl Display for ParseError {
 mod tests {
     use super::Parser;
     use crate::{
-        ast::{Arg, ArrayItem, ElseIf, InfixOp, MethodFlag, PropertyFlag},
+        ast::{Arg, ArrayItem, ElseIf, IncludeKind, InfixOp, MethodFlag, PropertyFlag},
         Expression, Identifier, Param, Statement, Type,
     };
     use trunk_lexer::Lexer;
@@ -2159,6 +2154,49 @@ mod tests {
         ($expr:expr) => {
             Statement::Expression { expr: $expr }
         };
+    }
+
+    #[test]
+    fn include() {
+        assert_ast(
+            "<?php include 'foo.php';",
+            &[Statement::Include {
+                path: Expression::ConstantString {
+                    value: "foo.php".into(),
+                },
+                kind: IncludeKind::Include,
+            }],
+        );
+
+        assert_ast(
+            "<?php include_once 'foo.php';",
+            &[Statement::Include {
+                path: Expression::ConstantString {
+                    value: "foo.php".into(),
+                },
+                kind: IncludeKind::IncludeOnce,
+            }],
+        );
+
+        assert_ast(
+            "<?php require 'foo.php';",
+            &[Statement::Include {
+                path: Expression::ConstantString {
+                    value: "foo.php".into(),
+                },
+                kind: IncludeKind::Require,
+            }],
+        );
+
+        assert_ast(
+            "<?php require_once 'foo.php';",
+            &[Statement::Include {
+                path: Expression::ConstantString {
+                    value: "foo.php".into(),
+                },
+                kind: IncludeKind::RequireOnce,
+            }],
+        );
     }
 
     #[test]
@@ -2631,7 +2669,7 @@ mod tests {
         assert_ast(
             "\
         <?php
-        
+
         class Foo {
             function bar() {
                 echo 1;
@@ -2657,7 +2695,7 @@ mod tests {
         assert_ast(
             "\
         <?php
-        
+
         class Foo extends Bar {}
         ",
             &[class!("Foo", Some("Bar".to_string().into()), &[], &[])],
@@ -2669,7 +2707,7 @@ mod tests {
         assert_ast(
             "\
         <?php
-        
+
         class Foo implements Bar, Baz {}
         ",
             &[class!(
@@ -2986,15 +3024,25 @@ mod tests {
 
     #[test]
     fn comment_at_end_of_class() {
-        assert_ast("<?php
+        assert_ast(
+            "<?php
         class MyClass {
             protected $a;
             // my comment
-        }", &[
-            Statement::Class { name: "MyClass".into(), extends: None, implements: vec![], body: vec![
-                Statement::Property { var: "a".into(), value: None, r#type: None, flags: vec![PropertyFlag::Protected] }
-            ], flag: None }
-        ]);
+        }",
+            &[Statement::Class {
+                name: "MyClass".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![Statement::Property {
+                    var: "a".into(),
+                    value: None,
+                    r#type: None,
+                    flags: vec![PropertyFlag::Protected],
+                }],
+                flag: None,
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

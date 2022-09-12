@@ -90,6 +90,8 @@ pub enum TokenKind {
     Identifier(String),
     If,
     Implements,
+    Include,
+    IncludeOnce,
     Increment,
     InlineHtml(String),
     Instanceof,
