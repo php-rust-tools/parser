@@ -9,6 +9,7 @@ pub enum OpenTagKind {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum TokenKind {
+    Global,
     Abstract,
     Ampersand,
     And,
@@ -300,6 +301,7 @@ impl Display for TokenKind {
                 Self::Variable(var) => &var[..],
                 Self::Yield => "yield",
                 Self::While => "while",
+                Self::Global => "global",
                 _ => todo!("format token: {:?}", self),
             }
         )

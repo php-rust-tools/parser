@@ -828,6 +828,7 @@ impl Lexer {
 #[allow(dead_code)]
 fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
     Some(match ident {
+        "global" => TokenKind::Global,
         "match" => TokenKind::Match,
         "abstract" => TokenKind::Abstract,
         "array" => TokenKind::Array,
