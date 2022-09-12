@@ -132,6 +132,8 @@ impl Parser {
 
                 if self.current.kind != TokenKind::Pipe {
                     break;
+                } else {
+                    self.next();
                 }
             }
 
@@ -149,13 +151,18 @@ impl Parser {
 
                 if self.current.kind != TokenKind::Ampersand {
                     break;
+                } else {
+                    self.next();
                 }
             }
 
             return Ok(Type::Intersection(types));
         }
 
-        Ok(Type::Plain(id))
+        Ok(match id.as_str() {
+            "void" => Type::Void,
+            _ => Type::Plain(id),
+        })
     }
 
     fn statement(&mut self) -> ParseResult<Statement> {
@@ -2861,6 +2868,26 @@ mod tests {
                 return_type: None,
             }],
         );
+
+        assert_ast(
+            "<?php function foo(string|int|float $b) {}",
+            &[Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: Some(Type::Union(vec![
+                        "string".into(),
+                        "int".into(),
+                        "float".into(),
+                    ])),
+                    variadic: false,
+                    default: None,
+                    flag: None,
+                }],
+                body: vec![],
+                return_type: None,
+            }],
+        );
     }
 
     #[test]
@@ -2880,6 +2907,26 @@ mod tests {
                 return_type: None,
             }],
         );
+
+        assert_ast(
+            "<?php function foo(Foo&Bar&Baz $b) {}",
+            &[Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: Some(Type::Intersection(vec![
+                        "Foo".into(),
+                        "Bar".into(),
+                        "Baz".into(),
+                    ])),
+                    variadic: false,
+                    default: None,
+                    flag: None,
+                }],
+                body: vec![],
+                return_type: None,
+            }],
+        );
     }
 
     #[test]
@@ -2891,6 +2938,16 @@ mod tests {
                 params: vec![],
                 body: vec![],
                 return_type: Some(Type::Plain("string".into())),
+            }],
+        );
+
+        assert_ast(
+            "<?php function foo(): void {}",
+            &[Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![],
+                body: vec![],
+                return_type: Some(Type::Void),
             }],
         );
     }
