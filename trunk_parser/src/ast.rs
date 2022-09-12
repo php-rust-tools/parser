@@ -302,6 +302,7 @@ pub enum Statement {
     },
     Declare {
         declares: Vec<DeclareItem>,
+        body: Block,
     },
     Noop,
 }

@@ -1,7 +1,7 @@
 use crate::{
     ast::{
-        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, ElseIf, IncludeKind, MagicConst,
-        MethodFlag, StaticVar, Use, UseKind, DeclareItem,
+        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, DeclareItem, ElseIf, IncludeKind,
+        MagicConst, MethodFlag, StaticVar, Use, UseKind,
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
@@ -190,10 +190,19 @@ impl Parser {
                 }
 
                 self.rparen()?;
-                self.semi()?;
 
-                Statement::Declare { declares }
-            },
+                let body = if self.current.kind == TokenKind::LeftBrace {
+                    self.next();
+                    let b = self.block(&TokenKind::RightBrace)?;
+                    self.rbrace()?;
+                    b
+                } else {
+                    self.semi()?;
+                    vec![]
+                };
+
+                Statement::Declare { declares, body }
+            }
             TokenKind::Global => {
                 self.next();
 
@@ -2176,7 +2185,9 @@ impl Display for ParseError {
 mod tests {
     use super::Parser;
     use crate::{
-        ast::{Arg, ArrayItem, ElseIf, IncludeKind, InfixOp, MethodFlag, PropertyFlag, DeclareItem},
+        ast::{
+            Arg, ArrayItem, DeclareItem, ElseIf, IncludeKind, InfixOp, MethodFlag, PropertyFlag,
+        },
         Catch, Expression, Identifier, Param, Statement, Type,
     };
     use trunk_lexer::Lexer;
@@ -3365,34 +3376,54 @@ mod tests {
 
     #[test]
     fn basic_declare() {
-        assert_ast("<?php declare(A='B');", &[
-            Statement::Declare {
-                declares: vec![
-                    DeclareItem {
-                        key: "A".into(),
-                        value: Expression::ConstantString { value: "B".into() }
-                    }
-                ]
-            }
-        ]);
+        assert_ast(
+            "<?php declare(A='B');",
+            &[Statement::Declare {
+                declares: vec![DeclareItem {
+                    key: "A".into(),
+                    value: Expression::ConstantString { value: "B".into() },
+                }],
+                body: vec![],
+            }],
+        );
     }
 
     #[test]
     fn multiple_declares_in_single_statement() {
-        assert_ast("<?php declare(A='B', C='D');", &[
-            Statement::Declare {
+        assert_ast(
+            "<?php declare(A='B', C='D');",
+            &[Statement::Declare {
                 declares: vec![
                     DeclareItem {
                         key: "A".into(),
-                        value: Expression::ConstantString { value: "B".into() }
+                        value: Expression::ConstantString { value: "B".into() },
                     },
                     DeclareItem {
                         key: "C".into(),
-                        value: Expression::ConstantString { value: "D".into() }
-                    }
-                ]
-            }
-        ]);
+                        value: Expression::ConstantString { value: "D".into() },
+                    },
+                ],
+                body: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn declare_block() {
+        assert_ast(
+            "<?php declare(A='B') { echo 'Hello, world!'; }",
+            &[Statement::Declare {
+                declares: vec![DeclareItem {
+                    key: "A".into(),
+                    value: Expression::ConstantString { value: "B".into() },
+                }],
+                body: vec![Statement::Echo {
+                    values: vec![Expression::ConstantString {
+                        value: "Hello, world!".into(),
+                    }],
+                }],
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
