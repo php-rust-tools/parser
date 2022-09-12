@@ -343,7 +343,7 @@ pub struct Case {
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct Catch {
     pub types: Vec<Identifier>,
-    pub var: Expression,
+    pub var: Option<Expression>,
     pub body: Block,
 }
 
