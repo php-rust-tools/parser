@@ -159,7 +159,10 @@ impl Parser {
             return Ok(Type::Intersection(types));
         }
 
-        Ok(Type::Plain(id))
+        Ok(match id.as_str() {
+            "void" => Type::Void,
+            _ => Type::Plain(id),
+        })
     }
 
     fn statement(&mut self) -> ParseResult<Statement> {
@@ -2927,6 +2930,16 @@ mod tests {
                 params: vec![],
                 body: vec![],
                 return_type: Some(Type::Plain("string".into())),
+            }],
+        );
+
+        assert_ast(
+            "<?php function foo(): void {}",
+            &[Statement::Function {
+                name: "foo".to_string().into(),
+                params: vec![],
+                body: vec![],
+                return_type: Some(Type::Void),
             }],
         );
     }
