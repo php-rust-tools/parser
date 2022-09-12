@@ -134,6 +134,8 @@ impl Lexer {
                             buffer.push('?');
                         }
                     } else {
+                        self.next();
+
                         self.col += 1;
 
                         buffer.push(char);
@@ -202,6 +204,7 @@ impl Lexer {
             '?' => {
                 // This is a close tag, we can enter "Initial" mode again.
                 if let Some('>') = self.peek {
+                    self.next();
                     self.next();
 
                     self.col += 2;
@@ -909,6 +912,18 @@ mod tests {
     #[test]
     fn basic_tokens() {
         assert_tokens("<?php ?>", &[open!(), TokenKind::CloseTag]);
+    }
+
+    #[test]
+    fn close_tag_followed_by_content() {
+        assert_tokens(
+            "<?php ?> <html>",
+            &[
+                open!(),
+                TokenKind::CloseTag,
+                TokenKind::InlineHtml(" <html>".into()),
+            ],
+        );
     }
 
     #[test]
