@@ -5,6 +5,7 @@ use crate::{
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
+use core::panic;
 use std::{fmt::Display, vec::IntoIter};
 use trunk_lexer::{Span, Token, TokenKind};
 
@@ -89,7 +90,10 @@ impl Parser {
         let mut ast = Program::new();
 
         while self.current.kind != TokenKind::Eof {
-            if let TokenKind::OpenTag(_) = self.current.kind {
+            if matches!(
+                self.current.kind,
+                TokenKind::OpenTag(_) | TokenKind::CloseTag
+            ) {
                 self.next();
                 continue;
             }
@@ -3086,6 +3090,14 @@ mod tests {
                 }],
             }],
         )
+    }
+
+    #[test]
+    fn close_tag_followed_by_content() {
+        assert_ast(
+            "<?php ?> <html>",
+            &[Statement::InlineHtml(" <html>".into())],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
