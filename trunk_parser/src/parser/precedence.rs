@@ -58,9 +58,10 @@ impl Precedence {
             BooleanOr => Self::Or,
             Coalesce => Self::NullCoalesce,
             Question => Self::Ternary,
-            Equals | PlusEquals | MinusEquals | AsteriskEqual | PowEquals | SlashEquals | DotEquals | AndEqual | CoalesceEqual => Self::Assignment,
+            Equals | PlusEquals | MinusEquals | AsteriskEqual | PowEquals | SlashEquals
+            | DotEquals | AndEqual | CoalesceEqual => Self::Assignment,
             Yield => Self::Yield,
-            _ => unimplemented!("precedence for op {:?}", kind)
+            _ => unimplemented!("precedence for op {:?}", kind),
         }
     }
 }
