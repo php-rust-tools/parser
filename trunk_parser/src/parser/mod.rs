@@ -1,7 +1,7 @@
 use crate::{
     ast::{
         Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, ElseIf, IncludeKind, MagicConst,
-        MethodFlag, StaticVar, Use, UseKind,
+        MethodFlag, StaticVar, Use, UseKind, DeclareItem,
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
@@ -169,6 +169,31 @@ impl Parser {
         self.skip_comments();
 
         let statement = match &self.current.kind {
+            TokenKind::Declare => {
+                self.next();
+                self.lparen()?;
+
+                let mut declares = Vec::new();
+                while self.current.kind != TokenKind::RightParen {
+                    let key = self.ident()?;
+
+                    expect!(self, TokenKind::Equals, "expected =");
+
+                    let value = self.expression(0)?;
+
+                    self.optional_comma()?;
+
+                    declares.push(DeclareItem {
+                        key: key.into(),
+                        value,
+                    });
+                }
+
+                self.rparen()?;
+                self.semi()?;
+
+                Statement::Declare { declares }
+            },
             TokenKind::Global => {
                 self.next();
 
@@ -2151,7 +2176,7 @@ impl Display for ParseError {
 mod tests {
     use super::Parser;
     use crate::{
-        ast::{Arg, ArrayItem, ElseIf, IncludeKind, InfixOp, MethodFlag, PropertyFlag},
+        ast::{Arg, ArrayItem, ElseIf, IncludeKind, InfixOp, MethodFlag, PropertyFlag, DeclareItem},
         Catch, Expression, Identifier, Param, Statement, Type,
     };
     use trunk_lexer::Lexer;
@@ -3336,6 +3361,20 @@ mod tests {
                 vars: vec!["a".into(), "b".into()],
             }],
         );
+    }
+
+    #[test]
+    fn basic_declare() {
+        assert_ast("<?php declare(A='B');", &[
+            Statement::Declare {
+                declares: vec![
+                    DeclareItem {
+                        key: "A".into(),
+                        value: Expression::ConstantString { value: "B".into() }
+                    }
+                ]
+            }
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
