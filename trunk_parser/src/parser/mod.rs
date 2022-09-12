@@ -46,6 +46,7 @@ mod block;
 mod comments;
 mod ident;
 mod params;
+mod precedence;
 mod punc;
 
 pub struct ParserConfig {
