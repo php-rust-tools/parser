@@ -833,6 +833,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "const" => TokenKind::Const,
         "declare" => TokenKind::Declare,
         "default" => TokenKind::Default,
+        "do" => TokenKind::Do,
         "echo" => TokenKind::Echo,
         "else" => TokenKind::Else,
         "elseif" => TokenKind::ElseIf,

@@ -193,6 +193,22 @@ impl Parser {
                 self.next();
                 s
             }
+            TokenKind::Do => {
+                self.next();
+
+                self.lbrace()?;
+                let body = self.block(&TokenKind::RightBrace)?;
+                self.rbrace()?;
+
+                expect!(self, TokenKind::While, "expected while");
+
+                self.lparen()?;
+                let condition = self.expression(0)?;
+                self.rparen()?;
+                self.semi()?;
+
+                Statement::DoWhile { condition, body }
+            }
             TokenKind::While => {
                 self.next();
                 self.lparen()?;
@@ -3043,6 +3059,33 @@ mod tests {
                 flag: None,
             }],
         );
+    }
+
+    #[test]
+    fn do_while() {
+        assert_ast(
+            "<?php do { } while ($a);",
+            &[Statement::DoWhile {
+                condition: Expression::Variable { name: "a".into() },
+                body: vec![],
+            }],
+        );
+
+        assert_ast(
+            "<?php 
+        do {
+            echo 'Hi!';
+        } while (true);
+        ",
+            &[Statement::DoWhile {
+                condition: Expression::Bool { value: true },
+                body: vec![Statement::Echo {
+                    values: vec![Expression::ConstantString {
+                        value: "Hi!".into(),
+                    }],
+                }],
+            }],
+        )
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

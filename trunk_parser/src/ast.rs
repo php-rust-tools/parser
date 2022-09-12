@@ -169,6 +169,10 @@ pub enum Statement {
     Static {
         vars: Vec<StaticVar>,
     },
+    DoWhile {
+        condition: Expression,
+        body: Block,
+    },
     While {
         condition: Expression,
         body: Block,
