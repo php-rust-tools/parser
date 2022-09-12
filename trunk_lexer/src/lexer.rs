@@ -350,7 +350,7 @@ impl Lexer {
 
                 while let Some(n) = self.peek {
                     match n {
-                        '0'..='9' if buffer.len() > 1 => {
+                        '0'..='9' if buffer.len() > 0 => {
                             self.col += 1;
                             buffer.push(n);
                             self.next();
@@ -1017,13 +1017,14 @@ function"#,
     #[test]
     fn vars() {
         assert_tokens(
-            "<?php $one $_one $One $one_one",
+            "<?php $one $_one $One $one_one $a1",
             &[
                 open!(),
                 var!("one"),
                 var!("_one"),
                 var!("One"),
                 var!("one_one"),
+                var!("a1"),
             ],
         );
     }
