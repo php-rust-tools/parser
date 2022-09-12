@@ -17,6 +17,7 @@ pub enum TokenKind {
     ArrayCast,
     Arrow,
     NullsafeArrow,
+    At,
     As,
     Asterisk,
     Attribute,

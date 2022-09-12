@@ -167,6 +167,11 @@ impl Lexer {
         let char = self.current.unwrap();
 
         let kind = match char {
+            '@' => {
+                self.col += 1;
+
+                TokenKind::At
+            }
             '!' => {
                 self.col += 1;
 
