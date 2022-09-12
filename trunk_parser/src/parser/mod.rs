@@ -3066,6 +3066,20 @@ mod tests {
         assert_ast("<?php do { } while ($a);", &[
             Statement::DoWhile { condition: Expression::Variable { name: "a".into() }, body: vec![] }
         ]);
+
+        assert_ast("<?php 
+        do {
+            echo 'Hi!';
+        } while (true);
+        ", &[
+            Statement::DoWhile {
+                condition: Expression::Bool { value: true },
+                body: vec![
+                    Statement::Echo { values: vec![
+                        Expression::ConstantString { value: "Hi!".into() }
+                    ]}
+                ]
+        }])
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
