@@ -1993,6 +1993,7 @@ fn is_prefix(op: &TokenKind) -> bool {
             | TokenKind::BoolCast
             | TokenKind::IntCast
             | TokenKind::DoubleCast
+            | TokenKind::At
     )
 }
 
@@ -2003,8 +2004,9 @@ fn prefix_binding_power(op: &TokenKind) -> u8 {
         | TokenKind::BoolCast
         | TokenKind::IntCast
         | TokenKind::DoubleCast => 101,
-        TokenKind::Minus => 100,
-        TokenKind::Bang => 99,
+        TokenKind::At => 16,
+        TokenKind::Minus => 99,
+        TokenKind::Bang => 98,
         _ => unreachable!(),
     }
 }
@@ -2025,6 +2027,7 @@ fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
             kind: op.into(),
             value: Box::new(rhs),
         },
+        TokenKind::At => Expression::ErrorSuppress { expr: Box::new(rhs) },
         _ => unreachable!(),
     }
 }
@@ -3155,6 +3158,20 @@ mod tests {
             "<?php ?> <html>",
             &[Statement::InlineHtml(" <html>".into())],
         );
+    }
+
+    #[test]
+    fn error_suppress() {
+        assert_ast("<?php @hello();", &[
+            expr!(Expression::ErrorSuppress {
+                expr: Box::new(Expression::Call {
+                    target: Box::new(Expression::Identifier {
+                        name: "hello".into()
+                    }),
+                    args: vec![],
+                }),
+            })
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
