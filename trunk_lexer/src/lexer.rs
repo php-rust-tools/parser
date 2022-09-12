@@ -171,7 +171,7 @@ impl Lexer {
                 self.col += 1;
 
                 TokenKind::At
-            },
+            }
             '!' => {
                 self.col += 1;
 

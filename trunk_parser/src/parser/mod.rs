@@ -2027,7 +2027,9 @@ fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
             kind: op.into(),
             value: Box::new(rhs),
         },
-        TokenKind::At => Expression::ErrorSuppress { expr: Box::new(rhs) },
+        TokenKind::At => Expression::ErrorSuppress {
+            expr: Box::new(rhs),
+        },
         _ => unreachable!(),
     }
 }
@@ -3162,16 +3164,17 @@ mod tests {
 
     #[test]
     fn error_suppress() {
-        assert_ast("<?php @hello();", &[
-            expr!(Expression::ErrorSuppress {
+        assert_ast(
+            "<?php @hello();",
+            &[expr!(Expression::ErrorSuppress {
                 expr: Box::new(Expression::Call {
                     target: Box::new(Expression::Identifier {
                         name: "hello".into()
                     }),
                     args: vec![],
                 }),
-            })
-        ]);
+            })],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
