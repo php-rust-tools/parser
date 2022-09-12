@@ -937,8 +937,12 @@ impl Parser {
 
                 self.semi()?;
 
-                Statement::Constant { name: name.into(), value, flags: vec![] }
-            },
+                Statement::Constant {
+                    name: name.into(),
+                    value,
+                    flags: vec![],
+                }
+            }
             _ => {
                 let expr = self.expression(0)?;
 
@@ -3291,9 +3295,14 @@ mod tests {
 
     #[test]
     fn top_level_constant() {
-        assert_ast("<?php const FOO = 1;", &[
-            Statement::Constant { name: "FOO".into(), value: Expression::Int { i: 1 }, flags: vec![] }
-        ]);
+        assert_ast(
+            "<?php const FOO = 1;",
+            &[Statement::Constant {
+                name: "FOO".into(),
+                value: Expression::Int { i: 1 },
+                flags: vec![],
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
