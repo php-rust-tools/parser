@@ -3377,6 +3377,24 @@ mod tests {
         ]);
     }
 
+    #[test]
+    fn multiple_declares_in_single_statement() {
+        assert_ast("<?php declare(A='B', C='D');", &[
+            Statement::Declare {
+                declares: vec![
+                    DeclareItem {
+                        key: "A".into(),
+                        value: Expression::ConstantString { value: "B".into() }
+                    },
+                    DeclareItem {
+                        key: "C".into(),
+                        value: Expression::ConstantString { value: "D".into() }
+                    }
+                ]
+            }
+        ]);
+    }
+
     fn assert_ast(source: &str, expected: &[Statement]) {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();
