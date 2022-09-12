@@ -237,7 +237,7 @@ impl Lexer {
                     TokenKind::QuestionColon
                 } else if self.try_read("->") {
                     self.col += 1;
-                    self.skip(3);
+                    self.skip(2);
                     TokenKind::NullsafeArrow
                 } else {
                     TokenKind::Question
