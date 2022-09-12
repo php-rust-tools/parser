@@ -883,7 +883,11 @@ impl Parser {
                         _ => return Err(ParseError::InvalidCatchArgumentType(self.current.span)),
                     };
 
-                    let var = self.expression(0)?;
+                    let var = if self.current.kind == TokenKind::RightParen {
+                        None
+                    } else {
+                        Some(self.expression(0)?)
+                    };
 
                     self.rparen()?;
                     self.lbrace()?;
@@ -2117,7 +2121,7 @@ mod tests {
     use super::Parser;
     use crate::{
         ast::{Arg, ArrayItem, ElseIf, IncludeKind, InfixOp, MethodFlag, PropertyFlag},
-        Expression, Identifier, Param, Statement, Type,
+        Catch, Expression, Identifier, Param, Statement, Type,
     };
     use trunk_lexer::Lexer;
 
@@ -3185,6 +3189,89 @@ mod tests {
                 target: Box::new(Expression::Variable { name: "a".into() }),
                 property: Box::new(Expression::Identifier { name: "b".into() })
             })],
+        );
+    }
+
+    #[test]
+    fn try_catch() {
+        assert_ast(
+            "<?php try {} catch (Exception $e) {}",
+            &[Statement::Try {
+                body: vec![],
+                catches: vec![Catch {
+                    types: vec!["Exception".into()],
+                    var: Some(Expression::Variable { name: "e".into() }),
+                    body: vec![],
+                }],
+                finally: None,
+            }],
+        );
+    }
+
+    #[test]
+    fn try_catch_no_variable() {
+        assert_ast(
+            "<?php try {} catch (Exception) {}",
+            &[Statement::Try {
+                body: vec![],
+                catches: vec![Catch {
+                    types: vec!["Exception".into()],
+                    var: None,
+                    body: vec![],
+                }],
+                finally: None,
+            }],
+        );
+    }
+
+    #[test]
+    fn try_catch_multiple_catches() {
+        assert_ast(
+            "<?php try {} catch (Exception $e) {} catch (CustomException $e) {}",
+            &[Statement::Try {
+                body: vec![],
+                catches: vec![
+                    Catch {
+                        types: vec!["Exception".into()],
+                        var: Some(Expression::Variable { name: "e".into() }),
+                        body: vec![],
+                    },
+                    Catch {
+                        types: vec!["CustomException".into()],
+                        var: Some(Expression::Variable { name: "e".into() }),
+                        body: vec![],
+                    },
+                ],
+                finally: None,
+            }],
+        );
+    }
+
+    #[test]
+    fn try_catch_finally() {
+        assert_ast(
+            "<?php try {} catch (Exception $e) {} finally {}",
+            &[Statement::Try {
+                body: vec![],
+                catches: vec![Catch {
+                    types: vec!["Exception".into()],
+                    var: Some(Expression::Variable { name: "e".into() }),
+                    body: vec![],
+                }],
+                finally: Some(vec![]),
+            }],
+        );
+    }
+
+    #[test]
+    fn try_finally_no_catch() {
+        assert_ast(
+            "<?php try {} finally {}",
+            &[Statement::Try {
+                body: vec![],
+                catches: vec![],
+                finally: Some(vec![]),
+            }],
         );
     }
 
