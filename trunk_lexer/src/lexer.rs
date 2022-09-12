@@ -846,6 +846,8 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
         "foreach" => TokenKind::Foreach,
         "function" => TokenKind::Function,
         "if" => TokenKind::If,
+        "include" => TokenKind::Include,
+        "include_once" => TokenKind::IncludeOnce,
         "implements" => TokenKind::Implements,
         "interface" => TokenKind::Interface,
         "instanceof" => TokenKind::Instanceof,

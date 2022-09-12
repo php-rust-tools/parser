@@ -144,6 +144,26 @@ pub struct StaticVar {
 }
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
+pub enum IncludeKind {
+    Include,
+    IncludeOnce,
+    Require,
+    RequireOnce,
+}
+
+impl From<&TokenKind> for IncludeKind {
+    fn from(k: &TokenKind) -> Self {
+        match k {
+            TokenKind::Include => IncludeKind::Include,
+            TokenKind::IncludeOnce => IncludeKind::IncludeOnce,
+            TokenKind::Require => IncludeKind::Require,
+            TokenKind::RequireOnce => IncludeKind::RequireOnce,
+            _ => unreachable!(),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
     InlineHtml(String),
     Static {
@@ -166,10 +186,8 @@ pub enum Statement {
         value_var: Expression,
         body: Block,
     },
-    Require {
-        path: Expression,
-    },
-    RequireOnce {
+    Include {
+        kind: IncludeKind,
         path: Expression,
     },
     Var {
