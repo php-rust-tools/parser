@@ -3179,9 +3179,13 @@ mod tests {
 
     #[test]
     fn nullsafe_operator() {
-        assert_ast("<?php $a?->b;", &[
-            expr!(Expression::NullsafePropertyFetch { target: Box::new(Expression::Variable { name: "a".into() }), property: Box::new(Expression::Identifier { name: "b".into() }) })
-        ]);
+        assert_ast(
+            "<?php $a?->b;",
+            &[expr!(Expression::NullsafePropertyFetch {
+                target: Box::new(Expression::Variable { name: "a".into() }),
+                property: Box::new(Expression::Identifier { name: "b".into() })
+            })],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
