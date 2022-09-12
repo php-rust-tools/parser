@@ -297,6 +297,9 @@ pub enum Statement {
     Block {
         body: Block,
     },
+    Global {
+        vars: Vec<Identifier>,
+    },
     Noop,
 }
 

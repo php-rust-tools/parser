@@ -169,6 +169,19 @@ impl Parser {
         self.skip_comments();
 
         let statement = match &self.current.kind {
+            TokenKind::Global => {
+                self.next();
+
+                let mut vars = vec![];
+                while self.current.kind != TokenKind::SemiColon {
+                    vars.push(self.var()?.into());
+
+                    self.optional_comma()?;
+                }
+
+                self.semi()?;
+                Statement::Global { vars }
+            }
             TokenKind::Static if matches!(self.peek.kind, TokenKind::Variable(_)) => {
                 self.next();
 
@@ -3301,6 +3314,26 @@ mod tests {
                 name: "FOO".into(),
                 value: Expression::Int { i: 1 },
                 flags: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn global_statements() {
+        assert_ast(
+            "<?php global $a;",
+            &[Statement::Global {
+                vars: vec!["a".into()],
+            }],
+        );
+    }
+
+    #[test]
+    fn multiple_global_vars_in_statement() {
+        assert_ast(
+            "<?php global $a, $b;",
+            &[Statement::Global {
+                vars: vec!["a".into(), "b".into()],
             }],
         );
     }
