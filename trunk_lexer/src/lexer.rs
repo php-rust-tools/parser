@@ -531,7 +531,8 @@ impl Lexer {
                 if qualified {
                     TokenKind::QualifiedIdentifier(buffer.into())
                 } else {
-                    identifier_to_keyword(&buffer).unwrap_or_else(|| TokenKind::Identifier(buffer.into()))
+                    identifier_to_keyword(&buffer)
+                        .unwrap_or_else(|| TokenKind::Identifier(buffer.into()))
                 }
             }
             b'/' | b'#' => {
