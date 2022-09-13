@@ -1505,6 +1505,15 @@ impl Parser {
                 self.skip_comments();
 
                 while self.current.kind != TokenKind::RightBracket {
+                    if self.current.kind == TokenKind::Comma {
+                        items.push(ArrayItem {
+                            key: None,
+                            value: Expression::Empty,
+                        });
+                        self.next();
+                        continue;
+                    }
+
                     let mut key = None;
                     let mut value = self.expression(0)?;
 
@@ -3419,6 +3428,33 @@ mod tests {
                 }],
             }],
         );
+    }
+
+    #[test]
+    fn array_empty_items() {
+        assert_ast(
+            "<?php [1, 2, , 4];",
+            &[expr!(Expression::Array {
+                items: vec![
+                    ArrayItem {
+                        key: None,
+                        value: Expression::Int { i: 1 },
+                    },
+                    ArrayItem {
+                        key: None,
+                        value: Expression::Int { i: 2 },
+                    },
+                    ArrayItem {
+                        key: None,
+                        value: Expression::Empty,
+                    },
+                    ArrayItem {
+                        key: None,
+                        value: Expression::Int { i: 4 },
+                    },
+                ]
+            })],
+        )
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
