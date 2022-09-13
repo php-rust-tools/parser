@@ -118,6 +118,7 @@ impl From<TokenKind> for MethodFlag {
 pub enum ClassFlag {
     Final,
     Abstract,
+    Readonly,
 }
 
 impl From<TokenKind> for ClassFlag {
@@ -125,6 +126,7 @@ impl From<TokenKind> for ClassFlag {
         match k {
             TokenKind::Final => Self::Final,
             TokenKind::Abstract => Self::Abstract,
+            TokenKind::Readonly => Self::Readonly,
             _ => unreachable!("token {:?} can't be converted into class flag.", k),
         }
     }
