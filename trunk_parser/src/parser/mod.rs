@@ -8,7 +8,7 @@ use crate::{
 use std::{fmt::Display, vec::IntoIter};
 use trunk_lexer::{Span, Token, TokenKind};
 
-use self::precedence::Precedence;
+use self::precedence::{Precedence, Associativity};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -1812,6 +1812,7 @@ impl Parser {
                 break;
             }
 
+            let span = self.current.span.clone();
             let kind = self.current.kind.clone();
 
             if is_postfix(&kind) {
@@ -1832,6 +1833,10 @@ impl Parser {
 
                 if rpred < precedence {
                     break;
+                }
+
+                if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Non)) {
+                    return Err(ParseError::UnexpectedToken(kind.to_string(), span));
                 }
 
                 self.next();
