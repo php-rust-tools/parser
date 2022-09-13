@@ -48,6 +48,7 @@ impl Precedence {
         use TokenKind::*;
 
         match kind {
+            Pow => Self::Pow,
             Instanceof => Self::Instanceof,
             Asterisk | Slash | Percent => Self::MulDivMod,
             Plus | Minus => Self::AddSub,
