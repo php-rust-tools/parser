@@ -76,6 +76,7 @@ pub enum PropertyFlag {
     Protected,
     Private,
     Static,
+    Readonly,
 }
 
 impl From<TokenKind> for PropertyFlag {
@@ -85,6 +86,7 @@ impl From<TokenKind> for PropertyFlag {
             TokenKind::Protected => Self::Protected,
             TokenKind::Private => Self::Private,
             TokenKind::Static => Self::Static,
+            TokenKind::Readonly => Self::Readonly,
             _ => unreachable!("token {:?} can't be converted into property flag.", k),
         }
     }
