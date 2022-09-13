@@ -38,9 +38,12 @@ impl Lexer {
         }
     }
 
-    pub fn tokenize(&mut self, input: &str) -> Result<Vec<Token>, LexerError> {
+    pub fn tokenize<B: ?Sized + AsRef<[u8]>>(
+        &mut self,
+        input: &B,
+    ) -> Result<Vec<Token>, LexerError> {
         let mut tokens = Vec::new();
-        self.chars = input.bytes().collect();
+        self.chars = input.as_ref().to_vec();
 
         self.next();
         self.next();
