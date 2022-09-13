@@ -206,6 +206,9 @@ pub enum Statement {
         flags: Vec<PropertyFlag>,
     },
     Constant {
+        constants: Vec<Constant>,
+    },
+    ClassConstant {
         name: Identifier,
         value: Expression,
         flags: Vec<ConstFlag>,
@@ -304,6 +307,12 @@ pub enum Statement {
         body: Block,
     },
     Noop,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Constant {
+    pub name: Identifier,
+    pub value: Expression,
 }
 
 #[derive(Debug, Clone, PartialEq)]
