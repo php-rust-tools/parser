@@ -1,5 +1,7 @@
 use std::fmt::Display;
 
+use crate::ByteString;
+
 pub type Span = (usize, usize);
 
 #[derive(Debug, Eq, PartialEq, Clone)]
@@ -43,10 +45,10 @@ pub enum TokenKind {
     AsteriskEqual,
     Colon,
     Comma,
-    Comment(Vec<u8>),
+    Comment(ByteString),
     ConcatEqual,
     Const,
-    ConstantString(Vec<u8>),
+    ConstantString(ByteString),
     Continue,
     CurlyOpen,
     Declare,
@@ -55,8 +57,8 @@ pub enum TokenKind {
     DirConstant,
     DivEqual,
     Do,
-    DocComment(Vec<u8>),
-    DocOpen(Vec<u8>),
+    DocComment(ByteString),
+    DocOpen(ByteString),
     Dot,
     DotEquals,
     DoubleArrow,
@@ -85,17 +87,17 @@ pub enum TokenKind {
     Fn,
     For,
     Foreach,
-    FullyQualifiedIdentifier(Vec<u8>),
+    FullyQualifiedIdentifier(ByteString),
     Function,
     GreaterThan,
     GreaterThanEquals,
-    Identifier(Vec<u8>),
+    Identifier(ByteString),
     If,
     Implements,
     Include,
     IncludeOnce,
     Increment,
-    InlineHtml(Vec<u8>),
+    InlineHtml(ByteString),
     Instanceof,
     Int(i64),
     IntCast,
@@ -122,7 +124,7 @@ pub enum TokenKind {
     Private,
     Protected,
     Public,
-    QualifiedIdentifier(Vec<u8>),
+    QualifiedIdentifier(ByteString),
     Question,
     QuestionColon,
     Require,
@@ -144,7 +146,7 @@ pub enum TokenKind {
     Try,
     Use,
     Var,
-    Variable(Vec<u8>),
+    Variable(ByteString),
     Yield,
     While,
 }

@@ -1,38 +1,38 @@
 use serde::Serialize;
-use trunk_lexer::TokenKind;
+use trunk_lexer::{ByteString, TokenKind};
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
 
 #[derive(Debug, Eq, PartialEq, Clone, Serialize)]
 pub enum Type {
-    Plain(Vec<u8>),
-    Nullable(Vec<u8>),
-    Union(Vec<Vec<u8>>),
-    Intersection(Vec<Vec<u8>>),
+    Plain(ByteString),
+    Nullable(ByteString),
+    Union(Vec<ByteString>),
+    Intersection(Vec<ByteString>),
     Void,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Serialize)]
 pub struct Identifier {
-    pub name: Vec<u8>,
+    pub name: ByteString,
 }
 
-impl From<Vec<u8>> for Identifier {
-    fn from(name: Vec<u8>) -> Self {
+impl From<ByteString> for Identifier {
+    fn from(name: ByteString) -> Self {
         Self { name }
     }
 }
 
-impl From<&Vec<u8>> for Identifier {
-    fn from(name: &Vec<u8>) -> Self {
+impl From<&ByteString> for Identifier {
+    fn from(name: &ByteString) -> Self {
         Self::from(name.clone())
     }
 }
 
 impl From<&[u8]> for Identifier {
     fn from(name: &[u8]) -> Self {
-        Self::from(name.to_vec())
+        Self::from(ByteString::from(name))
     }
 }
 
@@ -47,8 +47,8 @@ pub struct Param {
     pub flag: Option<PropertyFlag>,
 }
 
-impl From<Vec<u8>> for Param {
-    fn from(name: Vec<u8>) -> Self {
+impl From<ByteString> for Param {
+    fn from(name: ByteString) -> Self {
         Self {
             name: Expression::Variable { name },
             r#type: None,
@@ -59,15 +59,15 @@ impl From<Vec<u8>> for Param {
     }
 }
 
-impl From<&Vec<u8>> for Param {
-    fn from(name: &Vec<u8>) -> Self {
+impl From<&ByteString> for Param {
+    fn from(name: &ByteString) -> Self {
         Self::from(name.clone())
     }
 }
 
 impl From<&[u8]> for Param {
     fn from(name: &[u8]) -> Self {
-        Self::from(name.to_vec())
+        Self::from(ByteString::from(name))
     }
 }
 
@@ -166,7 +166,7 @@ impl From<&TokenKind> for IncludeKind {
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
-    InlineHtml(Vec<u8>),
+    InlineHtml(ByteString),
     Static {
         vars: Vec<StaticVar>,
     },
@@ -196,12 +196,12 @@ pub enum Statement {
         path: Expression,
     },
     Var {
-        var: Vec<u8>,
+        var: ByteString,
         value: Option<Expression>,
         r#type: Option<Type>,
     },
     Property {
-        var: Vec<u8>,
+        var: ByteString,
         value: Option<Expression>,
         r#type: Option<Type>,
         flags: Vec<PropertyFlag>,
@@ -269,7 +269,7 @@ pub enum Statement {
         expr: Expression,
     },
     Namespace {
-        name: Vec<u8>,
+        name: ByteString,
         body: Block,
     },
     Use {
@@ -277,7 +277,7 @@ pub enum Statement {
         kind: UseKind,
     },
     Comment {
-        comment: Vec<u8>,
+        comment: ByteString,
     },
     Try {
         body: Block,
@@ -405,7 +405,7 @@ pub enum Expression {
         f: f64,
     },
     Variable {
-        name: Vec<u8>,
+        name: ByteString,
     },
     Infix {
         lhs: Box<Self>,
@@ -417,7 +417,7 @@ pub enum Expression {
         args: Vec<Arg>,
     },
     Identifier {
-        name: Vec<u8>,
+        name: ByteString,
     },
     Array {
         items: Vec<ArrayItem>,
@@ -438,7 +438,7 @@ pub enum Expression {
         args: Vec<Arg>,
     },
     ConstantString {
-        value: Vec<u8>,
+        value: ByteString,
     },
     PropertyFetch {
         target: Box<Self>,
@@ -518,7 +518,7 @@ pub enum Expression {
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Arg {
-    pub name: Option<Vec<u8>>,
+    pub name: Option<ByteString>,
     pub value: Expression,
     pub unpack: bool,
 }

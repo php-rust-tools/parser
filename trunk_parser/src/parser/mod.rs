@@ -559,7 +559,7 @@ impl Parser {
                     expect!(self, TokenKind::Colon, "expected :");
 
                     match self.current.kind.clone() {
-                        TokenKind::Identifier(s) if s == *b"string" || s == *b"int" => {
+                        TokenKind::Identifier(s) if s == b"string" || s == b"int" => {
                             self.next();
 
                             is_backed = true;
@@ -1909,7 +1909,7 @@ impl Parser {
                     let ident = if self.current.kind == TokenKind::Class {
                         self.next();
 
-                        b"class".to_vec()
+                        b"class".into()
                     } else {
                         self.ident_maybe_reserved()?
                     };

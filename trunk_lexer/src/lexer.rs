@@ -1,4 +1,4 @@
-use crate::{OpenTagKind, Token, TokenKind};
+use crate::{ByteString, OpenTagKind, Token, TokenKind};
 
 #[derive(Debug)]
 pub enum LexerState {
@@ -114,7 +114,7 @@ impl Lexer {
 
                                     if !buffer.is_empty() {
                                         tokens.push(Token {
-                                            kind: TokenKind::InlineHtml(buffer),
+                                            kind: TokenKind::InlineHtml(buffer.into()),
                                             span: (self.line, self.col.saturating_sub(5)),
                                         });
                                     }
@@ -152,7 +152,7 @@ impl Lexer {
         }
 
         Ok(vec![Token {
-            kind: TokenKind::InlineHtml(buffer),
+            kind: TokenKind::InlineHtml(buffer.into()),
             span: (self.line, self.col),
         }])
     }
@@ -311,7 +311,7 @@ impl Lexer {
                     self.next();
                 }
 
-                TokenKind::ConstantString(buffer)
+                TokenKind::ConstantString(buffer.into())
             }
             b'"' => {
                 self.col += 1;
@@ -352,7 +352,7 @@ impl Lexer {
                     self.next();
                 }
 
-                TokenKind::ConstantString(buffer)
+                TokenKind::ConstantString(buffer.into())
             }
             b'$' => {
                 let mut buffer = Vec::new();
@@ -376,7 +376,7 @@ impl Lexer {
                     }
                 }
 
-                TokenKind::Variable(buffer)
+                TokenKind::Variable(buffer.into())
             }
             b'.' => {
                 self.col += 1;
@@ -487,11 +487,12 @@ impl Lexer {
                     match self.scripting()? {
                         Token {
                             kind:
-                                TokenKind::Identifier(mut i) | TokenKind::QualifiedIdentifier(mut i),
+                                TokenKind::Identifier(ByteString(mut i))
+                                | TokenKind::QualifiedIdentifier(ByteString(mut i)),
                             ..
                         } => {
                             i.insert(0, b'\\');
-                            TokenKind::FullyQualifiedIdentifier(i)
+                            TokenKind::FullyQualifiedIdentifier(i.into())
                         }
                         s => unreachable!("{:?}", s),
                     }
@@ -528,9 +529,9 @@ impl Lexer {
                 }
 
                 if qualified {
-                    TokenKind::QualifiedIdentifier(buffer)
+                    TokenKind::QualifiedIdentifier(buffer.into())
                 } else {
-                    identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer))
+                    identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer.into()))
                 }
             }
             b'/' | b'#' => {
@@ -588,9 +589,9 @@ impl Lexer {
                     }
 
                     if buffer.starts_with(b"/**") {
-                        TokenKind::DocComment(buffer)
+                        TokenKind::DocComment(buffer.into())
                     } else {
-                        TokenKind::Comment(buffer)
+                        TokenKind::Comment(buffer.into())
                     }
                 } else if let Some(b'=') = self.peek {
                     self.col += 1;
@@ -606,7 +607,7 @@ impl Lexer {
                     let mut buffer = read_till_end_of_line(self);
                     buffer.splice(0..0, [char, current]);
 
-                    TokenKind::Comment(buffer)
+                    TokenKind::Comment(buffer.into())
                 }
             }
             b'*' => {
@@ -901,7 +902,7 @@ pub enum LexerError {
 #[cfg(test)]
 mod tests {
     use super::Lexer;
-    use crate::{OpenTagKind, Token, TokenKind};
+    use crate::{ByteString, OpenTagKind, Token, TokenKind};
 
     macro_rules! open {
         () => {
@@ -917,8 +918,8 @@ mod tests {
         };
     }
 
-    fn var<B: ?Sized + AsRef<[u8]>>(v: &B) -> TokenKind {
-        TokenKind::Variable(v.as_ref().to_vec())
+    fn var<B: ?Sized + Into<ByteString>>(v: B) -> TokenKind {
+        TokenKind::Variable(v.into())
     }
 
     #[test]
