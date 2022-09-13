@@ -1,7 +1,7 @@
 use crate::{
     ast::{
-        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, DeclareItem, ElseIf, IncludeKind,
-        MagicConst, MethodFlag, StaticVar, Use, UseKind,
+        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, Constant, DeclareItem, ElseIf,
+        IncludeKind, MagicConst, MethodFlag, StaticVar, Use, UseKind,
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
@@ -426,7 +426,7 @@ impl Parser {
                 let mut body = Block::new();
                 while self.current.kind != TokenKind::RightBrace {
                     match self.class_statement()? {
-                        Statement::Constant { .. } => {
+                        Statement::ClassConstant { .. } => {
                             return Err(ParseError::TraitCannotContainConstant(self.current.span))
                         }
                         s => {
@@ -975,20 +975,26 @@ impl Parser {
             TokenKind::Const => {
                 self.next();
 
-                // TODO: Support defining multiple constants in one go.
-                let name = self.ident()?;
+                let mut constants = vec![];
 
-                expect!(self, TokenKind::Equals, "expected =");
+                while self.current.kind != TokenKind::SemiColon {
+                    let name = self.ident()?;
 
-                let value = self.expression(0)?;
+                    expect!(self, TokenKind::Equals, "expected =");
+
+                    let value = self.expression(0)?;
+
+                    constants.push(Constant {
+                        name: name.into(),
+                        value,
+                    });
+
+                    self.optional_comma()?;
+                }
 
                 self.semi()?;
 
-                Statement::Constant {
-                    name: name.into(),
-                    value,
-                    flags: vec![],
-                }
+                Statement::Constant { constants }
             }
             _ => {
                 let expr = self.expression(0)?;
@@ -1112,7 +1118,7 @@ impl Parser {
 
                 self.semi()?;
 
-                Ok(Statement::Constant {
+                Ok(Statement::ClassConstant {
                     name: name.into(),
                     value,
                     flags: vec![],
@@ -1206,7 +1212,7 @@ impl Parser {
 
                         self.semi()?;
 
-                        Ok(Statement::Constant {
+                        Ok(Statement::ClassConstant {
                             name: name.into(),
                             value,
                             flags: flags.into_iter().map(|f| f.into()).collect(),
@@ -2187,7 +2193,8 @@ mod tests {
     use super::Parser;
     use crate::{
         ast::{
-            Arg, ArrayItem, DeclareItem, ElseIf, IncludeKind, InfixOp, MethodFlag, PropertyFlag,
+            Arg, ArrayItem, Constant, DeclareItem, ElseIf, IncludeKind, InfixOp, MethodFlag,
+            PropertyFlag,
         },
         Catch, Expression, Identifier, Param, Statement, Type,
     };
@@ -3351,9 +3358,29 @@ mod tests {
         assert_ast(
             "<?php const FOO = 1;",
             &[Statement::Constant {
-                name: "FOO".as_bytes().into(),
-                value: Expression::Int { i: 1 },
-                flags: vec![],
+                constants: vec![Constant {
+                    name: "FOO".as_bytes().into(),
+                    value: Expression::Int { i: 1 },
+                }],
+            }],
+        );
+    }
+
+    #[test]
+    fn top_level_constant_multiple() {
+        assert_ast(
+            "<?php const FOO = 1, BAR = 2;",
+            &[Statement::Constant {
+                constants: vec![
+                    Constant {
+                        name: "FOO".as_bytes().into(),
+                        value: Expression::Int { i: 1 },
+                    },
+                    Constant {
+                        name: "BAR".as_bytes().into(),
+                        value: Expression::Int { i: 2 },
+                    },
+                ],
             }],
         );
     }
