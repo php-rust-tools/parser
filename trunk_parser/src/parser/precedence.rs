@@ -81,10 +81,31 @@ impl Precedence {
             _ => unimplemented!("postfix precedence for op {:?}", kind),
         }
     }
+
+    pub fn associativity(&self) -> Option<Associativity> {
+        Some(match self {
+            Self::Instanceof
+            | Self::MulDivMod
+            | Self::AddSub
+            | Self::BitShift
+            | Self::Concat
+            | Self::BitwiseAnd
+            | Self::BitwiseOr
+            | Self::BitwiseXor
+            | Self::And
+            | Self::Or
+            | Self::KeyAnd
+            | Self::KeyOr
+            | Self::KeyXor => Associativity::Left,
+            Self::Pow | Self::NullCoalesce | Self::Assignment => Associativity::Right,
+            Self::Ternary | Self::Equality | Self::LtGt => Associativity::Non,
+            _ => return None,
+        })
+    }
 }
 
 pub enum Associativity {
-    None,
+    Non,
     Left,
     Right,
 }
