@@ -416,6 +416,26 @@ impl Parser {
                     _ => unreachable!(),
                 }
             }
+            TokenKind::Readonly if self.peek.kind == TokenKind::Class => {
+                self.next();
+
+                match self.class()? {
+                    Statement::Class {
+                        name,
+                        extends,
+                        implements,
+                        body,
+                        ..
+                    } => Statement::Class {
+                        name,
+                        extends,
+                        implements,
+                        body,
+                        flag: Some(ClassFlag::Readonly),
+                    },
+                    _ => unreachable!(),
+                }
+            }
             TokenKind::Trait => {
                 self.next();
 
@@ -2193,8 +2213,8 @@ mod tests {
     use super::Parser;
     use crate::{
         ast::{
-            Arg, ArrayItem, Case, Constant, DeclareItem, ElseIf, IncludeKind, InfixOp, MethodFlag,
-            PropertyFlag,
+            Arg, ArrayItem, Case, ClassFlag, Constant, DeclareItem, ElseIf, IncludeKind, InfixOp,
+            MethodFlag, PropertyFlag,
         },
         Catch, Expression, Identifier, Param, Statement, Type,
     };
@@ -3513,6 +3533,20 @@ mod tests {
                 ],
             }],
         )
+    }
+
+    #[test]
+    fn readonly_classes() {
+        assert_ast(
+            "<?php readonly class Foo {}",
+            &[Statement::Class {
+                name: "Foo".as_bytes().into(),
+                extends: None,
+                implements: vec![],
+                body: vec![],
+                flag: Some(ClassFlag::Readonly),
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
