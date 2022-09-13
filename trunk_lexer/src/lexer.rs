@@ -911,15 +911,14 @@ mod tests {
             TokenKind::OpenTag($kind)
         };
     }
-    macro_rules! var {
-        ($v:expr) => {
-            TokenKind::Variable($v.into())
-        };
-    }
     macro_rules! int {
         ($i:expr) => {
             TokenKind::Int($i)
         };
+    }
+
+    fn var<B: ?Sized + AsRef<[u8]>>(v: &B) -> TokenKind {
+        TokenKind::Variable(v.as_ref().to_vec())
     }
 
     #[test]
@@ -1048,14 +1047,15 @@ function"#,
     #[test]
     fn vars() {
         assert_tokens(
-            "<?php $one $_one $One $one_one $a1",
+            b"<?php $one $_one $One $one_one $a1 $\xff",
             &[
                 open!(),
-                var!("one"),
-                var!("_one"),
-                var!("One"),
-                var!("one_one"),
-                var!("a1"),
+                var("one"),
+                var("_one"),
+                var("One"),
+                var("one_one"),
+                var("a1"),
+                var(b"\xff"),
             ],
         );
     }
@@ -1158,7 +1158,7 @@ function hello_world() {
         );
     }
 
-    fn assert_tokens(source: &str, expected: &[TokenKind]) {
+    fn assert_tokens<B: ?Sized + AsRef<[u8]>>(source: &B, expected: &[TokenKind]) {
         let mut kinds = vec![];
 
         for token in get_tokens(source) {
@@ -1179,7 +1179,7 @@ function hello_world() {
         spans
     }
 
-    fn get_tokens(source: &str) -> Vec<Token> {
+    fn get_tokens<B: ?Sized + AsRef<[u8]>>(source: &B) -> Vec<Token> {
         let mut lexer = Lexer::new(None);
         lexer.tokenize(source).unwrap()
     }
