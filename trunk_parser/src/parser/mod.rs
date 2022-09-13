@@ -1177,7 +1177,8 @@ impl Parser {
             | TokenKind::Public
             | TokenKind::Private
             | TokenKind::Protected
-            | TokenKind::Static => {
+            | TokenKind::Static
+            | TokenKind::Readonly => {
                 let mut flags = vec![self.current.kind.clone()];
                 self.next();
 
@@ -1189,6 +1190,7 @@ impl Parser {
                         TokenKind::Private,
                         TokenKind::Protected,
                         TokenKind::Static,
+                        TokenKind::Readonly,
                     ]
                     .contains(&self.current.kind)
                 {
@@ -3545,6 +3547,25 @@ mod tests {
                 implements: vec![],
                 body: vec![],
                 flag: Some(ClassFlag::Readonly),
+            }],
+        );
+    }
+
+    #[test]
+    fn readonly_class_props() {
+        assert_ast(
+            "<?php class Foo { public readonly $bar; }",
+            &[Statement::Class {
+                name: "Foo".as_bytes().into(),
+                extends: None,
+                implements: vec![],
+                body: vec![Statement::Property {
+                    var: "bar".as_bytes().into(),
+                    value: None,
+                    r#type: None,
+                    flags: vec![PropertyFlag::Public, PropertyFlag::Readonly],
+                }],
+                flag: None,
             }],
         );
     }
