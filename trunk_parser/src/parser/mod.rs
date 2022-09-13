@@ -695,7 +695,7 @@ impl Parser {
 
                             let condition = self.expression(0)?;
 
-                            expect!(self, TokenKind::Colon, "expected :");
+                            expect!(self, TokenKind::Colon | TokenKind::SemiColon, "expected :");
 
                             let mut body = Block::new();
 
@@ -714,7 +714,7 @@ impl Parser {
                         TokenKind::Default => {
                             self.next();
 
-                            expect!(self, TokenKind::Colon, "expected :");
+                            expect!(self, TokenKind::Colon | TokenKind::SemiColon, "expected :");
 
                             let mut body = Block::new();
 
@@ -2193,7 +2193,7 @@ mod tests {
     use super::Parser;
     use crate::{
         ast::{
-            Arg, ArrayItem, Constant, DeclareItem, ElseIf, IncludeKind, InfixOp, MethodFlag,
+            Arg, ArrayItem, Case, Constant, DeclareItem, ElseIf, IncludeKind, InfixOp, MethodFlag,
             PropertyFlag,
         },
         Catch, Expression, Identifier, Param, Statement, Type,
@@ -3481,6 +3481,37 @@ mod tests {
                     },
                 ]
             })],
+        )
+    }
+
+    #[test]
+    fn switch() {
+        assert_ast(
+            "<?php
+        switch ($a) {
+            case 0:
+                break;
+            case 1;
+            default:
+        }
+        ",
+            &[Statement::Switch {
+                condition: Expression::Variable { name: "a".into() },
+                cases: vec![
+                    Case {
+                        condition: Some(Expression::Int { i: 0 }),
+                        body: vec![Statement::Break { num: None }],
+                    },
+                    Case {
+                        condition: Some(Expression::Int { i: 1 }),
+                        body: vec![],
+                    },
+                    Case {
+                        condition: None,
+                        body: vec![],
+                    },
+                ],
+            }],
         )
     }
 
