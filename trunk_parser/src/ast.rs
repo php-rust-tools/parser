@@ -1,44 +1,43 @@
-use serde::Serialize;
-use trunk_lexer::TokenKind;
+use trunk_lexer::{ByteString, TokenKind};
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
 
-#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub enum Type {
-    Plain(String),
-    Nullable(String),
-    Union(Vec<String>),
-    Intersection(Vec<String>),
+    Plain(ByteString),
+    Nullable(ByteString),
+    Union(Vec<ByteString>),
+    Intersection(Vec<ByteString>),
     Void,
 }
 
-#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Identifier {
-    pub name: String,
+    pub name: ByteString,
 }
 
-impl From<String> for Identifier {
-    fn from(name: String) -> Self {
+impl From<ByteString> for Identifier {
+    fn from(name: ByteString) -> Self {
         Self { name }
     }
 }
 
-impl From<&String> for Identifier {
-    fn from(name: &String) -> Self {
-        Self::from(name.to_string())
+impl From<&ByteString> for Identifier {
+    fn from(name: &ByteString) -> Self {
+        Self::from(name.clone())
     }
 }
 
-impl From<&str> for Identifier {
-    fn from(name: &str) -> Self {
-        Self::from(name.to_string())
+impl From<&[u8]> for Identifier {
+    fn from(name: &[u8]) -> Self {
+        Self::from(ByteString::from(name))
     }
 }
 
 pub type ParamList = Vec<Param>;
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Param {
     pub name: Expression,
     pub r#type: Option<Type>,
@@ -47,8 +46,8 @@ pub struct Param {
     pub flag: Option<PropertyFlag>,
 }
 
-impl From<String> for Param {
-    fn from(name: String) -> Self {
+impl From<ByteString> for Param {
+    fn from(name: ByteString) -> Self {
         Self {
             name: Expression::Variable { name },
             r#type: None,
@@ -59,19 +58,19 @@ impl From<String> for Param {
     }
 }
 
-impl From<&String> for Param {
-    fn from(name: &String) -> Self {
-        Self::from(name.to_string())
+impl From<&ByteString> for Param {
+    fn from(name: &ByteString) -> Self {
+        Self::from(name.clone())
     }
 }
 
-impl From<&str> for Param {
-    fn from(name: &str) -> Self {
-        Self::from(name.to_string())
+impl From<&[u8]> for Param {
+    fn from(name: &[u8]) -> Self {
+        Self::from(ByteString::from(name))
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum PropertyFlag {
     Public,
     Protected,
@@ -91,7 +90,7 @@ impl From<TokenKind> for PropertyFlag {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum MethodFlag {
     Final,
     Abstract,
@@ -115,7 +114,7 @@ impl From<TokenKind> for MethodFlag {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ClassFlag {
     Final,
     Abstract,
@@ -131,20 +130,20 @@ impl From<TokenKind> for ClassFlag {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub enum UseKind {
     Normal,
     Function,
     Const,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct StaticVar {
     pub var: Expression,
     pub default: Option<Expression>,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum IncludeKind {
     Include,
     IncludeOnce,
@@ -164,9 +163,9 @@ impl From<&TokenKind> for IncludeKind {
     }
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
-    InlineHtml(String),
+    InlineHtml(ByteString),
     Static {
         vars: Vec<StaticVar>,
     },
@@ -196,12 +195,12 @@ pub enum Statement {
         path: Expression,
     },
     Var {
-        var: String,
+        var: ByteString,
         value: Option<Expression>,
         r#type: Option<Type>,
     },
     Property {
-        var: String,
+        var: ByteString,
         value: Option<Expression>,
         r#type: Option<Type>,
         flags: Vec<PropertyFlag>,
@@ -269,7 +268,7 @@ pub enum Statement {
         expr: Expression,
     },
     Namespace {
-        name: String,
+        name: ByteString,
         body: Block,
     },
     Use {
@@ -277,7 +276,7 @@ pub enum Statement {
         kind: UseKind,
     },
     Comment {
-        comment: String,
+        comment: ByteString,
     },
     Try {
         body: Block,
@@ -307,13 +306,13 @@ pub enum Statement {
     Noop,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct DeclareItem {
     pub key: Identifier,
     pub value: Expression,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum CastKind {
     String,
     Object,
@@ -341,26 +340,26 @@ impl From<&TokenKind> for CastKind {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum BackedEnumType {
     String,
     Int,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Case {
     pub condition: Option<Expression>,
     pub body: Block,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Catch {
     pub types: Vec<Identifier>,
     pub var: Option<Expression>,
     pub body: Block,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ConstFlag {
     Final,
     Public,
@@ -380,13 +379,13 @@ impl From<TokenKind> for ConstFlag {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Use {
     pub name: Identifier,
     pub alias: Option<Identifier>,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
     Static,
     ErrorSuppress {
@@ -405,7 +404,7 @@ pub enum Expression {
         f: f64,
     },
     Variable {
-        name: String,
+        name: ByteString,
     },
     Infix {
         lhs: Box<Self>,
@@ -417,7 +416,7 @@ pub enum Expression {
         args: Vec<Arg>,
     },
     Identifier {
-        name: String,
+        name: ByteString,
     },
     Array {
         items: Vec<ArrayItem>,
@@ -438,7 +437,7 @@ pub enum Expression {
         args: Vec<Arg>,
     },
     ConstantString {
-        value: String,
+        value: ByteString,
     },
     PropertyFetch {
         target: Box<Self>,
@@ -516,37 +515,37 @@ pub enum Expression {
     },
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Arg {
-    pub name: Option<String>,
+    pub name: Option<ByteString>,
     pub value: Expression,
     pub unpack: bool,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct ClosureUse {
     pub var: Expression,
     pub by_ref: bool,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct MatchArm {
     pub conditions: Option<Vec<Expression>>,
     pub body: Expression,
 }
 
-#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub enum MagicConst {
     Dir,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ArrayItem {
     pub key: Option<Expression>,
     pub value: Expression,
 }
 
-#[derive(Debug, Eq, PartialEq, Clone, Serialize)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub enum InfixOp {
     Add,
     Sub,
@@ -606,7 +605,7 @@ impl From<TokenKind> for InfixOp {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ElseIf {
     pub condition: Expression,
     pub body: Block,
