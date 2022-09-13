@@ -147,7 +147,7 @@ pub struct StaticVar {
     pub default: Option<Expression>,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub enum IncludeKind {
     Include,
     IncludeOnce,

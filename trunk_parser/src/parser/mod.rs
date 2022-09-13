@@ -5,7 +5,6 @@ use crate::{
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
-use core::panic;
 use std::{fmt::Display, vec::IntoIter};
 use trunk_lexer::{Span, Token, TokenKind};
 
@@ -2047,17 +2046,15 @@ impl Parser {
                         method: Box::new(property),
                         args,
                     }
+                } else if op == &TokenKind::NullsafeArrow {
+                    Expression::NullsafePropertyFetch {
+                        target: Box::new(lhs),
+                        property: Box::new(property),
+                    }
                 } else {
-                    if op == &TokenKind::NullsafeArrow {
-                        Expression::NullsafePropertyFetch {
-                            target: Box::new(lhs),
-                            property: Box::new(property),
-                        }
-                    } else {
-                        Expression::PropertyFetch {
-                            target: Box::new(lhs),
-                            property: Box::new(property),
-                        }
+                    Expression::PropertyFetch {
+                        target: Box::new(lhs),
+                        property: Box::new(property),
                     }
                 }
             }

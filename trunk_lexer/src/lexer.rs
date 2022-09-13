@@ -361,7 +361,7 @@ impl Lexer {
 
                 while let Some(n) = self.peek {
                     match n {
-                        b'0'..=b'9' if buffer.len() > 0 => {
+                        b'0'..=b'9' if !buffer.is_empty() => {
                             self.col += 1;
                             buffer.push(n);
                             self.next();
@@ -531,7 +531,7 @@ impl Lexer {
                 if qualified {
                     TokenKind::QualifiedIdentifier(buffer.into())
                 } else {
-                    identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer.into()))
+                    identifier_to_keyword(&buffer).unwrap_or_else(|| TokenKind::Identifier(buffer.into()))
                 }
             }
             b'/' | b'#' => {
