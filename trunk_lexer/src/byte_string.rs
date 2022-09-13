@@ -2,14 +2,12 @@ use std::cmp::{Eq, PartialEq};
 use std::fmt::{Debug, Formatter, Result};
 use std::ops::Deref;
 
-use serde::Serialize;
-
 /// A wrapper for Vec<u8> that provides a human-readable Debug impl and
 /// a few other conveniences.
 ///
 /// The Trunk lexer and parser work mainly with byte strings because
 /// valid PHP code is not required to be valid UTF-8.
-#[derive(Clone, Eq, PartialEq, Serialize)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct ByteString(pub(crate) Vec<u8>);
 
 impl ByteString {
