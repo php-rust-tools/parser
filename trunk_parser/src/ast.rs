@@ -300,7 +300,17 @@ pub enum Statement {
     Global {
         vars: Vec<Identifier>,
     },
+    Declare {
+        declares: Vec<DeclareItem>,
+        body: Block,
+    },
     Noop,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct DeclareItem {
+    pub key: Identifier,
+    pub value: Expression,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Serialize)]

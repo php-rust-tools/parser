@@ -1,7 +1,7 @@
 use crate::{
     ast::{
-        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, ElseIf, IncludeKind, MagicConst,
-        MethodFlag, StaticVar, Use, UseKind,
+        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, DeclareItem, ElseIf, IncludeKind,
+        MagicConst, MethodFlag, StaticVar, Use, UseKind,
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
@@ -169,6 +169,40 @@ impl Parser {
         self.skip_comments();
 
         let statement = match &self.current.kind {
+            TokenKind::Declare => {
+                self.next();
+                self.lparen()?;
+
+                let mut declares = Vec::new();
+                while self.current.kind != TokenKind::RightParen {
+                    let key = self.ident()?;
+
+                    expect!(self, TokenKind::Equals, "expected =");
+
+                    let value = self.expression(0)?;
+
+                    self.optional_comma()?;
+
+                    declares.push(DeclareItem {
+                        key: key.into(),
+                        value,
+                    });
+                }
+
+                self.rparen()?;
+
+                let body = if self.current.kind == TokenKind::LeftBrace {
+                    self.next();
+                    let b = self.block(&TokenKind::RightBrace)?;
+                    self.rbrace()?;
+                    b
+                } else {
+                    self.semi()?;
+                    vec![]
+                };
+
+                Statement::Declare { declares, body }
+            }
             TokenKind::Global => {
                 self.next();
 
@@ -2151,7 +2185,9 @@ impl Display for ParseError {
 mod tests {
     use super::Parser;
     use crate::{
-        ast::{Arg, ArrayItem, ElseIf, IncludeKind, InfixOp, MethodFlag, PropertyFlag},
+        ast::{
+            Arg, ArrayItem, DeclareItem, ElseIf, IncludeKind, InfixOp, MethodFlag, PropertyFlag,
+        },
         Catch, Expression, Identifier, Param, Statement, Type,
     };
     use trunk_lexer::Lexer;
@@ -3334,6 +3370,58 @@ mod tests {
             "<?php global $a, $b;",
             &[Statement::Global {
                 vars: vec!["a".into(), "b".into()],
+            }],
+        );
+    }
+
+    #[test]
+    fn basic_declare() {
+        assert_ast(
+            "<?php declare(A='B');",
+            &[Statement::Declare {
+                declares: vec![DeclareItem {
+                    key: "A".into(),
+                    value: Expression::ConstantString { value: "B".into() },
+                }],
+                body: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn multiple_declares_in_single_statement() {
+        assert_ast(
+            "<?php declare(A='B', C='D');",
+            &[Statement::Declare {
+                declares: vec![
+                    DeclareItem {
+                        key: "A".into(),
+                        value: Expression::ConstantString { value: "B".into() },
+                    },
+                    DeclareItem {
+                        key: "C".into(),
+                        value: Expression::ConstantString { value: "D".into() },
+                    },
+                ],
+                body: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn declare_block() {
+        assert_ast(
+            "<?php declare(A='B') { echo 'Hello, world!'; }",
+            &[Statement::Declare {
+                declares: vec![DeclareItem {
+                    key: "A".into(),
+                    value: Expression::ConstantString { value: "B".into() },
+                }],
+                body: vec![Statement::Echo {
+                    values: vec![Expression::ConstantString {
+                        value: "Hello, world!".into(),
+                    }],
+                }],
             }],
         );
     }
