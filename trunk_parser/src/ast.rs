@@ -6,33 +6,33 @@ pub type Program = Block;
 
 #[derive(Debug, Eq, PartialEq, Clone, Serialize)]
 pub enum Type {
-    Plain(String),
-    Nullable(String),
-    Union(Vec<String>),
-    Intersection(Vec<String>),
+    Plain(Vec<u8>),
+    Nullable(Vec<u8>),
+    Union(Vec<Vec<u8>>),
+    Intersection(Vec<Vec<u8>>),
     Void,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone, Serialize)]
 pub struct Identifier {
-    pub name: String,
+    pub name: Vec<u8>,
 }
 
-impl From<String> for Identifier {
-    fn from(name: String) -> Self {
+impl From<Vec<u8>> for Identifier {
+    fn from(name: Vec<u8>) -> Self {
         Self { name }
     }
 }
 
-impl From<&String> for Identifier {
-    fn from(name: &String) -> Self {
-        Self::from(name.to_string())
+impl From<&Vec<u8>> for Identifier {
+    fn from(name: &Vec<u8>) -> Self {
+        Self::from(name.clone())
     }
 }
 
-impl From<&str> for Identifier {
-    fn from(name: &str) -> Self {
-        Self::from(name.to_string())
+impl From<&[u8]> for Identifier {
+    fn from(name: &[u8]) -> Self {
+        Self::from(name.to_vec())
     }
 }
 
@@ -47,8 +47,8 @@ pub struct Param {
     pub flag: Option<PropertyFlag>,
 }
 
-impl From<String> for Param {
-    fn from(name: String) -> Self {
+impl From<Vec<u8>> for Param {
+    fn from(name: Vec<u8>) -> Self {
         Self {
             name: Expression::Variable { name },
             r#type: None,
@@ -59,15 +59,15 @@ impl From<String> for Param {
     }
 }
 
-impl From<&String> for Param {
-    fn from(name: &String) -> Self {
-        Self::from(name.to_string())
+impl From<&Vec<u8>> for Param {
+    fn from(name: &Vec<u8>) -> Self {
+        Self::from(name.clone())
     }
 }
 
-impl From<&str> for Param {
-    fn from(name: &str) -> Self {
-        Self::from(name.to_string())
+impl From<&[u8]> for Param {
+    fn from(name: &[u8]) -> Self {
+        Self::from(name.to_vec())
     }
 }
 
@@ -166,7 +166,7 @@ impl From<&TokenKind> for IncludeKind {
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub enum Statement {
-    InlineHtml(String),
+    InlineHtml(Vec<u8>),
     Static {
         vars: Vec<StaticVar>,
     },
@@ -196,12 +196,12 @@ pub enum Statement {
         path: Expression,
     },
     Var {
-        var: String,
+        var: Vec<u8>,
         value: Option<Expression>,
         r#type: Option<Type>,
     },
     Property {
-        var: String,
+        var: Vec<u8>,
         value: Option<Expression>,
         r#type: Option<Type>,
         flags: Vec<PropertyFlag>,
@@ -269,7 +269,7 @@ pub enum Statement {
         expr: Expression,
     },
     Namespace {
-        name: String,
+        name: Vec<u8>,
         body: Block,
     },
     Use {
@@ -277,7 +277,7 @@ pub enum Statement {
         kind: UseKind,
     },
     Comment {
-        comment: String,
+        comment: Vec<u8>,
     },
     Try {
         body: Block,
@@ -405,7 +405,7 @@ pub enum Expression {
         f: f64,
     },
     Variable {
-        name: String,
+        name: Vec<u8>,
     },
     Infix {
         lhs: Box<Self>,
@@ -417,7 +417,7 @@ pub enum Expression {
         args: Vec<Arg>,
     },
     Identifier {
-        name: String,
+        name: Vec<u8>,
     },
     Array {
         items: Vec<ArrayItem>,
@@ -438,7 +438,7 @@ pub enum Expression {
         args: Vec<Arg>,
     },
     ConstantString {
-        value: String,
+        value: Vec<u8>,
     },
     PropertyFetch {
         target: Box<Self>,
@@ -518,7 +518,7 @@ pub enum Expression {
 
 #[derive(Debug, PartialEq, Clone, Serialize)]
 pub struct Arg {
-    pub name: Option<String>,
+    pub name: Option<Vec<u8>>,
     pub value: Expression,
     pub unpack: bool,
 }

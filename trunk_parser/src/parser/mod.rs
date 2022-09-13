@@ -159,8 +159,8 @@ impl Parser {
             return Ok(Type::Intersection(types));
         }
 
-        Ok(match id.as_str() {
-            "void" => Type::Void,
+        Ok(match &id[..] {
+            b"void" => Type::Void,
             _ => Type::Plain(id),
         })
     }
@@ -240,13 +240,13 @@ impl Parser {
                 Statement::Static { vars }
             }
             TokenKind::InlineHtml(html) => {
-                let s = Statement::InlineHtml(html.to_string());
+                let s = Statement::InlineHtml(html.clone());
                 self.next();
                 s
             }
             TokenKind::Comment(comment) => {
                 let s = Statement::Comment {
-                    comment: comment.to_string(),
+                    comment: comment.clone(),
                 };
                 self.next();
                 s
@@ -559,14 +559,14 @@ impl Parser {
                     expect!(self, TokenKind::Colon, "expected :");
 
                     match self.current.kind.clone() {
-                        TokenKind::Identifier(s) if s == *"string" || s == *"int" => {
+                        TokenKind::Identifier(s) if s == *b"string" || s == *b"int" => {
                             self.next();
 
                             is_backed = true;
 
-                            Some(match s.as_str() {
-                                "string" => BackedEnumType::String,
-                                "int" => BackedEnumType::Int,
+                            Some(match &s[..] {
+                                b"string" => BackedEnumType::String,
+                                b"int" => BackedEnumType::Int,
                                 _ => unreachable!(),
                             })
                         }
@@ -1372,9 +1372,7 @@ impl Parser {
                 }
             }
             TokenKind::Variable(v) => {
-                let e = Expression::Variable {
-                    name: v.to_string(),
-                };
+                let e = Expression::Variable { name: v.clone() };
                 self.next();
                 e
             }
@@ -1391,9 +1389,7 @@ impl Parser {
             TokenKind::Identifier(i)
             | TokenKind::QualifiedIdentifier(i)
             | TokenKind::FullyQualifiedIdentifier(i) => {
-                let e = Expression::Identifier {
-                    name: i.to_string(),
-                };
+                let e = Expression::Identifier { name: i.clone() };
                 self.next();
                 e
             }
@@ -1402,9 +1398,7 @@ impl Parser {
                 Expression::Static
             }
             TokenKind::ConstantString(s) => {
-                let e = Expression::ConstantString {
-                    value: s.to_string(),
-                };
+                let e = Expression::ConstantString { value: s.clone() };
                 self.next();
                 e
             }
@@ -1915,7 +1909,7 @@ impl Parser {
                     let ident = if self.current.kind == TokenKind::Class {
                         self.next();
 
-                        String::from("class")
+                        b"class".to_vec()
                     } else {
                         self.ident_maybe_reserved()?
                     };
@@ -1972,9 +1966,7 @@ impl Parser {
                         expr
                     }
                     TokenKind::Variable(ref var) => {
-                        let var = Expression::Variable {
-                            name: var.to_string(),
-                        };
+                        let var = Expression::Variable { name: var.clone() };
                         self.next();
                         var
                     }
@@ -2195,11 +2187,11 @@ mod tests {
     macro_rules! function {
         ($name:literal, $params:expr, $body:expr) => {
             Statement::Function {
-                name: $name.to_string().into(),
+                name: $name.as_bytes().into(),
                 params: $params
                     .to_vec()
                     .into_iter()
-                    .map(|p: &str| Param::from(p))
+                    .map(|p: &str| Param::from(p.as_bytes()))
                     .collect::<Vec<Param>>(),
                 body: $body.to_vec(),
                 return_type: None,
@@ -2210,7 +2202,7 @@ mod tests {
     macro_rules! class {
         ($name:literal) => {
             Statement::Class {
-                name: $name.to_string().into(),
+                name: $name.as_bytes().into(),
                 body: vec![],
                 extends: None,
                 implements: vec![],
@@ -2219,7 +2211,7 @@ mod tests {
         };
         ($name:literal, $body:expr) => {
             Statement::Class {
-                name: $name.to_string().into(),
+                name: $name.as_bytes().into(),
                 body: $body.to_vec(),
                 extends: None,
                 implements: vec![],
@@ -2228,7 +2220,7 @@ mod tests {
         };
         ($name:literal, $extends:expr, $implements:expr, $body:expr) => {
             Statement::Class {
-                name: $name.to_string().into(),
+                name: $name.as_bytes().into(),
                 body: $body.to_vec(),
                 extends: $extends,
                 implements: $implements.to_vec(),
@@ -2240,11 +2232,11 @@ mod tests {
     macro_rules! method {
         ($name:literal, $params:expr, $flags:expr, $body:expr) => {
             Statement::Method {
-                name: $name.to_string().into(),
+                name: $name.as_bytes().into(),
                 params: $params
                     .to_vec()
                     .into_iter()
-                    .map(|p: &str| Param::from(p))
+                    .map(|p: &str| Param::from(p.as_bytes()))
                     .collect::<Vec<Param>>(),
                 flags: $flags.to_vec(),
                 body: $body.to_vec(),
@@ -2801,7 +2793,7 @@ mod tests {
 
         class Foo extends Bar {}
         ",
-            &[class!("Foo", Some("Bar".to_string().into()), &[], &[])],
+            &[class!("Foo", Some("Bar".as_bytes().into()), &[], &[])],
         );
     }
 
@@ -2816,7 +2808,7 @@ mod tests {
             &[class!(
                 "Foo",
                 None,
-                &["Bar".to_string().into(), "Baz".to_string().into()],
+                &["Bar".as_bytes().into(), "Baz".as_bytes().into()],
                 &[]
             )],
         );
@@ -2827,7 +2819,7 @@ mod tests {
         assert_ast(
             "<?php function foo(string $b) {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
                     r#type: Some(Type::Plain("string".into())),
@@ -2846,7 +2838,7 @@ mod tests {
         assert_ast(
             "<?php function foo(...$bar) {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "bar".into() },
                     r#type: None,
@@ -2862,7 +2854,7 @@ mod tests {
         assert_ast(
             "<?php function foo(string ...$bar) {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "bar".into() },
                     r#type: Some(Type::Plain("string".into())),
@@ -2878,7 +2870,7 @@ mod tests {
         assert_ast(
             "<?php function foo($bar, $baz, ...$car) {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![
                     Param {
                         name: Expression::Variable { name: "bar".into() },
@@ -2913,7 +2905,7 @@ mod tests {
         assert_ast(
             "<?php function foo(?string $b) {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
                     r#type: Some(Type::Nullable("string".into())),
@@ -2932,7 +2924,7 @@ mod tests {
         assert_ast(
             "<?php function foo(int|float $b) {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
                     r#type: Some(Type::Union(vec!["int".into(), "float".into()])),
@@ -2948,7 +2940,7 @@ mod tests {
         assert_ast(
             "<?php function foo(string|int|float $b) {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
                     r#type: Some(Type::Union(vec![
@@ -2971,7 +2963,7 @@ mod tests {
         assert_ast(
             "<?php function foo(Foo&Bar $b) {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
                     r#type: Some(Type::Intersection(vec!["Foo".into(), "Bar".into()])),
@@ -2987,7 +2979,7 @@ mod tests {
         assert_ast(
             "<?php function foo(Foo&Bar&Baz $b) {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
                     r#type: Some(Type::Intersection(vec![
@@ -3010,7 +3002,7 @@ mod tests {
         assert_ast(
             "<?php function foo(): string {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![],
                 body: vec![],
                 return_type: Some(Type::Plain("string".into())),
@@ -3020,7 +3012,7 @@ mod tests {
         assert_ast(
             "<?php function foo(): void {}",
             &[Statement::Function {
-                name: "foo".to_string().into(),
+                name: "foo".as_bytes().into(),
                 params: vec![],
                 body: vec![],
                 return_type: Some(Type::Void),
@@ -3069,7 +3061,7 @@ mod tests {
             "<?php new class extends Foo {};",
             &[expr!(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
-                    extends: Some(Identifier::from("Foo")),
+                    extends: Some(Identifier::from("Foo".as_bytes())),
                     implements: vec![],
                     body: vec![]
                 }),
@@ -3082,7 +3074,10 @@ mod tests {
             &[expr!(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
                     extends: None,
-                    implements: vec![Identifier::from("Foo"), Identifier::from("Bar"),],
+                    implements: vec![
+                        Identifier::from("Foo".as_bytes()),
+                        Identifier::from("Bar".as_bytes()),
+                    ],
                     body: vec![]
                 }),
                 args: vec![]
@@ -3098,7 +3093,7 @@ mod tests {
                     extends: None,
                     implements: vec![],
                     body: vec![Statement::Method {
-                        name: "foo".into(),
+                        name: "foo".as_bytes().into(),
                         params: vec![],
                         body: vec![],
                         return_type: None,
@@ -3184,7 +3179,7 @@ mod tests {
             // my comment
         }",
             &[Statement::Class {
-                name: "MyClass".into(),
+                name: "MyClass".as_bytes().into(),
                 extends: None,
                 implements: vec![],
                 body: vec![Statement::Property {
@@ -3209,7 +3204,7 @@ mod tests {
         );
 
         assert_ast(
-            "<?php 
+            "<?php
         do {
             echo 'Hi!';
         } while (true);
@@ -3266,7 +3261,7 @@ mod tests {
             &[Statement::Try {
                 body: vec![],
                 catches: vec![Catch {
-                    types: vec!["Exception".into()],
+                    types: vec!["Exception".as_bytes().into()],
                     var: Some(Expression::Variable { name: "e".into() }),
                     body: vec![],
                 }],
@@ -3282,7 +3277,7 @@ mod tests {
             &[Statement::Try {
                 body: vec![],
                 catches: vec![Catch {
-                    types: vec!["Exception".into()],
+                    types: vec!["Exception".as_bytes().into()],
                     var: None,
                     body: vec![],
                 }],
@@ -3299,12 +3294,12 @@ mod tests {
                 body: vec![],
                 catches: vec![
                     Catch {
-                        types: vec!["Exception".into()],
+                        types: vec!["Exception".as_bytes().into()],
                         var: Some(Expression::Variable { name: "e".into() }),
                         body: vec![],
                     },
                     Catch {
-                        types: vec!["CustomException".into()],
+                        types: vec!["CustomException".as_bytes().into()],
                         var: Some(Expression::Variable { name: "e".into() }),
                         body: vec![],
                     },
@@ -3321,7 +3316,7 @@ mod tests {
             &[Statement::Try {
                 body: vec![],
                 catches: vec![Catch {
-                    types: vec!["Exception".into()],
+                    types: vec!["Exception".as_bytes().into()],
                     var: Some(Expression::Variable { name: "e".into() }),
                     body: vec![],
                 }],
@@ -3347,7 +3342,7 @@ mod tests {
         assert_ast(
             "<?php const FOO = 1;",
             &[Statement::Constant {
-                name: "FOO".into(),
+                name: "FOO".as_bytes().into(),
                 value: Expression::Int { i: 1 },
                 flags: vec![],
             }],
@@ -3359,7 +3354,7 @@ mod tests {
         assert_ast(
             "<?php global $a;",
             &[Statement::Global {
-                vars: vec!["a".into()],
+                vars: vec!["a".as_bytes().into()],
             }],
         );
     }
@@ -3369,7 +3364,7 @@ mod tests {
         assert_ast(
             "<?php global $a, $b;",
             &[Statement::Global {
-                vars: vec!["a".into(), "b".into()],
+                vars: vec!["a".as_bytes().into(), "b".as_bytes().into()],
             }],
         );
     }
@@ -3380,7 +3375,7 @@ mod tests {
             "<?php declare(A='B');",
             &[Statement::Declare {
                 declares: vec![DeclareItem {
-                    key: "A".into(),
+                    key: "A".as_bytes().into(),
                     value: Expression::ConstantString { value: "B".into() },
                 }],
                 body: vec![],
@@ -3395,11 +3390,11 @@ mod tests {
             &[Statement::Declare {
                 declares: vec![
                     DeclareItem {
-                        key: "A".into(),
+                        key: "A".as_bytes().into(),
                         value: Expression::ConstantString { value: "B".into() },
                     },
                     DeclareItem {
-                        key: "C".into(),
+                        key: "C".as_bytes().into(),
                         value: Expression::ConstantString { value: "D".into() },
                     },
                 ],
@@ -3414,7 +3409,7 @@ mod tests {
             "<?php declare(A='B') { echo 'Hello, world!'; }",
             &[Statement::Declare {
                 declares: vec![DeclareItem {
-                    key: "A".into(),
+                    key: "A".as_bytes().into(),
                     value: Expression::ConstantString { value: "B".into() },
                 }],
                 body: vec![Statement::Echo {

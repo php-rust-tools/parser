@@ -16,10 +16,10 @@ pub struct LexerConfig {
 pub struct Lexer {
     config: LexerConfig,
     state: LexerState,
-    chars: Vec<char>,
+    chars: Vec<u8>,
     cursor: usize,
-    current: Option<char>,
-    peek: Option<char>,
+    current: Option<u8>,
+    peek: Option<u8>,
     col: usize,
     line: usize,
 }
@@ -29,7 +29,7 @@ impl Lexer {
         Self {
             config: config.unwrap_or_default(),
             state: LexerState::Initial,
-            chars: "".chars().collect(),
+            chars: Vec::new(),
             cursor: 0,
             current: None,
             peek: None,
@@ -40,7 +40,7 @@ impl Lexer {
 
     pub fn tokenize(&mut self, input: &str) -> Result<Vec<Token>, LexerError> {
         let mut tokens = Vec::new();
-        self.chars = input.chars().collect();
+        self.chars = input.bytes().collect();
 
         self.next();
         self.next();
@@ -57,11 +57,11 @@ impl Lexer {
                 // This tells the lexer to start analysing characters at PHP tokens instead of inline HTML.
                 LexerState::Scripting => {
                     while let Some(c) = self.peek {
-                        if !c.is_whitespace() && !['\n', '\t', '\r'].contains(&c) {
+                        if !c.is_ascii_whitespace() && ![b'\n', b'\t', b'\r'].contains(&c) {
                             break;
                         }
 
-                        if c == '\n' {
+                        if c == b'\n' {
                             self.line += 1;
                             self.col = 0;
                         } else {
@@ -86,21 +86,21 @@ impl Lexer {
 
     #[allow(dead_code)]
     fn initial(&mut self) -> Result<Vec<Token>, LexerError> {
-        let mut buffer = String::new();
+        let mut buffer = Vec::new();
         while let Some(char) = self.current {
             match char {
-                '<' => {
+                b'<' => {
                     // This is disgusting and can most definitely be tidied up with a multi-peek iterator.
-                    if let Some('?') = self.peek {
+                    if let Some(b'?') = self.peek {
                         self.next();
 
-                        if let Some('p') = self.peek {
+                        if let Some(b'p') = self.peek {
                             self.next();
 
-                            if let Some('h') = self.peek {
+                            if let Some(b'h') = self.peek {
                                 self.next();
 
-                                if let Some('p') = self.peek {
+                                if let Some(b'p') = self.peek {
                                     self.next();
 
                                     self.col += 4;
@@ -126,12 +126,12 @@ impl Lexer {
                             } else {
                                 self.col += 3;
 
-                                buffer.push('h');
+                                buffer.push(b'h');
                             }
                         } else {
                             self.col += 2;
 
-                            buffer.push('?');
+                            buffer.push(b'?');
                         }
                     } else {
                         self.next();
@@ -167,20 +167,20 @@ impl Lexer {
         let char = self.current.unwrap();
 
         let kind = match char {
-            '@' => {
+            b'@' => {
                 self.col += 1;
 
                 TokenKind::At
             }
-            '!' => {
+            b'!' => {
                 self.col += 1;
 
-                if let Some('=') = self.peek {
+                if let Some(b'=') = self.peek {
                     self.col += 1;
 
                     self.next();
 
-                    if let Some('=') = self.peek {
+                    if let Some(b'=') = self.peek {
                         self.col += 1;
 
                         self.next();
@@ -193,10 +193,10 @@ impl Lexer {
                     TokenKind::Bang
                 }
             }
-            '&' => {
+            b'&' => {
                 self.col += 1;
 
-                if let Some('&') = self.peek {
+                if let Some(b'&') = self.peek {
                     self.col += 1;
 
                     self.next();
@@ -206,9 +206,9 @@ impl Lexer {
                     TokenKind::Ampersand
                 }
             }
-            '?' => {
+            b'?' => {
                 // This is a close tag, we can enter "Initial" mode again.
-                if let Some('>') = self.peek {
+                if let Some(b'>') = self.peek {
                     self.next();
                     self.next();
 
@@ -217,12 +217,12 @@ impl Lexer {
                     self.enter_state(LexerState::Initial);
 
                     TokenKind::CloseTag
-                } else if let Some('?') = self.peek {
+                } else if let Some(b'?') = self.peek {
                     self.col += 1;
 
                     self.next();
 
-                    if let Some('=') = self.peek {
+                    if let Some(b'=') = self.peek {
                         self.col += 1;
 
                         self.next();
@@ -231,11 +231,11 @@ impl Lexer {
                     } else {
                         TokenKind::Coalesce
                     }
-                } else if let Some(':') = self.peek {
+                } else if let Some(b':') = self.peek {
                     self.col += 1;
                     self.next();
                     TokenKind::QuestionColon
-                } else if self.try_read("->") {
+                } else if self.try_read(b"->") {
                     self.col += 1;
                     self.skip(2);
                     TokenKind::NullsafeArrow
@@ -243,11 +243,11 @@ impl Lexer {
                     TokenKind::Question
                 }
             }
-            '=' => {
-                if let Some('=') = self.peek {
+            b'=' => {
+                if let Some(b'=') = self.peek {
                     self.next();
 
-                    if let Some('=') = self.peek {
+                    if let Some(b'=') = self.peek {
                         self.next();
 
                         self.col += 3;
@@ -258,7 +258,7 @@ impl Lexer {
 
                         TokenKind::DoubleEquals
                     }
-                } else if let Some('>') = self.peek {
+                } else if let Some(b'>') = self.peek {
                     self.next();
                     self.col += 1;
                     TokenKind::DoubleArrow
@@ -269,33 +269,33 @@ impl Lexer {
                 }
             }
             // Single quoted string.
-            '\'' => {
+            b'\'' => {
                 self.col += 1;
 
-                let mut buffer = String::new();
+                let mut buffer = Vec::new();
                 let mut escaping = false;
 
                 while let Some(n) = self.peek {
-                    if !escaping && n == '\'' {
+                    if !escaping && n == b'\'' {
                         self.next();
 
                         break;
                     }
 
-                    if n == '\\' && !escaping {
+                    if n == b'\\' && !escaping {
                         escaping = true;
                         self.next();
                         continue;
                     }
 
-                    if escaping && ['\\', '\''].contains(&n) {
+                    if escaping && [b'\\', b'\''].contains(&n) {
                         escaping = false;
                         buffer.push(n);
                         self.next();
                         continue;
                     }
 
-                    if n == '\n' {
+                    if n == b'\n' {
                         self.line += 1;
                         self.col = 0;
                     } else {
@@ -310,33 +310,33 @@ impl Lexer {
 
                 TokenKind::ConstantString(buffer)
             }
-            '"' => {
+            b'"' => {
                 self.col += 1;
 
-                let mut buffer = String::new();
+                let mut buffer = Vec::new();
                 let mut escaping = false;
 
                 while let Some(n) = self.peek {
-                    if !escaping && n == '"' {
+                    if !escaping && n == b'"' {
                         self.next();
 
                         break;
                     }
 
-                    if n == '\\' && !escaping {
+                    if n == b'\\' && !escaping {
                         escaping = true;
                         self.next();
                         continue;
                     }
 
-                    if escaping && ['\\', '"'].contains(&n) {
+                    if escaping && [b'\\', b'"'].contains(&n) {
                         escaping = false;
                         buffer.push(n);
                         self.next();
                         continue;
                     }
 
-                    if n == '\n' {
+                    if n == b'\n' {
                         self.line += 1;
                         self.col = 0;
                     } else {
@@ -351,19 +351,19 @@ impl Lexer {
 
                 TokenKind::ConstantString(buffer)
             }
-            '$' => {
-                let mut buffer = String::new();
+            b'$' => {
+                let mut buffer = Vec::new();
 
                 self.col += 1;
 
                 while let Some(n) = self.peek {
                     match n {
-                        '0'..='9' if buffer.len() > 0 => {
+                        b'0'..=b'9' if buffer.len() > 0 => {
                             self.col += 1;
                             buffer.push(n);
                             self.next();
                         }
-                        'a'..='z' | 'A'..='Z' | '\u{80}'..='\u{ff}' | '_' => {
+                        b'a'..=b'z' | b'A'..=b'Z' | 0x80..=0xff | b'_' => {
                             self.col += 1;
 
                             buffer.push(n);
@@ -375,23 +375,23 @@ impl Lexer {
 
                 TokenKind::Variable(buffer)
             }
-            '.' => {
+            b'.' => {
                 self.col += 1;
 
-                if let Some('0'..='9') = self.peek {
+                if let Some(b'0'..=b'9') = self.peek {
                     let mut buffer = String::from("0.");
                     let mut underscore = false;
 
                     while let Some(n) = self.peek {
                         match n {
-                            '0'..='9' => {
+                            b'0'..=b'9' => {
                                 underscore = false;
-                                buffer.push(n);
+                                buffer.push(n as char);
                                 self.next();
 
                                 self.col += 1;
                             }
-                            '_' => {
+                            b'_' => {
                                 if underscore {
                                     return Err(LexerError::UnexpectedCharacter(n));
                                 }
@@ -406,12 +406,12 @@ impl Lexer {
                     }
 
                     TokenKind::Float(buffer.parse().unwrap())
-                } else if let Some('.') = self.peek {
+                } else if let Some(b'.') = self.peek {
                     self.next();
 
                     self.col += 1;
 
-                    if let Some('.') = self.peek {
+                    if let Some(b'.') = self.peek {
                         self.next();
 
                         self.col += 1;
@@ -420,7 +420,7 @@ impl Lexer {
                     } else {
                         todo!("don't know how to handle this case yet, it should just be 2 Dot tokens...")
                     }
-                } else if let Some('=') = self.peek {
+                } else if let Some(b'=') = self.peek {
                     self.next();
                     self.col += 1;
                     TokenKind::DotEquals
@@ -428,8 +428,8 @@ impl Lexer {
                     TokenKind::Dot
                 }
             }
-            '0'..='9' => {
-                let mut buffer = String::from(char);
+            b'0'..=b'9' => {
+                let mut buffer = String::from(char as char);
                 let mut underscore = false;
                 let mut is_float = false;
 
@@ -437,24 +437,24 @@ impl Lexer {
 
                 while let Some(n) = self.peek {
                     match n {
-                        '0'..='9' => {
+                        b'0'..=b'9' => {
                             underscore = false;
-                            buffer.push(n);
+                            buffer.push(n as char);
                             self.next();
 
                             self.col += 1;
                         }
-                        '.' => {
+                        b'.' => {
                             if is_float {
                                 return Err(LexerError::UnexpectedCharacter(n));
                             }
 
                             is_float = true;
-                            buffer.push(n);
+                            buffer.push(n as char);
                             self.next();
                             self.col += 1;
                         }
-                        '_' => {
+                        b'_' => {
                             if underscore {
                                 return Err(LexerError::UnexpectedCharacter(n));
                             }
@@ -474,30 +474,37 @@ impl Lexer {
                     TokenKind::Int(buffer.parse().unwrap())
                 }
             }
-            '\\' => {
+            b'\\' => {
                 self.col += 1;
 
-                if self.peek.map_or(false, |n| n == '_' || n.is_alphabetic()) {
+                if self
+                    .peek
+                    .map_or(false, |n| n == b'_' || n.is_ascii_alphabetic())
+                {
                     match self.scripting()? {
                         Token {
-                            kind: TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i),
+                            kind:
+                                TokenKind::Identifier(mut i) | TokenKind::QualifiedIdentifier(mut i),
                             ..
-                        } => TokenKind::FullyQualifiedIdentifier(format!("\\{}", i)),
+                        } => {
+                            i.insert(0, b'\\');
+                            TokenKind::FullyQualifiedIdentifier(i)
+                        }
                         s => unreachable!("{:?}", s),
                     }
                 } else {
                     TokenKind::NamespaceSeparator
                 }
             }
-            _ if char.is_alphabetic() || char == '_' => {
+            _ if char.is_ascii_alphabetic() || char == b'_' => {
                 self.col += 1;
 
                 let mut qualified = false;
                 let mut last_was_slash = false;
 
-                let mut buffer = String::from(char);
+                let mut buffer = vec![char];
                 while let Some(next) = self.peek {
-                    if next.is_alphanumeric() || next == '_' {
+                    if next.is_ascii_alphanumeric() || next == b'_' {
                         buffer.push(next);
                         self.next();
                         self.col += 1;
@@ -505,7 +512,7 @@ impl Lexer {
                         continue;
                     }
 
-                    if next == '\\' && !last_was_slash {
+                    if next == b'\\' && !last_was_slash {
                         qualified = true;
                         last_was_slash = true;
                         buffer.push(next);
@@ -523,16 +530,16 @@ impl Lexer {
                     identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier(buffer))
                 }
             }
-            '/' | '#' => {
+            b'/' | b'#' => {
                 self.col += 1;
 
-                fn read_till_end_of_line(s: &mut Lexer) -> String {
+                fn read_till_end_of_line(s: &mut Lexer) -> Vec<u8> {
                     s.col += 1;
 
-                    let mut buffer = String::new();
+                    let mut buffer = Vec::new();
 
                     while let Some(c) = s.peek {
-                        if c == '\n' {
+                        if c == b'\n' {
                             break;
                         }
 
@@ -543,8 +550,8 @@ impl Lexer {
                     buffer
                 }
 
-                if char == '/' && self.peek == Some('*') {
-                    let mut buffer = String::from(char);
+                if char == b'/' && self.peek == Some(b'*') {
+                    let mut buffer = vec![char];
 
                     while self.peek.is_some() {
                         self.next();
@@ -552,10 +559,10 @@ impl Lexer {
                         let t = self.current.unwrap();
 
                         match t {
-                            '*' => {
-                                if let Some('/') = self.peek {
+                            b'*' => {
+                                if let Some(b'/') = self.peek {
                                     self.col += 2;
-                                    buffer.push_str("*/");
+                                    buffer.extend_from_slice(b"*/");
                                     self.next();
                                     break;
                                 } else {
@@ -563,11 +570,11 @@ impl Lexer {
                                     buffer.push(t);
                                 }
                             }
-                            '\n' => {
+                            b'\n' => {
                                 self.line += 1;
                                 self.col = 0;
 
-                                buffer.push('\n');
+                                buffer.push(b'\n');
                             }
                             _ => {
                                 self.col += 1;
@@ -577,39 +584,36 @@ impl Lexer {
                         }
                     }
 
-                    if buffer.starts_with("/**") {
+                    if buffer.starts_with(b"/**") {
                         TokenKind::DocComment(buffer)
                     } else {
                         TokenKind::Comment(buffer)
                     }
-                } else if let Some('=') = self.peek {
+                } else if let Some(b'=') = self.peek {
                     self.col += 1;
                     self.next();
                     TokenKind::SlashEquals
-                } else if char == '/' && self.peek != Some('/') {
+                } else if char == b'/' && self.peek != Some(b'/') {
                     TokenKind::Slash
-                } else if char == '#' && self.peek == Some('[') {
+                } else if char == b'#' && self.peek == Some(b'[') {
                     TokenKind::Attribute
                 } else {
                     self.next();
-                    let buffer = format!(
-                        "{}{}{}",
-                        char,
-                        &self.current.unwrap(),
-                        read_till_end_of_line(self)
-                    );
+                    let current = self.current.unwrap();
+                    let mut buffer = read_till_end_of_line(self);
+                    buffer.splice(0..0, [char, current]);
 
                     TokenKind::Comment(buffer)
                 }
             }
-            '*' => {
+            b'*' => {
                 self.col += 1;
 
-                if let Some('*') = self.peek {
+                if let Some(b'*') = self.peek {
                     self.col += 1;
                     self.next();
                     TokenKind::Pow
-                } else if let Some('=') = self.peek {
+                } else if let Some(b'=') = self.peek {
                     self.col += 1;
                     self.next();
                     TokenKind::AsteriskEqual
@@ -617,10 +621,10 @@ impl Lexer {
                     TokenKind::Asterisk
                 }
             }
-            '|' => {
+            b'|' => {
                 self.col += 1;
 
-                if let Some('|') = self.peek {
+                if let Some(b'|') = self.peek {
                     self.col += 1;
 
                     self.next();
@@ -630,36 +634,36 @@ impl Lexer {
                     TokenKind::Pipe
                 }
             }
-            '{' => {
+            b'{' => {
                 self.col += 1;
                 TokenKind::LeftBrace
             }
-            '}' => {
+            b'}' => {
                 self.col += 1;
                 TokenKind::RightBrace
             }
-            '(' => {
+            b'(' => {
                 self.col += 1;
 
-                if self.try_read("string)") {
+                if self.try_read(b"string)") {
                     self.col += 7;
                     self.skip(8);
 
                     TokenKind::StringCast
-                } else if self.try_read("object)") {
+                } else if self.try_read(b"object)") {
                     self.col += 7;
                     self.skip(8);
 
                     TokenKind::ObjectCast
-                } else if self.try_read("bool)") {
+                } else if self.try_read(b"bool)") {
                     self.col += 5;
                     self.skip(6);
                     TokenKind::BoolCast
-                } else if self.try_read("int)") {
+                } else if self.try_read(b"int)") {
                     self.col += 4;
                     self.skip(5);
                     TokenKind::IntCast
-                } else if self.try_read("float)") {
+                } else if self.try_read(b"float)") {
                     self.col += 6;
                     self.skip(7);
                     TokenKind::DoubleCast
@@ -667,24 +671,24 @@ impl Lexer {
                     TokenKind::LeftParen
                 }
             }
-            ')' => {
+            b')' => {
                 self.col += 1;
                 TokenKind::RightParen
             }
-            ';' => {
+            b';' => {
                 self.col += 1;
                 TokenKind::SemiColon
             }
-            '+' => {
+            b'+' => {
                 self.col += 1;
 
-                if let Some('=') = self.peek {
+                if let Some(b'=') = self.peek {
                     self.col += 1;
 
                     self.next();
 
                     TokenKind::PlusEquals
-                } else if let Some('+') = self.peek {
+                } else if let Some(b'+') = self.peek {
                     self.col += 1;
 
                     self.next();
@@ -694,16 +698,16 @@ impl Lexer {
                     TokenKind::Plus
                 }
             }
-            '-' => {
+            b'-' => {
                 self.col += 1;
 
-                if let Some('>') = self.peek {
+                if let Some(b'>') = self.peek {
                     self.col += 1;
 
                     self.next();
 
                     TokenKind::Arrow
-                } else if let Some('=') = self.peek {
+                } else if let Some(b'=') = self.peek {
                     self.col += 1;
                     self.next();
                     TokenKind::MinusEquals
@@ -711,19 +715,19 @@ impl Lexer {
                     TokenKind::Minus
                 }
             }
-            '<' => {
+            b'<' => {
                 self.col += 1;
 
-                if let Some('=') = self.peek {
+                if let Some(b'=') = self.peek {
                     self.next();
 
                     self.col += 1;
 
                     TokenKind::LessThanEquals
-                } else if let Some('<') = self.peek {
+                } else if let Some(b'<') = self.peek {
                     self.next();
 
-                    if let Some('<') = self.peek {
+                    if let Some(b'<') = self.peek {
                         // TODO: Handle both heredocs and nowdocs.
                         self.next();
 
@@ -735,10 +739,10 @@ impl Lexer {
                     TokenKind::LessThan
                 }
             }
-            '>' => {
+            b'>' => {
                 self.col += 1;
 
-                if let Some('=') = self.peek {
+                if let Some(b'=') = self.peek {
                     self.next();
 
                     self.col += 1;
@@ -748,22 +752,22 @@ impl Lexer {
                     TokenKind::GreaterThan
                 }
             }
-            ',' => {
+            b',' => {
                 self.col += 1;
                 TokenKind::Comma
             }
-            '[' => {
+            b'[' => {
                 self.col += 1;
                 TokenKind::LeftBracket
             }
-            ']' => {
+            b']' => {
                 self.col += 1;
                 TokenKind::RightBracket
             }
-            ':' => {
+            b':' => {
                 self.col += 1;
 
-                if let Some(':') = self.peek {
+                if let Some(b':') = self.peek {
                     self.col += 1;
 
                     self.next();
@@ -790,17 +794,17 @@ impl Lexer {
         self.state = state;
     }
 
-    fn char_at(&self, idx: usize) -> Option<&char> {
+    fn char_at(&self, idx: usize) -> Option<&u8> {
         self.chars.get(idx)
     }
 
-    fn try_read(&self, search: &'static str) -> bool {
+    fn try_read(&self, search: &'static [u8]) -> bool {
         if self.current.is_none() || self.peek.is_none() {
             return false;
         }
 
         let start = self.cursor.saturating_sub(1);
-        let mut buffer = String::new();
+        let mut buffer = Vec::new();
 
         for i in 0..search.len() {
             match self.char_at(start + i) {
@@ -809,7 +813,7 @@ impl Lexer {
             };
         }
 
-        buffer.as_str() == search
+        buffer == search
     }
 
     fn skip(&mut self, count: usize) {
@@ -826,61 +830,61 @@ impl Lexer {
 }
 
 #[allow(dead_code)]
-fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
+fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident {
-        "global" => TokenKind::Global,
-        "match" => TokenKind::Match,
-        "abstract" => TokenKind::Abstract,
-        "array" => TokenKind::Array,
-        "as" => TokenKind::As,
-        "break" => TokenKind::Break,
-        "case" => TokenKind::Case,
-        "catch" => TokenKind::Catch,
-        "class" => TokenKind::Class,
-        "clone" => TokenKind::Clone,
-        "continue" => TokenKind::Continue,
-        "const" => TokenKind::Const,
-        "declare" => TokenKind::Declare,
-        "default" => TokenKind::Default,
-        "do" => TokenKind::Do,
-        "echo" => TokenKind::Echo,
-        "else" => TokenKind::Else,
-        "elseif" => TokenKind::ElseIf,
-        "enum" => TokenKind::Enum,
-        "extends" => TokenKind::Extends,
-        "false" | "FALSE" => TokenKind::False,
-        "final" => TokenKind::Final,
-        "finally" => TokenKind::Finally,
-        "fn" => TokenKind::Fn,
-        "for" => TokenKind::For,
-        "foreach" => TokenKind::Foreach,
-        "function" => TokenKind::Function,
-        "if" => TokenKind::If,
-        "include" => TokenKind::Include,
-        "include_once" => TokenKind::IncludeOnce,
-        "implements" => TokenKind::Implements,
-        "interface" => TokenKind::Interface,
-        "instanceof" => TokenKind::Instanceof,
-        "namespace" => TokenKind::Namespace,
-        "new" => TokenKind::New,
-        "null" | "NULL" => TokenKind::Null,
-        "private" => TokenKind::Private,
-        "protected" => TokenKind::Protected,
-        "public" => TokenKind::Public,
-        "require" => TokenKind::Require,
-        "require_once" => TokenKind::RequireOnce,
-        "return" => TokenKind::Return,
-        "static" => TokenKind::Static,
-        "switch" => TokenKind::Switch,
-        "throw" => TokenKind::Throw,
-        "trait" => TokenKind::Trait,
-        "true" | "TRUE" => TokenKind::True,
-        "try" => TokenKind::Try,
-        "use" => TokenKind::Use,
-        "var" => TokenKind::Var,
-        "yield" => TokenKind::Yield,
-        "__DIR__" => TokenKind::DirConstant,
-        "while" => TokenKind::While,
+        b"global" => TokenKind::Global,
+        b"match" => TokenKind::Match,
+        b"abstract" => TokenKind::Abstract,
+        b"array" => TokenKind::Array,
+        b"as" => TokenKind::As,
+        b"break" => TokenKind::Break,
+        b"case" => TokenKind::Case,
+        b"catch" => TokenKind::Catch,
+        b"class" => TokenKind::Class,
+        b"clone" => TokenKind::Clone,
+        b"continue" => TokenKind::Continue,
+        b"const" => TokenKind::Const,
+        b"declare" => TokenKind::Declare,
+        b"default" => TokenKind::Default,
+        b"do" => TokenKind::Do,
+        b"echo" => TokenKind::Echo,
+        b"else" => TokenKind::Else,
+        b"elseif" => TokenKind::ElseIf,
+        b"enum" => TokenKind::Enum,
+        b"extends" => TokenKind::Extends,
+        b"false" | b"FALSE" => TokenKind::False,
+        b"final" => TokenKind::Final,
+        b"finally" => TokenKind::Finally,
+        b"fn" => TokenKind::Fn,
+        b"for" => TokenKind::For,
+        b"foreach" => TokenKind::Foreach,
+        b"function" => TokenKind::Function,
+        b"if" => TokenKind::If,
+        b"include" => TokenKind::Include,
+        b"include_once" => TokenKind::IncludeOnce,
+        b"implements" => TokenKind::Implements,
+        b"interface" => TokenKind::Interface,
+        b"instanceof" => TokenKind::Instanceof,
+        b"namespace" => TokenKind::Namespace,
+        b"new" => TokenKind::New,
+        b"null" | b"NULL" => TokenKind::Null,
+        b"private" => TokenKind::Private,
+        b"protected" => TokenKind::Protected,
+        b"public" => TokenKind::Public,
+        b"require" => TokenKind::Require,
+        b"require_once" => TokenKind::RequireOnce,
+        b"return" => TokenKind::Return,
+        b"static" => TokenKind::Static,
+        b"switch" => TokenKind::Switch,
+        b"throw" => TokenKind::Throw,
+        b"trait" => TokenKind::Trait,
+        b"true" | b"TRUE" => TokenKind::True,
+        b"try" => TokenKind::Try,
+        b"use" => TokenKind::Use,
+        b"var" => TokenKind::Var,
+        b"yield" => TokenKind::Yield,
+        b"__DIR__" => TokenKind::DirConstant,
+        b"while" => TokenKind::While,
         _ => return None,
     })
 }
@@ -888,7 +892,7 @@ fn identifier_to_keyword(ident: &str) -> Option<TokenKind> {
 #[derive(Debug)]
 pub enum LexerError {
     UnexpectedEndOfFile,
-    UnexpectedCharacter(char),
+    UnexpectedCharacter(u8),
 }
 
 #[cfg(test)]

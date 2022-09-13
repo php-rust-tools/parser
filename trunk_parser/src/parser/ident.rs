@@ -4,7 +4,7 @@ use trunk_lexer::TokenKind;
 
 impl Parser {
     /// Expect an unqualified identifier such as Foo or Bar.
-    pub(crate) fn ident(&mut self) -> ParseResult<String> {
+    pub(crate) fn ident(&mut self) -> ParseResult<Vec<u8>> {
         Ok(expect!(
             self,
             TokenKind::Identifier(i),
@@ -14,7 +14,7 @@ impl Parser {
     }
 
     /// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
-    pub(crate) fn name(&mut self) -> ParseResult<String> {
+    pub(crate) fn name(&mut self) -> ParseResult<Vec<u8>> {
         Ok(expect!(
             self,
             TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i),
@@ -24,7 +24,7 @@ impl Parser {
     }
 
     /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
-    pub(crate) fn full_name(&mut self) -> ParseResult<String> {
+    pub(crate) fn full_name(&mut self) -> ParseResult<Vec<u8>> {
         Ok(expect!(
             self,
             TokenKind::Identifier(i)
@@ -35,7 +35,7 @@ impl Parser {
         ))
     }
 
-    pub(crate) fn var(&mut self) -> ParseResult<String> {
+    pub(crate) fn var(&mut self) -> ParseResult<Vec<u8>> {
         Ok(expect!(
             self,
             TokenKind::Variable(v),
@@ -44,10 +44,10 @@ impl Parser {
         ))
     }
 
-    pub(crate) fn full_name_maybe_type_keyword(&mut self) -> ParseResult<String> {
+    pub(crate) fn full_name_maybe_type_keyword(&mut self) -> ParseResult<Vec<u8>> {
         match self.current.kind {
             TokenKind::Array | TokenKind::Callable => {
-                let r = Ok(self.current.kind.to_string());
+                let r = Ok(self.current.kind.to_string().into());
                 self.next();
                 r
             }
@@ -55,7 +55,7 @@ impl Parser {
         }
     }
 
-    pub(crate) fn type_with_static(&mut self) -> ParseResult<String> {
+    pub(crate) fn type_with_static(&mut self) -> ParseResult<Vec<u8>> {
         Ok(match self.current.kind {
             TokenKind::Static => {
                 self.next();
@@ -65,7 +65,7 @@ impl Parser {
         })
     }
 
-    pub(crate) fn ident_maybe_reserved(&mut self) -> ParseResult<String> {
+    pub(crate) fn ident_maybe_reserved(&mut self) -> ParseResult<Vec<u8>> {
         match self.current.kind {
             TokenKind::Static
             | TokenKind::Abstract
@@ -87,7 +87,7 @@ impl Parser {
             | TokenKind::Catch
             | TokenKind::Finally
             | TokenKind::Namespace => {
-                let string = self.current.kind.to_string();
+                let string = self.current.kind.to_string().into();
                 self.next();
                 Ok(string)
             }
