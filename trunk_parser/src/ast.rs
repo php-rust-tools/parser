@@ -388,6 +388,7 @@ pub struct Use {
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
     Static,
+    Empty,
     ErrorSuppress {
         expr: Box<Self>,
     },
