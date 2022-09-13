@@ -4,7 +4,7 @@ use crate::{
 };
 use trunk_lexer::TokenKind;
 
-use super::Parser;
+use super::{precedence::Precedence, Parser};
 
 impl Parser {
     pub(crate) fn param_list(&mut self) -> Result<ParamList, ParseError> {
@@ -47,7 +47,7 @@ impl Parser {
             let mut default = None;
             if self.current.kind == TokenKind::Equals {
                 self.next();
-                default = Some(self.expression(0)?);
+                default = Some(self.expression(Precedence::Lowest)?);
             }
 
             // TODO: Support variable types and default values.

@@ -617,7 +617,7 @@ impl Lexer {
                 if let Some(b'*') = self.peek {
                     self.col += 1;
                     self.next();
-                    
+
                     if let Some(b'=') = self.peek {
                         self.col += 1;
                         self.next();

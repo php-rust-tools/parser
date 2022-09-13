@@ -2,6 +2,7 @@ use trunk_lexer::TokenKind;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Precedence {
+    Lowest,
     CloneNew,
     Pow,
     Prefix,
@@ -27,6 +28,9 @@ pub enum Precedence {
     KeyAnd,
     KeyXor,
     KeyOr,
+    CallDim,
+    ObjectAccess,
+    IncDec,
 }
 
 impl Precedence {
@@ -62,6 +66,18 @@ impl Precedence {
             | DotEquals | AndEqual | CoalesceEqual => Self::Assignment,
             Yield => Self::Yield,
             _ => unimplemented!("precedence for op {:?}", kind),
+        }
+    }
+
+    pub fn postfix(kind: &TokenKind) -> Self {
+        use TokenKind::*;
+
+        match kind {
+            Coalesce => Self::NullCoalesce,
+            Increment | Decrement => Self::IncDec,
+            LeftParen | LeftBracket => Self::CallDim,
+            Arrow | NullsafeArrow | DoubleColon => Self::ObjectAccess,
+            _ => unimplemented!("postfix precedence for op {:?}", kind),
         }
     }
 }
