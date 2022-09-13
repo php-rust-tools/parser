@@ -622,7 +622,7 @@ impl Parser {
                             let name = self.ident()?;
                             let mut value = None;
 
-                            if is_backed {
+                            if self.current.kind == TokenKind::Equals {
                                 expect!(self, TokenKind::Equals, "expected =");
 
                                 value = Some(self.expression(0)?);
@@ -2212,8 +2212,8 @@ mod tests {
     use super::Parser;
     use crate::{
         ast::{
-            Arg, ArrayItem, Case, ClassFlag, Constant, DeclareItem, ElseIf, IncludeKind, InfixOp,
-            MethodFlag, PropertyFlag,
+            Arg, ArrayItem, BackedEnumType, Case, ClassFlag, Constant, DeclareItem, ElseIf,
+            IncludeKind, InfixOp, MethodFlag, PropertyFlag,
         },
         Catch, Expression, Identifier, Param, Statement, Type,
     };
@@ -3563,6 +3563,33 @@ mod tests {
                     flags: vec![PropertyFlag::Public, PropertyFlag::Readonly],
                 }],
                 flag: None,
+            }],
+        );
+    }
+
+    #[test]
+    fn backed_enum_without_values() {
+        assert_ast(
+            "<?php enum Foo: string {
+                case Bar;
+                case Baz = 'Baz';
+            }",
+            &[Statement::Enum {
+                name: "Foo".as_bytes().into(),
+                implements: vec![],
+                backed_type: Some(BackedEnumType::String),
+                body: vec![
+                    Statement::EnumCase {
+                        name: "Bar".as_bytes().into(),
+                        value: None,
+                    },
+                    Statement::EnumCase {
+                        name: "Baz".as_bytes().into(),
+                        value: Some(Expression::ConstantString {
+                            value: "Baz".into(),
+                        }),
+                    },
+                ],
             }],
         );
     }
