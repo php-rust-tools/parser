@@ -4,6 +4,7 @@ use crate::{ByteString, OpenTagKind, Token, TokenKind};
 pub enum LexerState {
     Initial,
     Scripting,
+    Halted,
 }
 
 #[allow(dead_code)]
@@ -77,6 +78,16 @@ impl Lexer {
                     }
 
                     tokens.push(self.scripting()?);
+                }
+                // The "Halted" state is entered when the `__halt_compiler` token is encountered.
+                // In this state, all the text that follows is no longer parsed as PHP as is collected
+                // into a single "InlineHtml" token (kind of cheating, oh well).
+                LexerState::Halted => {
+                    tokens.push(Token {
+                        kind: TokenKind::InlineHtml(self.chars[self.cursor..].into()),
+                        span: (self.line, self.col),
+                    });
+                    break;
                 }
             }
         }
@@ -300,8 +311,21 @@ impl Lexer {
                 if qualified {
                     TokenKind::QualifiedIdentifier(buffer.into())
                 } else {
-                    identifier_to_keyword(&buffer)
-                        .unwrap_or_else(|| TokenKind::Identifier(buffer.into()))
+                    let kind = identifier_to_keyword(&buffer)
+                        .unwrap_or_else(|| TokenKind::Identifier(buffer.into()));
+
+                    if kind == TokenKind::HaltCompiler {
+                        match self.peek_buf() {
+                            [b'(', b')', b';', ..] => {
+                                self.skip(3);
+                                self.col += 3;
+                                self.enter_state(LexerState::Halted);
+                            }
+                            _ => return Err(LexerError::InvalidHaltCompiler),
+                        }
+                    }
+
+                    kind
                 }
             }
             [b'/', b'*', ..] => {
@@ -755,6 +779,7 @@ impl Lexer {
 #[allow(dead_code)]
 fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident {
+        b"__halt_compiler" | b"__HALT_COMPILER" => TokenKind::HaltCompiler,
         b"readonly" => TokenKind::Readonly,
         b"global" => TokenKind::Global,
         b"match" => TokenKind::Match,
@@ -817,6 +842,7 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
 pub enum LexerError {
     UnexpectedEndOfFile,
     UnexpectedCharacter(u8),
+    InvalidHaltCompiler,
 }
 
 #[cfg(test)]
@@ -1077,6 +1103,32 @@ function hello_world() {
         assert_tokens(
             "<?php 200.5 .05",
             &[open!(), TokenKind::Float(200.5), TokenKind::Float(0.05)],
+        );
+    }
+
+    #[test]
+    fn halt_compiler() {
+        assert_tokens(
+            "<?php __halt_compiler();",
+            &[open!(), TokenKind::HaltCompiler],
+        );
+
+        assert_tokens(
+            "<?php __HALT_COMPILER();",
+            &[open!(), TokenKind::HaltCompiler],
+        );
+
+        assert_tokens(
+            "<?php __halt_compiler(); Some jargon that comes after the halt, oops!",
+            &[
+                open!(),
+                TokenKind::HaltCompiler,
+                TokenKind::InlineHtml(
+                    " Some jargon that comes after the halt, oops!"
+                        .as_bytes()
+                        .into(),
+                ),
+            ],
         );
     }
 

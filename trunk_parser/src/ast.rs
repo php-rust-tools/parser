@@ -170,6 +170,9 @@ impl From<&TokenKind> for IncludeKind {
 #[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(ByteString),
+    HaltCompiler {
+        content: Option<ByteString>,
+    },
     Static {
         vars: Vec<StaticVar>,
     },

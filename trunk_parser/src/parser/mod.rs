@@ -171,6 +171,18 @@ impl Parser {
         self.skip_comments();
 
         let statement = match &self.current.kind {
+            TokenKind::HaltCompiler => {
+                self.next();
+
+                let content = if let TokenKind::InlineHtml(content) = self.current.kind.clone() {
+                    self.next();
+                    Some(content)
+                } else {
+                    None
+                };
+
+                Statement::HaltCompiler { content }
+            }
             TokenKind::Declare => {
                 self.next();
                 self.lparen()?;
