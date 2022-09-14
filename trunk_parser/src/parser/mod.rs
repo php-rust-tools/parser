@@ -531,6 +531,7 @@ impl Parser {
                                 body: vec![],
                                 return_type,
                                 flags: vec![MethodFlag::Public],
+                                by_ref: false,
                             })
                         }
                         TokenKind::Function => {
@@ -562,6 +563,7 @@ impl Parser {
                                 body: vec![],
                                 return_type,
                                 flags: vec![],
+                                by_ref: false,
                             })
                         }
                         _ => {
@@ -934,8 +936,28 @@ impl Parser {
                     ret
                 }
             }
-            TokenKind::Function if matches!(self.peek.kind, TokenKind::Identifier(_)) => {
-                self.function()?
+            TokenKind::Function if matches!(self.peek.kind, TokenKind::Identifier(_) | TokenKind::Ampersand) => {
+                // FIXME: This is incredibly hacky but we don't have a way to look at
+                // the next N tokens right now. We could probably do with a `peek_buf()`
+                // method like the Lexer has.
+                if self.peek.kind == TokenKind::Ampersand {
+                    let mut cloned = self.iter.clone();
+                    for (index, _) in self.iter.clone().enumerate() {
+                        if ! matches!(cloned.nth(index), Some(Token { kind: TokenKind::Identifier(_), .. })) {
+                            let expr = self.expression(Precedence::Lowest)?;
+
+                            self.semi()?;
+
+                            return Ok(Statement::Expression { expr });
+                        }
+
+                        break;
+                    }
+
+                    self.function()?
+                } else {
+                    self.function()?
+                }
             }
             TokenKind::SemiColon => {
                 self.next();
@@ -1053,6 +1075,13 @@ impl Parser {
     fn function(&mut self) -> ParseResult<Statement> {
         self.next();
 
+        let by_ref = if self.current.kind == TokenKind::Ampersand {
+            self.next();
+            true
+        } else {
+            false
+        };
+
         let name = self.ident()?;
 
         self.lparen()?;
@@ -1080,6 +1109,7 @@ impl Parser {
             params,
             body,
             return_type,
+            by_ref,
         })
     }
 
@@ -1264,6 +1294,13 @@ impl Parser {
                         if flags.contains(&TokenKind::Abstract) {
                             self.next();
 
+                            let by_ref = if self.current.kind == TokenKind::Ampersand {
+                                self.next();
+                                true
+                            } else {
+                                false
+                            };
+
                             let name = self.ident()?;
 
                             self.lparen()?;
@@ -1290,6 +1327,7 @@ impl Parser {
                                 body: vec![],
                                 return_type,
                                 flags: flags.iter().map(|t| t.clone().into()).collect(),
+                                by_ref,
                             })
                         } else {
                             match self.function()? {
@@ -1298,12 +1336,14 @@ impl Parser {
                                     params,
                                     body,
                                     return_type,
+                                    by_ref,
                                 } => Ok(Statement::Method {
                                     name,
                                     params,
                                     body,
                                     flags: flags.iter().map(|t| t.clone().into()).collect(),
                                     return_type,
+                                    by_ref,
                                 }),
                                 _ => unreachable!(),
                             }
@@ -1365,12 +1405,14 @@ impl Parser {
                     params,
                     body,
                     return_type,
+                    by_ref
                 } => Ok(Statement::Method {
                     name,
                     params,
                     body,
                     flags: vec![],
                     return_type,
+                    by_ref
                 }),
                 _ => unreachable!(),
             },
@@ -2272,6 +2314,7 @@ mod tests {
                     .collect::<Vec<Param>>(),
                 body: $body.to_vec(),
                 return_type: None,
+                by_ref: false,
             }
         };
     }
@@ -2318,6 +2361,7 @@ mod tests {
                 flags: $flags.to_vec(),
                 body: $body.to_vec(),
                 return_type: None,
+                by_ref: false,
             }
         };
     }
@@ -2910,6 +2954,7 @@ mod tests {
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -2930,6 +2975,7 @@ mod tests {
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
 
@@ -2947,6 +2993,7 @@ mod tests {
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
 
@@ -2982,6 +3029,7 @@ mod tests {
                 ],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -3002,6 +3050,7 @@ mod tests {
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -3022,6 +3071,7 @@ mod tests {
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
 
@@ -3043,6 +3093,7 @@ mod tests {
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -3063,6 +3114,7 @@ mod tests {
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
 
@@ -3084,6 +3136,7 @@ mod tests {
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -3097,6 +3150,7 @@ mod tests {
                 params: vec![],
                 body: vec![],
                 return_type: Some(Type::Plain("string".into())),
+                by_ref: false,
             }],
         );
 
@@ -3107,6 +3161,7 @@ mod tests {
                 params: vec![],
                 body: vec![],
                 return_type: Some(Type::Void),
+                by_ref: false,
             }],
         );
     }
@@ -3188,7 +3243,8 @@ mod tests {
                         params: vec![],
                         body: vec![],
                         return_type: None,
-                        flags: vec![MethodFlag::Public,]
+                        flags: vec![MethodFlag::Public,],
+                        by_ref: false,
                     }]
                 }),
                 args: vec![]
@@ -3687,6 +3743,7 @@ mod tests {
                     params: vec![],
                     body: vec![],
                     return_type: None,
+                    by_ref: false,
                 }],
             }],
         );
@@ -3776,6 +3833,7 @@ mod tests {
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -3797,6 +3855,24 @@ mod tests {
                 expr: Box::new(Expression::Null)
             })],
         );
+    }
+
+    #[test]
+    fn function_returning_ref() {
+        assert_ast("<?php function &a($b) {}", &[Statement::Function {
+            name: "a".into(),
+            params: vec![Param {
+                name: Expression::Variable { name: "b".into() },
+                r#type: None,
+                variadic: false,
+                flag: None,
+                default: None,
+                by_ref: false,
+            }],
+            body: vec![],
+            return_type: None,
+            by_ref: true,
+        }]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

@@ -233,6 +233,7 @@ pub enum Statement {
         params: Vec<Param>,
         body: Block,
         return_type: Option<Type>,
+        by_ref: bool,
     },
     Class {
         name: Identifier,
@@ -259,6 +260,7 @@ pub enum Statement {
         body: Block,
         flags: Vec<MethodFlag>,
         return_type: Option<Type>,
+        by_ref: bool,
     },
     If {
         condition: Expression,
