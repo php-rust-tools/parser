@@ -2906,6 +2906,7 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
@@ -2925,6 +2926,7 @@ mod tests {
                     variadic: true,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
@@ -2941,6 +2943,7 @@ mod tests {
                     variadic: true,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
@@ -2958,6 +2961,7 @@ mod tests {
                         variadic: false,
                         default: None,
                         flag: None,
+                        by_ref: false,
                     },
                     Param {
                         name: Expression::Variable { name: "baz".into() },
@@ -2965,6 +2969,7 @@ mod tests {
                         variadic: false,
                         default: None,
                         flag: None,
+                        by_ref: false,
                     },
                     Param {
                         name: Expression::Variable { name: "car".into() },
@@ -2972,6 +2977,7 @@ mod tests {
                         variadic: true,
                         default: None,
                         flag: None,
+                        by_ref: false,
                     },
                 ],
                 body: vec![],
@@ -2992,6 +2998,7 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
@@ -3011,6 +3018,7 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
@@ -3031,6 +3039,7 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
@@ -3050,6 +3059,7 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
@@ -3070,6 +3080,7 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
@@ -3723,28 +3734,69 @@ mod tests {
 
     #[test]
     fn simple_foreach_reference() {
-        assert_ast("<?php foreach ($a as &$b) {}", &[
-            Statement::Foreach {
+        assert_ast(
+            "<?php foreach ($a as &$b) {}",
+            &[Statement::Foreach {
                 expr: Expression::Variable { name: "a".into() },
                 by_ref: true,
                 key_var: None,
                 value_var: Expression::Variable { name: "b".into() },
-                body: vec![]
-            }
-        ]);
+                body: vec![],
+            }],
+        );
     }
 
     #[test]
     fn key_value_foreach_reference() {
-        assert_ast("<?php foreach ($a as $b => &$c) {}", &[
-            Statement::Foreach {
+        assert_ast(
+            "<?php foreach ($a as $b => &$c) {}",
+            &[Statement::Foreach {
                 expr: Expression::Variable { name: "a".into() },
                 by_ref: true,
                 key_var: Some(Expression::Variable { name: "b".into() }),
                 value_var: Expression::Variable { name: "c".into() },
-                body: vec![]
-            }
-        ]);
+                body: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn function_with_ref_param() {
+        assert_ast(
+            "<?php function a(&$b) {}",
+            &[Statement::Function {
+                name: "a".into(),
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: None,
+                    variadic: false,
+                    flag: None,
+                    default: None,
+                    by_ref: true,
+                }],
+                body: vec![],
+                return_type: None,
+            }],
+        );
+    }
+
+    #[test]
+    fn arrow_function_with_ref_param() {
+        assert_ast(
+            "<?php fn (&$b) => null;",
+            &[expr!(Expression::ArrowFunction {
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: None,
+                    variadic: false,
+                    flag: None,
+                    default: None,
+                    by_ref: true,
+                }],
+                return_type: None,
+                expr: Box::new(Expression::Null)
+            })],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

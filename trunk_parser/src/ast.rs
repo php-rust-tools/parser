@@ -35,6 +35,12 @@ impl From<&[u8]> for Identifier {
     }
 }
 
+impl From<&str> for Identifier {
+    fn from(name: &str) -> Self {
+        Self::from(ByteString::from(name))
+    }
+}
+
 pub type ParamList = Vec<Param>;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -44,6 +50,7 @@ pub struct Param {
     pub variadic: bool,
     pub default: Option<Expression>,
     pub flag: Option<PropertyFlag>,
+    pub by_ref: bool,
 }
 
 impl From<ByteString> for Param {
@@ -54,6 +61,7 @@ impl From<ByteString> for Param {
             variadic: false,
             default: None,
             flag: None,
+            by_ref: false,
         }
     }
 }

@@ -27,18 +27,26 @@ impl Parser {
             // 1. If we don't see a variable, we should expect a type-string.
             if !matches!(
                 self.current.kind,
-                TokenKind::Variable(_) | TokenKind::Ellipsis
+                TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
             ) || self.config.force_type_strings
             {
                 // 1a. Try to parse the type.
                 param_type = Some(self.type_string()?);
             }
 
-            let variadic = if self.current.kind == TokenKind::Ellipsis {
-                self.next();
-                true
-            } else {
-                false
+            let mut variadic = false;
+            let mut by_ref = false;
+
+            match self.current.kind {
+                TokenKind::Ellipsis => {
+                    self.next();
+                    variadic = true;
+                }
+                TokenKind::Ampersand => {
+                    self.next();
+                    by_ref = true;
+                }
+                _ => {}
             };
 
             // 2. Then expect a variable.
@@ -57,6 +65,7 @@ impl Parser {
                 variadic,
                 default,
                 flag,
+                by_ref,
             });
 
             self.optional_comma()?;
