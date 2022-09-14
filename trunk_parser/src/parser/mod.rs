@@ -531,6 +531,7 @@ impl Parser {
                                 body: vec![],
                                 return_type,
                                 flags: vec![MethodFlag::Public],
+                                by_ref: false,
                             })
                         }
                         TokenKind::Function => {
@@ -562,6 +563,7 @@ impl Parser {
                                 body: vec![],
                                 return_type,
                                 flags: vec![],
+                                by_ref: false,
                             })
                         }
                         _ => {
@@ -934,8 +936,39 @@ impl Parser {
                     ret
                 }
             }
-            TokenKind::Function if matches!(self.peek.kind, TokenKind::Identifier(_)) => {
-                self.function()?
+            TokenKind::Function
+                if matches!(
+                    self.peek.kind,
+                    TokenKind::Identifier(_) | TokenKind::Ampersand
+                ) =>
+            {
+                // FIXME: This is incredibly hacky but we don't have a way to look at
+                // the next N tokens right now. We could probably do with a `peek_buf()`
+                // method like the Lexer has.
+                if self.peek.kind == TokenKind::Ampersand {
+                    let mut cloned = self.iter.clone();
+                    for (index, _) in self.iter.clone().enumerate() {
+                        if !matches!(
+                            cloned.nth(index),
+                            Some(Token {
+                                kind: TokenKind::Identifier(_),
+                                ..
+                            })
+                        ) {
+                            let expr = self.expression(Precedence::Lowest)?;
+
+                            self.semi()?;
+
+                            return Ok(Statement::Expression { expr });
+                        }
+
+                        break;
+                    }
+
+                    self.function()?
+                } else {
+                    self.function()?
+                }
             }
             TokenKind::SemiColon => {
                 self.next();
@@ -1053,6 +1086,13 @@ impl Parser {
     fn function(&mut self) -> ParseResult<Statement> {
         self.next();
 
+        let by_ref = if self.current.kind == TokenKind::Ampersand {
+            self.next();
+            true
+        } else {
+            false
+        };
+
         let name = self.ident()?;
 
         self.lparen()?;
@@ -1080,6 +1120,7 @@ impl Parser {
             params,
             body,
             return_type,
+            by_ref,
         })
     }
 
@@ -1264,6 +1305,13 @@ impl Parser {
                         if flags.contains(&TokenKind::Abstract) {
                             self.next();
 
+                            let by_ref = if self.current.kind == TokenKind::Ampersand {
+                                self.next();
+                                true
+                            } else {
+                                false
+                            };
+
                             let name = self.ident()?;
 
                             self.lparen()?;
@@ -1290,6 +1338,7 @@ impl Parser {
                                 body: vec![],
                                 return_type,
                                 flags: flags.iter().map(|t| t.clone().into()).collect(),
+                                by_ref,
                             })
                         } else {
                             match self.function()? {
@@ -1298,12 +1347,14 @@ impl Parser {
                                     params,
                                     body,
                                     return_type,
+                                    by_ref,
                                 } => Ok(Statement::Method {
                                     name,
                                     params,
                                     body,
                                     flags: flags.iter().map(|t| t.clone().into()).collect(),
                                     return_type,
+                                    by_ref,
                                 }),
                                 _ => unreachable!(),
                             }
@@ -1365,12 +1416,14 @@ impl Parser {
                     params,
                     body,
                     return_type,
+                    by_ref,
                 } => Ok(Statement::Method {
                     name,
                     params,
                     body,
                     flags: vec![],
                     return_type,
+                    by_ref,
                 }),
                 _ => unreachable!(),
             },
@@ -1588,12 +1641,14 @@ impl Parser {
                         uses,
                         return_type,
                         body,
+                        by_ref,
                         ..
                     } => Expression::Closure {
                         params,
                         uses,
                         return_type,
                         body,
+                        by_ref,
                         r#static: true,
                     },
                     _ => unreachable!(),
@@ -1601,6 +1656,13 @@ impl Parser {
             }
             TokenKind::Function => {
                 self.next();
+
+                let by_ref = if self.current.kind == TokenKind::Ampersand {
+                    self.next();
+                    true
+                } else {
+                    false
+                };
 
                 self.lparen()?;
 
@@ -1673,10 +1735,18 @@ impl Parser {
                     return_type,
                     body,
                     r#static: false,
+                    by_ref,
                 }
             }
             TokenKind::Fn => {
                 self.next();
+
+                let by_ref = if self.current.kind == TokenKind::Ampersand {
+                    self.next();
+                    true
+                } else {
+                    false
+                };
 
                 self.lparen()?;
 
@@ -1700,6 +1770,7 @@ impl Parser {
                     params,
                     return_type,
                     expr: Box::new(value),
+                    by_ref,
                 }
             }
             TokenKind::New => {
@@ -2272,6 +2343,7 @@ mod tests {
                     .collect::<Vec<Param>>(),
                 body: $body.to_vec(),
                 return_type: None,
+                by_ref: false,
             }
         };
     }
@@ -2318,6 +2390,7 @@ mod tests {
                 flags: $flags.to_vec(),
                 body: $body.to_vec(),
                 return_type: None,
+                by_ref: false,
             }
         };
     }
@@ -2906,9 +2979,11 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -2925,9 +3000,11 @@ mod tests {
                     variadic: true,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
 
@@ -2941,9 +3018,11 @@ mod tests {
                     variadic: true,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
 
@@ -2958,6 +3037,7 @@ mod tests {
                         variadic: false,
                         default: None,
                         flag: None,
+                        by_ref: false,
                     },
                     Param {
                         name: Expression::Variable { name: "baz".into() },
@@ -2965,6 +3045,7 @@ mod tests {
                         variadic: false,
                         default: None,
                         flag: None,
+                        by_ref: false,
                     },
                     Param {
                         name: Expression::Variable { name: "car".into() },
@@ -2972,10 +3053,12 @@ mod tests {
                         variadic: true,
                         default: None,
                         flag: None,
+                        by_ref: false,
                     },
                 ],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -2992,9 +3075,11 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -3011,9 +3096,11 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
 
@@ -3031,9 +3118,11 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -3050,9 +3139,11 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
 
@@ -3070,9 +3161,11 @@ mod tests {
                     variadic: false,
                     default: None,
                     flag: None,
+                    by_ref: false,
                 }],
                 body: vec![],
                 return_type: None,
+                by_ref: false,
             }],
         );
     }
@@ -3086,6 +3179,7 @@ mod tests {
                 params: vec![],
                 body: vec![],
                 return_type: Some(Type::Plain("string".into())),
+                by_ref: false,
             }],
         );
 
@@ -3096,6 +3190,7 @@ mod tests {
                 params: vec![],
                 body: vec![],
                 return_type: Some(Type::Void),
+                by_ref: false,
             }],
         );
     }
@@ -3177,7 +3272,8 @@ mod tests {
                         params: vec![],
                         body: vec![],
                         return_type: None,
-                        flags: vec![MethodFlag::Public,]
+                        flags: vec![MethodFlag::Public,],
+                        by_ref: false,
                     }]
                 }),
                 args: vec![]
@@ -3676,6 +3772,7 @@ mod tests {
                     params: vec![],
                     body: vec![],
                     return_type: None,
+                    by_ref: false,
                 }],
             }],
         );
@@ -3690,7 +3787,8 @@ mod tests {
                 uses: vec![],
                 return_type: None,
                 body: vec![],
-                r#static: false
+                r#static: false,
+                by_ref: false,
             })],
         );
     }
@@ -3702,7 +3800,8 @@ mod tests {
             &[expr!(Expression::ArrowFunction {
                 params: vec![],
                 return_type: None,
-                expr: Box::new(Expression::Null)
+                expr: Box::new(Expression::Null),
+                by_ref: false,
             })],
         );
     }
@@ -3716,7 +3815,141 @@ mod tests {
                 uses: vec![],
                 return_type: None,
                 body: vec![],
-                r#static: true
+                r#static: true,
+                by_ref: false,
+            })],
+        );
+    }
+
+    #[test]
+    fn simple_foreach_reference() {
+        assert_ast(
+            "<?php foreach ($a as &$b) {}",
+            &[Statement::Foreach {
+                expr: Expression::Variable { name: "a".into() },
+                by_ref: true,
+                key_var: None,
+                value_var: Expression::Variable { name: "b".into() },
+                body: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn key_value_foreach_reference() {
+        assert_ast(
+            "<?php foreach ($a as $b => &$c) {}",
+            &[Statement::Foreach {
+                expr: Expression::Variable { name: "a".into() },
+                by_ref: true,
+                key_var: Some(Expression::Variable { name: "b".into() }),
+                value_var: Expression::Variable { name: "c".into() },
+                body: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn function_with_ref_param() {
+        assert_ast(
+            "<?php function a(&$b) {}",
+            &[Statement::Function {
+                name: "a".into(),
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: None,
+                    variadic: false,
+                    flag: None,
+                    default: None,
+                    by_ref: true,
+                }],
+                body: vec![],
+                return_type: None,
+                by_ref: false,
+            }],
+        );
+    }
+
+    #[test]
+    fn arrow_function_with_ref_param() {
+        assert_ast(
+            "<?php fn (&$b) => null;",
+            &[expr!(Expression::ArrowFunction {
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: None,
+                    variadic: false,
+                    flag: None,
+                    default: None,
+                    by_ref: true,
+                }],
+                return_type: None,
+                expr: Box::new(Expression::Null),
+                by_ref: false,
+            })],
+        );
+    }
+
+    #[test]
+    fn function_returning_ref() {
+        assert_ast(
+            "<?php function &a($b) {}",
+            &[Statement::Function {
+                name: "a".into(),
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: None,
+                    variadic: false,
+                    flag: None,
+                    default: None,
+                    by_ref: false,
+                }],
+                body: vec![],
+                return_type: None,
+                by_ref: true,
+            }],
+        );
+    }
+
+    #[test]
+    fn closure_returning_ref() {
+        assert_ast(
+            "<?php function &() {};",
+            &[expr!(Expression::Closure {
+                params: vec![],
+                body: vec![],
+                return_type: None,
+                r#static: false,
+                uses: vec![],
+                by_ref: true,
+            })],
+        );
+    }
+
+    #[test]
+    fn static_closures_returning_by_ref() {
+        assert_ast(
+            "<?php static function &() {};",
+            &[expr!(Expression::Closure {
+                params: vec![],
+                body: vec![],
+                return_type: None,
+                r#static: true,
+                uses: vec![],
+                by_ref: true,
+            })],
+        );
+    }
+
+    #[test]
+    fn arrow_functions_returning_by_ref() {
+        assert_ast(
+            "<?php fn &() => null;",
+            &[expr!(Expression::ArrowFunction {
+                params: vec![],
+                expr: Box::new(Expression::Null),
+                return_type: None,
+                by_ref: true,
             })],
         );
     }

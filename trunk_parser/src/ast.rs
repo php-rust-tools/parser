@@ -35,6 +35,12 @@ impl From<&[u8]> for Identifier {
     }
 }
 
+impl From<&str> for Identifier {
+    fn from(name: &str) -> Self {
+        Self::from(ByteString::from(name))
+    }
+}
+
 pub type ParamList = Vec<Param>;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -44,6 +50,7 @@ pub struct Param {
     pub variadic: bool,
     pub default: Option<Expression>,
     pub flag: Option<PropertyFlag>,
+    pub by_ref: bool,
 }
 
 impl From<ByteString> for Param {
@@ -54,6 +61,7 @@ impl From<ByteString> for Param {
             variadic: false,
             default: None,
             flag: None,
+            by_ref: false,
         }
     }
 }
@@ -225,6 +233,7 @@ pub enum Statement {
         params: Vec<Param>,
         body: Block,
         return_type: Option<Type>,
+        by_ref: bool,
     },
     Class {
         name: Identifier,
@@ -251,6 +260,7 @@ pub enum Statement {
         body: Block,
         flags: Vec<MethodFlag>,
         return_type: Option<Type>,
+        by_ref: bool,
     },
     If {
         condition: Expression,
@@ -443,11 +453,13 @@ pub enum Expression {
         return_type: Option<Type>,
         body: Block,
         r#static: bool,
+        by_ref: bool,
     },
     ArrowFunction {
         params: Vec<Param>,
         return_type: Option<Type>,
         expr: Box<Self>,
+        by_ref: bool,
     },
     New {
         target: Box<Self>,
