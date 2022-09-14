@@ -122,13 +122,6 @@ impl Lexer {
     }
 
     fn scripting(&mut self) -> Result<Token, LexerError> {
-        // We should never reach this point since we have the empty checks surrounding
-        // the call to this function, but it's better to be safe than sorry.
-        let char = match self.current {
-            Some(c) => c,
-            None => return Err(LexerError::UnexpectedEndOfFile),
-        };
-
         let kind = match self.peek() {
             [b'@', ..] => {
                 self.next();
@@ -250,9 +243,9 @@ impl Lexer {
                 self.col += 1;
                 TokenKind::Dot
             }
-            [b'0'..=b'9', ..] => {
+            &[b @ b'0'..=b'9', ..] => {
                 self.next();
-                self.tokenize_number(String::from(char as char), false)?
+                self.tokenize_number(String::from(b as char), false)?
             }
             &[b'\\', n, ..] if n == b'_' || n.is_ascii_alphabetic() => {
                 self.col += 1;
@@ -275,14 +268,14 @@ impl Lexer {
                 self.col += 1;
                 TokenKind::NamespaceSeparator
             }
-            _ if char.is_ascii_alphabetic() || char == b'_' => {
+            &[b, ..] if b.is_ascii_alphabetic() || b == b'_' => {
                 self.next();
                 self.col += 1;
 
                 let mut qualified = false;
                 let mut last_was_slash = false;
 
-                let mut buffer = vec![char];
+                let mut buffer = vec![b];
                 while let Some(next) = self.current {
                     if next.is_ascii_alphanumeric() || next == b'_' {
                         buffer.push(next);
@@ -314,7 +307,7 @@ impl Lexer {
             [b'/', b'*', ..] => {
                 self.next();
                 self.col += 1;
-                let mut buffer = vec![char];
+                let mut buffer = vec![b'/'];
 
                 while self.current.is_some() {
                     match self.peek() {
@@ -559,12 +552,15 @@ impl Lexer {
                 self.col += 1;
                 TokenKind::Colon
             }
-            _ => unimplemented!(
+            &[b, ..] => unimplemented!(
                 "<scripting> char: {}, line: {}, col: {}",
-                char,
+                b as char,
                 self.line,
                 self.col
             ),
+            // We should never reach this point since we have the empty checks surrounding
+            // the call to this function, but it's better to be safe than sorry.
+            [] => return Err(LexerError::UnexpectedEndOfFile),
         };
 
         Ok(Token {
