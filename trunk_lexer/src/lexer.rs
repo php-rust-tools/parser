@@ -617,7 +617,14 @@ impl Lexer {
                 if let Some(b'*') = self.peek {
                     self.col += 1;
                     self.next();
-                    TokenKind::Pow
+
+                    if let Some(b'=') = self.peek {
+                        self.col += 1;
+                        self.next();
+                        TokenKind::PowEquals
+                    } else {
+                        TokenKind::Pow
+                    }
                 } else if let Some(b'=') = self.peek {
                     self.col += 1;
                     self.next();
@@ -753,6 +760,12 @@ impl Lexer {
                     self.col += 1;
 
                     TokenKind::GreaterThanEquals
+                } else if let Some(b'>') = self.peek {
+                    self.next();
+
+                    self.col += 1;
+
+                    TokenKind::RightShift
                 } else {
                     TokenKind::GreaterThan
                 }

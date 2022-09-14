@@ -8,6 +8,8 @@ use crate::{
 use std::{fmt::Display, vec::IntoIter};
 use trunk_lexer::{Span, Token, TokenKind};
 
+use self::precedence::{Associativity, Precedence};
+
 type ParseResult<T> = Result<T, ParseError>;
 
 macro_rules! expect {
@@ -46,6 +48,7 @@ mod block;
 mod comments;
 mod ident;
 mod params;
+mod precedence;
 mod punc;
 
 pub struct ParserConfig {
@@ -178,7 +181,7 @@ impl Parser {
 
                     expect!(self, TokenKind::Equals, "expected =");
 
-                    let value = self.expression(0)?;
+                    let value = self.expression(Precedence::Lowest)?;
 
                     self.optional_comma()?;
 
@@ -226,7 +229,7 @@ impl Parser {
 
                     if self.current.kind == TokenKind::Equals {
                         expect!(self, TokenKind::Equals, "expected =");
-                        default = Some(self.expression(0)?);
+                        default = Some(self.expression(Precedence::Lowest)?);
                     }
 
                     self.optional_comma()?;
@@ -260,7 +263,7 @@ impl Parser {
                 expect!(self, TokenKind::While, "expected while");
 
                 self.lparen()?;
-                let condition = self.expression(0)?;
+                let condition = self.expression(Precedence::Lowest)?;
                 self.rparen()?;
                 self.semi()?;
 
@@ -270,7 +273,7 @@ impl Parser {
                 self.next();
                 self.lparen()?;
 
-                let condition = self.expression(0)?;
+                let condition = self.expression(Precedence::Lowest)?;
 
                 self.rparen()?;
                 self.lbrace()?;
@@ -288,7 +291,7 @@ impl Parser {
                 let kind: IncludeKind = (&self.current.kind).into();
                 self.next();
 
-                let path = self.expression(0)?;
+                let path = self.expression(Precedence::Lowest)?;
 
                 self.semi()?;
 
@@ -301,19 +304,19 @@ impl Parser {
 
                 let mut init = None;
                 if self.current.kind != TokenKind::SemiColon {
-                    init = Some(self.expression(0)?);
+                    init = Some(self.expression(Precedence::Lowest)?);
                 }
                 self.semi()?;
 
                 let mut condition = None;
                 if self.current.kind != TokenKind::SemiColon {
-                    condition = Some(self.expression(0)?);
+                    condition = Some(self.expression(Precedence::Lowest)?);
                 }
                 self.semi()?;
 
                 let mut r#loop = None;
                 if self.current.kind != TokenKind::RightParen {
-                    r#loop = Some(self.expression(0)?);
+                    r#loop = Some(self.expression(Precedence::Lowest)?);
                 }
 
                 self.rparen()?;
@@ -335,7 +338,7 @@ impl Parser {
 
                 self.lparen()?;
 
-                let expr = self.expression(0)?;
+                let expr = self.expression(Precedence::Lowest)?;
 
                 expect!(self, TokenKind::As, "expected 'as'");
 
@@ -345,7 +348,7 @@ impl Parser {
                 }
 
                 let mut key_var = None;
-                let mut value_var = self.expression(0)?;
+                let mut value_var = self.expression(Precedence::Lowest)?;
 
                 if self.current.kind == TokenKind::DoubleArrow {
                     self.next();
@@ -357,7 +360,7 @@ impl Parser {
                         self.next();
                     }
 
-                    value_var = self.expression(0)?;
+                    value_var = self.expression(Precedence::Lowest)?;
                 }
 
                 self.rparen()?;
@@ -625,7 +628,7 @@ impl Parser {
                             if self.current.kind == TokenKind::Equals {
                                 expect!(self, TokenKind::Equals, "expected =");
 
-                                value = Some(self.expression(0)?);
+                                value = Some(self.expression(Precedence::Lowest)?);
                             }
 
                             self.semi()?;
@@ -696,7 +699,7 @@ impl Parser {
 
                 self.lparen()?;
 
-                let condition = self.expression(0)?;
+                let condition = self.expression(Precedence::Lowest)?;
 
                 self.rparen()?;
 
@@ -712,7 +715,7 @@ impl Parser {
                         TokenKind::Case => {
                             self.next();
 
-                            let condition = self.expression(0)?;
+                            let condition = self.expression(Precedence::Lowest)?;
 
                             expect!(self, TokenKind::Colon | TokenKind::SemiColon, "expected :");
 
@@ -792,7 +795,7 @@ impl Parser {
 
                 self.lparen()?;
 
-                let condition = self.expression(0)?;
+                let condition = self.expression(Precedence::Lowest)?;
 
                 self.rparen()?;
 
@@ -817,7 +820,7 @@ impl Parser {
 
                         self.lparen()?;
 
-                        let condition = self.expression(0)?;
+                        let condition = self.expression(Precedence::Lowest)?;
 
                         self.rparen()?;
 
@@ -863,7 +866,7 @@ impl Parser {
 
                 let mut values = Vec::new();
                 while !self.is_eof() && self.current.kind != TokenKind::SemiColon {
-                    values.push(self.expression(0)?);
+                    values.push(self.expression(Precedence::Lowest)?);
 
                     self.optional_comma()?;
                 }
@@ -875,7 +878,7 @@ impl Parser {
 
                 let mut num = None;
                 if self.current.kind != TokenKind::SemiColon {
-                    num = Some(self.expression(0)?);
+                    num = Some(self.expression(Precedence::Lowest)?);
                 }
 
                 self.semi()?;
@@ -887,7 +890,7 @@ impl Parser {
 
                 let mut num = None;
                 if self.current.kind != TokenKind::SemiColon {
-                    num = Some(self.expression(0)?);
+                    num = Some(self.expression(Precedence::Lowest)?);
                 }
 
                 self.semi()?;
@@ -907,7 +910,7 @@ impl Parser {
                     ret
                 } else {
                     let ret = Statement::Return {
-                        value: self.expression(0).ok(),
+                        value: self.expression(Precedence::Lowest).ok(),
                     };
                     self.semi()?;
                     ret
@@ -952,7 +955,7 @@ impl Parser {
                     let var = if self.current.kind == TokenKind::RightParen {
                         None
                     } else {
-                        Some(self.expression(0)?)
+                        Some(self.expression(Precedence::Lowest)?)
                     };
 
                     self.rparen()?;
@@ -1001,7 +1004,7 @@ impl Parser {
 
                     expect!(self, TokenKind::Equals, "expected =");
 
-                    let value = self.expression(0)?;
+                    let value = self.expression(Precedence::Lowest)?;
 
                     constants.push(Constant {
                         name: name.into(),
@@ -1016,7 +1019,7 @@ impl Parser {
                 Statement::Constant { constants }
             }
             _ => {
-                let expr = self.expression(0)?;
+                let expr = self.expression(Precedence::Lowest)?;
 
                 self.semi()?;
 
@@ -1133,7 +1136,7 @@ impl Parser {
 
                 expect!(self, TokenKind::Equals, "expected =");
 
-                let value = self.expression(0)?;
+                let value = self.expression(Precedence::Lowest)?;
 
                 self.semi()?;
 
@@ -1160,7 +1163,7 @@ impl Parser {
                 if self.current.kind == TokenKind::Equals {
                     self.next();
 
-                    value = Some(self.expression(0)?);
+                    value = Some(self.expression(Precedence::Lowest)?);
                 }
 
                 self.semi()?;
@@ -1229,7 +1232,7 @@ impl Parser {
 
                         expect!(self, TokenKind::Equals, "expected =");
 
-                        let value = self.expression(0)?;
+                        let value = self.expression(Precedence::Lowest)?;
 
                         self.semi()?;
 
@@ -1299,7 +1302,7 @@ impl Parser {
 
                         if self.current.kind == TokenKind::Equals {
                             self.next();
-                            value = Some(self.expression(0)?);
+                            value = Some(self.expression(Precedence::Lowest)?);
                         }
 
                         // TODO: Support comma-separated property declarations.
@@ -1320,7 +1323,7 @@ impl Parser {
 
                         if self.current.kind == TokenKind::Equals {
                             self.next();
-                            value = Some(self.expression(0)?);
+                            value = Some(self.expression(Precedence::Lowest)?);
                         }
 
                         self.semi()?;
@@ -1361,18 +1364,18 @@ impl Parser {
         }
     }
 
-    fn expression(&mut self, bp: u8) -> Result<Expression, ParseError> {
+    fn expression(&mut self, precedence: Precedence) -> ParseResult<Expression> {
         if self.is_eof() {
             return Err(ParseError::UnexpectedEndOfFile);
         }
 
         self.skip_comments();
 
-        let mut lhs = match &self.current.kind {
+        let mut left = match &self.current.kind {
             TokenKind::Throw => {
                 self.next();
 
-                let value = self.expression(0)?;
+                let value = self.expression(Precedence::Lowest)?;
 
                 Expression::Throw {
                     value: Box::new(value),
@@ -1381,7 +1384,7 @@ impl Parser {
             TokenKind::Yield => {
                 self.next();
 
-                let value = self.expression(0)?;
+                let value = self.expression(Precedence::Lowest)?;
 
                 // FIXME: Check for presence of => here to allow yielding key and value.
 
@@ -1392,7 +1395,7 @@ impl Parser {
             TokenKind::Clone => {
                 self.next();
 
-                let target = self.expression(0)?;
+                let target = self.expression(Precedence::CloneNew)?;
 
                 Expression::Clone {
                     target: Box::new(target),
@@ -1446,7 +1449,7 @@ impl Parser {
             TokenKind::LeftParen => {
                 self.next();
 
-                let e = self.expression(0)?;
+                let e = self.expression(Precedence::Lowest)?;
 
                 self.rparen()?;
 
@@ -1456,7 +1459,7 @@ impl Parser {
                 self.next();
                 self.lparen()?;
 
-                let condition = Box::new(self.expression(0)?);
+                let condition = Box::new(self.expression(Precedence::Lowest)?);
 
                 self.rparen()?;
                 self.lbrace()?;
@@ -1471,14 +1474,14 @@ impl Parser {
                             break;
                         }
 
-                        conditions.push(self.expression(0)?);
+                        conditions.push(self.expression(Precedence::Lowest)?);
 
                         self.optional_comma()?;
                     }
 
                     expect!(self, TokenKind::DoubleArrow, "expected =>");
 
-                    let body = self.expression(0)?;
+                    let body = self.expression(Precedence::Lowest)?;
 
                     self.optional_comma()?;
 
@@ -1505,13 +1508,13 @@ impl Parser {
 
                 while self.current.kind != TokenKind::RightParen {
                     let mut key = None;
-                    let mut value = self.expression(0)?;
+                    let mut value = self.expression(Precedence::Lowest)?;
 
                     if self.current.kind == TokenKind::DoubleArrow {
                         self.next();
 
                         key = Some(value);
-                        value = self.expression(0)?;
+                        value = self.expression(Precedence::Lowest)?;
                     }
 
                     items.push(ArrayItem { key, value });
@@ -1542,13 +1545,13 @@ impl Parser {
                     }
 
                     let mut key = None;
-                    let mut value = self.expression(0)?;
+                    let mut value = self.expression(Precedence::Lowest)?;
 
                     if self.current.kind == TokenKind::DoubleArrow {
                         self.next();
 
                         key = Some(value);
-                        value = self.expression(0)?;
+                        value = self.expression(Precedence::Lowest)?;
                     }
 
                     items.push(ArrayItem { key, value });
@@ -1582,7 +1585,7 @@ impl Parser {
                             TokenKind::Ampersand => {
                                 self.next();
 
-                                match self.expression(0)? {
+                                match self.expression(Precedence::Lowest)? {
                                     s @ Expression::Variable { .. } => ClosureUse {
                                         var: s,
                                         by_ref: true,
@@ -1595,7 +1598,7 @@ impl Parser {
                                     }
                                 }
                             }
-                            _ => match self.expression(0)? {
+                            _ => match self.expression(Precedence::Lowest)? {
                                 s @ Expression::Variable { .. } => ClosureUse {
                                     var: s,
                                     by_ref: false,
@@ -1656,7 +1659,7 @@ impl Parser {
 
                 expect!(self, TokenKind::DoubleArrow, "expected =>");
 
-                let value = self.expression(0)?;
+                let value = self.expression(Precedence::Lowest)?;
 
                 Expression::ArrowFunction {
                     params,
@@ -1687,7 +1690,7 @@ impl Parser {
                                 unpack = true;
                             }
 
-                            let value = self.expression(0)?;
+                            let value = self.expression(Precedence::Lowest)?;
 
                             args.push(Arg {
                                 name,
@@ -1734,7 +1737,7 @@ impl Parser {
                         body,
                     }
                 } else {
-                    self.expression(20)?
+                    self.expression(Precedence::CloneNew)?
                 };
 
                 if self.current.kind == TokenKind::LeftParen {
@@ -1753,7 +1756,7 @@ impl Parser {
                             unpack = true;
                         }
 
-                        let value = self.expression(0)?;
+                        let value = self.expression(Precedence::Lowest)?;
 
                         args.push(Arg {
                             name,
@@ -1783,8 +1786,8 @@ impl Parser {
 
                 self.next();
 
-                let rbp = prefix_binding_power(&op);
-                let rhs = self.expression(rbp)?;
+                let rpred = Precedence::prefix(&op);
+                let rhs = self.expression(rpred)?;
 
                 prefix(&op, rhs)
             }
@@ -1797,7 +1800,7 @@ impl Parser {
         };
 
         if self.current.kind == TokenKind::SemiColon {
-            return Ok(lhs);
+            return Ok(left);
         }
 
         self.skip_comments();
@@ -1805,57 +1808,67 @@ impl Parser {
         loop {
             self.skip_comments();
 
-            let kind = match &self.current {
-                Token {
-                    kind: TokenKind::SemiColon | TokenKind::Eof,
-                    ..
-                } => break,
-                Token { kind, .. } => kind.clone(),
-            };
+            if matches!(self.current.kind, TokenKind::SemiColon | TokenKind::Eof) {
+                break;
+            }
 
-            if let Some(lbp) = postfix_binding_power(&kind) {
-                if lbp < bp {
+            let span = self.current.span.clone();
+            let kind = self.current.kind.clone();
+
+            if is_postfix(&kind) {
+                let lpred = Precedence::postfix(&kind);
+
+                if lpred < precedence {
                     break;
                 }
 
                 self.next();
 
-                let op = kind.clone();
-                lhs = self.postfix(lhs, &op)?;
-
+                left = self.postfix(left, &kind)?;
                 continue;
             }
 
-            if let Some((lbp, rbp)) = infix_binding_power(&kind) {
-                if lbp < bp {
+            if is_infix(&kind) {
+                let rpred = Precedence::infix(&kind);
+
+                if rpred < precedence {
                     break;
+                }
+
+                if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Left))
+                {
+                    break;
+                }
+
+                if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Non))
+                {
+                    return Err(ParseError::UnexpectedToken(kind.to_string(), span));
                 }
 
                 self.next();
 
-                let op = kind.clone();
-                match op {
+                match kind {
                     TokenKind::Question => {
-                        let then = self.expression(0)?;
+                        let then = self.expression(Precedence::Lowest)?;
                         expect!(self, TokenKind::Colon, "expected :");
-                        let otherwise = self.expression(rbp)?;
-                        lhs = Expression::Ternary {
-                            condition: Box::new(lhs),
+                        let otherwise = self.expression(rpred)?;
+                        left = Expression::Ternary {
+                            condition: Box::new(left),
                             then: Some(Box::new(then)),
                             r#else: Box::new(otherwise),
                         }
                     }
                     TokenKind::QuestionColon => {
-                        let r#else = self.expression(0)?;
-                        lhs = Expression::Ternary {
-                            condition: Box::new(lhs),
+                        let r#else = self.expression(Precedence::Lowest)?;
+                        left = Expression::Ternary {
+                            condition: Box::new(left),
                             then: None,
                             r#else: Box::new(r#else),
                         }
                     }
                     _ => {
-                        let rhs = self.expression(rbp)?;
-                        lhs = infix(lhs, op, rhs);
+                        let rhs = self.expression(rpred)?;
+                        left = infix(left, kind, rhs);
                     }
                 }
 
@@ -1867,13 +1880,13 @@ impl Parser {
 
         self.skip_comments();
 
-        Ok(lhs)
+        Ok(left)
     }
 
     fn postfix(&mut self, lhs: Expression, op: &TokenKind) -> Result<Expression, ParseError> {
         Ok(match op {
             TokenKind::Coalesce => {
-                let rhs = self.expression(11)?;
+                let rhs = self.expression(Precedence::NullCoalesce)?;
 
                 Expression::Coalesce {
                     lhs: Box::new(lhs),
@@ -1895,7 +1908,7 @@ impl Parser {
                         unpack = true;
                     }
 
-                    let value = self.expression(0)?;
+                    let value = self.expression(Precedence::Lowest)?;
 
                     args.push(Arg {
                         name,
@@ -1922,7 +1935,7 @@ impl Parser {
                         index: None,
                     }
                 } else {
-                    let index = self.expression(0)?;
+                    let index = self.expression(Precedence::Lowest)?;
 
                     expect!(self, TokenKind::RightBracket, "expected ]");
 
@@ -1934,7 +1947,7 @@ impl Parser {
             }
             TokenKind::DoubleColon => match self.current.kind.clone() {
                 TokenKind::Variable(_) => {
-                    let var = self.expression(0)?;
+                    let var = self.expression(Precedence::Lowest)?;
 
                     Expression::StaticPropertyFetch {
                         target: Box::new(lhs),
@@ -1967,7 +1980,7 @@ impl Parser {
                                 unpack = true;
                             }
 
-                            let value = self.expression(0)?;
+                            let value = self.expression(Precedence::Lowest)?;
 
                             args.push(Arg {
                                 name,
@@ -1997,7 +2010,7 @@ impl Parser {
                 let property = match self.current.kind {
                     TokenKind::LeftBrace => {
                         self.lbrace()?;
-                        let expr = self.expression(0)?;
+                        let expr = self.expression(Precedence::Lowest)?;
                         self.rbrace()?;
                         expr
                     }
@@ -2028,7 +2041,7 @@ impl Parser {
                             unpack = true;
                         }
 
-                        let value = self.expression(0)?;
+                        let value = self.expression(Precedence::Lowest)?;
 
                         args.push(Arg {
                             name,
@@ -2092,20 +2105,6 @@ fn is_prefix(op: &TokenKind) -> bool {
     )
 }
 
-fn prefix_binding_power(op: &TokenKind) -> u8 {
-    match op {
-        TokenKind::StringCast
-        | TokenKind::ObjectCast
-        | TokenKind::BoolCast
-        | TokenKind::IntCast
-        | TokenKind::DoubleCast => 101,
-        TokenKind::At => 16,
-        TokenKind::Minus => 99,
-        TokenKind::Bang => 98,
-        _ => unreachable!(),
-    }
-}
-
 fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
     match op {
         TokenKind::Bang => Expression::BooleanNot {
@@ -2137,43 +2136,50 @@ fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
     }
 }
 
-fn infix_binding_power(t: &TokenKind) -> Option<(u8, u8)> {
-    Some(match t {
-        TokenKind::Pow => (18, 19),
-        TokenKind::Instanceof => (16, 17),
-        TokenKind::Asterisk | TokenKind::Slash => (14, 15),
-        TokenKind::Plus | TokenKind::Minus => (12, 13),
-        TokenKind::Dot => (12, 12),
-        TokenKind::LessThan
-        | TokenKind::GreaterThan
-        | TokenKind::LessThanEquals
-        | TokenKind::GreaterThanEquals => (10, 11),
-        TokenKind::DoubleEquals
-        | TokenKind::TripleEquals
-        | TokenKind::BangEquals
-        | TokenKind::BangDoubleEquals => (8, 9),
-        TokenKind::Question | TokenKind::QuestionColon => (6, 7),
-        TokenKind::BooleanAnd => (4, 5),
-        TokenKind::BooleanOr => (2, 3),
-        TokenKind::Equals
-        | TokenKind::PlusEquals
-        | TokenKind::MinusEquals
-        | TokenKind::DotEquals
-        | TokenKind::CoalesceEqual
-        | TokenKind::AsteriskEqual
-        | TokenKind::SlashEquals => (0, 1),
-        _ => return None,
-    })
+fn is_infix(t: &TokenKind) -> bool {
+    return matches!(
+        t,
+        TokenKind::Pow
+            | TokenKind::Instanceof
+            | TokenKind::Asterisk
+            | TokenKind::Slash
+            | TokenKind::Plus
+            | TokenKind::Minus
+            | TokenKind::Dot
+            | TokenKind::LessThan
+            | TokenKind::GreaterThan
+            | TokenKind::LessThanEquals
+            | TokenKind::GreaterThanEquals
+            | TokenKind::DoubleEquals
+            | TokenKind::TripleEquals
+            | TokenKind::BangEquals
+            | TokenKind::BangDoubleEquals
+            | TokenKind::Question
+            | TokenKind::QuestionColon
+            | TokenKind::BooleanAnd
+            | TokenKind::BooleanOr
+            | TokenKind::Equals
+            | TokenKind::PlusEquals
+            | TokenKind::MinusEquals
+            | TokenKind::DotEquals
+            | TokenKind::CoalesceEqual
+            | TokenKind::AsteriskEqual
+            | TokenKind::SlashEquals
+    );
 }
 
-fn postfix_binding_power(t: &TokenKind) -> Option<u8> {
-    Some(match t {
-        TokenKind::Increment | TokenKind::Decrement => 77,
-        TokenKind::LeftParen | TokenKind::LeftBracket => 19,
-        TokenKind::Arrow | TokenKind::NullsafeArrow | TokenKind::DoubleColon => 18,
-        TokenKind::Coalesce => 11,
-        _ => return None,
-    })
+fn is_postfix(t: &TokenKind) -> bool {
+    return matches!(
+        t,
+        TokenKind::Increment
+            | TokenKind::Decrement
+            | TokenKind::LeftParen
+            | TokenKind::LeftBracket
+            | TokenKind::Arrow
+            | TokenKind::NullsafeArrow
+            | TokenKind::DoubleColon
+            | TokenKind::Coalesce
+    );
 }
 
 #[derive(Debug)]
@@ -2217,6 +2223,7 @@ mod tests {
         },
         Catch, Expression, Identifier, Param, Statement, Type,
     };
+    use pretty_assertions::assert_eq;
     use trunk_lexer::Lexer;
 
     macro_rules! function {
@@ -2339,7 +2346,10 @@ mod tests {
                 rhs: Box::new(Expression::Identifier { name: "Foo".into() })
             })],
         );
+    }
 
+    #[test]
+    fn multiple_instances_of() {
         assert_ast(
             "<?php $foo instanceof Foo && $foo instanceof Foo;",
             &[expr!(Expression::Infix {
@@ -2627,18 +2637,18 @@ mod tests {
         assert_ast(
             "<?php 'foo' . 'bar' . 'baz';",
             &[expr!(Expression::Infix {
-                lhs: Box::new(Expression::ConstantString {
-                    value: "foo".into()
-                }),
-                op: InfixOp::Concat,
-                rhs: Box::new(Expression::Infix {
+                lhs: Box::new(Expression::Infix {
                     lhs: Box::new(Expression::ConstantString {
-                        value: "bar".into()
+                        value: "foo".into()
                     }),
                     op: InfixOp::Concat,
                     rhs: Box::new(Expression::ConstantString {
-                        value: "baz".into()
+                        value: "bar".into()
                     }),
+                }),
+                op: InfixOp::Concat,
+                rhs: Box::new(Expression::ConstantString {
+                    value: "baz".into()
                 })
             })],
         );
