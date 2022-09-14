@@ -122,7 +122,7 @@ impl Lexer {
     }
 
     fn scripting(&mut self) -> Result<Token, LexerError> {
-        let kind = match self.peek() {
+        let kind = match self.peek_buf() {
             [b'@', ..] => {
                 self.next();
                 self.col += 1;
@@ -310,7 +310,7 @@ impl Lexer {
                 let mut buffer = vec![b'/'];
 
                 while self.current.is_some() {
-                    match self.peek() {
+                    match self.peek_buf() {
                         [b'*', b'/', ..] => {
                             self.col += 2;
                             buffer.extend_from_slice(b"*/");
@@ -732,12 +732,12 @@ impl Lexer {
         self.state = state;
     }
 
-    fn peek(&self) -> &[u8] {
+    fn peek_buf(&self) -> &[u8] {
         &self.chars[self.cursor..]
     }
 
     fn try_read(&self, search: &'static [u8]) -> bool {
-        self.peek().starts_with(search)
+        self.peek_buf().starts_with(search)
     }
 
     fn skip(&mut self, count: usize) {
