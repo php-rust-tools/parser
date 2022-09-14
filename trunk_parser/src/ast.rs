@@ -275,7 +275,7 @@ pub enum Statement {
         expr: Expression,
     },
     Namespace {
-        name: ByteString,
+        name: Option<ByteString>,
         body: Block,
     },
     Use {
