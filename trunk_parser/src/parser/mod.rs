@@ -1730,6 +1730,13 @@ impl Parser {
             TokenKind::Fn => {
                 self.next();
 
+                let by_ref = if self.current.kind == TokenKind::Ampersand {
+                    self.next();
+                    true
+                } else {
+                    false
+                };
+
                 self.lparen()?;
 
                 let params = self.param_list()?;
@@ -1752,6 +1759,7 @@ impl Parser {
                     params,
                     return_type,
                     expr: Box::new(value),
+                    by_ref,
                 }
             }
             TokenKind::New => {
@@ -3781,7 +3789,8 @@ mod tests {
             &[expr!(Expression::ArrowFunction {
                 params: vec![],
                 return_type: None,
-                expr: Box::new(Expression::Null)
+                expr: Box::new(Expression::Null),
+                by_ref: false,
             })],
         );
     }
@@ -3864,7 +3873,8 @@ mod tests {
                     by_ref: true,
                 }],
                 return_type: None,
-                expr: Box::new(Expression::Null)
+                expr: Box::new(Expression::Null),
+                by_ref: false,
             })],
         );
     }
@@ -3910,6 +3920,18 @@ mod tests {
                 return_type: None,
                 r#static: true,
                 uses: vec![],
+                by_ref: true,
+            })
+        ]);
+    }
+
+    #[test]
+    fn arrow_functions_returning_by_ref() {
+        assert_ast("<?php fn &() => null;", &[
+            expr!(Expression::ArrowFunction {
+                params: vec![],
+                expr: Box::new(Expression::Null),
+                return_type: None,
                 by_ref: true,
             })
         ]);

@@ -459,6 +459,7 @@ pub enum Expression {
         params: Vec<Param>,
         return_type: Option<Type>,
         expr: Box<Self>,
+        by_ref: bool,
     },
     New {
         target: Box<Self>,
