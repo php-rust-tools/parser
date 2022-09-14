@@ -1835,6 +1835,10 @@ impl Parser {
                     break;
                 }
 
+                if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Left)) {
+                    break;
+                }
+
                 if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Non)) {
                     return Err(ParseError::UnexpectedToken(kind.to_string(), span));
                 }
@@ -2218,6 +2222,7 @@ mod tests {
         Catch, Expression, Identifier, Param, Statement, Type,
     };
     use trunk_lexer::Lexer;
+    use pretty_assertions::{assert_eq};
 
     macro_rules! function {
         ($name:literal, $params:expr, $body:expr) => {
@@ -2630,18 +2635,18 @@ mod tests {
         assert_ast(
             "<?php 'foo' . 'bar' . 'baz';",
             &[expr!(Expression::Infix {
-                lhs: Box::new(Expression::ConstantString {
-                    value: "foo".into()
-                }),
-                op: InfixOp::Concat,
-                rhs: Box::new(Expression::Infix {
+                lhs: Box::new(Expression::Infix {
                     lhs: Box::new(Expression::ConstantString {
-                        value: "bar".into()
+                        value: "foo".into()
                     }),
                     op: InfixOp::Concat,
                     rhs: Box::new(Expression::ConstantString {
-                        value: "baz".into()
+                        value: "bar".into()
                     }),
+                }),
+                op: InfixOp::Concat,
+                rhs: Box::new(Expression::ConstantString {
+                    value: "baz".into()
                 })
             })],
         );
