@@ -3721,6 +3721,32 @@ mod tests {
         );
     }
 
+    #[test]
+    fn simple_foreach_reference() {
+        assert_ast("<?php foreach ($a as &$b) {}", &[
+            Statement::Foreach {
+                expr: Expression::Variable { name: "a".into() },
+                by_ref: true,
+                key_var: None,
+                value_var: Expression::Variable { name: "b".into() },
+                body: vec![]
+            }
+        ]);
+    }
+
+    #[test]
+    fn key_value_foreach_reference() {
+        assert_ast("<?php foreach ($a as $b => &$c) {}", &[
+            Statement::Foreach {
+                expr: Expression::Variable { name: "a".into() },
+                by_ref: true,
+                key_var: Some(Expression::Variable { name: "b".into() }),
+                value_var: Expression::Variable { name: "c".into() },
+                body: vec![]
+            }
+        ]);
+    }
+
     fn assert_ast(source: &str, expected: &[Statement]) {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();
