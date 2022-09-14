@@ -576,15 +576,12 @@ impl Parser {
 
                 let name = self.ident()?;
 
-                let mut is_backed = false;
                 let backed_type: Option<BackedEnumType> = if self.current.kind == TokenKind::Colon {
                     expect!(self, TokenKind::Colon, "expected :");
 
                     match self.current.kind.clone() {
                         TokenKind::Identifier(s) if s == b"string" || s == b"int" => {
                             self.next();
-
-                            is_backed = true;
 
                             Some(match &s[..] {
                                 b"string" => BackedEnumType::String,
@@ -1812,7 +1809,7 @@ impl Parser {
                 break;
             }
 
-            let span = self.current.span.clone();
+            let span = self.current.span;
             let kind = self.current.kind.clone();
 
             if is_postfix(&kind) {
@@ -2137,7 +2134,7 @@ fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
 }
 
 fn is_infix(t: &TokenKind) -> bool {
-    return matches!(
+    matches!(
         t,
         TokenKind::Pow
             | TokenKind::Instanceof
@@ -2165,11 +2162,11 @@ fn is_infix(t: &TokenKind) -> bool {
             | TokenKind::CoalesceEqual
             | TokenKind::AsteriskEqual
             | TokenKind::SlashEquals
-    );
+    )
 }
 
 fn is_postfix(t: &TokenKind) -> bool {
-    return matches!(
+    matches!(
         t,
         TokenKind::Increment
             | TokenKind::Decrement
@@ -2179,7 +2176,7 @@ fn is_postfix(t: &TokenKind) -> bool {
             | TokenKind::NullsafeArrow
             | TokenKind::DoubleColon
             | TokenKind::Coalesce
-    );
+    )
 }
 
 #[derive(Debug)]
