@@ -3901,6 +3901,20 @@ mod tests {
         ]);
     }
 
+    #[test]
+    fn static_closures_returning_by_ref() {
+        assert_ast("<?php static function &() {};", &[
+            expr!(Expression::Closure {
+                params: vec![],
+                body: vec![],
+                return_type: None,
+                r#static: true,
+                uses: vec![],
+                by_ref: true,
+            })
+        ]);
+    }
+
     fn assert_ast(source: &str, expected: &[Statement]) {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();
