@@ -1632,7 +1632,7 @@ impl Parser {
 
                 Expression::Array { items }
             }
-            TokenKind::Static if matches!(self.peek.kind, TokenKind::Function) => {
+            TokenKind::Static if matches!(self.peek.kind, TokenKind::Function | TokenKind::Fn) => {
                 self.next();
 
                 match self.expression(Precedence::Lowest)? {
@@ -1648,6 +1648,19 @@ impl Parser {
                         uses,
                         return_type,
                         body,
+                        by_ref,
+                        r#static: true,
+                    },
+                    Expression::ArrowFunction {
+                        params,
+                        return_type,
+                        expr,
+                        by_ref,
+                        ..
+                    } => Expression::ArrowFunction {
+                        params,
+                        return_type,
+                        expr,
                         by_ref,
                         r#static: true,
                     },
@@ -1771,6 +1784,7 @@ impl Parser {
                     return_type,
                     expr: Box::new(value),
                     by_ref,
+                    r#static: false,
                 }
             }
             TokenKind::New => {
@@ -3802,6 +3816,7 @@ mod tests {
                 return_type: None,
                 expr: Box::new(Expression::Null),
                 by_ref: false,
+                r#static: false,
             })],
         );
     }
@@ -3886,6 +3901,7 @@ mod tests {
                 return_type: None,
                 expr: Box::new(Expression::Null),
                 by_ref: false,
+                r#static: false,
             })],
         );
     }
@@ -3950,6 +3966,35 @@ mod tests {
                 expr: Box::new(Expression::Null),
                 return_type: None,
                 by_ref: true,
+                r#static: false,
+            })],
+        );
+    }
+
+    #[test]
+    fn static_arrow_functions() {
+        assert_ast(
+            "<?php static fn () => null;",
+            &[expr!(Expression::ArrowFunction {
+                params: vec![],
+                expr: Box::new(Expression::Null),
+                return_type: None,
+                by_ref: false,
+                r#static: true,
+            })],
+        );
+    }
+
+    #[test]
+    fn static_arrow_functions_returning_by_ref() {
+        assert_ast(
+            "<?php static fn &() => null;",
+            &[expr!(Expression::ArrowFunction {
+                params: vec![],
+                expr: Box::new(Expression::Null),
+                return_type: None,
+                by_ref: true,
+                r#static: true,
             })],
         );
     }

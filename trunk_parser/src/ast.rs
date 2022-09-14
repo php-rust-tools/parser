@@ -460,6 +460,7 @@ pub enum Expression {
         return_type: Option<Type>,
         expr: Box<Self>,
         by_ref: bool,
+        r#static: bool,
     },
     New {
         target: Box<Self>,
