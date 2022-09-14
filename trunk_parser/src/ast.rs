@@ -403,7 +403,6 @@ pub struct Use {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
-    Static,
     Empty,
     ErrorSuppress {
         expr: Box<Self>,
@@ -443,6 +442,7 @@ pub enum Expression {
         uses: Vec<ClosureUse>,
         return_type: Option<Type>,
         body: Block,
+        r#static: bool,
     },
     ArrowFunction {
         params: Vec<Param>,

@@ -1441,10 +1441,6 @@ impl Parser {
                 self.next();
                 e
             }
-            TokenKind::Static => {
-                self.next();
-                Expression::Static
-            }
             TokenKind::ConstantString(s) => {
                 let e = Expression::ConstantString { value: s.clone() };
                 self.next();
@@ -1583,6 +1579,26 @@ impl Parser {
 
                 Expression::Array { items }
             }
+            TokenKind::Static if matches!(self.peek.kind, TokenKind::Function) => {
+                self.next();
+
+                match self.expression(Precedence::Lowest)? {
+                    Expression::Closure {
+                        params,
+                        uses,
+                        return_type,
+                        body,
+                        ..
+                    } => Expression::Closure {
+                        params,
+                        uses,
+                        return_type,
+                        body,
+                        r#static: true,
+                    },
+                    _ => unreachable!(),
+                }
+            }
             TokenKind::Function => {
                 self.next();
 
@@ -1656,6 +1672,7 @@ impl Parser {
                     uses,
                     return_type,
                     body,
+                    r#static: false,
                 }
             }
             TokenKind::Fn => {
@@ -3661,6 +3678,46 @@ mod tests {
                     return_type: None,
                 }],
             }],
+        );
+    }
+
+    #[test]
+    fn basic_closures() {
+        assert_ast(
+            "<?php function () {};",
+            &[expr!(Expression::Closure {
+                params: vec![],
+                uses: vec![],
+                return_type: None,
+                body: vec![],
+                r#static: false
+            })],
+        );
+    }
+
+    #[test]
+    fn arrow_functions() {
+        assert_ast(
+            "<?php fn () => null;",
+            &[expr!(Expression::ArrowFunction {
+                params: vec![],
+                return_type: None,
+                expr: Box::new(Expression::Null)
+            })],
+        );
+    }
+
+    #[test]
+    fn static_closures() {
+        assert_ast(
+            "<?php static function () {};",
+            &[expr!(Expression::Closure {
+                params: vec![],
+                uses: vec![],
+                return_type: None,
+                body: vec![],
+                r#static: true
+            })],
         );
     }
 
