@@ -19,7 +19,6 @@ pub struct Lexer {
     chars: Vec<u8>,
     cursor: usize,
     current: Option<u8>,
-    peek: Option<u8>,
     col: usize,
     line: usize,
 }
@@ -32,7 +31,6 @@ impl Lexer {
             chars: Vec::new(),
             cursor: 0,
             current: None,
-            peek: None,
             line: 1,
             col: 0,
         }
@@ -45,10 +43,9 @@ impl Lexer {
         let mut tokens = Vec::new();
         self.chars = input.as_ref().to_vec();
 
-        self.next();
-        self.next();
+        self.current = self.chars.get(0).copied();
 
-        while self.peek.is_some() {
+        while self.current.is_some() {
             match self.state {
                 // The "Initial" state is used to parse inline HTML. It is essentially a catch-all
                 // state that will build up a single token buffer until it encounters an open tag
@@ -59,7 +56,7 @@ impl Lexer {
                 // The scripting state is entered when an open tag is encountered in the source code.
                 // This tells the lexer to start analysing characters at PHP tokens instead of inline HTML.
                 LexerState::Scripting => {
-                    while let Some(c) = self.peek {
+                    while let Some(c) = self.current {
                         if !c.is_ascii_whitespace() && ![b'\n', b'\t', b'\r'].contains(&c) {
                             break;
                         }
@@ -75,7 +72,7 @@ impl Lexer {
                     }
 
                     // If we have consumed whitespace and then reached the end of the file, we should break.
-                    if self.peek.is_none() {
+                    if self.current.is_none() {
                         break;
                     }
 
@@ -91,64 +88,31 @@ impl Lexer {
     fn initial(&mut self) -> Result<Vec<Token>, LexerError> {
         let mut buffer = Vec::new();
         while let Some(char) = self.current {
-            match char {
-                b'<' => {
-                    // This is disgusting and can most definitely be tidied up with a multi-peek iterator.
-                    if let Some(b'?') = self.peek {
-                        self.next();
+            if self.try_read(b"<?php") {
+                self.skip(5);
+                self.col += 4;
 
-                        if let Some(b'p') = self.peek {
-                            self.next();
+                self.enter_state(LexerState::Scripting);
 
-                            if let Some(b'h') = self.peek {
-                                self.next();
+                let mut tokens = vec![];
 
-                                if let Some(b'p') = self.peek {
-                                    self.next();
-
-                                    self.col += 4;
-
-                                    self.enter_state(LexerState::Scripting);
-
-                                    let mut tokens = vec![];
-
-                                    if !buffer.is_empty() {
-                                        tokens.push(Token {
-                                            kind: TokenKind::InlineHtml(buffer.into()),
-                                            span: (self.line, self.col.saturating_sub(5)),
-                                        });
-                                    }
-
-                                    tokens.push(Token {
-                                        kind: TokenKind::OpenTag(OpenTagKind::Full),
-                                        span: (self.line, self.col),
-                                    });
-
-                                    return Ok(tokens);
-                                }
-                            } else {
-                                self.col += 3;
-
-                                buffer.push(b'h');
-                            }
-                        } else {
-                            self.col += 2;
-
-                            buffer.push(b'?');
-                        }
-                    } else {
-                        self.next();
-
-                        self.col += 1;
-
-                        buffer.push(char);
-                    }
+                if !buffer.is_empty() {
+                    tokens.push(Token {
+                        kind: TokenKind::InlineHtml(buffer.into()),
+                        span: (self.line, self.col.saturating_sub(5)),
+                    });
                 }
-                _ => {
-                    self.next();
-                    buffer.push(char);
-                }
+
+                tokens.push(Token {
+                    kind: TokenKind::OpenTag(OpenTagKind::Full),
+                    span: (self.line, self.col),
+                });
+
+                return Ok(tokens);
             }
+
+            self.next();
+            buffer.push(char);
         }
 
         Ok(vec![Token {
@@ -158,356 +122,161 @@ impl Lexer {
     }
 
     fn scripting(&mut self) -> Result<Token, LexerError> {
-        // We should never reach this point since we have the empty checks surrounding
-        // the call to this function, but it's better to be safe than sorry.
-        if self.peek.is_none() {
-            return Err(LexerError::UnexpectedEndOfFile);
-        }
-
-        // Since we have the check above, we can safely unwrap the result of `.next()`
-        // to help reduce the amount of indentation.
-        self.next();
-        let char = self.current.unwrap();
-
-        let kind = match char {
-            b'@' => {
+        let kind = match self.peek_buf() {
+            [b'@', ..] => {
+                self.next();
                 self.col += 1;
 
                 TokenKind::At
             }
-            b'!' => {
-                self.col += 1;
-
-                if let Some(b'=') = self.peek {
-                    self.col += 1;
-
-                    self.next();
-
-                    if let Some(b'=') = self.peek {
-                        self.col += 1;
-
-                        self.next();
-
-                        TokenKind::BangDoubleEquals
-                    } else {
-                        TokenKind::BangEquals
-                    }
-                } else {
-                    TokenKind::Bang
-                }
+            [b'!', b'=', b'=', ..] => {
+                self.skip(3);
+                self.col += 2;
+                TokenKind::BangDoubleEquals
             }
-            b'&' => {
-                self.col += 1;
-
-                if let Some(b'&') = self.peek {
-                    self.col += 1;
-
-                    self.next();
-
-                    TokenKind::BooleanAnd
-                } else {
-                    TokenKind::Ampersand
-                }
+            [b'!', b'=', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::BangEquals
             }
-            b'?' => {
+            [b'!', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::BangEquals
+            }
+            [b'&', b'&', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::BooleanAnd
+            }
+            [b'&', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::Ampersand
+            }
+            [b'?', b'>', ..] => {
                 // This is a close tag, we can enter "Initial" mode again.
-                if let Some(b'>') = self.peek {
-                    self.next();
-                    self.next();
+                self.skip(2);
+                self.col += 2;
 
-                    self.col += 2;
+                self.enter_state(LexerState::Initial);
 
-                    self.enter_state(LexerState::Initial);
-
-                    TokenKind::CloseTag
-                } else if let Some(b'?') = self.peek {
-                    self.col += 1;
-
-                    self.next();
-
-                    if let Some(b'=') = self.peek {
-                        self.col += 1;
-
-                        self.next();
-
-                        TokenKind::CoalesceEqual
-                    } else {
-                        TokenKind::Coalesce
-                    }
-                } else if let Some(b':') = self.peek {
-                    self.col += 1;
-                    self.next();
-                    TokenKind::QuestionColon
-                } else if self.try_read(b"->") {
-                    self.col += 1;
-                    self.skip(2);
-                    TokenKind::NullsafeArrow
-                } else {
-                    TokenKind::Question
-                }
+                TokenKind::CloseTag
             }
-            b'=' => {
-                if let Some(b'=') = self.peek {
-                    self.next();
-
-                    if let Some(b'=') = self.peek {
-                        self.next();
-
-                        self.col += 3;
-
-                        TokenKind::TripleEquals
-                    } else {
-                        self.col += 2;
-
-                        TokenKind::DoubleEquals
-                    }
-                } else if let Some(b'>') = self.peek {
-                    self.next();
-                    self.col += 1;
-                    TokenKind::DoubleArrow
-                } else {
-                    self.col += 1;
-
-                    TokenKind::Equals
-                }
+            [b'?', b'?', b'=', ..] => {
+                self.skip(3);
+                self.col += 3;
+                TokenKind::CoalesceEqual
+            }
+            [b'?', b'?', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::Coalesce
+            }
+            [b'?', b':', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::QuestionColon
+            }
+            [b'?', b'-', b'>', ..] => {
+                self.skip(3);
+                self.col += 3;
+                TokenKind::NullsafeArrow
+            }
+            [b'?', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::Question
+            }
+            [b'=', b'>', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::DoubleArrow
+            }
+            [b'=', b'=', b'=', ..] => {
+                self.skip(3);
+                self.col += 3;
+                TokenKind::TripleEquals
+            }
+            [b'=', b'=', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::DoubleEquals
+            }
+            [b'=', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::Equals
             }
             // Single quoted string.
-            b'\'' => {
+            [b'\'', ..] => {
+                self.next();
+                self.col += 1;
+                self.tokenize_single_quote_string()
+            }
+            [b'"', ..] => {
+                self.next();
+                self.col += 1;
+                self.tokenize_double_quote_string()
+            }
+            [b'$', ..] => {
+                self.next();
+                self.col += 1;
+                self.tokenize_variable()
+            }
+            [b'.', b'=', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::DotEquals
+            }
+            [b'.', b'0'..=b'9', ..] => {
+                self.next();
+                self.tokenize_number(String::from("0."), true)?
+            }
+            [b'.', b'.', b'.', ..] => {
+                self.skip(3);
+                self.col += 3;
+                TokenKind::Ellipsis
+            }
+            [b'.', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::Dot
+            }
+            &[b @ b'0'..=b'9', ..] => {
+                self.next();
+                self.tokenize_number(String::from(b as char), false)?
+            }
+            &[b'\\', n, ..] if n == b'_' || n.is_ascii_alphabetic() => {
                 self.col += 1;
 
-                let mut buffer = Vec::new();
-                let mut escaping = false;
-
-                while let Some(n) = self.peek {
-                    if !escaping && n == b'\'' {
-                        self.next();
-
-                        break;
+                match self.scripting()? {
+                    Token {
+                        kind:
+                            TokenKind::Identifier(ByteString(mut i))
+                            | TokenKind::QualifiedIdentifier(ByteString(mut i)),
+                        ..
+                    } => {
+                        i.insert(0, b'\\');
+                        TokenKind::FullyQualifiedIdentifier(i.into())
                     }
-
-                    if n == b'\\' && !escaping {
-                        escaping = true;
-                        self.next();
-                        continue;
-                    }
-
-                    if escaping && [b'\\', b'\''].contains(&n) {
-                        escaping = false;
-                        buffer.push(n);
-                        self.next();
-                        continue;
-                    }
-
-                    if n == b'\n' {
-                        self.line += 1;
-                        self.col = 0;
-                    } else {
-                        self.col += 1;
-                    }
-
-                    escaping = false;
-
-                    buffer.push(n);
-                    self.next();
+                    s => unreachable!("{:?}", s),
                 }
-
-                TokenKind::ConstantString(buffer.into())
             }
-            b'"' => {
+            [b'\\', ..] => {
+                self.next();
                 self.col += 1;
-
-                let mut buffer = Vec::new();
-                let mut escaping = false;
-
-                while let Some(n) = self.peek {
-                    if !escaping && n == b'"' {
-                        self.next();
-
-                        break;
-                    }
-
-                    if n == b'\\' && !escaping {
-                        escaping = true;
-                        self.next();
-                        continue;
-                    }
-
-                    if escaping && [b'\\', b'"'].contains(&n) {
-                        escaping = false;
-                        buffer.push(n);
-                        self.next();
-                        continue;
-                    }
-
-                    if n == b'\n' {
-                        self.line += 1;
-                        self.col = 0;
-                    } else {
-                        self.col += 1;
-                    }
-
-                    escaping = false;
-
-                    buffer.push(n);
-                    self.next();
-                }
-
-                TokenKind::ConstantString(buffer.into())
+                TokenKind::NamespaceSeparator
             }
-            b'$' => {
-                let mut buffer = Vec::new();
-
-                self.col += 1;
-
-                while let Some(n) = self.peek {
-                    match n {
-                        b'0'..=b'9' if !buffer.is_empty() => {
-                            self.col += 1;
-                            buffer.push(n);
-                            self.next();
-                        }
-                        b'a'..=b'z' | b'A'..=b'Z' | 0x80..=0xff | b'_' => {
-                            self.col += 1;
-
-                            buffer.push(n);
-                            self.next();
-                        }
-                        _ => break,
-                    }
-                }
-
-                TokenKind::Variable(buffer.into())
-            }
-            b'.' => {
-                self.col += 1;
-
-                if let Some(b'0'..=b'9') = self.peek {
-                    let mut buffer = String::from("0.");
-                    let mut underscore = false;
-
-                    while let Some(n) = self.peek {
-                        match n {
-                            b'0'..=b'9' => {
-                                underscore = false;
-                                buffer.push(n as char);
-                                self.next();
-
-                                self.col += 1;
-                            }
-                            b'_' => {
-                                if underscore {
-                                    return Err(LexerError::UnexpectedCharacter(n));
-                                }
-
-                                underscore = true;
-                                self.next();
-
-                                self.col += 1;
-                            }
-                            _ => break,
-                        }
-                    }
-
-                    TokenKind::Float(buffer.parse().unwrap())
-                } else if let Some(b'.') = self.peek {
-                    self.next();
-
-                    self.col += 1;
-
-                    if let Some(b'.') = self.peek {
-                        self.next();
-
-                        self.col += 1;
-
-                        TokenKind::Ellipsis
-                    } else {
-                        todo!("don't know how to handle this case yet, it should just be 2 Dot tokens...")
-                    }
-                } else if let Some(b'=') = self.peek {
-                    self.next();
-                    self.col += 1;
-                    TokenKind::DotEquals
-                } else {
-                    TokenKind::Dot
-                }
-            }
-            b'0'..=b'9' => {
-                let mut buffer = String::from(char as char);
-                let mut underscore = false;
-                let mut is_float = false;
-
-                self.col += 1;
-
-                while let Some(n) = self.peek {
-                    match n {
-                        b'0'..=b'9' => {
-                            underscore = false;
-                            buffer.push(n as char);
-                            self.next();
-
-                            self.col += 1;
-                        }
-                        b'.' => {
-                            if is_float {
-                                return Err(LexerError::UnexpectedCharacter(n));
-                            }
-
-                            is_float = true;
-                            buffer.push(n as char);
-                            self.next();
-                            self.col += 1;
-                        }
-                        b'_' => {
-                            if underscore {
-                                return Err(LexerError::UnexpectedCharacter(n));
-                            }
-
-                            underscore = true;
-                            self.next();
-
-                            self.col += 1;
-                        }
-                        _ => break,
-                    }
-                }
-
-                if is_float {
-                    TokenKind::Float(buffer.parse().unwrap())
-                } else {
-                    TokenKind::Int(buffer.parse().unwrap())
-                }
-            }
-            b'\\' => {
-                self.col += 1;
-
-                if self
-                    .peek
-                    .map_or(false, |n| n == b'_' || n.is_ascii_alphabetic())
-                {
-                    match self.scripting()? {
-                        Token {
-                            kind:
-                                TokenKind::Identifier(ByteString(mut i))
-                                | TokenKind::QualifiedIdentifier(ByteString(mut i)),
-                            ..
-                        } => {
-                            i.insert(0, b'\\');
-                            TokenKind::FullyQualifiedIdentifier(i.into())
-                        }
-                        s => unreachable!("{:?}", s),
-                    }
-                } else {
-                    TokenKind::NamespaceSeparator
-                }
-            }
-            _ if char.is_ascii_alphabetic() || char == b'_' => {
+            &[b, ..] if b.is_ascii_alphabetic() || b == b'_' => {
+                self.next();
                 self.col += 1;
 
                 let mut qualified = false;
                 let mut last_was_slash = false;
 
-                let mut buffer = vec![char];
-                while let Some(next) = self.peek {
+                let mut buffer = vec![b];
+                while let Some(next) = self.current {
                     if next.is_ascii_alphanumeric() || next == b'_' {
                         buffer.push(next);
                         self.next();
@@ -535,126 +304,119 @@ impl Lexer {
                         .unwrap_or_else(|| TokenKind::Identifier(buffer.into()))
                 }
             }
-            b'/' | b'#' => {
+            [b'/', b'*', ..] => {
+                self.next();
                 self.col += 1;
+                let mut buffer = vec![b'/'];
 
-                fn read_till_end_of_line(s: &mut Lexer) -> Vec<u8> {
-                    s.col += 1;
-
-                    let mut buffer = Vec::new();
-
-                    while let Some(c) = s.peek {
-                        if c == b'\n' {
+                while self.current.is_some() {
+                    match self.peek_buf() {
+                        [b'*', b'/', ..] => {
+                            self.col += 2;
+                            buffer.extend_from_slice(b"*/");
+                            self.next();
                             break;
                         }
+                        [b'\n', ..] => {
+                            self.line += 1;
+                            self.col = 0;
 
-                        buffer.push(c);
-                        s.next();
-                    }
-
-                    buffer
-                }
-
-                if char == b'/' && self.peek == Some(b'*') {
-                    let mut buffer = vec![char];
-
-                    while self.peek.is_some() {
-                        self.next();
-
-                        let t = self.current.unwrap();
-
-                        match t {
-                            b'*' => {
-                                if let Some(b'/') = self.peek {
-                                    self.col += 2;
-                                    buffer.extend_from_slice(b"*/");
-                                    self.next();
-                                    break;
-                                } else {
-                                    self.col += 1;
-                                    buffer.push(t);
-                                }
-                            }
-                            b'\n' => {
-                                self.line += 1;
-                                self.col = 0;
-
-                                buffer.push(b'\n');
-                            }
-                            _ => {
-                                self.col += 1;
-
-                                buffer.push(t);
-                            }
+                            buffer.push(b'\n');
                         }
-                    }
+                        &[t, ..] => {
+                            self.col += 1;
 
-                    if buffer.starts_with(b"/**") {
-                        TokenKind::DocComment(buffer.into())
-                    } else {
-                        TokenKind::Comment(buffer.into())
+                            buffer.push(t);
+                        }
+                        [] => {}
                     }
-                } else if let Some(b'=') = self.peek {
-                    self.col += 1;
                     self.next();
-                    TokenKind::SlashEquals
-                } else if char == b'/' && self.peek != Some(b'/') {
-                    TokenKind::Slash
-                } else if char == b'#' && self.peek == Some(b'[') {
-                    TokenKind::Attribute
+                }
+                self.next();
+                self.col += 1;
+
+                if buffer.starts_with(b"/**") {
+                    TokenKind::DocComment(buffer.into())
                 } else {
-                    self.next();
-                    let current = self.current.unwrap();
-                    let mut buffer = read_till_end_of_line(self);
-                    buffer.splice(0..0, [char, current]);
-
                     TokenKind::Comment(buffer.into())
                 }
             }
-            b'*' => {
-                self.col += 1;
-
-                if let Some(b'*') = self.peek {
-                    self.col += 1;
+            [b'#', b'[', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::Attribute
+            }
+            &[ch @ b'/', b'/', ..] | &[ch @ b'#', ..] => {
+                let mut buffer = if ch == b'/' {
+                    self.skip(2);
+                    self.col += 2;
+                    b"//".to_vec()
+                } else {
                     self.next();
+                    self.col += 1;
+                    b"#".to_vec()
+                };
 
-                    if let Some(b'=') = self.peek {
-                        self.col += 1;
-                        self.next();
-                        TokenKind::PowEquals
-                    } else {
-                        TokenKind::Pow
+                while let Some(c) = self.current {
+                    if c == b'\n' {
+                        break;
                     }
-                } else if let Some(b'=') = self.peek {
-                    self.col += 1;
+
+                    buffer.push(c);
                     self.next();
-                    TokenKind::AsteriskEqual
-                } else {
-                    TokenKind::Asterisk
                 }
+
+                self.next();
+
+                TokenKind::Comment(buffer.into())
             }
-            b'|' => {
+            [b'/', b'=', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::SlashEquals
+            }
+            [b'/', ..] => {
+                self.next();
                 self.col += 1;
-
-                if let Some(b'|') = self.peek {
-                    self.col += 1;
-
-                    self.next();
-
-                    TokenKind::BooleanOr
-                } else {
-                    TokenKind::Pipe
-                }
+                TokenKind::Slash
             }
-            b'{' => {
+            [b'*', b'*', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::Pow
+            }
+            [b'*', b'=', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::AsteriskEqual
+            }
+            [b'*', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::Asterisk
+            }
+            [b'|', b'|', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::Pipe
+            }
+            [b'|', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::Pipe
+            }
+            [b'{', ..] => {
+                self.next();
                 self.col += 1;
                 TokenKind::LeftBrace
             }
-            b'}' => {
+            [b'}', ..] => {
+                self.next();
                 self.col += 1;
                 TokenKind::RightBrace
             }
-            b'(' => {
+            [b'(', ..] => {
+                self.next();
                 self.col += 1;
 
                 if self.try_read(b"string)") {
@@ -683,123 +445,122 @@ impl Lexer {
                     TokenKind::LeftParen
                 }
             }
-            b')' => {
+            [b')', ..] => {
+                self.next();
                 self.col += 1;
                 TokenKind::RightParen
             }
-            b';' => {
+            [b';', ..] => {
+                self.next();
                 self.col += 1;
                 TokenKind::SemiColon
             }
-            b'+' => {
-                self.col += 1;
-
-                if let Some(b'=') = self.peek {
-                    self.col += 1;
-
-                    self.next();
-
-                    TokenKind::PlusEquals
-                } else if let Some(b'+') = self.peek {
-                    self.col += 1;
-
-                    self.next();
-
-                    TokenKind::Increment
-                } else {
-                    TokenKind::Plus
-                }
+            [b'+', b'+', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::Increment
             }
-            b'-' => {
-                self.col += 1;
-
-                if let Some(b'>') = self.peek {
-                    self.col += 1;
-
-                    self.next();
-
-                    TokenKind::Arrow
-                } else if let Some(b'=') = self.peek {
-                    self.col += 1;
-                    self.next();
-                    TokenKind::MinusEquals
-                } else {
-                    TokenKind::Minus
-                }
+            [b'+', b'=', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::PlusEquals
             }
-            b'<' => {
+            [b'+', ..] => {
+                self.next();
                 self.col += 1;
-
-                if let Some(b'=') = self.peek {
-                    self.next();
-
-                    self.col += 1;
-
-                    TokenKind::LessThanEquals
-                } else if let Some(b'<') = self.peek {
-                    self.next();
-
-                    if let Some(b'<') = self.peek {
-                        // TODO: Handle both heredocs and nowdocs.
-                        self.next();
-
-                        todo!("heredocs & nowdocs");
-                    } else {
-                        TokenKind::LeftShift
-                    }
-                } else {
-                    TokenKind::LessThan
-                }
+                TokenKind::Plus
             }
-            b'>' => {
+            [b'-', b'-', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::Decrement
+            }
+            [b'-', b'>', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::Arrow
+            }
+            [b'-', b'=', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::MinusEquals
+            }
+            [b'-', ..] => {
+                self.next();
                 self.col += 1;
-
-                if let Some(b'=') = self.peek {
-                    self.next();
-
-                    self.col += 1;
-
-                    TokenKind::GreaterThanEquals
-                } else if let Some(b'>') = self.peek {
-                    self.next();
-
-                    self.col += 1;
-
-                    TokenKind::RightShift
-                } else {
-                    TokenKind::GreaterThan
-                }
+                TokenKind::Minus
             }
-            b',' => {
+            [b'<', b'<', b'<', ..] => {
+                // TODO: Handle both heredocs and nowdocs.
+                self.skip(3);
+                self.col += 3;
+
+                todo!("heredocs & nowdocs");
+            }
+            [b'<', b'<', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::LeftShift
+            }
+            [b'<', b'=', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::LessThanEquals
+            }
+            [b'<', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::LessThan
+            }
+            [b'>', b'>', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::RightShift
+            }
+            [b'>', b'=', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::GreaterThanEquals
+            }
+            [b'>', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::GreaterThan
+            }
+            [b',', ..] => {
+                self.next();
                 self.col += 1;
                 TokenKind::Comma
             }
-            b'[' => {
+            [b'[', ..] => {
+                self.next();
                 self.col += 1;
                 TokenKind::LeftBracket
             }
-            b']' => {
+            [b']', ..] => {
+                self.next();
                 self.col += 1;
                 TokenKind::RightBracket
             }
-            b':' => {
-                self.col += 1;
-
-                if let Some(b':') = self.peek {
-                    self.col += 1;
-
-                    self.next();
-                    TokenKind::DoubleColon
-                } else {
-                    TokenKind::Colon
-                }
+            [b':', b':', ..] => {
+                self.skip(2);
+                self.col += 2;
+                TokenKind::DoubleColon
             }
-            _ => unimplemented!(
+            [b':', ..] => {
+                self.next();
+                self.col += 1;
+                TokenKind::Colon
+            }
+            &[b, ..] => unimplemented!(
                 "<scripting> char: {}, line: {}, col: {}",
-                char,
+                b as char,
                 self.line,
                 self.col
             ),
+            // We should never reach this point since we have the empty checks surrounding
+            // the call to this function, but it's better to be safe than sorry.
+            [] => return Err(LexerError::UnexpectedEndOfFile),
         };
 
         Ok(Token {
@@ -808,30 +569,175 @@ impl Lexer {
         })
     }
 
+    fn tokenize_single_quote_string(&mut self) -> TokenKind {
+        self.col += 1;
+
+        let mut buffer = Vec::new();
+        let mut escaping = false;
+
+        while let Some(n) = self.current {
+            if !escaping && n == b'\'' {
+                self.next();
+
+                break;
+            }
+
+            if n == b'\\' && !escaping {
+                escaping = true;
+                self.next();
+                continue;
+            }
+
+            if escaping && [b'\\', b'\''].contains(&n) {
+                escaping = false;
+                buffer.push(n);
+                self.next();
+                continue;
+            }
+
+            if n == b'\n' {
+                self.line += 1;
+                self.col = 0;
+            } else {
+                self.col += 1;
+            }
+
+            escaping = false;
+
+            buffer.push(n);
+            self.next();
+        }
+
+        TokenKind::ConstantString(buffer.into())
+    }
+
+    fn tokenize_double_quote_string(&mut self) -> TokenKind {
+        self.col += 1;
+
+        let mut buffer = Vec::new();
+        let mut escaping = false;
+
+        while let Some(n) = self.current {
+            if !escaping && n == b'"' {
+                self.next();
+
+                break;
+            }
+
+            if n == b'\\' && !escaping {
+                escaping = true;
+                self.next();
+                continue;
+            }
+
+            if escaping && [b'\\', b'"'].contains(&n) {
+                escaping = false;
+                buffer.push(n);
+                self.next();
+                continue;
+            }
+
+            if n == b'\n' {
+                self.line += 1;
+                self.col = 0;
+            } else {
+                self.col += 1;
+            }
+
+            escaping = false;
+
+            buffer.push(n);
+            self.next();
+        }
+
+        TokenKind::ConstantString(buffer.into())
+    }
+
+    fn tokenize_variable(&mut self) -> TokenKind {
+        let mut buffer = Vec::new();
+
+        self.col += 1;
+
+        while let Some(n) = self.current {
+            match n {
+                b'0'..=b'9' if !buffer.is_empty() => {
+                    self.col += 1;
+                    buffer.push(n);
+                    self.next();
+                }
+                b'a'..=b'z' | b'A'..=b'Z' | 0x80..=0xff | b'_' => {
+                    self.col += 1;
+
+                    buffer.push(n);
+                    self.next();
+                }
+                _ => break,
+            }
+        }
+
+        TokenKind::Variable(buffer.into())
+    }
+
+    fn tokenize_number(
+        &mut self,
+        mut buffer: String,
+        seen_decimal: bool,
+    ) -> Result<TokenKind, LexerError> {
+        let mut underscore = false;
+        let mut is_float = seen_decimal;
+
+        self.col += 1;
+
+        while let Some(n) = self.current {
+            match n {
+                b'0'..=b'9' => {
+                    underscore = false;
+                    buffer.push(n as char);
+                    self.next();
+
+                    self.col += 1;
+                }
+                b'.' => {
+                    if is_float {
+                        return Err(LexerError::UnexpectedCharacter(n));
+                    }
+
+                    is_float = true;
+                    buffer.push(n as char);
+                    self.next();
+                    self.col += 1;
+                }
+                b'_' => {
+                    if underscore {
+                        return Err(LexerError::UnexpectedCharacter(n));
+                    }
+
+                    underscore = true;
+                    self.next();
+
+                    self.col += 1;
+                }
+                _ => break,
+            }
+        }
+
+        Ok(if is_float {
+            TokenKind::Float(buffer.parse().unwrap())
+        } else {
+            TokenKind::Int(buffer.parse().unwrap())
+        })
+    }
+
     fn enter_state(&mut self, state: LexerState) {
         self.state = state;
     }
 
-    fn char_at(&self, idx: usize) -> Option<&u8> {
-        self.chars.get(idx)
+    fn peek_buf(&self) -> &[u8] {
+        &self.chars[self.cursor..]
     }
 
     fn try_read(&self, search: &'static [u8]) -> bool {
-        if self.current.is_none() || self.peek.is_none() {
-            return false;
-        }
-
-        let start = self.cursor.saturating_sub(1);
-        let mut buffer = Vec::new();
-
-        for i in 0..search.len() {
-            match self.char_at(start + i) {
-                Some(char) => buffer.push(*char),
-                _ => return false,
-            };
-        }
-
-        buffer == search
+        self.peek_buf().starts_with(search)
     }
 
     fn skip(&mut self, count: usize) {
@@ -841,9 +747,8 @@ impl Lexer {
     }
 
     fn next(&mut self) {
-        self.current = self.peek;
-        self.peek = self.chars.get(self.cursor).cloned();
         self.cursor += 1;
+        self.current = self.chars.get(self.cursor).copied();
     }
 }
 
