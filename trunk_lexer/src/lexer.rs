@@ -797,26 +797,13 @@ impl Lexer {
         self.state = state;
     }
 
-    fn char_at(&self, idx: usize) -> Option<&u8> {
-        self.chars.get(idx)
-    }
-
     fn try_read(&self, search: &'static [u8]) -> bool {
         if self.current.is_none() || self.peek.is_none() {
             return false;
         }
 
         let start = self.cursor.saturating_sub(1);
-        let mut buffer = Vec::new();
-
-        for i in 0..search.len() {
-            match self.char_at(start + i) {
-                Some(char) => buffer.push(*char),
-                _ => return false,
-            };
-        }
-
-        buffer == search
+        self.chars[start..].starts_with(search)
     }
 
     fn skip(&mut self, count: usize) {
