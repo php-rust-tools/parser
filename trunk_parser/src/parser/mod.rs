@@ -936,14 +936,25 @@ impl Parser {
                     ret
                 }
             }
-            TokenKind::Function if matches!(self.peek.kind, TokenKind::Identifier(_) | TokenKind::Ampersand) => {
+            TokenKind::Function
+                if matches!(
+                    self.peek.kind,
+                    TokenKind::Identifier(_) | TokenKind::Ampersand
+                ) =>
+            {
                 // FIXME: This is incredibly hacky but we don't have a way to look at
                 // the next N tokens right now. We could probably do with a `peek_buf()`
                 // method like the Lexer has.
                 if self.peek.kind == TokenKind::Ampersand {
                     let mut cloned = self.iter.clone();
                     for (index, _) in self.iter.clone().enumerate() {
-                        if ! matches!(cloned.nth(index), Some(Token { kind: TokenKind::Identifier(_), .. })) {
+                        if !matches!(
+                            cloned.nth(index),
+                            Some(Token {
+                                kind: TokenKind::Identifier(_),
+                                ..
+                            })
+                        ) {
                             let expr = self.expression(Precedence::Lowest)?;
 
                             self.semi()?;
@@ -1405,14 +1416,14 @@ impl Parser {
                     params,
                     body,
                     return_type,
-                    by_ref
+                    by_ref,
                 } => Ok(Statement::Method {
                     name,
                     params,
                     body,
                     flags: vec![],
                     return_type,
-                    by_ref
+                    by_ref,
                 }),
                 _ => unreachable!(),
             },
@@ -3881,60 +3892,66 @@ mod tests {
 
     #[test]
     fn function_returning_ref() {
-        assert_ast("<?php function &a($b) {}", &[Statement::Function {
-            name: "a".into(),
-            params: vec![Param {
-                name: Expression::Variable { name: "b".into() },
-                r#type: None,
-                variadic: false,
-                flag: None,
-                default: None,
-                by_ref: false,
+        assert_ast(
+            "<?php function &a($b) {}",
+            &[Statement::Function {
+                name: "a".into(),
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: None,
+                    variadic: false,
+                    flag: None,
+                    default: None,
+                    by_ref: false,
+                }],
+                body: vec![],
+                return_type: None,
+                by_ref: true,
             }],
-            body: vec![],
-            return_type: None,
-            by_ref: true,
-        }]);
+        );
     }
 
     #[test]
     fn closure_returning_ref() {
-        assert_ast("<?php function &() {};", &[
-            expr!(Expression::Closure {
+        assert_ast(
+            "<?php function &() {};",
+            &[expr!(Expression::Closure {
                 params: vec![],
                 body: vec![],
                 return_type: None,
                 r#static: false,
                 uses: vec![],
                 by_ref: true,
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn static_closures_returning_by_ref() {
-        assert_ast("<?php static function &() {};", &[
-            expr!(Expression::Closure {
+        assert_ast(
+            "<?php static function &() {};",
+            &[expr!(Expression::Closure {
                 params: vec![],
                 body: vec![],
                 return_type: None,
                 r#static: true,
                 uses: vec![],
                 by_ref: true,
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
     fn arrow_functions_returning_by_ref() {
-        assert_ast("<?php fn &() => null;", &[
-            expr!(Expression::ArrowFunction {
+        assert_ast(
+            "<?php fn &() => null;",
+            &[expr!(Expression::ArrowFunction {
                 params: vec![],
                 expr: Box::new(Expression::Null),
                 return_type: None,
                 by_ref: true,
-            })
-        ]);
+            })],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
