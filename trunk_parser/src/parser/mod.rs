@@ -765,14 +765,23 @@ impl Parser {
             TokenKind::Namespace => {
                 self.next();
 
-                let name = self.name()?;
-
                 let mut braced = false;
-                if self.current.kind == TokenKind::LeftBrace {
+
+                let name = if self.current.kind == TokenKind::LeftBrace {
                     braced = true;
-                    self.next();
+                    self.lbrace()?;
+                    None
                 } else {
-                    self.semi()?;
+                    Some(self.name()?)
+                };
+
+                if name.is_some() {
+                    if self.current.kind == TokenKind::LeftBrace {
+                        braced = true;
+                        self.next();
+                    } else {
+                        self.semi()?;
+                    }
                 }
 
                 let body = if braced {
@@ -3597,6 +3606,48 @@ mod tests {
                         }),
                     },
                 ],
+            }],
+        );
+    }
+
+    #[test]
+    fn basic_namespace() {
+        assert_ast(
+            "<?php namespace Foo;",
+            &[Statement::Namespace {
+                name: Some("Foo".as_bytes().into()),
+                body: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn basic_braced_namespace() {
+        assert_ast(
+            "<?php namespace Foo {}",
+            &[Statement::Namespace {
+                name: Some("Foo".as_bytes().into()),
+                body: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn braced_global_namespace() {
+        assert_ast(
+            "<?php
+        namespace {
+            function globalFunc() {}
+        }
+        ",
+            &[Statement::Namespace {
+                name: None,
+                body: vec![Statement::Function {
+                    name: "globalFunc".as_bytes().into(),
+                    params: vec![],
+                    body: vec![],
+                    return_type: None,
+                }],
             }],
         );
     }
