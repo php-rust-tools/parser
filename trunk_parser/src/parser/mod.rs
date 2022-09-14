@@ -1630,12 +1630,14 @@ impl Parser {
                         uses,
                         return_type,
                         body,
+                        by_ref,
                         ..
                     } => Expression::Closure {
                         params,
                         uses,
                         return_type,
                         body,
+                        by_ref,
                         r#static: true,
                     },
                     _ => unreachable!(),
@@ -1643,6 +1645,13 @@ impl Parser {
             }
             TokenKind::Function => {
                 self.next();
+
+                let by_ref = if self.current.kind == TokenKind::Ampersand {
+                    self.next();
+                    true
+                } else {
+                    false
+                };
 
                 self.lparen()?;
 
@@ -1715,6 +1724,7 @@ impl Parser {
                     return_type,
                     body,
                     r#static: false,
+                    by_ref,
                 }
             }
             TokenKind::Fn => {
@@ -3758,7 +3768,8 @@ mod tests {
                 uses: vec![],
                 return_type: None,
                 body: vec![],
-                r#static: false
+                r#static: false,
+                by_ref: false,
             })],
         );
     }
@@ -3784,7 +3795,8 @@ mod tests {
                 uses: vec![],
                 return_type: None,
                 body: vec![],
-                r#static: true
+                r#static: true,
+                by_ref: false,
             })],
         );
     }
@@ -3873,6 +3885,20 @@ mod tests {
             return_type: None,
             by_ref: true,
         }]);
+    }
+
+    #[test]
+    fn closure_returning_ref() {
+        assert_ast("<?php function &() {};", &[
+            expr!(Expression::Closure {
+                params: vec![],
+                body: vec![],
+                return_type: None,
+                r#static: false,
+                uses: vec![],
+                by_ref: true,
+            })
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

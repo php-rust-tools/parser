@@ -453,6 +453,7 @@ pub enum Expression {
         return_type: Option<Type>,
         body: Block,
         r#static: bool,
+        by_ref: bool,
     },
     ArrowFunction {
         params: Vec<Param>,
