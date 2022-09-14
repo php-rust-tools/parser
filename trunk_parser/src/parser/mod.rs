@@ -8,7 +8,7 @@ use crate::{
 use std::{fmt::Display, vec::IntoIter};
 use trunk_lexer::{Span, Token, TokenKind};
 
-use self::precedence::{Precedence, Associativity};
+use self::precedence::{Associativity, Precedence};
 
 type ParseResult<T> = Result<T, ParseError>;
 
@@ -1835,11 +1835,13 @@ impl Parser {
                     break;
                 }
 
-                if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Left)) {
+                if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Left))
+                {
                     break;
                 }
 
-                if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Non)) {
+                if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Non))
+                {
                     return Err(ParseError::UnexpectedToken(kind.to_string(), span));
                 }
 
@@ -2221,8 +2223,8 @@ mod tests {
         },
         Catch, Expression, Identifier, Param, Statement, Type,
     };
+    use pretty_assertions::assert_eq;
     use trunk_lexer::Lexer;
-    use pretty_assertions::{assert_eq};
 
     macro_rules! function {
         ($name:literal, $params:expr, $body:expr) => {
