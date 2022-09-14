@@ -3972,6 +3972,20 @@ mod tests {
         ]);
     }
 
+    #[test]
+    fn static_arrow_functions_returning_by_ref() {
+        assert_ast(
+            "<?php static fn &() => null;",
+            &[expr!(Expression::ArrowFunction {
+                params: vec![],
+                expr: Box::new(Expression::Null),
+                return_type: None,
+                by_ref: true,
+                r#static: true,
+            })],
+        );
+    }
+
     fn assert_ast(source: &str, expected: &[Statement]) {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();
