@@ -1651,7 +1651,19 @@ impl Parser {
                         by_ref,
                         r#static: true,
                     },
-                    Expression::ArrowFunction { params, return_type, expr, by_ref, .. } => Expression::ArrowFunction { params, return_type, expr, by_ref, r#static: true },
+                    Expression::ArrowFunction {
+                        params,
+                        return_type,
+                        expr,
+                        by_ref,
+                        ..
+                    } => Expression::ArrowFunction {
+                        params,
+                        return_type,
+                        expr,
+                        by_ref,
+                        r#static: true,
+                    },
                     _ => unreachable!(),
                 }
             }
@@ -3961,15 +3973,16 @@ mod tests {
 
     #[test]
     fn static_arrow_functions() {
-        assert_ast("<?php static fn () => null;", &[
-            expr!(Expression::ArrowFunction {
+        assert_ast(
+            "<?php static fn () => null;",
+            &[expr!(Expression::ArrowFunction {
                 params: vec![],
                 expr: Box::new(Expression::Null),
                 return_type: None,
                 by_ref: false,
                 r#static: true,
-            })
-        ]);
+            })],
+        );
     }
 
     #[test]
