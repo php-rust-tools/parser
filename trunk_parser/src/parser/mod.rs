@@ -171,6 +171,15 @@ impl Parser {
         self.skip_comments();
 
         let statement = match &self.current.kind {
+            TokenKind::Goto => {
+                self.next();
+
+                let label = self.ident()?.into();
+
+                self.semi()?;
+
+                Statement::Goto { label }
+            },
             TokenKind::HaltCompiler => {
                 self.next();
 
@@ -4076,6 +4085,13 @@ mod tests {
                 }]
             })],
         );
+    }
+
+    #[test]
+    fn simple_goto() {
+        assert_ast("<?php goto a;", &[
+            Statement::Goto { label: "a".into() }
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

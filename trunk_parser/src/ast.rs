@@ -178,6 +178,9 @@ impl From<&TokenKind> for IncludeKind {
 #[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(ByteString),
+    Goto {
+        label: Identifier,
+    },
     HaltCompiler {
         content: Option<ByteString>,
     },
