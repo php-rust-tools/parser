@@ -2032,7 +2032,7 @@ impl Parser {
                         args.push(Arg {
                             name: None,
                             unpack: false,
-                            value: Expression::VariadicPlaceholder
+                            value: Expression::VariadicPlaceholder,
                         });
 
                         break;
@@ -2114,9 +2114,9 @@ impl Parser {
                                 args.push(Arg {
                                     name: None,
                                     unpack: false,
-                                    value: Expression::VariadicPlaceholder
+                                    value: Expression::VariadicPlaceholder,
                                 });
-    
+
                                 break;
                             }
 
@@ -2180,12 +2180,12 @@ impl Parser {
                             self.next();
                             unpack = true;
                         }
-                        
+
                         if unpack && self.current.kind == TokenKind::RightParen {
                             args.push(Arg {
                                 name: None,
                                 unpack: false,
-                                value: Expression::VariadicPlaceholder
+                                value: Expression::VariadicPlaceholder,
                             });
 
                             break;
@@ -4031,41 +4031,51 @@ mod tests {
 
     #[test]
     fn first_class_callables() {
-        assert_ast("<?php foo(...);", &[
-            expr!(Expression::Call { target: Box::new(Expression::Identifier { name: "foo".into() }), args: vec![
-                Arg {
+        assert_ast(
+            "<?php foo(...);",
+            &[expr!(Expression::Call {
+                target: Box::new(Expression::Identifier { name: "foo".into() }),
+                args: vec![Arg {
                     name: None,
                     unpack: false,
                     value: Expression::VariadicPlaceholder
-                }
-            ] })
-        ]);
+                }]
+            })],
+        );
     }
 
     #[test]
     fn first_class_callable_method() {
-        assert_ast("<?php $this->foo(...);", &[
-            expr!(Expression::MethodCall { target: Box::new(Expression::Variable { name: "this".into() }), method: Box::new(Expression::Identifier { name: "foo".into() }), args: vec![
-                Arg {
+        assert_ast(
+            "<?php $this->foo(...);",
+            &[expr!(Expression::MethodCall {
+                target: Box::new(Expression::Variable {
+                    name: "this".into()
+                }),
+                method: Box::new(Expression::Identifier { name: "foo".into() }),
+                args: vec![Arg {
                     name: None,
                     unpack: false,
                     value: Expression::VariadicPlaceholder
-                }
-            ] })
-        ]);
+                }]
+            })],
+        );
     }
 
     #[test]
     fn first_class_callable_static_method() {
-        assert_ast("<?php A::foo(...);", &[
-            expr!(Expression::StaticMethodCall { target: Box::new(Expression::Identifier { name: "A".into() }), method: "foo".into(), args: vec![
-                Arg {
+        assert_ast(
+            "<?php A::foo(...);",
+            &[expr!(Expression::StaticMethodCall {
+                target: Box::new(Expression::Identifier { name: "A".into() }),
+                method: "foo".into(),
+                args: vec![Arg {
                     name: None,
                     unpack: false,
                     value: Expression::VariadicPlaceholder
-                }
-            ] })
-        ]);
+                }]
+            })],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
