@@ -808,6 +808,7 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
         b"for" => TokenKind::For,
         b"foreach" => TokenKind::Foreach,
         b"function" => TokenKind::Function,
+        b"goto" => TokenKind::Goto,
         b"if" => TokenKind::If,
         b"include" => TokenKind::Include,
         b"include_once" => TokenKind::IncludeOnce,

@@ -91,6 +91,7 @@ pub enum TokenKind {
     Foreach,
     FullyQualifiedIdentifier(ByteString),
     Function,
+    Goto,
     GreaterThan,
     GreaterThanEquals,
     Identifier(ByteString),
@@ -259,6 +260,7 @@ impl Display for TokenKind {
                 return write!(f, "{}", String::from_utf8_lossy(id));
             }
             Self::Function => "function",
+            Self::Goto => "goto",
             Self::GreaterThan => ">",
             Self::GreaterThanEquals => ">=",
             Self::Identifier(id) => {
