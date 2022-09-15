@@ -200,11 +200,11 @@ impl Lexer {
             // Single quoted string.
             [b'\'', ..] => {
                 self.next();
-                self.tokenize_single_quote_string()
+                self.tokenize_single_quote_string()?
             }
             [b'"', ..] => {
                 self.next();
-                self.tokenize_double_quote_string()
+                self.tokenize_double_quote_string()?
             }
             [b'$', ..] => {
                 self.next();
@@ -507,70 +507,135 @@ impl Lexer {
         Ok(Token { kind, span })
     }
 
-    fn tokenize_single_quote_string(&mut self) -> TokenKind {
+    fn tokenize_single_quote_string(&mut self) -> Result<TokenKind, LexerError> {
         let mut buffer = Vec::new();
-        let mut escaping = false;
 
-        while let Some(n) = self.current {
-            if !escaping && n == b'\'' {
-                self.next();
-
-                break;
+        loop {
+            match self.peek_buf() {
+                [b'\'', ..] => {
+                    self.next();
+                    break;
+                }
+                &[b'\\', b @ b'\'' | b @ b'\\', ..] => {
+                    self.skip(2);
+                    buffer.push(b);
+                }
+                &[b, ..] => {
+                    self.next();
+                    buffer.push(b);
+                }
+                [] => return Err(LexerError::UnexpectedEndOfFile),
             }
-
-            if n == b'\\' && !escaping {
-                escaping = true;
-                self.next();
-                continue;
-            }
-
-            if escaping && [b'\\', b'\''].contains(&n) {
-                escaping = false;
-                buffer.push(n);
-                self.next();
-                continue;
-            }
-
-            escaping = false;
-
-            buffer.push(n);
-            self.next();
         }
 
-        TokenKind::ConstantString(buffer.into())
+        Ok(TokenKind::ConstantString(buffer.into()))
     }
 
-    fn tokenize_double_quote_string(&mut self) -> TokenKind {
+    fn tokenize_double_quote_string(&mut self) -> Result<TokenKind, LexerError> {
         let mut buffer = Vec::new();
-        let mut escaping = false;
 
-        while let Some(n) = self.current {
-            if !escaping && n == b'"' {
-                self.next();
+        loop {
+            match self.peek_buf() {
+                [b'"', ..] => {
+                    self.next();
+                    break;
+                }
+                &[b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
+                    self.skip(2);
+                    buffer.push(b);
+                }
+                &[b'\\', b'n', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\n');
+                }
+                &[b'\\', b'r', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\r');
+                }
+                &[b'\\', b't', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\t');
+                }
+                &[b'\\', b'v', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\x0b');
+                }
+                &[b'\\', b'e', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\x1b');
+                }
+                &[b'\\', b'f', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\x0c');
+                }
+                &[b'\\', b'x', b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F'), ..] => {
+                    self.skip(3);
 
-                break;
+                    let mut hex = String::from(b as char);
+                    if let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = self.current {
+                        self.next();
+                        hex.push(b as char);
+                    }
+
+                    let b = u8::from_str_radix(&hex, 16).unwrap();
+                    buffer.push(b);
+                }
+                &[b'\\', b'u', b'{', ..] => {
+                    self.skip(3);
+
+                    let mut code_point = String::new();
+                    while let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = self.current {
+                        self.next();
+                        code_point.push(b as char);
+                    }
+
+                    if code_point.is_empty() || self.current != Some(b'}') {
+                        return Err(LexerError::InvalidUnicodeEscape);
+                    }
+                    self.next();
+
+                    let c = if let Ok(c) = u32::from_str_radix(&code_point, 16) {
+                        c
+                    } else {
+                        return Err(LexerError::InvalidUnicodeEscape);
+                    };
+
+                    if let Some(c) = char::from_u32(c) {
+                        let mut tmp = [0; 4];
+                        let bytes = c.encode_utf8(&mut tmp);
+                        buffer.extend(bytes.as_bytes());
+                    } else {
+                        return Err(LexerError::InvalidUnicodeEscape);
+                    }
+                }
+                &[b'\\', b @ b'0'..=b'7', ..] => {
+                    self.skip(2);
+
+                    let mut octal = String::from(b as char);
+                    if let Some(b @ b'0'..=b'7') = self.current {
+                        self.next();
+                        octal.push(b as char);
+                    }
+                    if let Some(b @ b'0'..=b'7') = self.current {
+                        self.next();
+                        octal.push(b as char);
+                    }
+
+                    if let Ok(b) = u8::from_str_radix(&octal, 8) {
+                        buffer.push(b);
+                    } else {
+                        return Err(LexerError::InvalidOctalEscape);
+                    }
+                }
+                &[b, ..] => {
+                    self.next();
+                    buffer.push(b);
+                }
+                [] => return Err(LexerError::UnexpectedEndOfFile),
             }
-
-            if n == b'\\' && !escaping {
-                escaping = true;
-                self.next();
-                continue;
-            }
-
-            if escaping && [b'\\', b'"'].contains(&n) {
-                escaping = false;
-                buffer.push(n);
-                self.next();
-                continue;
-            }
-
-            escaping = false;
-
-            buffer.push(n);
-            self.next();
         }
 
-        TokenKind::ConstantString(buffer.into())
+        Ok(TokenKind::ConstantString(buffer.into()))
     }
 
     fn tokenize_variable(&mut self) -> TokenKind {
@@ -730,17 +795,19 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     })
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum LexerError {
     UnexpectedEndOfFile,
     UnexpectedCharacter(u8),
     InvalidHaltCompiler,
+    InvalidOctalEscape,
+    InvalidUnicodeEscape,
 }
 
 #[cfg(test)]
 mod tests {
     use super::Lexer;
-    use crate::{ByteString, OpenTagKind, Token, TokenKind};
+    use crate::{ByteString, LexerError, OpenTagKind, Token, TokenKind};
 
     macro_rules! open {
         () => {
@@ -840,6 +907,57 @@ string.'"#,
                 TokenKind::ConstantString("This is a multi-line\nstring.".into()),
             ],
         );
+    }
+
+    #[test]
+    fn string_escapes() {
+        assert_tokens(
+            "<?php '\\ \\' ' ",
+            &[open!(), TokenKind::ConstantString("\\ \' ".into())],
+        );
+        assert_tokens(
+            r#"<?php "\n \r \t \v \e \f \\ \$ \" " "#,
+            &[
+                open!(),
+                TokenKind::ConstantString("\n \r \t \x0b \x1b \x0c \\ $ \" ".into()),
+            ],
+        );
+        // octal
+        assert_tokens(
+            r#"<?php "\0 \7 \66 \377 \9 \0000" "#,
+            &[
+                open!(),
+                TokenKind::ConstantString(b"\0 \x07 \x36 \xff \\9 \00".into()),
+            ],
+        );
+        // hex
+        assert_tokens(
+            r#"<?php "\x \x0 \xa \xA \xff \xFF" "#,
+            &[
+                open!(),
+                TokenKind::ConstantString(b"\\x \0 \x0a \x0a \xff \xff".into()),
+            ],
+        );
+        // Invalid escapes that should be taken literally.
+        assert_tokens(
+            r#"<?php "\x \u" "#,
+            &[open!(), TokenKind::ConstantString(r"\x \u".into())],
+        );
+    }
+
+    #[test]
+    fn invalid_escapes() {
+        assert_error(r#"<?php "\666" "#, LexerError::InvalidOctalEscape);
+        assert_error(r#"<?php "\u{" "#, LexerError::InvalidUnicodeEscape);
+        assert_error(r#"<?php "\u{}" "#, LexerError::InvalidUnicodeEscape);
+        assert_error(r#"<?php "\u{42" "#, LexerError::InvalidUnicodeEscape);
+        assert_error(r#"<?php "\u{110000}" "#, LexerError::InvalidUnicodeEscape);
+    }
+
+    #[test]
+    fn unterminated_strings() {
+        assert_error(r#"<?php "unterminated "#, LexerError::UnexpectedEndOfFile);
+        assert_error("<?php 'unterminated ", LexerError::UnexpectedEndOfFile);
     }
 
     #[test]
@@ -1034,6 +1152,11 @@ function hello_world() {
                 ),
             ],
         );
+    }
+
+    fn assert_error<B: ?Sized + AsRef<[u8]>>(source: &B, expected: LexerError) {
+        let mut lexer = Lexer::new(None);
+        assert_eq!(lexer.tokenize(source), Err(expected));
     }
 
     fn assert_tokens<B: ?Sized + AsRef<[u8]>>(source: &B, expected: &[TokenKind]) {
