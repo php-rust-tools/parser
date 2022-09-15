@@ -179,14 +179,14 @@ impl Parser {
                 self.semi()?;
 
                 Statement::Goto { label }
-            },
+            }
             TokenKind::Identifier(_) if self.peek.kind == TokenKind::Colon => {
                 let label = self.ident()?.into();
 
                 expect!(self, TokenKind::Colon, "expected :");
 
                 Statement::Label { label }
-            },
+            }
             TokenKind::HaltCompiler => {
                 self.next();
 
@@ -4096,16 +4096,12 @@ mod tests {
 
     #[test]
     fn simple_goto() {
-        assert_ast("<?php goto a;", &[
-            Statement::Goto { label: "a".into() }
-        ]);
+        assert_ast("<?php goto a;", &[Statement::Goto { label: "a".into() }]);
     }
 
     #[test]
     fn label() {
-        assert_ast("<?php a:", &[
-            Statement::Label { label: "a".into() }
-        ]);
+        assert_ast("<?php a:", &[Statement::Label { label: "a".into() }]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
