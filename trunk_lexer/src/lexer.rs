@@ -568,6 +568,65 @@ impl Lexer {
                     self.skip(2);
                     buffer.push(b'\x0c');
                 }
+                &[b'\\', b'x', b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F'), ..] => {
+                    self.skip(3);
+
+                    let mut hex = String::from(b as char);
+                    if let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = self.current {
+                        self.next();
+                        hex.push(b as char);
+                    }
+
+                    let b = u8::from_str_radix(&hex, 16).unwrap();
+                    buffer.push(b);
+                }
+                &[b'\\', b'u', b'{', ..] => {
+                    self.skip(3);
+
+                    let mut code_point = String::new();
+                    while let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = self.current {
+                        self.next();
+                        code_point.push(b as char);
+                    }
+
+                    if code_point.is_empty() || self.current != Some(b'}') {
+                        return Err(LexerError::InvalidUnicodeEscape);
+                    }
+                    self.next();
+
+                    let c = if let Ok(c) = u32::from_str_radix(&code_point, 16) {
+                        c
+                    } else {
+                        return Err(LexerError::InvalidUnicodeEscape);
+                    };
+
+                    if let Some(c) = char::from_u32(c) {
+                        let mut tmp = [0; 4];
+                        let bytes = c.encode_utf8(&mut tmp);
+                        buffer.extend(bytes.as_bytes());
+                    } else {
+                        return Err(LexerError::InvalidUnicodeEscape);
+                    }
+                }
+                &[b'\\', b @ b'0'..=b'7', ..] => {
+                    self.skip(2);
+
+                    let mut octal = String::from(b as char);
+                    if let Some(b @ b'0'..=b'7') = self.current {
+                        self.next();
+                        octal.push(b as char);
+                    }
+                    if let Some(b @ b'0'..=b'7') = self.current {
+                        self.next();
+                        octal.push(b as char);
+                    }
+
+                    if let Ok(b) = u8::from_str_radix(&octal, 8) {
+                        buffer.push(b);
+                    } else {
+                        return Err(LexerError::InvalidOctalEscape);
+                    }
+                }
                 &[b, ..] => {
                     self.next();
                     buffer.push(b);
@@ -741,6 +800,8 @@ pub enum LexerError {
     UnexpectedEndOfFile,
     UnexpectedCharacter(u8),
     InvalidHaltCompiler,
+    InvalidOctalEscape,
+    InvalidUnicodeEscape,
 }
 
 #[cfg(test)]
@@ -861,6 +922,36 @@ string.'"#,
                 TokenKind::ConstantString("\n \r \t \x0b \x1b \x0c \\ $ \" ".into()),
             ],
         );
+        // octal
+        assert_tokens(
+            r#"<?php "\0 \7 \66 \377 \9 \0000" "#,
+            &[
+                open!(),
+                TokenKind::ConstantString(b"\0 \x07 \x36 \xff \\9 \00".into()),
+            ],
+        );
+        // hex
+        assert_tokens(
+            r#"<?php "\x \x0 \xa \xA \xff \xFF" "#,
+            &[
+                open!(),
+                TokenKind::ConstantString(b"\\x \0 \x0a \x0a \xff \xff".into()),
+            ],
+        );
+        // Invalid escapes that should be taken literally.
+        assert_tokens(
+            r#"<?php "\x \u" "#,
+            &[open!(), TokenKind::ConstantString(r"\x \u".into())],
+        );
+    }
+
+    #[test]
+    fn invalid_escapes() {
+        assert_error(r#"<?php "\666" "#, LexerError::InvalidOctalEscape);
+        assert_error(r#"<?php "\u{" "#, LexerError::InvalidUnicodeEscape);
+        assert_error(r#"<?php "\u{}" "#, LexerError::InvalidUnicodeEscape);
+        assert_error(r#"<?php "\u{42" "#, LexerError::InvalidUnicodeEscape);
+        assert_error(r#"<?php "\u{110000}" "#, LexerError::InvalidUnicodeEscape);
     }
 
     #[test]
