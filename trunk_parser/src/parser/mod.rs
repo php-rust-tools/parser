@@ -2028,6 +2028,16 @@ impl Parser {
                         unpack = true;
                     }
 
+                    if unpack && self.current.kind == TokenKind::RightParen {
+                        args.push(Arg {
+                            name: None,
+                            unpack: false,
+                            value: Expression::VariadicPlaceholder,
+                        });
+
+                        break;
+                    }
+
                     let value = self.expression(Precedence::Lowest)?;
 
                     args.push(Arg {
@@ -2100,6 +2110,16 @@ impl Parser {
                                 unpack = true;
                             }
 
+                            if unpack && self.current.kind == TokenKind::RightParen {
+                                args.push(Arg {
+                                    name: None,
+                                    unpack: false,
+                                    value: Expression::VariadicPlaceholder,
+                                });
+
+                                break;
+                            }
+
                             let value = self.expression(Precedence::Lowest)?;
 
                             args.push(Arg {
@@ -2159,6 +2179,16 @@ impl Parser {
                         } else if self.current.kind == TokenKind::Ellipsis {
                             self.next();
                             unpack = true;
+                        }
+
+                        if unpack && self.current.kind == TokenKind::RightParen {
+                            args.push(Arg {
+                                name: None,
+                                unpack: false,
+                                value: Expression::VariadicPlaceholder,
+                            });
+
+                            break;
                         }
 
                         let value = self.expression(Precedence::Lowest)?;
@@ -3995,6 +4025,55 @@ mod tests {
                 return_type: None,
                 by_ref: true,
                 r#static: true,
+            })],
+        );
+    }
+
+    #[test]
+    fn first_class_callables() {
+        assert_ast(
+            "<?php foo(...);",
+            &[expr!(Expression::Call {
+                target: Box::new(Expression::Identifier { name: "foo".into() }),
+                args: vec![Arg {
+                    name: None,
+                    unpack: false,
+                    value: Expression::VariadicPlaceholder
+                }]
+            })],
+        );
+    }
+
+    #[test]
+    fn first_class_callable_method() {
+        assert_ast(
+            "<?php $this->foo(...);",
+            &[expr!(Expression::MethodCall {
+                target: Box::new(Expression::Variable {
+                    name: "this".into()
+                }),
+                method: Box::new(Expression::Identifier { name: "foo".into() }),
+                args: vec![Arg {
+                    name: None,
+                    unpack: false,
+                    value: Expression::VariadicPlaceholder
+                }]
+            })],
+        );
+    }
+
+    #[test]
+    fn first_class_callable_static_method() {
+        assert_ast(
+            "<?php A::foo(...);",
+            &[expr!(Expression::StaticMethodCall {
+                target: Box::new(Expression::Identifier { name: "A".into() }),
+                method: "foo".into(),
+                args: vec![Arg {
+                    name: None,
+                    unpack: false,
+                    value: Expression::VariadicPlaceholder
+                }]
             })],
         );
     }
