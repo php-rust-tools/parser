@@ -200,11 +200,11 @@ impl Lexer {
             // Single quoted string.
             [b'\'', ..] => {
                 self.next();
-                self.tokenize_single_quote_string()
+                self.tokenize_single_quote_string()?
             }
             [b'"', ..] => {
                 self.next();
-                self.tokenize_double_quote_string()
+                self.tokenize_double_quote_string()?
             }
             [b'$', ..] => {
                 self.next();
@@ -507,70 +507,52 @@ impl Lexer {
         Ok(Token { kind, span })
     }
 
-    fn tokenize_single_quote_string(&mut self) -> TokenKind {
+    fn tokenize_single_quote_string(&mut self) -> Result<TokenKind, LexerError> {
         let mut buffer = Vec::new();
-        let mut escaping = false;
 
-        while let Some(n) = self.current {
-            if !escaping && n == b'\'' {
-                self.next();
-
-                break;
+        loop {
+            match self.peek_buf() {
+                [b'\'', ..] => {
+                    self.next();
+                    break;
+                }
+                &[b'\\', b @ b'\'' | b @ b'\\', ..] => {
+                    self.skip(2);
+                    buffer.push(b);
+                }
+                &[b, ..] => {
+                    self.next();
+                    buffer.push(b);
+                }
+                [] => return Err(LexerError::UnexpectedEndOfFile),
             }
-
-            if n == b'\\' && !escaping {
-                escaping = true;
-                self.next();
-                continue;
-            }
-
-            if escaping && [b'\\', b'\''].contains(&n) {
-                escaping = false;
-                buffer.push(n);
-                self.next();
-                continue;
-            }
-
-            escaping = false;
-
-            buffer.push(n);
-            self.next();
         }
 
-        TokenKind::ConstantString(buffer.into())
+        Ok(TokenKind::ConstantString(buffer.into()))
     }
 
-    fn tokenize_double_quote_string(&mut self) -> TokenKind {
+    fn tokenize_double_quote_string(&mut self) -> Result<TokenKind, LexerError> {
         let mut buffer = Vec::new();
-        let mut escaping = false;
 
-        while let Some(n) = self.current {
-            if !escaping && n == b'"' {
-                self.next();
-
-                break;
+        loop {
+            match self.peek_buf() {
+                [b'"', ..] => {
+                    self.next();
+                    break;
+                }
+                &[b'\\', b @ b'"' | b @ b'\\', ..] => {
+                    self.skip(2);
+                    buffer.push(b);
+                }
+                &[b, ..] => {
+                    self.next();
+                    buffer.push(b);
+                }
+                [] => return Err(LexerError::UnexpectedEndOfFile),
             }
-
-            if n == b'\\' && !escaping {
-                escaping = true;
-                self.next();
-                continue;
-            }
-
-            if escaping && [b'\\', b'"'].contains(&n) {
-                escaping = false;
-                buffer.push(n);
-                self.next();
-                continue;
-            }
-
-            escaping = false;
-
-            buffer.push(n);
-            self.next();
         }
 
-        TokenKind::ConstantString(buffer.into())
+        Ok(TokenKind::ConstantString(buffer.into()))
     }
 
     fn tokenize_variable(&mut self) -> TokenKind {
@@ -730,7 +712,7 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     })
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum LexerError {
     UnexpectedEndOfFile,
     UnexpectedCharacter(u8),
@@ -740,7 +722,7 @@ pub enum LexerError {
 #[cfg(test)]
 mod tests {
     use super::Lexer;
-    use crate::{ByteString, OpenTagKind, Token, TokenKind};
+    use crate::{ByteString, LexerError, OpenTagKind, Token, TokenKind};
 
     macro_rules! open {
         () => {
@@ -840,6 +822,12 @@ string.'"#,
                 TokenKind::ConstantString("This is a multi-line\nstring.".into()),
             ],
         );
+    }
+
+    #[test]
+    fn unterminated_strings() {
+        assert_error(r#"<?php "unterminated "#, LexerError::UnexpectedEndOfFile);
+        assert_error("<?php 'unterminated ", LexerError::UnexpectedEndOfFile);
     }
 
     #[test]
@@ -1034,6 +1022,11 @@ function hello_world() {
                 ),
             ],
         );
+    }
+
+    fn assert_error<B: ?Sized + AsRef<[u8]>>(source: &B, expected: LexerError) {
+        let mut lexer = Lexer::new(None);
+        assert_eq!(lexer.tokenize(source), Err(expected));
     }
 
     fn assert_tokens<B: ?Sized + AsRef<[u8]>>(source: &B, expected: &[TokenKind]) {
