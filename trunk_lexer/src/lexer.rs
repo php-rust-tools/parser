@@ -540,9 +540,33 @@ impl Lexer {
                     self.next();
                     break;
                 }
-                &[b'\\', b @ b'"' | b @ b'\\', ..] => {
+                &[b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
                     self.skip(2);
                     buffer.push(b);
+                }
+                &[b'\\', b'n', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\n');
+                }
+                &[b'\\', b'r', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\r');
+                }
+                &[b'\\', b't', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\t');
+                }
+                &[b'\\', b'v', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\x0b');
+                }
+                &[b'\\', b'e', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\x1b');
+                }
+                &[b'\\', b'f', ..] => {
+                    self.skip(2);
+                    buffer.push(b'\x0c');
                 }
                 &[b, ..] => {
                     self.next();
@@ -820,6 +844,21 @@ string.'"#,
                 TokenKind::ConstantString("I'm a developer.".into()),
                 TokenKind::ConstantString("This is a backslash \\.".into()),
                 TokenKind::ConstantString("This is a multi-line\nstring.".into()),
+            ],
+        );
+    }
+
+    #[test]
+    fn string_escapes() {
+        assert_tokens(
+            "<?php '\\ \\' ' ",
+            &[open!(), TokenKind::ConstantString("\\ \' ".into())],
+        );
+        assert_tokens(
+            r#"<?php "\n \r \t \v \e \f \\ \$ \" " "#,
+            &[
+                open!(),
+                TokenKind::ConstantString("\n \r \t \x0b \x1b \x0c \\ $ \" ".into()),
             ],
         );
     }
