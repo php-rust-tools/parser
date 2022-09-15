@@ -181,6 +181,9 @@ pub enum Statement {
     Goto {
         label: Identifier,
     },
+    Label {
+        label: Identifier,
+    },
     HaltCompiler {
         content: Option<ByteString>,
     },
