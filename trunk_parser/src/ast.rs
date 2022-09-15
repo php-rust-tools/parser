@@ -11,6 +11,7 @@ pub enum Type {
     Intersection(Vec<ByteString>),
     Void,
     Null,
+    True,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
