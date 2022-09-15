@@ -12,6 +12,7 @@ pub enum Type {
     Void,
     Null,
     True,
+    False,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]

@@ -165,6 +165,7 @@ impl Parser {
             b"void" => Type::Void,
             b"null" => Type::Null,
             b"true" => Type::True,
+            b"false" => Type::False,
             _ => Type::Plain(id),
         })
     }
@@ -4117,6 +4118,13 @@ mod tests {
     fn true_return_type() {
         assert_ast("<?php function a(): true {}", &[
             Statement::Function { name: "a".into(), params: vec![], body: vec![], return_type: Some(Type::True), by_ref: false }
+        ]);
+    }
+
+    #[test]
+    fn false_return_type() {
+        assert_ast("<?php function a(): false {}", &[
+            Statement::Function { name: "a".into(), params: vec![], body: vec![], return_type: Some(Type::False), by_ref: false }
         ]);
     }
 
