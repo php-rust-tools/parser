@@ -2110,6 +2110,16 @@ impl Parser {
                                 unpack = true;
                             }
 
+                            if unpack && self.current.kind == TokenKind::RightParen {
+                                args.push(Arg {
+                                    name: None,
+                                    unpack: false,
+                                    value: Expression::VariadicPlaceholder
+                                });
+    
+                                break;
+                            }
+
                             let value = self.expression(Precedence::Lowest)?;
 
                             args.push(Arg {
@@ -4036,6 +4046,19 @@ mod tests {
     fn first_class_callable_method() {
         assert_ast("<?php $this->foo(...);", &[
             expr!(Expression::MethodCall { target: Box::new(Expression::Variable { name: "this".into() }), method: Box::new(Expression::Identifier { name: "foo".into() }), args: vec![
+                Arg {
+                    name: None,
+                    unpack: false,
+                    value: Expression::VariadicPlaceholder
+                }
+            ] })
+        ]);
+    }
+
+    #[test]
+    fn first_class_callable_static_method() {
+        assert_ast("<?php A::foo(...);", &[
+            expr!(Expression::StaticMethodCall { target: Box::new(Expression::Identifier { name: "A".into() }), method: "foo".into(), args: vec![
                 Arg {
                     name: None,
                     unpack: false,
