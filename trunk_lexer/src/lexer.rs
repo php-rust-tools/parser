@@ -999,6 +999,18 @@ function hello_world() {
     }
 
     #[test]
+    fn fully_qualified_ident() {
+        assert_tokens(
+            "<?php \\Exception \\Foo\\Bar",
+            &[
+                open!(),
+                TokenKind::FullyQualifiedIdentifier(b"\\Exception".into()),
+                TokenKind::FullyQualifiedIdentifier(b"\\Foo\\Bar".into()),
+            ],
+        );
+    }
+
+    #[test]
     fn halt_compiler() {
         assert_tokens(
             "<?php __halt_compiler();",
