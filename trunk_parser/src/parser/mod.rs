@@ -163,6 +163,7 @@ impl Parser {
 
         Ok(match &id[..] {
             b"void" => Type::Void,
+            b"null" => Type::Null,
             _ => Type::Plain(id),
         })
     }
@@ -4102,6 +4103,13 @@ mod tests {
     #[test]
     fn label() {
         assert_ast("<?php a:", &[Statement::Label { label: "a".into() }]);
+    }
+
+    #[test]
+    fn null_return_type() {
+        assert_ast("<?php function a(): null {}", &[
+            Statement::Function { name: "a".into(), params: vec![], body: vec![], return_type: Some(Type::Null), by_ref: false }
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

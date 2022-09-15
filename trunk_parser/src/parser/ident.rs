@@ -57,10 +57,11 @@ impl Parser {
 
     pub(crate) fn type_with_static(&mut self) -> ParseResult<ByteString> {
         Ok(match self.current.kind {
-            TokenKind::Static => {
+            TokenKind::Static | TokenKind::Null | TokenKind::True | TokenKind::False => {
+                let str = self.current.kind.to_string();
                 self.next();
-                "static".into()
-            }
+                str.into()
+            },
             _ => self.full_name_maybe_type_keyword()?,
         })
     }

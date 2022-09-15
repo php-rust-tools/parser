@@ -10,6 +10,7 @@ pub enum Type {
     Union(Vec<ByteString>),
     Intersection(Vec<ByteString>),
     Void,
+    Null,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
