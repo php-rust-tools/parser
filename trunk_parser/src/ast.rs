@@ -414,6 +414,7 @@ pub struct Use {
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
     Empty,
+    VariadicPlaceholder,
     ErrorSuppress {
         expr: Box<Self>,
     },
