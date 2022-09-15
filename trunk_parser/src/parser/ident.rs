@@ -61,7 +61,7 @@ impl Parser {
                 let str = self.current.kind.to_string();
                 self.next();
                 str.into()
-            },
+            }
             _ => self.full_name_maybe_type_keyword()?,
         })
     }

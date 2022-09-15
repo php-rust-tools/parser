@@ -4109,23 +4109,44 @@ mod tests {
 
     #[test]
     fn null_return_type() {
-        assert_ast("<?php function a(): null {}", &[
-            Statement::Function { name: "a".into(), params: vec![], body: vec![], return_type: Some(Type::Null), by_ref: false }
-        ]);
+        assert_ast(
+            "<?php function a(): null {}",
+            &[Statement::Function {
+                name: "a".into(),
+                params: vec![],
+                body: vec![],
+                return_type: Some(Type::Null),
+                by_ref: false,
+            }],
+        );
     }
 
     #[test]
     fn true_return_type() {
-        assert_ast("<?php function a(): true {}", &[
-            Statement::Function { name: "a".into(), params: vec![], body: vec![], return_type: Some(Type::True), by_ref: false }
-        ]);
+        assert_ast(
+            "<?php function a(): true {}",
+            &[Statement::Function {
+                name: "a".into(),
+                params: vec![],
+                body: vec![],
+                return_type: Some(Type::True),
+                by_ref: false,
+            }],
+        );
     }
 
     #[test]
     fn false_return_type() {
-        assert_ast("<?php function a(): false {}", &[
-            Statement::Function { name: "a".into(), params: vec![], body: vec![], return_type: Some(Type::False), by_ref: false }
-        ]);
+        assert_ast(
+            "<?php function a(): false {}",
+            &[Statement::Function {
+                name: "a".into(),
+                params: vec![],
+                body: vec![],
+                return_type: Some(Type::False),
+                by_ref: false,
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
