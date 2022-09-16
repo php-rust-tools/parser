@@ -1933,7 +1933,7 @@ impl Parser {
             TokenKind::Dollar => {
                 self.next();
 
-                match self.current.kind {
+                match &self.current.kind {
                     TokenKind::LeftBrace => {
                         self.next();
 
@@ -1943,6 +1943,15 @@ impl Parser {
 
                         Expression::DynamicVariable {
                             name: Box::new(name),
+                        }
+                    }
+                    TokenKind::Variable(variable) => {
+                        let variable = variable.clone();
+
+                        self.next();
+
+                        Expression::DynamicVariable {
+                            name: Box::new(Expression::Variable { name: variable }),
                         }
                     }
                     _ => todo!(),
@@ -4236,6 +4245,16 @@ mod tests {
                     target: Box::new(Expression::Identifier { name: "foo".into() }),
                     args: vec![]
                 })
+            })],
+        );
+    }
+
+    #[test]
+    fn variable_variables() {
+        assert_ast(
+            "<?php $$a;",
+            &[expr!(Expression::DynamicVariable {
+                name: Box::new(Expression::Variable { name: "a".into() })
             })],
         );
     }
