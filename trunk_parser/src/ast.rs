@@ -442,6 +442,9 @@ pub enum Expression {
     Variable {
         name: ByteString,
     },
+    DynamicVariable {
+        name: Box<Self>,
+    },
     Infix {
         lhs: Box<Self>,
         op: InfixOp,

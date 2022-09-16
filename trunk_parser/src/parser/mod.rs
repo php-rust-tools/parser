@@ -1929,7 +1929,23 @@ impl Parser {
                 let rhs = self.expression(rpred)?;
 
                 prefix(&op, rhs)
-            }
+            },
+            TokenKind::Dollar => {
+                self.next();
+
+                match self.current.kind {
+                    TokenKind::LeftBrace => {
+                        self.next();
+
+                        let name = self.expression(Precedence::Lowest)?;
+
+                        self.rbrace()?;
+
+                        Expression::DynamicVariable { name: Box::new(name) }
+                    },
+                    _ => todo!(),
+                }
+            },
             _ => todo!(
                 "expr lhs: {:?}, line {} col {}",
                 self.current.kind,
@@ -4198,6 +4214,15 @@ mod tests {
                 by_ref: false,
             }],
         );
+    }
+
+    #[test]
+    fn braced_variables() {
+        assert_ast("<?php ${'foo'};", &[
+            expr!(Expression::DynamicVariable {
+                name: Box::new(Expression::ConstantString { value: "foo".into() })
+            })
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
