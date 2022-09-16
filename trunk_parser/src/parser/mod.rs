@@ -1831,29 +1831,7 @@ impl Parser {
                     if self.current.kind == TokenKind::LeftParen {
                         self.lparen()?;
 
-                        while self.current.kind != TokenKind::RightParen {
-                            let mut name = None;
-                            let mut unpack = false;
-                            if matches!(self.current.kind, TokenKind::Identifier(_))
-                                && self.peek.kind == TokenKind::Colon
-                            {
-                                name = Some(self.ident_maybe_reserved()?);
-                                self.next();
-                            } else if self.current.kind == TokenKind::Ellipsis {
-                                self.next();
-                                unpack = true;
-                            }
-
-                            let value = self.expression(Precedence::Lowest)?;
-
-                            args.push(Arg {
-                                name,
-                                unpack,
-                                value,
-                            });
-
-                            self.optional_comma()?;
-                        }
+                        args = self.args_list()?;
 
                         self.rparen()?;
                     }
@@ -1897,29 +1875,7 @@ impl Parser {
                 if self.current.kind == TokenKind::LeftParen {
                     self.lparen()?;
 
-                    while self.current.kind != TokenKind::RightParen {
-                        let mut name = None;
-                        let mut unpack = false;
-                        if matches!(self.current.kind, TokenKind::Identifier(_))
-                            && self.peek.kind == TokenKind::Colon
-                        {
-                            name = Some(self.ident_maybe_reserved()?);
-                            self.next();
-                        } else if self.current.kind == TokenKind::Ellipsis {
-                            self.next();
-                            unpack = true;
-                        }
-
-                        let value = self.expression(Precedence::Lowest)?;
-
-                        args.push(Arg {
-                            name,
-                            unpack,
-                            value,
-                        });
-
-                        self.optional_comma()?;
-                    }
+                    args = self.args_list()?;
 
                     self.rparen()?;
                 }
@@ -2049,40 +2005,7 @@ impl Parser {
                 }
             }
             TokenKind::LeftParen => {
-                let mut args = Vec::new();
-                while !self.is_eof() && self.current.kind != TokenKind::RightParen {
-                    let mut name = None;
-                    let mut unpack = false;
-                    if matches!(self.current.kind, TokenKind::Identifier(_))
-                        && self.peek.kind == TokenKind::Colon
-                    {
-                        name = Some(self.ident_maybe_reserved()?);
-                        self.next();
-                    } else if self.current.kind == TokenKind::Ellipsis {
-                        self.next();
-                        unpack = true;
-                    }
-
-                    if unpack && self.current.kind == TokenKind::RightParen {
-                        args.push(Arg {
-                            name: None,
-                            unpack: false,
-                            value: Expression::VariadicPlaceholder,
-                        });
-
-                        break;
-                    }
-
-                    let value = self.expression(Precedence::Lowest)?;
-
-                    args.push(Arg {
-                        name,
-                        unpack,
-                        value,
-                    });
-
-                    self.optional_comma()?;
-                }
+                let args = self.args_list()?;
 
                 self.rparen()?;
 
@@ -2162,40 +2085,7 @@ impl Parser {
                     _ if self.current.kind == TokenKind::LeftParen || must_be_method_call => {
                         self.lparen()?;
 
-                        let mut args = vec![];
-                        while !self.is_eof() && self.current.kind != TokenKind::RightParen {
-                            let mut name = None;
-                            let mut unpack = false;
-                            if matches!(self.current.kind, TokenKind::Identifier(_))
-                                && self.peek.kind == TokenKind::Colon
-                            {
-                                name = Some(self.ident_maybe_reserved()?);
-                                self.next();
-                            } else if self.current.kind == TokenKind::Ellipsis {
-                                self.next();
-                                unpack = true;
-                            }
-
-                            if unpack && self.current.kind == TokenKind::RightParen {
-                                args.push(Arg {
-                                    name: None,
-                                    unpack: false,
-                                    value: Expression::VariadicPlaceholder,
-                                });
-
-                                break;
-                            }
-
-                            let value = self.expression(Precedence::Lowest)?;
-
-                            args.push(Arg {
-                                name,
-                                unpack,
-                                value,
-                            });
-
-                            self.optional_comma()?;
-                        }
+                        let args = self.args_list()?;
 
                         self.rparen()?;
 
@@ -2237,40 +2127,7 @@ impl Parser {
                 if self.current.kind == TokenKind::LeftParen {
                     self.next();
 
-                    let mut args = Vec::new();
-                    while !self.is_eof() && self.current.kind != TokenKind::RightParen {
-                        let mut name = None;
-                        let mut unpack = false;
-                        if matches!(self.current.kind, TokenKind::Identifier(_))
-                            && self.peek.kind == TokenKind::Colon
-                        {
-                            name = Some(self.ident_maybe_reserved()?);
-                            self.next();
-                        } else if self.current.kind == TokenKind::Ellipsis {
-                            self.next();
-                            unpack = true;
-                        }
-
-                        if unpack && self.current.kind == TokenKind::RightParen {
-                            args.push(Arg {
-                                name: None,
-                                unpack: false,
-                                value: Expression::VariadicPlaceholder,
-                            });
-
-                            break;
-                        }
-
-                        let value = self.expression(Precedence::Lowest)?;
-
-                        args.push(Arg {
-                            name,
-                            value,
-                            unpack,
-                        });
-
-                        self.optional_comma()?;
-                    }
+                    let args = self.args_list()?;
 
                     self.rparen()?;
 
