@@ -562,6 +562,9 @@ pub enum Expression {
     Negate {
         value: Box<Expression>,
     },
+    UnaryPlus {
+        value: Box<Expression>,
+    },
     Cast {
         kind: CastKind,
         value: Box<Self>,

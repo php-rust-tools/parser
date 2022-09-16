@@ -2179,6 +2179,7 @@ fn is_prefix(op: &TokenKind) -> bool {
         op,
         TokenKind::Bang
             | TokenKind::Minus
+            | TokenKind::Plus
             | TokenKind::StringCast
             | TokenKind::BinaryCast
             | TokenKind::ObjectCast
@@ -2203,6 +2204,7 @@ fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
         TokenKind::Minus => Expression::Negate {
             value: Box::new(rhs),
         },
+        TokenKind::Plus => Expression::UnaryPlus { value: Box::new(rhs) },
         TokenKind::StringCast
         | TokenKind::BinaryCast
         | TokenKind::ObjectCast
@@ -4284,6 +4286,13 @@ mod tests {
                 args: vec![]
             })],
         );
+    }
+
+    #[test]
+    fn unary_plus() {
+        assert_ast("<?php +1;", &[
+            expr!(Expression::UnaryPlus { value: Box::new(Expression::Int { i: 1 }) })
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
