@@ -50,6 +50,7 @@ mod ident;
 mod params;
 mod precedence;
 mod punc;
+mod vars;
 
 pub struct ParserConfig {
     force_type_strings: bool,
@@ -1930,24 +1931,7 @@ impl Parser {
 
                 prefix(&op, rhs)
             }
-            TokenKind::Dollar => {
-                self.next();
-
-                match self.current.kind {
-                    TokenKind::LeftBrace => {
-                        self.next();
-
-                        let name = self.expression(Precedence::Lowest)?;
-
-                        self.rbrace()?;
-
-                        Expression::DynamicVariable {
-                            name: Box::new(name),
-                        }
-                    }
-                    _ => todo!(),
-                }
-            }
+            TokenKind::Dollar => self.dynamic_variable()?,
             _ => todo!(
                 "expr lhs: {:?}, line {} col {}",
                 self.current.kind,
@@ -2112,25 +2096,56 @@ impl Parser {
                     }
                 }
             }
-            TokenKind::DoubleColon => match self.current.kind.clone() {
-                TokenKind::Variable(_) => {
-                    let var = self.expression(Precedence::Lowest)?;
+            TokenKind::DoubleColon => {
+                let mut must_be_method_call = false;
 
-                    Expression::StaticPropertyFetch {
-                        target: Box::new(lhs),
-                        property: Box::new(var),
+                let property = match self.current.kind.clone() {
+                    TokenKind::Dollar => self.dynamic_variable()?,
+                    TokenKind::Variable(var) => {
+                        self.next();
+                        Expression::Variable { name: var.into() }
                     }
-                }
-                _ => {
-                    let ident = if self.current.kind == TokenKind::Class {
+                    TokenKind::LeftBrace => {
+                        must_be_method_call = true;
                         self.next();
 
-                        b"class".into()
-                    } else {
-                        self.ident_maybe_reserved()?
-                    };
+                        let name = self.expression(Precedence::Lowest)?;
 
-                    if self.current.kind == TokenKind::LeftParen {
+                        self.rbrace()?;
+
+                        Expression::DynamicVariable {
+                            name: Box::new(name),
+                        }
+                    }
+                    TokenKind::Identifier(ident) => {
+                        self.next();
+                        Expression::Identifier { name: ident.into() }
+                    }
+                    _ => {
+                        return Err(ParseError::UnexpectedToken(
+                            self.current.kind.to_string(),
+                            self.current.span,
+                        ))
+                    }
+                };
+
+                let lhs = Box::new(lhs);
+
+                match property {
+                    // 1. If we have an identifier and the current token is not a left paren,
+                    //    the resulting expression must be a constant fetch.
+                    Expression::Identifier { name }
+                        if self.current.kind != TokenKind::LeftParen =>
+                    {
+                        Expression::ConstFetch {
+                            target: lhs,
+                            constant: name.into(),
+                        }
+                    }
+                    // 2. If the current token is a left paren, or if we know the property expression
+                    //    is only valid a method call context, we can assume we're parsing a static
+                    //    method call.
+                    _ if self.current.kind == TokenKind::LeftParen || must_be_method_call => {
                         self.lparen()?;
 
                         let mut args = vec![];
@@ -2171,18 +2186,19 @@ impl Parser {
                         self.rparen()?;
 
                         Expression::StaticMethodCall {
-                            target: Box::new(lhs),
-                            method: ident.into(),
+                            target: lhs,
+                            method: Box::new(property),
                             args,
                         }
-                    } else {
-                        Expression::ConstFetch {
-                            target: Box::new(lhs),
-                            constant: ident.into(),
-                        }
                     }
+                    // 3. If we haven't met any of the previous conditions, we can assume
+                    //    that we're parsing a static property fetch.
+                    _ => Expression::StaticPropertyFetch {
+                        target: lhs,
+                        property: Box::new(property),
+                    },
                 }
-            },
+            }
             TokenKind::Arrow | TokenKind::NullsafeArrow => {
                 let property = match self.current.kind {
                     TokenKind::LeftBrace => {
@@ -2196,10 +2212,13 @@ impl Parser {
                         self.next();
                         var
                     }
+                    TokenKind::Dollar => self.dynamic_variable()?,
                     _ => Expression::Identifier {
                         name: self.ident_maybe_reserved()?,
                     },
                 };
+
+                dbg!(&self.current.kind);
 
                 if self.current.kind == TokenKind::LeftParen {
                     self.next();
@@ -4156,7 +4175,7 @@ mod tests {
             "<?php A::foo(...);",
             &[expr!(Expression::StaticMethodCall {
                 target: Box::new(Expression::Identifier { name: "A".into() }),
-                method: "foo".into(),
+                method: Box::new(Expression::Identifier { name: "foo".into() }),
                 args: vec![Arg {
                     name: None,
                     unpack: false,
@@ -4236,6 +4255,86 @@ mod tests {
                     target: Box::new(Expression::Identifier { name: "foo".into() }),
                     args: vec![]
                 })
+            })],
+        );
+    }
+
+    #[test]
+    fn variable_variables() {
+        assert_ast(
+            "<?php $$a;",
+            &[expr!(Expression::DynamicVariable {
+                name: Box::new(Expression::Variable { name: "a".into() })
+            })],
+        );
+    }
+
+    #[test]
+    fn variable_variable_property_fetch() {
+        assert_ast(
+            "<?php $a->$$b;",
+            &[expr!(Expression::PropertyFetch {
+                target: Box::new(Expression::Variable { name: "a".into() }),
+                property: Box::new(Expression::DynamicVariable {
+                    name: Box::new(Expression::Variable { name: "b".into() })
+                }),
+            })],
+        );
+    }
+
+    #[test]
+    fn variable_variable_method_calls() {
+        assert_ast(
+            "<?php $a->$$b();",
+            &[expr!(Expression::MethodCall {
+                target: Box::new(Expression::Variable { name: "a".into() }),
+                method: Box::new(Expression::DynamicVariable {
+                    name: Box::new(Expression::Variable { name: "b".into() })
+                }),
+                args: vec![],
+            })],
+        );
+    }
+
+    #[test]
+    fn variable_variable_static_property_fetch() {
+        assert_ast(
+            "<?php Foo::$$a;",
+            &[expr!(Expression::StaticPropertyFetch {
+                target: Box::new(Expression::Identifier { name: "Foo".into() }),
+                property: Box::new(Expression::DynamicVariable {
+                    name: Box::new(Expression::Variable { name: "a".into() })
+                })
+            })],
+        );
+    }
+
+    #[test]
+    fn variable_variable_static_method_call() {
+        assert_ast(
+            "<?php Foo::$$a();",
+            &[expr!(Expression::StaticMethodCall {
+                target: Box::new(Expression::Identifier { name: "Foo".into() }),
+                method: Box::new(Expression::DynamicVariable {
+                    name: Box::new(Expression::Variable { name: "a".into() })
+                }),
+                args: vec![],
+            })],
+        );
+    }
+
+    #[test]
+    fn braced_static_method_call() {
+        assert_ast(
+            "<?php Foo::{'foo'}();",
+            &[expr!(Expression::StaticMethodCall {
+                target: Box::new(Expression::Identifier { name: "Foo".into() }),
+                method: Box::new(Expression::DynamicVariable {
+                    name: Box::new(Expression::ConstantString {
+                        value: "foo".into()
+                    })
+                }),
+                args: vec![],
             })],
         );
     }
