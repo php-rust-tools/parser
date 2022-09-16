@@ -4408,9 +4408,13 @@ mod tests {
 
     #[test]
     fn basic_new() {
-        assert_ast("<?php new Foo();", &[
-            expr!(Expression::New { target: Box::new(Expression::Identifier { name: "Foo".into() }), args: vec![] })
-        ]);
+        assert_ast(
+            "<?php new Foo();",
+            &[expr!(Expression::New {
+                target: Box::new(Expression::Identifier { name: "Foo".into() }),
+                args: vec![]
+            })],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
