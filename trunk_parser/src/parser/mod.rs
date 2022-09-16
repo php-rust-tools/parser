@@ -849,13 +849,35 @@ impl Parser {
                             then.push(self.statement()?);
                         }
 
+                        let mut else_ifs = vec![];
+                        loop {
+                            if self.current.kind != TokenKind::ElseIf {
+                                break;
+                            }
+
+                            self.next();
+
+                            self.lparen()?;
+                            let condition = self.expression(Precedence::Lowest)?;
+                            self.rparen()?;
+
+                            expect!(self, TokenKind::Colon, "expected :");
+
+                            let mut body = vec![];
+                            while ! matches!(self.current.kind, TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf) {
+                                body.push(self.statement()?);
+                            }
+
+                            else_ifs.push(ElseIf { condition, body });
+                        }
+
                         expect!(self, TokenKind::EndIf, "expected endif");
                         self.semi()?;
 
                         Statement::If {
                             condition,
                             then,
-                            else_ifs: vec![],
+                            else_ifs,
                             r#else: None,
                         }
                     },
@@ -4783,6 +4805,68 @@ mod tests {
                 r#else: None,
             }
         ])
+    }
+
+    #[test]
+    fn short_else_if() {
+        assert_ast("<?php
+        if (true):
+            $a;
+        elseif (true):
+            $b;
+        endif;
+        ", &[
+            Statement::If {
+                condition: Expression::Bool { value: true },
+                then: vec![
+                    expr!(Expression::Variable { name: "a".into() })
+                ],
+                else_ifs: vec![
+                    ElseIf {
+                        condition: Expression::Bool { value: true },
+                        body: vec![
+                            expr!(Expression::Variable { name: "b".into() })
+                        ]
+                    }
+                ],
+                r#else: None,
+            }
+        ]);
+    }
+
+    #[test]
+    fn multiple_short_else_if() {
+        assert_ast("<?php
+        if (true):
+            $a;
+        elseif (true):
+            $b;
+        elseif (true):
+            $c;
+        endif;
+        ", &[
+            Statement::If {
+                condition: Expression::Bool { value: true },
+                then: vec![
+                    expr!(Expression::Variable { name: "a".into() })
+                ],
+                else_ifs: vec![
+                    ElseIf {
+                        condition: Expression::Bool { value: true },
+                        body: vec![
+                            expr!(Expression::Variable { name: "b".into() })
+                        ]
+                    },
+                    ElseIf {
+                        condition: Expression::Bool { value: true },
+                        body: vec![
+                            expr!(Expression::Variable { name: "c".into() })
+                        ]
+                    }
+                ],
+                r#else: None,
+            }
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
