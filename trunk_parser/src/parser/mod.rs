@@ -1595,6 +1595,13 @@ impl Parser {
 
                 while self.current.kind != TokenKind::RightParen {
                     let mut key = None;
+                    let unpack = if self.current.kind == TokenKind::Ellipsis {
+                        self.next();
+                        true
+                    } else {
+                        false
+                    };
+
                     let mut value = self.expression(Precedence::Lowest)?;
 
                     if self.current.kind == TokenKind::DoubleArrow {
@@ -1604,7 +1611,7 @@ impl Parser {
                         value = self.expression(Precedence::Lowest)?;
                     }
 
-                    items.push(ArrayItem { key, value });
+                    items.push(ArrayItem { key, value, unpack });
 
                     self.optional_comma()?;
 
@@ -1626,12 +1633,19 @@ impl Parser {
                         items.push(ArrayItem {
                             key: None,
                             value: Expression::Empty,
+                            unpack: false,
                         });
                         self.next();
                         continue;
                     }
 
                     let mut key = None;
+                    let unpack = if self.current.kind == TokenKind::Ellipsis {
+                        self.next();
+                        true
+                    } else {
+                        false
+                    };
                     let mut value = self.expression(Precedence::Lowest)?;
 
                     if self.current.kind == TokenKind::DoubleArrow {
@@ -1641,7 +1655,7 @@ impl Parser {
                         value = self.expression(Precedence::Lowest)?;
                     }
 
-                    items.push(ArrayItem { key, value });
+                    items.push(ArrayItem { key, value, unpack });
 
                     self.optional_comma()?;
 
@@ -3424,10 +3438,12 @@ mod tests {
                         ArrayItem {
                             key: None,
                             value: Expression::Variable { name: "baz".into() },
+                            unpack: false,
                         },
                         ArrayItem {
                             key: None,
                             value: Expression::Variable { name: "car".into() },
+                            unpack: false,
                         },
                     ],
                 },
@@ -3777,18 +3793,22 @@ mod tests {
                     ArrayItem {
                         key: None,
                         value: Expression::Int { i: 1 },
+                        unpack: false,
                     },
                     ArrayItem {
                         key: None,
                         value: Expression::Int { i: 2 },
+                        unpack: false,
                     },
                     ArrayItem {
                         key: None,
                         value: Expression::Empty,
+                        unpack: false,
                     },
                     ArrayItem {
                         key: None,
                         value: Expression::Int { i: 4 },
+                        unpack: false,
                     },
                 ]
             })],
@@ -4335,6 +4355,53 @@ mod tests {
                     })
                 }),
                 args: vec![],
+            })],
+        );
+    }
+
+    #[test]
+    fn unpack_array_items() {
+        assert_ast(
+            "<?php [...[]];",
+            &[expr!(Expression::Array {
+                items: vec![ArrayItem {
+                    key: None,
+                    unpack: true,
+                    value: Expression::Array { items: vec![] }
+                }]
+            })],
+        );
+    }
+
+    #[test]
+    fn unpack_multiple_array_items() {
+        assert_ast(
+            "<?php [...[1], ...[2]];",
+            &[expr!(Expression::Array {
+                items: vec![
+                    ArrayItem {
+                        key: None,
+                        unpack: true,
+                        value: Expression::Array {
+                            items: vec![ArrayItem {
+                                key: None,
+                                unpack: false,
+                                value: Expression::Int { i: 1 }
+                            }]
+                        }
+                    },
+                    ArrayItem {
+                        key: None,
+                        unpack: true,
+                        value: Expression::Array {
+                            items: vec![ArrayItem {
+                                key: None,
+                                unpack: false,
+                                value: Expression::Int { i: 2 }
+                            }]
+                        }
+                    }
+                ]
             })],
         );
     }
