@@ -29,9 +29,9 @@ pub enum Precedence {
     Instanceof,
     Prefix,
     Pow,
-    CloneNew,
     CallDim,
     ObjectAccess,
+    CloneNew,
 }
 
 impl Precedence {
