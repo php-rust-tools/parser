@@ -2180,10 +2180,17 @@ fn is_prefix(op: &TokenKind) -> bool {
         TokenKind::Bang
             | TokenKind::Minus
             | TokenKind::StringCast
+            | TokenKind::BinaryCast
             | TokenKind::ObjectCast
             | TokenKind::BoolCast
+            | TokenKind::BooleanCast
             | TokenKind::IntCast
+            | TokenKind::IntegerCast
+            | TokenKind::FloatCast
             | TokenKind::DoubleCast
+            | TokenKind::RealCast
+            | TokenKind::UnsetCast
+            | TokenKind::ArrayCast
             | TokenKind::At
     )
 }
@@ -2197,10 +2204,17 @@ fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
             value: Box::new(rhs),
         },
         TokenKind::StringCast
+        | TokenKind::BinaryCast
         | TokenKind::ObjectCast
         | TokenKind::BoolCast
+        | TokenKind::BooleanCast
         | TokenKind::IntCast
-        | TokenKind::DoubleCast => Expression::Cast {
+        | TokenKind::IntegerCast
+        | TokenKind::FloatCast
+        | TokenKind::DoubleCast
+        | TokenKind::RealCast
+        | TokenKind::UnsetCast
+        | TokenKind::ArrayCast => Expression::Cast {
             kind: op.into(),
             value: Box::new(rhs),
         },

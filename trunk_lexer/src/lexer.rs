@@ -394,23 +394,42 @@ impl Lexer {
             [b'(', ..] => {
                 self.next();
 
-                if self.try_read(b"string)") {
-                    self.skip(8);
-
-                    TokenKind::StringCast
-                } else if self.try_read(b"object)") {
-                    self.skip(8);
-
-                    TokenKind::ObjectCast
-                } else if self.try_read(b"bool)") {
-                    self.skip(6);
-                    TokenKind::BoolCast
-                } else if self.try_read(b"int)") {
-                    self.skip(5);
+                if self.try_read(b"int)") {
+                    self.skip(4);
                     TokenKind::IntCast
+                } else if self.try_read(b"integer)") {
+                    self.skip(8);
+                    TokenKind::IntegerCast
+                } else if self.try_read(b"bool)") {
+                    self.skip(5);
+                    TokenKind::BoolCast
+                } else if self.try_read(b"boolean)") {
+                    self.skip(8);
+                    TokenKind::BooleanCast
                 } else if self.try_read(b"float)") {
+                    self.skip(6);
+                    TokenKind::FloatCast
+                } else if self.try_read(b"double)") {
                     self.skip(7);
                     TokenKind::DoubleCast
+                } else if self.try_read(b"real)") {
+                    self.skip(5);
+                    TokenKind::RealCast
+                } else if self.try_read(b"string)") {
+                    self.skip(7);
+                    TokenKind::StringCast
+                } else if self.try_read(b"binary)") {
+                    self.skip(7);
+                    TokenKind::BinaryCast
+                } else if self.try_read(b"array)") {
+                    self.skip(6);
+                    TokenKind::ArrayCast
+                } else if self.try_read(b"object)") {
+                    self.skip(7);
+                    TokenKind::ObjectCast
+                } else if self.try_read(b"unset)") {
+                    self.skip(6);
+                    TokenKind::UnsetCast
                 } else {
                     TokenKind::LeftParen
                 }
@@ -900,9 +919,25 @@ mod tests {
 
     #[test]
     fn casts() {
+        use TokenKind::*;
+
         assert_tokens(
-            "<?php (object) (string)",
-            &[open!(), TokenKind::ObjectCast, TokenKind::StringCast],
+            "<?php (int) (integer) (bool) (boolean) (float) (double) (real) (string) (binary) (array) (object) (unset)",
+            &[
+                open!(),
+                IntCast,
+                IntegerCast,
+                BoolCast,
+                BooleanCast,
+                FloatCast,
+                DoubleCast,
+                RealCast,
+                StringCast,
+                BinaryCast,
+                ArrayCast,
+                ObjectCast,
+                UnsetCast
+            ],
         );
     }
 
