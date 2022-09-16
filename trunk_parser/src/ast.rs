@@ -574,6 +574,9 @@ pub enum Expression {
     PreIncrement {
         value: Box<Self>,
     },
+    Print {
+        value: Box<Self>,
+    },
     Cast {
         kind: CastKind,
         value: Box<Self>,
