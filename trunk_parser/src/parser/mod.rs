@@ -2178,7 +2178,12 @@ fn is_prefix(op: &TokenKind) -> bool {
     matches!(
         op,
         TokenKind::Bang
+            | TokenKind::Print
+            | TokenKind::BitwiseNot
+            | TokenKind::Decrement
+            | TokenKind::Increment
             | TokenKind::Minus
+            | TokenKind::Plus
             | TokenKind::StringCast
             | TokenKind::BinaryCast
             | TokenKind::ObjectCast
@@ -2197,10 +2202,25 @@ fn is_prefix(op: &TokenKind) -> bool {
 
 fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
     match op {
+        TokenKind::Print => Expression::Print {
+            value: Box::new(rhs),
+        },
         TokenKind::Bang => Expression::BooleanNot {
             value: Box::new(rhs),
         },
         TokenKind::Minus => Expression::Negate {
+            value: Box::new(rhs),
+        },
+        TokenKind::Plus => Expression::UnaryPlus {
+            value: Box::new(rhs),
+        },
+        TokenKind::BitwiseNot => Expression::BitwiseNot {
+            value: Box::new(rhs),
+        },
+        TokenKind::Decrement => Expression::PreDecrement {
+            value: Box::new(rhs),
+        },
+        TokenKind::Increment => Expression::PreIncrement {
             value: Box::new(rhs),
         },
         TokenKind::StringCast
@@ -4282,6 +4302,56 @@ mod tests {
             &[expr!(Expression::New {
                 target: Box::new(Expression::Identifier { name: "Foo".into() }),
                 args: vec![]
+            })],
+        );
+    }
+
+    #[test]
+    fn unary_plus() {
+        assert_ast(
+            "<?php +1;",
+            &[expr!(Expression::UnaryPlus {
+                value: Box::new(Expression::Int { i: 1 })
+            })],
+        );
+    }
+
+    #[test]
+    fn bitwise_not() {
+        assert_ast(
+            "<?php ~2;",
+            &[expr!(Expression::BitwiseNot {
+                value: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn pre_decrement() {
+        assert_ast(
+            "<?php --$a;",
+            &[expr!(Expression::PreDecrement {
+                value: Box::new(Expression::Variable { name: "a".into() })
+            })],
+        );
+    }
+
+    #[test]
+    fn pre_increment() {
+        assert_ast(
+            "<?php ++$a;",
+            &[expr!(Expression::PreIncrement {
+                value: Box::new(Expression::Variable { name: "a".into() })
+            })],
+        );
+    }
+
+    #[test]
+    fn print_expression() {
+        assert_ast(
+            "<?php print $foo;",
+            &[expr!(Expression::Print {
+                value: Box::new(Expression::Variable { name: "foo".into() })
             })],
         );
     }

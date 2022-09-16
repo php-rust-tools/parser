@@ -520,6 +520,10 @@ impl Lexer {
                 self.next();
                 TokenKind::Colon
             }
+            &[b'~', ..] => {
+                self.next();
+                TokenKind::BitwiseNot
+            }
             &[b, ..] => unimplemented!(
                 "<scripting> char: {}, line: {}, col: {}",
                 b as char,
@@ -766,6 +770,7 @@ impl Lexer {
 
 fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident {
+        b"print" => TokenKind::Print,
         b"__halt_compiler" | b"__HALT_COMPILER" => TokenKind::HaltCompiler,
         b"readonly" => TokenKind::Readonly,
         b"global" => TokenKind::Global,

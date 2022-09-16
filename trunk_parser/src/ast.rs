@@ -560,7 +560,22 @@ pub enum Expression {
         value: Box<Expression>,
     },
     Negate {
-        value: Box<Expression>,
+        value: Box<Self>,
+    },
+    UnaryPlus {
+        value: Box<Self>,
+    },
+    BitwiseNot {
+        value: Box<Self>,
+    },
+    PreDecrement {
+        value: Box<Self>,
+    },
+    PreIncrement {
+        value: Box<Self>,
+    },
+    Print {
+        value: Box<Self>,
     },
     Cast {
         kind: CastKind,
