@@ -643,6 +643,8 @@ pub enum InfixOp {
     DivAssign,
     LeftShift,
     RightShift,
+    BitwiseAnd,
+    BitwiseOr,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -675,6 +677,8 @@ impl From<TokenKind> for InfixOp {
             TokenKind::SlashEquals => Self::DivAssign,
             TokenKind::LeftShift => Self::LeftShift,
             TokenKind::RightShift => Self::RightShift,
+            TokenKind::Ampersand => Self::BitwiseAnd,
+            TokenKind::Pipe => Self::BitwiseOr,
             _ => unreachable!(),
         }
     }

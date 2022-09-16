@@ -2259,6 +2259,8 @@ fn is_infix(t: &TokenKind) -> bool {
         TokenKind::Pow
             | TokenKind::LeftShift
             | TokenKind::RightShift
+            | TokenKind::Ampersand
+            | TokenKind::Pipe
             | TokenKind::Percent
             | TokenKind::Instanceof
             | TokenKind::Asterisk
@@ -4377,6 +4379,20 @@ mod tests {
     fn right_shift() {
         assert_ast("<?php 6 >> 2;", &[
             expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::RightShift, rhs: Box::new(Expression::Int { i: 2 }) })
+        ]);
+    }
+
+    #[test]
+    fn bitwise_and() {
+        assert_ast("<?php 6 & 2;", &[
+            expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::BitwiseAnd, rhs: Box::new(Expression::Int { i: 2 }) })
+        ]);
+    }
+
+    #[test]
+    fn bitwise_or() {
+        assert_ast("<?php 6 | 2;", &[
+            expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::BitwiseOr, rhs: Box::new(Expression::Int { i: 2 }) })
         ]);
     }
 
