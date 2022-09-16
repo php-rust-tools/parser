@@ -557,7 +557,7 @@ pub enum Expression {
         value: Box<Expression>,
     },
     Yield {
-        value: Box<Expression>,
+        value: Option<Box<Expression>>,
     },
     Negate {
         value: Box<Self>,

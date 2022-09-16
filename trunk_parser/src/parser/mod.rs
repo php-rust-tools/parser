@@ -1473,12 +1473,16 @@ impl Parser {
             TokenKind::Yield => {
                 self.next();
 
-                let value = self.expression(Precedence::Lowest)?;
+                if self.current.kind == TokenKind::SemiColon {
+                    Expression::Yield { value: None }
+                } else {
+                    let value = self.expression(Precedence::Lowest)?;
 
-                // FIXME: Check for presence of => here to allow yielding key and value.
+                    // FIXME: Check for presence of => here to allow yielding key and value.
 
-                Expression::Yield {
-                    value: Box::new(value),
+                    Expression::Yield {
+                        value: Some(Box::new(value)),
+                    }
                 }
             }
             TokenKind::Clone => {
@@ -4672,6 +4676,13 @@ mod tests {
                 rhs: Box::new(Expression::Int { i: 1 }),
             })],
         );
+    }
+
+    #[test]
+    fn empty_yield() {
+        assert_ast("<?php yield;", &[
+            expr!(Expression::Yield { value: None })
+        ]); 
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
