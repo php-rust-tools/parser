@@ -2257,6 +2257,7 @@ fn is_infix(t: &TokenKind) -> bool {
     matches!(
         t,
         TokenKind::Pow
+            | TokenKind::Percent
             | TokenKind::Instanceof
             | TokenKind::Asterisk
             | TokenKind::Slash
@@ -4354,6 +4355,13 @@ mod tests {
                 value: Box::new(Expression::Variable { name: "foo".into() })
             })],
         );
+    }
+
+    #[test]
+    fn modulo() {
+        assert_ast("<?php 6 % 2;", &[
+            expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::Mod, rhs: Box::new(Expression::Int { i: 2 }) })
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

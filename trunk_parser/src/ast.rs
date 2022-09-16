@@ -620,6 +620,7 @@ pub enum InfixOp {
     Sub,
     Div,
     Mul,
+    Mod,
     Concat,
     ConcatAssign,
     LessThan,
@@ -645,6 +646,7 @@ pub enum InfixOp {
 impl From<TokenKind> for InfixOp {
     fn from(k: TokenKind) -> Self {
         match k {
+            TokenKind::Percent => Self::Mod,
             TokenKind::Plus => Self::Add,
             TokenKind::Minus => Self::Sub,
             TokenKind::Asterisk => Self::Mul,

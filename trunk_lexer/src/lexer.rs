@@ -454,6 +454,10 @@ impl Lexer {
                 self.next();
                 TokenKind::Plus
             }
+            [b'%', ..] => {
+                self.next();
+                TokenKind::Percent
+            },
             [b'-', b'-', ..] => {
                 self.skip(2);
                 TokenKind::Decrement
