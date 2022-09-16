@@ -663,7 +663,11 @@ impl Lexer {
             }
         }
 
-        TokenKind::Variable(buffer.into())
+        if buffer.is_empty() {
+            TokenKind::Dollar
+        } else {
+            TokenKind::Variable(buffer.into())
+        }
     }
 
     fn tokenize_number(
@@ -1066,7 +1070,10 @@ function"#,
 
     #[test]
     fn sigils() {
-        assert_tokens("<?php ->", &[open!(), TokenKind::Arrow]);
+        assert_tokens(
+            "<?php -> $",
+            &[open!(), TokenKind::Arrow, TokenKind::Dollar],
+        );
     }
 
     #[test]

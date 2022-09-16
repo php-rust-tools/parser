@@ -1930,6 +1930,24 @@ impl Parser {
 
                 prefix(&op, rhs)
             }
+            TokenKind::Dollar => {
+                self.next();
+
+                match self.current.kind {
+                    TokenKind::LeftBrace => {
+                        self.next();
+
+                        let name = self.expression(Precedence::Lowest)?;
+
+                        self.rbrace()?;
+
+                        Expression::DynamicVariable {
+                            name: Box::new(name),
+                        }
+                    }
+                    _ => todo!(),
+                }
+            }
             _ => todo!(
                 "expr lhs: {:?}, line {} col {}",
                 self.current.kind,
@@ -4197,6 +4215,28 @@ mod tests {
                 return_type: Some(Type::False),
                 by_ref: false,
             }],
+        );
+    }
+
+    #[test]
+    fn braced_variables() {
+        assert_ast(
+            "<?php ${'foo'};",
+            &[expr!(Expression::DynamicVariable {
+                name: Box::new(Expression::ConstantString {
+                    value: "foo".into()
+                })
+            })],
+        );
+
+        assert_ast(
+            "<?php ${foo()};",
+            &[expr!(Expression::DynamicVariable {
+                name: Box::new(Expression::Call {
+                    target: Box::new(Expression::Identifier { name: "foo".into() }),
+                    args: vec![]
+                })
+            })],
         );
     }
 
