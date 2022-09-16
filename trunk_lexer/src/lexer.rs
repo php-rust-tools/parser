@@ -520,6 +520,10 @@ impl Lexer {
                 self.next();
                 TokenKind::Colon
             }
+            &[b'~', ..] => {
+                self.next();
+                TokenKind::BitwiseNot
+            }
             &[b, ..] => unimplemented!(
                 "<scripting> char: {}, line: {}, col: {}",
                 b as char,

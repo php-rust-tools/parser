@@ -2178,6 +2178,7 @@ fn is_prefix(op: &TokenKind) -> bool {
     matches!(
         op,
         TokenKind::Bang
+            | TokenKind::BitwiseNot
             | TokenKind::Minus
             | TokenKind::Plus
             | TokenKind::StringCast
@@ -2205,6 +2206,7 @@ fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
             value: Box::new(rhs),
         },
         TokenKind::Plus => Expression::UnaryPlus { value: Box::new(rhs) },
+        TokenKind::BitwiseNot => Expression::BitwiseNot { value: Box::new(rhs) },
         TokenKind::StringCast
         | TokenKind::BinaryCast
         | TokenKind::ObjectCast
@@ -4292,6 +4294,13 @@ mod tests {
     fn unary_plus() {
         assert_ast("<?php +1;", &[
             expr!(Expression::UnaryPlus { value: Box::new(Expression::Int { i: 1 }) })
+        ]);
+    }
+
+    #[test]
+    fn bitwise_not() {
+        assert_ast("<?php ~2;", &[
+            expr!(Expression::BitwiseNot { value: Box::new(Expression::Int { i: 2 }) })
         ]);
     }
 

@@ -560,10 +560,13 @@ pub enum Expression {
         value: Box<Expression>,
     },
     Negate {
-        value: Box<Expression>,
+        value: Box<Self>,
     },
     UnaryPlus {
-        value: Box<Expression>,
+        value: Box<Self>,
+    },
+    BitwiseNot {
+        value: Box<Self>,
     },
     Cast {
         kind: CastKind,
