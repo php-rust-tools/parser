@@ -2257,6 +2257,8 @@ fn is_infix(t: &TokenKind) -> bool {
     matches!(
         t,
         TokenKind::Pow
+            | TokenKind::LeftShift
+            | TokenKind::RightShift
             | TokenKind::Percent
             | TokenKind::Instanceof
             | TokenKind::Asterisk
@@ -4361,6 +4363,20 @@ mod tests {
     fn modulo() {
         assert_ast("<?php 6 % 2;", &[
             expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::Mod, rhs: Box::new(Expression::Int { i: 2 }) })
+        ]);
+    }
+
+    #[test]
+    fn left_shift() {
+        assert_ast("<?php 6 << 2;", &[
+            expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::LeftShift, rhs: Box::new(Expression::Int { i: 2 }) })
+        ]);
+    }
+
+    #[test]
+    fn right_shift() {
+        assert_ast("<?php 6 >> 2;", &[
+            expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::RightShift, rhs: Box::new(Expression::Int { i: 2 }) })
         ]);
     }
 

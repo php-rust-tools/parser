@@ -641,6 +641,8 @@ pub enum InfixOp {
     MulAssign,
     SubAssign,
     DivAssign,
+    LeftShift,
+    RightShift,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -671,6 +673,8 @@ impl From<TokenKind> for InfixOp {
             TokenKind::AsteriskEqual => Self::MulAssign,
             TokenKind::MinusEquals => Self::SubAssign,
             TokenKind::SlashEquals => Self::DivAssign,
+            TokenKind::LeftShift => Self::LeftShift,
+            TokenKind::RightShift => Self::RightShift,
             _ => unreachable!(),
         }
     }
