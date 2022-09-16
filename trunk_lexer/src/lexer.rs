@@ -16,7 +16,7 @@ pub struct LexerConfig {
 #[allow(dead_code)]
 pub struct Lexer {
     config: LexerConfig,
-    state: LexerState,
+    state_stack: Vec<LexerState>,
     chars: Vec<u8>,
     cursor: usize,
     current: Option<u8>,
@@ -28,7 +28,7 @@ impl Lexer {
     pub fn new(config: Option<LexerConfig>) -> Self {
         Self {
             config: config.unwrap_or_default(),
-            state: LexerState::Initial,
+            state_stack: vec![LexerState::Initial],
             chars: Vec::new(),
             cursor: 0,
             current: None,
@@ -47,7 +47,7 @@ impl Lexer {
         self.current = self.chars.get(0).copied();
 
         while self.current.is_some() {
-            match self.state {
+            match self.state_stack.last().unwrap() {
                 // The "Initial" state is used to parse inline HTML. It is essentially a catch-all
                 // state that will build up a single token buffer until it encounters an open tag
                 // of some description.
@@ -782,7 +782,7 @@ impl Lexer {
     }
 
     fn enter_state(&mut self, state: LexerState) {
-        self.state = state;
+        *self.state_stack.last_mut().unwrap() = state;
     }
 
     fn peek_buf(&self) -> &[u8] {
