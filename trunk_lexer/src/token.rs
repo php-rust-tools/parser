@@ -32,6 +32,7 @@ pub enum TokenKind {
     BangEquals,
     AngledLeftRight,
     BangDoubleEquals,
+    Spaceship,
     BoolCast,
     BooleanCast,
     BooleanAnd,
@@ -344,6 +345,8 @@ impl Display for TokenKind {
             Self::Yield => "yield",
             Self::While => "while",
             Self::Global => "global",
+            Self::AngledLeftRight => "<>",
+            Self::Spaceship => "<=>",
             _ => todo!("format token: {:?}", self),
         };
         write!(f, "{}", s)

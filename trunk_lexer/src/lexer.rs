@@ -488,6 +488,10 @@ impl Lexer {
                 self.skip(2);
                 TokenKind::LeftShift
             }
+            [b'<', b'=', b'>', ..] => {
+                self.skip(3);
+                TokenKind::Spaceship
+            }
             [b'<', b'=', ..] => {
                 self.skip(2);
                 TokenKind::LessThanEquals

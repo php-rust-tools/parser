@@ -646,6 +646,7 @@ pub enum InfixOp {
     BitwiseAnd,
     BitwiseOr,
     BitwiseXor,
+    Spaceship,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -681,6 +682,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::Ampersand => Self::BitwiseAnd,
             TokenKind::Pipe => Self::BitwiseOr,
             TokenKind::Caret => Self::BitwiseXor,
+            TokenKind::Spaceship => Self::Spaceship,
             _ => unreachable!(),
         }
     }
