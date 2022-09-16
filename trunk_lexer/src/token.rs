@@ -167,7 +167,7 @@ pub enum TokenKind {
     BitwiseNot,
     LogicalAnd,
     LogicalOr,
-    LogicalXor
+    LogicalXor,
 }
 
 #[derive(Debug, Clone, PartialEq)]

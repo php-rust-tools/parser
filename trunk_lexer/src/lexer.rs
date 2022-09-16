@@ -386,7 +386,7 @@ impl Lexer {
             [b'^', ..] => {
                 self.next();
                 TokenKind::Caret
-            },
+            }
             [b'{', ..] => {
                 self.next();
                 TokenKind::LeftBrace
@@ -461,7 +461,7 @@ impl Lexer {
             [b'%', ..] => {
                 self.next();
                 TokenKind::Percent
-            },
+            }
             [b'-', b'-', ..] => {
                 self.skip(2);
                 TokenKind::Decrement
@@ -499,7 +499,7 @@ impl Lexer {
             [b'<', b'>', ..] => {
                 self.skip(2);
                 TokenKind::AngledLeftRight
-            },
+            }
             [b'<', ..] => {
                 self.next();
                 TokenKind::LessThan
