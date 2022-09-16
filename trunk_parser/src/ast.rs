@@ -645,6 +645,7 @@ pub enum InfixOp {
     RightShift,
     BitwiseAnd,
     BitwiseOr,
+    BitwiseXor,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -679,6 +680,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::RightShift => Self::RightShift,
             TokenKind::Ampersand => Self::BitwiseAnd,
             TokenKind::Pipe => Self::BitwiseOr,
+            TokenKind::Caret => Self::BitwiseXor,
             _ => unreachable!(),
         }
     }

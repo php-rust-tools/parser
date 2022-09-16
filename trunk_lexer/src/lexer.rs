@@ -383,6 +383,10 @@ impl Lexer {
                 self.next();
                 TokenKind::Pipe
             }
+            [b'^', ..] => {
+                self.next();
+                TokenKind::Caret
+            },
             [b'{', ..] => {
                 self.next();
                 TokenKind::LeftBrace
