@@ -492,6 +492,10 @@ impl Lexer {
                 self.skip(2);
                 TokenKind::LessThanEquals
             }
+            [b'<', b'>', ..] => {
+                self.skip(2);
+                TokenKind::AngledLeftRight
+            },
             [b'<', ..] => {
                 self.next();
                 TokenKind::LessThan

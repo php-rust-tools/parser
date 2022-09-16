@@ -2277,6 +2277,7 @@ fn is_infix(t: &TokenKind) -> bool {
             | TokenKind::TripleEquals
             | TokenKind::BangEquals
             | TokenKind::BangDoubleEquals
+            | TokenKind::AngledLeftRight
             | TokenKind::Question
             | TokenKind::QuestionColon
             | TokenKind::BooleanAnd
@@ -4401,6 +4402,13 @@ mod tests {
     fn bitwise_xor() {
         assert_ast("<?php 6 ^ 2;", &[
             expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::BitwiseXor, rhs: Box::new(Expression::Int { i: 2 }) })
+        ]);
+    }
+
+    #[test]
+    fn angled_not_equal() {
+        assert_ast("<?php 6 <> 2;", &[
+            expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::NotEquals, rhs: Box::new(Expression::Int { i: 2 }) })
         ]);
     }
 

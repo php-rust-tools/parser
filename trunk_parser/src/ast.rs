@@ -664,7 +664,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::DotEquals => Self::ConcatAssign,
             TokenKind::DoubleEquals => Self::Equals,
             TokenKind::TripleEquals => Self::Identical,
-            TokenKind::BangEquals => Self::NotEquals,
+            TokenKind::BangEquals | TokenKind::AngledLeftRight => Self::NotEquals,
             TokenKind::BangDoubleEquals => Self::NotIdentical,
             TokenKind::BooleanAnd => Self::And,
             TokenKind::BooleanOr => Self::Or,

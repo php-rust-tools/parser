@@ -56,7 +56,7 @@ impl Precedence {
             LeftShift | RightShift => Self::BitShift,
             Dot => Self::Concat,
             LessThan | LessThanEquals | GreaterThan | GreaterThanEquals => Self::LtGt,
-            DoubleEquals | BangEquals | TripleEquals | BangDoubleEquals => Self::Equality,
+            DoubleEquals | BangEquals | TripleEquals | BangDoubleEquals | AngledLeftRight => Self::Equality,
             Ampersand => Self::BitwiseAnd,
             Caret => Self::BitwiseXor,
             Pipe => Self::BitwiseOr,

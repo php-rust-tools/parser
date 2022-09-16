@@ -30,6 +30,7 @@ pub enum TokenKind {
     Attribute,
     Bang,
     BangEquals,
+    AngledLeftRight,
     BangDoubleEquals,
     BoolCast,
     BooleanCast,
