@@ -42,4 +42,10 @@ impl Parser {
 
         Ok(())
     }
+
+    pub(crate) fn colon(&mut self) -> ParseResult<()> {
+        expect!(self, TokenKind::Colon, "expected :");
+
+        Ok(())
+    }
 }

@@ -187,7 +187,7 @@ impl Parser {
             TokenKind::Identifier(_) if self.peek.kind == TokenKind::Colon => {
                 let label = self.ident()?.into();
 
-                expect!(self, TokenKind::Colon, "expected :");
+                self.colon()?;
 
                 Statement::Label { label }
             }
@@ -538,7 +538,7 @@ impl Parser {
                             if self.current.kind == TokenKind::Colon
                                 || self.config.force_type_strings
                             {
-                                expect!(self, TokenKind::Colon, "expected :");
+                                self.colon()?;
 
                                 return_type = Some(self.type_string()?);
                             }
@@ -570,7 +570,7 @@ impl Parser {
                             if self.current.kind == TokenKind::Colon
                                 || self.config.force_type_strings
                             {
-                                expect!(self, TokenKind::Colon, "expected :");
+                                self.colon()?;
 
                                 return_type = Some(self.type_string()?);
                             }
@@ -611,7 +611,7 @@ impl Parser {
                 let name = self.ident()?;
 
                 let backed_type: Option<BackedEnumType> = if self.current.kind == TokenKind::Colon {
-                    expect!(self, TokenKind::Colon, "expected :");
+                    self.colon()?;
 
                     match self.current.kind.clone() {
                         TokenKind::Identifier(s) if s == b"string" || s == b"int" => {
@@ -864,7 +864,7 @@ impl Parser {
                             let condition = self.expression(Precedence::Lowest)?;
                             self.rparen()?;
 
-                            expect!(self, TokenKind::Colon, "expected :");
+                            self.colon()?;
 
                             let mut body = vec![];
                             while !matches!(
@@ -880,7 +880,7 @@ impl Parser {
                         let mut r#else = None;
                         if self.current.kind == TokenKind::Else {
                             self.next();
-                            expect!(self, TokenKind::Colon, "expected :");
+                            self.colon()?;
 
                             let mut body = vec![];
                             while self.current.kind != TokenKind::EndIf {
@@ -1185,7 +1185,7 @@ impl Parser {
         let mut return_type = None;
 
         if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
-            expect!(self, TokenKind::Colon, "expected :");
+            self.colon()?;
 
             return_type = Some(self.type_string()?);
         }
@@ -1406,7 +1406,7 @@ impl Parser {
                             if self.current.kind == TokenKind::Colon
                                 || self.config.force_type_strings
                             {
-                                expect!(self, TokenKind::Colon, "expected :");
+                                self.colon()?;
 
                                 return_type = Some(self.type_string()?);
                             }
@@ -1854,7 +1854,7 @@ impl Parser {
 
                 let mut return_type = None;
                 if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
-                    expect!(self, TokenKind::Colon, "expected :");
+                    self.colon()?;
 
                     return_type = Some(self.type_string()?);
                 }
@@ -1893,7 +1893,7 @@ impl Parser {
                 let mut return_type = None;
 
                 if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
-                    expect!(self, TokenKind::Colon, "expected :");
+                    self.colon()?;
 
                     return_type = Some(self.type_string()?);
                 }
@@ -2050,7 +2050,7 @@ impl Parser {
                 match kind {
                     TokenKind::Question => {
                         let then = self.expression(Precedence::Lowest)?;
-                        expect!(self, TokenKind::Colon, "expected :");
+                        self.colon()?;
                         let otherwise = self.expression(rpred)?;
                         left = Expression::Ternary {
                             condition: Box::new(left),
