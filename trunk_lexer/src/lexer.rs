@@ -405,10 +405,12 @@ impl Lexer {
             }
             [b'{', ..] => {
                 self.next();
+                self.push_state(LexerState::Scripting);
                 TokenKind::LeftBrace
             }
             [b'}', ..] => {
                 self.next();
+                self.pop_state();
                 TokenKind::RightBrace
             }
             [b'(', ..] => {
@@ -783,6 +785,14 @@ impl Lexer {
 
     fn enter_state(&mut self, state: LexerState) {
         *self.state_stack.last_mut().unwrap() = state;
+    }
+
+    fn push_state(&mut self, state: LexerState) {
+        self.state_stack.push(state);
+    }
+
+    fn pop_state(&mut self) {
+        self.state_stack.pop();
     }
 
     fn peek_buf(&self) -> &[u8] {
