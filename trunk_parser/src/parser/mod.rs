@@ -5,7 +5,7 @@ use crate::{
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
-use std::{fmt::Display, vec::IntoIter};
+use std::{fmt::Display, vec::IntoIter, f32::consts::E};
 use trunk_lexer::{Span, Token, TokenKind};
 
 use self::precedence::{Associativity, Precedence};
@@ -845,7 +845,10 @@ impl Parser {
                         self.next();
 
                         let mut then = vec![];
-                        while ! matches!(self.current.kind, TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf) {
+                        while !matches!(
+                            self.current.kind,
+                            TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
+                        ) {
                             then.push(self.statement()?);
                         }
 
@@ -864,11 +867,26 @@ impl Parser {
                             expect!(self, TokenKind::Colon, "expected :");
 
                             let mut body = vec![];
-                            while ! matches!(self.current.kind, TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf) {
+                            while !matches!(
+                                self.current.kind,
+                                TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
+                            ) {
                                 body.push(self.statement()?);
                             }
 
                             else_ifs.push(ElseIf { condition, body });
+                        }
+
+                        let mut r#else = None;
+                        if self.current.kind == TokenKind::Else {
+                            self.next();
+                            expect!(self, TokenKind::Colon, "expected :");
+
+                            let mut body = vec![];
+                            while self.current.kind != TokenKind::EndIf {
+                                body.push(self.statement()?);
+                            }
+                            r#else = Some(body);
                         }
 
                         expect!(self, TokenKind::EndIf, "expected endif");
@@ -878,47 +896,47 @@ impl Parser {
                             condition,
                             then,
                             else_ifs,
-                            r#else: None,
+                            r#else,
                         }
-                    },
+                    }
                     _ => {
                         let body_end_token = if self.current.kind == TokenKind::LeftBrace {
                             self.next();
-        
+
                             TokenKind::RightBrace
                         } else {
                             TokenKind::SemiColon
                         };
-        
+
                         let then = self.block(&body_end_token)?;
-        
+
                         if body_end_token == TokenKind::RightBrace {
                             self.rbrace()?;
                         }
-        
+
                         let mut else_ifs: Vec<ElseIf> = Vec::new();
                         loop {
                             if self.current.kind == TokenKind::ElseIf {
                                 self.next();
-        
+
                                 self.lparen()?;
-        
+
                                 let condition = self.expression(Precedence::Lowest)?;
-        
+
                                 self.rparen()?;
-        
+
                                 self.lbrace()?;
-        
+
                                 let body = self.block(&TokenKind::RightBrace)?;
-        
+
                                 self.rbrace()?;
-        
+
                                 else_ifs.push(ElseIf { condition, body });
                             } else {
                                 break;
                             }
                         }
-        
+
                         if self.current.kind != TokenKind::Else {
                             return Ok(Statement::If {
                                 condition,
@@ -927,22 +945,22 @@ impl Parser {
                                 r#else: None,
                             });
                         }
-        
+
                         expect!(self, TokenKind::Else, "expected else");
-        
+
                         self.lbrace()?;
-        
+
                         let r#else = self.block(&TokenKind::RightBrace)?;
-        
+
                         self.rbrace()?;
-        
+
                         Statement::If {
                             condition,
                             then,
                             else_ifs,
                             r#else: Some(r#else),
-                        }  
-                    },
+                        }
+                    }
                 }
             }
             TokenKind::Class => self.class()?,
@@ -4792,51 +4810,46 @@ mod tests {
 
     #[test]
     fn short_if() {
-        assert_ast("<?php
+        assert_ast(
+            "<?php
         if ($a):
             $a;
-        endif;", &[
-            Statement::If {
+        endif;",
+            &[Statement::If {
                 condition: Expression::Variable { name: "a".into() },
-                then: vec![
-                    expr!(Expression::Variable { name: "a".into() })
-                ],
+                then: vec![expr!(Expression::Variable { name: "a".into() })],
                 else_ifs: vec![],
                 r#else: None,
-            }
-        ])
+            }],
+        )
     }
 
     #[test]
     fn short_else_if() {
-        assert_ast("<?php
+        assert_ast(
+            "<?php
         if (true):
             $a;
         elseif (true):
             $b;
         endif;
-        ", &[
-            Statement::If {
+        ",
+            &[Statement::If {
                 condition: Expression::Bool { value: true },
-                then: vec![
-                    expr!(Expression::Variable { name: "a".into() })
-                ],
-                else_ifs: vec![
-                    ElseIf {
-                        condition: Expression::Bool { value: true },
-                        body: vec![
-                            expr!(Expression::Variable { name: "b".into() })
-                        ]
-                    }
-                ],
+                then: vec![expr!(Expression::Variable { name: "a".into() })],
+                else_ifs: vec![ElseIf {
+                    condition: Expression::Bool { value: true },
+                    body: vec![expr!(Expression::Variable { name: "b".into() })],
+                }],
                 r#else: None,
-            }
-        ]);
+            }],
+        );
     }
 
     #[test]
     fn multiple_short_else_if() {
-        assert_ast("<?php
+        assert_ast(
+            "<?php
         if (true):
             $a;
         elseif (true):
@@ -4844,29 +4857,43 @@ mod tests {
         elseif (true):
             $c;
         endif;
-        ", &[
-            Statement::If {
+        ",
+            &[Statement::If {
                 condition: Expression::Bool { value: true },
-                then: vec![
-                    expr!(Expression::Variable { name: "a".into() })
-                ],
+                then: vec![expr!(Expression::Variable { name: "a".into() })],
                 else_ifs: vec![
                     ElseIf {
                         condition: Expression::Bool { value: true },
-                        body: vec![
-                            expr!(Expression::Variable { name: "b".into() })
-                        ]
+                        body: vec![expr!(Expression::Variable { name: "b".into() })],
                     },
                     ElseIf {
                         condition: Expression::Bool { value: true },
-                        body: vec![
-                            expr!(Expression::Variable { name: "c".into() })
-                        ]
-                    }
+                        body: vec![expr!(Expression::Variable { name: "c".into() })],
+                    },
                 ],
                 r#else: None,
-            }
-        ]);
+            }],
+        );
+    }
+
+    #[test]
+    fn short_else() {
+        assert_ast(
+            "<?php
+        if ($a):
+            $a;
+        else:
+            $b;
+        endif;",
+            &[Statement::If {
+                condition: Expression::Variable { name: "a".into() },
+                then: vec![expr!(Expression::Variable { name: "a".into() })],
+                else_ifs: vec![],
+                r#else: Some(vec![
+                    expr!(Expression::Variable { name: "b".into() })
+                ]),
+            }],
+        )
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
