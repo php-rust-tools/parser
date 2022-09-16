@@ -11,6 +11,7 @@ pub enum OpenTagKind {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum TokenKind {
+    Dollar,
     HaltCompiler,
     Readonly,
     Global,
@@ -174,6 +175,7 @@ impl Default for Token {
 impl Display for TokenKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
+            Self::Dollar => "$",
             Self::HaltCompiler => "__halt_compiler",
             Self::Readonly => "readonly",
             Self::AsteriskEqual => "*=",
