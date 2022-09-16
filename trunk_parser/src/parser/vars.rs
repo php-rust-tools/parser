@@ -1,5 +1,5 @@
-use crate::{Parser, Expression};
-use super::{ParseResult, Precedence, ParseError};
+use super::{ParseError, ParseResult, Precedence};
+use crate::{Expression, Parser};
 use trunk_lexer::TokenKind;
 
 impl Parser {
@@ -27,7 +27,12 @@ impl Parser {
                     name: Box::new(Expression::Variable { name: variable }),
                 }
             }
-            _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span)),
+            _ => {
+                return Err(ParseError::UnexpectedToken(
+                    self.current.kind.to_string(),
+                    self.current.span,
+                ))
+            }
         })
     }
 }

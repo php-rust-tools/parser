@@ -510,7 +510,7 @@ pub enum Expression {
     },
     StaticMethodCall {
         target: Box<Self>,
-        method: Identifier,
+        method: Box<Self>,
         args: Vec<Arg>,
     },
     AnonymousClass {
