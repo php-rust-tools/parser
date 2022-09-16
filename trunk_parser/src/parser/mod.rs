@@ -1,6 +1,6 @@
 use crate::{
     ast::{
-        Arg, ArrayItem, BackedEnumType, ClassFlag, ClosureUse, Constant, DeclareItem, ElseIf,
+        ArrayItem, BackedEnumType, ClassFlag, ClosureUse, Constant, DeclareItem, ElseIf,
         IncludeKind, MagicConst, MethodFlag, StaticVar, Use, UseKind,
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
@@ -967,7 +967,7 @@ impl Parser {
                 // method like the Lexer has.
                 if self.peek.kind == TokenKind::Ampersand {
                     let mut cloned = self.iter.clone();
-                    for (index, _) in self.iter.clone().enumerate() {
+                    if let Some((index, _)) = self.iter.clone().enumerate().next() {
                         if !matches!(
                             cloned.nth(index),
                             Some(Token {
@@ -981,8 +981,6 @@ impl Parser {
 
                             return Ok(Statement::Expression { expr });
                         }
-
-                        break;
                     }
 
                     self.function()?
@@ -2040,7 +2038,7 @@ impl Parser {
                     TokenKind::Dollar => self.dynamic_variable()?,
                     TokenKind::Variable(var) => {
                         self.next();
-                        Expression::Variable { name: var.into() }
+                        Expression::Variable { name: var }
                     }
                     TokenKind::LeftBrace => {
                         must_be_method_call = true;
@@ -2056,7 +2054,7 @@ impl Parser {
                     }
                     TokenKind::Identifier(ident) => {
                         self.next();
-                        Expression::Identifier { name: ident.into() }
+                        Expression::Identifier { name: ident }
                     }
                     _ => {
                         return Err(ParseError::UnexpectedToken(
