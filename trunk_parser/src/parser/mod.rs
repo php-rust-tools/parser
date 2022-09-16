@@ -50,6 +50,7 @@ mod ident;
 mod params;
 mod precedence;
 mod punc;
+mod vars;
 
 pub struct ParserConfig {
     force_type_strings: bool,
@@ -1931,31 +1932,7 @@ impl Parser {
                 prefix(&op, rhs)
             }
             TokenKind::Dollar => {
-                self.next();
-
-                match &self.current.kind {
-                    TokenKind::LeftBrace => {
-                        self.next();
-
-                        let name = self.expression(Precedence::Lowest)?;
-
-                        self.rbrace()?;
-
-                        Expression::DynamicVariable {
-                            name: Box::new(name),
-                        }
-                    }
-                    TokenKind::Variable(variable) => {
-                        let variable = variable.clone();
-
-                        self.next();
-
-                        Expression::DynamicVariable {
-                            name: Box::new(Expression::Variable { name: variable }),
-                        }
-                    }
-                    _ => todo!(),
-                }
+                self.dynamic_variable()?   
             }
             _ => todo!(
                 "expr lhs: {:?}, line {} col {}",
@@ -2205,10 +2182,15 @@ impl Parser {
                         self.next();
                         var
                     }
+                    TokenKind::Dollar => {
+                        self.dynamic_variable()?
+                    },
                     _ => Expression::Identifier {
                         name: self.ident_maybe_reserved()?,
                     },
                 };
+
+                dbg!(&self.current.kind);
 
                 if self.current.kind == TokenKind::LeftParen {
                     self.next();
@@ -4260,15 +4242,28 @@ mod tests {
     }
 
     #[test]
-    fn variable_variable_method_calls() {
+    fn variable_variable_property_fetch() {
         assert_ast(
             "<?php $a->$$b;",
+            &[expr!(Expression::PropertyFetch {
+                target: Box::new(Expression::Variable { name: "a".into() }),
+                property: Box::new(Expression::DynamicVariable {
+                    name: Box::new(Expression::Variable { name: "b".into() })
+                }),
+            })],
+        );
+    }
+
+    #[test]
+    fn variable_variable_method_calls() {
+        assert_ast(
+            "<?php $a->$$b();",
             &[expr!(Expression::MethodCall {
                 target: Box::new(Expression::Variable { name: "a".into() }),
                 method: Box::new(Expression::DynamicVariable {
                     name: Box::new(Expression::Variable { name: "b".into() })
                 }),
-                args: vec![]
+                args: vec![],
             })],
         );
     }
