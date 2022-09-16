@@ -4745,6 +4745,23 @@ mod tests {
         );
     }
 
+    #[test]
+    fn short_if() {
+        assert_ast("<?php
+        if ($a):
+            $a;
+        endif;", &[
+            Statement::If {
+                condition: Expression::Variable { name: "a".into() },
+                then: vec![
+                    expr!(Expression::Variable { name: "a".into() })
+                ],
+                else_ifs: vec![],
+                r#else: None,
+            }
+        ])
+    }
+
     fn assert_ast(source: &str, expected: &[Statement]) {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();
