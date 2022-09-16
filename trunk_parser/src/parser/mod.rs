@@ -2107,7 +2107,15 @@ impl Parser {
                     }
                     TokenKind::LeftBrace => {
                         must_be_method_call = true;
-                        self.dynamic_variable()?
+                        self.next();
+
+                        let name = self.expression(Precedence::Lowest)?;
+
+                        self.rbrace()?;
+
+                        Expression::DynamicVariable {
+                            name: Box::new(name),
+                        }
                     }
                     TokenKind::Identifier(ident) => {
                         self.next();
@@ -4309,6 +4317,22 @@ mod tests {
                 target: Box::new(Expression::Identifier { name: "Foo".into() }),
                 method: Box::new(Expression::DynamicVariable {
                     name: Box::new(Expression::Variable { name: "a".into() })
+                }),
+                args: vec![],
+            })],
+        );
+    }
+
+    #[test]
+    fn braced_static_method_call() {
+        assert_ast(
+            "<?php Foo::{'foo'}();",
+            &[expr!(Expression::StaticMethodCall {
+                target: Box::new(Expression::Identifier { name: "Foo".into() }),
+                method: Box::new(Expression::DynamicVariable {
+                    name: Box::new(Expression::ConstantString {
+                        value: "foo".into()
+                    })
                 }),
                 args: vec![],
             })],
