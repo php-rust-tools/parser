@@ -1,10 +1,10 @@
 use crate::{
-    ast::{ParamList, PropertyFlag},
+    ast::{ParamList, PropertyFlag, Arg},
     Expression, Param, ParseError,
 };
 use trunk_lexer::TokenKind;
 
-use super::{precedence::Precedence, Parser};
+use super::{precedence::Precedence, Parser, ParseResult};
 
 impl Parser {
     pub(crate) fn param_list(&mut self) -> Result<ParamList, ParseError> {
@@ -58,7 +58,6 @@ impl Parser {
                 default = Some(self.expression(Precedence::Lowest)?);
             }
 
-            // TODO: Support variable types and default values.
             params.push(Param {
                 name: Expression::Variable { name: var },
                 r#type: param_type,
@@ -72,5 +71,45 @@ impl Parser {
         }
 
         Ok(params)
+    }
+
+    pub(crate) fn args_list(&mut self) -> ParseResult<Vec<Arg>> {
+        let mut args = Vec::new();
+
+        while !self.is_eof() && self.current.kind != TokenKind::RightParen {
+            let mut name = None;
+            let mut unpack = false;
+            if matches!(self.current.kind, TokenKind::Identifier(_))
+                && self.peek.kind == TokenKind::Colon
+            {
+                name = Some(self.ident_maybe_reserved()?);
+                self.next();
+            } else if self.current.kind == TokenKind::Ellipsis {
+                self.next();
+                unpack = true;
+            }
+
+            if unpack && self.current.kind == TokenKind::RightParen {
+                args.push(Arg {
+                    name: None,
+                    unpack: false,
+                    value: Expression::VariadicPlaceholder,
+                });
+
+                break;
+            }
+
+            let value = self.expression(Precedence::Lowest)?;
+
+            args.push(Arg {
+                name,
+                unpack,
+                value,
+            });
+
+            self.optional_comma()?;
+        }
+
+        Ok(args)
     }
 }
