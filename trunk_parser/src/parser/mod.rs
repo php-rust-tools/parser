@@ -2257,6 +2257,13 @@ fn is_infix(t: &TokenKind) -> bool {
     matches!(
         t,
         TokenKind::Pow
+            | TokenKind::RightShiftEquals
+            | TokenKind::LeftShiftEquals
+            | TokenKind::CaretEquals
+            | TokenKind::AmpersandEquals
+            | TokenKind::PipeEquals
+            | TokenKind::PercentEquals
+            | TokenKind::PowEquals
             | TokenKind::LogicalAnd
             | TokenKind::LogicalOr
             | TokenKind::LogicalXor
@@ -4495,6 +4502,174 @@ mod tests {
                 lhs: Box::new(Expression::Int { i: 6 }),
                 op: InfixOp::LogicalXor,
                 rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn assign() {
+        assert_ast(
+            "<?php $a = 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::Assign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn add_assign() {
+        assert_ast(
+            "<?php $a += 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::AddAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn sub_assign() {
+        assert_ast(
+            "<?php $a -= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::SubAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn mul_assign() {
+        assert_ast(
+            "<?php $a *= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::MulAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn pow_assign() {
+        assert_ast(
+            "<?php $a **= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::PowAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn div_assign() {
+        assert_ast(
+            "<?php $a /= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::DivAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn concat_assign() {
+        assert_ast(
+            "<?php $a .= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::ConcatAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn mod_assign() {
+        assert_ast(
+            "<?php $a %= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::ModAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn bit_and_assign() {
+        assert_ast(
+            "<?php $a &= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::BitwiseAndAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn bit_or_assign() {
+        assert_ast(
+            "<?php $a |= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::BitwiseOrAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn bit_xor_assign() {
+        assert_ast(
+            "<?php $a ^= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::BitwiseXorAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn left_shift_assign() {
+        assert_ast(
+            "<?php $a <<= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::LeftShiftAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn right_shift_assign() {
+        assert_ast(
+            "<?php $a >>= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::RightShiftAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
+            })],
+        );
+    }
+
+    #[test]
+    fn null_coalese_assign() {
+        assert_ast(
+            "<?php $a ??= 1;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Variable { name: "a".into() }),
+                op: InfixOp::CoalesceAssign,
+                rhs: Box::new(Expression::Int { i: 1 }),
             })],
         );
     }

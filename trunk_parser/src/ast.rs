@@ -650,6 +650,13 @@ pub enum InfixOp {
     LogicalOr,
     LogicalXor,
     Spaceship,
+    PowAssign,
+    ModAssign,
+    BitwiseAndAssign,
+    BitwiseOrAssign,
+    BitwiseXorAssign,
+    LeftShiftAssign,
+    RightShiftAssign,
 }
 
 impl From<TokenKind> for InfixOp {
@@ -689,6 +696,13 @@ impl From<TokenKind> for InfixOp {
             TokenKind::LogicalAnd => Self::LogicalAnd,
             TokenKind::LogicalOr => Self::LogicalOr,
             TokenKind::LogicalXor => Self::LogicalXor,
+            TokenKind::PowEquals => Self::PowAssign,
+            TokenKind::PercentEquals => Self::ModAssign,
+            TokenKind::AmpersandEquals => Self::BitwiseAndAssign,
+            TokenKind::PipeEquals => Self::BitwiseOrAssign,
+            TokenKind::CaretEquals => Self::BitwiseXorAssign,
+            TokenKind::LeftShiftEquals => Self::LeftShiftAssign,
+            TokenKind::RightShiftEquals => Self::RightShiftAssign,
             _ => unreachable!(),
         }
     }

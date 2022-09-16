@@ -66,7 +66,8 @@ impl Precedence {
             Coalesce => Self::NullCoalesce,
             Question => Self::Ternary,
             Equals | PlusEquals | MinusEquals | AsteriskEqual | PowEquals | SlashEquals
-            | DotEquals | AndEqual | CoalesceEqual => Self::Assignment,
+            | DotEquals | AndEqual | CoalesceEqual | PercentEquals | AmpersandEquals
+            | PipeEquals | CaretEquals | LeftShiftEquals | RightShiftEquals => Self::Assignment,
             Yield => Self::Yield,
             LogicalAnd => Self::KeyAnd,
             LogicalOr => Self::KeyOr,

@@ -149,6 +149,10 @@ impl Lexer {
                 self.skip(2);
                 TokenKind::BooleanAnd
             }
+            [b'&', b'=', ..] => {
+                self.skip(2);
+                TokenKind::AmpersandEquals
+            }
             [b'&', ..] => {
                 self.next();
                 TokenKind::Ampersand
@@ -363,6 +367,10 @@ impl Lexer {
                 self.next();
                 TokenKind::Slash
             }
+            [b'*', b'*', b'=', ..] => {
+                self.skip(3);
+                TokenKind::PowEquals
+            }
             [b'*', b'*', ..] => {
                 self.skip(2);
                 TokenKind::Pow
@@ -379,9 +387,17 @@ impl Lexer {
                 self.skip(2);
                 TokenKind::Pipe
             }
+            [b'|', b'=', ..] => {
+                self.skip(2);
+                TokenKind::PipeEquals
+            }
             [b'|', ..] => {
                 self.next();
                 TokenKind::Pipe
+            }
+            [b'^', b'=', ..] => {
+                self.skip(2);
+                TokenKind::CaretEquals
             }
             [b'^', ..] => {
                 self.next();
@@ -458,6 +474,10 @@ impl Lexer {
                 self.next();
                 TokenKind::Plus
             }
+            [b'%', b'=', ..] => {
+                self.skip(2);
+                TokenKind::PercentEquals
+            }
             [b'%', ..] => {
                 self.next();
                 TokenKind::Percent
@@ -484,6 +504,11 @@ impl Lexer {
 
                 todo!("heredocs & nowdocs");
             }
+            [b'<', b'<', b'=', ..] => {
+                self.skip(3);
+
+                TokenKind::LeftShiftEquals
+            }
             [b'<', b'<', ..] => {
                 self.skip(2);
                 TokenKind::LeftShift
@@ -503,6 +528,10 @@ impl Lexer {
             [b'<', ..] => {
                 self.next();
                 TokenKind::LessThan
+            }
+            [b'>', b'>', b'=', ..] => {
+                self.skip(3);
+                TokenKind::RightShiftEquals
             }
             [b'>', b'>', ..] => {
                 self.skip(2);
