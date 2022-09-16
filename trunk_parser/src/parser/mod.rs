@@ -5,7 +5,7 @@ use crate::{
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
-use std::{fmt::Display, vec::IntoIter, f32::consts::E};
+use std::{f32::consts::E, fmt::Display, vec::IntoIter};
 use trunk_lexer::{Span, Token, TokenKind};
 
 use self::precedence::{Associativity, Precedence};
@@ -4889,9 +4889,7 @@ mod tests {
                 condition: Expression::Variable { name: "a".into() },
                 then: vec![expr!(Expression::Variable { name: "a".into() })],
                 else_ifs: vec![],
-                r#else: Some(vec![
-                    expr!(Expression::Variable { name: "b".into() })
-                ]),
+                r#else: Some(vec![expr!(Expression::Variable { name: "b".into() })]),
             }],
         )
     }
