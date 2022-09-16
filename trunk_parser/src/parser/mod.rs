@@ -2257,6 +2257,16 @@ fn is_infix(t: &TokenKind) -> bool {
     matches!(
         t,
         TokenKind::Pow
+            | TokenKind::LogicalAnd
+            | TokenKind::LogicalOr
+            | TokenKind::LogicalXor
+            | TokenKind::Spaceship
+            | TokenKind::LeftShift
+            | TokenKind::RightShift
+            | TokenKind::Ampersand
+            | TokenKind::Pipe
+            | TokenKind::Caret
+            | TokenKind::Percent
             | TokenKind::Instanceof
             | TokenKind::Asterisk
             | TokenKind::Slash
@@ -2271,6 +2281,7 @@ fn is_infix(t: &TokenKind) -> bool {
             | TokenKind::TripleEquals
             | TokenKind::BangEquals
             | TokenKind::BangDoubleEquals
+            | TokenKind::AngledLeftRight
             | TokenKind::Question
             | TokenKind::QuestionColon
             | TokenKind::BooleanAnd
@@ -4352,6 +4363,138 @@ mod tests {
             "<?php print $foo;",
             &[expr!(Expression::Print {
                 value: Box::new(Expression::Variable { name: "foo".into() })
+            })],
+        );
+    }
+
+    #[test]
+    fn modulo() {
+        assert_ast(
+            "<?php 6 % 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::Mod,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn left_shift() {
+        assert_ast(
+            "<?php 6 << 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::LeftShift,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn right_shift() {
+        assert_ast(
+            "<?php 6 >> 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::RightShift,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn bitwise_and() {
+        assert_ast(
+            "<?php 6 & 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::BitwiseAnd,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn bitwise_or() {
+        assert_ast(
+            "<?php 6 | 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::BitwiseOr,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn bitwise_xor() {
+        assert_ast(
+            "<?php 6 ^ 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::BitwiseXor,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn angled_not_equal() {
+        assert_ast(
+            "<?php 6 <> 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::NotEquals,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn spaceship() {
+        assert_ast(
+            "<?php 6 <=> 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::Spaceship,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn logical_and() {
+        assert_ast(
+            "<?php 6 and 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::LogicalAnd,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn logical_or() {
+        assert_ast(
+            "<?php 6 or 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::LogicalOr,
+                rhs: Box::new(Expression::Int { i: 2 })
+            })],
+        );
+    }
+
+    #[test]
+    fn logical_xor() {
+        assert_ast(
+            "<?php 6 xor 2;",
+            &[expr!(Expression::Infix {
+                lhs: Box::new(Expression::Int { i: 6 }),
+                op: InfixOp::LogicalXor,
+                rhs: Box::new(Expression::Int { i: 2 })
             })],
         );
     }

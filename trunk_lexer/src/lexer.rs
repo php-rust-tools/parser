@@ -383,6 +383,10 @@ impl Lexer {
                 self.next();
                 TokenKind::Pipe
             }
+            [b'^', ..] => {
+                self.next();
+                TokenKind::Caret
+            }
             [b'{', ..] => {
                 self.next();
                 TokenKind::LeftBrace
@@ -454,6 +458,10 @@ impl Lexer {
                 self.next();
                 TokenKind::Plus
             }
+            [b'%', ..] => {
+                self.next();
+                TokenKind::Percent
+            }
             [b'-', b'-', ..] => {
                 self.skip(2);
                 TokenKind::Decrement
@@ -480,9 +488,17 @@ impl Lexer {
                 self.skip(2);
                 TokenKind::LeftShift
             }
+            [b'<', b'=', b'>', ..] => {
+                self.skip(3);
+                TokenKind::Spaceship
+            }
             [b'<', b'=', ..] => {
                 self.skip(2);
                 TokenKind::LessThanEquals
+            }
+            [b'<', b'>', ..] => {
+                self.skip(2);
+                TokenKind::AngledLeftRight
             }
             [b'<', ..] => {
                 self.next();
@@ -770,6 +786,9 @@ impl Lexer {
 
 fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident {
+        b"and" => TokenKind::LogicalAnd,
+        b"or" => TokenKind::LogicalOr,
+        b"xor" => TokenKind::LogicalXor,
         b"print" => TokenKind::Print,
         b"__halt_compiler" | b"__HALT_COMPILER" => TokenKind::HaltCompiler,
         b"readonly" => TokenKind::Readonly,

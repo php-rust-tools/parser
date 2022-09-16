@@ -30,7 +30,9 @@ pub enum TokenKind {
     Attribute,
     Bang,
     BangEquals,
+    AngledLeftRight,
     BangDoubleEquals,
+    Spaceship,
     BoolCast,
     BooleanCast,
     BooleanAnd,
@@ -163,6 +165,9 @@ pub enum TokenKind {
     Yield,
     While,
     BitwiseNot,
+    LogicalAnd,
+    LogicalOr,
+    LogicalXor,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -343,6 +348,11 @@ impl Display for TokenKind {
             Self::Yield => "yield",
             Self::While => "while",
             Self::Global => "global",
+            Self::AngledLeftRight => "<>",
+            Self::Spaceship => "<=>",
+            Self::LogicalAnd => "and",
+            Self::LogicalOr => "or",
+            Self::LogicalXor => "xor",
             _ => todo!("format token: {:?}", self),
         };
         write!(f, "{}", s)

@@ -56,7 +56,8 @@ impl Precedence {
             LeftShift | RightShift => Self::BitShift,
             Dot => Self::Concat,
             LessThan | LessThanEquals | GreaterThan | GreaterThanEquals => Self::LtGt,
-            DoubleEquals | BangEquals | TripleEquals | BangDoubleEquals => Self::Equality,
+            DoubleEquals | BangEquals | TripleEquals | BangDoubleEquals | AngledLeftRight
+            | Spaceship => Self::Equality,
             Ampersand => Self::BitwiseAnd,
             Caret => Self::BitwiseXor,
             Pipe => Self::BitwiseOr,
@@ -67,6 +68,9 @@ impl Precedence {
             Equals | PlusEquals | MinusEquals | AsteriskEqual | PowEquals | SlashEquals
             | DotEquals | AndEqual | CoalesceEqual => Self::Assignment,
             Yield => Self::Yield,
+            LogicalAnd => Self::KeyAnd,
+            LogicalOr => Self::KeyOr,
+            LogicalXor => Self::KeyXor,
             _ => unimplemented!("precedence for op {:?}", kind),
         }
     }

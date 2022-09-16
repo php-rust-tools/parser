@@ -620,6 +620,7 @@ pub enum InfixOp {
     Sub,
     Div,
     Mul,
+    Mod,
     Concat,
     ConcatAssign,
     LessThan,
@@ -640,11 +641,21 @@ pub enum InfixOp {
     MulAssign,
     SubAssign,
     DivAssign,
+    LeftShift,
+    RightShift,
+    BitwiseAnd,
+    BitwiseOr,
+    BitwiseXor,
+    LogicalAnd,
+    LogicalOr,
+    LogicalXor,
+    Spaceship,
 }
 
 impl From<TokenKind> for InfixOp {
     fn from(k: TokenKind) -> Self {
         match k {
+            TokenKind::Percent => Self::Mod,
             TokenKind::Plus => Self::Add,
             TokenKind::Minus => Self::Sub,
             TokenKind::Asterisk => Self::Mul,
@@ -657,7 +668,7 @@ impl From<TokenKind> for InfixOp {
             TokenKind::DotEquals => Self::ConcatAssign,
             TokenKind::DoubleEquals => Self::Equals,
             TokenKind::TripleEquals => Self::Identical,
-            TokenKind::BangEquals => Self::NotEquals,
+            TokenKind::BangEquals | TokenKind::AngledLeftRight => Self::NotEquals,
             TokenKind::BangDoubleEquals => Self::NotIdentical,
             TokenKind::BooleanAnd => Self::And,
             TokenKind::BooleanOr => Self::Or,
@@ -669,6 +680,15 @@ impl From<TokenKind> for InfixOp {
             TokenKind::AsteriskEqual => Self::MulAssign,
             TokenKind::MinusEquals => Self::SubAssign,
             TokenKind::SlashEquals => Self::DivAssign,
+            TokenKind::LeftShift => Self::LeftShift,
+            TokenKind::RightShift => Self::RightShift,
+            TokenKind::Ampersand => Self::BitwiseAnd,
+            TokenKind::Pipe => Self::BitwiseOr,
+            TokenKind::Caret => Self::BitwiseXor,
+            TokenKind::Spaceship => Self::Spaceship,
+            TokenKind::LogicalAnd => Self::LogicalAnd,
+            TokenKind::LogicalOr => Self::LogicalOr,
+            TokenKind::LogicalXor => Self::LogicalXor,
             _ => unreachable!(),
         }
     }
