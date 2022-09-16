@@ -2099,7 +2099,7 @@ impl Parser {
                 }
             }
             TokenKind::DoubleColon => match self.current.kind.clone() {
-                TokenKind::Variable(_) => {
+                TokenKind::Dollar | TokenKind::Variable(_) => {
                     let var = self.expression(Precedence::Lowest)?;
 
                     Expression::StaticPropertyFetch {
@@ -4266,6 +4266,20 @@ mod tests {
                 args: vec![],
             })],
         );
+    }
+
+    #[test]
+    fn variable_variable_static_property_fetch() {
+        assert_ast("<?php Foo::$$a;", &[
+            expr!(Expression::StaticPropertyFetch {
+                target: Box::new(Expression::Identifier { name: "Foo".into() }),
+                property: Box::new(Expression::DynamicVariable {
+                    name: Box::new(Expression::Variable {
+                        name: "a".into()
+                    })
+                })
+            })
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
