@@ -487,6 +487,11 @@ pub enum Expression {
         target: Box<Self>,
         property: Box<Self>,
     },
+    NullsafeMethodCall {
+        target: Box<Self>,
+        method: Box<Self>,
+        args: Vec<Arg>,
+    },
     StaticPropertyFetch {
         target: Box<Self>,
         property: Box<Self>,

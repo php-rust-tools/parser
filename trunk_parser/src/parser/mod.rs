@@ -2223,10 +2223,18 @@ impl Parser {
 
                     self.rparen()?;
 
-                    Expression::MethodCall {
-                        target: Box::new(lhs),
-                        method: Box::new(property),
-                        args,
+                    if op == &TokenKind::NullsafeArrow {
+                        Expression::NullsafeMethodCall {
+                            target: Box::new(lhs),
+                            method: Box::new(property),
+                            args,
+                        }
+                    } else {
+                        Expression::MethodCall {
+                            target: Box::new(lhs),
+                            method: Box::new(property),
+                            args,
+                        }
                     }
                 } else if op == &TokenKind::NullsafeArrow {
                     Expression::NullsafePropertyFetch {
@@ -3489,6 +3497,49 @@ mod tests {
             &[expr!(Expression::NullsafePropertyFetch {
                 target: Box::new(Expression::Variable { name: "a".into() }),
                 property: Box::new(Expression::Identifier { name: "b".into() })
+            })],
+        );
+    }
+
+    #[test]
+    fn nullsafe_method_calls() {
+        assert_ast(
+            "<?php $a?->b();",
+            &[expr!(Expression::NullsafeMethodCall {
+                target: Box::new(Expression::Variable { name: "a".into() }),
+                method: Box::new(Expression::Identifier { name: "b".into() }),
+                args: vec![],
+            })],
+        );
+    }
+
+    #[test]
+    fn nullsafe_method_calls_with_args() {
+        assert_ast(
+            "<?php $a?->b($c);",
+            &[expr!(Expression::NullsafeMethodCall {
+                target: Box::new(Expression::Variable { name: "a".into() }),
+                method: Box::new(Expression::Identifier { name: "b".into() }),
+                args: vec![Arg {
+                    name: None,
+                    unpack: false,
+                    value: Expression::Variable { name: "c".into() }
+                }],
+            })],
+        );
+    }
+
+    #[test]
+    fn nullsafe_method_call_chain() {
+        assert_ast(
+            "<?php $a?->b?->c();",
+            &[expr!(Expression::NullsafeMethodCall {
+                target: Box::new(Expression::NullsafePropertyFetch {
+                    target: Box::new(Expression::Variable { name: "a".into() }),
+                    property: Box::new(Expression::Identifier { name: "b".into() }),
+                }),
+                method: Box::new(Expression::Identifier { name: "c".into() }),
+                args: vec![],
             })],
         );
     }
