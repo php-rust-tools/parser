@@ -347,23 +347,28 @@ pub struct DeclareItem {
     pub value: Expression,
 }
 
+// See https://www.php.net/manual/en/language.types.type-juggling.php#language.types.typecasting for more info.
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum CastKind {
-    String,
-    Object,
-    Bool,
     Int,
-    Double,
+    Bool,
+    Float,
+    String,
+    Array,
+    Object,
+    Unset,
 }
 
 impl From<TokenKind> for CastKind {
     fn from(kind: TokenKind) -> Self {
         match kind {
-            TokenKind::StringCast => Self::String,
+            TokenKind::StringCast | TokenKind::BinaryCast => Self::String,
             TokenKind::ObjectCast => Self::Object,
-            TokenKind::BoolCast => Self::Bool,
-            TokenKind::IntCast => Self::Int,
-            TokenKind::DoubleCast => Self::Double,
+            TokenKind::BoolCast | TokenKind::BooleanCast => Self::Bool,
+            TokenKind::IntCast | TokenKind::IntegerCast => Self::Int,
+            TokenKind::FloatCast | TokenKind::DoubleCast | TokenKind::RealCast => Self::Float,
+            TokenKind::UnsetCast => Self::Unset,
+            TokenKind::ArrayCast => Self::Array,
             _ => unreachable!(),
         }
     }
