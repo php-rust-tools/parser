@@ -1474,14 +1474,38 @@ impl Parser {
                 self.next();
 
                 if self.current.kind == TokenKind::SemiColon {
-                    Expression::Yield { value: None }
-                } else {
-                    let value = self.expression(Precedence::Lowest)?;
-
-                    // FIXME: Check for presence of => here to allow yielding key and value.
-
                     Expression::Yield {
-                        value: Some(Box::new(value)),
+                        key: None,
+                        value: None,
+                    }
+                } else {
+                    let mut from = false;
+
+                    if self.current.kind == TokenKind::From {
+                        self.next();
+                        from = true;
+                    }
+
+                    let mut key = None;
+                    let mut value = Box::new(self.expression(if from {
+                        Precedence::YieldFrom
+                    } else {
+                        Precedence::Yield
+                    })?);
+
+                    if self.current.kind == TokenKind::DoubleArrow && !from {
+                        self.next();
+                        key = Some(value.clone());
+                        value = Box::new(self.expression(Precedence::Yield)?);
+                    }
+
+                    if from {
+                        Expression::YieldFrom { value }
+                    } else {
+                        Expression::Yield {
+                            key,
+                            value: Some(value),
+                        }
                     }
                 }
             }
@@ -4680,9 +4704,45 @@ mod tests {
 
     #[test]
     fn empty_yield() {
-        assert_ast("<?php yield;", &[
-            expr!(Expression::Yield { value: None })
-        ]); 
+        assert_ast(
+            "<?php yield;",
+            &[expr!(Expression::Yield {
+                key: None,
+                value: None
+            })],
+        );
+    }
+
+    #[test]
+    fn simple_yield() {
+        assert_ast(
+            "<?php yield 1;",
+            &[expr!(Expression::Yield {
+                key: None,
+                value: Some(Box::new(Expression::Int { i: 1 }))
+            })],
+        );
+    }
+
+    #[test]
+    fn yield_with_key() {
+        assert_ast(
+            "<?php yield 0 => 1;",
+            &[expr!(Expression::Yield {
+                key: Some(Box::new(Expression::Int { i: 0 })),
+                value: Some(Box::new(Expression::Int { i: 1 }))
+            })],
+        );
+    }
+
+    #[test]
+    fn yield_from() {
+        assert_ast(
+            "<?php yield from 1;",
+            &[expr!(Expression::YieldFrom {
+                value: Box::new(Expression::Int { i: 1 })
+            })],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
