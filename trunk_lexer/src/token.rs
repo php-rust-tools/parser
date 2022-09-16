@@ -165,6 +165,9 @@ pub enum TokenKind {
     Yield,
     While,
     BitwiseNot,
+    LogicalAnd,
+    LogicalOr,
+    LogicalXor
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -347,6 +350,9 @@ impl Display for TokenKind {
             Self::Global => "global",
             Self::AngledLeftRight => "<>",
             Self::Spaceship => "<=>",
+            Self::LogicalAnd => "and",
+            Self::LogicalOr => "or",
+            Self::LogicalXor => "xor",
             _ => todo!("format token: {:?}", self),
         };
         write!(f, "{}", s)

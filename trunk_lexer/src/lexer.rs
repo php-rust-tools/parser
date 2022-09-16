@@ -786,6 +786,9 @@ impl Lexer {
 
 fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident {
+        b"and" => TokenKind::LogicalAnd,
+        b"or" => TokenKind::LogicalOr,
+        b"xor" => TokenKind::LogicalXor,
         b"print" => TokenKind::Print,
         b"__halt_compiler" | b"__HALT_COMPILER" => TokenKind::HaltCompiler,
         b"readonly" => TokenKind::Readonly,

@@ -2257,6 +2257,9 @@ fn is_infix(t: &TokenKind) -> bool {
     matches!(
         t,
         TokenKind::Pow
+            | TokenKind::LogicalAnd
+            | TokenKind::LogicalOr
+            | TokenKind::LogicalXor
             | TokenKind::Spaceship
             | TokenKind::LeftShift
             | TokenKind::RightShift
@@ -4417,6 +4420,27 @@ mod tests {
     fn spaceship() {
         assert_ast("<?php 6 <=> 2;", &[
             expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::Spaceship, rhs: Box::new(Expression::Int { i: 2 }) })
+        ]);
+    }
+
+    #[test]
+    fn logical_and() {
+        assert_ast("<?php 6 and 2;", &[
+            expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::LogicalAnd, rhs: Box::new(Expression::Int { i: 2 }) })
+        ]);
+    }
+
+    #[test]
+    fn logical_or() {
+        assert_ast("<?php 6 or 2;", &[
+            expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::LogicalOr, rhs: Box::new(Expression::Int { i: 2 }) })
+        ]);
+    }
+
+    #[test]
+    fn logical_xor() {
+        assert_ast("<?php 6 xor 2;", &[
+            expr!(Expression::Infix { lhs: Box::new(Expression::Int { i: 6 }), op: InfixOp::LogicalXor, rhs: Box::new(Expression::Int { i: 2 }) })
         ]);
     }
 

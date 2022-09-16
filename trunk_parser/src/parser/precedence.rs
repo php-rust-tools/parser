@@ -67,6 +67,9 @@ impl Precedence {
             Equals | PlusEquals | MinusEquals | AsteriskEqual | PowEquals | SlashEquals
             | DotEquals | AndEqual | CoalesceEqual => Self::Assignment,
             Yield => Self::Yield,
+            LogicalAnd => Self::KeyAnd,
+            LogicalOr => Self::KeyOr,
+            LogicalXor => Self::KeyXor,
             _ => unimplemented!("precedence for op {:?}", kind),
         }
     }
