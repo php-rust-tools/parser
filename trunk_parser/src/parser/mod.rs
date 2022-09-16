@@ -839,65 +839,88 @@ impl Parser {
 
                 self.rparen()?;
 
-                let body_end_token = if self.current.kind == TokenKind::LeftBrace {
-                    self.next();
-
-                    TokenKind::RightBrace
-                } else {
-                    TokenKind::SemiColon
-                };
-
-                let then = self.block(&body_end_token)?;
-
-                if body_end_token == TokenKind::RightBrace {
-                    self.rbrace()?;
-                }
-
-                let mut else_ifs: Vec<ElseIf> = Vec::new();
-                loop {
-                    if self.current.kind == TokenKind::ElseIf {
+                // FIXME: Tidy up duplication and make the intent a bit clearer.
+                match self.current.kind {
+                    TokenKind::Colon => {
                         self.next();
 
-                        self.lparen()?;
+                        let mut then = vec![];
+                        while ! matches!(self.current.kind, TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf) {
+                            then.push(self.statement()?);
+                        }
 
-                        let condition = self.expression(Precedence::Lowest)?;
+                        expect!(self, TokenKind::EndIf, "expected endif");
+                        self.semi()?;
 
-                        self.rparen()?;
-
+                        Statement::If {
+                            condition,
+                            then,
+                            else_ifs: vec![],
+                            r#else: None,
+                        }
+                    },
+                    _ => {
+                        let body_end_token = if self.current.kind == TokenKind::LeftBrace {
+                            self.next();
+        
+                            TokenKind::RightBrace
+                        } else {
+                            TokenKind::SemiColon
+                        };
+        
+                        let then = self.block(&body_end_token)?;
+        
+                        if body_end_token == TokenKind::RightBrace {
+                            self.rbrace()?;
+                        }
+        
+                        let mut else_ifs: Vec<ElseIf> = Vec::new();
+                        loop {
+                            if self.current.kind == TokenKind::ElseIf {
+                                self.next();
+        
+                                self.lparen()?;
+        
+                                let condition = self.expression(Precedence::Lowest)?;
+        
+                                self.rparen()?;
+        
+                                self.lbrace()?;
+        
+                                let body = self.block(&TokenKind::RightBrace)?;
+        
+                                self.rbrace()?;
+        
+                                else_ifs.push(ElseIf { condition, body });
+                            } else {
+                                break;
+                            }
+                        }
+        
+                        if self.current.kind != TokenKind::Else {
+                            return Ok(Statement::If {
+                                condition,
+                                then,
+                                else_ifs,
+                                r#else: None,
+                            });
+                        }
+        
+                        expect!(self, TokenKind::Else, "expected else");
+        
                         self.lbrace()?;
-
-                        let body = self.block(&TokenKind::RightBrace)?;
-
+        
+                        let r#else = self.block(&TokenKind::RightBrace)?;
+        
                         self.rbrace()?;
-
-                        else_ifs.push(ElseIf { condition, body });
-                    } else {
-                        break;
-                    }
-                }
-
-                if self.current.kind != TokenKind::Else {
-                    return Ok(Statement::If {
-                        condition,
-                        then,
-                        else_ifs,
-                        r#else: None,
-                    });
-                }
-
-                expect!(self, TokenKind::Else, "expected else");
-
-                self.lbrace()?;
-
-                let r#else = self.block(&TokenKind::RightBrace)?;
-
-                self.rbrace()?;
-
-                Statement::If {
-                    condition,
-                    then,
-                    else_ifs,
-                    r#else: Some(r#else),
+        
+                        Statement::If {
+                            condition,
+                            then,
+                            else_ifs,
+                            r#else: Some(r#else),
+                        }  
+                    },
                 }
             }
             TokenKind::Class => self.class()?,
