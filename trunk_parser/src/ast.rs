@@ -568,6 +568,12 @@ pub enum Expression {
     BitwiseNot {
         value: Box<Self>,
     },
+    PreDecrement {
+        value: Box<Self>,
+    },
+    PreIncrement {
+        value: Box<Self>,
+    },
     Cast {
         kind: CastKind,
         value: Box<Self>,

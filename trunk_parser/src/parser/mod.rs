@@ -2179,6 +2179,8 @@ fn is_prefix(op: &TokenKind) -> bool {
         op,
         TokenKind::Bang
             | TokenKind::BitwiseNot
+            | TokenKind::Decrement
+            | TokenKind::Increment
             | TokenKind::Minus
             | TokenKind::Plus
             | TokenKind::StringCast
@@ -2207,6 +2209,8 @@ fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
         },
         TokenKind::Plus => Expression::UnaryPlus { value: Box::new(rhs) },
         TokenKind::BitwiseNot => Expression::BitwiseNot { value: Box::new(rhs) },
+        TokenKind::Decrement => Expression::PreDecrement { value: Box::new(rhs) },
+        TokenKind::Increment => Expression::PreIncrement { value: Box::new(rhs) },
         TokenKind::StringCast
         | TokenKind::BinaryCast
         | TokenKind::ObjectCast
@@ -4301,6 +4305,20 @@ mod tests {
     fn bitwise_not() {
         assert_ast("<?php ~2;", &[
             expr!(Expression::BitwiseNot { value: Box::new(Expression::Int { i: 2 }) })
+        ]);
+    }
+
+    #[test]
+    fn pre_decrement() {
+        assert_ast("<?php --$a;", &[
+            expr!(Expression::PreDecrement { value: Box::new(Expression::Variable { name: "a".into() }) })
+        ]);
+    }
+
+    #[test]
+    fn pre_increment() {
+        assert_ast("<?php ++$a;", &[
+            expr!(Expression::PreIncrement { value: Box::new(Expression::Variable { name: "a".into() }) })
         ]);
     }
 
