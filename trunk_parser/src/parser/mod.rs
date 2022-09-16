@@ -4259,6 +4259,20 @@ mod tests {
         );
     }
 
+    #[test]
+    fn variable_variable_method_calls() {
+        assert_ast(
+            "<?php $a->$$b;",
+            &[expr!(Expression::MethodCall {
+                target: Box::new(Expression::Variable { name: "a".into() }),
+                method: Box::new(Expression::DynamicVariable {
+                    name: Box::new(Expression::Variable { name: "b".into() })
+                }),
+                args: vec![]
+            })],
+        );
+    }
+
     fn assert_ast(source: &str, expected: &[Statement]) {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();
