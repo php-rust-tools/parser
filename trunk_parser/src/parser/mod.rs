@@ -1929,7 +1929,7 @@ impl Parser {
                 let rhs = self.expression(rpred)?;
 
                 prefix(&op, rhs)
-            },
+            }
             TokenKind::Dollar => {
                 self.next();
 
@@ -1941,11 +1941,13 @@ impl Parser {
 
                         self.rbrace()?;
 
-                        Expression::DynamicVariable { name: Box::new(name) }
-                    },
+                        Expression::DynamicVariable {
+                            name: Box::new(name),
+                        }
+                    }
                     _ => todo!(),
                 }
-            },
+            }
             _ => todo!(
                 "expr lhs: {:?}, line {} col {}",
                 self.current.kind,
@@ -4218,11 +4220,24 @@ mod tests {
 
     #[test]
     fn braced_variables() {
-        assert_ast("<?php ${'foo'};", &[
-            expr!(Expression::DynamicVariable {
-                name: Box::new(Expression::ConstantString { value: "foo".into() })
-            })
-        ]);
+        assert_ast(
+            "<?php ${'foo'};",
+            &[expr!(Expression::DynamicVariable {
+                name: Box::new(Expression::ConstantString {
+                    value: "foo".into()
+                })
+            })],
+        );
+
+        assert_ast(
+            "<?php ${foo()};",
+            &[expr!(Expression::DynamicVariable {
+                name: Box::new(Expression::Call {
+                    target: Box::new(Expression::Identifier { name: "foo".into() }),
+                    args: vec![]
+                })
+            })],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {

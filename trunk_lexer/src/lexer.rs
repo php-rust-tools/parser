@@ -1070,7 +1070,10 @@ function"#,
 
     #[test]
     fn sigils() {
-        assert_tokens("<?php -> $", &[open!(), TokenKind::Arrow, TokenKind::Dollar]);
+        assert_tokens(
+            "<?php -> $",
+            &[open!(), TokenKind::Arrow, TokenKind::Dollar],
+        );
     }
 
     #[test]
