@@ -1,10 +1,10 @@
 use crate::{
-    ast::{ParamList, PropertyFlag, Arg},
+    ast::{Arg, ParamList, PropertyFlag},
     Expression, Param, ParseError,
 };
 use trunk_lexer::TokenKind;
 
-use super::{precedence::Precedence, Parser, ParseResult};
+use super::{precedence::Precedence, ParseResult, Parser};
 
 impl Parser {
     pub(crate) fn param_list(&mut self) -> Result<ParamList, ParseError> {
