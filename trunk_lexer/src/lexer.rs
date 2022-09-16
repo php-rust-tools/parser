@@ -202,8 +202,16 @@ impl Lexer {
                 self.next();
                 self.tokenize_single_quote_string()?
             }
+            [b'b' | b'B', b'\'', ..] => {
+                self.skip(2);
+                self.tokenize_single_quote_string()?
+            }
             [b'"', ..] => {
                 self.next();
+                self.tokenize_double_quote_string()?
+            }
+            [b'b' | b'B', b'"', ..] => {
+                self.skip(2);
                 self.tokenize_double_quote_string()?
             }
             [b'$', ..] => {
@@ -907,6 +915,18 @@ string.'"#,
                 TokenKind::ConstantString("This is a multi-line\nstring.".into()),
             ],
         );
+    }
+
+    #[test]
+    fn binary_strings() {
+        assert_tokens(
+            r#"<?php b'single' b"double" "#,
+            &[
+                open!(),
+                TokenKind::ConstantString("single".into()),
+                TokenKind::ConstantString("double".into()),
+            ],
+        )
     }
 
     #[test]
