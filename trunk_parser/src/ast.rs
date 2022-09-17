@@ -487,6 +487,9 @@ pub enum Expression {
     ConstantString {
         value: ByteString,
     },
+    InterpolatedString {
+        parts: Vec<StringPart>,
+    },
     PropertyFetch {
         target: Box<Self>,
         property: Box<Self>,
@@ -609,6 +612,12 @@ pub struct MatchArm {
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum MagicConst {
     Dir,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum StringPart {
+    Const(ByteString),
+    Expr(Box<Expression>),
 }
 
 #[derive(Debug, Clone, PartialEq)]

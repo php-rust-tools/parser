@@ -1,11 +1,11 @@
 use crate::{
     ast::{
         ArrayItem, BackedEnumType, ClassFlag, ClosureUse, Constant, DeclareItem, ElseIf,
-        IncludeKind, MagicConst, MethodFlag, StaticVar, Use, UseKind,
+        IncludeKind, MagicConst, MethodFlag, StaticVar, StringPart, Use, UseKind,
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
-use std::{f32::consts::E, fmt::Display, vec::IntoIter};
+use std::{fmt::Display, vec::IntoIter};
 use trunk_lexer::{Span, Token, TokenKind};
 
 use self::precedence::{Associativity, Precedence};
@@ -1608,6 +1608,7 @@ impl Parser {
                 self.next();
                 e
             }
+            TokenKind::StringPart(_) => self.interpolated_string()?,
             TokenKind::True => {
                 let e = Expression::Bool { value: true };
                 self.next();
@@ -2255,6 +2256,145 @@ impl Parser {
         })
     }
 
+    fn interpolated_string(&mut self) -> ParseResult<Expression> {
+        let mut parts = Vec::new();
+
+        while self.current.kind != TokenKind::DoubleQuote {
+            match &self.current.kind {
+                TokenKind::StringPart(s) => {
+                    if s.len() > 0 {
+                        parts.push(StringPart::Const(s.clone()));
+                    }
+                    self.next();
+                }
+                TokenKind::DollarLeftBrace => {
+                    self.next();
+                    let e = match (&self.current.kind, &self.peek.kind) {
+                        (TokenKind::Identifier(var), TokenKind::RightBrace) => {
+                            // "${var}"
+                            let e = Expression::Variable { name: var.clone() };
+                            self.next();
+                            self.next();
+                            e
+                        }
+                        (TokenKind::Identifier(var), TokenKind::LeftBracket) => {
+                            // "${var[e]}"
+                            let var = Expression::Variable { name: var.clone() };
+                            self.next();
+                            self.next();
+                            let e = self.expression(Precedence::Lowest)?;
+                            expect!(self, TokenKind::RightBracket, "expected ]");
+                            expect!(self, TokenKind::RightBrace, "expected }");
+                            Expression::ArrayIndex {
+                                array: Box::new(var),
+                                index: Some(Box::new(e)),
+                            }
+                        }
+                        _ => {
+                            // Arbitrary expressions are allowed, but are treated as variable variables.
+                            let e = self.expression(Precedence::Lowest)?;
+                            expect!(self, TokenKind::RightBrace, "expected }");
+
+                            Expression::DynamicVariable { name: Box::new(e) }
+                        }
+                    };
+                    parts.push(StringPart::Expr(Box::new(e)));
+                }
+                TokenKind::LeftBrace => {
+                    // "{$expr}"
+                    self.next();
+                    let e = self.expression(Precedence::Lowest)?;
+                    expect!(self, TokenKind::RightBrace, "expected }");
+                    parts.push(StringPart::Expr(Box::new(e)));
+                }
+                TokenKind::Variable(var) => {
+                    // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
+                    let var = Expression::Variable { name: var.clone() };
+                    self.next();
+                    let e = match self.current.kind {
+                        TokenKind::LeftBracket => {
+                            self.next();
+                            // Full expression syntax is not allowed here,
+                            // so we can't call self.expression.
+                            let index = match &self.current.kind {
+                                &TokenKind::Int(i) => {
+                                    self.next();
+                                    Expression::Int { i }
+                                }
+                                TokenKind::Minus => {
+                                    self.next();
+                                    if let TokenKind::Int(i) = self.current.kind {
+                                        self.next();
+                                        Expression::Negate {
+                                            value: Box::new(Expression::Int { i }),
+                                        }
+                                    } else {
+                                        return Err(ParseError::ExpectedToken(
+                                            "expected integer".into(),
+                                            self.current.span,
+                                        ));
+                                    }
+                                }
+                                TokenKind::Identifier(ident) => {
+                                    let e = Expression::ConstantString {
+                                        value: ident.clone(),
+                                    };
+                                    self.next();
+                                    e
+                                }
+                                TokenKind::Variable(var) => {
+                                    let e = Expression::Variable { name: var.clone() };
+                                    self.next();
+                                    e
+                                }
+                                _ => {
+                                    return Err(ParseError::ExpectedToken(
+                                        "expected -, number, identifier, or variable".into(),
+                                        self.current.span,
+                                    ))
+                                }
+                            };
+                            expect!(self, TokenKind::RightBracket, "expected ]");
+                            Expression::ArrayIndex {
+                                array: Box::new(var),
+                                index: Some(Box::new(index)),
+                            }
+                        }
+                        TokenKind::Arrow => {
+                            self.next();
+                            Expression::PropertyFetch {
+                                target: Box::new(var),
+                                property: Box::new(Expression::Identifier {
+                                    name: self.ident_maybe_reserved()?,
+                                }),
+                            }
+                        }
+                        TokenKind::NullsafeArrow => {
+                            self.next();
+                            Expression::NullsafePropertyFetch {
+                                target: Box::new(var),
+                                property: Box::new(Expression::Identifier {
+                                    name: self.ident_maybe_reserved()?,
+                                }),
+                            }
+                        }
+                        _ => var,
+                    };
+                    parts.push(StringPart::Expr(Box::new(e)));
+                }
+                _ => {
+                    return Err(ParseError::UnexpectedToken(
+                        "string part".into(),
+                        self.current.span,
+                    ));
+                }
+            }
+        }
+        self.next();
+
+        Ok(Expression::InterpolatedString { parts })
+    }
+
     fn is_eof(&self) -> bool {
         self.current.kind == TokenKind::Eof
     }
@@ -2445,7 +2585,7 @@ mod tests {
     use crate::{
         ast::{
             Arg, ArrayItem, BackedEnumType, Case, ClassFlag, Constant, DeclareItem, ElseIf,
-            IncludeKind, InfixOp, MethodFlag, PropertyFlag,
+            IncludeKind, InfixOp, MethodFlag, PropertyFlag, StringPart,
         },
         Catch, Expression, Identifier, Param, Statement, Type,
     };
@@ -2856,6 +2996,83 @@ mod tests {
                     args: vec![]
                 }),
                 args: vec![]
+            })],
+        );
+    }
+
+    #[test]
+    fn interpolated_string() {
+        assert_ast(
+            r#"<?php "$foo abc $bar->a def $bar[0] ghi $bar[baz]";"#,
+            &[expr!(Expression::InterpolatedString {
+                parts: vec![
+                    StringPart::Expr(Box::new(Expression::Variable { name: "foo".into() })),
+                    StringPart::Const(" abc ".into()),
+                    StringPart::Expr(Box::new(Expression::PropertyFetch {
+                        target: Box::new(Expression::Variable { name: "bar".into() }),
+                        property: Box::new(Expression::Identifier { name: "a".into() })
+                    })),
+                    StringPart::Const(" def ".into()),
+                    StringPart::Expr(Box::new(Expression::ArrayIndex {
+                        array: Box::new(Expression::Variable { name: "bar".into() }),
+                        index: Some(Box::new(Expression::Int { i: 0 })),
+                    })),
+                    StringPart::Const(" ghi ".into()),
+                    StringPart::Expr(Box::new(Expression::ArrayIndex {
+                        array: Box::new(Expression::Variable { name: "bar".into() }),
+                        index: Some(Box::new(Expression::ConstantString {
+                            value: "baz".into()
+                        })),
+                    })),
+                ]
+            })],
+        );
+        assert_ast(
+            r#"<?php "${foo}${foo[0]}${foo['bar']}${($foo)}";"#,
+            &[expr!(Expression::InterpolatedString {
+                parts: vec![
+                    StringPart::Expr(Box::new(Expression::Variable { name: "foo".into() })),
+                    StringPart::Expr(Box::new(Expression::ArrayIndex {
+                        array: Box::new(Expression::Variable { name: "foo".into() }),
+                        index: Some(Box::new(Expression::Int { i: 0 })),
+                    })),
+                    StringPart::Expr(Box::new(Expression::ArrayIndex {
+                        array: Box::new(Expression::Variable { name: "foo".into() }),
+                        index: Some(Box::new(Expression::ConstantString {
+                            value: "bar".into()
+                        })),
+                    })),
+                    StringPart::Expr(Box::new(Expression::DynamicVariable {
+                        name: Box::new(Expression::Variable { name: "foo".into() })
+                    })),
+                ]
+            })],
+        );
+        assert_ast(
+            r#"<?php "{$foo}{$foo[0]}{$foo['bar']}{$foo->bar}{$foo->bar()}";"#,
+            &[expr!(Expression::InterpolatedString {
+                parts: vec![
+                    StringPart::Expr(Box::new(Expression::Variable { name: "foo".into() })),
+                    StringPart::Expr(Box::new(Expression::ArrayIndex {
+                        array: Box::new(Expression::Variable { name: "foo".into() }),
+                        index: Some(Box::new(Expression::Int { i: 0 })),
+                    })),
+                    StringPart::Expr(Box::new(Expression::ArrayIndex {
+                        array: Box::new(Expression::Variable { name: "foo".into() }),
+                        index: Some(Box::new(Expression::ConstantString {
+                            value: "bar".into()
+                        })),
+                    })),
+                    StringPart::Expr(Box::new(Expression::PropertyFetch {
+                        target: Box::new(Expression::Variable { name: "foo".into() }),
+                        property: Box::new(Expression::Identifier { name: "bar".into() }),
+                    })),
+                    StringPart::Expr(Box::new(Expression::MethodCall {
+                        target: Box::new(Expression::Variable { name: "foo".into() }),
+                        method: Box::new(Expression::Identifier { name: "bar".into() }),
+                        args: Vec::new(),
+                    })),
+                ]
             })],
         );
     }
