@@ -1,10 +1,14 @@
 use crate::{ByteString, OpenTagKind, Token, TokenKind};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum LexerState {
     Initial,
     Scripting,
     Halted,
+    DoubleQuote,
+    LookingForVarname,
+    LookingForProperty,
+    VarOffset,
 }
 
 #[allow(dead_code)]
@@ -22,6 +26,20 @@ pub struct Lexer {
     current: Option<u8>,
     col: usize,
     line: usize,
+}
+
+// Reusable pattern for the first byte of an identifier.
+macro_rules! ident_start {
+    () => {
+        b'a'..=b'z' | b'A'..=b'Z' | b'_' | b'\x80'..=b'\xff'
+    };
+}
+
+// Reusable pattern for identifier after the first byte.
+macro_rules! ident {
+    () => {
+        b'0'..=b'9' | b'a'..=b'z' | b'A'..=b'Z' | b'_' | b'\x80'..=b'\xff'
+    };
 }
 
 impl Lexer {
@@ -57,13 +75,7 @@ impl Lexer {
                 // The scripting state is entered when an open tag is encountered in the source code.
                 // This tells the lexer to start analysing characters at PHP tokens instead of inline HTML.
                 LexerState::Scripting => {
-                    while let Some(c) = self.current {
-                        if !c.is_ascii_whitespace() && ![b'\n', b'\t', b'\r'].contains(&c) {
-                            break;
-                        }
-
-                        self.next();
-                    }
+                    self.skip_whitespace();
 
                     // If we have consumed whitespace and then reached the end of the file, we should break.
                     if self.current.is_none() {
@@ -82,10 +94,40 @@ impl Lexer {
                     });
                     break;
                 }
+                // The double quote state is entered when inside a double-quoted string that
+                // contains variables.
+                LexerState::DoubleQuote => tokens.extend(self.double_quote()?),
+                // LookingForProperty is entered inside double quotes,
+                // backticks, or a heredoc, expecting a variable name.
+                // If one isn't found, it switches to scripting.
+                LexerState::LookingForVarname => {
+                    if let Some(token) = self.looking_for_varname() {
+                        tokens.push(token);
+                    }
+                }
+                // LookingForProperty is entered inside double quotes,
+                // backticks, or a heredoc, expecting an arrow followed by a
+                // property name.
+                LexerState::LookingForProperty => {
+                    tokens.push(self.looking_for_property()?);
+                }
+                LexerState::VarOffset => {
+                    if self.current.is_none() {
+                        break;
+                    }
+
+                    tokens.push(self.var_offset()?);
+                }
             }
         }
 
         Ok(tokens)
+    }
+
+    fn skip_whitespace(&mut self) {
+        while let Some(b' ' | b'\n' | b'\r' | b'\t') = self.current {
+            self.next();
+        }
     }
 
     fn initial(&mut self) -> Result<Vec<Token>, LexerError> {
@@ -218,9 +260,13 @@ impl Lexer {
                 self.skip(2);
                 self.tokenize_double_quote_string()?
             }
-            [b'$', ..] => {
+            [b'$', ident_start!(), ..] => {
                 self.next();
                 self.tokenize_variable()
+            }
+            [b'$', ..] => {
+                self.next();
+                TokenKind::Dollar
             }
             [b'.', b'=', ..] => {
                 self.skip(2);
@@ -242,7 +288,7 @@ impl Lexer {
                 self.next();
                 self.tokenize_number(String::from(b as char), false)?
             }
-            &[b'\\', n, ..] if n == b'_' || n.is_ascii_alphabetic() => {
+            &[b'\\', ident_start!(), ..] => {
                 self.next();
 
                 match self.scripting()? {
@@ -262,7 +308,7 @@ impl Lexer {
                 self.next();
                 TokenKind::NamespaceSeparator
             }
-            &[b, ..] if b.is_ascii_alphabetic() || b == b'_' => {
+            &[b @ ident_start!(), ..] => {
                 self.next();
                 let mut qualified = false;
                 let mut last_was_slash = false;
@@ -297,7 +343,6 @@ impl Lexer {
                         match self.peek_buf() {
                             [b'(', b')', b';', ..] => {
                                 self.skip(3);
-                                self.col += 3;
                                 self.enter_state(LexerState::Halted);
                             }
                             _ => return Err(LexerError::InvalidHaltCompiler),
@@ -585,6 +630,144 @@ impl Lexer {
         Ok(Token { kind, span })
     }
 
+    fn double_quote(&mut self) -> Result<Vec<Token>, LexerError> {
+        let span = (self.line, self.col);
+        let mut buffer = Vec::new();
+        let kind = loop {
+            match self.peek_buf() {
+                [b'$', b'{', ..] => {
+                    self.skip(2);
+                    self.push_state(LexerState::LookingForVarname);
+                    break TokenKind::DollarLeftBrace;
+                }
+                [b'{', b'$', ..] => {
+                    // Intentionally only consume the left brace.
+                    self.next();
+                    self.push_state(LexerState::Scripting);
+                    break TokenKind::LeftBrace;
+                }
+                [b'"', ..] => {
+                    self.next();
+                    self.enter_state(LexerState::Scripting);
+                    break TokenKind::DoubleQuote;
+                }
+                [b'$', ident_start!(), ..] => {
+                    self.next();
+                    let ident = self.consume_identifier();
+
+                    match self.peek_buf() {
+                        [b'[', ..] => self.push_state(LexerState::VarOffset),
+                        [b'-', b'>', ident_start!(), ..]
+                        | [b'?', b'-', b'>', ident_start!(), ..] => {
+                            self.push_state(LexerState::LookingForProperty)
+                        }
+                        _ => {}
+                    }
+
+                    break TokenKind::Variable(ident.into());
+                }
+                &[b, ..] => {
+                    self.next();
+                    buffer.push(b);
+                }
+                [] => return Err(LexerError::UnexpectedEndOfFile),
+            }
+        };
+
+        let mut tokens = Vec::new();
+        if !buffer.is_empty() {
+            tokens.push(Token {
+                kind: TokenKind::StringPart(buffer.into()),
+                span,
+            })
+        }
+
+        tokens.push(Token { kind, span });
+        Ok(tokens)
+    }
+
+    fn looking_for_varname(&mut self) -> Option<Token> {
+        if let Some(ident) = self.peek_identifier() {
+            if let Some(b'[' | b'}') = self.peek_byte(ident.len()) {
+                let ident = ident.to_vec();
+                let span = (self.line, self.col);
+                self.skip(ident.len());
+                self.enter_state(LexerState::Scripting);
+                return Some(Token {
+                    kind: TokenKind::Identifier(ident.into()),
+                    span,
+                });
+            }
+        }
+
+        self.enter_state(LexerState::Scripting);
+        None
+    }
+
+    fn looking_for_property(&mut self) -> Result<Token, LexerError> {
+        let span = (self.line, self.col);
+        let kind = match self.peek_buf() {
+            [b'-', b'>', ..] => {
+                self.skip(2);
+                TokenKind::Arrow
+            }
+            [b'?', b'-', b'>', ..] => {
+                self.skip(3);
+                TokenKind::NullsafeArrow
+            }
+            &[ident_start!(), ..] => {
+                let buffer = self.consume_identifier();
+                self.pop_state();
+                TokenKind::Identifier(buffer.into())
+            }
+            // Should be impossible as we already looked ahead this far inside double_quote.
+            _ => unreachable!(),
+        };
+        Ok(Token { kind, span })
+    }
+
+    fn var_offset(&mut self) -> Result<Token, LexerError> {
+        let span = (self.line, self.col);
+        let kind = match self.peek_buf() {
+            [b'$', ident_start!(), ..] => {
+                self.next();
+                self.tokenize_variable()
+            }
+            &[b @ b'0'..=b'9', ..] => {
+                self.next();
+                // TODO: all integer literals are allowed, but only decimal integers with no underscores
+                // are actually treated as numbers. Others are treated as strings.
+                // Float literals are not allowed, but that could be handled in the parser.
+                self.tokenize_number(String::from(b as char), false)?
+            }
+            [b'[', ..] => {
+                self.next();
+                TokenKind::LeftBracket
+            }
+            [b'-', ..] => {
+                self.next();
+                TokenKind::Minus
+            }
+            [b']', ..] => {
+                self.next();
+                self.pop_state();
+                TokenKind::RightBracket
+            }
+            &[ident_start!(), ..] => {
+                let label = self.consume_identifier();
+                TokenKind::Identifier(label.into())
+            }
+            &[b, ..] => unimplemented!(
+                "<var offset> char: {}, line: {}, col: {}",
+                b as char,
+                self.line,
+                self.col
+            ),
+            [] => return Err(LexerError::UnexpectedEndOfFile),
+        };
+        Ok(Token { kind, span })
+    }
+
     fn tokenize_single_quote_string(&mut self) -> Result<TokenKind, LexerError> {
         let mut buffer = Vec::new();
 
@@ -612,11 +795,11 @@ impl Lexer {
     fn tokenize_double_quote_string(&mut self) -> Result<TokenKind, LexerError> {
         let mut buffer = Vec::new();
 
-        loop {
+        let constant = loop {
             match self.peek_buf() {
                 [b'"', ..] => {
                     self.next();
-                    break;
+                    break true;
                 }
                 &[b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
                     self.skip(2);
@@ -705,39 +888,47 @@ impl Lexer {
                         return Err(LexerError::InvalidOctalEscape);
                     }
                 }
+                [b'$', ident_start!(), ..] | [b'{', b'$', ..] | [b'$', b'{', ..] => {
+                    break false;
+                }
                 &[b, ..] => {
                     self.next();
                     buffer.push(b);
                 }
                 [] => return Err(LexerError::UnexpectedEndOfFile),
             }
-        }
+        };
 
-        Ok(TokenKind::ConstantString(buffer.into()))
+        Ok(if constant {
+            TokenKind::ConstantString(buffer.into())
+        } else {
+            self.enter_state(LexerState::DoubleQuote);
+            TokenKind::StringPart(buffer.into())
+        })
+    }
+
+    fn peek_identifier(&self) -> Option<&[u8]> {
+        let mut cursor = self.cursor;
+        if let Some(ident_start!()) = self.chars.get(cursor) {
+            cursor += 1;
+            while let Some(ident!()) = self.chars.get(cursor) {
+                cursor += 1;
+            }
+            Some(&self.chars[self.cursor..cursor])
+        } else {
+            None
+        }
+    }
+
+    fn consume_identifier(&mut self) -> Vec<u8> {
+        let ident = self.peek_identifier().unwrap().to_vec();
+        self.skip(ident.len());
+
+        ident
     }
 
     fn tokenize_variable(&mut self) -> TokenKind {
-        let mut buffer = Vec::new();
-
-        while let Some(n) = self.current {
-            match n {
-                b'0'..=b'9' if !buffer.is_empty() => {
-                    buffer.push(n);
-                    self.next();
-                }
-                b'a'..=b'z' | b'A'..=b'Z' | 0x80..=0xff | b'_' => {
-                    buffer.push(n);
-                    self.next();
-                }
-                _ => break,
-            }
-        }
-
-        if buffer.is_empty() {
-            TokenKind::Dollar
-        } else {
-            TokenKind::Variable(buffer.into())
-        }
+        TokenKind::Variable(self.consume_identifier().into())
     }
 
     fn tokenize_number(
@@ -797,6 +988,10 @@ impl Lexer {
 
     fn peek_buf(&self) -> &[u8] {
         &self.chars[self.cursor..]
+    }
+
+    fn peek_byte(&self, delta: usize) -> Option<u8> {
+        self.chars.get(self.cursor + delta).copied()
     }
 
     fn try_read(&self, search: &'static [u8]) -> bool {
@@ -1082,6 +1277,134 @@ string.'"#,
     fn unterminated_strings() {
         assert_error(r#"<?php "unterminated "#, LexerError::UnexpectedEndOfFile);
         assert_error("<?php 'unterminated ", LexerError::UnexpectedEndOfFile);
+    }
+
+    #[test]
+    fn string_variable() {
+        assert_tokens(
+            r#"<?php "$a" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::Variable("a".into()),
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "{$a}" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::LeftBrace,
+                TokenKind::Variable("a".into()),
+                TokenKind::RightBrace,
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "{$a->b}" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::LeftBrace,
+                TokenKind::Variable("a".into()),
+                TokenKind::Arrow,
+                TokenKind::Identifier("b".into()),
+                TokenKind::RightBrace,
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "$a->b" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::Variable("a".into()),
+                TokenKind::Arrow,
+                TokenKind::Identifier("b".into()),
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "$a->" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::Variable("a".into()),
+                TokenKind::StringPart("->".into()),
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "$a?->b" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::Variable("a".into()),
+                TokenKind::NullsafeArrow,
+                TokenKind::Identifier("b".into()),
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "$a?->" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::Variable("a".into()),
+                TokenKind::StringPart("?->".into()),
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "$a[0]" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::Variable("a".into()),
+                TokenKind::LeftBracket,
+                TokenKind::Int(0),
+                TokenKind::RightBracket,
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "abc{$foo}xyz" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("abc".into()),
+                TokenKind::LeftBrace,
+                TokenKind::Variable("foo".into()),
+                TokenKind::RightBrace,
+                TokenKind::StringPart("xyz".into()),
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "${a}" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::DollarLeftBrace,
+                TokenKind::Identifier("a".into()),
+                TokenKind::RightBrace,
+                TokenKind::DoubleQuote,
+            ],
+        );
+        assert_tokens(
+            r#"<?php "${a[0]}" "#,
+            &[
+                open!(),
+                TokenKind::StringPart("".into()),
+                TokenKind::DollarLeftBrace,
+                TokenKind::Identifier("a".into()),
+                TokenKind::LeftBracket,
+                TokenKind::Int(0),
+                TokenKind::RightBracket,
+                TokenKind::RightBrace,
+                TokenKind::DoubleQuote,
+            ],
+        );
     }
 
     #[test]
