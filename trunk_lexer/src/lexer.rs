@@ -1,3 +1,5 @@
+use std::num::IntErrorKind;
+
 use crate::{ByteString, OpenTagKind, Token, TokenKind};
 
 #[derive(Debug, PartialEq)]
@@ -272,10 +274,7 @@ impl Lexer {
                 self.skip(2);
                 TokenKind::DotEquals
             }
-            [b'.', b'0'..=b'9', ..] => {
-                self.next();
-                self.tokenize_number(String::from("0."), true)?
-            }
+            [b'.', b'0'..=b'9', ..] => self.tokenize_number()?,
             [b'.', b'.', b'.', ..] => {
                 self.skip(3);
                 TokenKind::Ellipsis
@@ -284,10 +283,7 @@ impl Lexer {
                 self.next();
                 TokenKind::Dot
             }
-            &[b @ b'0'..=b'9', ..] => {
-                self.next();
-                self.tokenize_number(String::from(b as char), false)?
-            }
+            &[b'0'..=b'9', ..] => self.tokenize_number()?,
             &[b'\\', ident_start!(), ..] => {
                 self.next();
 
@@ -733,12 +729,11 @@ impl Lexer {
                 self.next();
                 self.tokenize_variable()
             }
-            &[b @ b'0'..=b'9', ..] => {
-                self.next();
+            &[b'0'..=b'9', ..] => {
                 // TODO: all integer literals are allowed, but only decimal integers with no underscores
                 // are actually treated as numbers. Others are treated as strings.
                 // Float literals are not allowed, but that could be handled in the parser.
-                self.tokenize_number(String::from(b as char), false)?
+                self.tokenize_number()?
             }
             [b'[', ..] => {
                 self.next();
@@ -931,47 +926,97 @@ impl Lexer {
         TokenKind::Variable(self.consume_identifier().into())
     }
 
-    fn tokenize_number(
-        &mut self,
-        mut buffer: String,
-        seen_decimal: bool,
-    ) -> Result<TokenKind, LexerError> {
-        let mut underscore = false;
-        let mut is_float = seen_decimal;
+    fn tokenize_number(&mut self) -> Result<TokenKind, LexerError> {
+        let mut buffer = String::new();
 
-        while let Some(n) = self.current {
-            match n {
-                b'0'..=b'9' => {
-                    underscore = false;
-                    buffer.push(n as char);
-                    self.next();
-                }
-                b'.' => {
-                    if is_float {
-                        return Err(LexerError::UnexpectedCharacter(n));
-                    }
+        let (base, kind) = match self.peek_buf() {
+            [b'0', b'b', ..] => {
+                self.skip(2);
+                (2, NumberKind::Int)
+            }
+            [b'0', b'o', ..] => {
+                self.skip(2);
+                (8, NumberKind::Int)
+            }
+            [b'0', b'x', ..] => {
+                self.skip(2);
+                (16, NumberKind::Int)
+            }
+            [b'0', ..] => (10, NumberKind::OctalOrFloat),
+            [b'.', ..] => (10, NumberKind::Float),
+            _ => (10, NumberKind::IntOrFloat),
+        };
 
-                    is_float = true;
-                    buffer.push(n as char);
-                    self.next();
-                }
-                b'_' => {
-                    if underscore {
-                        return Err(LexerError::UnexpectedCharacter(n));
-                    }
-
-                    underscore = true;
-                    self.next();
-                }
-                _ => break,
+        if kind != NumberKind::Float {
+            self.read_digits(&mut buffer, base);
+            if kind == NumberKind::Int {
+                return Ok(parse_int(&buffer, base as u32)?);
             }
         }
 
-        Ok(if is_float {
-            TokenKind::Float(buffer.parse().unwrap())
+        // Remaining cases: decimal integer, legacy octal integer, or float.
+        let is_float = match self.peek_buf() {
+            [b'.', ..] | [b'e' | b'E', b'0'..=b'9', ..] => true,
+            _ => false,
+        };
+        if !is_float {
+            let base = if kind == NumberKind::OctalOrFloat {
+                8
+            } else {
+                10
+            };
+            return Ok(parse_int(&buffer, base as u32)?);
+        }
+
+        if self.current == Some(b'.') {
+            buffer.push('.');
+            self.next();
+            self.read_digits(&mut buffer, 10);
+        }
+
+        if let Some(b'e' | b'E') = self.current {
+            buffer.push('e');
+            self.next();
+            self.read_digits(&mut buffer, 10);
+        }
+
+        Ok(TokenKind::Float(buffer.parse().unwrap()))
+    }
+
+    fn read_digits(&mut self, buffer: &mut String, base: usize) {
+        if base == 16 {
+            self.read_digits_fn(buffer, u8::is_ascii_hexdigit);
         } else {
-            TokenKind::Int(buffer.parse().unwrap())
-        })
+            let max = b'0' + base as u8;
+            self.read_digits_fn(buffer, |b| (b'0'..max).contains(b));
+        };
+    }
+
+    fn read_digits_fn<F: Fn(&u8) -> bool>(&mut self, buffer: &mut String, is_digit: F) {
+        if let Some(b) = self.current {
+            if is_digit(&b) {
+                self.next();
+                buffer.push(b as char);
+            } else {
+                return;
+            }
+        }
+        loop {
+            match self.peek_buf() {
+                &[b, ..] if is_digit(&b) => {
+                    self.next();
+                    buffer.push(b as char);
+                }
+                &[b'_', b, ..] if is_digit(&b) => {
+                    self.next();
+                    self.next();
+                    buffer.push(b as char);
+                }
+                _ => {
+                    break;
+                }
+            }
+        }
     }
 
     fn enter_state(&mut self, state: LexerState) {
@@ -1015,6 +1060,25 @@ impl Lexer {
         }
         self.cursor += 1;
         self.current = self.chars.get(self.cursor).copied();
+    }
+}
+
+// Parses an integer literal in the given base and converts errors to LexerError.
+// It returns a float token instead on overflow.
+fn parse_int(buffer: &str, base: u32) -> Result<TokenKind, LexerError> {
+    match i64::from_str_radix(&buffer, base) {
+        Ok(i) => Ok(TokenKind::Int(i)),
+        Err(err) if err.kind() == &IntErrorKind::InvalidDigit => {
+            // The InvalidDigit error is only possible for legacy octal literals.
+            Err(LexerError::InvalidOctalLiteral)
+        }
+        Err(err) if err.kind() == &IntErrorKind::PosOverflow => {
+            // Parse as i128 so we can handle other bases.
+            // This means there's an upper limit on how large the literal can be.
+            let i = i128::from_str_radix(buffer, base).unwrap();
+            Ok(TokenKind::Float(i as f64))
+        }
+        _ => Err(LexerError::UnexpectedError),
     }
 }
 
@@ -1088,11 +1152,21 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
 }
 
 #[derive(Debug, Eq, PartialEq)]
+enum NumberKind {
+    Int,
+    Float,
+    IntOrFloat,
+    OctalOrFloat,
+}
+
+#[derive(Debug, Eq, PartialEq)]
 pub enum LexerError {
     UnexpectedEndOfFile,
+    UnexpectedError,
     UnexpectedCharacter(u8),
     InvalidHaltCompiler,
     InvalidOctalEscape,
+    InvalidOctalLiteral,
     InvalidUnicodeEscape,
 }
 
@@ -1562,9 +1636,51 @@ function hello_world() {
     #[test]
     fn floats() {
         assert_tokens(
-            "<?php 200.5 .05",
-            &[open!(), TokenKind::Float(200.5), TokenKind::Float(0.05)],
+            "<?php 200.5 .05 01.1 1. 1e1 3.1e2 1_1.2_2 3_3.2_2e1_1 18446744073709551615 0x10000000000000000 1e",
+            &[
+                open!(),
+                TokenKind::Float(200.5),
+                TokenKind::Float(0.05),
+                TokenKind::Float(1.1),
+                TokenKind::Float(1.0),
+                TokenKind::Float(10.0),
+                TokenKind::Float(310.0),
+                TokenKind::Float(11.22),
+                TokenKind::Float(3322000000000.0),
+                TokenKind::Float(18446744073709551615.0),
+                TokenKind::Float(18446744073709551616.0),
+                TokenKind::Int(1),
+                TokenKind::Identifier("e".into()),
+            ],
         );
+    }
+
+    #[test]
+    fn ints() {
+        assert_tokens(
+            "<?php 0 10 0b101 0o666 0666 0xff 0xf_f 0b10.1 1__1 1_",
+            &[
+                open!(),
+                TokenKind::Int(0),
+                TokenKind::Int(10),
+                TokenKind::Int(0b101),
+                TokenKind::Int(0o666),
+                TokenKind::Int(0o666),
+                TokenKind::Int(0xff),
+                TokenKind::Int(0xff),
+                TokenKind::Int(2),
+                TokenKind::Float(0.1),
+                TokenKind::Int(1),
+                TokenKind::Identifier("__1".into()),
+                TokenKind::Int(1),
+                TokenKind::Identifier("_".into()),
+            ],
+        );
+    }
+
+    #[test]
+    fn invalid_numbers() {
+        assert_error("<?php 09", LexerError::InvalidOctalLiteral);
     }
 
     #[test]
