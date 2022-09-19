@@ -5125,17 +5125,16 @@ mod tests {
 
     #[test]
     fn short_foreach() {
-        assert_ast("<?php foreach ($a as $b): $c; endforeach;", &[
-            Statement::Foreach {
+        assert_ast(
+            "<?php foreach ($a as $b): $c; endforeach;",
+            &[Statement::Foreach {
                 expr: Expression::Variable { name: "a".into() },
                 by_ref: false,
                 key_var: None,
                 value_var: Expression::Variable { name: "b".into() },
-                body: vec![
-                    expr!(Expression::Variable { name: "c".into() })
-                ]
-            }
-        ]);
+                body: vec![expr!(Expression::Variable { name: "c".into() })],
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
