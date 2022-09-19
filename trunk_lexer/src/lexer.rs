@@ -1020,6 +1020,7 @@ impl Lexer {
 
 fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident {
+        b"endforeach" => TokenKind::EndForeach,
         b"endif" => TokenKind::EndIf,
         b"from" => TokenKind::From,
         b"and" => TokenKind::LogicalAnd,
