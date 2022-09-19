@@ -396,11 +396,23 @@ impl Parser {
                 }
 
                 self.rparen()?;
-                self.lbrace()?;
 
-                let body = self.block(&TokenKind::RightBrace)?;
+                let end_token = if self.current.kind == TokenKind::Colon {
+                    self.colon()?;
+                    TokenKind::EndForeach
+                } else {
+                    self.lbrace()?;
+                    TokenKind::RightBrace
+                };
 
-                self.rbrace()?;
+                let body = self.block(&end_token)?;
+
+                if end_token == TokenKind::EndForeach {
+                    expect!(self, TokenKind::EndForeach, "expected endforeach");
+                    self.semi()?;
+                } else {
+                    self.rbrace()?;
+                }
 
                 Statement::Foreach {
                     expr,
@@ -5109,6 +5121,20 @@ mod tests {
                 r#else: Some(vec![expr!(Expression::Variable { name: "b".into() })]),
             }],
         )
+    }
+
+    #[test]
+    fn short_foreach() {
+        assert_ast(
+            "<?php foreach ($a as $b): $c; endforeach;",
+            &[Statement::Foreach {
+                expr: Expression::Variable { name: "a".into() },
+                by_ref: false,
+                key_var: None,
+                value_var: Expression::Variable { name: "b".into() },
+                body: vec![expr!(Expression::Variable { name: "c".into() })],
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
