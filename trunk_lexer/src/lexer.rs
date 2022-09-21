@@ -930,15 +930,15 @@ impl Lexer {
         let mut buffer = String::new();
 
         let (base, kind) = match self.peek_buf() {
-            [b'0', b'b', ..] => {
+            [b'0', b'B' | b'b', ..] => {
                 self.skip(2);
                 (2, NumberKind::Int)
             }
-            [b'0', b'o', ..] => {
+            [b'0', b'O' | b'o', ..] => {
                 self.skip(2);
                 (8, NumberKind::Int)
             }
-            [b'0', b'x', ..] => {
+            [b'0', b'X' | b'x', ..] => {
                 self.skip(2);
                 (16, NumberKind::Int)
             }
@@ -1658,14 +1658,17 @@ function hello_world() {
     #[test]
     fn ints() {
         assert_tokens(
-            "<?php 0 10 0b101 0o666 0666 0xff 0xf_f 0b10.1 1__1 1_",
+            "<?php 0 10 0b101 0B101 0o666 0O666 0666 0xff 0Xff 0xf_f 0b10.1 1__1 1_",
             &[
                 open!(),
                 TokenKind::Int(0),
                 TokenKind::Int(10),
                 TokenKind::Int(0b101),
+                TokenKind::Int(0b101),
                 TokenKind::Int(0o666),
                 TokenKind::Int(0o666),
+                TokenKind::Int(0o666),
+                TokenKind::Int(0xff),
                 TokenKind::Int(0xff),
                 TokenKind::Int(0xff),
                 TokenKind::Int(2),
