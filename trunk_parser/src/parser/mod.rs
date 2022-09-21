@@ -2783,6 +2783,19 @@ mod tests {
                 r#else: Box::new(Expression::Int { i: 5 }),
             })],
         );
+
+        assert_ast(
+            "<?php 1 ?: 2 ?: 3;",
+            &[expr!(Expression::Ternary {
+                condition: Box::new(Expression::Int { i: 1 }),
+                then: None,
+                r#else: Box::new(Expression::Ternary {
+                    condition: Box::new(Expression::Int { i: 2 }),
+                    then: None,
+                    r#else: Box::new(Expression::Int { i: 3 })
+                }),
+            })],
+        );
     }
 
     #[test]
