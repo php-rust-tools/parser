@@ -64,7 +64,7 @@ impl Precedence {
             BooleanAnd => Self::And,
             BooleanOr => Self::Or,
             Coalesce => Self::NullCoalesce,
-            Question => Self::Ternary,
+            Question | QuestionColon => Self::Ternary,
             Equals | PlusEquals | MinusEquals | AsteriskEqual | PowEquals | SlashEquals
             | DotEquals | AndEqual | CoalesceEqual | PercentEquals | AmpersandEquals
             | PipeEquals | CaretEquals | LeftShiftEquals | RightShiftEquals => Self::Assignment,
