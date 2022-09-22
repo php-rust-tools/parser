@@ -308,11 +308,23 @@ impl Parser {
                 let condition = self.expression(Precedence::Lowest)?;
 
                 self.rparen()?;
-                self.lbrace()?;
 
-                let body = self.block(&TokenKind::RightBrace)?;
+                let end_token = if self.current.kind == TokenKind::Colon {
+                    self.colon()?;
+                    TokenKind::EndWhile
+                } else {
+                    self.lbrace()?;
+                    TokenKind::RightBrace
+                };
 
-                self.rbrace()?;
+                let body = self.block(&end_token)?;
+
+                if end_token == TokenKind::RightBrace {
+                    self.rbrace()?;
+                } else {
+                    expect!(self, TokenKind::EndWhile, "expected endwhile");
+                    self.semi()?;
+                }
 
                 Statement::While { condition, body }
             }
@@ -5148,6 +5160,18 @@ mod tests {
                 body: vec![expr!(Expression::Variable { name: "c".into() })],
             }],
         );
+    }
+
+    #[test]
+    fn short_while() {
+        assert_ast("<?php while (true): $a; endwhile;", &[
+            Statement::While {
+                condition: Expression::Bool { value: true },
+                body: vec![
+                    expr!(Expression::Variable { name: "a".into() })
+                ]
+            }
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
