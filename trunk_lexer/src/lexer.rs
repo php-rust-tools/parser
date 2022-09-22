@@ -1084,6 +1084,7 @@ fn parse_int(buffer: &str, base: u32) -> Result<TokenKind, LexerError> {
 
 fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident {
+        b"enddeclare" => TokenKind::EndDeclare,
         b"endswitch" => TokenKind::EndSwitch,
         b"endfor" => TokenKind::EndFor,
         b"endwhile" => TokenKind::EndWhile,

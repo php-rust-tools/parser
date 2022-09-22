@@ -230,6 +230,12 @@ impl Parser {
                     let b = self.block(&TokenKind::RightBrace)?;
                     self.rbrace()?;
                     b
+                } else if self.current.kind == TokenKind::Colon {
+                    self.colon()?;
+                    let b = self.block(&TokenKind::EndDeclare)?;
+                    expect!(self, TokenKind::EndDeclare, "expected enddeclare");
+                    self.semi()?;
+                    b
                 } else {
                     self.semi()?;
                     vec![]
@@ -5215,6 +5221,20 @@ mod tests {
     fn shorthand_switch() {
         assert_ast("<?php switch ($a): endswitch;", &[
             Statement::Switch { condition: Expression::Variable { name: "a".into() }, cases: vec![] }
+        ]);
+    }
+
+    #[test]
+    fn shorthand_declare() {
+        assert_ast("<?php declare(a=b): $a; enddeclare;", &[
+            Statement::Declare { declares: vec![
+                DeclareItem {
+                    key: "a".into(),
+                    value: Expression::Identifier { name: "b".into() },
+                }
+            ], body: vec![
+                expr!(Expression::Variable { name: "a".into() })
+            ] }
         ]);
     }
 
