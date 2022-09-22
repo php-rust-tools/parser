@@ -364,11 +364,23 @@ impl Parser {
                 }
 
                 self.rparen()?;
-                self.lbrace()?;
 
-                let then = self.block(&TokenKind::RightBrace)?;
+                let end_token = if self.current.kind == TokenKind::Colon {
+                    self.colon()?;
+                    TokenKind::EndFor
+                } else {
+                    self.lbrace()?;
+                    TokenKind::RightBrace
+                };
 
-                self.rbrace()?;
+                let then = self.block(&end_token)?;
+
+                if end_token == TokenKind::EndFor {
+                    expect!(self, TokenKind::EndFor, "expected endfor");
+                    self.semi()?;
+                } else {
+                    self.rbrace()?;
+                };
 
                 Statement::For {
                     init,
@@ -5169,6 +5181,20 @@ mod tests {
                 condition: Expression::Bool { value: true },
                 body: vec![
                     expr!(Expression::Variable { name: "a".into() })
+                ]
+            }
+        ]);
+    }
+
+    #[test]
+    fn short_for() {
+        assert_ast("<?php for ($a; $b; $c): $d; endfor;", &[
+            Statement::For {
+                init: Some(Expression::Variable { name: "a".into() }),
+                condition: Some(Expression::Variable { name: "b".into() }),
+                r#loop: Some(Expression::Variable { name: "c".into() }),
+                then: vec![
+                    expr!(Expression::Variable { name: "d".into() })
                 ]
             }
         ]);
