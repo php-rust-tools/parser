@@ -5193,49 +5193,51 @@ mod tests {
 
     #[test]
     fn short_while() {
-        assert_ast("<?php while (true): $a; endwhile;", &[
-            Statement::While {
+        assert_ast(
+            "<?php while (true): $a; endwhile;",
+            &[Statement::While {
                 condition: Expression::Bool { value: true },
-                body: vec![
-                    expr!(Expression::Variable { name: "a".into() })
-                ]
-            }
-        ]);
+                body: vec![expr!(Expression::Variable { name: "a".into() })],
+            }],
+        );
     }
 
     #[test]
     fn short_for() {
-        assert_ast("<?php for ($a; $b; $c): $d; endfor;", &[
-            Statement::For {
+        assert_ast(
+            "<?php for ($a; $b; $c): $d; endfor;",
+            &[Statement::For {
                 init: Some(Expression::Variable { name: "a".into() }),
                 condition: Some(Expression::Variable { name: "b".into() }),
                 r#loop: Some(Expression::Variable { name: "c".into() }),
-                then: vec![
-                    expr!(Expression::Variable { name: "d".into() })
-                ]
-            }
-        ]);
+                then: vec![expr!(Expression::Variable { name: "d".into() })],
+            }],
+        );
     }
 
     #[test]
     fn shorthand_switch() {
-        assert_ast("<?php switch ($a): endswitch;", &[
-            Statement::Switch { condition: Expression::Variable { name: "a".into() }, cases: vec![] }
-        ]);
+        assert_ast(
+            "<?php switch ($a): endswitch;",
+            &[Statement::Switch {
+                condition: Expression::Variable { name: "a".into() },
+                cases: vec![],
+            }],
+        );
     }
 
     #[test]
     fn shorthand_declare() {
-        assert_ast("<?php declare(a=b): $a; enddeclare;", &[
-            Statement::Declare { declares: vec![
-                DeclareItem {
+        assert_ast(
+            "<?php declare(a=b): $a; enddeclare;",
+            &[Statement::Declare {
+                declares: vec![DeclareItem {
                     key: "a".into(),
                     value: Expression::Identifier { name: "b".into() },
-                }
-            ], body: vec![
-                expr!(Expression::Variable { name: "a".into() })
-            ] }
-        ]);
+                }],
+                body: vec![expr!(Expression::Variable { name: "a".into() })],
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
