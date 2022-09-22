@@ -770,11 +770,17 @@ impl Parser {
 
                 self.rparen()?;
 
-                self.lbrace()?;
+                let end_token = if self.current.kind == TokenKind::Colon {
+                    self.colon()?;
+                    TokenKind::EndSwitch
+                } else {
+                    self.lbrace()?;
+                    TokenKind::RightBrace
+                };
 
                 let mut cases = Vec::new();
                 loop {
-                    if self.current.kind == TokenKind::RightBrace {
+                    if self.current.kind == end_token {
                         break;
                     }
 
@@ -828,7 +834,12 @@ impl Parser {
                     }
                 }
 
-                self.rbrace()?;
+                if end_token == TokenKind::EndSwitch {
+                    expect!(self, TokenKind::EndSwitch, "expected endswitch");
+                    self.semi()?;
+                } else {
+                    self.rbrace()?;
+                }
 
                 Statement::Switch { condition, cases }
             }
@@ -5197,6 +5208,13 @@ mod tests {
                     expr!(Expression::Variable { name: "d".into() })
                 ]
             }
+        ]);
+    }
+
+    #[test]
+    fn shorthand_switch() {
+        assert_ast("<?php switch ($a): endswitch;", &[
+            Statement::Switch { condition: Expression::Variable { name: "a".into() }, cases: vec![] }
         ]);
     }
 
