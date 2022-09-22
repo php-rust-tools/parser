@@ -230,6 +230,12 @@ impl Parser {
                     let b = self.block(&TokenKind::RightBrace)?;
                     self.rbrace()?;
                     b
+                } else if self.current.kind == TokenKind::Colon {
+                    self.colon()?;
+                    let b = self.block(&TokenKind::EndDeclare)?;
+                    expect!(self, TokenKind::EndDeclare, "expected enddeclare");
+                    self.semi()?;
+                    b
                 } else {
                     self.semi()?;
                     vec![]
@@ -308,11 +314,23 @@ impl Parser {
                 let condition = self.expression(Precedence::Lowest)?;
 
                 self.rparen()?;
-                self.lbrace()?;
 
-                let body = self.block(&TokenKind::RightBrace)?;
+                let end_token = if self.current.kind == TokenKind::Colon {
+                    self.colon()?;
+                    TokenKind::EndWhile
+                } else {
+                    self.lbrace()?;
+                    TokenKind::RightBrace
+                };
 
-                self.rbrace()?;
+                let body = self.block(&end_token)?;
+
+                if end_token == TokenKind::RightBrace {
+                    self.rbrace()?;
+                } else {
+                    expect!(self, TokenKind::EndWhile, "expected endwhile");
+                    self.semi()?;
+                }
 
                 Statement::While { condition, body }
             }
@@ -352,11 +370,23 @@ impl Parser {
                 }
 
                 self.rparen()?;
-                self.lbrace()?;
 
-                let then = self.block(&TokenKind::RightBrace)?;
+                let end_token = if self.current.kind == TokenKind::Colon {
+                    self.colon()?;
+                    TokenKind::EndFor
+                } else {
+                    self.lbrace()?;
+                    TokenKind::RightBrace
+                };
 
-                self.rbrace()?;
+                let then = self.block(&end_token)?;
+
+                if end_token == TokenKind::EndFor {
+                    expect!(self, TokenKind::EndFor, "expected endfor");
+                    self.semi()?;
+                } else {
+                    self.rbrace()?;
+                };
 
                 Statement::For {
                     init,
@@ -746,11 +776,17 @@ impl Parser {
 
                 self.rparen()?;
 
-                self.lbrace()?;
+                let end_token = if self.current.kind == TokenKind::Colon {
+                    self.colon()?;
+                    TokenKind::EndSwitch
+                } else {
+                    self.lbrace()?;
+                    TokenKind::RightBrace
+                };
 
                 let mut cases = Vec::new();
                 loop {
-                    if self.current.kind == TokenKind::RightBrace {
+                    if self.current.kind == end_token {
                         break;
                     }
 
@@ -804,7 +840,12 @@ impl Parser {
                     }
                 }
 
-                self.rbrace()?;
+                if end_token == TokenKind::EndSwitch {
+                    expect!(self, TokenKind::EndSwitch, "expected endswitch");
+                    self.semi()?;
+                } else {
+                    self.rbrace()?;
+                }
 
                 Statement::Switch { condition, cases }
             }
@@ -5146,6 +5187,55 @@ mod tests {
                 key_var: None,
                 value_var: Expression::Variable { name: "b".into() },
                 body: vec![expr!(Expression::Variable { name: "c".into() })],
+            }],
+        );
+    }
+
+    #[test]
+    fn short_while() {
+        assert_ast(
+            "<?php while (true): $a; endwhile;",
+            &[Statement::While {
+                condition: Expression::Bool { value: true },
+                body: vec![expr!(Expression::Variable { name: "a".into() })],
+            }],
+        );
+    }
+
+    #[test]
+    fn short_for() {
+        assert_ast(
+            "<?php for ($a; $b; $c): $d; endfor;",
+            &[Statement::For {
+                init: Some(Expression::Variable { name: "a".into() }),
+                condition: Some(Expression::Variable { name: "b".into() }),
+                r#loop: Some(Expression::Variable { name: "c".into() }),
+                then: vec![expr!(Expression::Variable { name: "d".into() })],
+            }],
+        );
+    }
+
+    #[test]
+    fn shorthand_switch() {
+        assert_ast(
+            "<?php switch ($a): endswitch;",
+            &[Statement::Switch {
+                condition: Expression::Variable { name: "a".into() },
+                cases: vec![],
+            }],
+        );
+    }
+
+    #[test]
+    fn shorthand_declare() {
+        assert_ast(
+            "<?php declare(a=b): $a; enddeclare;",
+            &[Statement::Declare {
+                declares: vec![DeclareItem {
+                    key: "a".into(),
+                    value: Expression::Identifier { name: "b".into() },
+                }],
+                body: vec![expr!(Expression::Variable { name: "a".into() })],
             }],
         );
     }
