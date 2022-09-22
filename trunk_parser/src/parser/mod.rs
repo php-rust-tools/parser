@@ -107,7 +107,7 @@ impl Parser {
                 break;
             }
 
-            ast.push(self.statement()?);
+            ast.push(self.top_level_statement()?);
 
             self.clear_comments();
         }
@@ -171,6 +171,129 @@ impl Parser {
         })
     }
 
+    fn top_level_statement(&mut self) -> ParseResult<Statement> {
+        self.skip_comments();
+
+        let statement = match &self.current.kind {
+            TokenKind::Namespace => {
+                self.next();
+
+                let mut braced = false;
+
+                let name = if self.current.kind == TokenKind::LeftBrace {
+                    braced = true;
+                    self.lbrace()?;
+                    None
+                } else {
+                    Some(self.name()?)
+                };
+
+                if name.is_some() {
+                    if self.current.kind == TokenKind::LeftBrace {
+                        braced = true;
+                        self.next();
+                    } else {
+                        self.semi()?;
+                    }
+                }
+
+                let body = if braced {
+                    self.block(&TokenKind::RightBrace)?
+                } else {
+                    Block::new()
+                };
+
+                if braced {
+                    self.rbrace()?;
+                }
+
+                Statement::Namespace { name, body }
+            }
+            TokenKind::Use => {
+                self.next();
+
+                let kind = match self.current.kind {
+                    TokenKind::Function => {
+                        self.next();
+                        UseKind::Function
+                    }
+                    TokenKind::Const => {
+                        self.next();
+                        UseKind::Const
+                    }
+                    _ => UseKind::Normal,
+                };
+
+                let mut uses = Vec::new();
+                while !self.is_eof() {
+                    let name = self.full_name()?;
+                    let mut alias = None;
+
+                    if self.current.kind == TokenKind::As {
+                        self.next();
+                        alias = Some(self.ident()?.into());
+                    }
+
+                    uses.push(Use {
+                        name: name.into(),
+                        alias,
+                    });
+
+                    if self.current.kind == TokenKind::Comma {
+                        self.next();
+                        continue;
+                    }
+
+                    self.semi()?;
+                    break;
+                }
+
+                Statement::Use { uses, kind }
+            }
+            TokenKind::Const => {
+                self.next();
+
+                let mut constants = vec![];
+
+                while self.current.kind != TokenKind::SemiColon {
+                    let name = self.ident()?;
+
+                    expect!(self, TokenKind::Equals, "expected =");
+
+                    let value = self.expression(Precedence::Lowest)?;
+
+                    constants.push(Constant {
+                        name: name.into(),
+                        value,
+                    });
+
+                    self.optional_comma()?;
+                }
+
+                self.semi()?;
+
+                Statement::Constant { constants }
+            }
+            TokenKind::HaltCompiler => {
+                self.next();
+
+                let content = if let TokenKind::InlineHtml(content) = self.current.kind.clone() {
+                    self.next();
+                    Some(content)
+                } else {
+                    None
+                };
+
+                Statement::HaltCompiler { content }
+            }
+            _ => self.statement()?
+        };
+
+        self.clear_comments();
+
+        Ok(statement)
+    }
+
     fn statement(&mut self) -> ParseResult<Statement> {
         self.skip_comments();
 
@@ -190,18 +313,6 @@ impl Parser {
                 self.colon()?;
 
                 Statement::Label { label }
-            }
-            TokenKind::HaltCompiler => {
-                self.next();
-
-                let content = if let TokenKind::InlineHtml(content) = self.current.kind.clone() {
-                    self.next();
-                    Some(content)
-                } else {
-                    None
-                };
-
-                Statement::HaltCompiler { content }
             }
             TokenKind::Declare => {
                 self.next();
@@ -726,47 +837,6 @@ impl Parser {
                     body,
                 }
             }
-            TokenKind::Use => {
-                self.next();
-
-                let kind = match self.current.kind {
-                    TokenKind::Function => {
-                        self.next();
-                        UseKind::Function
-                    }
-                    TokenKind::Const => {
-                        self.next();
-                        UseKind::Const
-                    }
-                    _ => UseKind::Normal,
-                };
-
-                let mut uses = Vec::new();
-                while !self.is_eof() {
-                    let name = self.full_name()?;
-                    let mut alias = None;
-
-                    if self.current.kind == TokenKind::As {
-                        self.next();
-                        alias = Some(self.ident()?.into());
-                    }
-
-                    uses.push(Use {
-                        name: name.into(),
-                        alias,
-                    });
-
-                    if self.current.kind == TokenKind::Comma {
-                        self.next();
-                        continue;
-                    }
-
-                    self.semi()?;
-                    break;
-                }
-
-                Statement::Use { uses, kind }
-            }
             TokenKind::Switch => {
                 self.next();
 
@@ -848,40 +918,6 @@ impl Parser {
                 }
 
                 Statement::Switch { condition, cases }
-            }
-            TokenKind::Namespace => {
-                self.next();
-
-                let mut braced = false;
-
-                let name = if self.current.kind == TokenKind::LeftBrace {
-                    braced = true;
-                    self.lbrace()?;
-                    None
-                } else {
-                    Some(self.name()?)
-                };
-
-                if name.is_some() {
-                    if self.current.kind == TokenKind::LeftBrace {
-                        braced = true;
-                        self.next();
-                    } else {
-                        self.semi()?;
-                    }
-                }
-
-                let body = if braced {
-                    self.block(&TokenKind::RightBrace)?
-                } else {
-                    Block::new()
-                };
-
-                if braced {
-                    self.rbrace()?;
-                }
-
-                Statement::Namespace { name, body }
             }
             TokenKind::If => {
                 self.next();
@@ -1178,30 +1214,6 @@ impl Parser {
                 let body = self.block(&TokenKind::RightBrace)?;
                 self.rbrace()?;
                 Statement::Block { body }
-            }
-            TokenKind::Const => {
-                self.next();
-
-                let mut constants = vec![];
-
-                while self.current.kind != TokenKind::SemiColon {
-                    let name = self.ident()?;
-
-                    expect!(self, TokenKind::Equals, "expected =");
-
-                    let value = self.expression(Precedence::Lowest)?;
-
-                    constants.push(Constant {
-                        name: name.into(),
-                        value,
-                    });
-
-                    self.optional_comma()?;
-                }
-
-                self.semi()?;
-
-                Statement::Constant { constants }
             }
             _ => {
                 let expr = self.expression(Precedence::Lowest)?;
