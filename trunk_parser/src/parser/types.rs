@@ -1,6 +1,6 @@
-use crate::Parser;
 use super::{ParseResult, Type};
-use trunk_lexer::{TokenKind};
+use crate::Parser;
+use trunk_lexer::TokenKind;
 
 impl Parser {
     pub(crate) fn type_string(&mut self) -> ParseResult<Type> {

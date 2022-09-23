@@ -50,8 +50,8 @@ mod ident;
 mod params;
 mod precedence;
 mod punc;
-mod vars;
 mod types;
+mod vars;
 
 pub struct ParserConfig {
     force_type_strings: bool,
