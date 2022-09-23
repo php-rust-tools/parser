@@ -286,7 +286,7 @@ impl Parser {
 
                 Statement::HaltCompiler { content }
             }
-            _ => self.statement()?
+            _ => self.statement()?,
         };
 
         self.clear_comments();
