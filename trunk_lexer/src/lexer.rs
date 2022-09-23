@@ -956,7 +956,9 @@ impl Lexer {
 
         // Remaining cases: decimal integer, legacy octal integer, or float.
         let is_float = match self.peek_buf() {
-            [b'.', ..] | [b'e' | b'E', b'0'..=b'9', ..] => true,
+            [b'.', ..]
+            | [b'e' | b'E', b'-' | b'+', b'0'..=b'9', ..]
+            | [b'e' | b'E', b'0'..=b'9', ..] => true,
             _ => false,
         };
         if !is_float {
@@ -977,6 +979,10 @@ impl Lexer {
         if let Some(b'e' | b'E') = self.current {
             buffer.push('e');
             self.next();
+            if let Some(b @ (b'-' | b'+')) = self.current {
+                buffer.push(b as char);
+                self.next();
+            }
             self.read_digits(&mut buffer, 10);
         }
 
@@ -1640,21 +1646,29 @@ function hello_world() {
     #[test]
     fn floats() {
         assert_tokens(
-            "<?php 200.5 .05 01.1 1. 1e1 3.1e2 1_1.2_2 3_3.2_2e1_1 18446744073709551615 0x10000000000000000 1e",
+            "<?php 200.5 .05 01.1 1. 1e1 1e+1 1e-1 3.1e2 1_1.2_2 3_3.2_2e1_1 18446744073709551615 0x10000000000000000 1e 1e+ 1e-",
             &[
                 open!(),
                 TokenKind::Float(200.5),
                 TokenKind::Float(0.05),
-                TokenKind::Float(1.1),
-                TokenKind::Float(1.0),
-                TokenKind::Float(10.0),
-                TokenKind::Float(310.0),
-                TokenKind::Float(11.22),
-                TokenKind::Float(3322000000000.0),
+                TokenKind::Float(01.1),
+                TokenKind::Float(1.),
+                TokenKind::Float(1e1),
+                TokenKind::Float(1e+1),
+                TokenKind::Float(1e-1),
+                TokenKind::Float(3.1e2),
+                TokenKind::Float(1_1.2_2),
+                TokenKind::Float(3_3.2_2e1_1),
                 TokenKind::Float(18446744073709551615.0),
                 TokenKind::Float(18446744073709551616.0),
                 TokenKind::Int(1),
                 TokenKind::Identifier("e".into()),
+                TokenKind::Int(1),
+                TokenKind::Identifier("e".into()),
+                TokenKind::Plus,
+                TokenKind::Int(1),
+                TokenKind::Identifier("e".into()),
+                TokenKind::Minus,
             ],
         );
     }
