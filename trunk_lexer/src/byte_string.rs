@@ -1,6 +1,7 @@
 use std::cmp::{Eq, PartialEq};
 use std::fmt::{Debug, Formatter, Result};
 use std::ops::Deref;
+use std::str::from_utf8;
 
 /// A wrapper for Vec<u8> that provides a human-readable Debug impl and
 /// a few other conveniences.
@@ -65,6 +66,12 @@ impl From<&str> for ByteString {
 impl From<String> for ByteString {
     fn from(bytes: String) -> Self {
         ByteString::new(bytes.into_bytes())
+    }
+}
+
+impl Into<String> for ByteString {
+    fn into(self) -> String {
+        String::from(from_utf8(&self.0).unwrap())
     }
 }
 
