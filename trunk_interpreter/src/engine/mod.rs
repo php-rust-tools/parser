@@ -1,6 +1,8 @@
 use std::collections::HashMap;
+use std::path::PathBuf;
 
-use trunk_parser::{Statement, Param, Expression, InfixOp, CastKind};
+use trunk_lexer::Lexer;
+use trunk_parser::{Statement, Param, Expression, InfixOp, CastKind, MagicConst, Parser};
 
 use self::environment::Environment;
 use self::value::Value;
@@ -14,14 +16,16 @@ pub struct Function {
 }
 
 pub struct Engine {
+    pub(crate) filename: PathBuf,
     pub(crate) global_environment: Environment,
     pub(crate) function_table: HashMap<String, Function>,
     pub(crate) scopes: Vec<Environment>,
 }
 
 impl Engine {
-    pub fn new() -> Self {
+    pub fn new(filename: PathBuf) -> Self {
         Self {
+            filename,
             global_environment: Environment::new(),
             function_table: HashMap::default(),
             scopes: Vec::new(),
@@ -29,8 +33,8 @@ impl Engine {
     }
 }
 
-pub fn eval(program: Vec<Statement>) -> Result<(), Escape> {
-    let mut engine = Engine::new();
+pub fn eval(filename: PathBuf, program: Vec<Statement>) -> Result<(), Escape> {
+    let mut engine = Engine::new(filename);
     for statement in program {
         eval_statement(&mut engine, statement)?;
     }
@@ -41,12 +45,22 @@ pub enum Escape {
     Return(Value),
 }
 
+macro_rules! extract {
+    ($target:expr, $pattern:pat, $return:expr) => {
+        match $target {
+            $pattern => $return,
+            _ => unreachable!(),
+        }
+    };
+}
+
 pub fn eval_statement(engine: &mut Engine, statement: Statement) -> Result<(), Escape> {
     match statement {
         Statement::Function { .. } => eval_function(engine, statement)?,
         Statement::Echo { .. } => eval_echo(engine, statement)?,
         Statement::If { .. } => eval_if(engine, statement)?,
         Statement::Return { .. } => return Err(Escape::Return(eval_return(engine, statement))),
+        Statement::Include { .. } => eval_include(engine, statement)?,
         _ => unimplemented!("{:?}", statement)
     };
 
@@ -102,10 +116,7 @@ fn eval_if(engine: &mut Engine, statement: Statement) -> Result<(), Escape> {
 }
 
 fn eval_return(engine: &mut Engine, statement: Statement) -> Value {
-    let (value) = match statement {
-        Statement::Return { value } => value,
-        _ => unreachable!(),
-    };
+    let value = extract!(statement, Statement::Return { value }, value);
 
     if let Some(value) = value {
         return eval_expression(engine, value);
@@ -114,12 +125,37 @@ fn eval_return(engine: &mut Engine, statement: Statement) -> Value {
     return Value::Null;
 }
 
+fn eval_include(engine: &mut Engine, statement: Statement) -> Result<(), Escape> {
+    let (kind, path) = extract!(statement, Statement::Include { kind, path }, (kind, path));
+
+    let path = extract!(eval_expression(engine, path), Value::String(value), value);
+    let original_filename = engine.filename.clone();
+    let contents = std::fs::read_to_string(&path).unwrap();
+
+    engine.filename = PathBuf::from(&path);
+
+    let mut lexer = Lexer::new(None);
+    let tokens = lexer.tokenize(&contents).unwrap();
+
+    let mut parser = Parser::new(None);
+    let ast = parser.parse(tokens).unwrap();
+
+    for statement in ast {
+        eval_statement(engine, statement)?;
+    }
+
+    engine.filename = original_filename;
+
+    Ok(())
+}
+
 fn eval_expression(engine: &mut Engine, expression: Expression) -> Value {
     match expression {
         Expression::Infix { .. } => eval_infix_expression(engine, expression),
         Expression::Call { .. } => eval_call_expression(engine, expression),
         Expression::Variable { .. } => eval_variable_expression(engine, expression),
         Expression::Cast { .. } => eval_cast_expression(engine, expression),
+        Expression::MagicConst { constant } => eval_magic_const(engine, constant),
         Expression::Int { i } => Value::Int(i),
         Expression::ConstantString { value } => Value::String(value.into()),
         _ => panic!("unhandled expression: {:?}", expression)
@@ -238,5 +274,15 @@ fn eval_cast_expression(engine: &mut Engine, expression: Expression) -> Value {
     match (kind, &value) {
         (CastKind::String, Value::Int(i)) => Value::String(i.to_string()),
         _ => value,
+    }
+}
+
+fn eval_magic_const(engine: &mut Engine, constant: MagicConst) -> Value {
+    match constant {
+        MagicConst::Dir => {
+            // FIXME: Sort this nasty code out.
+            Value::String(engine.filename.parent().unwrap().to_str().unwrap().to_string())
+        },
+        _ => todo!()
     }
 }
