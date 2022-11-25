@@ -27,6 +27,8 @@ The current goal for Trunk is to get a fully functional parser up and running so
 * [Lexer](/trunk_lexer/)
 * [Parser](/trunk_parser/)
 
+> Neither of these projects are production-ready so please don't use them for anything critical.
+
 #### Contributing
 
 All contributions to Trunk are welcome. It's the perfect project for Rust beginners since we don't use many of Rust's complex features and the core concepts in the parser are purposely simple.
