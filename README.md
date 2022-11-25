@@ -26,7 +26,6 @@ The current goal for Trunk is to get a fully functional parser up and running so
 
 * [Lexer](/trunk_lexer/)
 * [Parser](/trunk_parser/)
-* [Compiler](/trunk_compiler/) (**incredibly experimental**)
 
 #### Contributing
 
