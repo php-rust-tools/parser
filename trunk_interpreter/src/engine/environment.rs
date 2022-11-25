@@ -1,23 +1,22 @@
-use std::{cell::RefCell, collections::HashMap};
+use std::{cell::RefCell};
+use hashbrown::HashMap;
 
 use super::value::Value;
 
 #[derive(Clone, Debug)]
 pub struct Environment {
-    entries: RefCell<HashMap<String, Value>>,
+    entries: HashMap<String, Value>,
 }
 
 impl Environment {
     pub fn new() -> Self {
         Self {
-            entries: RefCell::new(HashMap::new()),
+            entries: HashMap::new(),
         }
     }
 
     pub fn get(&self, name: &str) -> Option<Value> {
-        let entries = self.entries.borrow();
-
-        if let Some(value) = entries.get(name) {
+        if let Some(value) = self.entries.get(name) {
             return Some(value.clone());
         }
 
@@ -25,12 +24,10 @@ impl Environment {
     }
 
     pub fn set(&mut self, name: &str, value: Value) {
-        let mut entries = self.entries.borrow_mut();
-
-        if let Some(current) = entries.get_mut(name) {
+        if let Some(current) = self.entries.get_mut(name) {
             *current = value;
         } else {
-            entries.insert(name.to_owned(), value);
+            self.entries.insert(name.to_owned(), value);
         }
     }
 }

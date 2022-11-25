@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use hashbrown::HashMap;
 use std::path::PathBuf;
 
 use trunk_lexer::Lexer;
@@ -211,7 +211,7 @@ fn eval_call_expression(engine: &mut Engine, expression: Expression) -> Value {
         arg_values.push(value);
     }
 
-    let func = engine.function_table.get(&target).unwrap().clone();
+    let func = engine.function_table.get(&target).unwrap();
     let mut environment = Environment::new();
 
     for (i, param) in func.params.clone().into_iter().enumerate() {
