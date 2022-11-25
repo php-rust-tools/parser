@@ -1,4 +1,4 @@
-use cmder::{Program};
+use cmder::Program;
 
 mod cmd;
 mod engine;

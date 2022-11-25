@@ -2,7 +2,7 @@ use hashbrown::HashMap;
 use std::path::PathBuf;
 
 use trunk_lexer::Lexer;
-use trunk_parser::{Statement, Param, Expression, InfixOp, CastKind, MagicConst, Parser};
+use trunk_parser::{CastKind, Expression, InfixOp, MagicConst, Param, Parser, Statement};
 
 use self::environment::Environment;
 use self::value::Value;
@@ -61,7 +61,7 @@ pub fn eval_statement(engine: &mut Engine, statement: Statement) -> Result<(), E
         Statement::If { .. } => eval_if(engine, statement)?,
         Statement::Return { .. } => return Err(Escape::Return(eval_return(engine, statement))),
         Statement::Include { .. } => eval_include(engine, statement)?,
-        _ => unimplemented!("{:?}", statement)
+        _ => unimplemented!("{:?}", statement),
     };
 
     Ok(())
@@ -69,14 +69,17 @@ pub fn eval_statement(engine: &mut Engine, statement: Statement) -> Result<(), E
 
 fn eval_function(engine: &mut Engine, statement: Statement) -> Result<(), Escape> {
     let (name, params, body, return_type, by_ref) = match statement {
-        Statement::Function { name, params, body, return_type, by_ref } => (name, params, body, return_type, by_ref),
+        Statement::Function {
+            name,
+            params,
+            body,
+            return_type,
+            by_ref,
+        } => (name, params, body, return_type, by_ref),
         _ => unreachable!(),
     };
 
-    let func = Function {
-        params,
-        body
-    };
+    let func = Function { params, body };
 
     engine.function_table.insert(name.name.into(), func);
 
@@ -86,7 +89,7 @@ fn eval_function(engine: &mut Engine, statement: Statement) -> Result<(), Escape
 fn eval_echo(engine: &mut Engine, statement: Statement) -> Result<(), Escape> {
     let values = match statement {
         Statement::Echo { values } => values,
-        _ => unreachable!()
+        _ => unreachable!(),
     };
 
     for value in values {
@@ -100,8 +103,13 @@ fn eval_echo(engine: &mut Engine, statement: Statement) -> Result<(), Escape> {
 
 fn eval_if(engine: &mut Engine, statement: Statement) -> Result<(), Escape> {
     let (condition, then, ..) = match statement {
-        Statement::If { condition, then, else_ifs, r#else } => (condition, then, else_ifs, r#else),
-        _ => unreachable!()
+        Statement::If {
+            condition,
+            then,
+            else_ifs,
+            r#else,
+        } => (condition, then, else_ifs, r#else),
+        _ => unreachable!(),
     };
 
     let condition = eval_expression(engine, condition);
@@ -158,7 +166,7 @@ fn eval_expression(engine: &mut Engine, expression: Expression) -> Value {
         Expression::MagicConst { constant } => eval_magic_const(engine, constant),
         Expression::Int { i } => Value::Int(i),
         Expression::ConstantString { value } => Value::String(value.into()),
-        _ => panic!("unhandled expression: {:?}", expression)
+        _ => panic!("unhandled expression: {:?}", expression),
     }
 }
 
@@ -175,25 +183,23 @@ fn eval_infix_expression(engine: &mut Engine, expression: Expression) -> Value {
         InfixOp::Add => lhs + rhs,
         InfixOp::Sub => lhs - rhs,
         InfixOp::LessThan => Value::Bool(lhs < rhs),
-        InfixOp::Concat => {
-            match (lhs, rhs) {
-                (Value::String(a), Value::String(b)) => {
-                    let mut s = String::with_capacity(a.len() + b.len());
-                    s.push_str(&a);
-                    s.push_str(&b);
-                    Value::String(s)
-                },
-                _ => todo!()
+        InfixOp::Concat => match (lhs, rhs) {
+            (Value::String(a), Value::String(b)) => {
+                let mut s = String::with_capacity(a.len() + b.len());
+                s.push_str(&a);
+                s.push_str(&b);
+                Value::String(s)
             }
+            _ => todo!(),
         },
-        _ => todo!("infix: {:?}", op)
+        _ => todo!("infix: {:?}", op),
     }
 }
 
 fn eval_call_expression(engine: &mut Engine, expression: Expression) -> Value {
     let (target, args) = match expression {
         Expression::Call { target, args } => (target, args),
-        _ => unreachable!()
+        _ => unreachable!(),
     };
 
     let target: String = match *target {
@@ -217,7 +223,7 @@ fn eval_call_expression(engine: &mut Engine, expression: Expression) -> Value {
     for (i, param) in func.params.clone().into_iter().enumerate() {
         let name: String = match param.name {
             Expression::Variable { name } => name.into(),
-            _ => todo!()
+            _ => todo!(),
         };
 
         environment.set(&name, arg_values.get(i).unwrap().clone());
@@ -232,8 +238,8 @@ fn eval_call_expression(engine: &mut Engine, expression: Expression) -> Value {
             Err(Escape::Return(value)) => {
                 return_value = value.clone();
                 break;
-            },
-            _ => {},
+            }
+            _ => {}
         }
     }
 
@@ -266,7 +272,7 @@ fn eval_variable_expression(engine: &mut Engine, expression: Expression) -> Valu
 fn eval_cast_expression(engine: &mut Engine, expression: Expression) -> Value {
     let (kind, value) = match expression {
         Expression::Cast { kind, value } => (kind, value),
-        _ => unreachable!()
+        _ => unreachable!(),
     };
 
     let value = eval_expression(engine, *value);
@@ -281,8 +287,16 @@ fn eval_magic_const(engine: &mut Engine, constant: MagicConst) -> Value {
     match constant {
         MagicConst::Dir => {
             // FIXME: Sort this nasty code out.
-            Value::String(engine.filename.parent().unwrap().to_str().unwrap().to_string())
-        },
-        _ => todo!()
+            Value::String(
+                engine
+                    .filename
+                    .parent()
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
+            )
+        }
+        _ => todo!(),
     }
 }

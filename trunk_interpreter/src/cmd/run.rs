@@ -1,4 +1,4 @@
-use std::{path::PathBuf, fs::canonicalize};
+use std::{fs::canonicalize, path::PathBuf};
 
 use cmder::ParserMatches;
 use trunk_lexer::Lexer;

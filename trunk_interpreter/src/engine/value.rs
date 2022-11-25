@@ -1,4 +1,7 @@
-use std::{ops::{Add, Sub}, fmt::Display};
+use std::{
+    fmt::Display,
+    ops::{Add, Sub},
+};
 
 #[derive(Debug, Clone, PartialOrd, PartialEq)]
 pub enum Value {
