@@ -2,7 +2,6 @@
 <?php
 
 $files = [
-    __DIR__ . '/../trunk_compiler/Cargo.toml',
     __DIR__ . '/../trunk_parser/Cargo.toml',
     __DIR__ . '/../trunk_lexer/Cargo.toml',
 ];
