@@ -75,19 +75,77 @@ impl Parser {
             | TokenKind::Private
             | TokenKind::Protected
             | TokenKind::Public
+            | TokenKind::Include
+            | TokenKind::IncludeOnce
+            | TokenKind::Eval
             | TokenKind::Require
             | TokenKind::RequireOnce
+            | TokenKind::LogicalOr
+            | TokenKind::LogicalXor
+            | TokenKind::LogicalAnd
+            | TokenKind::Instanceof
             | TokenKind::New
             | TokenKind::Clone
+            | TokenKind::Exit
             | TokenKind::If
-            | TokenKind::Else
             | TokenKind::ElseIf
-            | TokenKind::Default
-            | TokenKind::Enum
-            | TokenKind::Match
+            | TokenKind::Else
+            | TokenKind::EndIf
+            | TokenKind::Echo
+            | TokenKind::Do
+            | TokenKind::While
+            | TokenKind::EndWhile
+            | TokenKind::For
+            | TokenKind::EndFor
+            | TokenKind::Foreach
+            | TokenKind::EndForeach
+            | TokenKind::Declare
+            | TokenKind::EndDeclare
+            | TokenKind::As
+            | TokenKind::Try
             | TokenKind::Catch
             | TokenKind::Finally
-            | TokenKind::Namespace => {
+            | TokenKind::Throw
+            | TokenKind::Use
+            | TokenKind::Insteadof
+            | TokenKind::Global
+            | TokenKind::Var
+            | TokenKind::Unset
+            | TokenKind::Isset
+            | TokenKind::Empty
+            | TokenKind::Continue
+            | TokenKind::Goto
+            | TokenKind::Function
+            | TokenKind::Const
+            | TokenKind::Return
+            | TokenKind::Print
+            | TokenKind::Yield
+            | TokenKind::List
+            | TokenKind::Switch
+            | TokenKind::EndSwitch
+            | TokenKind::Case
+            | TokenKind::Default
+            | TokenKind::Break
+            | TokenKind::Array
+            | TokenKind::Callable
+            | TokenKind::Extends
+            | TokenKind::Implements
+            | TokenKind::Namespace
+            | TokenKind::Trait
+            | TokenKind::Interface
+            | TokenKind::Class
+            | TokenKind::ClassConstant
+            | TokenKind::TraitConstant
+            | TokenKind::FunctionConstant
+            | TokenKind::MethodConstant
+            | TokenKind::LineConstant
+            | TokenKind::FileConstant
+            | TokenKind::DirConstant
+            | TokenKind::NamespaceConstant
+            | TokenKind::HaltCompiler
+            | TokenKind::Fn
+            | TokenKind::Match
+            | TokenKind::Enum => {
                 let string = self.current.kind.to_string().into();
                 self.next();
                 Ok(string)
