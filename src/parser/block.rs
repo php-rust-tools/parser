@@ -1,4 +1,4 @@
-use trunk_lexer::TokenKind;
+use crate::TokenKind;
 
 use crate::Block;
 

@@ -1,5 +1,4 @@
-use trunk_lexer::Lexer;
-use trunk_parser::Parser;
+use trunk_parser::{Lexer, Parser};
 
 fn main() {
     let file = std::env::args().nth(1).unwrap();

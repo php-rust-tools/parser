@@ -1,4 +1,4 @@
-use trunk_lexer::{Token, TokenKind};
+use crate::{Token, TokenKind};
 
 use crate::Parser;
 

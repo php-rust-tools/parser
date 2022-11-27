@@ -6,7 +6,7 @@ use crate::{
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
 use std::{fmt::Display, vec::IntoIter};
-use trunk_lexer::{Span, Token, TokenKind};
+use crate::lexer::{Span, Token, TokenKind};
 
 use self::precedence::{Associativity, Precedence};
 
@@ -2655,7 +2655,7 @@ mod tests {
         Catch, Expression, Identifier, Param, Statement, Type,
     };
     use pretty_assertions::assert_eq;
-    use trunk_lexer::Lexer;
+    use crate::Lexer;
 
     macro_rules! function {
         ($name:literal, $params:expr, $body:expr) => {

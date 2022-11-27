@@ -1,4 +1,4 @@
-use trunk_lexer::TokenKind;
+use crate::TokenKind;
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]

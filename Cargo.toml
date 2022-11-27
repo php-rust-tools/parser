@@ -1,5 +1,10 @@
-[workspace]
-members = [
-    "trunk_lexer",
-    "trunk_parser"
-]
+[package]
+name = "trunk_parser"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+doctest = false
+
+[dev-dependencies]
+pretty_assertions = "1.3.0"

@@ -1,4 +1,4 @@
-use trunk_lexer::{ByteString, TokenKind};
+use crate::{ByteString, TokenKind};
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
