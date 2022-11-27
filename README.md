@@ -8,6 +8,18 @@
 
 ---
 
+#### Usage
+
+```rust
+use php_parser_rs::*;
+
+let mut lexer = Lexer::new(None);
+let tokens = lexer.tokenize(&source_code[..]).unwrap();
+
+let mut parser = Parser::new(None);
+let ast = parser.parse(tokens).unwrap();
+```
+
 #### Contributing
 
 All contributions to this repository are welcome. It's the perfect project for Rust beginners since we don't use many of Rust's complex features and the core concepts in the parser are purposely simple.
