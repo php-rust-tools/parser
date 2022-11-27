@@ -1,4 +1,4 @@
-use trunk_parser::{Lexer, Parser};
+use php_parser_rs::{Lexer, Parser};
 
 fn main() {
     let file = std::env::args().nth(1).unwrap();
