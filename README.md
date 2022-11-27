@@ -20,6 +20,8 @@ let mut parser = Parser::new(None);
 let ast = parser.parse(tokens).unwrap();
 ```
 
+> **Warning**: This crate is not ready for any form of production use _yet_. There are still a lot of things missing from the parser, so please use at your own risk.
+
 #### Contributing
 
 All contributions to this repository are welcome. It's the perfect project for Rust beginners since we don't use many of Rust's complex features and the core concepts in the parser are purposely simple.
