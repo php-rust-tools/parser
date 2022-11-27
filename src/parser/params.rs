@@ -2,7 +2,7 @@ use crate::{
     ast::{Arg, ParamList, PropertyFlag},
     Expression, Param, ParseError,
 };
-use trunk_lexer::TokenKind;
+use crate::TokenKind;
 
 use super::{precedence::Precedence, ParseResult, Parser};
 

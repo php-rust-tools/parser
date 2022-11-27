@@ -1,6 +1,6 @@
 use super::{ParseError, ParseResult};
 use crate::Parser;
-use trunk_lexer::{ByteString, TokenKind};
+use crate::{ByteString, TokenKind};
 
 impl Parser {
     /// Expect an unqualified identifier such as Foo or Bar.
