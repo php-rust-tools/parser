@@ -3,7 +3,7 @@
 </h3>
 
 <p align="center">
-    A handwritten recursive-descent PHP parser written in Rust, for fun.
+    A handwritten recursive-descent parser for PHP written in Rust, for fun.
 </p>
 
 ---
