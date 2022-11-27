@@ -7,7 +7,9 @@
 </p>
 
 <p align="center">
-[![justforfunnoreally.dev badge](https://img.shields.io/badge/justforfunnoreally-dev-9ff)](https://justforfunnoreally.dev)
+    <a href="https://justforfunnoreally.dev/">
+        <img src="https://img.shields.io/badge/justforfunnoreally-dev-9ff">
+    </a>
 </p>
 
 ---
