@@ -1,6 +1,6 @@
 use super::{ParseError, ParseResult, Precedence};
-use crate::{Expression, Parser};
 use crate::TokenKind;
+use crate::{Expression, Parser};
 
 impl Parser {
     pub(crate) fn dynamic_variable(&mut self) -> ParseResult<Expression> {

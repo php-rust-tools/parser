@@ -1,7 +1,7 @@
 mod ast;
-mod parser;
 mod lexer;
+mod parser;
 
-pub use lexer::*;
 pub use ast::*;
+pub use lexer::*;
 pub use parser::{ParseError, Parser};
