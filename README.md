@@ -6,6 +6,10 @@
     A handwritten recursive-descent parser for PHP written in Rust, for fun.
 </p>
 
+<p align="center">
+[![justforfunnoreally.dev badge](https://img.shields.io/badge/justforfunnoreally-dev-9ff)](https://justforfunnoreally.dev)
+</p>
+
 ---
 
 #### Usage
