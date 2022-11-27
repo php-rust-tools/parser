@@ -1,3 +1,4 @@
+use crate::lexer::{Span, Token, TokenKind};
 use crate::{
     ast::{
         ArrayItem, BackedEnumType, ClassFlag, ClosureUse, Constant, DeclareItem, ElseIf,
@@ -6,7 +7,6 @@ use crate::{
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
 use std::{fmt::Display, vec::IntoIter};
-use crate::lexer::{Span, Token, TokenKind};
 
 use self::precedence::{Associativity, Precedence};
 
@@ -2647,6 +2647,7 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use super::Parser;
+    use crate::Lexer;
     use crate::{
         ast::{
             Arg, ArrayItem, BackedEnumType, Case, ClassFlag, Constant, DeclareItem, ElseIf,
@@ -2655,7 +2656,6 @@ mod tests {
         Catch, Expression, Identifier, Param, Statement, Type,
     };
     use pretty_assertions::assert_eq;
-    use crate::Lexer;
 
     macro_rules! function {
         ($name:literal, $params:expr, $body:expr) => {

@@ -1,8 +1,8 @@
+use crate::TokenKind;
 use crate::{
     ast::{Arg, ParamList, PropertyFlag},
     Expression, Param, ParseError,
 };
-use crate::TokenKind;
 
 use super::{precedence::Precedence, ParseResult, Parser};
 
