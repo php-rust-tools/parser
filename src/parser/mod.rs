@@ -5582,6 +5582,33 @@ mod tests {
         ]);
     }
 
+    #[test]
+    fn trait_simple_alias_with_trait_prefix() {
+        assert_ast("<?php class A { use B { B::foo as bar; } }", &[
+            Statement::Class {
+                name: "A".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![
+                    Statement::TraitUse {
+                        traits: vec![
+                            "B".into(),
+                        ],
+                        adaptations: vec![
+                            TraitAdaptation::Alias {
+                                r#trait: Some("B".into()),
+                                method: "foo".into(),
+                                alias: "bar".into(),
+                                visibility: None,
+                            }
+                        ]
+                    }
+                ],
+                flag: None
+            }
+        ]);
+    }
+
     fn assert_ast(source: &str, expected: &[Statement]) {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();

@@ -256,7 +256,7 @@ pub enum TraitAdaptation {
         method: Identifier,
         alias: Identifier,
         visibility: Option<MethodFlag>,
-    }
+    },
 }
 
 #[derive(Debug, PartialEq, Clone)]
