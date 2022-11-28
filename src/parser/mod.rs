@@ -6,6 +6,7 @@ use crate::{
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
+use crate::{ByteString, TryBlockCaughtType};
 use std::{fmt::Display, vec::IntoIter};
 
 use self::precedence::{Associativity, Precedence};
@@ -115,11 +116,36 @@ impl Parser {
         Ok(ast.to_vec())
     }
 
+    fn try_block_caught_type_string(&mut self) -> ParseResult<TryBlockCaughtType> {
+        let id = self.full_name()?;
+
+        if self.current.kind == TokenKind::Pipe {
+            self.next();
+
+            let mut types = vec![id.into()];
+
+            while !self.is_eof() {
+                let id = self.full_name()?;
+                types.push(id.into());
+
+                if self.current.kind != TokenKind::Pipe {
+                    break;
+                }
+
+                self.next();
+            }
+
+            return Ok(TryBlockCaughtType::Union(types));
+        }
+
+        Ok(TryBlockCaughtType::Identifier(id.into()))
+    }
+
     fn type_string(&mut self) -> ParseResult<Type> {
         if self.current.kind == TokenKind::Question {
             self.next();
             let t = self.type_with_static()?;
-            return Ok(Type::Nullable(t));
+            return Ok(Type::Nullable(Box::new(parse_simple_type(t))));
         }
 
         let id = self.type_with_static()?;
@@ -127,11 +153,27 @@ impl Parser {
         if self.current.kind == TokenKind::Pipe {
             self.next();
 
-            let mut types = vec![id];
+            let r#type = parse_simple_type(id);
+            if r#type.standalone() {
+                return Err(ParseError::StandaloneTypeUsedInCombination(
+                    r#type,
+                    self.current.span,
+                ));
+            }
+
+            let mut types = vec![r#type];
 
             while !self.is_eof() {
                 let id = self.type_with_static()?;
-                types.push(id);
+                let r#type = parse_simple_type(id);
+                if r#type.standalone() {
+                    return Err(ParseError::StandaloneTypeUsedInCombination(
+                        r#type,
+                        self.current.span,
+                    ));
+                }
+
+                types.push(r#type);
 
                 if self.current.kind != TokenKind::Pipe {
                     break;
@@ -146,11 +188,27 @@ impl Parser {
         if self.current.kind == TokenKind::Ampersand {
             self.next();
 
-            let mut types = vec![id];
+            let r#type = parse_simple_type(id);
+            if r#type.standalone() {
+                return Err(ParseError::StandaloneTypeUsedInCombination(
+                    r#type,
+                    self.current.span,
+                ));
+            }
+
+            let mut types = vec![r#type];
 
             while !self.is_eof() {
                 let id = self.type_with_static()?;
-                types.push(id);
+                let r#type = parse_simple_type(id);
+                if r#type.standalone() {
+                    return Err(ParseError::StandaloneTypeUsedInCombination(
+                        r#type,
+                        self.current.span,
+                    ));
+                }
+
+                types.push(r#type);
 
                 if self.current.kind != TokenKind::Ampersand {
                     break;
@@ -162,13 +220,7 @@ impl Parser {
             return Ok(Type::Intersection(types));
         }
 
-        Ok(match &id[..] {
-            b"void" => Type::Void,
-            b"null" => Type::Null,
-            b"true" => Type::True,
-            b"false" => Type::False,
-            _ => Type::Plain(id),
-        })
+        Ok(parse_simple_type(id))
     }
 
     fn top_level_statement(&mut self) -> ParseResult<Statement> {
@@ -1203,15 +1255,7 @@ impl Parser {
                     self.next();
                     self.lparen()?;
 
-                    let types = match self.type_string()? {
-                        Type::Plain(t) => vec![t.into()],
-                        Type::Union(ts) => ts
-                            .into_iter()
-                            .map(|t| t.into())
-                            .collect::<Vec<Identifier>>(),
-                        _ => return Err(ParseError::InvalidCatchArgumentType(self.current.span)),
-                    };
-
+                    let types = self.try_block_caught_type_string()?;
                     let var = if self.current.kind == TokenKind::RightParen {
                         None
                     } else {
@@ -1238,7 +1282,7 @@ impl Parser {
                     self.rbrace()?;
                 }
 
-                if catches.is_empty() && finally == None {
+                if catches.is_empty() && finally.is_none() {
                     return Err(ParseError::TryWithoutCatchOrFinally(start_span));
                 }
 
@@ -1690,12 +1734,12 @@ impl Parser {
                 self.next();
                 e
             }
-            TokenKind::Int(i) => {
+            TokenKind::LiteralInteger(i) => {
                 let e = Expression::Int { i: *i };
                 self.next();
                 e
             }
-            TokenKind::Float(f) => {
+            TokenKind::ConstantFloat(f) => {
                 let f = Expression::Float { f: *f };
                 self.next();
                 f
@@ -2421,13 +2465,13 @@ impl Parser {
                             // Full expression syntax is not allowed here,
                             // so we can't call self.expression.
                             let index = match &self.current.kind {
-                                &TokenKind::Int(i) => {
+                                &TokenKind::LiteralInteger(i) => {
                                     self.next();
                                     Expression::Int { i }
                                 }
                                 TokenKind::Minus => {
                                     self.next();
-                                    if let TokenKind::Int(i) = self.current.kind {
+                                    if let TokenKind::LiteralInteger(i) = self.current.kind {
                                         self.next();
                                         Expression::Negate {
                                             value: Box::new(Expression::Int { i }),
@@ -2506,6 +2550,28 @@ impl Parser {
     pub fn next(&mut self) {
         self.current = self.peek.clone();
         self.peek = self.iter.next().unwrap_or_default()
+    }
+}
+
+fn parse_simple_type(id: ByteString) -> Type {
+    let name = &id[..];
+    let lowered_name = name.to_ascii_lowercase();
+    match lowered_name.as_slice() {
+        b"void" => Type::Void,
+        b"never" => Type::Never,
+        b"null" => Type::Null,
+        b"true" => Type::True,
+        b"false" => Type::False,
+        b"float" => Type::Float,
+        b"bool" => Type::Boolean,
+        b"int" => Type::Integer,
+        b"string" => Type::String,
+        b"array" => Type::Array,
+        b"object" => Type::Object,
+        b"mixed" => Type::Mixed,
+        b"iterable" => Type::Iterable,
+        b"callable" => Type::Callable,
+        _ => Type::Identifier(id.into()),
     }
 }
 
@@ -2657,6 +2723,7 @@ pub enum ParseError {
     ExpectedToken(String, Span),
     UnexpectedToken(String, Span),
     UnexpectedEndOfFile,
+    StandaloneTypeUsedInCombination(Type, Span),
     InvalidClassStatement(String, Span),
     InvalidAbstractFinalFlagCombination(Span),
     ConstantCannotBeStatic(Span),
@@ -2678,7 +2745,8 @@ impl Display for ParseError {
             Self::ConstantCannotBePrivateFinal(span) => write!(f, "Parse error: private class constant cannot be marked final since it is not visible to other classes on line {}", span.0),
             Self::TraitCannotContainConstant(span) => write!(f, "Parse error: traits cannot contain constants on line {}", span.0),
             Self::TryWithoutCatchOrFinally(span) => write!(f, "Parse error: cannot use try without catch or finally on line {}", span.0),
-            Self::InvalidCatchArgumentType(span) => write!(f, "Parse error: catch types must either describe a single type or union of types on line {}", span.0)
+            Self::InvalidCatchArgumentType(span) => write!(f, "Parse error: catch types must either describe a single type or union of types on line {}", span.0),
+            Self::StandaloneTypeUsedInCombination(r#type, span) => write!(f, "Parse error: {} can only be used as a standalone type on line {}", r#type, span.0)
         }
     }
 }
@@ -2691,7 +2759,7 @@ mod tests {
             Arg, ArrayItem, BackedEnumType, Case, ClassFlag, Constant, DeclareItem, ElseIf,
             IncludeKind, InfixOp, MethodFlag, PropertyFlag, StringPart,
         },
-        Catch, Expression, Identifier, Param, Statement, Type,
+        Catch, Expression, Identifier, Param, Statement, TryBlockCaughtType, Type,
     };
     use crate::{Lexer, Use};
     use pretty_assertions::assert_eq;
@@ -3422,14 +3490,40 @@ mod tests {
     }
 
     #[test]
-    fn plain_typestrings_test() {
+    fn string_type_test() {
         assert_ast(
             "<?php function foo(string $b) {}",
             &[Statement::Function {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Plain("string".into())),
+                    r#type: Some(Type::String),
+                    variadic: false,
+                    default: None,
+                    flag: None,
+                    by_ref: false,
+                }],
+                body: vec![],
+                return_type: None,
+                by_ref: false,
+            }],
+        );
+    }
+
+    #[test]
+    fn simple_union_types_test() {
+        assert_ast(
+            "<?php function foo(string|ArrAy|iterable|CALLABLE $b) {}",
+            &[Statement::Function {
+                name: "foo".as_bytes().into(),
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: Some(Type::Union(vec![
+                        Type::String,
+                        Type::Array,
+                        Type::Iterable,
+                        Type::Callable,
+                    ])),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3468,7 +3562,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "bar".into() },
-                    r#type: Some(Type::Plain("string".into())),
+                    r#type: Some(Type::String),
                     variadic: true,
                     default: None,
                     flag: None,
@@ -3525,7 +3619,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Nullable("string".into())),
+                    r#type: Some(Type::Nullable(Box::new(Type::String))),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3546,7 +3640,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Union(vec!["int".into(), "float".into()])),
+                    r#type: Some(Type::Union(vec![Type::Integer, Type::Float])),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3564,11 +3658,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Union(vec![
-                        "string".into(),
-                        "int".into(),
-                        "float".into(),
-                    ])),
+                    r#type: Some(Type::Union(vec![Type::String, Type::Integer, Type::Float])),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3589,7 +3679,10 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Intersection(vec!["Foo".into(), "Bar".into()])),
+                    r#type: Some(Type::Intersection(vec![
+                        Type::Identifier("Foo".into()),
+                        Type::Identifier("Bar".into()),
+                    ])),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3608,9 +3701,9 @@ mod tests {
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
                     r#type: Some(Type::Intersection(vec![
-                        "Foo".into(),
-                        "Bar".into(),
-                        "Baz".into(),
+                        Type::Identifier("Foo".into()),
+                        Type::Identifier("Bar".into()),
+                        Type::Identifier("Baz".into()),
                     ])),
                     variadic: false,
                     default: None,
@@ -3632,7 +3725,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![],
                 body: vec![],
-                return_type: Some(Type::Plain("string".into())),
+                return_type: Some(Type::String),
                 by_ref: false,
             }],
         );
@@ -3936,7 +4029,7 @@ mod tests {
             &[Statement::Try {
                 body: vec![],
                 catches: vec![Catch {
-                    types: vec!["Exception".as_bytes().into()],
+                    types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
                     var: Some(Expression::Variable { name: "e".into() }),
                     body: vec![],
                 }],
@@ -3952,7 +4045,7 @@ mod tests {
             &[Statement::Try {
                 body: vec![],
                 catches: vec![Catch {
-                    types: vec!["Exception".as_bytes().into()],
+                    types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
                     var: None,
                     body: vec![],
                 }],
@@ -3969,12 +4062,12 @@ mod tests {
                 body: vec![],
                 catches: vec![
                     Catch {
-                        types: vec!["Exception".as_bytes().into()],
+                        types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
                         var: Some(Expression::Variable { name: "e".into() }),
                         body: vec![],
                     },
                     Catch {
-                        types: vec!["CustomException".as_bytes().into()],
+                        types: TryBlockCaughtType::Identifier("CustomException".as_bytes().into()),
                         var: Some(Expression::Variable { name: "e".into() }),
                         body: vec![],
                     },
@@ -3991,7 +4084,7 @@ mod tests {
             &[Statement::Try {
                 body: vec![],
                 catches: vec![Catch {
-                    types: vec!["Exception".as_bytes().into()],
+                    types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
                     var: Some(Expression::Variable { name: "e".into() }),
                     body: vec![],
                 }],

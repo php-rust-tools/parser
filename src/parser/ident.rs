@@ -95,7 +95,6 @@ impl Parser {
             | TokenKind::Do
             | TokenKind::While
             | TokenKind::EndWhile
-            | TokenKind::For
             | TokenKind::EndFor
             | TokenKind::Foreach
             | TokenKind::EndForeach

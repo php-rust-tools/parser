@@ -1,5 +1,5 @@
 use std::cmp::{Eq, PartialEq};
-use std::fmt::{Debug, Formatter, Result};
+use std::fmt::{Debug, Display, Formatter, Result};
 use std::ops::Deref;
 use std::str::from_utf8;
 
@@ -14,6 +14,21 @@ pub struct ByteString(pub(crate) Vec<u8>);
 impl ByteString {
     pub fn new(bytes: Vec<u8>) -> Self {
         ByteString(bytes)
+    }
+}
+
+impl Display for ByteString {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        for &b in &self.0 {
+            match b {
+                0 => write!(f, "\\0")?,
+                b'\n' | b'\r' | b'\t' => write!(f, "{}", b.escape_ascii())?,
+                0x01..=0x19 | 0x7f..=0xff => write!(f, "\\x{:02x}", b)?,
+                _ => write!(f, "{}", b as char)?,
+            }
+        }
+
+        Ok(())
     }
 }
 
@@ -69,9 +84,9 @@ impl From<String> for ByteString {
     }
 }
 
-impl Into<String> for ByteString {
-    fn into(self) -> String {
-        String::from(from_utf8(&self.0).unwrap())
+impl From<ByteString> for String {
+    fn from(bytes: ByteString) -> Self {
+        String::from(from_utf8(&bytes.0).unwrap())
     }
 }
 

@@ -1,23 +1,94 @@
+use std::fmt::Display;
+
 use crate::{ByteString, TokenKind};
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
+pub enum TryBlockCaughtType {
+    Identifier(Identifier),
+    Union(Vec<Identifier>),
+}
+
+#[derive(Debug, Eq, PartialEq, Clone)]
 pub enum Type {
-    Plain(ByteString),
-    Nullable(ByteString),
-    Union(Vec<ByteString>),
-    Intersection(Vec<ByteString>),
+    Identifier(Identifier),
+    Nullable(Box<Type>),
+    Union(Vec<Type>),
+    Intersection(Vec<Type>),
     Void,
     Null,
     True,
     False,
+    Never,
+    Float,
+    Boolean,
+    Integer,
+    String,
+    Array,
+    Object,
+    Mixed,
+    Callable,
+    Iterable,
+}
+
+impl Type {
+    pub fn standalone(&self) -> bool {
+        matches!(self, Type::Mixed | Type::Never | Type::Void)
+    }
+}
+
+impl Display for Type {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match &self {
+            Type::Identifier(inner) => write!(f, "{}", inner),
+            Type::Nullable(inner) => write!(f, "{}", inner),
+            Type::Union(inner) => write!(
+                f,
+                "{}",
+                inner
+                    .iter()
+                    .map(|t| t.to_string())
+                    .collect::<Vec<String>>()
+                    .join("|")
+            ),
+            Type::Intersection(inner) => write!(
+                f,
+                "{}",
+                inner
+                    .iter()
+                    .map(|t| t.to_string())
+                    .collect::<Vec<String>>()
+                    .join("&")
+            ),
+            Type::Void => write!(f, "void"),
+            Type::Null => write!(f, "null"),
+            Type::True => write!(f, "true"),
+            Type::False => write!(f, "false"),
+            Type::Never => write!(f, "never"),
+            Type::Float => write!(f, "float"),
+            Type::Boolean => write!(f, "bool"),
+            Type::Integer => write!(f, "int"),
+            Type::String => write!(f, "string"),
+            Type::Array => write!(f, "array"),
+            Type::Object => write!(f, "object"),
+            Type::Mixed => write!(f, "mixed"),
+            Type::Callable => write!(f, "callable"),
+            Type::Iterable => write!(f, "iterable"),
+        }
+    }
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Identifier {
     pub name: ByteString,
+}
+
+impl Display for Identifier {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.name)
+    }
 }
 
 impl From<ByteString> for Identifier {
@@ -399,7 +470,7 @@ pub struct Case {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Catch {
-    pub types: Vec<Identifier>,
+    pub types: TryBlockCaughtType,
     pub var: Option<Expression>,
     pub body: Block,
 }
