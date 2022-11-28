@@ -2550,7 +2550,9 @@ impl Parser {
 }
 
 fn parse_simple_type(id: ByteString) -> Type {
-    match &id[..] {
+    let name = &id[..];
+    let lowered_name = name.to_ascii_lowercase();
+    match lowered_name.as_slice() {
         b"void" => Type::Void,
         b"never" => Type::Never,
         b"null" => Type::Null,
@@ -2563,6 +2565,8 @@ fn parse_simple_type(id: ByteString) -> Type {
         b"array" => Type::Array,
         b"object" => Type::Object,
         b"mixed" => Type::Mixed,
+        b"iterable" => Type::Iterable,
+        b"callable" => Type::Callable,
         _ => Type::Identifier(id.into()),
     }
 }
@@ -3482,7 +3486,7 @@ mod tests {
     }
 
     #[test]
-    fn plain_typestrings_test() {
+    fn string_type_test() {
         assert_ast(
             "<?php function foo(string $b) {}",
             &[Statement::Function {
@@ -3490,6 +3494,32 @@ mod tests {
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
                     r#type: Some(Type::String),
+                    variadic: false,
+                    default: None,
+                    flag: None,
+                    by_ref: false,
+                }],
+                body: vec![],
+                return_type: None,
+                by_ref: false,
+            }],
+        );
+    }
+
+    #[test]
+    fn simple_union_types_test() {
+        assert_ast(
+            "<?php function foo(string|array|iterable|callable $b) {}",
+            &[Statement::Function {
+                name: "foo".as_bytes().into(),
+                params: vec![Param {
+                    name: Expression::Variable { name: "b".into() },
+                    r#type: Some(Type::Union(vec![
+                        Type::String,
+                        Type::Array,
+                        Type::Iterable,
+                        Type::Callable,
+                    ])),
                     variadic: false,
                     default: None,
                     flag: None,

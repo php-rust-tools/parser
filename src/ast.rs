@@ -29,6 +29,8 @@ pub enum Type {
     Array,
     Object,
     Mixed,
+    Callable,
+    Iterable,
 }
 
 impl Type {
@@ -72,6 +74,8 @@ impl Display for Type {
             Type::Array => write!(f, "array"),
             Type::Object => write!(f, "object"),
             Type::Mixed => write!(f, "mixed"),
+            Type::Callable => write!(f, "callable"),
+            Type::Iterable => write!(f, "iterable"),
         }
     }
 }
