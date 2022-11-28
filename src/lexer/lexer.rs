@@ -1157,6 +1157,7 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
         b"yield" => TokenKind::Yield,
         b"__DIR__" => TokenKind::DirConstant,
         b"while" => TokenKind::While,
+        b"insteadof" => TokenKind::Insteadof,
         _ => return None,
     })
 }

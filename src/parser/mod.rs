@@ -1460,7 +1460,23 @@ impl Parser {
                                     }
                                 }
                             },
-                            _ => todo!(),
+                            TokenKind::Insteadof => {
+                                self.next();
+
+                                let mut insteadof = Vec::new();
+                                insteadof.push(self.full_name()?.into());
+                                while self.current.kind != TokenKind::SemiColon {
+                                    self.optional_comma()?;
+                                    insteadof.push(self.full_name()?.into());
+                                }
+
+                                adaptations.push(TraitAdaptation::Precedence {
+                                    r#trait,
+                                    method,
+                                    insteadof
+                                });
+                            },
+                            _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span))
                         };
 
                         self.semi()?;
@@ -5668,6 +5684,35 @@ mod tests {
                                 method: "foo".into(),
                                 alias: "bar".into(),
                                 visibility: Some(MethodFlag::Protected),
+                            }
+                        ]
+                    }
+                ],
+                flag: None
+            }
+        ]);
+    }
+
+    #[test]
+    fn trait_method_precedence_adaptation() {
+        assert_ast("<?php class A { use B, C { B::foo insteadof C; } }", &[
+            Statement::Class {
+                name: "A".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![
+                    Statement::TraitUse {
+                        traits: vec![
+                            "B".into(),
+                            "C".into(),
+                        ],
+                        adaptations: vec![
+                            TraitAdaptation::Precedence {
+                                r#trait: Some("B".into()),
+                                method: "foo".into(),
+                                insteadof: vec![
+                                    "C".into()
+                                ]
                             }
                         ]
                     }

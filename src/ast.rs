@@ -261,7 +261,12 @@ pub enum TraitAdaptation {
         r#trait: Option<Identifier>,
         method: Identifier,
         visibility: MethodFlag,
-    }
+    },
+    Precedence {
+        r#trait: Option<Identifier>,
+        method: Identifier,
+        insteadof: Vec<Identifier>,
+    },
 }
 
 #[derive(Debug, PartialEq, Clone)]
