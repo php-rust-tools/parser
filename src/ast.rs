@@ -257,6 +257,11 @@ pub enum TraitAdaptation {
         alias: Identifier,
         visibility: Option<MethodFlag>,
     },
+    Visibility {
+        r#trait: Option<Identifier>,
+        method: Identifier,
+        visibility: MethodFlag,
+    }
 }
 
 #[derive(Debug, PartialEq, Clone)]

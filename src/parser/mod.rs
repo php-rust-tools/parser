@@ -1433,7 +1433,22 @@ impl Parser {
                                 self.next();
 
                                 match self.current.kind {
-                                    TokenKind::Public | TokenKind::Protected | TokenKind::Private => todo!(),
+                                    TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
+                                        let visibility: MethodFlag = self.current.kind.clone().into();
+                                        self.next();
+
+                                        if self.current.kind == TokenKind::SemiColon {
+                                            adaptations.push(TraitAdaptation::Visibility { r#trait, method, visibility });
+                                        } else {
+                                            let alias: Identifier = self.name()?.into();
+                                            adaptations.push(TraitAdaptation::Alias {
+                                                r#trait,
+                                                method,
+                                                alias,
+                                                visibility: Some(visibility)
+                                            });
+                                        }
+                                    },
                                     _ => {
                                         let alias: Identifier = self.name()?.into();
                                         adaptations.push(TraitAdaptation::Alias {
@@ -5600,6 +5615,59 @@ mod tests {
                                 method: "foo".into(),
                                 alias: "bar".into(),
                                 visibility: None,
+                            }
+                        ]
+                    }
+                ],
+                flag: None
+            }
+        ]);
+    }
+
+    #[test]
+    fn trait_visibility_adaptation() {
+        assert_ast("<?php class A { use B { foo as protected; } }", &[
+            Statement::Class {
+                name: "A".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![
+                    Statement::TraitUse {
+                        traits: vec![
+                            "B".into(),
+                        ],
+                        adaptations: vec![
+                            TraitAdaptation::Visibility {
+                                r#trait: None,
+                                method: "foo".into(),
+                                visibility: MethodFlag::Protected,
+                            }
+                        ]
+                    }
+                ],
+                flag: None
+            }
+        ]);
+    }
+
+    #[test]
+    fn trait_visibility_adaptation_and_alias() {
+        assert_ast("<?php class A { use B { foo as protected bar; } }", &[
+            Statement::Class {
+                name: "A".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![
+                    Statement::TraitUse {
+                        traits: vec![
+                            "B".into(),
+                        ],
+                        adaptations: vec![
+                            TraitAdaptation::Alias {
+                                r#trait: None,
+                                method: "foo".into(),
+                                alias: "bar".into(),
+                                visibility: Some(MethodFlag::Protected),
                             }
                         ]
                     }
