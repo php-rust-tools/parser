@@ -1,40 +1,45 @@
-name: Tests
+name: ci
 
 on:
   push:
+    branches: [main]
   pull_request:
-    types: [opened, reopened]
 
 jobs:
-  tests:
-    name: Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: -q
-      - uses: actions-rs/cargo@v1
-        with:
-          command: run
-          args: --bin integration-test
+  ci:
+    name: ci
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        rust:
+          - 'stable'
+          - 'nightly'
+        os:
+          - 'ubuntu-latest'
 
-  fmt:
-    name: Format
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: install rust
+        uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: ${{ matrix.rust }}
           override: true
-      - run: rustup component add rustfmt
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+          components: rustfmt, clippy
+
+      - name: cache
+        uses: Swatinem/rust-cache@v2.0.0
+
+      - name: check
+        if: matrix.rust == 'stable'
+        run: |
+          cargo fmt --all -- --check
+          cargo clippy
+
+      - name: test
+        run: cargo test --all
+
+      - name: integration test
+        run: cargo run --bin integration-test
