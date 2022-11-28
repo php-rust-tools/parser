@@ -200,7 +200,11 @@ impl Parser {
                 let body = if braced {
                     self.block(&TokenKind::RightBrace)?
                 } else {
-                    Block::new()
+                    let mut body = Block::new();
+                    while ! self.is_eof() {
+                        body.push(self.top_level_statement()?);
+                    }
+                    body
                 };
 
                 if braced {
