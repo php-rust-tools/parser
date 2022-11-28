@@ -122,11 +122,11 @@ impl Parser {
         if self.current.kind == TokenKind::Pipe {
             self.next();
 
-            let mut types = vec![id];
+            let mut types = vec![id.into()];
 
             while !self.is_eof() {
                 let id = self.full_name()?;
-                types.push(id);
+                types.push(id.into());
 
                 if self.current.kind != TokenKind::Pipe {
                     break;
@@ -138,14 +138,14 @@ impl Parser {
             return Ok(TryBlockCaughtType::Union(types));
         }
 
-        Ok(TryBlockCaughtType::Identifier(id))
+        Ok(TryBlockCaughtType::Identifier(id.into()))
     }
 
     fn type_string(&mut self) -> ParseResult<Type> {
         if self.current.kind == TokenKind::Question {
             self.next();
             let t = self.type_with_static()?;
-            return Ok(Type::Nullable(t));
+            return Ok(Type::Nullable(Box::new(parse_simple_type(t))));
         }
 
         let id = self.type_with_static()?;
@@ -1251,14 +1251,7 @@ impl Parser {
                     self.next();
                     self.lparen()?;
 
-                    let types = match self.try_block_caught_type_string()? {
-                        TryBlockCaughtType::Identifier(t) => vec![t.into()],
-                        TryBlockCaughtType::Union(ts) => ts
-                            .into_iter()
-                            .map(|t| t.into())
-                            .collect::<Vec<Identifier>>(),
-                    };
-
+                    let types = self.try_block_caught_type_string()?;
                     let var = if self.current.kind == TokenKind::RightParen {
                         None
                     } else {
@@ -2570,7 +2563,7 @@ fn parse_simple_type(id: ByteString) -> Type {
         b"array" => Type::Array,
         b"object" => Type::Object,
         b"mixed" => Type::Mixed,
-        _ => Type::Identifier(id),
+        _ => Type::Identifier(id.into()),
     }
 }
 
@@ -2758,7 +2751,7 @@ mod tests {
             Arg, ArrayItem, BackedEnumType, Case, ClassFlag, Constant, DeclareItem, ElseIf,
             IncludeKind, InfixOp, MethodFlag, PropertyFlag, StringPart,
         },
-        Catch, Expression, Identifier, Param, Statement, Type,
+        Catch, Expression, Identifier, Param, Statement, TryBlockCaughtType, Type,
     };
     use crate::{Lexer, Use};
     use pretty_assertions::assert_eq;
@@ -3592,7 +3585,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Nullable("string".into())),
+                    r#type: Some(Type::Nullable(Box::new(Type::String))),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -4002,7 +3995,7 @@ mod tests {
             &[Statement::Try {
                 body: vec![],
                 catches: vec![Catch {
-                    types: vec!["Exception".as_bytes().into()],
+                    types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
                     var: Some(Expression::Variable { name: "e".into() }),
                     body: vec![],
                 }],
@@ -4018,7 +4011,7 @@ mod tests {
             &[Statement::Try {
                 body: vec![],
                 catches: vec![Catch {
-                    types: vec!["Exception".as_bytes().into()],
+                    types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
                     var: None,
                     body: vec![],
                 }],
@@ -4035,12 +4028,12 @@ mod tests {
                 body: vec![],
                 catches: vec![
                     Catch {
-                        types: vec!["Exception".as_bytes().into()],
+                        types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
                         var: Some(Expression::Variable { name: "e".into() }),
                         body: vec![],
                     },
                     Catch {
-                        types: vec!["CustomException".as_bytes().into()],
+                        types: TryBlockCaughtType::Identifier("CustomException".as_bytes().into()),
                         var: Some(Expression::Variable { name: "e".into() }),
                         body: vec![],
                     },
@@ -4057,7 +4050,7 @@ mod tests {
             &[Statement::Try {
                 body: vec![],
                 catches: vec![Catch {
-                    types: vec!["Exception".as_bytes().into()],
+                    types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
                     var: Some(Expression::Variable { name: "e".into() }),
                     body: vec![],
                 }],
