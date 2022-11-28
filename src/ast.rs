@@ -7,14 +7,14 @@ pub type Program = Block;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum TryBlockCaughtType {
-    Identifier(ByteString),
-    Union(Vec<ByteString>),
+    Identifier(Identifier),
+    Union(Vec<Identifier>),
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum Type {
-    Identifier(ByteString),
-    Nullable(ByteString),
+    Identifier(Identifier),
+    Nullable(Box<Type>),
     Union(Vec<Type>),
     Intersection(Vec<Type>),
     Void,
@@ -79,6 +79,12 @@ impl Display for Type {
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub struct Identifier {
     pub name: ByteString,
+}
+
+impl Display for Identifier {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.name)
+    }
 }
 
 impl From<ByteString> for Identifier {
@@ -460,7 +466,7 @@ pub struct Case {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Catch {
-    pub types: Vec<Identifier>,
+    pub types: TryBlockCaughtType,
     pub var: Option<Expression>,
     pub body: Block,
 }
