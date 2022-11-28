@@ -2,7 +2,7 @@ use std::num::IntErrorKind;
 
 use crate::{ByteString, OpenTagKind, Token, TokenKind};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum LexerState {
     Initial,
     Scripting,
@@ -64,7 +64,7 @@ impl Lexer {
         let mut tokens = Vec::new();
         self.chars = input.as_ref().to_vec();
 
-        self.current = self.chars.get(0).copied();
+        self.current = self.chars.first().copied();
 
         while self.current.is_some() {
             match self.state_stack.last().unwrap() {
@@ -950,24 +950,24 @@ impl Lexer {
         if kind != NumberKind::Float {
             self.read_digits(&mut buffer, base);
             if kind == NumberKind::Int {
-                return Ok(parse_int(&buffer, base as u32)?);
+                return parse_int(&buffer, base as u32);
             }
         }
 
         // Remaining cases: decimal integer, legacy octal integer, or float.
-        let is_float = match self.peek_buf() {
+        let is_float = matches!(
+            self.peek_buf(),
             [b'.', ..]
-            | [b'e' | b'E', b'-' | b'+', b'0'..=b'9', ..]
-            | [b'e' | b'E', b'0'..=b'9', ..] => true,
-            _ => false,
-        };
+                | [b'e' | b'E', b'-' | b'+', b'0'..=b'9', ..]
+                | [b'e' | b'E', b'0'..=b'9', ..]
+        );
         if !is_float {
             let base = if kind == NumberKind::OctalOrFloat {
                 8
             } else {
                 10
             };
-            return Ok(parse_int(&buffer, base as u32)?);
+            return parse_int(&buffer, base as u32);
         }
 
         if self.current == Some(b'.') {
@@ -986,7 +986,7 @@ impl Lexer {
             self.read_digits(&mut buffer, 10);
         }
 
-        Ok(TokenKind::Float(buffer.parse().unwrap()))
+        Ok(TokenKind::ConstantFloat(buffer.parse().unwrap()))
     }
 
     fn read_digits(&mut self, buffer: &mut String, base: usize) {
@@ -1008,12 +1008,12 @@ impl Lexer {
             }
         }
         loop {
-            match self.peek_buf() {
-                &[b, ..] if is_digit(&b) => {
+            match *self.peek_buf() {
+                [b, ..] if is_digit(&b) => {
                     self.next();
                     buffer.push(b as char);
                 }
-                &[b'_', b, ..] if is_digit(&b) => {
+                [b'_', b, ..] if is_digit(&b) => {
                     self.next();
                     self.next();
                     buffer.push(b as char);
@@ -1072,8 +1072,8 @@ impl Lexer {
 // Parses an integer literal in the given base and converts errors to LexerError.
 // It returns a float token instead on overflow.
 fn parse_int(buffer: &str, base: u32) -> Result<TokenKind, LexerError> {
-    match i64::from_str_radix(&buffer, base) {
-        Ok(i) => Ok(TokenKind::Int(i)),
+    match i64::from_str_radix(buffer, base) {
+        Ok(i) => Ok(TokenKind::LiteralInteger(i)),
         Err(err) if err.kind() == &IntErrorKind::InvalidDigit => {
             // The InvalidDigit error is only possible for legacy octal literals.
             Err(LexerError::InvalidOctalLiteral)
@@ -1082,7 +1082,7 @@ fn parse_int(buffer: &str, base: u32) -> Result<TokenKind, LexerError> {
             // Parse as i128 so we can handle other bases.
             // This means there's an upper limit on how large the literal can be.
             let i = i128::from_str_radix(buffer, base).unwrap();
-            Ok(TokenKind::Float(i as f64))
+            Ok(TokenKind::ConstantFloat(i as f64))
         }
         _ => Err(LexerError::UnexpectedError),
     }
@@ -1195,7 +1195,7 @@ mod tests {
     }
     macro_rules! int {
         ($i:expr) => {
-            TokenKind::Int($i)
+            TokenKind::LiteralInteger($i)
         };
     }
 
@@ -1331,7 +1331,7 @@ string.'"#,
             r#"<?php "\0 \7 \66 \377 \9 \0000" "#,
             &[
                 open!(),
-                TokenKind::ConstantString(b"\0 \x07 \x36 \xff \\9 \00".into()),
+                TokenKind::ConstantString(b"\0 \x07 \x36 \xff \\9 \x000".into()),
             ],
         );
         // hex
@@ -1448,7 +1448,7 @@ string.'"#,
                 TokenKind::StringPart("".into()),
                 TokenKind::Variable("a".into()),
                 TokenKind::LeftBracket,
-                TokenKind::Int(0),
+                TokenKind::LiteralInteger(0),
                 TokenKind::RightBracket,
                 TokenKind::DoubleQuote,
             ],
@@ -1484,7 +1484,7 @@ string.'"#,
                 TokenKind::DollarLeftBrace,
                 TokenKind::Identifier("a".into()),
                 TokenKind::LeftBracket,
-                TokenKind::Int(0),
+                TokenKind::LiteralInteger(0),
                 TokenKind::RightBracket,
                 TokenKind::RightBrace,
                 TokenKind::DoubleQuote,
@@ -1649,24 +1649,24 @@ function hello_world() {
             "<?php 200.5 .05 01.1 1. 1e1 1e+1 1e-1 3.1e2 1_1.2_2 3_3.2_2e1_1 18446744073709551615 0x10000000000000000 1e 1e+ 1e-",
             &[
                 open!(),
-                TokenKind::Float(200.5),
-                TokenKind::Float(0.05),
-                TokenKind::Float(01.1),
-                TokenKind::Float(1.),
-                TokenKind::Float(1e1),
-                TokenKind::Float(1e+1),
-                TokenKind::Float(1e-1),
-                TokenKind::Float(3.1e2),
-                TokenKind::Float(1_1.2_2),
-                TokenKind::Float(3_3.2_2e1_1),
-                TokenKind::Float(18446744073709551615.0),
-                TokenKind::Float(18446744073709551616.0),
-                TokenKind::Int(1),
+                TokenKind::ConstantFloat(200.5),
+                TokenKind::ConstantFloat(0.05),
+                TokenKind::ConstantFloat(01.1),
+                TokenKind::ConstantFloat(1.),
+                TokenKind::ConstantFloat(1e1),
+                TokenKind::ConstantFloat(1e+1),
+                TokenKind::ConstantFloat(1e-1),
+                TokenKind::ConstantFloat(3.1e2),
+                TokenKind::ConstantFloat(1_1.2_2),
+                TokenKind::ConstantFloat(3_3.2_2e1_1),
+                TokenKind::ConstantFloat(18446744073709551615.0),
+                TokenKind::ConstantFloat(18446744073709551616.0),
+                TokenKind::LiteralInteger(1),
                 TokenKind::Identifier("e".into()),
-                TokenKind::Int(1),
+                TokenKind::LiteralInteger(1),
                 TokenKind::Identifier("e".into()),
                 TokenKind::Plus,
-                TokenKind::Int(1),
+                TokenKind::LiteralInteger(1),
                 TokenKind::Identifier("e".into()),
                 TokenKind::Minus,
             ],
@@ -1679,21 +1679,21 @@ function hello_world() {
             "<?php 0 10 0b101 0B101 0o666 0O666 0666 0xff 0Xff 0xf_f 0b10.1 1__1 1_",
             &[
                 open!(),
-                TokenKind::Int(0),
-                TokenKind::Int(10),
-                TokenKind::Int(0b101),
-                TokenKind::Int(0b101),
-                TokenKind::Int(0o666),
-                TokenKind::Int(0o666),
-                TokenKind::Int(0o666),
-                TokenKind::Int(0xff),
-                TokenKind::Int(0xff),
-                TokenKind::Int(0xff),
-                TokenKind::Int(2),
-                TokenKind::Float(0.1),
-                TokenKind::Int(1),
+                TokenKind::LiteralInteger(0),
+                TokenKind::LiteralInteger(10),
+                TokenKind::LiteralInteger(0b101),
+                TokenKind::LiteralInteger(0b101),
+                TokenKind::LiteralInteger(0o666),
+                TokenKind::LiteralInteger(0o666),
+                TokenKind::LiteralInteger(0o666),
+                TokenKind::LiteralInteger(0xff),
+                TokenKind::LiteralInteger(0xff),
+                TokenKind::LiteralInteger(0xff),
+                TokenKind::LiteralInteger(2),
+                TokenKind::ConstantFloat(0.1),
+                TokenKind::LiteralInteger(1),
                 TokenKind::Identifier("__1".into()),
-                TokenKind::Int(1),
+                TokenKind::LiteralInteger(1),
                 TokenKind::Identifier("_".into()),
             ],
         );

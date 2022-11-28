@@ -6,6 +6,7 @@ use crate::{
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
+use crate::{ByteString, TryBlockCaughtType};
 use std::{fmt::Display, vec::IntoIter};
 
 use self::precedence::{Associativity, Precedence};
@@ -115,6 +116,31 @@ impl Parser {
         Ok(ast.to_vec())
     }
 
+    fn try_block_caught_type_string(&mut self) -> ParseResult<TryBlockCaughtType> {
+        let id = self.full_name()?;
+
+        if self.current.kind == TokenKind::Pipe {
+            self.next();
+
+            let mut types = vec![id];
+
+            while !self.is_eof() {
+                let id = self.full_name()?;
+                types.push(id);
+
+                if self.current.kind != TokenKind::Pipe {
+                    break;
+                } else {
+                    self.next();
+                }
+            }
+
+            return Ok(TryBlockCaughtType::Union(types));
+        }
+
+        Ok(TryBlockCaughtType::Identifier(id))
+    }
+
     fn type_string(&mut self) -> ParseResult<Type> {
         if self.current.kind == TokenKind::Question {
             self.next();
@@ -127,11 +153,27 @@ impl Parser {
         if self.current.kind == TokenKind::Pipe {
             self.next();
 
-            let mut types = vec![id];
+            let r#type = Self::parse_type(id)?;
+            if r#type.standalone() {
+                return Err(ParseError::StandaloneTypeUsedInCombination(
+                    r#type,
+                    self.current.span,
+                ));
+            }
+
+            let mut types = vec![r#type];
 
             while !self.is_eof() {
                 let id = self.type_with_static()?;
-                types.push(id);
+                let r#type = Self::parse_type(id)?;
+                if r#type.standalone() {
+                    return Err(ParseError::StandaloneTypeUsedInCombination(
+                        r#type,
+                        self.current.span,
+                    ));
+                }
+
+                types.push(r#type);
 
                 if self.current.kind != TokenKind::Pipe {
                     break;
@@ -140,17 +182,33 @@ impl Parser {
                 }
             }
 
-            return Ok(Type::Union(types));
+            return Ok(Type::Union(Box::new(types)));
         }
 
         if self.current.kind == TokenKind::Ampersand {
             self.next();
 
-            let mut types = vec![id];
+            let r#type = Self::parse_type(id)?;
+            if r#type.standalone() {
+                return Err(ParseError::StandaloneTypeUsedInCombination(
+                    r#type,
+                    self.current.span,
+                ));
+            }
+
+            let mut types = vec![r#type];
 
             while !self.is_eof() {
                 let id = self.type_with_static()?;
-                types.push(id);
+                let r#type = Self::parse_type(id)?;
+                if r#type.standalone() {
+                    return Err(ParseError::StandaloneTypeUsedInCombination(
+                        r#type,
+                        self.current.span,
+                    ));
+                }
+
+                types.push(r#type);
 
                 if self.current.kind != TokenKind::Ampersand {
                     break;
@@ -159,15 +217,27 @@ impl Parser {
                 }
             }
 
-            return Ok(Type::Intersection(types));
+            return Ok(Type::Intersection(Box::new(types)));
         }
 
+        Self::parse_type(id)
+    }
+
+    fn parse_type(id: ByteString) -> ParseResult<Type> {
         Ok(match &id[..] {
             b"void" => Type::Void,
+            b"never" => Type::Never,
             b"null" => Type::Null,
             b"true" => Type::True,
             b"false" => Type::False,
-            _ => Type::Plain(id),
+            b"float" => Type::Float,
+            b"bool" => Type::Boolean,
+            b"int" => Type::Integer,
+            b"string" => Type::String,
+            b"array" => Type::Array,
+            b"object" => Type::Object,
+            b"mixed" => Type::Mixed,
+            _ => Type::Identifier(id),
         })
     }
 
@@ -1199,13 +1269,12 @@ impl Parser {
                     self.next();
                     self.lparen()?;
 
-                    let types = match self.type_string()? {
-                        Type::Plain(t) => vec![t.into()],
-                        Type::Union(ts) => ts
+                    let types = match self.try_block_caught_type_string()? {
+                        TryBlockCaughtType::Identifier(t) => vec![t.into()],
+                        TryBlockCaughtType::Union(ts) => ts
                             .into_iter()
                             .map(|t| t.into())
                             .collect::<Vec<Identifier>>(),
-                        _ => return Err(ParseError::InvalidCatchArgumentType(self.current.span)),
                     };
 
                     let var = if self.current.kind == TokenKind::RightParen {
@@ -1234,7 +1303,7 @@ impl Parser {
                     self.rbrace()?;
                 }
 
-                if catches.is_empty() && finally == None {
+                if catches.is_empty() && finally.is_none() {
                     return Err(ParseError::TryWithoutCatchOrFinally(start_span));
                 }
 
@@ -1686,12 +1755,12 @@ impl Parser {
                 self.next();
                 e
             }
-            TokenKind::Int(i) => {
+            TokenKind::LiteralInteger(i) => {
                 let e = Expression::Int { i: *i };
                 self.next();
                 e
             }
-            TokenKind::Float(f) => {
+            TokenKind::ConstantFloat(f) => {
                 let f = Expression::Float { f: *f };
                 self.next();
                 f
@@ -2417,13 +2486,13 @@ impl Parser {
                             // Full expression syntax is not allowed here,
                             // so we can't call self.expression.
                             let index = match &self.current.kind {
-                                &TokenKind::Int(i) => {
+                                &TokenKind::LiteralInteger(i) => {
                                     self.next();
                                     Expression::Int { i }
                                 }
                                 TokenKind::Minus => {
                                     self.next();
-                                    if let TokenKind::Int(i) = self.current.kind {
+                                    if let TokenKind::LiteralInteger(i) = self.current.kind {
                                         self.next();
                                         Expression::Negate {
                                             value: Box::new(Expression::Int { i }),
@@ -2653,6 +2722,7 @@ pub enum ParseError {
     ExpectedToken(String, Span),
     UnexpectedToken(String, Span),
     UnexpectedEndOfFile,
+    StandaloneTypeUsedInCombination(Type, Span),
     InvalidClassStatement(String, Span),
     InvalidAbstractFinalFlagCombination(Span),
     ConstantCannotBeStatic(Span),
@@ -2674,7 +2744,8 @@ impl Display for ParseError {
             Self::ConstantCannotBePrivateFinal(span) => write!(f, "Parse error: private class constant cannot be marked final since it is not visible to other classes on line {}", span.0),
             Self::TraitCannotContainConstant(span) => write!(f, "Parse error: traits cannot contain constants on line {}", span.0),
             Self::TryWithoutCatchOrFinally(span) => write!(f, "Parse error: cannot use try without catch or finally on line {}", span.0),
-            Self::InvalidCatchArgumentType(span) => write!(f, "Parse error: catch types must either describe a single type or union of types on line {}", span.0)
+            Self::InvalidCatchArgumentType(span) => write!(f, "Parse error: catch types must either describe a single type or union of types on line {}", span.0),
+            Self::StandaloneTypeUsedInCombination(r#type, span) => write!(f, "Parse error: {} can only be used as a standalone type on line {}", r#type, span.0)
         }
     }
 }
@@ -3425,7 +3496,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Plain("string".into())),
+                    r#type: Some(Type::String),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3464,7 +3535,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "bar".into() },
-                    r#type: Some(Type::Plain("string".into())),
+                    r#type: Some(Type::String),
                     variadic: true,
                     default: None,
                     flag: None,
@@ -3542,7 +3613,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Union(vec!["int".into(), "float".into()])),
+                    r#type: Some(Type::Union(Box::new(vec![Type::Integer, Type::Float]))),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3560,11 +3631,11 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Union(vec![
-                        "string".into(),
-                        "int".into(),
-                        "float".into(),
-                    ])),
+                    r#type: Some(Type::Union(Box::new(vec![
+                        Type::String,
+                        Type::Integer,
+                        Type::Float,
+                    ]))),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3585,7 +3656,10 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Intersection(vec!["Foo".into(), "Bar".into()])),
+                    r#type: Some(Type::Intersection(Box::new(vec![
+                        Type::Identifier("Foo".into()),
+                        Type::Identifier("Bar".into()),
+                    ]))),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3603,11 +3677,11 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Intersection(vec![
-                        "Foo".into(),
-                        "Bar".into(),
-                        "Baz".into(),
-                    ])),
+                    r#type: Some(Type::Intersection(Box::new(vec![
+                        Type::Identifier("Foo".into()),
+                        Type::Identifier("Bar".into()),
+                        Type::Identifier("Baz".into()),
+                    ]))),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3628,7 +3702,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![],
                 body: vec![],
-                return_type: Some(Type::Plain("string".into())),
+                return_type: Some(Type::String),
                 by_ref: false,
             }],
         );
