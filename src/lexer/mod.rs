@@ -1,3 +1,5 @@
+#![allow(clippy::module_inception)]
+
 mod byte_string;
 mod lexer;
 mod token;

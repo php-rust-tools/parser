@@ -130,9 +130,9 @@ impl Parser {
 
                 if self.current.kind != TokenKind::Pipe {
                     break;
-                } else {
-                    self.next();
                 }
+
+                self.next();
             }
 
             return Ok(TryBlockCaughtType::Union(types));
@@ -153,7 +153,7 @@ impl Parser {
         if self.current.kind == TokenKind::Pipe {
             self.next();
 
-            let r#type = Self::parse_type(id)?;
+            let r#type = parse_simple_type(id);
             if r#type.standalone() {
                 return Err(ParseError::StandaloneTypeUsedInCombination(
                     r#type,
@@ -165,7 +165,7 @@ impl Parser {
 
             while !self.is_eof() {
                 let id = self.type_with_static()?;
-                let r#type = Self::parse_type(id)?;
+                let r#type = parse_simple_type(id);
                 if r#type.standalone() {
                     return Err(ParseError::StandaloneTypeUsedInCombination(
                         r#type,
@@ -182,13 +182,13 @@ impl Parser {
                 }
             }
 
-            return Ok(Type::Union(Box::new(types)));
+            return Ok(Type::Union(types));
         }
 
         if self.current.kind == TokenKind::Ampersand {
             self.next();
 
-            let r#type = Self::parse_type(id)?;
+            let r#type = parse_simple_type(id);
             if r#type.standalone() {
                 return Err(ParseError::StandaloneTypeUsedInCombination(
                     r#type,
@@ -200,7 +200,7 @@ impl Parser {
 
             while !self.is_eof() {
                 let id = self.type_with_static()?;
-                let r#type = Self::parse_type(id)?;
+                let r#type = parse_simple_type(id);
                 if r#type.standalone() {
                     return Err(ParseError::StandaloneTypeUsedInCombination(
                         r#type,
@@ -217,28 +217,10 @@ impl Parser {
                 }
             }
 
-            return Ok(Type::Intersection(Box::new(types)));
+            return Ok(Type::Intersection(types));
         }
 
-        Self::parse_type(id)
-    }
-
-    fn parse_type(id: ByteString) -> ParseResult<Type> {
-        Ok(match &id[..] {
-            b"void" => Type::Void,
-            b"never" => Type::Never,
-            b"null" => Type::Null,
-            b"true" => Type::True,
-            b"false" => Type::False,
-            b"float" => Type::Float,
-            b"bool" => Type::Boolean,
-            b"int" => Type::Integer,
-            b"string" => Type::String,
-            b"array" => Type::Array,
-            b"object" => Type::Object,
-            b"mixed" => Type::Mixed,
-            _ => Type::Identifier(id),
-        })
+        Ok(parse_simple_type(id))
     }
 
     fn top_level_statement(&mut self) -> ParseResult<Statement> {
@@ -2574,6 +2556,24 @@ impl Parser {
     }
 }
 
+fn parse_simple_type(id: ByteString) -> Type {
+    match &id[..] {
+        b"void" => Type::Void,
+        b"never" => Type::Never,
+        b"null" => Type::Null,
+        b"true" => Type::True,
+        b"false" => Type::False,
+        b"float" => Type::Float,
+        b"bool" => Type::Boolean,
+        b"int" => Type::Integer,
+        b"string" => Type::String,
+        b"array" => Type::Array,
+        b"object" => Type::Object,
+        b"mixed" => Type::Mixed,
+        _ => Type::Identifier(id),
+    }
+}
+
 fn is_prefix(op: &TokenKind) -> bool {
     matches!(
         op,
@@ -3613,7 +3613,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Union(Box::new(vec![Type::Integer, Type::Float]))),
+                    r#type: Some(Type::Union(vec![Type::Integer, Type::Float])),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3631,11 +3631,7 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Union(Box::new(vec![
-                        Type::String,
-                        Type::Integer,
-                        Type::Float,
-                    ]))),
+                    r#type: Some(Type::Union(vec![Type::String, Type::Integer, Type::Float])),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3656,10 +3652,10 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Intersection(Box::new(vec![
+                    r#type: Some(Type::Intersection(vec![
                         Type::Identifier("Foo".into()),
                         Type::Identifier("Bar".into()),
-                    ]))),
+                    ])),
                     variadic: false,
                     default: None,
                     flag: None,
@@ -3677,11 +3673,11 @@ mod tests {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
                     name: Expression::Variable { name: "b".into() },
-                    r#type: Some(Type::Intersection(Box::new(vec![
+                    r#type: Some(Type::Intersection(vec![
                         Type::Identifier("Foo".into()),
                         Type::Identifier("Bar".into()),
                         Type::Identifier("Baz".into()),
-                    ]))),
+                    ])),
                     variadic: false,
                     default: None,
                     flag: None,

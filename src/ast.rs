@@ -15,8 +15,8 @@ pub enum TryBlockCaughtType {
 pub enum Type {
     Identifier(ByteString),
     Nullable(ByteString),
-    Union(Box<Vec<Type>>),
-    Intersection(Box<Vec<Type>>),
+    Union(Vec<Type>),
+    Intersection(Vec<Type>),
     Void,
     Null,
     True,
