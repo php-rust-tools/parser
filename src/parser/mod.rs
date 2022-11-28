@@ -253,7 +253,7 @@ impl Parser {
                     self.block(&TokenKind::RightBrace)?
                 } else {
                     let mut body = Block::new();
-                    while ! self.is_eof() {
+                    while !self.is_eof() {
                         body.push(self.top_level_statement()?);
                     }
                     body
