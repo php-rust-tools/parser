@@ -3509,7 +3509,7 @@ mod tests {
     #[test]
     fn simple_union_types_test() {
         assert_ast(
-            "<?php function foo(string|array|iterable|callable $b) {}",
+            "<?php function foo(string|ArrAy|iterable|CALLABLE $b) {}",
             &[Statement::Function {
                 name: "foo".as_bytes().into(),
                 params: vec![Param {
