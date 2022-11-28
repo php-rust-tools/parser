@@ -19,6 +19,10 @@ jobs:
         with:
           command: test
           args: -q
+      - uses: actions-rs/cargo@v1
+        with:
+          command: run
+          args: --bin integration-test
 
   fmt:
     name: Format
