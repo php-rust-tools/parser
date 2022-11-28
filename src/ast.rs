@@ -304,6 +304,11 @@ pub enum Statement {
         uses: Vec<Use>,
         kind: UseKind,
     },
+    GroupUse {
+        prefix: Identifier,
+        kind: UseKind,
+        uses: Vec<Use>,
+    },
     Comment {
         comment: ByteString,
     },

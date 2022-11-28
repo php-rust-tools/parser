@@ -224,31 +224,62 @@ impl Parser {
                     _ => UseKind::Normal,
                 };
 
-                let mut uses = Vec::new();
-                while !self.is_eof() {
-                    let name = self.full_name()?;
-                    let mut alias = None;
+                if self.peek.kind == TokenKind::LeftBrace {
+                    let prefix = self.full_name()?;
+                    self.next();
 
-                    if self.current.kind == TokenKind::As {
-                        self.next();
-                        alias = Some(self.ident()?.into());
+                    let mut uses = Vec::new();
+                    while self.current.kind != TokenKind::RightBrace {
+                        let name = self.full_name()?;
+                        let mut alias = None;
+                        
+                        if self.current.kind == TokenKind::As {
+                            self.next();
+                            alias = Some(self.ident()?.into());
+                        }
+
+                        uses.push(Use {
+                            name: name.into(),
+                            alias,
+                        });
+
+                        if self.current.kind == TokenKind::Comma {
+                            self.next();
+                            continue;
+                        }
                     }
 
-                    uses.push(Use {
-                        name: name.into(),
-                        alias,
-                    });
-
-                    if self.current.kind == TokenKind::Comma {
-                        self.next();
-                        continue;
-                    }
-
+                    self.rbrace()?;
                     self.semi()?;
-                    break;
-                }
 
-                Statement::Use { uses, kind }
+                    Statement::GroupUse { prefix: prefix.into(), kind, uses }
+                } else {
+                    let mut uses = Vec::new();
+                    while !self.is_eof() {
+                        let name = self.full_name()?;
+                        let mut alias = None;
+
+                        if self.current.kind == TokenKind::As {
+                            self.next();
+                            alias = Some(self.ident()?.into());
+                        }
+
+                        uses.push(Use {
+                            name: name.into(),
+                            alias,
+                        });
+
+                        if self.current.kind == TokenKind::Comma {
+                            self.next();
+                            continue;
+                        }
+
+                        self.semi()?;
+                        break;
+                    }
+
+                    Statement::Use { uses, kind }
+                }
             }
             TokenKind::Const => {
                 self.next();
@@ -5296,6 +5327,17 @@ mod tests {
             Statement::Use { uses: vec![
                 Use { name: "FOO".into(), alias: None }
             ], kind: crate::UseKind::Const }
+        ]);
+    }
+
+    #[test]
+    fn simple_group_use() {
+        assert_ast("<?php use Foo\\{Bar, Baz, Car};", &[
+            Statement::GroupUse { prefix: "Foo\\".into(), kind: crate::UseKind::Normal, uses: vec![
+                Use { name: "Bar".into(), alias: None },
+                Use { name: "Baz".into(), alias: None },
+                Use { name: "Car".into(), alias: None }
+            ]}     
         ]);
     }
 
