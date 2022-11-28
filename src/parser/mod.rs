@@ -232,7 +232,7 @@ impl Parser {
                     while self.current.kind != TokenKind::RightBrace {
                         let name = self.full_name()?;
                         let mut alias = None;
-                        
+
                         if self.current.kind == TokenKind::As {
                             self.next();
                             alias = Some(self.ident()?.into());
@@ -252,7 +252,11 @@ impl Parser {
                     self.rbrace()?;
                     self.semi()?;
 
-                    Statement::GroupUse { prefix: prefix.into(), kind, uses }
+                    Statement::GroupUse {
+                        prefix: prefix.into(),
+                        kind,
+                        uses,
+                    }
                 } else {
                     let mut uses = Vec::new();
                     while !self.is_eof() {
@@ -2678,7 +2682,6 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use super::Parser;
-    use crate::{Lexer, Use};
     use crate::{
         ast::{
             Arg, ArrayItem, BackedEnumType, Case, ClassFlag, Constant, DeclareItem, ElseIf,
@@ -2686,6 +2689,7 @@ mod tests {
         },
         Catch, Expression, Identifier, Param, Statement, Type,
     };
+    use crate::{Lexer, Use};
     use pretty_assertions::assert_eq;
 
     macro_rules! function {
@@ -5285,71 +5289,132 @@ mod tests {
 
     #[test]
     fn simple_use() {
-        assert_ast("<?php use Foo;", &[
-            Statement::Use { uses: vec![
-                Use { name: "Foo".into(), alias: None }
-            ], kind: crate::UseKind::Normal }
-        ]);
+        assert_ast(
+            "<?php use Foo;",
+            &[Statement::Use {
+                uses: vec![Use {
+                    name: "Foo".into(),
+                    alias: None,
+                }],
+                kind: crate::UseKind::Normal,
+            }],
+        );
     }
 
     #[test]
     fn simple_use_alias() {
-        assert_ast("<?php use Foo as Bar;", &[
-            Statement::Use { uses: vec![
-                Use { name: "Foo".into(), alias: Some("Bar".into()) }
-            ], kind: crate::UseKind::Normal }
-        ]);
+        assert_ast(
+            "<?php use Foo as Bar;",
+            &[Statement::Use {
+                uses: vec![Use {
+                    name: "Foo".into(),
+                    alias: Some("Bar".into()),
+                }],
+                kind: crate::UseKind::Normal,
+            }],
+        );
     }
 
     #[test]
     fn multi_line_use() {
-        assert_ast("<?php use Foo, Bar, Baz;", &[
-            Statement::Use { uses: vec![
-                Use { name: "Foo".into(), alias: None },
-                Use { name: "Bar".into(), alias: None },
-                Use { name: "Baz".into(), alias: None }
-            ], kind: crate::UseKind::Normal }
-        ]);
+        assert_ast(
+            "<?php use Foo, Bar, Baz;",
+            &[Statement::Use {
+                uses: vec![
+                    Use {
+                        name: "Foo".into(),
+                        alias: None,
+                    },
+                    Use {
+                        name: "Bar".into(),
+                        alias: None,
+                    },
+                    Use {
+                        name: "Baz".into(),
+                        alias: None,
+                    },
+                ],
+                kind: crate::UseKind::Normal,
+            }],
+        );
     }
 
     #[test]
     fn simple_use_function() {
-        assert_ast("<?php use function foo;", &[
-            Statement::Use { uses: vec![
-                Use { name: "foo".into(), alias: None }
-            ], kind: crate::UseKind::Function }
-        ]);
+        assert_ast(
+            "<?php use function foo;",
+            &[Statement::Use {
+                uses: vec![Use {
+                    name: "foo".into(),
+                    alias: None,
+                }],
+                kind: crate::UseKind::Function,
+            }],
+        );
     }
 
     #[test]
     fn simple_use_const() {
-        assert_ast("<?php use const FOO;", &[
-            Statement::Use { uses: vec![
-                Use { name: "FOO".into(), alias: None }
-            ], kind: crate::UseKind::Const }
-        ]);
+        assert_ast(
+            "<?php use const FOO;",
+            &[Statement::Use {
+                uses: vec![Use {
+                    name: "FOO".into(),
+                    alias: None,
+                }],
+                kind: crate::UseKind::Const,
+            }],
+        );
     }
 
     #[test]
     fn simple_group_use() {
-        assert_ast("<?php use Foo\\{Bar, Baz, Car};", &[
-            Statement::GroupUse { prefix: "Foo\\".into(), kind: crate::UseKind::Normal, uses: vec![
-                Use { name: "Bar".into(), alias: None },
-                Use { name: "Baz".into(), alias: None },
-                Use { name: "Car".into(), alias: None }
-            ]}     
-        ]);
+        assert_ast(
+            "<?php use Foo\\{Bar, Baz, Car};",
+            &[Statement::GroupUse {
+                prefix: "Foo\\".into(),
+                kind: crate::UseKind::Normal,
+                uses: vec![
+                    Use {
+                        name: "Bar".into(),
+                        alias: None,
+                    },
+                    Use {
+                        name: "Baz".into(),
+                        alias: None,
+                    },
+                    Use {
+                        name: "Car".into(),
+                        alias: None,
+                    },
+                ],
+            }],
+        );
     }
 
     #[test]
     fn simple_group_use_with_alias() {
-        assert_ast("<?php use Foo\\{Bar, Baz as Bob, Car};", &[
-            Statement::GroupUse { prefix: "Foo\\".into(), kind: crate::UseKind::Normal, uses: vec![
-                Use { name: "Bar".into(), alias: None },
-                Use { name: "Baz".into(), alias: Some("Bob".into()) },
-                Use { name: "Car".into(), alias: None }
-            ]}     
-        ]);
+        assert_ast(
+            "<?php use Foo\\{Bar, Baz as Bob, Car};",
+            &[Statement::GroupUse {
+                prefix: "Foo\\".into(),
+                kind: crate::UseKind::Normal,
+                uses: vec![
+                    Use {
+                        name: "Bar".into(),
+                        alias: None,
+                    },
+                    Use {
+                        name: "Baz".into(),
+                        alias: Some("Bob".into()),
+                    },
+                    Use {
+                        name: "Car".into(),
+                        alias: None,
+                    },
+                ],
+            }],
+        );
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
