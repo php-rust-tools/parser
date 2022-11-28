@@ -1,4 +1,11 @@
-use crate::lexer::{Span, Token, TokenKind};
+use std::vec::IntoIter;
+
+use crate::expect_token;
+use crate::expected_token_err;
+use crate::lexer::{Token, TokenKind};
+use crate::parser::error::ParseError;
+use crate::parser::error::ParseResult;
+use crate::parser::precedence::{Associativity, Precedence};
 use crate::{
     ast::{
         ArrayItem, BackedEnumType, ClassFlag, ClosureUse, Constant, DeclareItem, ElseIf,
@@ -7,47 +14,13 @@ use crate::{
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
 use crate::{ByteString, TraitAdaptation, TryBlockCaughtType};
-use std::{fmt::Display, vec::IntoIter};
 
-use self::precedence::{Associativity, Precedence};
-
-type ParseResult<T> = Result<T, ParseError>;
-
-macro_rules! expect {
-    ($parser:expr, $expected:pat, $out:expr, $message:literal) => {{
-        $parser.skip_comments();
-        match $parser.current.kind.clone() {
-            $expected => {
-                $parser.next();
-                $out
-            }
-            _ => {
-                return Err(ParseError::ExpectedToken(
-                    $message.into(),
-                    $parser.current.span,
-                ))
-            }
-        }
-    }};
-    ($parser:expr, $expected:pat, $message:literal) => {{
-        $parser.skip_comments();
-        match $parser.current.kind.clone() {
-            $expected => {
-                $parser.next();
-            }
-            _ => {
-                return Err(ParseError::ExpectedToken(
-                    $message.into(),
-                    $parser.current.span,
-                ))
-            }
-        }
-    }};
-}
+pub mod error;
 
 mod block;
 mod comments;
 mod ident;
+mod macros;
 mod params;
 mod precedence;
 mod punc;
@@ -86,7 +59,7 @@ impl Parser {
         }
     }
 
-    pub fn parse(&mut self, tokens: Vec<Token>) -> Result<Program, ParseError> {
+    pub fn parse(&mut self, tokens: Vec<Token>) -> ParseResult<Program> {
         self.iter = tokens.into_iter();
         self.next();
         self.next();
@@ -349,7 +322,7 @@ impl Parser {
                 while self.current.kind != TokenKind::SemiColon {
                     let name = self.ident()?;
 
-                    expect!(self, TokenKind::Equals, "expected =");
+                    expect_token!([TokenKind::Equals], self, "`=`");
 
                     let value = self.expression(Precedence::Lowest)?;
 
@@ -413,7 +386,7 @@ impl Parser {
                 while self.current.kind != TokenKind::RightParen {
                     let key = self.ident()?;
 
-                    expect!(self, TokenKind::Equals, "expected =");
+                    expect_token!([TokenKind::Equals], self, "`=`");
 
                     let value = self.expression(Precedence::Lowest)?;
 
@@ -435,7 +408,7 @@ impl Parser {
                 } else if self.current.kind == TokenKind::Colon {
                     self.colon()?;
                     let b = self.block(&TokenKind::EndDeclare)?;
-                    expect!(self, TokenKind::EndDeclare, "expected enddeclare");
+                    expect_token!([TokenKind::EndDeclare], self, "`enddeclare`");
                     self.semi()?;
                     b
                 } else {
@@ -468,7 +441,7 @@ impl Parser {
                     let mut default = None;
 
                     if self.current.kind == TokenKind::Equals {
-                        expect!(self, TokenKind::Equals, "expected =");
+                        expect_token!([TokenKind::Equals], self, "`=`");
                         default = Some(self.expression(Precedence::Lowest)?);
                     }
 
@@ -500,7 +473,7 @@ impl Parser {
                 let body = self.block(&TokenKind::RightBrace)?;
                 self.rbrace()?;
 
-                expect!(self, TokenKind::While, "expected while");
+                expect_token!([TokenKind::While], self, "`while`");
 
                 self.lparen()?;
                 let condition = self.expression(Precedence::Lowest)?;
@@ -530,7 +503,7 @@ impl Parser {
                 if end_token == TokenKind::RightBrace {
                     self.rbrace()?;
                 } else {
-                    expect!(self, TokenKind::EndWhile, "expected endwhile");
+                    expect_token!([TokenKind::EndWhile], self, "`endwhile`");
                     self.semi()?;
                 }
 
@@ -584,7 +557,7 @@ impl Parser {
                 let then = self.block(&end_token)?;
 
                 if end_token == TokenKind::EndFor {
-                    expect!(self, TokenKind::EndFor, "expected endfor");
+                    expect_token!([TokenKind::EndFor], self, "`endfor`");
                     self.semi()?;
                 } else {
                     self.rbrace()?;
@@ -604,7 +577,7 @@ impl Parser {
 
                 let expr = self.expression(Precedence::Lowest)?;
 
-                expect!(self, TokenKind::As, "expected 'as'");
+                expect_token!([TokenKind::As], self, ["`as`"]);
 
                 let mut by_ref = self.current.kind == TokenKind::Ampersand;
                 if by_ref {
@@ -640,7 +613,7 @@ impl Parser {
                 let body = self.block(&end_token)?;
 
                 if end_token == TokenKind::EndForeach {
-                    expect!(self, TokenKind::EndForeach, "expected endforeach");
+                    expect_token!([TokenKind::EndForeach], self, "`endforeach`");
                     self.semi()?;
                 } else {
                     self.rbrace()?;
@@ -763,7 +736,7 @@ impl Parser {
                 let mut body = Block::new();
                 self.skip_comments();
                 while self.current.kind != TokenKind::RightBrace {
-                    match self.current.kind {
+                    match &self.current.kind {
                         TokenKind::Public => {
                             self.next();
 
@@ -831,10 +804,7 @@ impl Parser {
                             })
                         }
                         _ => {
-                            return Err(ParseError::UnexpectedToken(
-                                self.current.kind.to_string(),
-                                self.current.span,
-                            ))
+                            return expected_token_err!(["`function`", "`public`"], self);
                         }
                     };
 
@@ -868,10 +838,7 @@ impl Parser {
                             })
                         }
                         _ => {
-                            return Err(ParseError::UnexpectedToken(
-                                self.current.kind.to_string(),
-                                self.current.span,
-                            ))
+                            return expected_token_err!(["`string`", "`int`"], self);
                         }
                     }
                 } else {
@@ -901,7 +868,7 @@ impl Parser {
                             let mut value = None;
 
                             if self.current.kind == TokenKind::Equals {
-                                expect!(self, TokenKind::Equals, "expected =");
+                                expect_token!([TokenKind::Equals], self, "`=`");
 
                                 value = Some(self.expression(Precedence::Lowest)?);
                             }
@@ -957,8 +924,11 @@ impl Parser {
 
                             let condition = self.expression(Precedence::Lowest)?;
 
-                            expect!(self, TokenKind::Colon | TokenKind::SemiColon, "expected :");
-
+                            expect_token!(
+                                [TokenKind::Colon, TokenKind::SemiColon],
+                                self,
+                                ["`:`", "`;`"]
+                            );
                             let mut body = Block::new();
 
                             while self.current.kind != TokenKind::Case
@@ -976,7 +946,11 @@ impl Parser {
                         TokenKind::Default => {
                             self.next();
 
-                            expect!(self, TokenKind::Colon | TokenKind::SemiColon, "expected :");
+                            expect_token!(
+                                [TokenKind::Colon, TokenKind::SemiColon],
+                                self,
+                                ["`:`", "`;`"]
+                            );
 
                             let mut body = Block::new();
 
@@ -993,16 +967,13 @@ impl Parser {
                             });
                         }
                         _ => {
-                            return Err(ParseError::UnexpectedToken(
-                                self.current.kind.to_string(),
-                                self.current.span,
-                            ))
+                            return expected_token_err!(["`case`", "`default`"], self);
                         }
                     }
                 }
 
                 if end_token == TokenKind::EndSwitch {
-                    expect!(self, TokenKind::EndSwitch, "expected endswitch");
+                    expect_token!([TokenKind::EndSwitch], self, ["`endswitch`"]);
                     self.semi()?;
                 } else {
                     self.rbrace()?;
@@ -1069,7 +1040,7 @@ impl Parser {
                             r#else = Some(body);
                         }
 
-                        expect!(self, TokenKind::EndIf, "expected endif");
+                        expect_token!([TokenKind::EndIf], self, ["`endif`"]);
                         self.semi()?;
 
                         Statement::If {
@@ -1126,7 +1097,7 @@ impl Parser {
                             });
                         }
 
-                        expect!(self, TokenKind::Else, "expected else");
+                        expect_token!([TokenKind::Else], self, ["`else`"]);
 
                         self.lbrace()?;
 
@@ -1512,7 +1483,7 @@ impl Parser {
 
                 let name = self.ident()?;
 
-                expect!(self, TokenKind::Equals, "expected =");
+                expect_token!([TokenKind::Equals], self, "`=`");
 
                 let value = self.expression(Precedence::Lowest)?;
 
@@ -1575,7 +1546,7 @@ impl Parser {
                     .contains(&self.current.kind)
                 {
                     if flags.contains(&self.current.kind) {
-                        return Err(ParseError::UnexpectedToken(
+                        return Err(ParseError::MultipleModifiers(
                             self.current.kind.to_string(),
                             self.current.span,
                         ));
@@ -1591,7 +1562,7 @@ impl Parser {
                     ));
                 }
 
-                match self.current.kind {
+                match &self.current.kind {
                     TokenKind::Const => {
                         if flags.contains(&TokenKind::Static) {
                             return Err(ParseError::ConstantCannotBeStatic(self.current.span));
@@ -1608,7 +1579,7 @@ impl Parser {
 
                         let name = self.ident()?;
 
-                        expect!(self, TokenKind::Equals, "expected =");
+                        expect_token!([TokenKind::Equals], self, "`=`");
 
                         let value = self.expression(Precedence::Lowest)?;
 
@@ -1723,10 +1694,10 @@ impl Parser {
                             flags: flags.into_iter().map(|f| f.into()).collect(),
                         })
                     }
-                    _ => Err(ParseError::UnexpectedToken(
-                        self.current.kind.to_string(),
-                        self.current.span,
-                    )),
+                    _ => expected_token_err!(
+                        ["`const`", "`function`", "an identifier", "a varaible"],
+                        self
+                    ),
                 }
             }
             TokenKind::Function => match self.function()? {
@@ -1747,10 +1718,10 @@ impl Parser {
                 _ => unreachable!(),
             },
             // TODO: Support use statements.
-            _ => Err(ParseError::UnexpectedToken(
-                format!("{}", self.current.kind),
-                self.current.span,
-            )),
+            _ => expected_token_err!(
+                ["`use`", "`const`", "`var`", "`function`", "a modifier"],
+                self
+            ),
         }
     }
 
@@ -1894,7 +1865,7 @@ impl Parser {
                         self.optional_comma()?;
                     }
 
-                    expect!(self, TokenKind::DoubleArrow, "expected =>");
+                    expect_token!([TokenKind::DoubleArrow], self, "`=>`");
 
                     let body = self.expression(Precedence::Lowest)?;
 
@@ -2137,7 +2108,7 @@ impl Parser {
                     return_type = Some(self.type_string()?);
                 }
 
-                expect!(self, TokenKind::DoubleArrow, "expected =>");
+                expect_token!([TokenKind::DoubleArrow], self, ["`=>`"]);
 
                 let value = self.expression(Precedence::Lowest)?;
 
@@ -2353,7 +2324,7 @@ impl Parser {
                 } else {
                     let index = self.expression(Precedence::Lowest)?;
 
-                    expect!(self, TokenKind::RightBracket, "expected ]");
+                    expect_token!([TokenKind::RightBracket], self, ["`]`"]);
 
                     Expression::ArrayIndex {
                         array: Box::new(lhs),
@@ -2387,10 +2358,7 @@ impl Parser {
                         Expression::Identifier { name: ident }
                     }
                     _ => {
-                        return Err(ParseError::UnexpectedToken(
-                            self.current.kind.to_string(),
-                            self.current.span,
-                        ))
+                        return expected_token_err!(["`{`", "`$`", "an identifier"], self);
                     }
                 };
 
@@ -2521,8 +2489,8 @@ impl Parser {
                             self.next();
                             self.next();
                             let e = self.expression(Precedence::Lowest)?;
-                            expect!(self, TokenKind::RightBracket, "expected ]");
-                            expect!(self, TokenKind::RightBrace, "expected }");
+                            expect_token!([TokenKind::RightBracket], self, "`]`");
+                            expect_token!([TokenKind::RightBrace], self, "`}`");
                             Expression::ArrayIndex {
                                 array: Box::new(var),
                                 index: Some(Box::new(e)),
@@ -2531,7 +2499,7 @@ impl Parser {
                         _ => {
                             // Arbitrary expressions are allowed, but are treated as variable variables.
                             let e = self.expression(Precedence::Lowest)?;
-                            expect!(self, TokenKind::RightBrace, "expected }");
+                            expect_token!([TokenKind::RightBrace], self, "`}`");
 
                             Expression::DynamicVariable { name: Box::new(e) }
                         }
@@ -2542,7 +2510,7 @@ impl Parser {
                     // "{$expr}"
                     self.next();
                     let e = self.expression(Precedence::Lowest)?;
-                    expect!(self, TokenKind::RightBrace, "expected }");
+                    expect_token!([TokenKind::RightBrace], self, "`}`");
                     parts.push(StringPart::Expr(Box::new(e)));
                 }
                 TokenKind::Variable(var) => {
@@ -2567,10 +2535,7 @@ impl Parser {
                                             value: Box::new(Expression::Int { i }),
                                         }
                                     } else {
-                                        return Err(ParseError::ExpectedToken(
-                                            "expected integer".into(),
-                                            self.current.span,
-                                        ));
+                                        return expected_token_err!("an integer", self);
                                     }
                                 }
                                 TokenKind::Identifier(ident) => {
@@ -2586,13 +2551,14 @@ impl Parser {
                                     e
                                 }
                                 _ => {
-                                    return Err(ParseError::ExpectedToken(
-                                        "expected -, number, identifier, or variable".into(),
-                                        self.current.span,
-                                    ))
+                                    return expected_token_err!(
+                                        ["`-`", "an integer", "an identifier", "a variable"],
+                                        self
+                                    );
                                 }
                             };
-                            expect!(self, TokenKind::RightBracket, "expected ]");
+
+                            expect_token!([TokenKind::RightBracket], self, "`]`");
                             Expression::ArrayIndex {
                                 array: Box::new(var),
                                 index: Some(Box::new(index)),
@@ -2621,10 +2587,7 @@ impl Parser {
                     parts.push(StringPart::Expr(Box::new(e)));
                 }
                 _ => {
-                    return Err(ParseError::UnexpectedToken(
-                        "string part".into(),
-                        self.current.span,
-                    ));
+                    return expected_token_err!(["`${`", "`{$", "`\"`", "a variable"], self);
                 }
             }
         }
@@ -2806,39 +2769,6 @@ fn is_postfix(t: &TokenKind) -> bool {
             | TokenKind::DoubleColon
             | TokenKind::Coalesce
     )
-}
-
-#[derive(Debug)]
-pub enum ParseError {
-    ExpectedToken(String, Span),
-    UnexpectedToken(String, Span),
-    UnexpectedEndOfFile,
-    StandaloneTypeUsedInCombination(Type, Span),
-    InvalidClassStatement(String, Span),
-    InvalidAbstractFinalFlagCombination(Span),
-    ConstantCannotBeStatic(Span),
-    ConstantCannotBePrivateFinal(Span),
-    TraitCannotContainConstant(Span),
-    TryWithoutCatchOrFinally(Span),
-    InvalidCatchArgumentType(Span),
-}
-
-impl Display for ParseError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::ExpectedToken(message, span) => write!(f, "Parse error: {} on line {} column {}", message, span.0, span.1),
-            Self::InvalidClassStatement(message, span) => write!(f, "Parse error: {} on line {} column {}", message, span.0, span.1),
-            Self::UnexpectedEndOfFile => write!(f, "Parse error: unexpected end of file."),
-            Self::UnexpectedToken(message, span) => write!(f, "Parse error: unexpected token {} on line {} column {}", message, span.0, span.1),
-            Self::InvalidAbstractFinalFlagCombination(span) => write!(f, "Parse error: final cannot be used on an abstract class member on line {}", span.0),
-            Self::ConstantCannotBeStatic(span) => write!(f, "Parse error: class constant cannot be marked static on line {}", span.0),
-            Self::ConstantCannotBePrivateFinal(span) => write!(f, "Parse error: private class constant cannot be marked final since it is not visible to other classes on line {}", span.0),
-            Self::TraitCannotContainConstant(span) => write!(f, "Parse error: traits cannot contain constants on line {}", span.0),
-            Self::TryWithoutCatchOrFinally(span) => write!(f, "Parse error: cannot use try without catch or finally on line {}", span.0),
-            Self::InvalidCatchArgumentType(span) => write!(f, "Parse error: catch types must either describe a single type or union of types on line {}", span.0),
-            Self::StandaloneTypeUsedInCombination(r#type, span) => write!(f, "Parse error: {} can only be used as a standalone type on line {}", r#type, span.0)
-        }
-    }
 }
 
 #[cfg(test)]
@@ -3522,6 +3452,14 @@ mod tests {
     #[test]
     fn empty_class() {
         assert_ast("<?php class Foo {}", &[class!("Foo")]);
+    }
+
+    #[test]
+    fn class_syntax_error() {
+        assert_err(
+            "<?php class Foo { public fn() {}; }",
+            "Parse error: unexpected token `fn`, expecting `const`, `function`, an identifier, or a varaible on line 1 column 26",
+        );
     }
 
     #[test]
@@ -4687,6 +4625,14 @@ mod tests {
     }
 
     #[test]
+    fn first_class_callables_syntax_error() {
+        assert_err(
+            "<?php foo(...) class;",
+            "Parse error: unexpected token `class`, expecting `;` on line 1 column 16",
+        );
+    }
+
+    #[test]
     fn first_class_callable_method() {
         assert_ast(
             "<?php $this->foo(...);",
@@ -5720,9 +5666,23 @@ mod tests {
         let ast = parser.parse(tokens);
 
         if ast.is_err() {
-            panic!("{}", ast.err().unwrap());
+            panic!("expected ast, found error: {}", ast.err().unwrap());
         } else {
             assert_eq!(ast.unwrap(), expected);
+        }
+    }
+
+    fn assert_err(source: &str, expected: &str) {
+        let mut lexer = Lexer::new(None);
+        let tokens = lexer.tokenize(source).unwrap();
+
+        let mut parser = Parser::new(None);
+        let ast = parser.parse(tokens);
+
+        if ast.is_ok() {
+            panic!("expected an error, found: {:#?}", ast.unwrap());
+        } else {
+            assert_eq!(ast.err().unwrap().to_string(), expected);
         }
     }
 }

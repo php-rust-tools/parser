@@ -1,0 +1,160 @@
+[
+    Function {
+        name: Identifier {
+            name: "foo",
+        },
+        params: [
+            Param {
+                name: Variable {
+                    name: "a",
+                },
+                type: Some(
+                    String,
+                ),
+                variadic: false,
+                default: Some(
+                    ConstantString {
+                        value: "",
+                    },
+                ),
+                flag: None,
+                by_ref: false,
+            },
+            Param {
+                name: Variable {
+                    name: "b",
+                },
+                type: Some(
+                    Array,
+                ),
+                variadic: false,
+                default: Some(
+                    Array {
+                        items: [],
+                    },
+                ),
+                flag: None,
+                by_ref: false,
+            },
+        ],
+        body: [
+            Expression {
+                expr: Call {
+                    target: Identifier {
+                        name: "exit",
+                    },
+                    args: [
+                        Arg {
+                            name: None,
+                            value: Int {
+                                i: 1,
+                            },
+                            unpack: false,
+                        },
+                    ],
+                },
+            },
+        ],
+        return_type: Some(
+            Never,
+        ),
+        by_ref: false,
+    },
+    Function {
+        name: Identifier {
+            name: "bar",
+        },
+        params: [
+            Param {
+                name: Variable {
+                    name: "a",
+                },
+                type: Some(
+                    Integer,
+                ),
+                variadic: false,
+                default: None,
+                flag: None,
+                by_ref: false,
+            },
+            Param {
+                name: Variable {
+                    name: "b",
+                },
+                type: Some(
+                    Float,
+                ),
+                variadic: false,
+                default: None,
+                flag: None,
+                by_ref: false,
+            },
+            Param {
+                name: Variable {
+                    name: "c",
+                },
+                type: Some(
+                    String,
+                ),
+                variadic: false,
+                default: None,
+                flag: None,
+                by_ref: false,
+            },
+            Param {
+                name: Variable {
+                    name: "d",
+                },
+                type: Some(
+                    True,
+                ),
+                variadic: false,
+                default: None,
+                flag: None,
+                by_ref: false,
+            },
+            Param {
+                name: Variable {
+                    name: "e",
+                },
+                type: Some(
+                    False,
+                ),
+                variadic: false,
+                default: None,
+                flag: None,
+                by_ref: false,
+            },
+            Param {
+                name: Variable {
+                    name: "f",
+                },
+                type: Some(
+                    Null,
+                ),
+                variadic: false,
+                default: None,
+                flag: None,
+                by_ref: false,
+            },
+        ],
+        body: [
+            Return {
+                value: Some(
+                    Null,
+                ),
+            },
+        ],
+        return_type: Some(
+            Union(
+                [
+                    Null,
+                    String,
+                    Integer,
+                    Float,
+                ],
+            ),
+        ),
+        by_ref: false,
+    },
+]

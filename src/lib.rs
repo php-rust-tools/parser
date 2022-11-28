@@ -4,4 +4,6 @@ mod parser;
 
 pub use ast::*;
 pub use lexer::*;
-pub use parser::{ParseError, Parser};
+pub use parser::error::ParseError;
+pub use parser::error::ParseResult;
+pub use parser::Parser;
