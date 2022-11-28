@@ -5341,6 +5341,17 @@ mod tests {
         ]);
     }
 
+    #[test]
+    fn simple_group_use_with_alias() {
+        assert_ast("<?php use Foo\\{Bar, Baz as Bob, Car};", &[
+            Statement::GroupUse { prefix: "Foo\\".into(), kind: crate::UseKind::Normal, uses: vec![
+                Use { name: "Bar".into(), alias: None },
+                Use { name: "Baz".into(), alias: Some("Bob".into()) },
+                Use { name: "Car".into(), alias: None }
+            ]}     
+        ]);
+    }
+
     fn assert_ast(source: &str, expected: &[Statement]) {
         let mut lexer = Lexer::new(None);
         let tokens = lexer.tokenize(source).unwrap();
