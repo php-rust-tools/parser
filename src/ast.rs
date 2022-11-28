@@ -249,6 +249,11 @@ impl From<&TokenKind> for IncludeKind {
     }
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum TraitAdaptation {
+    
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(ByteString),
@@ -328,6 +333,7 @@ pub enum Statement {
     },
     TraitUse {
         traits: Vec<Identifier>,
+        adaptations: Vec<TraitAdaptation>,
     },
     Interface {
         name: Identifier,

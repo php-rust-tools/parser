@@ -1415,7 +1415,7 @@ impl Parser {
 
                 self.semi()?;
 
-                Ok(Statement::TraitUse { traits })
+                Ok(Statement::TraitUse { traits, adaptations: vec![] })
             }
             TokenKind::Const => {
                 self.next();
