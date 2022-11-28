@@ -2647,7 +2647,7 @@ impl Display for ParseError {
 #[cfg(test)]
 mod tests {
     use super::Parser;
-    use crate::Lexer;
+    use crate::{Lexer, Use};
     use crate::{
         ast::{
             Arg, ArrayItem, BackedEnumType, Case, ClassFlag, Constant, DeclareItem, ElseIf,
@@ -5250,6 +5250,53 @@ mod tests {
                 body: vec![expr!(Expression::Variable { name: "a".into() })],
             }],
         );
+    }
+
+    #[test]
+    fn simple_use() {
+        assert_ast("<?php use Foo;", &[
+            Statement::Use { uses: vec![
+                Use { name: "Foo".into(), alias: None }
+            ], kind: crate::UseKind::Normal }
+        ]);
+    }
+
+    #[test]
+    fn simple_use_alias() {
+        assert_ast("<?php use Foo as Bar;", &[
+            Statement::Use { uses: vec![
+                Use { name: "Foo".into(), alias: Some("Bar".into()) }
+            ], kind: crate::UseKind::Normal }
+        ]);
+    }
+
+    #[test]
+    fn multi_line_use() {
+        assert_ast("<?php use Foo, Bar, Baz;", &[
+            Statement::Use { uses: vec![
+                Use { name: "Foo".into(), alias: None },
+                Use { name: "Bar".into(), alias: None },
+                Use { name: "Baz".into(), alias: None }
+            ], kind: crate::UseKind::Normal }
+        ]);
+    }
+
+    #[test]
+    fn simple_use_function() {
+        assert_ast("<?php use function foo;", &[
+            Statement::Use { uses: vec![
+                Use { name: "foo".into(), alias: None }
+            ], kind: crate::UseKind::Function }
+        ]);
+    }
+
+    #[test]
+    fn simple_use_const() {
+        assert_ast("<?php use const FOO;", &[
+            Statement::Use { uses: vec![
+                Use { name: "FOO".into(), alias: None }
+            ], kind: crate::UseKind::Const }
+        ]);
     }
 
     fn assert_ast(source: &str, expected: &[Statement]) {
