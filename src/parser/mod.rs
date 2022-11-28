@@ -6,7 +6,7 @@ use crate::{
     },
     Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
 };
-use crate::{ByteString, TryBlockCaughtType};
+use crate::{ByteString, TraitAdaptation, TryBlockCaughtType};
 use std::{fmt::Display, vec::IntoIter};
 
 use self::precedence::{Associativity, Precedence};
@@ -1406,16 +1406,106 @@ impl Parser {
 
                 let mut traits = Vec::new();
 
-                while self.current.kind != TokenKind::SemiColon {
+                while self.current.kind != TokenKind::SemiColon
+                    && self.current.kind != TokenKind::LeftBrace
+                {
                     self.optional_comma()?;
 
                     let t = self.full_name()?;
                     traits.push(t.into());
                 }
 
-                self.semi()?;
+                let mut adaptations = Vec::new();
+                if self.current.kind == TokenKind::LeftBrace {
+                    self.lbrace()?;
 
-                Ok(Statement::TraitUse { traits })
+                    while self.current.kind != TokenKind::RightBrace {
+                        let (r#trait, method): (Option<Identifier>, Identifier) =
+                            match self.peek.kind {
+                                TokenKind::DoubleColon => {
+                                    let r#trait = self.full_name()?;
+                                    self.next();
+                                    let method = self.ident()?;
+                                    (Some(r#trait.into()), method.into())
+                                }
+                                _ => (None, self.ident()?.into()),
+                            };
+
+                        match self.current.kind {
+                            TokenKind::As => {
+                                self.next();
+
+                                match self.current.kind {
+                                    TokenKind::Public
+                                    | TokenKind::Protected
+                                    | TokenKind::Private => {
+                                        let visibility: MethodFlag =
+                                            self.current.kind.clone().into();
+                                        self.next();
+
+                                        if self.current.kind == TokenKind::SemiColon {
+                                            adaptations.push(TraitAdaptation::Visibility {
+                                                r#trait,
+                                                method,
+                                                visibility,
+                                            });
+                                        } else {
+                                            let alias: Identifier = self.name()?.into();
+                                            adaptations.push(TraitAdaptation::Alias {
+                                                r#trait,
+                                                method,
+                                                alias,
+                                                visibility: Some(visibility),
+                                            });
+                                        }
+                                    }
+                                    _ => {
+                                        let alias: Identifier = self.name()?.into();
+                                        adaptations.push(TraitAdaptation::Alias {
+                                            r#trait,
+                                            method,
+                                            alias,
+                                            visibility: None,
+                                        });
+                                    }
+                                }
+                            }
+                            TokenKind::Insteadof => {
+                                self.next();
+
+                                let mut insteadof = Vec::new();
+                                insteadof.push(self.full_name()?.into());
+                                while self.current.kind != TokenKind::SemiColon {
+                                    self.optional_comma()?;
+                                    insteadof.push(self.full_name()?.into());
+                                }
+
+                                adaptations.push(TraitAdaptation::Precedence {
+                                    r#trait,
+                                    method,
+                                    insteadof,
+                                });
+                            }
+                            _ => {
+                                return Err(ParseError::UnexpectedToken(
+                                    self.current.kind.to_string(),
+                                    self.current.span,
+                                ))
+                            }
+                        };
+
+                        self.semi()?;
+                    }
+
+                    self.rbrace()?;
+                } else {
+                    self.semi()?;
+                }
+
+                Ok(Statement::TraitUse {
+                    traits,
+                    adaptations,
+                })
             }
             TokenKind::Const => {
                 self.next();
@@ -2759,7 +2849,7 @@ mod tests {
             Arg, ArrayItem, BackedEnumType, Case, ClassFlag, Constant, DeclareItem, ElseIf,
             IncludeKind, InfixOp, MethodFlag, PropertyFlag, StringPart,
         },
-        Catch, Expression, Identifier, Param, Statement, TryBlockCaughtType, Type,
+        Catch, Expression, Identifier, Param, Statement, TraitAdaptation, TryBlockCaughtType, Type,
     };
     use crate::{Lexer, Use};
     use pretty_assertions::assert_eq;
@@ -5510,6 +5600,114 @@ mod tests {
                         alias: None,
                     },
                 ],
+            }],
+        );
+    }
+
+    #[test]
+    fn trait_simple_alias() {
+        assert_ast(
+            "<?php class A { use B { foo as bar; } }",
+            &[Statement::Class {
+                name: "A".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![Statement::TraitUse {
+                    traits: vec!["B".into()],
+                    adaptations: vec![TraitAdaptation::Alias {
+                        r#trait: None,
+                        method: "foo".into(),
+                        alias: "bar".into(),
+                        visibility: None,
+                    }],
+                }],
+                flag: None,
+            }],
+        );
+    }
+
+    #[test]
+    fn trait_simple_alias_with_trait_prefix() {
+        assert_ast(
+            "<?php class A { use B { B::foo as bar; } }",
+            &[Statement::Class {
+                name: "A".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![Statement::TraitUse {
+                    traits: vec!["B".into()],
+                    adaptations: vec![TraitAdaptation::Alias {
+                        r#trait: Some("B".into()),
+                        method: "foo".into(),
+                        alias: "bar".into(),
+                        visibility: None,
+                    }],
+                }],
+                flag: None,
+            }],
+        );
+    }
+
+    #[test]
+    fn trait_visibility_adaptation() {
+        assert_ast(
+            "<?php class A { use B { foo as protected; } }",
+            &[Statement::Class {
+                name: "A".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![Statement::TraitUse {
+                    traits: vec!["B".into()],
+                    adaptations: vec![TraitAdaptation::Visibility {
+                        r#trait: None,
+                        method: "foo".into(),
+                        visibility: MethodFlag::Protected,
+                    }],
+                }],
+                flag: None,
+            }],
+        );
+    }
+
+    #[test]
+    fn trait_visibility_adaptation_and_alias() {
+        assert_ast(
+            "<?php class A { use B { foo as protected bar; } }",
+            &[Statement::Class {
+                name: "A".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![Statement::TraitUse {
+                    traits: vec!["B".into()],
+                    adaptations: vec![TraitAdaptation::Alias {
+                        r#trait: None,
+                        method: "foo".into(),
+                        alias: "bar".into(),
+                        visibility: Some(MethodFlag::Protected),
+                    }],
+                }],
+                flag: None,
+            }],
+        );
+    }
+
+    #[test]
+    fn trait_method_precedence_adaptation() {
+        assert_ast(
+            "<?php class A { use B, C { B::foo insteadof C; } }",
+            &[Statement::Class {
+                name: "A".into(),
+                extends: None,
+                implements: vec![],
+                body: vec![Statement::TraitUse {
+                    traits: vec!["B".into(), "C".into()],
+                    adaptations: vec![TraitAdaptation::Precedence {
+                        r#trait: Some("B".into()),
+                        method: "foo".into(),
+                        insteadof: vec!["C".into()],
+                    }],
+                }],
+                flag: None,
             }],
         );
     }

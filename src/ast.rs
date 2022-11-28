@@ -249,6 +249,26 @@ impl From<&TokenKind> for IncludeKind {
     }
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum TraitAdaptation {
+    Alias {
+        r#trait: Option<Identifier>,
+        method: Identifier,
+        alias: Identifier,
+        visibility: Option<MethodFlag>,
+    },
+    Visibility {
+        r#trait: Option<Identifier>,
+        method: Identifier,
+        visibility: MethodFlag,
+    },
+    Precedence {
+        r#trait: Option<Identifier>,
+        method: Identifier,
+        insteadof: Vec<Identifier>,
+    },
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(ByteString),
@@ -328,6 +348,7 @@ pub enum Statement {
     },
     TraitUse {
         traits: Vec<Identifier>,
+        adaptations: Vec<TraitAdaptation>,
     },
     Interface {
         name: Identifier,
