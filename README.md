@@ -1,10 +1,6 @@
-<h3 align="center">
-    php-parser-rs
-</h3>
+# PHP-Parser
 
-<p align="center">
-    A handwritten recursive-descent parser for PHP written in Rust, for fun.
-</p>
+A handwritten recursive-descent parser for PHP written in Rust, for fun.
 
 <p align="center">
     <a href="https://justforfunnoreally.dev/">
@@ -12,9 +8,23 @@
     </a>
 </p>
 
+
 ---
 
-#### Usage
+> **Warning**: This crate is not ready for any form of production use _yet_. There are still a lot of things missing from the parser, so please use at your own risk.
+
+---
+
+## Usage
+
+Add `php-parser-rs` in your `Cargo.toml`'s `dependencies` section
+
+```toml
+[dependencies]
+php-parser-rs = "0.0.0-b1"
+```
+
+### Example
 
 ```rust
 use php_parser_rs::*;
@@ -26,19 +36,25 @@ let mut parser = Parser::new(None);
 let ast = parser.parse(tokens).unwrap();
 ```
 
-> **Warning**: This crate is not ready for any form of production use _yet_. There are still a lot of things missing from the parser, so please use at your own risk.
 
-#### Contributing
+## License
 
-All contributions to this repository are welcome. It's the perfect project for Rust beginners since we don't use many of Rust's complex features and the core concepts in the parser are purposely simple.
+Licensed under either of
 
-If you do wish to contribute, we just ask you to follow a few simple rules.
+ * Apache License, Version 2.0
+   ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
+ * MIT license
+   ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
-1. Create a pull request from a **non-main** branch on your fork.
-2. Provide a short, but clear, description of your changes.
-3. Have fun and don't take it all too seriously!
+at your option.
 
-#### Credits
+## Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted
+for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
+dual licensed as above, without any additional terms or conditions.
+
+## Credits
 
 * [Ryan Chandler](https://github.com/ryangjchandler)
 * [All contributors](https://github.com/ryangjchandler/php-parser-rs/graphs/contributors)
