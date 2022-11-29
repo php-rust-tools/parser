@@ -1,0 +1,131 @@
+[
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "a",
+            },
+            op: Assign,
+            rhs: Infix {
+                lhs: Int {
+                    i: 2,
+                },
+                op: Pow,
+                rhs: Int {
+                    i: 2,
+                },
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "b",
+            },
+            op: Assign,
+            rhs: Ternary {
+                condition: Int {
+                    i: 1,
+                },
+                then: Some(
+                    Int {
+                        i: 2,
+                    },
+                ),
+                else: Int {
+                    i: 3,
+                },
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "c",
+            },
+            op: Assign,
+            rhs: Ternary {
+                condition: Int {
+                    i: 1,
+                },
+                then: Some(
+                    Ternary {
+                        condition: Int {
+                            i: 2,
+                        },
+                        then: Some(
+                            Int {
+                                i: 3,
+                            },
+                        ),
+                        else: Int {
+                            i: 4,
+                        },
+                    },
+                ),
+                else: Int {
+                    i: 5,
+                },
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "d",
+            },
+            op: Assign,
+            rhs: Ternary {
+                condition: Int {
+                    i: 1,
+                },
+                then: None,
+                else: Ternary {
+                    condition: Int {
+                        i: 2,
+                    },
+                    then: None,
+                    else: Int {
+                        i: 3,
+                    },
+                },
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "e",
+            },
+            op: Assign,
+            rhs: Coalesce {
+                lhs: Int {
+                    i: 1,
+                },
+                rhs: Int {
+                    i: 2,
+                },
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "f",
+            },
+            op: Assign,
+            rhs: Coalesce {
+                lhs: Int {
+                    i: 1,
+                },
+                rhs: Coalesce {
+                    lhs: Int {
+                        i: 2,
+                    },
+                    rhs: Int {
+                        i: 3,
+                    },
+                },
+            },
+        },
+    },
+]

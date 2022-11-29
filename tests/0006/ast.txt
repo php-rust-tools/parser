@@ -1,0 +1,26 @@
+[
+    Include {
+        kind: Include,
+        path: ConstantString {
+            value: "foo.php",
+        },
+    },
+    Include {
+        kind: IncludeOnce,
+        path: ConstantString {
+            value: "bar.php",
+        },
+    },
+    Include {
+        kind: Require,
+        path: ConstantString {
+            value: "baz.php",
+        },
+    },
+    Include {
+        kind: RequireOnce,
+        path: ConstantString {
+            value: "qux.php",
+        },
+    },
+]

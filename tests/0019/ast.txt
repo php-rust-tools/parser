@@ -1,0 +1,458 @@
+[
+    Namespace {
+        name: None,
+        body: [
+            Function {
+                name: Identifier {
+                    name: "globalFunc",
+                },
+                params: [],
+                body: [],
+                return_type: None,
+                by_ref: false,
+            },
+        ],
+    },
+    Namespace {
+        name: Some(
+            "foo",
+        ),
+        body: [
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "a",
+                    },
+                    op: Assign,
+                    rhs: Closure {
+                        params: [],
+                        uses: [],
+                        return_type: None,
+                        body: [],
+                        static: false,
+                        by_ref: false,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "b",
+                    },
+                    op: Assign,
+                    rhs: Closure {
+                        params: [
+                            Param {
+                                name: Variable {
+                                    name: "b",
+                                },
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                flag: None,
+                                by_ref: true,
+                            },
+                        ],
+                        uses: [],
+                        return_type: None,
+                        body: [],
+                        static: false,
+                        by_ref: false,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "c",
+                    },
+                    op: Assign,
+                    rhs: Closure {
+                        params: [],
+                        uses: [],
+                        return_type: None,
+                        body: [],
+                        static: false,
+                        by_ref: true,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "d",
+                    },
+                    op: Assign,
+                    rhs: Closure {
+                        params: [
+                            Param {
+                                name: Variable {
+                                    name: "b",
+                                },
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                flag: None,
+                                by_ref: true,
+                            },
+                        ],
+                        uses: [],
+                        return_type: None,
+                        body: [
+                            Return {
+                                value: Some(
+                                    Variable {
+                                        name: "b",
+                                    },
+                                ),
+                            },
+                        ],
+                        static: false,
+                        by_ref: true,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "e",
+                    },
+                    op: Assign,
+                    rhs: ArrowFunction {
+                        params: [],
+                        return_type: None,
+                        expr: Null,
+                        by_ref: false,
+                        static: false,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "f",
+                    },
+                    op: Assign,
+                    rhs: ArrowFunction {
+                        params: [
+                            Param {
+                                name: Variable {
+                                    name: "b",
+                                },
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                flag: None,
+                                by_ref: true,
+                            },
+                        ],
+                        return_type: None,
+                        expr: Null,
+                        by_ref: false,
+                        static: false,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "g",
+                    },
+                    op: Assign,
+                    rhs: ArrowFunction {
+                        params: [],
+                        return_type: None,
+                        expr: Null,
+                        by_ref: true,
+                        static: false,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "h",
+                    },
+                    op: Assign,
+                    rhs: ArrowFunction {
+                        params: [
+                            Param {
+                                name: Variable {
+                                    name: "b",
+                                },
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                flag: None,
+                                by_ref: true,
+                            },
+                        ],
+                        return_type: None,
+                        expr: Variable {
+                            name: "b",
+                        },
+                        by_ref: true,
+                        static: false,
+                    },
+                },
+            },
+        ],
+    },
+    Namespace {
+        name: Some(
+            "bar",
+        ),
+        body: [
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "a",
+                    },
+                    op: Assign,
+                    rhs: Closure {
+                        params: [],
+                        uses: [],
+                        return_type: None,
+                        body: [],
+                        static: true,
+                        by_ref: false,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "b",
+                    },
+                    op: Assign,
+                    rhs: Closure {
+                        params: [
+                            Param {
+                                name: Variable {
+                                    name: "b",
+                                },
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                flag: None,
+                                by_ref: true,
+                            },
+                        ],
+                        uses: [],
+                        return_type: None,
+                        body: [],
+                        static: true,
+                        by_ref: false,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "c",
+                    },
+                    op: Assign,
+                    rhs: Closure {
+                        params: [],
+                        uses: [],
+                        return_type: None,
+                        body: [],
+                        static: true,
+                        by_ref: true,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "d",
+                    },
+                    op: Assign,
+                    rhs: Closure {
+                        params: [
+                            Param {
+                                name: Variable {
+                                    name: "b",
+                                },
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                flag: None,
+                                by_ref: true,
+                            },
+                        ],
+                        uses: [],
+                        return_type: None,
+                        body: [
+                            Return {
+                                value: Some(
+                                    Variable {
+                                        name: "b",
+                                    },
+                                ),
+                            },
+                        ],
+                        static: true,
+                        by_ref: true,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "e",
+                    },
+                    op: Assign,
+                    rhs: ArrowFunction {
+                        params: [],
+                        return_type: None,
+                        expr: Null,
+                        by_ref: false,
+                        static: true,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "f",
+                    },
+                    op: Assign,
+                    rhs: ArrowFunction {
+                        params: [
+                            Param {
+                                name: Variable {
+                                    name: "b",
+                                },
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                flag: None,
+                                by_ref: true,
+                            },
+                        ],
+                        return_type: None,
+                        expr: Null,
+                        by_ref: false,
+                        static: true,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "g",
+                    },
+                    op: Assign,
+                    rhs: ArrowFunction {
+                        params: [],
+                        return_type: None,
+                        expr: Null,
+                        by_ref: true,
+                        static: true,
+                    },
+                },
+            },
+            Expression {
+                expr: Infix {
+                    lhs: Variable {
+                        name: "h",
+                    },
+                    op: Assign,
+                    rhs: ArrowFunction {
+                        params: [
+                            Param {
+                                name: Variable {
+                                    name: "b",
+                                },
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                flag: None,
+                                by_ref: true,
+                            },
+                        ],
+                        return_type: None,
+                        expr: Variable {
+                            name: "b",
+                        },
+                        by_ref: true,
+                        static: true,
+                    },
+                },
+            },
+        ],
+    },
+    Namespace {
+        name: Some(
+            "baz",
+        ),
+        body: [
+            Function {
+                name: Identifier {
+                    name: "a",
+                },
+                params: [
+                    Param {
+                        name: Variable {
+                            name: "b",
+                        },
+                        type: None,
+                        variadic: false,
+                        default: None,
+                        flag: None,
+                        by_ref: true,
+                    },
+                ],
+                body: [],
+                return_type: None,
+                by_ref: false,
+            },
+            Function {
+                name: Identifier {
+                    name: "b",
+                },
+                params: [
+                    Param {
+                        name: Variable {
+                            name: "b",
+                        },
+                        type: None,
+                        variadic: false,
+                        default: None,
+                        flag: None,
+                        by_ref: false,
+                    },
+                ],
+                body: [
+                    Return {
+                        value: Some(
+                            Variable {
+                                name: "b",
+                            },
+                        ),
+                    },
+                ],
+                return_type: None,
+                by_ref: true,
+            },
+            Function {
+                name: Identifier {
+                    name: "c",
+                },
+                params: [],
+                body: [
+                    Return {
+                        value: Some(
+                            Variable {
+                                name: "b",
+                            },
+                        ),
+                    },
+                ],
+                return_type: None,
+                by_ref: true,
+            },
+        ],
+    },
+]

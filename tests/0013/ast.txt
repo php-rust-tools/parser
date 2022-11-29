@@ -1,0 +1,151 @@
+[
+    GroupUse {
+        prefix: Identifier {
+            name: "Foo\",
+        },
+        kind: Normal,
+        uses: [
+            Use {
+                name: Identifier {
+                    name: "Bar",
+                },
+                alias: None,
+            },
+            Use {
+                name: Identifier {
+                    name: "Baz",
+                },
+                alias: Some(
+                    Identifier {
+                        name: "Bob",
+                    },
+                ),
+            },
+            Use {
+                name: Identifier {
+                    name: "Car",
+                },
+                alias: None,
+            },
+        ],
+    },
+    GroupUse {
+        prefix: Identifier {
+            name: "Bar\",
+        },
+        kind: Normal,
+        uses: [
+            Use {
+                name: Identifier {
+                    name: "Bar0",
+                },
+                alias: None,
+            },
+            Use {
+                name: Identifier {
+                    name: "Baz0",
+                },
+                alias: None,
+            },
+            Use {
+                name: Identifier {
+                    name: "Car0",
+                },
+                alias: None,
+            },
+        ],
+    },
+    Use {
+        uses: [
+            Use {
+                name: Identifier {
+                    name: "Foo1",
+                },
+                alias: None,
+            },
+            Use {
+                name: Identifier {
+                    name: "Bar1",
+                },
+                alias: None,
+            },
+            Use {
+                name: Identifier {
+                    name: "Baz1",
+                },
+                alias: None,
+            },
+        ],
+        kind: Normal,
+    },
+    Use {
+        uses: [
+            Use {
+                name: Identifier {
+                    name: "Foo",
+                },
+                alias: Some(
+                    Identifier {
+                        name: "Qux",
+                    },
+                ),
+            },
+        ],
+        kind: Normal,
+    },
+    Use {
+        uses: [
+            Use {
+                name: Identifier {
+                    name: "Foo",
+                },
+                alias: None,
+            },
+        ],
+        kind: Normal,
+    },
+    Use {
+        uses: [
+            Use {
+                name: Identifier {
+                    name: "FOO",
+                },
+                alias: None,
+            },
+        ],
+        kind: Const,
+    },
+    Use {
+        uses: [
+            Use {
+                name: Identifier {
+                    name: "Foo\Bar\Baz\QUX",
+                },
+                alias: None,
+            },
+        ],
+        kind: Const,
+    },
+    Use {
+        uses: [
+            Use {
+                name: Identifier {
+                    name: "f",
+                },
+                alias: None,
+            },
+        ],
+        kind: Function,
+    },
+    Use {
+        uses: [
+            Use {
+                name: Identifier {
+                    name: "Pop\Bar\f",
+                },
+                alias: None,
+            },
+        ],
+        kind: Const,
+    },
+]

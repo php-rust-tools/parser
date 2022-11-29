@@ -1,0 +1,64 @@
+[
+    Function {
+        name: Identifier {
+            name: "a",
+        },
+        params: [],
+        body: [
+            Echo {
+                values: [
+                    ConstantString {
+                        value: "looping..\n",
+                    },
+                ],
+            },
+            Return {
+                value: Some(
+                    Null,
+                ),
+            },
+        ],
+        return_type: Some(
+            Null,
+        ),
+        by_ref: false,
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "bar",
+            },
+            op: Assign,
+            rhs: Call {
+                target: Identifier {
+                    name: "a",
+                },
+                args: [
+                    Arg {
+                        name: None,
+                        value: VariadicPlaceholder,
+                        unpack: false,
+                    },
+                ],
+            },
+        },
+    },
+    Label {
+        label: Identifier {
+            name: "foo",
+        },
+    },
+    Expression {
+        expr: Call {
+            target: Variable {
+                name: "bar",
+            },
+            args: [],
+        },
+    },
+    Goto {
+        label: Identifier {
+            name: "foo",
+        },
+    },
+]

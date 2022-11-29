@@ -1,0 +1,53 @@
+[
+    Declare {
+        declares: [
+            DeclareItem {
+                key: Identifier {
+                    name: "a",
+                },
+                value: Int {
+                    i: 1,
+                },
+            },
+        ],
+        body: [
+            Expression {
+                expr: Variable {
+                    name: "a",
+                },
+            },
+        ],
+    },
+    Declare {
+        declares: [
+            DeclareItem {
+                key: Identifier {
+                    name: "b",
+                },
+                value: ConstantString {
+                    value: "9",
+                },
+            },
+        ],
+        body: [
+            Expression {
+                expr: Variable {
+                    name: "a",
+                },
+            },
+        ],
+    },
+    Declare {
+        declares: [
+            DeclareItem {
+                key: Identifier {
+                    name: "foo",
+                },
+                value: Float {
+                    f: 1.42,
+                },
+            },
+        ],
+        body: [],
+    },
+]
