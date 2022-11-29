@@ -535,10 +535,10 @@ pub enum Expression {
     Decrement {
         value: Box<Self>,
     },
-    Int {
+    LiteralInteger {
         i: i64,
     },
-    Float {
+    LiteralFloat {
         f: f64,
     },
     Variable {
@@ -581,7 +581,7 @@ pub enum Expression {
         target: Box<Self>,
         args: Vec<Arg>,
     },
-    ConstantString {
+    LiteralString {
         value: ByteString,
     },
     InterpolatedString {
