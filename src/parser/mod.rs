@@ -2419,8 +2419,6 @@ impl Parser {
                     },
                 };
 
-                dbg!(&self.current.kind);
-
                 if self.current.kind == TokenKind::LeftParen {
                     self.next();
 
@@ -2778,10 +2776,10 @@ mod tests {
     use crate::Lexer;
     use crate::{
         ast::{
-            Arg, ArrayItem, BackedEnumType, Case, ClassFlag, Constant, DeclareItem, ElseIf,
-            InfixOp, MethodFlag, PropertyFlag, StringPart,
+            Arg, ArrayItem, BackedEnumType, ClassFlag, Constant, DeclareItem, ElseIf, InfixOp,
+            MethodFlag, PropertyFlag, StringPart,
         },
-        Catch, Expression, Identifier, Param, Statement, TryBlockCaughtType, Type,
+        Expression, Identifier, Param, Statement, Type,
     };
     use pretty_assertions::assert_eq;
 
@@ -3587,55 +3585,6 @@ mod tests {
     }
 
     #[test]
-    fn foreach() {
-        assert_ast(
-            "<?php foreach ($foo as $bar) {}",
-            &[Statement::Foreach {
-                expr: Expression::Variable { name: "foo".into() },
-                by_ref: false,
-                key_var: None,
-                value_var: Expression::Variable { name: "bar".into() },
-                body: vec![],
-            }],
-        );
-
-        assert_ast(
-            "<?php foreach ($foo as $bar => $baz) {}",
-            &[Statement::Foreach {
-                expr: Expression::Variable { name: "foo".into() },
-                by_ref: false,
-                key_var: Some(Expression::Variable { name: "bar".into() }),
-                value_var: Expression::Variable { name: "baz".into() },
-                body: vec![],
-            }],
-        );
-
-        assert_ast(
-            "<?php foreach ($foo as [$baz, $car]) {}",
-            &[Statement::Foreach {
-                expr: Expression::Variable { name: "foo".into() },
-                by_ref: false,
-                key_var: None,
-                value_var: Expression::Array {
-                    items: vec![
-                        ArrayItem {
-                            key: None,
-                            value: Expression::Variable { name: "baz".into() },
-                            unpack: false,
-                        },
-                        ArrayItem {
-                            key: None,
-                            value: Expression::Variable { name: "car".into() },
-                            unpack: false,
-                        },
-                    ],
-                },
-                body: vec![],
-            }],
-        );
-    }
-
-    #[test]
     fn block() {
         assert_ast("<?php {}", &[Statement::Block { body: vec![] }]);
         assert_ast(
@@ -3781,89 +3730,6 @@ mod tests {
     }
 
     #[test]
-    fn try_catch() {
-        assert_ast(
-            "<?php try {} catch (Exception $e) {}",
-            &[Statement::Try {
-                body: vec![],
-                catches: vec![Catch {
-                    types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
-                    var: Some(Expression::Variable { name: "e".into() }),
-                    body: vec![],
-                }],
-                finally: None,
-            }],
-        );
-    }
-
-    #[test]
-    fn try_catch_no_variable() {
-        assert_ast(
-            "<?php try {} catch (Exception) {}",
-            &[Statement::Try {
-                body: vec![],
-                catches: vec![Catch {
-                    types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
-                    var: None,
-                    body: vec![],
-                }],
-                finally: None,
-            }],
-        );
-    }
-
-    #[test]
-    fn try_catch_multiple_catches() {
-        assert_ast(
-            "<?php try {} catch (Exception $e) {} catch (CustomException $e) {}",
-            &[Statement::Try {
-                body: vec![],
-                catches: vec![
-                    Catch {
-                        types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
-                        var: Some(Expression::Variable { name: "e".into() }),
-                        body: vec![],
-                    },
-                    Catch {
-                        types: TryBlockCaughtType::Identifier("CustomException".as_bytes().into()),
-                        var: Some(Expression::Variable { name: "e".into() }),
-                        body: vec![],
-                    },
-                ],
-                finally: None,
-            }],
-        );
-    }
-
-    #[test]
-    fn try_catch_finally() {
-        assert_ast(
-            "<?php try {} catch (Exception $e) {} finally {}",
-            &[Statement::Try {
-                body: vec![],
-                catches: vec![Catch {
-                    types: TryBlockCaughtType::Identifier("Exception".as_bytes().into()),
-                    var: Some(Expression::Variable { name: "e".into() }),
-                    body: vec![],
-                }],
-                finally: Some(vec![]),
-            }],
-        );
-    }
-
-    #[test]
-    fn try_finally_no_catch() {
-        assert_ast(
-            "<?php try {} finally {}",
-            &[Statement::Try {
-                body: vec![],
-                catches: vec![],
-                finally: Some(vec![]),
-            }],
-        );
-    }
-
-    #[test]
     fn top_level_constant() {
         assert_ast(
             "<?php const FOO = 1;",
@@ -3999,37 +3865,6 @@ mod tests {
     }
 
     #[test]
-    fn switch() {
-        assert_ast(
-            "<?php
-        switch ($a) {
-            case 0:
-                break;
-            case 1;
-            default:
-        }
-        ",
-            &[Statement::Switch {
-                condition: Expression::Variable { name: "a".into() },
-                cases: vec![
-                    Case {
-                        condition: Some(Expression::LiteralInteger { i: 0 }),
-                        body: vec![Statement::Break { num: None }],
-                    },
-                    Case {
-                        condition: Some(Expression::LiteralInteger { i: 1 }),
-                        body: vec![],
-                    },
-                    Case {
-                        condition: None,
-                        body: vec![],
-                    },
-                ],
-            }],
-        )
-    }
-
-    #[test]
     fn readonly_classes() {
         assert_ast(
             "<?php readonly class Foo {}",
@@ -4085,45 +3920,6 @@ mod tests {
                         }),
                     },
                 ],
-            }],
-        );
-    }
-
-    #[test]
-    fn basic_namespace() {
-        assert_ast(
-            "<?php namespace Foo;",
-            &[Statement::Namespace {
-                name: Some("Foo".as_bytes().into()),
-                body: vec![],
-            }],
-        );
-    }
-
-    #[test]
-    fn simple_foreach_reference() {
-        assert_ast(
-            "<?php foreach ($a as &$b) {}",
-            &[Statement::Foreach {
-                expr: Expression::Variable { name: "a".into() },
-                by_ref: true,
-                key_var: None,
-                value_var: Expression::Variable { name: "b".into() },
-                body: vec![],
-            }],
-        );
-    }
-
-    #[test]
-    fn key_value_foreach_reference() {
-        assert_ast(
-            "<?php foreach ($a as $b => &$c) {}",
-            &[Statement::Foreach {
-                expr: Expression::Variable { name: "a".into() },
-                by_ref: true,
-                key_var: Some(Expression::Variable { name: "b".into() }),
-                value_var: Expression::Variable { name: "c".into() },
-                body: vec![],
             }],
         );
     }
@@ -4397,141 +4193,6 @@ mod tests {
             &[expr!(Expression::YieldFrom {
                 value: Box::new(Expression::LiteralInteger { i: 1 })
             })],
-        );
-    }
-
-    #[test]
-    fn short_if() {
-        assert_ast(
-            "<?php
-        if ($a):
-            $a;
-        endif;",
-            &[Statement::If {
-                condition: Expression::Variable { name: "a".into() },
-                then: vec![expr!(Expression::Variable { name: "a".into() })],
-                else_ifs: vec![],
-                r#else: None,
-            }],
-        )
-    }
-
-    #[test]
-    fn short_else_if() {
-        assert_ast(
-            "<?php
-        if (true):
-            $a;
-        elseif (true):
-            $b;
-        endif;
-        ",
-            &[Statement::If {
-                condition: Expression::Bool { value: true },
-                then: vec![expr!(Expression::Variable { name: "a".into() })],
-                else_ifs: vec![ElseIf {
-                    condition: Expression::Bool { value: true },
-                    body: vec![expr!(Expression::Variable { name: "b".into() })],
-                }],
-                r#else: None,
-            }],
-        );
-    }
-
-    #[test]
-    fn multiple_short_else_if() {
-        assert_ast(
-            "<?php
-        if (true):
-            $a;
-        elseif (true):
-            $b;
-        elseif (true):
-            $c;
-        endif;
-        ",
-            &[Statement::If {
-                condition: Expression::Bool { value: true },
-                then: vec![expr!(Expression::Variable { name: "a".into() })],
-                else_ifs: vec![
-                    ElseIf {
-                        condition: Expression::Bool { value: true },
-                        body: vec![expr!(Expression::Variable { name: "b".into() })],
-                    },
-                    ElseIf {
-                        condition: Expression::Bool { value: true },
-                        body: vec![expr!(Expression::Variable { name: "c".into() })],
-                    },
-                ],
-                r#else: None,
-            }],
-        );
-    }
-
-    #[test]
-    fn short_else() {
-        assert_ast(
-            "<?php
-        if ($a):
-            $a;
-        else:
-            $b;
-        endif;",
-            &[Statement::If {
-                condition: Expression::Variable { name: "a".into() },
-                then: vec![expr!(Expression::Variable { name: "a".into() })],
-                else_ifs: vec![],
-                r#else: Some(vec![expr!(Expression::Variable { name: "b".into() })]),
-            }],
-        )
-    }
-
-    #[test]
-    fn short_foreach() {
-        assert_ast(
-            "<?php foreach ($a as $b): $c; endforeach;",
-            &[Statement::Foreach {
-                expr: Expression::Variable { name: "a".into() },
-                by_ref: false,
-                key_var: None,
-                value_var: Expression::Variable { name: "b".into() },
-                body: vec![expr!(Expression::Variable { name: "c".into() })],
-            }],
-        );
-    }
-
-    #[test]
-    fn short_while() {
-        assert_ast(
-            "<?php while (true): $a; endwhile;",
-            &[Statement::While {
-                condition: Expression::Bool { value: true },
-                body: vec![expr!(Expression::Variable { name: "a".into() })],
-            }],
-        );
-    }
-
-    #[test]
-    fn short_for() {
-        assert_ast(
-            "<?php for ($a; $b; $c): $d; endfor;",
-            &[Statement::For {
-                init: Some(Expression::Variable { name: "a".into() }),
-                condition: Some(Expression::Variable { name: "b".into() }),
-                r#loop: Some(Expression::Variable { name: "c".into() }),
-                then: vec![expr!(Expression::Variable { name: "d".into() })],
-            }],
-        );
-    }
-
-    #[test]
-    fn shorthand_switch() {
-        assert_ast(
-            "<?php switch ($a): endswitch;",
-            &[Statement::Switch {
-                condition: Expression::Variable { name: "a".into() },
-                cases: vec![],
-            }],
         );
     }
 

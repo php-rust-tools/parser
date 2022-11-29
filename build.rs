@@ -4,6 +4,9 @@ use std::path::PathBuf;
 
 fn main() {
     println!("cargo:rerun-if-changed=tests");
+    if cfg!(not(test)) {
+        return;
+    }
 
     let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let mut entries = read_dir(manifest.join("tests"))
@@ -26,10 +29,7 @@ fn main() {
         let parser_error_filename = entry.join("parser-error.txt");
 
         if !code_filename.exists() {
-            panic!(
-                "unable to locate `code.php` in `{}`",
-                entry.to_string_lossy()
-            );
+            continue;
         }
 
         if ast_filename.exists() {
@@ -80,7 +80,7 @@ fn build_success_test(entry: PathBuf, code_filename: PathBuf, ast_filename: Path
     format!(
         r#"#[test]
 fn test_success_{}() {{
-    use php_parser_rs::{{self, Lexer, Parser}};
+    use php_parser_rs::{{Lexer, Parser}};
     use pretty_assertions::assert_str_eq;
 
     let code_filename = "{}";
