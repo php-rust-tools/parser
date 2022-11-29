@@ -1,0 +1,68 @@
+[
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "a",
+            },
+            op: Assign,
+            rhs: New {
+                target: Identifier {
+                    name: "Foo",
+                },
+                args: [],
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "b",
+            },
+            op: Assign,
+            rhs: UnaryPlus {
+                value: Int {
+                    i: 1,
+                },
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "c",
+            },
+            op: Assign,
+            rhs: BitwiseNot {
+                value: Int {
+                    i: 2,
+                },
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "d",
+            },
+            op: Assign,
+            rhs: PreDecrement {
+                value: Variable {
+                    name: "b",
+                },
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "e",
+            },
+            op: Assign,
+            rhs: PreIncrement {
+                value: Variable {
+                    name: "d",
+                },
+            },
+        },
+    },
+]

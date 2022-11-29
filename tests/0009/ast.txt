@@ -1,0 +1,51 @@
+[
+    Expression {
+        expr: ArrayIndex {
+            array: Variable {
+                name: "foo",
+            },
+            index: Some(
+                ConstantString {
+                    value: "bar",
+                },
+            ),
+        },
+    },
+    Expression {
+        expr: ArrayIndex {
+            array: ArrayIndex {
+                array: Variable {
+                    name: "foo",
+                },
+                index: Some(
+                    ConstantString {
+                        value: "bar",
+                    },
+                ),
+            },
+            index: Some(
+                ConstantString {
+                    value: "baz",
+                },
+            ),
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: ArrayIndex {
+                array: Variable {
+                    name: "foo",
+                },
+                index: Some(
+                    ConstantString {
+                        value: "bar",
+                    },
+                ),
+            },
+            op: Assign,
+            rhs: ConstantString {
+                value: "baz",
+            },
+        },
+    },
+]

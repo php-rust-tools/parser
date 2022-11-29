@@ -36,6 +36,33 @@ macro_rules! expect_token {
 }
 
 #[macro_export]
+macro_rules! expect_literal {
+    ($parser:expr) => {{
+        $parser.skip_comments();
+        match $parser.current.kind.clone() {
+            TokenKind::LiteralInteger(i) => {
+                let e = Expression::Int { i };
+                $parser.next();
+                e
+            }
+            TokenKind::ConstantFloat(f) => {
+                let e = Expression::Float { f };
+                $parser.next();
+                e
+            }
+            TokenKind::ConstantString(s) => {
+                let e = Expression::ConstantString { value: s.clone() };
+                $parser.next();
+                e
+            }
+            _ => {
+                return $crate::expected_token_err!(["a literal"], $parser);
+            }
+        }
+    }};
+}
+
+#[macro_export]
 macro_rules! expected_token_err {
     ([ $($expected:literal),+ $(,)? ], $parser:expr $(,)?) => {{
         match &$parser.current.kind {

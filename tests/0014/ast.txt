@@ -1,0 +1,132 @@
+[
+    Class {
+        name: Identifier {
+            name: "Foo2",
+        },
+        extends: None,
+        implements: [],
+        body: [
+            TraitUse {
+                traits: [
+                    Identifier {
+                        name: "B",
+                    },
+                ],
+                adaptations: [
+                    Alias {
+                        trait: None,
+                        method: Identifier {
+                            name: "foo",
+                        },
+                        alias: Identifier {
+                            name: "bar",
+                        },
+                        visibility: Some(
+                            Protected,
+                        ),
+                    },
+                ],
+            },
+        ],
+        flag: None,
+    },
+    Class {
+        name: Identifier {
+            name: "Bar2",
+        },
+        extends: None,
+        implements: [],
+        body: [
+            TraitUse {
+                traits: [
+                    Identifier {
+                        name: "B",
+                    },
+                    Identifier {
+                        name: "C",
+                    },
+                ],
+                adaptations: [
+                    Precedence {
+                        trait: Some(
+                            Identifier {
+                                name: "B",
+                            },
+                        ),
+                        method: Identifier {
+                            name: "foo",
+                        },
+                        insteadof: [
+                            Identifier {
+                                name: "C",
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+        flag: None,
+    },
+    Class {
+        name: Identifier {
+            name: "Bar3",
+        },
+        extends: None,
+        implements: [],
+        body: [
+            TraitUse {
+                traits: [
+                    Identifier {
+                        name: "B",
+                    },
+                ],
+                adaptations: [
+                    Alias {
+                        trait: Some(
+                            Identifier {
+                                name: "B",
+                            },
+                        ),
+                        method: Identifier {
+                            name: "foo",
+                        },
+                        alias: Identifier {
+                            name: "bar",
+                        },
+                        visibility: None,
+                    },
+                ],
+            },
+        ],
+        flag: None,
+    },
+    Class {
+        name: Identifier {
+            name: "Bar4",
+        },
+        extends: None,
+        implements: [],
+        body: [
+            TraitUse {
+                traits: [
+                    Identifier {
+                        name: "B",
+                    },
+                ],
+                adaptations: [
+                    Alias {
+                        trait: None,
+                        method: Identifier {
+                            name: "foo",
+                        },
+                        alias: Identifier {
+                            name: "bar",
+                        },
+                        visibility: None,
+                    },
+                ],
+            },
+        ],
+        flag: None,
+    },
+]

@@ -1,0 +1,74 @@
+[
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "foo",
+            },
+            op: Assign,
+            rhs: Call {
+                target: Identifier {
+                    name: "give_me_foo",
+                },
+                args: [],
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "a",
+            },
+            op: Assign,
+            rhs: Array {
+                items: [
+                    ArrayItem {
+                        key: Some(
+                            ConstantString {
+                                value: "single",
+                            },
+                        ),
+                        value: Infix {
+                            lhs: Variable {
+                                name: "foo",
+                            },
+                            op: Instanceof,
+                            rhs: Identifier {
+                                name: "Foo",
+                            },
+                        },
+                        unpack: false,
+                    },
+                    ArrayItem {
+                        key: Some(
+                            ConstantString {
+                                value: "multiple",
+                            },
+                        ),
+                        value: Infix {
+                            lhs: Infix {
+                                lhs: Variable {
+                                    name: "foo",
+                                },
+                                op: Instanceof,
+                                rhs: Identifier {
+                                    name: "Bar",
+                                },
+                            },
+                            op: And,
+                            rhs: Infix {
+                                lhs: Variable {
+                                    name: "foo",
+                                },
+                                op: Instanceof,
+                                rhs: Identifier {
+                                    name: "Baz",
+                                },
+                            },
+                        },
+                        unpack: false,
+                    },
+                ],
+            },
+        },
+    },
+]
