@@ -1,47 +1,37 @@
-use super::{ParseError, ParseResult};
+use super::ParseResult;
+use crate::expect_token;
 use crate::Parser;
 use crate::{ByteString, TokenKind};
 
 impl Parser {
     /// Expect an unqualified identifier such as Foo or Bar.
     pub(crate) fn ident(&mut self) -> ParseResult<ByteString> {
-        Ok(expect!(
-            self,
-            TokenKind::Identifier(i),
-            i,
-            "expected identifier"
-        ))
+        Ok(expect_token!([
+            TokenKind::Identifier(identifier) => identifier,
+        ], self, "an identifier"))
     }
 
     /// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
     pub(crate) fn name(&mut self) -> ParseResult<ByteString> {
-        Ok(expect!(
-            self,
-            TokenKind::Identifier(i) | TokenKind::QualifiedIdentifier(i),
-            i,
-            "expected identifier"
-        ))
+        Ok(expect_token!([
+            TokenKind::Identifier(identifier) => identifier,
+            TokenKind::QualifiedIdentifier(qualified) => qualified,
+        ], self, "an identifier"))
     }
 
     /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
     pub(crate) fn full_name(&mut self) -> ParseResult<ByteString> {
-        Ok(expect!(
-            self,
-            TokenKind::Identifier(i)
-                | TokenKind::QualifiedIdentifier(i)
-                | TokenKind::FullyQualifiedIdentifier(i),
-            i,
-            "expected identifier"
-        ))
+        Ok(expect_token!([
+            TokenKind::Identifier(identifier) => identifier,
+            TokenKind::QualifiedIdentifier(qualified) => qualified,
+            TokenKind::FullyQualifiedIdentifier(fully_qualified) => fully_qualified,
+        ], self, "an identifier"))
     }
 
     pub(crate) fn var(&mut self) -> ParseResult<ByteString> {
-        Ok(expect!(
-            self,
-            TokenKind::Variable(v),
-            v,
-            "expected variable name"
-        ))
+        Ok(expect_token!([
+            TokenKind::Variable(v) => v,
+        ], self, "a variable"))
     }
 
     pub(crate) fn full_name_maybe_type_keyword(&mut self) -> ParseResult<ByteString> {

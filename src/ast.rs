@@ -249,7 +249,7 @@ impl From<&TokenKind> for IncludeKind {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TraitAdaptation {
     Alias {
         r#trait: Option<Identifier>,

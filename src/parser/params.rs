@@ -1,7 +1,9 @@
+use crate::expect_token;
+use crate::parser::error::ParseError;
 use crate::TokenKind;
 use crate::{
     ast::{Arg, ParamList, PropertyFlag},
-    Expression, Param, ParseError,
+    Expression, Param,
 };
 
 use super::{precedence::Precedence, ParseResult, Parser};
@@ -50,7 +52,9 @@ impl Parser {
             };
 
             // 2. Then expect a variable.
-            let var = expect!(self, TokenKind::Variable(v), v, "expected variable");
+            let var = expect_token!([
+                TokenKind::Variable(v) => v
+            ], self, "a varaible");
 
             let mut default = None;
             if self.current.kind == TokenKind::Equals {
