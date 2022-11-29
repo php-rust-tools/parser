@@ -1,0 +1,43 @@
+[
+    If {
+        condition: Variable {
+            name: "foo",
+        },
+        then: [
+            Return {
+                value: Some(
+                    Variable {
+                        name: "foo",
+                    },
+                ),
+            },
+        ],
+        else_ifs: [
+            ElseIf {
+                condition: Variable {
+                    name: "foo",
+                },
+                body: [
+                    Return {
+                        value: Some(
+                            Variable {
+                                name: "foo",
+                            },
+                        ),
+                    },
+                ],
+            },
+        ],
+        else: Some(
+            [
+                Return {
+                    value: Some(
+                        Variable {
+                            name: "foo",
+                        },
+                    ),
+                },
+            ],
+        ),
+    },
+]

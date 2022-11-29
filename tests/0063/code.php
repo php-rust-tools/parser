@@ -1,0 +1,1 @@
+<?php new class implements Foo, Bar {};

@@ -1,0 +1,44 @@
+[
+    Expression {
+        expr: MethodCall {
+            target: Variable {
+                name: "foo",
+            },
+            method: Identifier {
+                name: "bar",
+            },
+            args: [],
+        },
+    },
+    Expression {
+        expr: MethodCall {
+            target: MethodCall {
+                target: Variable {
+                    name: "foo",
+                },
+                method: Identifier {
+                    name: "bar",
+                },
+                args: [],
+            },
+            method: Identifier {
+                name: "baz",
+            },
+            args: [],
+        },
+    },
+    Expression {
+        expr: Call {
+            target: MethodCall {
+                target: Variable {
+                    name: "foo",
+                },
+                method: Identifier {
+                    name: "bar",
+                },
+                args: [],
+            },
+            args: [],
+        },
+    },
+]

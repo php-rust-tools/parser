@@ -1,0 +1,1 @@
+<?php yield 1;

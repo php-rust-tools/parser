@@ -1,0 +1,92 @@
+[
+    Function {
+        name: Identifier {
+            name: "fib",
+        },
+        params: [
+            Param {
+                name: Variable {
+                    name: "n",
+                },
+                type: None,
+                variadic: false,
+                default: None,
+                flags: [],
+                by_ref: false,
+            },
+        ],
+        body: [
+            If {
+                condition: Infix {
+                    lhs: Variable {
+                        name: "n",
+                    },
+                    op: LessThan,
+                    rhs: LiteralInteger {
+                        i: 2,
+                    },
+                },
+                then: [
+                    Return {
+                        value: Some(
+                            Variable {
+                                name: "n",
+                            },
+                        ),
+                    },
+                ],
+                else_ifs: [],
+                else: None,
+            },
+            Return {
+                value: Some(
+                    Infix {
+                        lhs: Call {
+                            target: Identifier {
+                                name: "fib",
+                            },
+                            args: [
+                                Arg {
+                                    name: None,
+                                    value: Infix {
+                                        lhs: Variable {
+                                            name: "n",
+                                        },
+                                        op: Sub,
+                                        rhs: LiteralInteger {
+                                            i: 1,
+                                        },
+                                    },
+                                    unpack: false,
+                                },
+                            ],
+                        },
+                        op: Add,
+                        rhs: Call {
+                            target: Identifier {
+                                name: "fib",
+                            },
+                            args: [
+                                Arg {
+                                    name: None,
+                                    value: Infix {
+                                        lhs: Variable {
+                                            name: "n",
+                                        },
+                                        op: Sub,
+                                        rhs: LiteralInteger {
+                                            i: 2,
+                                        },
+                                    },
+                                    unpack: false,
+                                },
+                            ],
+                        },
+                    },
+                ),
+            },
+        ],
+        return_type: None,
+        by_ref: false,
+    },
+]

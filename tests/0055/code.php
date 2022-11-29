@@ -1,0 +1,1 @@
+<?php function foo(string|int|float $b) {}

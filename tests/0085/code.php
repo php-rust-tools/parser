@@ -1,0 +1,1 @@
+<?php readonly class Foo {}

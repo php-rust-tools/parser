@@ -1,0 +1,1 @@
+<?php "$foo abc $bar->a def $bar[0] ghi $bar[baz]";

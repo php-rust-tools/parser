@@ -1,0 +1,1 @@
+<?php function foo(string|ArrAy|iterable|CALLABLE $b) {}

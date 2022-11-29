@@ -1,0 +1,44 @@
+[
+    Expression {
+        expr: InterpolatedString {
+            parts: [
+                Expr(
+                    Variable {
+                        name: "foo",
+                    },
+                ),
+                Expr(
+                    ArrayIndex {
+                        array: Variable {
+                            name: "foo",
+                        },
+                        index: Some(
+                            LiteralInteger {
+                                i: 0,
+                            },
+                        ),
+                    },
+                ),
+                Expr(
+                    ArrayIndex {
+                        array: Variable {
+                            name: "foo",
+                        },
+                        index: Some(
+                            LiteralString {
+                                value: "bar",
+                            },
+                        ),
+                    },
+                ),
+                Expr(
+                    DynamicVariable {
+                        name: Variable {
+                            name: "foo",
+                        },
+                    },
+                ),
+            ],
+        },
+    },
+]

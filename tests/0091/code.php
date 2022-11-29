@@ -1,0 +1,1 @@
+<?php function a(): true {}
