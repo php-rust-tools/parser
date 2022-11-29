@@ -1,4 +1,4 @@
-name: tests
+name: third-party
 
 on:
   push:
@@ -6,15 +6,14 @@ on:
   pull_request:
 
 jobs:
-  tests:
-    name: tests
+  third-party-tests:
+    name: third-party
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         rust:
           - 'stable'
-          - 'nightly'
         os:
           - 'ubuntu-latest'
 
@@ -32,11 +31,5 @@ jobs:
       - name: cache
         uses: Swatinem/rust-cache@v2.0.0
 
-      - name: check
-        if: matrix.rust == 'stable'
-        run: |
-          cargo fmt --all -- --check
-          cargo clippy
-      
-      - name: test
-        run: cargo test --all -- --skip third_party
+      - name: test third-party
+        run: cargo test third_party
