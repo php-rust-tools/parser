@@ -1,0 +1,127 @@
+[
+    If {
+        condition: Variable {
+            name: "a",
+        },
+        then: [
+            Expression {
+                expr: Variable {
+                    name: "a",
+                },
+            },
+        ],
+        else_ifs: [],
+        else: None,
+    },
+    If {
+        condition: Variable {
+            name: "a",
+        },
+        then: [
+            Expression {
+                expr: Variable {
+                    name: "a",
+                },
+            },
+        ],
+        else_ifs: [],
+        else: Some(
+            [
+                Expression {
+                    expr: Variable {
+                        name: "b",
+                    },
+                },
+            ],
+        ),
+    },
+    If {
+        condition: Bool {
+            value: true,
+        },
+        then: [
+            Expression {
+                expr: Variable {
+                    name: "a",
+                },
+            },
+        ],
+        else_ifs: [
+            ElseIf {
+                condition: Infix {
+                    lhs: MethodCall {
+                        target: Variable {
+                            name: "foo",
+                        },
+                        method: Identifier {
+                            name: "bar",
+                        },
+                        args: [],
+                    },
+                    op: And,
+                    rhs: NullsafeMethodCall {
+                        target: PropertyFetch {
+                            target: Variable {
+                                name: "baz",
+                            },
+                            property: Identifier {
+                                name: "bar",
+                            },
+                        },
+                        method: Identifier {
+                            name: "qux",
+                        },
+                        args: [],
+                    },
+                },
+                body: [
+                    Expression {
+                        expr: Variable {
+                            name: "b",
+                        },
+                    },
+                ],
+            },
+        ],
+        else: None,
+    },
+    If {
+        condition: Bool {
+            value: true,
+        },
+        then: [
+            Expression {
+                expr: Variable {
+                    name: "a",
+                },
+            },
+        ],
+        else_ifs: [
+            ElseIf {
+                condition: Bool {
+                    value: true,
+                },
+                body: [
+                    Expression {
+                        expr: Variable {
+                            name: "b",
+                        },
+                    },
+                ],
+            },
+            ElseIf {
+                condition: Bool {
+                    value: true,
+                },
+                body: [
+                    Expression {
+                        expr: Variable {
+                            name: "c",
+                        },
+                    },
+                ],
+            },
+        ],
+        else: None,
+    },
+]

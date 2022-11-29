@@ -1,0 +1,57 @@
+[
+    Foreach {
+        expr: Variable {
+            name: "a",
+        },
+        by_ref: false,
+        key_var: None,
+        value_var: Variable {
+            name: "b",
+        },
+        body: [
+            Echo {
+                values: [
+                    Variable {
+                        name: "a",
+                    },
+                ],
+            },
+        ],
+    },
+    While {
+        condition: Bool {
+            value: true,
+        },
+        body: [
+            Expression {
+                expr: Variable {
+                    name: "a",
+                },
+            },
+        ],
+    },
+    For {
+        init: Some(
+            Variable {
+                name: "a",
+            },
+        ),
+        condition: Some(
+            Variable {
+                name: "b",
+            },
+        ),
+        loop: Some(
+            Variable {
+                name: "c",
+            },
+        ),
+        then: [
+            Expression {
+                expr: Variable {
+                    name: "d",
+                },
+            },
+        ],
+    },
+]

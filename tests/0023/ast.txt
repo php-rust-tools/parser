@@ -1,0 +1,111 @@
+[
+    Foreach {
+        expr: Variable {
+            name: "a",
+        },
+        by_ref: true,
+        key_var: None,
+        value_var: Variable {
+            name: "b",
+        },
+        body: [],
+    },
+    Foreach {
+        expr: Variable {
+            name: "a",
+        },
+        by_ref: true,
+        key_var: Some(
+            Variable {
+                name: "b",
+            },
+        ),
+        value_var: Variable {
+            name: "c",
+        },
+        body: [],
+    },
+    Switch {
+        condition: Variable {
+            name: "a",
+        },
+        cases: [
+            Case {
+                condition: Some(
+                    Int {
+                        i: 0,
+                    },
+                ),
+                body: [
+                    Break {
+                        num: None,
+                    },
+                ],
+            },
+            Case {
+                condition: Some(
+                    Int {
+                        i: 1,
+                    },
+                ),
+                body: [],
+            },
+            Case {
+                condition: None,
+                body: [],
+            },
+        ],
+    },
+    Foreach {
+        expr: Variable {
+            name: "foo",
+        },
+        by_ref: false,
+        key_var: None,
+        value_var: Array {
+            items: [
+                ArrayItem {
+                    key: None,
+                    value: Variable {
+                        name: "baz",
+                    },
+                    unpack: false,
+                },
+                ArrayItem {
+                    key: None,
+                    value: Variable {
+                        name: "car",
+                    },
+                    unpack: false,
+                },
+            ],
+        },
+        body: [],
+    },
+    Foreach {
+        expr: Variable {
+            name: "foo",
+        },
+        by_ref: false,
+        key_var: Some(
+            Variable {
+                name: "bar",
+            },
+        ),
+        value_var: Variable {
+            name: "baz",
+        },
+        body: [],
+    },
+    Foreach {
+        expr: Variable {
+            name: "foo",
+        },
+        by_ref: false,
+        key_var: None,
+        value_var: Variable {
+            name: "bar",
+        },
+        body: [],
+    },
+]
