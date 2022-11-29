@@ -17,7 +17,7 @@ A handwritten recursive-descent parser for PHP written in Rust, for fun.
 
 ## Usage
 
-Add `php-parser-rs` in your `Cargo.toms`'s `dependencies` section
+Add `php-parser-rs` in your `Cargo.toml`'s `dependencies` section
 
 ```toml
 [dependencies]
