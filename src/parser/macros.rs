@@ -41,17 +41,17 @@ macro_rules! expect_literal {
         $parser.skip_comments();
         match $parser.current.kind.clone() {
             TokenKind::LiteralInteger(i) => {
-                let e = Expression::Int { i };
+                let e = Expression::LiteralInteger { i };
                 $parser.next();
                 e
             }
-            TokenKind::ConstantFloat(f) => {
-                let e = Expression::Float { f };
+            TokenKind::LiteralFloat(f) => {
+                let e = Expression::LiteralFloat { f };
                 $parser.next();
                 e
             }
-            TokenKind::ConstantString(s) => {
-                let e = Expression::ConstantString { value: s.clone() };
+            TokenKind::LiteralString(s) => {
+                let e = Expression::LiteralString { value: s.clone() };
                 $parser.next();
                 e
             }

@@ -784,7 +784,7 @@ impl Lexer {
             }
         }
 
-        Ok(TokenKind::ConstantString(buffer.into()))
+        Ok(TokenKind::LiteralString(buffer.into()))
     }
 
     fn tokenize_double_quote_string(&mut self) -> Result<TokenKind, LexerError> {
@@ -895,7 +895,7 @@ impl Lexer {
         };
 
         Ok(if constant {
-            TokenKind::ConstantString(buffer.into())
+            TokenKind::LiteralString(buffer.into())
         } else {
             self.enter_state(LexerState::DoubleQuote);
             TokenKind::StringPart(buffer.into())
@@ -986,7 +986,7 @@ impl Lexer {
             self.read_digits(&mut buffer, 10);
         }
 
-        Ok(TokenKind::ConstantFloat(buffer.parse().unwrap()))
+        Ok(TokenKind::LiteralFloat(buffer.parse().unwrap()))
     }
 
     fn read_digits(&mut self, buffer: &mut String, base: usize) {
@@ -1082,7 +1082,7 @@ fn parse_int(buffer: &str, base: u32) -> Result<TokenKind, LexerError> {
             // Parse as i128 so we can handle other bases.
             // This means there's an upper limit on how large the literal can be.
             let i = i128::from_str_radix(buffer, base).unwrap();
-            Ok(TokenKind::ConstantFloat(i as f64))
+            Ok(TokenKind::LiteralFloat(i as f64))
         }
         _ => Err(LexerError::UnexpectedError),
     }
@@ -1294,10 +1294,10 @@ mod tests {
 string.'"#,
             &[
                 open!(),
-                TokenKind::ConstantString("Hello, world!".into()),
-                TokenKind::ConstantString("I'm a developer.".into()),
-                TokenKind::ConstantString("This is a backslash \\.".into()),
-                TokenKind::ConstantString("This is a multi-line\nstring.".into()),
+                TokenKind::LiteralString("Hello, world!".into()),
+                TokenKind::LiteralString("I'm a developer.".into()),
+                TokenKind::LiteralString("This is a backslash \\.".into()),
+                TokenKind::LiteralString("This is a multi-line\nstring.".into()),
             ],
         );
     }
@@ -1308,8 +1308,8 @@ string.'"#,
             r#"<?php b'single' b"double" "#,
             &[
                 open!(),
-                TokenKind::ConstantString("single".into()),
-                TokenKind::ConstantString("double".into()),
+                TokenKind::LiteralString("single".into()),
+                TokenKind::LiteralString("double".into()),
             ],
         )
     }
@@ -1318,13 +1318,13 @@ string.'"#,
     fn string_escapes() {
         assert_tokens(
             "<?php '\\ \\' ' ",
-            &[open!(), TokenKind::ConstantString("\\ \' ".into())],
+            &[open!(), TokenKind::LiteralString("\\ \' ".into())],
         );
         assert_tokens(
             r#"<?php "\n \r \t \v \e \f \\ \$ \" " "#,
             &[
                 open!(),
-                TokenKind::ConstantString("\n \r \t \x0b \x1b \x0c \\ $ \" ".into()),
+                TokenKind::LiteralString("\n \r \t \x0b \x1b \x0c \\ $ \" ".into()),
             ],
         );
         // octal
@@ -1332,7 +1332,7 @@ string.'"#,
             r#"<?php "\0 \7 \66 \377 \9 \0000" "#,
             &[
                 open!(),
-                TokenKind::ConstantString(b"\0 \x07 \x36 \xff \\9 \x000".into()),
+                TokenKind::LiteralString(b"\0 \x07 \x36 \xff \\9 \x000".into()),
             ],
         );
         // hex
@@ -1340,13 +1340,13 @@ string.'"#,
             r#"<?php "\x \x0 \xa \xA \xff \xFF" "#,
             &[
                 open!(),
-                TokenKind::ConstantString(b"\\x \0 \x0a \x0a \xff \xff".into()),
+                TokenKind::LiteralString(b"\\x \0 \x0a \x0a \xff \xff".into()),
             ],
         );
         // Invalid escapes that should be taken literally.
         assert_tokens(
             r#"<?php "\x \u" "#,
-            &[open!(), TokenKind::ConstantString(r"\x \u".into())],
+            &[open!(), TokenKind::LiteralString(r"\x \u".into())],
         );
     }
 
@@ -1650,18 +1650,18 @@ function hello_world() {
             "<?php 200.5 .05 01.1 1. 1e1 1e+1 1e-1 3.1e2 1_1.2_2 3_3.2_2e1_1 18446744073709551615 0x10000000000000000 1e 1e+ 1e-",
             &[
                 open!(),
-                TokenKind::ConstantFloat(200.5),
-                TokenKind::ConstantFloat(0.05),
-                TokenKind::ConstantFloat(01.1),
-                TokenKind::ConstantFloat(1.),
-                TokenKind::ConstantFloat(1e1),
-                TokenKind::ConstantFloat(1e+1),
-                TokenKind::ConstantFloat(1e-1),
-                TokenKind::ConstantFloat(3.1e2),
-                TokenKind::ConstantFloat(1_1.2_2),
-                TokenKind::ConstantFloat(3_3.2_2e1_1),
-                TokenKind::ConstantFloat(18446744073709551615.0),
-                TokenKind::ConstantFloat(18446744073709551616.0),
+                TokenKind::LiteralFloat(200.5),
+                TokenKind::LiteralFloat(0.05),
+                TokenKind::LiteralFloat(01.1),
+                TokenKind::LiteralFloat(1.),
+                TokenKind::LiteralFloat(1e1),
+                TokenKind::LiteralFloat(1e+1),
+                TokenKind::LiteralFloat(1e-1),
+                TokenKind::LiteralFloat(3.1e2),
+                TokenKind::LiteralFloat(1_1.2_2),
+                TokenKind::LiteralFloat(3_3.2_2e1_1),
+                TokenKind::LiteralFloat(18446744073709551615.0),
+                TokenKind::LiteralFloat(18446744073709551616.0),
                 TokenKind::LiteralInteger(1),
                 TokenKind::Identifier("e".into()),
                 TokenKind::LiteralInteger(1),
@@ -1691,7 +1691,7 @@ function hello_world() {
                 TokenKind::LiteralInteger(0xff),
                 TokenKind::LiteralInteger(0xff),
                 TokenKind::LiteralInteger(2),
-                TokenKind::ConstantFloat(0.1),
+                TokenKind::LiteralFloat(0.1),
                 TokenKind::LiteralInteger(1),
                 TokenKind::Identifier("__1".into()),
                 TokenKind::LiteralInteger(1),

@@ -63,7 +63,7 @@ pub enum TokenKind {
     Comment(ByteString),
     ConcatEqual,
     Const,
-    ConstantString(ByteString),
+    LiteralString(ByteString),
     Continue,
     CurlyOpen,
     Declare,
@@ -102,7 +102,7 @@ pub enum TokenKind {
     False,
     Final,
     Finally,
-    ConstantFloat(f64),
+    LiteralFloat(f64),
     Fn,
     For,
     Foreach,
@@ -254,7 +254,7 @@ impl Display for TokenKind {
             }
             Self::ConcatEqual => ".=",
             Self::Const => "const",
-            Self::ConstantString(comment) => {
+            Self::LiteralString(comment) => {
                 return write!(f, "{}", String::from_utf8_lossy(comment));
             }
             Self::Continue => "continue",
@@ -299,7 +299,7 @@ impl Display for TokenKind {
             Self::False => "false",
             Self::Final => "final",
             Self::Finally => "finally",
-            Self::ConstantFloat(_) => "float",
+            Self::LiteralFloat(_) => "float",
             Self::Fn => "fn",
             Self::For => "for",
             Self::FullyQualifiedIdentifier(id) => {

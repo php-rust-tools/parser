@@ -1797,12 +1797,12 @@ impl Parser {
                 e
             }
             TokenKind::LiteralInteger(i) => {
-                let e = Expression::Int { i: *i };
+                let e = Expression::LiteralInteger { i: *i };
                 self.next();
                 e
             }
-            TokenKind::ConstantFloat(f) => {
-                let f = Expression::Float { f: *f };
+            TokenKind::LiteralFloat(f) => {
+                let f = Expression::LiteralFloat { f: *f };
                 self.next();
                 f
             }
@@ -1813,8 +1813,8 @@ impl Parser {
                 self.next();
                 e
             }
-            TokenKind::ConstantString(s) => {
-                let e = Expression::ConstantString { value: s.clone() };
+            TokenKind::LiteralString(s) => {
+                let e = Expression::LiteralString { value: s.clone() };
                 self.next();
                 e
             }
@@ -2526,21 +2526,21 @@ impl Parser {
                             let index = match &self.current.kind {
                                 &TokenKind::LiteralInteger(i) => {
                                     self.next();
-                                    Expression::Int { i }
+                                    Expression::LiteralInteger { i }
                                 }
                                 TokenKind::Minus => {
                                     self.next();
                                     if let TokenKind::LiteralInteger(i) = self.current.kind {
                                         self.next();
                                         Expression::Negate {
-                                            value: Box::new(Expression::Int { i }),
+                                            value: Box::new(Expression::LiteralInteger { i }),
                                         }
                                     } else {
                                         return expected_token_err!("an integer", self);
                                     }
                                 }
                                 TokenKind::Identifier(ident) => {
-                                    let e = Expression::ConstantString {
+                                    let e = Expression::LiteralString {
                                         value: ident.clone(),
                                     };
                                     self.next();
@@ -2861,7 +2861,7 @@ mod tests {
         assert_ast(
             "<?php break 2;",
             &[Statement::Break {
-                num: Some(Expression::Int { i: 2 }),
+                num: Some(Expression::LiteralInteger { i: 2 }),
             }],
         );
     }
@@ -2873,7 +2873,7 @@ mod tests {
         assert_ast(
             "<?php continue 2;",
             &[Statement::Continue {
-                num: Some(Expression::Int { i: 2 }),
+                num: Some(Expression::LiteralInteger { i: 2 }),
             }],
         );
     }
@@ -2950,12 +2950,12 @@ mod tests {
                     StringPart::Const(" def ".into()),
                     StringPart::Expr(Box::new(Expression::ArrayIndex {
                         array: Box::new(Expression::Variable { name: "bar".into() }),
-                        index: Some(Box::new(Expression::Int { i: 0 })),
+                        index: Some(Box::new(Expression::LiteralInteger { i: 0 })),
                     })),
                     StringPart::Const(" ghi ".into()),
                     StringPart::Expr(Box::new(Expression::ArrayIndex {
                         array: Box::new(Expression::Variable { name: "bar".into() }),
-                        index: Some(Box::new(Expression::ConstantString {
+                        index: Some(Box::new(Expression::LiteralString {
                             value: "baz".into()
                         })),
                     })),
@@ -2969,11 +2969,11 @@ mod tests {
                     StringPart::Expr(Box::new(Expression::Variable { name: "foo".into() })),
                     StringPart::Expr(Box::new(Expression::ArrayIndex {
                         array: Box::new(Expression::Variable { name: "foo".into() }),
-                        index: Some(Box::new(Expression::Int { i: 0 })),
+                        index: Some(Box::new(Expression::LiteralInteger { i: 0 })),
                     })),
                     StringPart::Expr(Box::new(Expression::ArrayIndex {
                         array: Box::new(Expression::Variable { name: "foo".into() }),
-                        index: Some(Box::new(Expression::ConstantString {
+                        index: Some(Box::new(Expression::LiteralString {
                             value: "bar".into()
                         })),
                     })),
@@ -2990,11 +2990,11 @@ mod tests {
                     StringPart::Expr(Box::new(Expression::Variable { name: "foo".into() })),
                     StringPart::Expr(Box::new(Expression::ArrayIndex {
                         array: Box::new(Expression::Variable { name: "foo".into() }),
-                        index: Some(Box::new(Expression::Int { i: 0 })),
+                        index: Some(Box::new(Expression::LiteralInteger { i: 0 })),
                     })),
                     StringPart::Expr(Box::new(Expression::ArrayIndex {
                         array: Box::new(Expression::Variable { name: "foo".into() }),
-                        index: Some(Box::new(Expression::ConstantString {
+                        index: Some(Box::new(Expression::LiteralString {
                             value: "bar".into()
                         })),
                     })),
@@ -3018,16 +3018,16 @@ mod tests {
             "<?php 'foo' . 'bar' . 'baz';",
             &[expr!(Expression::Infix {
                 lhs: Box::new(Expression::Infix {
-                    lhs: Box::new(Expression::ConstantString {
+                    lhs: Box::new(Expression::LiteralString {
                         value: "foo".into()
                     }),
                     op: InfixOp::Concat,
-                    rhs: Box::new(Expression::ConstantString {
+                    rhs: Box::new(Expression::LiteralString {
                         value: "bar".into()
                     }),
                 }),
                 op: InfixOp::Concat,
-                rhs: Box::new(Expression::ConstantString {
+                rhs: Box::new(Expression::LiteralString {
                     value: "baz".into()
                 })
             })],
@@ -3073,7 +3073,7 @@ mod tests {
                         condition: Expression::Infix {
                             lhs: Box::new(Expression::Variable { name: "n".into() }),
                             op: InfixOp::LessThan,
-                            rhs: Box::new(Expression::Int { i: 2 }),
+                            rhs: Box::new(Expression::LiteralInteger { i: 2 }),
                         },
                         then: vec![Statement::Return {
                             value: Some(Expression::Variable { name: "n".into() })
@@ -3090,7 +3090,7 @@ mod tests {
                                     value: Expression::Infix {
                                         lhs: Box::new(Expression::Variable { name: "n".into() }),
                                         op: InfixOp::Sub,
-                                        rhs: Box::new(Expression::Int { i: 1 }),
+                                        rhs: Box::new(Expression::LiteralInteger { i: 1 }),
                                     },
                                     unpack: false,
                                 }]
@@ -3103,7 +3103,7 @@ mod tests {
                                     value: Expression::Infix {
                                         lhs: Box::new(Expression::Variable { name: "n".into() }),
                                         op: InfixOp::Sub,
-                                        rhs: Box::new(Expression::Int { i: 2 }),
+                                        rhs: Box::new(Expression::LiteralInteger { i: 2 }),
                                     },
                                     unpack: false,
                                 }]
@@ -3174,7 +3174,7 @@ mod tests {
         assert_ast(
             "<?php echo 1;",
             &[Statement::Echo {
-                values: vec![Expression::Int { i: 1 }],
+                values: vec![Expression::LiteralInteger { i: 1 }],
             }],
         );
     }
@@ -3211,7 +3211,7 @@ mod tests {
                     &[],
                     &[],
                     &[Statement::Echo {
-                        values: vec![Expression::Int { i: 1 },]
+                        values: vec![Expression::LiteralInteger { i: 1 },]
                     }]
                 )]
             )],
@@ -3525,12 +3525,12 @@ mod tests {
                 args: vec![
                     Arg {
                         name: None,
-                        value: Expression::Int { i: 1 },
+                        value: Expression::LiteralInteger { i: 1 },
                         unpack: false,
                     },
                     Arg {
                         name: None,
-                        value: Expression::Int { i: 2 },
+                        value: Expression::LiteralInteger { i: 2 },
                         unpack: false,
                     },
                 ],
@@ -3695,7 +3695,7 @@ mod tests {
             &[Statement::DoWhile {
                 condition: Expression::Bool { value: true },
                 body: vec![Statement::Echo {
-                    values: vec![Expression::ConstantString {
+                    values: vec![Expression::LiteralString {
                         value: "Hi!".into(),
                     }],
                 }],
@@ -3870,7 +3870,7 @@ mod tests {
             &[Statement::Constant {
                 constants: vec![Constant {
                     name: "FOO".as_bytes().into(),
-                    value: Expression::Int { i: 1 },
+                    value: Expression::LiteralInteger { i: 1 },
                 }],
             }],
         );
@@ -3884,11 +3884,11 @@ mod tests {
                 constants: vec![
                     Constant {
                         name: "FOO".as_bytes().into(),
-                        value: Expression::Int { i: 1 },
+                        value: Expression::LiteralInteger { i: 1 },
                     },
                     Constant {
                         name: "BAR".as_bytes().into(),
-                        value: Expression::Int { i: 2 },
+                        value: Expression::LiteralInteger { i: 2 },
                     },
                 ],
             }],
@@ -3922,7 +3922,7 @@ mod tests {
             &[Statement::Declare {
                 declares: vec![DeclareItem {
                     key: "A".as_bytes().into(),
-                    value: Expression::ConstantString { value: "B".into() },
+                    value: Expression::LiteralString { value: "B".into() },
                 }],
                 body: vec![],
             }],
@@ -3937,11 +3937,11 @@ mod tests {
                 declares: vec![
                     DeclareItem {
                         key: "A".as_bytes().into(),
-                        value: Expression::ConstantString { value: "B".into() },
+                        value: Expression::LiteralString { value: "B".into() },
                     },
                     DeclareItem {
                         key: "C".as_bytes().into(),
-                        value: Expression::ConstantString { value: "D".into() },
+                        value: Expression::LiteralString { value: "D".into() },
                     },
                 ],
                 body: vec![],
@@ -3956,10 +3956,10 @@ mod tests {
             &[Statement::Declare {
                 declares: vec![DeclareItem {
                     key: "A".as_bytes().into(),
-                    value: Expression::ConstantString { value: "B".into() },
+                    value: Expression::LiteralString { value: "B".into() },
                 }],
                 body: vec![Statement::Echo {
-                    values: vec![Expression::ConstantString {
+                    values: vec![Expression::LiteralString {
                         value: "Hello, world!".into(),
                     }],
                 }],
@@ -3975,12 +3975,12 @@ mod tests {
                 items: vec![
                     ArrayItem {
                         key: None,
-                        value: Expression::Int { i: 1 },
+                        value: Expression::LiteralInteger { i: 1 },
                         unpack: false,
                     },
                     ArrayItem {
                         key: None,
-                        value: Expression::Int { i: 2 },
+                        value: Expression::LiteralInteger { i: 2 },
                         unpack: false,
                     },
                     ArrayItem {
@@ -3990,7 +3990,7 @@ mod tests {
                     },
                     ArrayItem {
                         key: None,
-                        value: Expression::Int { i: 4 },
+                        value: Expression::LiteralInteger { i: 4 },
                         unpack: false,
                     },
                 ]
@@ -4013,11 +4013,11 @@ mod tests {
                 condition: Expression::Variable { name: "a".into() },
                 cases: vec![
                     Case {
-                        condition: Some(Expression::Int { i: 0 }),
+                        condition: Some(Expression::LiteralInteger { i: 0 }),
                         body: vec![Statement::Break { num: None }],
                     },
                     Case {
-                        condition: Some(Expression::Int { i: 1 }),
+                        condition: Some(Expression::LiteralInteger { i: 1 }),
                         body: vec![],
                     },
                     Case {
@@ -4080,7 +4080,7 @@ mod tests {
                     },
                     Statement::EnumCase {
                         name: "Baz".as_bytes().into(),
-                        value: Some(Expression::ConstantString {
+                        value: Some(Expression::LiteralString {
                             value: "Baz".into(),
                         }),
                     },
@@ -4203,7 +4203,7 @@ mod tests {
         assert_ast(
             "<?php ${'foo'};",
             &[expr!(Expression::DynamicVariable {
-                name: Box::new(Expression::ConstantString {
+                name: Box::new(Expression::LiteralString {
                     value: "foo".into()
                 })
             })],
@@ -4291,7 +4291,7 @@ mod tests {
             &[expr!(Expression::StaticMethodCall {
                 target: Box::new(Expression::Identifier { name: "Foo".into() }),
                 method: Box::new(Expression::DynamicVariable {
-                    name: Box::new(Expression::ConstantString {
+                    name: Box::new(Expression::LiteralString {
                         value: "foo".into()
                     })
                 }),
@@ -4327,7 +4327,7 @@ mod tests {
                             items: vec![ArrayItem {
                                 key: None,
                                 unpack: false,
-                                value: Expression::Int { i: 1 }
+                                value: Expression::LiteralInteger { i: 1 }
                             }]
                         }
                     },
@@ -4338,7 +4338,7 @@ mod tests {
                             items: vec![ArrayItem {
                                 key: None,
                                 unpack: false,
-                                value: Expression::Int { i: 2 }
+                                value: Expression::LiteralInteger { i: 2 }
                             }]
                         }
                     }
@@ -4374,7 +4374,7 @@ mod tests {
             "<?php yield 1;",
             &[expr!(Expression::Yield {
                 key: None,
-                value: Some(Box::new(Expression::Int { i: 1 }))
+                value: Some(Box::new(Expression::LiteralInteger { i: 1 }))
             })],
         );
     }
@@ -4384,8 +4384,8 @@ mod tests {
         assert_ast(
             "<?php yield 0 => 1;",
             &[expr!(Expression::Yield {
-                key: Some(Box::new(Expression::Int { i: 0 })),
-                value: Some(Box::new(Expression::Int { i: 1 }))
+                key: Some(Box::new(Expression::LiteralInteger { i: 0 })),
+                value: Some(Box::new(Expression::LiteralInteger { i: 1 }))
             })],
         );
     }
@@ -4395,7 +4395,7 @@ mod tests {
         assert_ast(
             "<?php yield from 1;",
             &[expr!(Expression::YieldFrom {
-                value: Box::new(Expression::Int { i: 1 })
+                value: Box::new(Expression::LiteralInteger { i: 1 })
             })],
         );
     }
