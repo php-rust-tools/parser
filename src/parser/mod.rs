@@ -2203,12 +2203,7 @@ impl Parser {
                 prefix(&op, rhs)
             }
             TokenKind::Dollar => self.dynamic_variable()?,
-            _ => todo!(
-                "expr lhs: {:?}, line {} col {}",
-                self.current.kind,
-                self.current.span.0,
-                self.current.span.1
-            ),
+            _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span)),
         };
 
         if self.current.kind == TokenKind::SemiColon {

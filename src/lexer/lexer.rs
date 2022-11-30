@@ -187,7 +187,7 @@ impl Lexer {
             }
             [b'!', ..] => {
                 self.next();
-                TokenKind::BangEquals
+                TokenKind::Bang
             }
             [b'&', b'&', ..] => {
                 self.skip(2);
