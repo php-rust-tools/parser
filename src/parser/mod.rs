@@ -864,6 +864,7 @@ impl Parser {
 
                 let mut body = Block::new();
                 while self.current.kind != TokenKind::RightBrace {
+                    self.skip_comments();
                     match self.current.kind {
                         TokenKind::Case => {
                             self.next();
