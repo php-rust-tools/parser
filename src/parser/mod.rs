@@ -1294,7 +1294,8 @@ impl Parser {
             false
         };
 
-        let name = self.ident()?;
+        // FIXME: We should only allow reserved words for class methods, not top-level functions.
+        let name = self.ident_maybe_reserved()?;
 
         self.lparen()?;
 
