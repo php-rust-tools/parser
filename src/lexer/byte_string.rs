@@ -8,7 +8,7 @@ use std::str::from_utf8;
 ///
 /// The Trunk lexer and parser work mainly with byte strings because
 /// valid PHP code is not required to be valid UTF-8.
-#[derive(Clone, Eq, PartialEq)]
+#[derive(PartialEq, Eq, PartialOrd, Clone)]
 pub struct ByteString(pub(crate) Vec<u8>);
 
 impl ByteString {

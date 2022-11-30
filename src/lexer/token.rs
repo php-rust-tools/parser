@@ -4,12 +4,12 @@ use crate::ByteString;
 
 pub type Span = (usize, usize);
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Clone)]
 pub enum OpenTagKind {
     Full,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, PartialOrd, Clone)]
 pub enum TokenKind {
     From,
     Print,
@@ -250,14 +250,8 @@ impl Display for TokenKind {
             Self::CoalesceEqual => "??=",
             Self::Colon => ":",
             Self::Comma => ",",
-            Self::Comment(comment) => {
-                return write!(f, "{}", String::from_utf8_lossy(comment));
-            }
             Self::ConcatEqual => ".=",
             Self::Const => "const",
-            Self::LiteralString(comment) => {
-                return write!(f, "{}", String::from_utf8_lossy(comment));
-            }
             Self::Continue => "continue",
             Self::IntCast => "(int)",
             Self::IntegerCast => "(integer)",
@@ -268,12 +262,6 @@ impl Display for TokenKind {
             Self::DirConstant => "__DIR__",
             Self::DivEqual => "/=",
             Self::Do => "do",
-            Self::DocComment(comment) => {
-                return write!(f, "{}", String::from_utf8_lossy(comment));
-            }
-            Self::DocOpen(doc_open) => {
-                return write!(f, "{}", String::from_utf8_lossy(doc_open));
-            }
             Self::Dot => ".",
             Self::DotEquals => ".=",
             Self::DoubleArrow => "=>",
@@ -303,16 +291,10 @@ impl Display for TokenKind {
             Self::LiteralFloat(_) => "float",
             Self::Fn => "fn",
             Self::For => "for",
-            Self::FullyQualifiedIdentifier(id) => {
-                return write!(f, "{}", String::from_utf8_lossy(id));
-            }
             Self::Function => "function",
             Self::Goto => "goto",
             Self::GreaterThan => ">",
             Self::GreaterThanEquals => ">=",
-            Self::Identifier(id) => {
-                return write!(f, "{}", String::from_utf8_lossy(id));
-            }
             Self::If => "if",
             Self::Implements => "implements",
             Self::Increment => "++",
@@ -347,9 +329,6 @@ impl Display for TokenKind {
             Self::Private => "private",
             Self::Protected => "protected",
             Self::Public => "public",
-            Self::QualifiedIdentifier(id) => {
-                return write!(f, "{}", String::from_utf8_lossy(id));
-            }
             Self::Question => "?",
             Self::QuestionColon => "?:",
             Self::Require => "require",
@@ -372,9 +351,6 @@ impl Display for TokenKind {
             Self::Try => "try",
             Self::Use => "use",
             Self::Var => "var",
-            Self::Variable(var) => {
-                return write!(f, "{}", String::from_utf8_lossy(var));
-            }
             Self::Yield => "yield",
             Self::While => "while",
             Self::Global => "global",
@@ -383,8 +359,42 @@ impl Display for TokenKind {
             Self::LogicalAnd => "and",
             Self::LogicalOr => "or",
             Self::LogicalXor => "xor",
-            _ => todo!("format token: {:?}", self),
+            Self::Foreach => "foreach",
+            Self::AmpersandEquals => "&=",
+            Self::At => "at",
+            Self::BangDoubleEquals => "!==",
+            Self::TraitConstant => "__TRAIT__",
+            Self::FunctionConstant => "__FUNCTION__",
+            Self::MethodConstant => "__METHOD__",
+            Self::LineConstant => "__LINE__",
+            Self::FileConstant => "__FILE__",
+            Self::DollarLeftBrace => "${",
+            Self::DoubleQuote => "\"",
+            Self::Include => "include",
+            Self::IncludeOnce => "include_once",
+            Self::Instanceof => "instanceof",
+            Self::Insteadof => "insteadof",
+            Self::Eval => "eval",
+            Self::Exit => "exit",
+            Self::Unset => "unset",
+            Self::Isset => "isset",
+            Self::List => "list",
+            Self::Interface => "interface",
+            Self::NamespaceConstant => "__NAMESPACE__",
+            Self::PowEquals => "**=",
+            Self::StringPart(v)
+            | Self::Variable(v)
+            | Self::QualifiedIdentifier(v)
+            | Self::Identifier(v)
+            | Self::FullyQualifiedIdentifier(v)
+            | Self::DocComment(v)
+            | Self::DocOpen(v)
+            | Self::Comment(v)
+            | Self::LiteralString(v) => {
+                return write!(f, "{}", v);
+            }
         };
+
         write!(f, "{}", s)
     }
 }
