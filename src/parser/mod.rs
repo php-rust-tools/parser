@@ -1818,6 +1818,10 @@ impl Parser {
                 self.next();
                 e
             }
+            TokenKind::Static if matches!(self.peek.kind, TokenKind::DoubleColon) => {
+                self.next();
+                Expression::Static
+            },
             TokenKind::LiteralString(s) => {
                 let e = Expression::LiteralString { value: s.clone() };
                 self.next();

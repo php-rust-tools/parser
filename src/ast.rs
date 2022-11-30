@@ -559,6 +559,7 @@ pub enum Expression {
     Identifier {
         name: ByteString,
     },
+    Static,
     Array {
         items: Vec<ArrayItem>,
     },
