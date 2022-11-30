@@ -1,0 +1,56 @@
+[
+    Expression {
+        expr: InterpolatedString {
+            parts: [
+                Expr(
+                    Variable {
+                        name: "foo",
+                    },
+                ),
+                Const(
+                    " abc ",
+                ),
+                Expr(
+                    PropertyFetch {
+                        target: Variable {
+                            name: "bar",
+                        },
+                        property: Identifier {
+                            name: "a",
+                        },
+                    },
+                ),
+                Const(
+                    " def ",
+                ),
+                Expr(
+                    ArrayIndex {
+                        array: Variable {
+                            name: "bar",
+                        },
+                        index: Some(
+                            LiteralInteger {
+                                i: 0,
+                            },
+                        ),
+                    },
+                ),
+                Const(
+                    " ghi ",
+                ),
+                Expr(
+                    ArrayIndex {
+                        array: Variable {
+                            name: "bar",
+                        },
+                        index: Some(
+                            LiteralString {
+                                value: "baz",
+                            },
+                        ),
+                    },
+                ),
+            ],
+        },
+    },
+]

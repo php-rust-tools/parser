@@ -1,0 +1,1 @@
+<?php global $a, $b;

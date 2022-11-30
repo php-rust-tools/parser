@@ -1,0 +1,1 @@
+<?php function foo(int|float $b) {}

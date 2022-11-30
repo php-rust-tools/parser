@@ -1,0 +1,1 @@
+<?php "${foo}${foo[0]}${foo['bar']}${($foo)}";

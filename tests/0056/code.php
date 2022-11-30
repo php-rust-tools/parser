@@ -1,0 +1,1 @@
+<?php function foo(Foo&Bar $b) {}

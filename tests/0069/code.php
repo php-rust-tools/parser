@@ -1,0 +1,1 @@
+<?php do { } while ($a);

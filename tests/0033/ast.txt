@@ -1,0 +1,58 @@
+[
+    Expression {
+        expr: InterpolatedString {
+            parts: [
+                Expr(
+                    Variable {
+                        name: "foo",
+                    },
+                ),
+                Expr(
+                    ArrayIndex {
+                        array: Variable {
+                            name: "foo",
+                        },
+                        index: Some(
+                            LiteralInteger {
+                                i: 0,
+                            },
+                        ),
+                    },
+                ),
+                Expr(
+                    ArrayIndex {
+                        array: Variable {
+                            name: "foo",
+                        },
+                        index: Some(
+                            LiteralString {
+                                value: "bar",
+                            },
+                        ),
+                    },
+                ),
+                Expr(
+                    PropertyFetch {
+                        target: Variable {
+                            name: "foo",
+                        },
+                        property: Identifier {
+                            name: "bar",
+                        },
+                    },
+                ),
+                Expr(
+                    MethodCall {
+                        target: Variable {
+                            name: "foo",
+                        },
+                        method: Identifier {
+                            name: "bar",
+                        },
+                        args: [],
+                    },
+                ),
+            ],
+        },
+    },
+]

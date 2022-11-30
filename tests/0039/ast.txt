@@ -1,0 +1,18 @@
+[
+    If {
+        condition: Variable {
+            name: "foo",
+        },
+        then: [
+            Return {
+                value: Some(
+                    Variable {
+                        name: "foo",
+                    },
+                ),
+            },
+        ],
+        else_ifs: [],
+        else: None,
+    },
+]

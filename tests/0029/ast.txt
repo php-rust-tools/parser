@@ -1,0 +1,27 @@
+[
+    Expression {
+        expr: PropertyFetch {
+            target: Variable {
+                name: "foo",
+            },
+            property: Identifier {
+                name: "bar",
+            },
+        },
+    },
+    Expression {
+        expr: PropertyFetch {
+            target: PropertyFetch {
+                target: Variable {
+                    name: "foo",
+                },
+                property: Identifier {
+                    name: "bar",
+                },
+            },
+            property: Identifier {
+                name: "baz",
+            },
+        },
+    },
+]

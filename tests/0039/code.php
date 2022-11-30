@@ -1,0 +1,1 @@
+<?php if($foo) return $foo;
