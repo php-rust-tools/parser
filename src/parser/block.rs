@@ -12,6 +12,7 @@ impl Parser {
 
         while !self.is_eof() && &self.current.kind != until {
             block.push(self.statement()?);
+            self.skip_comments();
         }
 
         Ok(block)
