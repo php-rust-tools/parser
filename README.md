@@ -2,14 +2,7 @@
 
 A handwritten recursive-descent parser for PHP written in Rust, for fun.
 
-<p align="center">
-    <a href="https://justforfunnoreally.dev/">
-        <img src="https://img.shields.io/badge/justforfunnoreally-dev-9ff">
-    </a>
-</p>
-
-
----
+[![justforfunnoreally.dev badge](https://img.shields.io/badge/justforfunnoreally-dev-9ff)](https://justforfunnoreally.dev)
 
 > **Warning**: This crate is not ready for any form of production use _yet_. There are still a lot of things missing from the parser, so please use at your own risk.
 
