@@ -17,6 +17,12 @@ Add `php-parser-rs` in your `Cargo.toml`'s `dependencies` section
 php-parser-rs = "0.0.0-b1"
 ```
 
+or use `cargo add`
+
+```sh
+cargo add php-parser-rs
+```
+
 ### Example
 
 ```rust
