@@ -39,4 +39,4 @@ jobs:
           cargo clippy
       
       - name: test
-        run: cargo test --all -- --skip third_party
+        run: ./meta/test --all -- --skip third_party

@@ -4,7 +4,8 @@ use std::path::PathBuf;
 
 fn main() {
     println!("cargo:rerun-if-changed=tests");
-    if cfg!(not(test)) {
+
+    if env::var("BUILD_INTEGRATION_TESTS").unwrap_or_else(|_| "0".to_string()) == "0" {
         return;
     }
 
