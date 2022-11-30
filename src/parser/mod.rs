@@ -746,7 +746,7 @@ impl Parser {
 
                             self.next();
 
-                            let name = self.ident()?;
+                            let name = self.ident_maybe_reserved()?;
 
                             self.lparen()?;
 
@@ -778,7 +778,7 @@ impl Parser {
                         TokenKind::Function => {
                             self.next();
 
-                            let name = self.ident()?;
+                            let name = self.ident_maybe_reserved()?;
 
                             self.lparen()?;
 
