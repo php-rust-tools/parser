@@ -16,7 +16,7 @@ impl Parser {
             let mut param_type = None;
 
             let mut flags: Vec<PropertyFlag> = Vec::new();
-            
+
             // FIXME: You should only be able to have a combination of 1 visibility + readonly modifier.
             while matches!(
                 self.current.kind,

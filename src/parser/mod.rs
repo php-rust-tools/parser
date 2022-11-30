@@ -1822,7 +1822,7 @@ impl Parser {
             TokenKind::Static if matches!(self.peek.kind, TokenKind::DoubleColon) => {
                 self.next();
                 Expression::Static
-            },
+            }
             TokenKind::LiteralString(s) => {
                 let e = Expression::LiteralString { value: s.clone() };
                 self.next();
@@ -2212,7 +2212,12 @@ impl Parser {
                 prefix(&op, rhs)
             }
             TokenKind::Dollar => self.dynamic_variable()?,
-            _ => return Err(ParseError::UnexpectedToken(self.current.kind.to_string(), self.current.span)),
+            _ => {
+                return Err(ParseError::UnexpectedToken(
+                    self.current.kind.to_string(),
+                    self.current.span,
+                ))
+            }
         };
 
         if self.current.kind == TokenKind::SemiColon {
@@ -2366,10 +2371,12 @@ impl Parser {
                     TokenKind::Class => {
                         self.next();
                         // FIXME: Can this be represented in a nicer way? Kind of hacky.
-                        Expression::Identifier { name: "class".into() }
-                    },
-                    _ if is_reserved_ident(&self.current.kind) => {
-                        Expression::Identifier { name: self.ident_maybe_reserved()?.into() }
+                        Expression::Identifier {
+                            name: "class".into(),
+                        }
+                    }
+                    _ if is_reserved_ident(&self.current.kind) => Expression::Identifier {
+                        name: self.ident_maybe_reserved()?.into(),
                     },
                     _ => {
                         return expected_token_err!(["`{`", "`$`", "an identifier"], self);
