@@ -123,7 +123,7 @@ pub struct Param {
     pub r#type: Option<Type>,
     pub variadic: bool,
     pub default: Option<Expression>,
-    pub flag: Option<PropertyFlag>,
+    pub flags: Vec<PropertyFlag>,
     pub by_ref: bool,
 }
 
@@ -134,7 +134,7 @@ impl From<ByteString> for Param {
             r#type: None,
             variadic: false,
             default: None,
-            flag: None,
+            flags: vec![],
             by_ref: false,
         }
     }

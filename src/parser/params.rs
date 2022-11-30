@@ -15,16 +15,17 @@ impl Parser {
         while !self.is_eof() && self.current.kind != TokenKind::RightParen {
             let mut param_type = None;
 
-            let flag: Option<PropertyFlag> = if matches!(
+            let mut flags: Vec<PropertyFlag> = Vec::new();
+            
+            // FIXME: You should only be able to have a combination of 1 visibility + readonly modifier.
+            while matches!(
                 self.current.kind,
-                TokenKind::Public | TokenKind::Protected | TokenKind::Private
+                TokenKind::Public | TokenKind::Protected | TokenKind::Private | TokenKind::Readonly,
             ) {
                 let flag = self.current.kind.clone().into();
                 self.next();
-                Some(flag)
-            } else {
-                None
-            };
+                flags.push(flag);
+            }
 
             // 1. If we don't see a variable, we should expect a type-string.
             if !matches!(
@@ -67,7 +68,7 @@ impl Parser {
                 r#type: param_type,
                 variadic,
                 default,
-                flag,
+                flags,
                 by_ref,
             });
 
