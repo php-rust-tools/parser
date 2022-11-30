@@ -145,5 +145,6 @@ pub(crate) fn is_reserved_ident(kind: &TokenKind) -> bool {
         | TokenKind::HaltCompiler
         | TokenKind::Fn
         | TokenKind::Match
-        | TokenKind::Enum)
+        | TokenKind::Enum
+        | TokenKind::From)
 }
