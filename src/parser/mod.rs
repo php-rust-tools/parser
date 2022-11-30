@@ -697,6 +697,7 @@ impl Parser {
 
                 let mut body = Block::new();
                 while self.current.kind != TokenKind::RightBrace {
+                    self.skip_comments();
                     match self.class_statement()? {
                         Statement::ClassConstant { .. } => {
                             return Err(ParseError::TraitCannotContainConstant(self.current.span))
