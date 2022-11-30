@@ -1656,7 +1656,8 @@ impl Parser {
                     | TokenKind::Identifier(_)
                     | TokenKind::QualifiedIdentifier(_)
                     | TokenKind::FullyQualifiedIdentifier(_)
-                    | TokenKind::Array => {
+                    | TokenKind::Array
+                    | TokenKind::Null => {
                         let prop_type = self.type_string()?;
                         let var = self.var()?;
                         let mut value = None;
