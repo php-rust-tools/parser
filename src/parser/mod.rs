@@ -16,6 +16,8 @@ use crate::{
 };
 use crate::{ByteString, TraitAdaptation, TryBlockCaughtType};
 
+use self::ident::is_reserved_ident;
+
 pub mod error;
 
 mod block;
@@ -2360,6 +2362,9 @@ impl Parser {
                         self.next();
                         // FIXME: Can this be represented in a nicer way? Kind of hacky.
                         Expression::Identifier { name: "class".into() }
+                    },
+                    _ if is_reserved_ident(&self.current.kind) => {
+                        Expression::Identifier { name: self.ident_maybe_reserved()?.into() }
                     },
                     _ => {
                         return expected_token_err!(["`{`", "`$`", "an identifier"], self);
