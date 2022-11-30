@@ -2359,6 +2359,11 @@ impl Parser {
                         self.next();
                         Expression::Identifier { name: ident }
                     }
+                    TokenKind::Class => {
+                        self.next();
+                        // FIXME: Can this be represented in a nicer way? Kind of hacky.
+                        Expression::Identifier { name: "class".into() }
+                    },
                     _ => {
                         return expected_token_err!(["`{`", "`$`", "an identifier"], self);
                     }
