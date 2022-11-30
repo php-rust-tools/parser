@@ -1,28 +1,26 @@
 [
-    Enum {
+    BackedEnum {
         name: Identifier {
             name: "Foo",
         },
         implements: [],
-        backed_type: Some(
-            String,
-        ),
+        backed_type: Int,
         body: [
-            EnumCase {
+            BackedEnumCase {
                 name: Identifier {
                     name: "Bar",
                 },
-                value: None,
+                value: LiteralInteger {
+                    i: 2,
+                },
             },
-            EnumCase {
+            BackedEnumCase {
                 name: Identifier {
                     name: "Baz",
                 },
-                value: Some(
-                    LiteralString {
-                        value: "Baz",
-                    },
-                ),
+                value: LiteralInteger {
+                    i: 4,
+                },
             },
         ],
     },

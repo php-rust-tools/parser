@@ -1,0 +1,44 @@
+[
+    Class {
+        name: Identifier {
+            name: "foo",
+        },
+        extends: None,
+        implements: [],
+        body: [
+            Method {
+                name: Identifier {
+                    name: "__construct",
+                },
+                params: [
+                    Param {
+                        name: Variable {
+                            name: "s",
+                        },
+                        type: Some(
+                            String,
+                        ),
+                        variadic: false,
+                        default: Some(
+                            LiteralString {
+                                value: "h",
+                            },
+                        ),
+                        flags: [
+                            Readonly,
+                            Public,
+                        ],
+                        by_ref: false,
+                    },
+                ],
+                body: [],
+                flags: [
+                    Public,
+                ],
+                return_type: None,
+                by_ref: false,
+            },
+        ],
+        flags: [],
+    },
+]

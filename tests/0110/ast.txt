@@ -1,0 +1,79 @@
+[
+    Class {
+        name: Identifier {
+            name: "foo",
+        },
+        extends: None,
+        implements: [],
+        body: [
+            Method {
+                name: Identifier {
+                    name: "__construct",
+                },
+                params: [
+                    Param {
+                        name: Variable {
+                            name: "a",
+                        },
+                        type: Some(
+                            String,
+                        ),
+                        variadic: false,
+                        default: None,
+                        flags: [
+                            Public,
+                        ],
+                        by_ref: false,
+                    },
+                    Param {
+                        name: Variable {
+                            name: "b",
+                        },
+                        type: Some(
+                            Integer,
+                        ),
+                        variadic: false,
+                        default: None,
+                        flags: [
+                            Public,
+                            Readonly,
+                        ],
+                        by_ref: false,
+                    },
+                    Param {
+                        name: Variable {
+                            name: "c",
+                        },
+                        type: Some(
+                            Float,
+                        ),
+                        variadic: false,
+                        default: None,
+                        flags: [
+                            Public,
+                            Readonly,
+                        ],
+                        by_ref: true,
+                    },
+                    Param {
+                        name: Variable {
+                            name: "e",
+                        },
+                        type: None,
+                        variadic: true,
+                        default: None,
+                        flags: [],
+                        by_ref: false,
+                    },
+                ],
+                body: [],
+                flags: [
+                    Public,
+                ],
+                return_type: None,
+                by_ref: false,
+            },
+        ],
+        flags: [],
+    },
+]

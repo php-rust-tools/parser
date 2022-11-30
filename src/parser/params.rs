@@ -8,49 +8,76 @@ use crate::{
 
 use super::{precedence::Precedence, ParseResult, Parser};
 
+#[derive(Debug)]
+pub enum ParamPosition {
+    Function,
+    Method(String),
+    AbstractMethod(String),
+}
+
 impl Parser {
-    pub(crate) fn param_list(&mut self) -> Result<ParamList, ParseError> {
+    pub(crate) fn param_list(&mut self, position: ParamPosition) -> Result<ParamList, ParseError> {
         let mut params = ParamList::new();
 
         while !self.is_eof() && self.current.kind != TokenKind::RightParen {
             let mut param_type = None;
 
-            let mut flags: Vec<PropertyFlag> = Vec::new();
+            let flags: Vec<PropertyFlag> = self
+                .promoted_property_flags()?
+                .iter()
+                .map(|f| f.into())
+                .collect();
 
-            // FIXME: You should only be able to have a combination of 1 visibility + readonly modifier.
-            while matches!(
-                self.current.kind,
-                TokenKind::Public | TokenKind::Protected | TokenKind::Private | TokenKind::Readonly,
-            ) {
-                let flag = self.current.kind.clone().into();
-                self.next();
-                flags.push(flag);
+            if !flags.is_empty() {
+                match position {
+                    ParamPosition::Method(name) if name != "__construct" => {
+                        return Err(ParseError::PromotedPropertyOutsideConstructor(
+                            self.current.span,
+                        ));
+                    }
+                    ParamPosition::AbstractMethod(name) => {
+                        if name == "__construct" {
+                            return Err(ParseError::PromotedPropertyOnAbstractConstructor(
+                                self.current.span,
+                            ));
+                        } else {
+                            return Err(ParseError::PromotedPropertyOutsideConstructor(
+                                self.current.span,
+                            ));
+                        }
+                    }
+                    _ => {}
+                }
             }
 
-            // 1. If we don't see a variable, we should expect a type-string.
-            if !matches!(
-                self.current.kind,
-                TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
-            ) || self.config.force_type_strings
+            // If this is a readonly promoted property, or we don't see a variable
+            if self.config.force_type_strings
+                || flags.contains(&PropertyFlag::Readonly)
+                || !matches!(
+                    self.current.kind,
+                    TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
+                )
             {
-                // 1a. Try to parse the type.
+                // Try to parse the type.
                 param_type = Some(self.type_string()?);
             }
 
             let mut variadic = false;
             let mut by_ref = false;
 
-            match self.current.kind {
-                TokenKind::Ellipsis => {
-                    self.next();
-                    variadic = true;
+            if matches!(self.current.kind, TokenKind::Ampersand) {
+                self.next();
+                by_ref = true;
+            }
+
+            if matches!(self.current.kind, TokenKind::Ellipsis) {
+                self.next();
+                if !flags.is_empty() {
+                    return Err(ParseError::VariadicPromotedProperty(self.current.span));
                 }
-                TokenKind::Ampersand => {
-                    self.next();
-                    by_ref = true;
-                }
-                _ => {}
-            };
+
+                variadic = true;
+            }
 
             // 2. Then expect a variable.
             let var = expect_token!([

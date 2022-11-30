@@ -9,19 +9,24 @@ use crate::parser::error::ParseResult;
 use crate::parser::precedence::{Associativity, Precedence};
 use crate::{
     ast::{
-        ArrayItem, BackedEnumType, ClassFlag, ClosureUse, Constant, DeclareItem, ElseIf,
-        IncludeKind, MagicConst, MethodFlag, StaticVar, StringPart, Use, UseKind,
+        ArrayItem, ClosureUse, Constant, DeclareItem, ElseIf, IncludeKind, MagicConst, StaticVar,
+        StringPart, Use, UseKind,
     },
-    Block, Case, Catch, Expression, Identifier, MatchArm, Program, Statement, Type,
+    Block, Case, Catch, Expression, MatchArm, Program, Statement, Type,
 };
-use crate::{ByteString, TraitAdaptation, TryBlockCaughtType};
+use crate::{ByteString, TryBlockCaughtType};
 
 use self::ident::is_reserved_ident;
+use self::params::ParamPosition;
 
 pub mod error;
 
 mod block;
+mod classish;
+mod classish_statement;
 mod comments;
+mod flags;
+mod functions;
 mod ident;
 mod macros;
 mod params;
@@ -161,7 +166,9 @@ impl Parser {
             return Ok(Type::Union(types));
         }
 
-        if self.current.kind == TokenKind::Ampersand {
+        if self.current.kind == TokenKind::Ampersand
+            && !matches!(self.peek.kind, TokenKind::Variable(_))
+        {
             self.next();
 
             let r#type = parse_simple_type(id);
@@ -630,276 +637,13 @@ impl Parser {
                     body,
                 }
             }
-            TokenKind::Abstract => {
-                self.next();
-
-                match self.class()? {
-                    Statement::Class {
-                        name,
-                        extends,
-                        implements,
-                        body,
-                        ..
-                    } => Statement::Class {
-                        name,
-                        extends,
-                        implements,
-                        body,
-                        flag: Some(ClassFlag::Abstract),
-                    },
-                    _ => unreachable!(),
-                }
-            }
-            TokenKind::Final => {
-                self.next();
-
-                match self.class()? {
-                    Statement::Class {
-                        name,
-                        extends,
-                        implements,
-                        body,
-                        ..
-                    } => Statement::Class {
-                        name,
-                        extends,
-                        implements,
-                        body,
-                        flag: Some(ClassFlag::Final),
-                    },
-                    _ => unreachable!(),
-                }
-            }
-            TokenKind::Readonly if self.peek.kind == TokenKind::Class => {
-                self.next();
-
-                match self.class()? {
-                    Statement::Class {
-                        name,
-                        extends,
-                        implements,
-                        body,
-                        ..
-                    } => Statement::Class {
-                        name,
-                        extends,
-                        implements,
-                        body,
-                        flag: Some(ClassFlag::Readonly),
-                    },
-                    _ => unreachable!(),
-                }
-            }
-            TokenKind::Trait => {
-                self.next();
-
-                let name = self.ident()?;
-
-                self.lbrace()?;
-
-                let mut body = Block::new();
-                while self.current.kind != TokenKind::RightBrace {
-                    self.skip_comments();
-                    match self.class_statement()? {
-                        Statement::ClassConstant { .. } => {
-                            return Err(ParseError::TraitCannotContainConstant(self.current.span))
-                        }
-                        s => {
-                            body.push(s);
-                        }
-                    }
-                }
-
-                self.rbrace()?;
-
-                Statement::Trait {
-                    name: name.into(),
-                    body,
-                }
-            }
-            TokenKind::Interface => {
-                self.next();
-
-                let name = self.ident()?;
-
-                let mut extends = vec![];
-                if self.current.kind == TokenKind::Extends {
-                    self.next();
-
-                    while self.current.kind != TokenKind::LeftBrace {
-                        self.optional_comma()?;
-
-                        let e = self.full_name()?;
-
-                        extends.push(e.into());
-                    }
-                }
-
-                self.lbrace()?;
-
-                let mut body = Block::new();
-                self.skip_comments();
-                while self.current.kind != TokenKind::RightBrace {
-                    match &self.current.kind {
-                        TokenKind::Public => {
-                            self.next();
-
-                            self.next();
-
-                            let name = self.ident_maybe_reserved()?;
-
-                            self.lparen()?;
-
-                            let params = self.param_list()?;
-
-                            self.rparen()?;
-
-                            let mut return_type = None;
-
-                            if self.current.kind == TokenKind::Colon
-                                || self.config.force_type_strings
-                            {
-                                self.colon()?;
-
-                                return_type = Some(self.type_string()?);
-                            }
-
-                            self.semi()?;
-
-                            body.push(Statement::Method {
-                                name: name.into(),
-                                params,
-                                body: vec![],
-                                return_type,
-                                flags: vec![MethodFlag::Public],
-                                by_ref: false,
-                            })
-                        }
-                        TokenKind::Function => {
-                            self.next();
-
-                            let name = self.ident_maybe_reserved()?;
-
-                            self.lparen()?;
-
-                            let params = self.param_list()?;
-
-                            self.rparen()?;
-
-                            let mut return_type = None;
-
-                            if self.current.kind == TokenKind::Colon
-                                || self.config.force_type_strings
-                            {
-                                self.colon()?;
-
-                                return_type = Some(self.type_string()?);
-                            }
-
-                            self.semi()?;
-
-                            body.push(Statement::Method {
-                                name: name.into(),
-                                params,
-                                body: vec![],
-                                return_type,
-                                flags: vec![],
-                                by_ref: false,
-                            })
-                        }
-                        _ => {
-                            return expected_token_err!(["`function`", "`public`"], self);
-                        }
-                    };
-
-                    self.skip_comments();
-                }
-
-                self.rbrace()?;
-
-                Statement::Interface {
-                    name: name.into(),
-                    extends,
-                    body,
-                }
-            }
-            TokenKind::Enum if matches!(self.peek.kind, TokenKind::Identifier(_)) => {
-                self.next();
-
-                let name = self.ident()?;
-
-                let backed_type: Option<BackedEnumType> = if self.current.kind == TokenKind::Colon {
-                    self.colon()?;
-
-                    match self.current.kind.clone() {
-                        TokenKind::Identifier(s) if s == b"string" || s == b"int" => {
-                            self.next();
-
-                            Some(match &s[..] {
-                                b"string" => BackedEnumType::String,
-                                b"int" => BackedEnumType::Int,
-                                _ => unreachable!(),
-                            })
-                        }
-                        _ => {
-                            return expected_token_err!(["`string`", "`int`"], self);
-                        }
-                    }
-                } else {
-                    None
-                };
-
-                let mut implements = Vec::new();
-                if self.current.kind == TokenKind::Implements {
-                    self.next();
-
-                    while self.current.kind != TokenKind::LeftBrace {
-                        implements.push(self.full_name()?.into());
-
-                        self.optional_comma()?;
-                    }
-                }
-
-                self.lbrace()?;
-
-                let mut body = Block::new();
-                while self.current.kind != TokenKind::RightBrace {
-                    self.skip_comments();
-                    match self.current.kind {
-                        TokenKind::Case => {
-                            self.next();
-
-                            let name = self.ident()?;
-                            let mut value = None;
-
-                            if self.current.kind == TokenKind::Equals {
-                                expect_token!([TokenKind::Equals], self, "`=`");
-
-                                value = Some(self.expression(Precedence::Lowest)?);
-                            }
-
-                            self.semi()?;
-
-                            body.push(Statement::EnumCase {
-                                name: name.into(),
-                                value,
-                            })
-                        }
-                        _ => {
-                            body.push(self.class_statement()?);
-                        }
-                    }
-                }
-
-                self.rbrace()?;
-
-                Statement::Enum {
-                    name: name.into(),
-                    backed_type,
-                    implements,
-                    body,
-                }
-            }
+            TokenKind::Abstract => self.class_definition()?,
+            TokenKind::Readonly => self.class_definition()?,
+            TokenKind::Final => self.class_definition()?,
+            TokenKind::Class => self.class_definition()?,
+            TokenKind::Interface => self.interface_definition()?,
+            TokenKind::Trait => self.trait_definition()?,
+            TokenKind::Enum => self.enum_definition()?,
             TokenKind::Switch => {
                 self.next();
 
@@ -1119,7 +863,6 @@ impl Parser {
                     }
                 }
             }
-            TokenKind::Class => self.class()?,
             TokenKind::Echo => {
                 self.next();
 
@@ -1288,450 +1031,6 @@ impl Parser {
         Ok(statement)
     }
 
-    fn function(&mut self) -> ParseResult<Statement> {
-        self.next();
-
-        let by_ref = if self.current.kind == TokenKind::Ampersand {
-            self.next();
-            true
-        } else {
-            false
-        };
-
-        // FIXME: We should only allow reserved words for class methods, not top-level functions.
-        let name = self.ident_maybe_reserved()?;
-
-        self.lparen()?;
-
-        let params = self.param_list()?;
-
-        self.rparen()?;
-
-        let mut return_type = None;
-
-        if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
-            self.colon()?;
-
-            return_type = Some(self.type_string()?);
-        }
-
-        self.lbrace()?;
-
-        let body = self.block(&TokenKind::RightBrace)?;
-
-        self.rbrace()?;
-
-        Ok(Statement::Function {
-            name: name.into(),
-            params,
-            body,
-            return_type,
-            by_ref,
-        })
-    }
-
-    fn class(&mut self) -> ParseResult<Statement> {
-        self.next();
-
-        let name = self.ident()?;
-        let mut extends: Option<Identifier> = None;
-
-        if self.current.kind == TokenKind::Extends {
-            self.next();
-            extends = Some(self.full_name()?.into());
-        }
-
-        let mut implements = Vec::new();
-        if self.current.kind == TokenKind::Implements {
-            self.next();
-
-            while self.current.kind != TokenKind::LeftBrace {
-                self.optional_comma()?;
-
-                implements.push(self.full_name()?.into());
-            }
-        }
-
-        self.lbrace()?;
-
-        let mut body = Vec::new();
-        while self.current.kind != TokenKind::RightBrace && !self.is_eof() {
-            self.gather_comments();
-
-            if self.current.kind == TokenKind::RightBrace {
-                self.clear_comments();
-                break;
-            }
-
-            body.push(self.class_statement()?);
-        }
-        self.rbrace()?;
-
-        Ok(Statement::Class {
-            name: name.into(),
-            extends,
-            implements,
-            body,
-            flag: None,
-        })
-    }
-
-    fn class_statement(&mut self) -> ParseResult<Statement> {
-        match self.current.kind {
-            TokenKind::Use => {
-                self.next();
-
-                let mut traits = Vec::new();
-
-                while self.current.kind != TokenKind::SemiColon
-                    && self.current.kind != TokenKind::LeftBrace
-                {
-                    self.optional_comma()?;
-
-                    let t = self.full_name()?;
-                    traits.push(t.into());
-                }
-
-                let mut adaptations = Vec::new();
-                if self.current.kind == TokenKind::LeftBrace {
-                    self.lbrace()?;
-
-                    while self.current.kind != TokenKind::RightBrace {
-                        let (r#trait, method): (Option<Identifier>, Identifier) =
-                            match self.peek.kind {
-                                TokenKind::DoubleColon => {
-                                    let r#trait = self.full_name()?;
-                                    self.next();
-                                    let method = self.ident()?;
-                                    (Some(r#trait.into()), method.into())
-                                }
-                                _ => (None, self.ident()?.into()),
-                            };
-
-                        match self.current.kind {
-                            TokenKind::As => {
-                                self.next();
-
-                                match self.current.kind {
-                                    TokenKind::Public
-                                    | TokenKind::Protected
-                                    | TokenKind::Private => {
-                                        let visibility: MethodFlag =
-                                            self.current.kind.clone().into();
-                                        self.next();
-
-                                        if self.current.kind == TokenKind::SemiColon {
-                                            adaptations.push(TraitAdaptation::Visibility {
-                                                r#trait,
-                                                method,
-                                                visibility,
-                                            });
-                                        } else {
-                                            let alias: Identifier = self.name()?.into();
-                                            adaptations.push(TraitAdaptation::Alias {
-                                                r#trait,
-                                                method,
-                                                alias,
-                                                visibility: Some(visibility),
-                                            });
-                                        }
-                                    }
-                                    _ => {
-                                        let alias: Identifier = self.name()?.into();
-                                        adaptations.push(TraitAdaptation::Alias {
-                                            r#trait,
-                                            method,
-                                            alias,
-                                            visibility: None,
-                                        });
-                                    }
-                                }
-                            }
-                            TokenKind::Insteadof => {
-                                self.next();
-
-                                let mut insteadof = Vec::new();
-                                insteadof.push(self.full_name()?.into());
-                                while self.current.kind != TokenKind::SemiColon {
-                                    self.optional_comma()?;
-                                    insteadof.push(self.full_name()?.into());
-                                }
-
-                                adaptations.push(TraitAdaptation::Precedence {
-                                    r#trait,
-                                    method,
-                                    insteadof,
-                                });
-                            }
-                            _ => {
-                                return Err(ParseError::UnexpectedToken(
-                                    self.current.kind.to_string(),
-                                    self.current.span,
-                                ))
-                            }
-                        };
-
-                        self.semi()?;
-                    }
-
-                    self.rbrace()?;
-                } else {
-                    self.semi()?;
-                }
-
-                Ok(Statement::TraitUse {
-                    traits,
-                    adaptations,
-                })
-            }
-            TokenKind::Const => {
-                self.next();
-
-                let name = self.ident()?;
-
-                expect_token!([TokenKind::Equals], self, "`=`");
-
-                let value = self.expression(Precedence::Lowest)?;
-
-                self.semi()?;
-
-                Ok(Statement::ClassConstant {
-                    name: name.into(),
-                    value,
-                    flags: vec![],
-                })
-            }
-            TokenKind::Var => {
-                self.next();
-
-                let mut var_type = None;
-
-                if !matches!(self.current.kind, TokenKind::Variable(_))
-                    || self.config.force_type_strings
-                {
-                    var_type = Some(self.type_string()?);
-                }
-
-                let var = self.var()?;
-                let mut value = None;
-
-                if self.current.kind == TokenKind::Equals {
-                    self.next();
-
-                    value = Some(self.expression(Precedence::Lowest)?);
-                }
-
-                self.semi()?;
-
-                Ok(Statement::Var {
-                    var,
-                    value,
-                    r#type: var_type,
-                })
-            }
-            TokenKind::Final
-            | TokenKind::Abstract
-            | TokenKind::Public
-            | TokenKind::Private
-            | TokenKind::Protected
-            | TokenKind::Static
-            | TokenKind::Readonly => {
-                let mut flags = vec![self.current.kind.clone()];
-                self.next();
-
-                while !self.is_eof()
-                    && [
-                        TokenKind::Final,
-                        TokenKind::Abstract,
-                        TokenKind::Public,
-                        TokenKind::Private,
-                        TokenKind::Protected,
-                        TokenKind::Static,
-                        TokenKind::Readonly,
-                    ]
-                    .contains(&self.current.kind)
-                {
-                    if flags.contains(&self.current.kind) {
-                        return Err(ParseError::MultipleModifiers(
-                            self.current.kind.to_string(),
-                            self.current.span,
-                        ));
-                    }
-
-                    flags.push(self.current.kind.clone());
-                    self.next();
-                }
-
-                if flags.contains(&TokenKind::Final) && flags.contains(&TokenKind::Abstract) {
-                    return Err(ParseError::InvalidAbstractFinalFlagCombination(
-                        self.current.span,
-                    ));
-                }
-
-                match &self.current.kind {
-                    TokenKind::Const => {
-                        if flags.contains(&TokenKind::Static) {
-                            return Err(ParseError::ConstantCannotBeStatic(self.current.span));
-                        }
-
-                        if flags.contains(&TokenKind::Final) && flags.contains(&TokenKind::Private)
-                        {
-                            return Err(ParseError::ConstantCannotBePrivateFinal(
-                                self.current.span,
-                            ));
-                        }
-
-                        self.next();
-
-                        let name = self.ident()?;
-
-                        expect_token!([TokenKind::Equals], self, "`=`");
-
-                        let value = self.expression(Precedence::Lowest)?;
-
-                        self.semi()?;
-
-                        Ok(Statement::ClassConstant {
-                            name: name.into(),
-                            value,
-                            flags: flags.into_iter().map(|f| f.into()).collect(),
-                        })
-                    }
-                    TokenKind::Function => {
-                        if flags.contains(&TokenKind::Abstract) {
-                            self.next();
-
-                            let by_ref = if self.current.kind == TokenKind::Ampersand {
-                                self.next();
-                                true
-                            } else {
-                                false
-                            };
-
-                            let name = self.ident()?;
-
-                            self.lparen()?;
-
-                            let params = self.param_list()?;
-
-                            self.rparen()?;
-
-                            let mut return_type = None;
-
-                            if self.current.kind == TokenKind::Colon
-                                || self.config.force_type_strings
-                            {
-                                self.colon()?;
-
-                                return_type = Some(self.type_string()?);
-                            }
-
-                            self.semi()?;
-
-                            Ok(Statement::Method {
-                                name: name.into(),
-                                params,
-                                body: vec![],
-                                return_type,
-                                flags: flags.iter().map(|t| t.clone().into()).collect(),
-                                by_ref,
-                            })
-                        } else {
-                            match self.function()? {
-                                Statement::Function {
-                                    name,
-                                    params,
-                                    body,
-                                    return_type,
-                                    by_ref,
-                                } => Ok(Statement::Method {
-                                    name,
-                                    params,
-                                    body,
-                                    flags: flags.iter().map(|t| t.clone().into()).collect(),
-                                    return_type,
-                                    by_ref,
-                                }),
-                                _ => unreachable!(),
-                            }
-                        }
-                    }
-                    TokenKind::Question
-                    | TokenKind::Identifier(_)
-                    | TokenKind::QualifiedIdentifier(_)
-                    | TokenKind::FullyQualifiedIdentifier(_)
-                    | TokenKind::Array
-                    | TokenKind::Null => {
-                        let prop_type = self.type_string()?;
-                        let var = self.var()?;
-                        let mut value = None;
-
-                        if self.current.kind == TokenKind::Equals {
-                            self.next();
-                            value = Some(self.expression(Precedence::Lowest)?);
-                        }
-
-                        // TODO: Support comma-separated property declarations.
-                        //       nikic/php-parser does this with a single Property statement
-                        //       that is capable of holding multiple property declarations.
-                        self.semi()?;
-
-                        Ok(Statement::Property {
-                            var,
-                            value,
-                            r#type: Some(prop_type),
-                            flags: flags.into_iter().map(|f| f.into()).collect(),
-                        })
-                    }
-                    TokenKind::Variable(_) => {
-                        let var = self.var()?;
-                        let mut value = None;
-
-                        if self.current.kind == TokenKind::Equals {
-                            self.next();
-                            value = Some(self.expression(Precedence::Lowest)?);
-                        }
-
-                        self.semi()?;
-
-                        Ok(Statement::Property {
-                            var,
-                            value,
-                            r#type: None,
-                            flags: flags.into_iter().map(|f| f.into()).collect(),
-                        })
-                    }
-                    _ => expected_token_err!(
-                        ["`const`", "`function`", "an identifier", "a varaible"],
-                        self
-                    ),
-                }
-            }
-            TokenKind::Function => match self.function()? {
-                Statement::Function {
-                    name,
-                    params,
-                    body,
-                    return_type,
-                    by_ref,
-                } => Ok(Statement::Method {
-                    name,
-                    params,
-                    body,
-                    flags: vec![],
-                    return_type,
-                    by_ref,
-                }),
-                _ => unreachable!(),
-            },
-            // TODO: Support use statements.
-            _ => expected_token_err!(
-                ["`use`", "`const`", "`var`", "`function`", "a modifier"],
-                self
-            ),
-        }
-    }
-
     fn expression(&mut self, precedence: Precedence) -> ParseResult<Expression> {
         if self.is_eof() {
             return Err(ParseError::UnexpectedEndOfFile);
@@ -1791,7 +1090,7 @@ impl Parser {
             TokenKind::Clone => {
                 self.next();
 
-                let target = self.expression(Precedence::CloneNew)?;
+                let target = self.expression(Precedence::CloneOrNew)?;
 
                 Expression::Clone {
                     target: Box::new(target),
@@ -2023,7 +1322,7 @@ impl Parser {
 
                 self.lparen()?;
 
-                let params = self.param_list()?;
+                let params = self.param_list(ParamPosition::Function)?;
 
                 self.rparen()?;
 
@@ -2107,7 +1406,7 @@ impl Parser {
 
                 self.lparen()?;
 
-                let params = self.param_list()?;
+                let params = self.param_list(ParamPosition::Function)?;
 
                 self.rparen()?;
 
@@ -2131,56 +1430,14 @@ impl Parser {
                     r#static: false,
                 }
             }
+            TokenKind::New if self.peek.kind == TokenKind::Class => {
+                self.anonymous_class_definition()?
+            }
             TokenKind::New => {
                 self.next();
 
                 let mut args = vec![];
-                let target = if self.current.kind == TokenKind::Class {
-                    self.next();
-
-                    if self.current.kind == TokenKind::LeftParen {
-                        self.lparen()?;
-
-                        args = self.args_list()?;
-
-                        self.rparen()?;
-                    }
-
-                    let mut extends: Option<Identifier> = None;
-
-                    if self.current.kind == TokenKind::Extends {
-                        self.next();
-                        extends = Some(self.full_name()?.into());
-                    }
-
-                    let mut implements = Vec::new();
-                    if self.current.kind == TokenKind::Implements {
-                        self.next();
-
-                        while self.current.kind != TokenKind::LeftBrace {
-                            self.optional_comma()?;
-
-                            implements.push(self.full_name()?.into());
-                        }
-                    }
-
-                    self.lbrace()?;
-
-                    let mut body = Vec::new();
-                    while self.current.kind != TokenKind::RightBrace && !self.is_eof() {
-                        body.push(self.class_statement()?);
-                    }
-
-                    self.rbrace()?;
-
-                    Expression::AnonymousClass {
-                        extends,
-                        implements,
-                        body,
-                    }
-                } else {
-                    self.expression(Precedence::CloneNew)?
-                };
+                let target = self.expression(Precedence::CloneOrNew)?;
 
                 if self.current.kind == TokenKind::LeftParen {
                     self.lparen()?;
@@ -2376,7 +1633,7 @@ impl Parser {
                         }
                     }
                     _ if is_reserved_ident(&self.current.kind) => Expression::Identifier {
-                        name: self.ident_maybe_reserved()?.into(),
+                        name: self.ident_maybe_reserved()?,
                     },
                     _ => {
                         return expected_token_err!(["`{`", "`$`", "an identifier"], self);
