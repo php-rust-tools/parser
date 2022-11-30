@@ -2,6 +2,7 @@ use super::ParseResult;
 use crate::expect_token;
 use crate::expected_token_err;
 use crate::parser::precedence::Precedence;
+use crate::peek_token;
 use crate::ClassFlag;
 use crate::Identifier;
 use crate::MethodFlag;
@@ -34,16 +35,15 @@ impl Parser {
             return self.method(ClassishDefinitionType::Interface, vec![]);
         }
 
-        let member_flags = self.class_members_flags()?;
+        let member_flags = self.interface_members_flags()?;
 
-        match &self.current.kind {
+        peek_token!([
             TokenKind::Const => self.parse_classish_const(member_flags),
             TokenKind::Function => self.method(
                 ClassishDefinitionType::Interface,
                 member_flags.iter().map(|t| t.clone().into()).collect(),
-            ),
-            _ => expected_token_err!(["`const`", "`function`"], self),
-        }
+            )
+        ], self, ["`const`", "`function`"])
     }
 
     pub(crate) fn trait_statement(&mut self) -> ParseResult<Statement> {
@@ -87,14 +87,13 @@ impl Parser {
 
         let member_flags = self.enum_members_flags()?;
 
-        match &self.current.kind {
+        peek_token!([
             TokenKind::Const => self.parse_classish_const(member_flags),
             TokenKind::Function => self.method(
                 ClassishDefinitionType::Enum,
                 member_flags.iter().map(|t| t.clone().into()).collect(),
-            ),
-            _ => expected_token_err!(["`const`", "`function`"], self),
-        }
+            )
+        ], self, ["`const`", "`function`"])
     }
 
     fn complete_class_statement(
