@@ -31,7 +31,7 @@ pub enum Precedence {
     Pow,
     CallDim,
     ObjectAccess,
-    CloneNew,
+    CloneOrNew,
 }
 
 impl Precedence {
@@ -40,7 +40,7 @@ impl Precedence {
 
         match kind {
             Bang => Self::Bang,
-            Clone | New => Self::CloneNew,
+            Clone | New => Self::CloneOrNew,
             _ => Self::Prefix,
         }
     }

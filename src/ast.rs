@@ -163,6 +163,12 @@ pub enum PropertyFlag {
 
 impl From<TokenKind> for PropertyFlag {
     fn from(k: TokenKind) -> Self {
+        (&k).into()
+    }
+}
+
+impl From<&TokenKind> for PropertyFlag {
+    fn from(k: &TokenKind) -> Self {
         match k {
             TokenKind::Public => Self::Public,
             TokenKind::Protected => Self::Protected,
@@ -207,6 +213,12 @@ pub enum ClassFlag {
 
 impl From<TokenKind> for ClassFlag {
     fn from(k: TokenKind) -> Self {
+        (&k).into()
+    }
+}
+
+impl From<&TokenKind> for ClassFlag {
+    fn from(k: &TokenKind) -> Self {
         match k {
             TokenKind::Final => Self::Final,
             TokenKind::Abstract => Self::Abstract,
@@ -323,7 +335,7 @@ pub enum Statement {
     Constant {
         constants: Vec<Constant>,
     },
-    ClassConstant {
+    ClassishConstant {
         name: Identifier,
         value: Expression,
         flags: Vec<ConstFlag>,
@@ -340,7 +352,7 @@ pub enum Statement {
         extends: Option<Identifier>,
         implements: Vec<Identifier>,
         body: Block,
-        flag: Option<ClassFlag>,
+        flags: Vec<ClassFlag>,
     },
     Trait {
         name: Identifier,
@@ -359,6 +371,13 @@ pub enum Statement {
         name: Identifier,
         params: Vec<Param>,
         body: Block,
+        flags: Vec<MethodFlag>,
+        return_type: Option<Type>,
+        by_ref: bool,
+    },
+    AbstractMethod {
+        name: Identifier,
+        params: Vec<Param>,
         flags: Vec<MethodFlag>,
         return_type: Option<Type>,
         by_ref: bool,
@@ -409,15 +428,23 @@ pub enum Statement {
         catches: Vec<Catch>,
         finally: Option<Block>,
     },
-    Enum {
+    UnitEnum {
         name: Identifier,
         implements: Vec<Identifier>,
-        backed_type: Option<BackedEnumType>,
         body: Block,
     },
-    EnumCase {
+    BackedEnum {
         name: Identifier,
-        value: Option<Expression>,
+        implements: Vec<Identifier>,
+        backed_type: BackedEnumType,
+        body: Block,
+    },
+    UnitEnumCase {
+        name: Identifier,
+    },
+    BackedEnumCase {
+        name: Identifier,
+        value: Expression,
     },
     Block {
         body: Block,
