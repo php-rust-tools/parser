@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::ByteString;
+use crate::lexer::byte_string::ByteString;
 
 pub type Span = (usize, usize);
 

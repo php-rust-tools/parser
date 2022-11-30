@@ -1,18 +1,20 @@
-use super::ParseResult;
+use crate::lexer::byte_string::ByteString;
+use crate::lexer::token::TokenKind;
+use crate::parser::error::ParseResult;
+use crate::parser::Parser;
+
 use crate::expect_token;
-use crate::Parser;
-use crate::{ByteString, TokenKind};
 
 impl Parser {
     /// Expect an unqualified identifier such as Foo or Bar.
-    pub(crate) fn ident(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn ident(&mut self) -> ParseResult<ByteString> {
         Ok(expect_token!([
             TokenKind::Identifier(identifier) => identifier,
         ], self, "an identifier"))
     }
 
     /// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
-    pub(crate) fn name(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn name(&mut self) -> ParseResult<ByteString> {
         Ok(expect_token!([
             TokenKind::Identifier(identifier) => identifier,
             TokenKind::QualifiedIdentifier(qualified) => qualified,
@@ -20,7 +22,7 @@ impl Parser {
     }
 
     /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
-    pub(crate) fn full_name(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn full_name(&mut self) -> ParseResult<ByteString> {
         Ok(expect_token!([
             TokenKind::Identifier(identifier) => identifier,
             TokenKind::QualifiedIdentifier(qualified) => qualified,
@@ -28,13 +30,13 @@ impl Parser {
         ], self, "an identifier"))
     }
 
-    pub(crate) fn var(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn var(&mut self) -> ParseResult<ByteString> {
         Ok(expect_token!([
             TokenKind::Variable(v) => v,
         ], self, "a variable"))
     }
 
-    pub(crate) fn full_name_maybe_type_keyword(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn full_name_maybe_type_keyword(&mut self) -> ParseResult<ByteString> {
         match self.current.kind {
             TokenKind::Array | TokenKind::Callable => {
                 let r = Ok(self.current.kind.to_string().into());
@@ -45,7 +47,7 @@ impl Parser {
         }
     }
 
-    pub(crate) fn type_with_static(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn type_with_static(&mut self) -> ParseResult<ByteString> {
         Ok(match self.current.kind {
             TokenKind::Static | TokenKind::Null | TokenKind::True | TokenKind::False => {
                 let str = self.current.kind.to_string();
@@ -56,7 +58,7 @@ impl Parser {
         })
     }
 
-    pub(crate) fn ident_maybe_reserved(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn ident_maybe_reserved(&mut self) -> ParseResult<ByteString> {
         match self.current.kind {
             _ if is_reserved_ident(&self.current.kind) => {
                 let string = self.current.kind.to_string().into();
@@ -68,7 +70,7 @@ impl Parser {
     }
 }
 
-pub(crate) fn is_reserved_ident(kind: &TokenKind) -> bool {
+pub fn is_reserved_ident(kind: &TokenKind) -> bool {
     matches!(
         kind,
         TokenKind::Static

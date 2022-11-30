@@ -3,14 +3,19 @@ use std::fs::read_dir;
 use std::path::PathBuf;
 
 fn main() {
-    println!("cargo:rerun-if-changed=tests");
+    let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+    let tests = manifest.join("tests");
+    let snapshot = manifest.join("bin").join("snapshot.rs");
+
+    println!("cargo:rerun-if-changed={}", tests.to_string_lossy());
+    println!("cargo:rerun-if-changed={}", snapshot.to_string_lossy());
+    println!("cargo:rerun-if-env-changed=BUILD_INTEGRATION_TESTS");
 
     if env::var("BUILD_INTEGRATION_TESTS").unwrap_or_else(|_| "0".to_string()) == "0" {
         return;
     }
 
-    let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-    let mut entries = read_dir(manifest.join("tests"))
+    let mut entries = read_dir(tests)
         .unwrap()
         .flatten()
         .map(|entry| entry.path())
@@ -26,6 +31,7 @@ fn main() {
     for entry in entries {
         let code_filename = entry.join("code.php");
         let ast_filename = entry.join("ast.txt");
+        let tokens_filename = entry.join("tokens.txt");
         let lexer_error_filename = entry.join("lexer-error.txt");
         let parser_error_filename = entry.join("parser-error.txt");
 
@@ -45,7 +51,12 @@ fn main() {
                 entry.to_string_lossy()
             );
 
-            content.push_str(&build_success_test(entry, code_filename, ast_filename))
+            content.push_str(&build_success_test(
+                entry,
+                code_filename,
+                ast_filename,
+                tokens_filename,
+            ))
         } else if lexer_error_filename.exists() {
             assert!(
                 !parser_error_filename.exists(),
@@ -69,6 +80,7 @@ fn main() {
                 entry,
                 code_filename,
                 parser_error_filename,
+                tokens_filename,
             ))
         }
     }
@@ -77,21 +89,32 @@ fn main() {
     std::fs::write(dest, content).expect("failed to write to file");
 }
 
-fn build_success_test(entry: PathBuf, code_filename: PathBuf, ast_filename: PathBuf) -> String {
+fn build_success_test(
+    entry: PathBuf,
+    code_filename: PathBuf,
+    ast_filename: PathBuf,
+    tokens_filename: PathBuf,
+) -> String {
     format!(
         r#"#[test]
 fn test_success_{}() {{
-    use php_parser_rs::{{Lexer, Parser}};
+    use php_parser_rs::prelude::Parser;
+    use php_parser_rs::prelude::Lexer;
     use pretty_assertions::assert_str_eq;
 
     let code_filename = "{}";
     let ast_filename = "{}";
+    let tokens_filename = "{}";
 
     let code = std::fs::read_to_string(&code_filename).unwrap();
     let expected_ast = std::fs::read_to_string(&ast_filename).unwrap();
+    let expected_tokens = std::fs::read_to_string(&tokens_filename).unwrap();
 
-    let mut lexer = Lexer::new(None);
+    let mut lexer = Lexer::new();
     let tokens = lexer.tokenize(code.as_bytes()).unwrap();
+
+    assert_str_eq!(expected_tokens.trim(), format!("{{:#?}}", tokens));
+
     let mut parser = Parser::new(None);
     let ast = parser.parse(tokens).unwrap();
 
@@ -101,7 +124,8 @@ fn test_success_{}() {{
 "#,
         entry.file_name().unwrap().to_string_lossy(),
         code_filename.to_string_lossy(),
-        ast_filename.to_string_lossy()
+        ast_filename.to_string_lossy(),
+        tokens_filename.to_string_lossy(),
     )
 }
 
@@ -113,7 +137,7 @@ fn build_lexer_error_test(
     format!(
         r#"#[test]
 fn test_lexer_error_{}() {{
-    use php_parser_rs::Lexer;
+    use php_parser_rs::prelude::Lexer;
     use pretty_assertions::assert_str_eq;
 
     let code_filename = "{}";
@@ -122,10 +146,13 @@ fn test_lexer_error_{}() {{
     let code = std::fs::read_to_string(&code_filename).unwrap();
     let expected_error = std::fs::read_to_string(&lexer_error_filename).unwrap();
 
-    let mut lexer = Lexer::new(None);
+    let mut lexer = Lexer::new();
     let error = lexer.tokenize(code.as_bytes()).err().unwrap();
 
-    assert_str_eq!(expected_error.trim(), format!("{{:?}}", error));
+    assert_str_eq!(
+        expected_error.trim(),
+        format!("{{:?}} -> {{}}", error, error.to_string())
+    );
 }}
 
 "#,
@@ -139,21 +166,27 @@ fn build_parser_error_test(
     entry: PathBuf,
     code_filename: PathBuf,
     parser_error_filename: PathBuf,
+    tokens_filename: PathBuf,
 ) -> String {
     format!(
         r#"#[test]
 fn test_paser_error_{}() {{
-    use php_parser_rs::{{Lexer, Parser}};
+    use php_parser_rs::prelude::Parser;
+    use php_parser_rs::prelude::Lexer;
     use pretty_assertions::assert_str_eq;
 
     let code_filename = "{}";
+    let tokens_filename = "{}";
     let parser_error_filename = "{}";
 
     let code = std::fs::read_to_string(&code_filename).unwrap();
+    let expected_tokens = std::fs::read_to_string(&tokens_filename).unwrap();
     let expected_error = std::fs::read_to_string(&parser_error_filename).unwrap();
 
-    let mut lexer = Lexer::new(None);
+    let mut lexer = Lexer::new();
     let tokens = lexer.tokenize(code.as_bytes()).unwrap();
+
+    assert_str_eq!(expected_tokens.trim(), format!("{{:#?}}", tokens));
 
     let mut parser = Parser::new(None);
     let error = parser.parse(tokens).err().unwrap();
@@ -167,6 +200,7 @@ fn test_paser_error_{}() {{
 "#,
         entry.file_name().unwrap().to_string_lossy(),
         code_filename.to_string_lossy(),
+        tokens_filename.to_string_lossy(),
         parser_error_filename.to_string_lossy()
     )
 }

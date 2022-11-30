@@ -1,6 +1,7 @@
 use std::fmt::Display;
 
-use crate::{ByteString, TokenKind};
+use crate::lexer::byte_string::ByteString;
+use crate::lexer::token::TokenKind;
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
@@ -100,18 +101,6 @@ impl From<ByteString> for Identifier {
 impl From<&ByteString> for Identifier {
     fn from(name: &ByteString) -> Self {
         Self::from(name.clone())
-    }
-}
-
-impl From<&[u8]> for Identifier {
-    fn from(name: &[u8]) -> Self {
-        Self::from(ByteString::from(name))
-    }
-}
-
-impl From<&str> for Identifier {
-    fn from(name: &str) -> Self {
-        Self::from(ByteString::from(name))
     }
 }
 

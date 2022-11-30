@@ -1,7 +1,7 @@
-use super::ParseResult;
-use crate::ParseError;
-use crate::Parser;
-use crate::TokenKind;
+use crate::lexer::token::TokenKind;
+use crate::parser::error::ParseError;
+use crate::parser::error::ParseResult;
+use crate::parser::Parser;
 
 enum FlagTarget {
     Class,
@@ -11,14 +11,14 @@ enum FlagTarget {
 }
 
 impl Parser {
-    pub(crate) fn class_flags(&mut self) -> ParseResult<Vec<TokenKind>> {
+    pub(in crate::parser) fn class_flags(&mut self) -> ParseResult<Vec<TokenKind>> {
         self.collect(
             vec![TokenKind::Final, TokenKind::Abstract, TokenKind::Readonly],
             FlagTarget::Class,
         )
     }
 
-    pub(crate) fn class_members_flags(&mut self) -> ParseResult<Vec<TokenKind>> {
+    pub(in crate::parser) fn class_members_flags(&mut self) -> ParseResult<Vec<TokenKind>> {
         self.collect(
             vec![
                 TokenKind::Final,
@@ -33,7 +33,7 @@ impl Parser {
         )
     }
 
-    pub(crate) fn enum_members_flags(&mut self) -> ParseResult<Vec<TokenKind>> {
+    pub(in crate::parser) fn enum_members_flags(&mut self) -> ParseResult<Vec<TokenKind>> {
         self.collect(
             vec![
                 TokenKind::Final,
@@ -46,7 +46,7 @@ impl Parser {
         )
     }
 
-    pub(crate) fn promoted_property_flags(&mut self) -> ParseResult<Vec<TokenKind>> {
+    pub(in crate::parser) fn promoted_property_flags(&mut self) -> ParseResult<Vec<TokenKind>> {
         self.collect(
             vec![
                 TokenKind::Private,

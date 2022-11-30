@@ -1,4 +1,4 @@
-use php_parser_rs::{Lexer, Parser};
+use php_parser_rs::prelude::{Lexer, Parser};
 use std::env;
 use std::fs::read_dir;
 use std::path::PathBuf;
@@ -21,6 +21,7 @@ fn main() {
     for entry in entries {
         let code_filename = entry.join("code.php");
         let ast_filename = entry.join("ast.txt");
+        let tokens_filename = entry.join("tokens.txt");
         let lexer_error_filename = entry.join("lexer-error.txt");
         let parser_error_filename = entry.join("parser-error.txt");
 
@@ -32,6 +33,10 @@ fn main() {
             std::fs::remove_file(&ast_filename).unwrap();
         }
 
+        if tokens_filename.exists() {
+            std::fs::remove_file(&tokens_filename).unwrap();
+        }
+
         if lexer_error_filename.exists() {
             std::fs::remove_file(&lexer_error_filename).unwrap();
         }
@@ -41,11 +46,17 @@ fn main() {
         }
 
         let code = std::fs::read_to_string(&code_filename).unwrap();
-        let mut lexer = Lexer::new(None);
+        let mut lexer = Lexer::new();
         let tokens = lexer.tokenize(code.as_bytes());
 
         match tokens {
             Ok(tokens) => {
+                std::fs::write(tokens_filename, format!("{:#?}\n", tokens)).unwrap();
+                println!(
+                    "✅ generated `tokens.txt` for `{}`",
+                    entry.to_string_lossy()
+                );
+
                 let mut parser = Parser::new(None);
                 let ast = parser.parse(tokens);
                 match ast {
@@ -67,7 +78,8 @@ fn main() {
                 }
             }
             Err(error) => {
-                std::fs::write(lexer_error_filename, format!("{:?}\n", error)).unwrap();
+                std::fs::write(lexer_error_filename, format!("{:?} -> {}\n", error, error))
+                    .unwrap();
                 println!(
                     "✅ generated `lexer-error.txt` for `{}`",
                     entry.to_string_lossy()
