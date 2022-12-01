@@ -19,6 +19,8 @@ pub enum ParseError {
     PromotedPropertyOnAbstractConstructor(Span),
     AbstractModifierOnNonAbstractClassMethod(Span),
     ConstructorInEnum(String, Span),
+    MissingCaseValueForBackedEnum(String, String, Span),
+    CaseValueForUnitEnum(String, String, Span),
     StaticModifierOnConstant(Span),
     ReadonlyModifierOnConstant(Span),
     FinalModifierOnAbstractClassMember(Span),
@@ -61,6 +63,8 @@ impl Display for ParseError {
             Self::AbstractModifierOnNonAbstractClassMethod(span) => write!(f, "Parse Error: Cannot declare abstract methods on a non-abstract class on line {} column {}", span.0, span.1),
             Self::FinalModifierOnAbstractClass(span) => write!(f, "Parse Error: Cannot use the final modifier on an abstract class on line {} column {}", span.0, span.1),
             Self::ConstructorInEnum(name, span) => write!(f, "Parse Error: Enum '{}' cannot have a constructor on line {} column {}", name, span.0, span.1),
+            Self::MissingCaseValueForBackedEnum(case, name, span) => write!(f, "Parse Error: Case `{}` of backed enum `{}` must have a value on line {} column {}", case, name, span.0, span.1),
+            Self::CaseValueForUnitEnum(case, name, span) => write!(f, "Parse Error: Case `{}` of unit enum `{}` must not have a value on line {} column {}", case, name, span.0, span.1),
             Self::UnpredictableState(span) => write!(f, "Parse Error: Reached an unpredictable state on line {} column {}", span.0, span.1)
         }
     }
