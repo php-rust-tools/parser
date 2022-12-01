@@ -2,7 +2,7 @@ use std::fmt::Display;
 
 use crate::lexer::token::Span;
 
-pub type LexResult<T> = Result<T, SyntaxError>;
+pub type SyntaxResult<T> = Result<T, SyntaxError>;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum SyntaxError {
@@ -13,6 +13,7 @@ pub enum SyntaxError {
     InvalidOctalEscape(Span),
     InvalidOctalLiteral(Span),
     InvalidUnicodeEscape(Span),
+    UnpredictableState(Span),
 }
 
 impl Display for SyntaxError {
@@ -51,6 +52,11 @@ impl Display for SyntaxError {
             Self::InvalidUnicodeEscape(span) => write!(
                 f,
                 "Syntax Error: invalid unicode escape on line {} column {}",
+                span.0, span.1
+            ),
+            Self::UnpredictableState(span) => write!(
+                f,
+                "Syntax Error: Reached an unpredictable state on line {} column {}",
                 span.0, span.1
             ),
         }

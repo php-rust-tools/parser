@@ -1,12 +1,11 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::ClassFlag;
 use crate::parser::ast::Identifier;
 use crate::parser::ast::MethodFlag;
 use crate::parser::ast::Statement;
 use crate::parser::ast::TraitAdaptation;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
-use crate::parser::precedence::Precedence;
+use crate::parser::internal::precedence::Precedence;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
@@ -14,24 +13,7 @@ use crate::expect_token;
 use crate::expected_token_err;
 use crate::peek_token;
 
-#[derive(Debug)]
-pub enum ClassishDefinitionType {
-    Class(Vec<ClassFlag>),
-    AnonymousClass,
-    Trait,
-    Interface,
-    Enum,
-}
-
 impl Parser {
-    pub(in crate::parser) fn class_statement(
-        &self,
-        state: &mut State,
-        flags: Vec<ClassFlag>,
-    ) -> ParseResult<Statement> {
-        self.complete_class_statement(state, ClassishDefinitionType::Class(flags))
-    }
-
     pub(in crate::parser) fn interface_statement(
         &self,
         state: &mut State,
@@ -41,7 +23,7 @@ impl Parser {
         }
 
         if state.current.kind == TokenKind::Function {
-            return self.method(state, ClassishDefinitionType::Interface, vec![]);
+            return self.method(state, vec![]);
         }
 
         let member_flags = self.interface_members_flags(state)?;
@@ -50,21 +32,9 @@ impl Parser {
             TokenKind::Const => self.parse_classish_const(state, member_flags),
             TokenKind::Function => self.method(
                 state,
-                ClassishDefinitionType::Interface,
                 member_flags.iter().map(|t| t.clone().into()).collect(),
             )
         ], state, ["`const`", "`function`"])
-    }
-
-    pub(in crate::parser) fn trait_statement(&self, state: &mut State) -> ParseResult<Statement> {
-        self.complete_class_statement(state, ClassishDefinitionType::Trait)
-    }
-
-    pub(in crate::parser) fn anonymous_class_statement(
-        &self,
-        state: &mut State,
-    ) -> ParseResult<Statement> {
-        self.complete_class_statement(state, ClassishDefinitionType::AnonymousClass)
     }
 
     pub(in crate::parser) fn enum_statement(
@@ -99,7 +69,7 @@ impl Parser {
         }
 
         if state.current.kind == TokenKind::Function {
-            return self.method(state, ClassishDefinitionType::Enum, vec![]);
+            return self.method(state, vec![]);
         }
 
         let member_flags = self.enum_members_flags(state)?;
@@ -108,16 +78,14 @@ impl Parser {
             TokenKind::Const => self.parse_classish_const(state, member_flags),
             TokenKind::Function => self.method(
                 state,
-                ClassishDefinitionType::Enum,
                 member_flags.iter().map(|t| t.clone().into()).collect(),
             )
         ], state, ["`const`", "`function`"])
     }
 
-    fn complete_class_statement(
+    pub(in crate::parser) fn class_like_statement(
         &self,
         state: &mut State,
-        class_type: ClassishDefinitionType,
     ) -> ParseResult<Statement> {
         if state.current.kind == TokenKind::Use {
             return self.parse_classish_uses(state);
@@ -132,7 +100,7 @@ impl Parser {
         }
 
         if state.current.kind == TokenKind::Function {
-            return self.method(state, class_type, vec![]);
+            return self.method(state, vec![]);
         }
 
         let member_flags = self.class_members_flags(state)?;
@@ -141,7 +109,6 @@ impl Parser {
             TokenKind::Const => self.parse_classish_const(state, member_flags),
             TokenKind::Function => self.method(
                 state,
-                class_type,
                 member_flags.iter().map(|t| t.clone().into()).collect(),
             ),
             // TODO
