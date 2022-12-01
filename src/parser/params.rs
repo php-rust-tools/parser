@@ -1,12 +1,15 @@
-use crate::expect_token;
+use crate::lexer::token::TokenKind;
+use crate::parser::ast::Arg;
+use crate::parser::ast::Expression;
+use crate::parser::ast::Param;
+use crate::parser::ast::ParamList;
+use crate::parser::ast::PropertyFlag;
 use crate::parser::error::ParseError;
-use crate::TokenKind;
-use crate::{
-    ast::{Arg, ParamList, PropertyFlag},
-    Expression, Param,
-};
+use crate::parser::error::ParseResult;
+use crate::parser::precedence::Precedence;
+use crate::parser::Parser;
 
-use super::{precedence::Precedence, ParseResult, Parser};
+use crate::expect_token;
 
 #[derive(Debug)]
 pub enum ParamPosition {
@@ -16,7 +19,10 @@ pub enum ParamPosition {
 }
 
 impl Parser {
-    pub(crate) fn param_list(&mut self, position: ParamPosition) -> Result<ParamList, ParseError> {
+    pub(in crate::parser) fn param_list(
+        &mut self,
+        position: ParamPosition,
+    ) -> Result<ParamList, ParseError> {
         let mut params = ParamList::new();
 
         while !self.is_eof() && self.current.kind != TokenKind::RightParen {
@@ -105,7 +111,7 @@ impl Parser {
         Ok(params)
     }
 
-    pub(crate) fn args_list(&mut self) -> ParseResult<Vec<Arg>> {
+    pub(in crate::parser) fn args_list(&mut self) -> ParseResult<Vec<Arg>> {
         let mut args = Vec::new();
 
         while !self.is_eof() && self.current.kind != TokenKind::RightParen {

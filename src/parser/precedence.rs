@@ -1,4 +1,4 @@
-use crate::TokenKind;
+use crate::lexer::token::TokenKind;
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]

@@ -1,17 +1,18 @@
-use super::ParseResult;
+use crate::lexer::token::TokenKind;
+use crate::parser::ast::BackedEnumType;
+use crate::parser::ast::Block;
+use crate::parser::ast::ClassFlag;
+use crate::parser::ast::Expression;
+use crate::parser::ast::Identifier;
+use crate::parser::ast::Statement;
+use crate::parser::error::ParseResult;
+use crate::parser::Parser;
+
 use crate::expect_token;
 use crate::expected_token_err;
-use crate::BackedEnumType;
-use crate::Block;
-use crate::ClassFlag;
-use crate::Expression;
-use crate::Identifier;
-use crate::Parser;
-use crate::Statement;
-use crate::TokenKind;
 
 impl Parser {
-    pub(crate) fn class_definition(&mut self) -> ParseResult<Statement> {
+    pub(in crate::parser) fn class_definition(&mut self) -> ParseResult<Statement> {
         let flags: Vec<ClassFlag> = self.class_flags()?.iter().map(|f| f.into()).collect();
 
         expect_token!([TokenKind::Class], self, ["`class`"]);
@@ -58,7 +59,7 @@ impl Parser {
         })
     }
 
-    pub(crate) fn interface_definition(&mut self) -> ParseResult<Statement> {
+    pub(in crate::parser) fn interface_definition(&mut self) -> ParseResult<Statement> {
         expect_token!([TokenKind::Interface], self, ["`interface`"]);
 
         let name = self.ident()?;
@@ -95,7 +96,7 @@ impl Parser {
         })
     }
 
-    pub(crate) fn trait_definition(&mut self) -> ParseResult<Statement> {
+    pub(in crate::parser) fn trait_definition(&mut self) -> ParseResult<Statement> {
         expect_token!([TokenKind::Trait], self, ["`trait`"]);
 
         let name = self.ident()?;
@@ -121,7 +122,7 @@ impl Parser {
         })
     }
 
-    pub(crate) fn anonymous_class_definition(&mut self) -> ParseResult<Expression> {
+    pub(in crate::parser) fn anonymous_class_definition(&mut self) -> ParseResult<Expression> {
         self.next();
 
         expect_token!([TokenKind::Class], self, ["`class`"]);
@@ -173,7 +174,7 @@ impl Parser {
         })
     }
 
-    pub(crate) fn enum_definition(&mut self) -> ParseResult<Statement> {
+    pub(in crate::parser) fn enum_definition(&mut self) -> ParseResult<Statement> {
         self.next();
 
         let name = self.ident()?;

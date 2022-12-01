@@ -1,15 +1,16 @@
-use super::ParseResult;
+use crate::lexer::token::TokenKind;
+use crate::parser::ast::ClassFlag;
+use crate::parser::ast::Identifier;
+use crate::parser::ast::MethodFlag;
+use crate::parser::ast::Statement;
+use crate::parser::ast::TraitAdaptation;
+use crate::parser::error::ParseError;
+use crate::parser::error::ParseResult;
+use crate::parser::precedence::Precedence;
+use crate::parser::Parser;
+
 use crate::expect_token;
 use crate::expected_token_err;
-use crate::parser::precedence::Precedence;
-use crate::ClassFlag;
-use crate::Identifier;
-use crate::MethodFlag;
-use crate::ParseError;
-use crate::Parser;
-use crate::Statement;
-use crate::TokenKind;
-use crate::TraitAdaptation;
 
 #[derive(Debug)]
 pub enum ClassishDefinitionType {
@@ -21,11 +22,14 @@ pub enum ClassishDefinitionType {
 }
 
 impl Parser {
-    pub(crate) fn class_statement(&mut self, flags: Vec<ClassFlag>) -> ParseResult<Statement> {
+    pub(in crate::parser) fn class_statement(
+        &mut self,
+        flags: Vec<ClassFlag>,
+    ) -> ParseResult<Statement> {
         self.complete_class_statement(ClassishDefinitionType::Class(flags))
     }
 
-    pub(crate) fn interface_statement(&mut self) -> ParseResult<Statement> {
+    pub(in crate::parser) fn interface_statement(&mut self) -> ParseResult<Statement> {
         if self.current.kind == TokenKind::Const {
             return self.parse_classish_const(vec![]);
         }
@@ -46,15 +50,15 @@ impl Parser {
         }
     }
 
-    pub(crate) fn trait_statement(&mut self) -> ParseResult<Statement> {
+    pub(in crate::parser) fn trait_statement(&mut self) -> ParseResult<Statement> {
         self.complete_class_statement(ClassishDefinitionType::Trait)
     }
 
-    pub(crate) fn anonymous_class_statement(&mut self) -> ParseResult<Statement> {
+    pub(in crate::parser) fn anonymous_class_statement(&mut self) -> ParseResult<Statement> {
         self.complete_class_statement(ClassishDefinitionType::AnonymousClass)
     }
 
-    pub(crate) fn enum_statement(&mut self, backed: bool) -> ParseResult<Statement> {
+    pub(in crate::parser) fn enum_statement(&mut self, backed: bool) -> ParseResult<Statement> {
         if self.current.kind == TokenKind::Case {
             self.next();
 

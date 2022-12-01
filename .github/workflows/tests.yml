@@ -37,6 +37,6 @@ jobs:
         run: |
           cargo fmt --all -- --check
           cargo clippy
-      
+
       - name: test
         run: ./meta/test --all -- --skip third_party

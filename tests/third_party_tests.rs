@@ -3,8 +3,8 @@ use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
 
-use php_parser_rs::Lexer;
-use php_parser_rs::Parser;
+use php_parser_rs::prelude::Lexer;
+use php_parser_rs::prelude::Parser;
 
 #[test]
 fn third_party_php_standard_library() {
@@ -73,7 +73,7 @@ fn test_directory(root: PathBuf, directory: PathBuf) {
 fn test_file(name: &str, filename: PathBuf) {
     let code = std::fs::read_to_string(&filename).unwrap();
 
-    Lexer::new(None)
+    Lexer::new()
         .tokenize(code.as_bytes())
         .map(|tokens| {
             Parser::new(None)
