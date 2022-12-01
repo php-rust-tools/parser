@@ -397,6 +397,10 @@ pub enum Statement {
         expr: Expression,
     },
     Namespace {
+        name: ByteString,
+        body: Block,
+    },
+    BracedNamespace {
         name: Option<ByteString>,
         body: Block,
     },

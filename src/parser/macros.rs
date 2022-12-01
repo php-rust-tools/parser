@@ -93,3 +93,17 @@ macro_rules! expected_token_err {
         $crate::expected_token_err!([$expected], $state)
     };
 }
+
+#[macro_export]
+macro_rules! scoped {
+    ($state:expr, $scope:expr, $block:block) => {{
+        let scope = $scope;
+        $state.enter(scope.clone());
+
+        let result = $block?;
+
+        $state.exit();
+
+        Ok(result)
+    }};
+}

@@ -1,7 +1,11 @@
+use std::collections::VecDeque;
+
+use crate::lexer::error::SyntaxError;
+use crate::lexer::error::SyntaxResult;
 use crate::lexer::token::Span;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub enum StackState {
+pub enum StackFrame {
     Initial,
     Scripting,
     Halted,
@@ -11,10 +15,9 @@ pub enum StackState {
     VarOffset,
 }
 
-// TODO(azjezz): make `chars` a `[u8, N]`, and `State`, `State<const N: usize>`
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct State {
-    pub stack: Vec<StackState>,
+    pub stack: VecDeque<StackFrame>,
     pub chars: Vec<u8>,
     pub cursor: usize,
     pub current: Option<u8>,
@@ -27,7 +30,7 @@ impl State {
         let current = chars.first().copied();
 
         Self {
-            stack: vec![StackState::Initial],
+            stack: VecDeque::from([StackFrame::Initial]),
             chars,
             current,
             cursor: 0,
@@ -35,16 +38,27 @@ impl State {
         }
     }
 
-    pub fn enter_state(&mut self, state: StackState) {
-        *self.stack.last_mut().unwrap() = state;
+    pub fn set(&mut self, state: StackFrame) -> SyntaxResult<()> {
+        *self
+            .stack
+            .back_mut()
+            .ok_or(SyntaxError::UnpredictableState(self.span))? = state;
+
+        Ok(())
     }
 
-    pub fn push_state(&mut self, state: StackState) {
-        self.stack.push(state);
+    pub fn frame(&self) -> SyntaxResult<&StackFrame> {
+        self.stack
+            .back()
+            .ok_or(SyntaxError::UnpredictableState(self.span))
     }
 
-    pub fn pop_state(&mut self) {
-        self.stack.pop();
+    pub fn enter(&mut self, state: StackFrame) {
+        self.stack.push_back(state);
+    }
+
+    pub fn exit(&mut self) {
+        self.stack.pop_back();
     }
 
     pub fn peek_buf(&self) -> &[u8] {

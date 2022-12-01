@@ -1,36 +1,26 @@
 use crate::expect_literal;
 use crate::expect_token;
 use crate::expected_token_err;
-use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::{
-    ArrayItem, Block, Case, Catch, ClosureUse, Constant, DeclareItem, ElseIf, Expression,
-    IncludeKind, MagicConst, MatchArm, Program, Statement, StaticVar, StringPart,
-    TryBlockCaughtType, Type, Use, UseKind,
+    ArrayItem, Block, Case, Catch, Constant, DeclareItem, ElseIf, Expression, IncludeKind,
+    MagicConst, MatchArm, Program, Statement, StaticVar, StringPart, Use, UseKind,
 };
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
-use crate::parser::ident::is_reserved_ident;
-use crate::parser::params::ParamPosition;
-use crate::parser::precedence::{Associativity, Precedence};
+use crate::parser::internal::ident::is_reserved_ident;
+use crate::parser::internal::precedence::{Associativity, Precedence};
+use crate::parser::state::Scope;
 use crate::parser::state::State;
+use crate::scoped;
 
 pub mod ast;
 pub mod error;
 
-mod block;
-mod classish;
-mod classish_statement;
-mod flags;
-mod functions;
-mod ident;
+mod internal;
 mod macros;
-mod params;
-mod precedence;
-mod punc;
 mod state;
-mod vars;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Default)]
 pub struct Parser;
@@ -68,115 +58,6 @@ impl Parser {
         Ok(ast.to_vec())
     }
 
-    fn try_block_caught_type_string(&self, state: &mut State) -> ParseResult<TryBlockCaughtType> {
-        let id = self.full_name(state)?;
-
-        if state.current.kind == TokenKind::Pipe {
-            state.next();
-
-            let mut types = vec![id.into()];
-
-            while !state.is_eof() {
-                let id = self.full_name(state)?;
-                types.push(id.into());
-
-                if state.current.kind != TokenKind::Pipe {
-                    break;
-                }
-
-                state.next();
-            }
-
-            return Ok(TryBlockCaughtType::Union(types));
-        }
-
-        Ok(TryBlockCaughtType::Identifier(id.into()))
-    }
-
-    fn type_string(&self, state: &mut State) -> ParseResult<Type> {
-        if state.current.kind == TokenKind::Question {
-            state.next();
-            let t = self.type_with_static(state)?;
-            return Ok(Type::Nullable(Box::new(parse_simple_type(t))));
-        }
-
-        let id = self.type_with_static(state)?;
-
-        if state.current.kind == TokenKind::Pipe {
-            state.next();
-
-            let r#type = parse_simple_type(id);
-            if r#type.standalone() {
-                return Err(ParseError::StandaloneTypeUsedInCombination(
-                    r#type,
-                    state.current.span,
-                ));
-            }
-
-            let mut types = vec![r#type];
-
-            while !state.is_eof() {
-                let id = self.type_with_static(state)?;
-                let r#type = parse_simple_type(id);
-                if r#type.standalone() {
-                    return Err(ParseError::StandaloneTypeUsedInCombination(
-                        r#type,
-                        state.current.span,
-                    ));
-                }
-
-                types.push(r#type);
-
-                if state.current.kind != TokenKind::Pipe {
-                    break;
-                } else {
-                    state.next();
-                }
-            }
-
-            return Ok(Type::Union(types));
-        }
-
-        if state.current.kind == TokenKind::Ampersand
-            && !matches!(state.peek.kind, TokenKind::Variable(_))
-        {
-            state.next();
-
-            let r#type = parse_simple_type(id);
-            if r#type.standalone() {
-                return Err(ParseError::StandaloneTypeUsedInCombination(
-                    r#type,
-                    state.current.span,
-                ));
-            }
-
-            let mut types = vec![r#type];
-
-            while !state.is_eof() {
-                let id = self.type_with_static(state)?;
-                let r#type = parse_simple_type(id);
-                if r#type.standalone() {
-                    return Err(ParseError::StandaloneTypeUsedInCombination(
-                        r#type,
-                        state.current.span,
-                    ));
-                }
-
-                types.push(r#type);
-
-                if state.current.kind != TokenKind::Ampersand {
-                    break;
-                } else {
-                    state.next();
-                }
-            }
-
-            return Ok(Type::Intersection(types));
-        }
-
-        Ok(parse_simple_type(id))
-    }
-
     fn top_level_statement(&self, state: &mut State) -> ParseResult<Statement> {
         state.skip_comments();
 
@@ -184,40 +65,45 @@ impl Parser {
             TokenKind::Namespace => {
                 state.next();
 
-                let mut braced = false;
+                if state.current.kind != TokenKind::LeftBrace {
+                    let name = self.name(state)?;
 
-                let name = if state.current.kind == TokenKind::LeftBrace {
-                    braced = true;
-                    self.lbrace(state)?;
-                    None
-                } else {
-                    Some(self.name(state)?)
-                };
-
-                if name.is_some() {
                     if state.current.kind == TokenKind::LeftBrace {
-                        braced = true;
-                        state.next();
+                        self.lbrace(state)?;
+
+                        let body = scoped!(state, Scope::BracedNamespace(Some(name.clone())), {
+                            self.block(state, &TokenKind::RightBrace)
+                        })?;
+
+                        self.rbrace(state)?;
+
+                        Statement::BracedNamespace {
+                            name: Some(name),
+                            body,
+                        }
                     } else {
-                        self.semi(state)?;
-                    }
-                }
+                        let body = scoped!(state, Scope::Namespace(name.clone()), {
+                            let mut body = Block::new();
+                            while !state.is_eof() {
+                                body.push(self.top_level_statement(state)?);
+                            }
 
-                let body = if braced {
-                    self.block(state, &TokenKind::RightBrace)?
+                            Ok(body)
+                        })?;
+
+                        Statement::Namespace { name, body }
+                    }
                 } else {
-                    let mut body = Block::new();
-                    while !state.is_eof() {
-                        body.push(self.top_level_statement(state)?);
-                    }
-                    body
-                };
+                    self.lbrace(state)?;
 
-                if braced {
+                    let body = scoped!(state, Scope::BracedNamespace(None), {
+                        self.block(state, &TokenKind::RightBrace)
+                    })?;
+
                     self.rbrace(state)?;
-                }
 
-                Statement::Namespace { name, body }
+                    Statement::BracedNamespace { name: None, body }
+                }
             }
             TokenKind::Use => {
                 state.next();
@@ -1251,161 +1137,12 @@ impl Parser {
 
                 Expression::Array { items }
             }
-            TokenKind::Static if matches!(state.peek.kind, TokenKind::Function | TokenKind::Fn) => {
-                state.next();
-
-                match self.expression(state, Precedence::Lowest)? {
-                    Expression::Closure {
-                        params,
-                        uses,
-                        return_type,
-                        body,
-                        by_ref,
-                        ..
-                    } => Expression::Closure {
-                        params,
-                        uses,
-                        return_type,
-                        body,
-                        by_ref,
-                        r#static: true,
-                    },
-                    Expression::ArrowFunction {
-                        params,
-                        return_type,
-                        expr,
-                        by_ref,
-                        ..
-                    } => Expression::ArrowFunction {
-                        params,
-                        return_type,
-                        expr,
-                        by_ref,
-                        r#static: true,
-                    },
-                    _ => unreachable!(),
-                }
+            TokenKind::Static if state.peek.kind == TokenKind::Function => {
+                self.anonymous_function(state)?
             }
-            TokenKind::Function => {
-                state.next();
-
-                let by_ref = if state.current.kind == TokenKind::Ampersand {
-                    state.next();
-                    true
-                } else {
-                    false
-                };
-
-                self.lparen(state)?;
-
-                let params = self.param_list(state, ParamPosition::Function)?;
-
-                self.rparen(state)?;
-
-                let mut uses = vec![];
-                if state.current.kind == TokenKind::Use {
-                    state.next();
-
-                    self.lparen(state)?;
-
-                    while state.current.kind != TokenKind::RightParen {
-                        let var = match state.current.kind {
-                            TokenKind::Ampersand => {
-                                state.next();
-
-                                match self.expression(state, Precedence::Lowest)? {
-                                    s @ Expression::Variable { .. } => ClosureUse {
-                                        var: s,
-                                        by_ref: true,
-                                    },
-                                    _ => {
-                                        return Err(ParseError::UnexpectedToken(
-                                            "expected variable".into(),
-                                            state.current.span,
-                                        ))
-                                    }
-                                }
-                            }
-                            _ => match self.expression(state, Precedence::Lowest)? {
-                                s @ Expression::Variable { .. } => ClosureUse {
-                                    var: s,
-                                    by_ref: false,
-                                },
-                                _ => {
-                                    return Err(ParseError::UnexpectedToken(
-                                        "expected variable".into(),
-                                        state.current.span,
-                                    ))
-                                }
-                            },
-                        };
-
-                        uses.push(var);
-
-                        self.optional_comma(state)?;
-                    }
-
-                    self.rparen(state)?;
-                }
-
-                let mut return_type = None;
-                if state.current.kind == TokenKind::Colon {
-                    self.colon(state)?;
-
-                    return_type = Some(self.type_string(state)?);
-                }
-
-                self.lbrace(state)?;
-
-                let body = self.block(state, &TokenKind::RightBrace)?;
-
-                self.rbrace(state)?;
-
-                Expression::Closure {
-                    params,
-                    uses,
-                    return_type,
-                    body,
-                    r#static: false,
-                    by_ref,
-                }
-            }
-            TokenKind::Fn => {
-                state.next();
-
-                let by_ref = if state.current.kind == TokenKind::Ampersand {
-                    state.next();
-                    true
-                } else {
-                    false
-                };
-
-                self.lparen(state)?;
-
-                let params = self.param_list(state, ParamPosition::Function)?;
-
-                self.rparen(state)?;
-
-                let mut return_type = None;
-
-                if state.current.kind == TokenKind::Colon {
-                    self.colon(state)?;
-
-                    return_type = Some(self.type_string(state)?);
-                }
-
-                expect_token!([TokenKind::DoubleArrow], state, ["`=>`"]);
-
-                let value = self.expression(state, Precedence::Lowest)?;
-
-                Expression::ArrowFunction {
-                    params,
-                    return_type,
-                    expr: Box::new(value),
-                    by_ref,
-                    r#static: false,
-                }
-            }
+            TokenKind::Static if state.peek.kind == TokenKind::Fn => self.arrow_function(state)?,
+            TokenKind::Function => self.anonymous_function(state)?,
+            TokenKind::Fn => self.arrow_function(state)?,
             TokenKind::New if state.peek.kind == TokenKind::Class => {
                 self.anonymous_class_definition(state)?
             }
@@ -1852,28 +1589,6 @@ impl Parser {
         state.next();
 
         Ok(Expression::InterpolatedString { parts })
-    }
-}
-
-fn parse_simple_type(id: ByteString) -> Type {
-    let name = &id[..];
-    let lowered_name = name.to_ascii_lowercase();
-    match lowered_name.as_slice() {
-        b"void" => Type::Void,
-        b"never" => Type::Never,
-        b"null" => Type::Null,
-        b"true" => Type::True,
-        b"false" => Type::False,
-        b"float" => Type::Float,
-        b"bool" => Type::Boolean,
-        b"int" => Type::Integer,
-        b"string" => Type::String,
-        b"array" => Type::Array,
-        b"object" => Type::Object,
-        b"mixed" => Type::Mixed,
-        b"iterable" => Type::Iterable,
-        b"callable" => Type::Callable,
-        _ => Type::Identifier(id.into()),
     }
 }
 

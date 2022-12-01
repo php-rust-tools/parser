@@ -9,7 +9,8 @@ use std::num::IntErrorKind;
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::error::SyntaxError;
-use crate::lexer::state::StackState;
+use crate::lexer::error::SyntaxResult;
+use crate::lexer::state::StackFrame;
 use crate::lexer::state::State;
 use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::Span;
@@ -27,21 +28,21 @@ impl Lexer {
         Self {}
     }
 
-    pub fn tokenize<B: ?Sized + AsRef<[u8]>>(&self, input: &B) -> Result<Vec<Token>, SyntaxError> {
+    pub fn tokenize<B: ?Sized + AsRef<[u8]>>(&self, input: &B) -> SyntaxResult<Vec<Token>> {
         let mut state = State::new(input);
         let mut tokens = Vec::new();
 
         while state.current.is_some() {
-            match state.stack.last().unwrap() {
+            match state.frame()? {
                 // The "Initial" state is used to parse inline HTML. It is essentially a catch-all
                 // state that will build up a single token buffer until it encounters an open tag
                 // of some description.
-                StackState::Initial => {
+                StackFrame::Initial => {
                     tokens.append(&mut self.initial(&mut state)?);
                 }
                 // The scripting state is entered when an open tag is encountered in the source code.
                 // This tells the lexer to start analysing characters at PHP tokens instead of inline HTML.
-                StackState::Scripting => {
+                StackFrame::Scripting => {
                     self.skip_whitespace(&mut state);
 
                     // If we have consumed whitespace and then reached the end of the file, we should break.
@@ -54,7 +55,7 @@ impl Lexer {
                 // The "Halted" state is entered when the `__halt_compiler` token is encountered.
                 // In this state, all the text that follows is no longer parsed as PHP as is collected
                 // into a single "InlineHtml" token (kind of cheating, oh well).
-                StackState::Halted => {
+                StackFrame::Halted => {
                     tokens.push(Token {
                         kind: TokenKind::InlineHtml(state.chars[state.cursor..].into()),
                         span: state.span,
@@ -63,22 +64,22 @@ impl Lexer {
                 }
                 // The double quote state is entered when inside a double-quoted string that
                 // contains variables.
-                StackState::DoubleQuote => tokens.extend(self.double_quote(&mut state)?),
+                StackFrame::DoubleQuote => tokens.extend(self.double_quote(&mut state)?),
                 // LookingForProperty is entered inside double quotes,
                 // backticks, or a heredoc, expecting a variable name.
                 // If one isn't found, it switches to scripting.
-                StackState::LookingForVarname => {
-                    if let Some(token) = self.looking_for_varname(&mut state) {
+                StackFrame::LookingForVarname => {
+                    if let Some(token) = self.looking_for_varname(&mut state)? {
                         tokens.push(token);
                     }
                 }
                 // LookingForProperty is entered inside double quotes,
                 // backticks, or a heredoc, expecting an arrow followed by a
                 // property name.
-                StackState::LookingForProperty => {
+                StackFrame::LookingForProperty => {
                     tokens.push(self.looking_for_property(&mut state)?);
                 }
-                StackState::VarOffset => {
+                StackFrame::VarOffset => {
                     if state.current.is_none() {
                         break;
                     }
@@ -97,7 +98,7 @@ impl Lexer {
         }
     }
 
-    fn initial(&self, state: &mut State) -> Result<Vec<Token>, SyntaxError> {
+    fn initial(&self, state: &mut State) -> SyntaxResult<Vec<Token>> {
         let inline_span = state.span;
         let mut buffer = Vec::new();
         while let Some(char) = state.current {
@@ -105,7 +106,7 @@ impl Lexer {
                 let tag_span = state.span;
                 state.skip(5);
 
-                state.enter_state(StackState::Scripting);
+                state.set(StackFrame::Scripting)?;
 
                 let mut tokens = vec![];
 
@@ -134,7 +135,7 @@ impl Lexer {
         }])
     }
 
-    fn scripting(&self, state: &mut State) -> Result<Token, SyntaxError> {
+    fn scripting(&self, state: &mut State) -> SyntaxResult<Token> {
         let span = state.span;
         let kind = match state.peek_buf() {
             [b'@', ..] => {
@@ -170,7 +171,7 @@ impl Lexer {
                 // This is a close tag, we can enter "Initial" mode again.
                 state.skip(2);
 
-                state.enter_state(StackState::Initial);
+                state.set(StackFrame::Initial)?;
 
                 TokenKind::CloseTag
             }
@@ -304,7 +305,7 @@ impl Lexer {
                         match state.peek_buf() {
                             [b'(', b')', b';', ..] => {
                                 state.skip(3);
-                                state.enter_state(StackState::Halted);
+                                state.set(StackFrame::Halted)?;
                             }
                             _ => return Err(SyntaxError::InvalidHaltCompiler(state.span)),
                         }
@@ -411,12 +412,12 @@ impl Lexer {
             }
             [b'{', ..] => {
                 state.next();
-                state.push_state(StackState::Scripting);
+                state.enter(StackFrame::Scripting);
                 TokenKind::LeftBrace
             }
             [b'}', ..] => {
                 state.next();
-                state.pop_state();
+                state.exit();
                 TokenKind::RightBrace
             }
             [b'(', ..] => {
@@ -591,25 +592,25 @@ impl Lexer {
         Ok(Token { kind, span })
     }
 
-    fn double_quote(&self, state: &mut State) -> Result<Vec<Token>, SyntaxError> {
+    fn double_quote(&self, state: &mut State) -> SyntaxResult<Vec<Token>> {
         let span = state.span;
         let mut buffer = Vec::new();
         let kind = loop {
             match state.peek_buf() {
                 [b'$', b'{', ..] => {
                     state.skip(2);
-                    state.push_state(StackState::LookingForVarname);
+                    state.enter(StackFrame::LookingForVarname);
                     break TokenKind::DollarLeftBrace;
                 }
                 [b'{', b'$', ..] => {
                     // Intentionally only consume the left brace.
                     state.next();
-                    state.push_state(StackState::Scripting);
+                    state.enter(StackFrame::Scripting);
                     break TokenKind::LeftBrace;
                 }
                 [b'"', ..] => {
                     state.next();
-                    state.enter_state(StackState::Scripting);
+                    state.set(StackFrame::Scripting)?;
                     break TokenKind::DoubleQuote;
                 }
                 [b'$', ident_start!(), ..] => {
@@ -617,10 +618,10 @@ impl Lexer {
                     let ident = self.consume_identifier(state);
 
                     match state.peek_buf() {
-                        [b'[', ..] => state.push_state(StackState::VarOffset),
+                        [b'[', ..] => state.enter(StackFrame::VarOffset),
                         [b'-', b'>', ident_start!(), ..]
                         | [b'?', b'-', b'>', ident_start!(), ..] => {
-                            state.push_state(StackState::LookingForProperty)
+                            state.enter(StackFrame::LookingForProperty)
                         }
                         _ => {}
                     }
@@ -647,7 +648,7 @@ impl Lexer {
         Ok(tokens)
     }
 
-    fn looking_for_varname(&self, state: &mut State) -> Option<Token> {
+    fn looking_for_varname(&self, state: &mut State) -> SyntaxResult<Option<Token>> {
         let identifier = self.peek_identifier(state);
 
         if let Some(ident) = identifier {
@@ -655,19 +656,20 @@ impl Lexer {
                 let ident = ident.to_vec();
                 let span = state.span;
                 state.skip(ident.len());
-                state.enter_state(StackState::Scripting);
-                return Some(Token {
+                state.set(StackFrame::Scripting)?;
+                return Ok(Some(Token {
                     kind: TokenKind::Identifier(ident.into()),
                     span,
-                });
+                }));
             }
         }
 
-        state.enter_state(StackState::Scripting);
-        None
+        state.set(StackFrame::Scripting)?;
+
+        Ok(None)
     }
 
-    fn looking_for_property(&self, state: &mut State) -> Result<Token, SyntaxError> {
+    fn looking_for_property(&self, state: &mut State) -> SyntaxResult<Token> {
         let span = state.span;
         let kind = match state.peek_buf() {
             [b'-', b'>', ..] => {
@@ -680,7 +682,7 @@ impl Lexer {
             }
             &[ident_start!(), ..] => {
                 let buffer = self.consume_identifier(state);
-                state.pop_state();
+                state.exit();
                 TokenKind::Identifier(buffer.into())
             }
             // Should be impossible as we already looked ahead this far inside double_quote.
@@ -689,7 +691,7 @@ impl Lexer {
         Ok(Token { kind, span })
     }
 
-    fn var_offset(&self, state: &mut State) -> Result<Token, SyntaxError> {
+    fn var_offset(&self, state: &mut State) -> SyntaxResult<Token> {
         let span = state.span;
         let kind = match state.peek_buf() {
             [b'$', ident_start!(), ..] => {
@@ -712,7 +714,7 @@ impl Lexer {
             }
             [b']', ..] => {
                 state.next();
-                state.pop_state();
+                state.exit();
                 TokenKind::RightBracket
             }
             &[ident_start!(), ..] => {
@@ -730,7 +732,7 @@ impl Lexer {
         Ok(Token { kind, span })
     }
 
-    fn tokenize_single_quote_string(&self, state: &mut State) -> Result<TokenKind, SyntaxError> {
+    fn tokenize_single_quote_string(&self, state: &mut State) -> SyntaxResult<TokenKind> {
         let mut buffer = Vec::new();
 
         loop {
@@ -754,7 +756,7 @@ impl Lexer {
         Ok(TokenKind::LiteralString(buffer.into()))
     }
 
-    fn tokenize_double_quote_string(&self, state: &mut State) -> Result<TokenKind, SyntaxError> {
+    fn tokenize_double_quote_string(&self, state: &mut State) -> SyntaxResult<TokenKind> {
         let mut buffer = Vec::new();
 
         let constant = loop {
@@ -864,7 +866,7 @@ impl Lexer {
         Ok(if constant {
             TokenKind::LiteralString(buffer.into())
         } else {
-            state.enter_state(StackState::DoubleQuote);
+            state.set(StackFrame::DoubleQuote)?;
             TokenKind::StringPart(buffer.into())
         })
     }
@@ -893,7 +895,7 @@ impl Lexer {
         TokenKind::Variable(self.consume_identifier(state).into())
     }
 
-    fn tokenize_number(&self, state: &mut State) -> Result<TokenKind, SyntaxError> {
+    fn tokenize_number(&self, state: &mut State) -> SyntaxResult<TokenKind> {
         let mut buffer = String::new();
 
         let (base, kind) = match state.peek_buf() {
@@ -1000,7 +1002,7 @@ impl Lexer {
 
 // Parses an integer literal in the given base and converts errors to SyntaxError.
 // It returns a float token instead on overflow.
-fn parse_int(buffer: &str, base: u32, span: Span) -> Result<TokenKind, SyntaxError> {
+fn parse_int(buffer: &str, base: u32, span: Span) -> SyntaxResult<TokenKind> {
     match i64::from_str_radix(buffer, base) {
         Ok(i) => Ok(TokenKind::LiteralInteger(i)),
         Err(err) if err.kind() == &IntErrorKind::InvalidDigit => {
