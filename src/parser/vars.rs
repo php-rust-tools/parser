@@ -1,9 +1,12 @@
-use super::{ParseError, ParseResult, Precedence};
-use crate::TokenKind;
-use crate::{Expression, Parser};
+use crate::lexer::token::TokenKind;
+use crate::parser::ast::Expression;
+use crate::parser::error::ParseError;
+use crate::parser::error::ParseResult;
+use crate::parser::precedence::Precedence;
+use crate::parser::Parser;
 
 impl Parser {
-    pub(crate) fn dynamic_variable(&mut self) -> ParseResult<Expression> {
+    pub(in crate::parser) fn dynamic_variable(&mut self) -> ParseResult<Expression> {
         self.next();
 
         Ok(match &self.current.kind {

@@ -1,16 +1,16 @@
-use super::classish_statement::ClassishDefinitionType;
-use super::params::ParamPosition;
-use super::ParseResult;
-use crate::ByteString;
-use crate::ClassFlag;
-use crate::MethodFlag;
-use crate::ParseError;
-use crate::Parser;
-use crate::Statement;
-use crate::TokenKind;
+use crate::lexer::byte_string::ByteString;
+use crate::lexer::token::TokenKind;
+use crate::parser::ast::ClassFlag;
+use crate::parser::ast::MethodFlag;
+use crate::parser::ast::Statement;
+use crate::parser::classish_statement::ClassishDefinitionType;
+use crate::parser::error::ParseError;
+use crate::parser::error::ParseResult;
+use crate::parser::params::ParamPosition;
+use crate::parser::Parser;
 
 impl Parser {
-    pub(crate) fn function(&mut self) -> ParseResult<Statement> {
+    pub(in crate::parser) fn function(&mut self) -> ParseResult<Statement> {
         self.next();
 
         let by_ref = if self.current.kind == TokenKind::Ampersand {
@@ -51,7 +51,7 @@ impl Parser {
         })
     }
 
-    pub(crate) fn method(
+    pub(in crate::parser) fn method(
         &mut self,
         class_type: ClassishDefinitionType,
         flags: Vec<MethodFlag>,

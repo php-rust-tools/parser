@@ -1,16 +1,44 @@
-use php_parser_rs::{Lexer, Parser};
+use php_parser_rs::prelude::Lexer;
+use php_parser_rs::prelude::Parser;
 
 fn main() {
-    let file = std::env::args().nth(1).unwrap();
-    let contents = std::fs::read_to_string(&file).unwrap();
+    let file = match std::env::args().nth(1) {
+        Some(file) => file,
+        None => {
+            println!("Usage: php-parser [file]");
 
-    println!("> Parsing {}", file);
+            ::std::process::exit(0);
+        }
+    };
 
-    let mut lexer = Lexer::new(None);
-    let tokens = lexer.tokenize(contents.as_bytes()).unwrap();
+    let contents = match std::fs::read_to_string(&file) {
+        Ok(contents) => contents,
+        Err(error) => {
+            println!("Failed to read file: {}", error);
+
+            ::std::process::exit(1);
+        }
+    };
+
+    let mut lexer = Lexer::new();
+    let tokens = match lexer.tokenize(contents.as_bytes()) {
+        Ok(tokens) => tokens,
+        Err(error) => {
+            println!("{}", error);
+
+            ::std::process::exit(1);
+        }
+    };
 
     let mut parser = Parser::new(None);
-    let ast = parser.parse(tokens).unwrap();
+    let ast = match parser.parse(tokens) {
+        Ok(ast) => ast,
+        Err(error) => {
+            println!("{}", error);
+
+            ::std::process::exit(1);
+        }
+    };
 
     dbg!(ast);
 }

@@ -3,22 +3,21 @@ use std::vec::IntoIter;
 use crate::expect_literal;
 use crate::expect_token;
 use crate::expected_token_err;
-use crate::lexer::{Token, TokenKind};
+use crate::lexer::byte_string::ByteString;
+use crate::lexer::token::Token;
+use crate::lexer::token::TokenKind;
+use crate::parser::ast::{
+    ArrayItem, Block, Case, Catch, ClosureUse, Constant, DeclareItem, ElseIf, Expression,
+    IncludeKind, MagicConst, MatchArm, Program, Statement, StaticVar, StringPart,
+    TryBlockCaughtType, Type, Use, UseKind,
+};
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::ident::is_reserved_ident;
+use crate::parser::params::ParamPosition;
 use crate::parser::precedence::{Associativity, Precedence};
-use crate::{
-    ast::{
-        ArrayItem, ClosureUse, Constant, DeclareItem, ElseIf, IncludeKind, MagicConst, StaticVar,
-        StringPart, Use, UseKind,
-    },
-    Block, Case, Catch, Expression, MatchArm, Program, Statement, Type,
-};
-use crate::{ByteString, TryBlockCaughtType};
 
-use self::ident::is_reserved_ident;
-use self::params::ParamPosition;
-
+pub mod ast;
 pub mod error;
 
 mod block;

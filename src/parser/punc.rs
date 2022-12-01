@@ -1,42 +1,41 @@
-use crate::TokenKind;
+use crate::lexer::token::TokenKind;
+use crate::parser::error::ParseResult;
+use crate::parser::Parser;
 
 use crate::expect_token;
-use crate::Parser;
-
-use super::ParseResult;
 
 impl Parser {
-    pub(crate) fn semi(&mut self) -> ParseResult<()> {
+    pub(in crate::parser) fn semi(&mut self) -> ParseResult<()> {
         expect_token!([TokenKind::SemiColon], self, "`;`");
         Ok(())
     }
 
-    pub(crate) fn lbrace(&mut self) -> ParseResult<()> {
+    pub(in crate::parser) fn lbrace(&mut self) -> ParseResult<()> {
         expect_token!([TokenKind::LeftBrace], self, "`{`");
         Ok(())
     }
 
-    pub(crate) fn rbrace(&mut self) -> ParseResult<()> {
+    pub(in crate::parser) fn rbrace(&mut self) -> ParseResult<()> {
         expect_token!([TokenKind::RightBrace], self, "`}`");
         Ok(())
     }
 
-    pub(crate) fn lparen(&mut self) -> ParseResult<()> {
+    pub(in crate::parser) fn lparen(&mut self) -> ParseResult<()> {
         expect_token!([TokenKind::LeftParen], self, "`(`");
         Ok(())
     }
 
-    pub(crate) fn rparen(&mut self) -> ParseResult<()> {
+    pub(in crate::parser) fn rparen(&mut self) -> ParseResult<()> {
         expect_token!([TokenKind::RightParen], self, "`)`");
         Ok(())
     }
 
-    pub(crate) fn rbracket(&mut self) -> ParseResult<()> {
+    pub(in crate::parser) fn rbracket(&mut self) -> ParseResult<()> {
         expect_token!([TokenKind::RightBracket], self, "`]`");
         Ok(())
     }
 
-    pub(crate) fn optional_comma(&mut self) -> ParseResult<()> {
+    pub(in crate::parser) fn optional_comma(&mut self) -> ParseResult<()> {
         if self.current.kind == TokenKind::Comma {
             expect_token!([TokenKind::Comma], self, "`,`");
         }
@@ -44,7 +43,7 @@ impl Parser {
         Ok(())
     }
 
-    pub(crate) fn colon(&mut self) -> ParseResult<()> {
+    pub(in crate::parser) fn colon(&mut self) -> ParseResult<()> {
         expect_token!([TokenKind::Colon], self, "`:`");
 
         Ok(())
