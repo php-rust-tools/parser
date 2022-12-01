@@ -17,7 +17,7 @@ pub enum Scope {
     Interface(ByteString),
     Class(ByteString, Vec<ClassFlag>),
     Trait(ByteString),
-    Enum(ByteString),
+    Enum(ByteString, bool),
     AnonymousClass,
 
     Function(ByteString),

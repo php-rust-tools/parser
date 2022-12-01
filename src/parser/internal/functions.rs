@@ -1,4 +1,5 @@
 use crate::expect_token;
+use crate::expected_scope;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::ClassFlag;
 use crate::parser::ast::ClosureUse;
@@ -203,32 +204,32 @@ impl Parser {
 
         let name = self.ident_maybe_reserved(state)?;
 
+        let has_body = expected_scope!([
+            Scope::Class(_, cf) => {
+                if !cf.contains(&ClassFlag::Abstract) && flags.contains(&MethodFlag::Abstract) {
+                    return Err(ParseError::AbstractModifierOnNonAbstractClassMethod(
+                        state.current.span,
+                    ));
+                }
+
+                !flags.contains(&MethodFlag::Abstract)
+            },
+            Scope::Trait(_) => !flags.contains(&MethodFlag::Abstract),
+            Scope::Interface(_) => false,
+            Scope::Enum(enum_name, _) => {
+                if name.to_string() == "__construct" {
+                    return Err(ParseError::ConstructorInEnum(
+                        state.named(&enum_name),
+                        state.current.span,
+                    ));
+                }
+
+                true
+            },
+            Scope::AnonymousClass => true,
+        ], state);
+
         scoped!(state, Scope::Method(name.clone(), flags.clone()), {
-            let has_body = match state.parent()? {
-                Scope::Class(_, cf) => {
-                    if !cf.contains(&ClassFlag::Abstract) && flags.contains(&MethodFlag::Abstract) {
-                        return Err(ParseError::AbstractModifierOnNonAbstractClassMethod(
-                            state.current.span,
-                        ));
-                    }
-
-                    !flags.contains(&MethodFlag::Abstract)
-                }
-                Scope::Trait(_) => !flags.contains(&MethodFlag::Abstract),
-                Scope::Interface(_) => false,
-                Scope::Enum(enum_name) => {
-                    if name.to_string() == "__construct" {
-                        return Err(ParseError::ConstructorInEnum(
-                            state.named(enum_name),
-                            state.current.span,
-                        ));
-                    }
-
-                    true
-                }
-                _ => true,
-            };
-
             self.lparen(state)?;
 
             let params = self.param_list(state)?;

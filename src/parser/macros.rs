@@ -1,43 +1,43 @@
 #[macro_export]
 macro_rules! peek_token {
-    ([ $($expected:pat => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
         $state.skip_comments();
         match $state.current.kind.clone() {
             $(
-                $expected => $out,
+                $( $pattern )|+ $( if $guard )? => $out,
             )+
             _ => {
                 return $crate::expected_token_err!([ $($message,)+ ], $state);
             }
         }
     }};
-    ([ $($expected:pat),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )?),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
         $state.skip_comments();
-        if !matches!($state.current.kind, $(| $expected )+) {
+        if !matches!($state.current.kind, $( $pattern )|+ $( if $guard )?) {
             return $crate::expected_token_err!([ $($message,)+ ], $state);
         }
     }};
-    ([ $($expected:pat => $out:expr),+ $(,)? ], $state:expr, $message:literal) => {
-        $crate::peek_token!([ $($expected => $out,)+ ], $state, [$message])
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, $message:literal) => {
+        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )? => $out,)+ ], $state, [$message])
     };
-    ([ $($expected:pat),+ $(,)? ], $state:expr, $message:literal) => {
-        $crate::peek_token!([ $($expected,)+ ], $state, [$message])
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )?),+ $(,)? ], $state:expr, $message:literal) => {
+        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )?,)+ ], $state, [$message])
     };
 }
 
 #[macro_export]
 macro_rules! expect_token {
-    ([ $($expected:pat => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {
-        $crate::peek_token!([ $($expected => { $state.next(); $out },)+ ], $state, [$($message,)+])
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {
+        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )? => { $state.next(); $out },)+ ], $state, [$($message,)+])
     };
-    ([ $($expected:pat),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {
-        $crate::peek_token!([ $($expected => { $state.next(); },)+ ], $state, [$($message,)+])
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )?),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {
+        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )? => { $state.next(); },)+ ], $state, [$($message,)+])
     };
-    ([ $($expected:pat => $out:expr),+ $(,)? ], $state:expr, $message:literal) => {
-        $crate::peek_token!([ $($expected => { $state.next(); $out },)+ ], $state, [$message])
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, $message:literal) => {
+        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )? => { $state.next(); $out },)+ ], $state, [$message])
     };
-    ([ $($expected:pat),+ $(,)? ], $state:expr, $message:literal) => {
-        $crate::peek_token!([ $($expected => { $state.next(); },)+ ], $state, [$message])
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )?),+ $(,)? ], $state:expr, $message:literal) => {
+        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )? => { $state.next(); },)+ ], $state, [$message])
     };
 }
 
@@ -92,6 +92,20 @@ macro_rules! expected_token_err {
     ($expected:literal, $state:expr $(,)?) => {
         $crate::expected_token_err!([$expected], $state)
     };
+}
+
+#[macro_export]
+macro_rules! expected_scope {
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr) => {{
+        match $state.scope().cloned()? {
+            $(
+                $( $pattern )|+ $( if $guard )? => $out,
+            )+
+            _ => {
+                return Err($crate::parser::error::ParseError::UnpredictableState($state.current.span));
+            }
+        }
+    }};
 }
 
 #[macro_export]

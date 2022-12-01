@@ -1,3 +1,4 @@
+use crate::expected_scope;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::Identifier;
 use crate::parser::ast::MethodFlag;
@@ -6,6 +7,7 @@ use crate::parser::ast::TraitAdaptation;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::precedence::Precedence;
+use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
@@ -37,17 +39,25 @@ impl Parser {
         ], state, ["`const`", "`function`"])
     }
 
-    pub(in crate::parser) fn enum_statement(
-        &self,
-        state: &mut State,
-        backed: bool,
-    ) -> ParseResult<Statement> {
+    pub(in crate::parser) fn enum_statement(&self, state: &mut State) -> ParseResult<Statement> {
+        let (enum_name, backed) = expected_scope!([
+            Scope::Enum(enum_name, backed) => (enum_name, backed),
+        ], state);
+
         if state.current.kind == TokenKind::Case {
             state.next();
 
             let name = self.ident(state)?;
 
             if backed {
+                if state.current.kind == TokenKind::SemiColon {
+                    return Err(ParseError::MissingCaseValueForBackedEnum(
+                        name.to_string(),
+                        state.named(&enum_name),
+                        state.current.span,
+                    ));
+                }
+
                 expect_token!([TokenKind::Equals], state, "`=`");
 
                 let value = self.expression(state, Precedence::Lowest)?;
@@ -58,6 +68,14 @@ impl Parser {
                     value,
                 });
             } else {
+                if state.current.kind == TokenKind::Equals {
+                    return Err(ParseError::CaseValueForUnitEnum(
+                        name.to_string(),
+                        state.named(&enum_name),
+                        state.current.span,
+                    ));
+                }
+
                 self.semi(state)?;
 
                 return Ok(Statement::UnitEnumCase { name: name.into() });

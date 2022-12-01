@@ -11,7 +11,6 @@ use crate::parser::state::State;
 use crate::parser::Parser;
 
 use crate::expect_token;
-use crate::expected_token_err;
 use crate::scoped;
 
 impl Parser {
@@ -195,28 +194,23 @@ impl Parser {
 
         let name = self.ident(state)?;
 
-        scoped!(state, Scope::Enum(name.clone()), {
-            let backed_type: Option<BackedEnumType> = if state.current.kind == TokenKind::Colon {
-                self.colon(state)?;
+        let backed_type: Option<BackedEnumType> = if state.current.kind == TokenKind::Colon {
+            self.colon(state)?;
 
-                match state.current.kind.clone() {
-                    TokenKind::Identifier(s) if s == b"string" || s == b"int" => {
-                        state.next();
+            expect_token!([
+                TokenKind::Identifier(s) if s == b"string" || s == b"int" => {
+                    Some(match &s[..] {
+                        b"string" => BackedEnumType::String,
+                        b"int" => BackedEnumType::Int,
+                        _ => unreachable!(),
+                    })
+                },
+            ], state, ["`string`", "`int`",])
+        } else {
+            None
+        };
 
-                        Some(match &s[..] {
-                            b"string" => BackedEnumType::String,
-                            b"int" => BackedEnumType::Int,
-                            _ => unreachable!(),
-                        })
-                    }
-                    _ => {
-                        return expected_token_err!(["`string`", "`int`"], state);
-                    }
-                }
-            } else {
-                None
-            };
-
+        scoped!(state, Scope::Enum(name.clone(), backed_type.is_some()), {
             let mut implements = Vec::new();
             if state.current.kind == TokenKind::Implements {
                 state.next();
@@ -233,7 +227,7 @@ impl Parser {
             let mut body = Block::new();
             while state.current.kind != TokenKind::RightBrace {
                 state.skip_comments();
-                body.push(self.enum_statement(state, backed_type.is_some())?);
+                body.push(self.enum_statement(state)?);
             }
 
             self.rbrace(state)?;
