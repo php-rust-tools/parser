@@ -3,10 +3,12 @@ use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::Parser;
 
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 enum FlagTarget {
     Class,
     EnumMember,
     ClassMember,
+    InterfaceMember,
     PromotedProperty,
 }
 
@@ -15,6 +17,13 @@ impl Parser {
         self.collect(
             vec![TokenKind::Final, TokenKind::Abstract, TokenKind::Readonly],
             FlagTarget::Class,
+        )
+    }
+
+    pub(in crate::parser) fn interface_members_flags(&mut self) -> ParseResult<Vec<TokenKind>> {
+        self.collect(
+            vec![TokenKind::Public, TokenKind::Static],
+            FlagTarget::InterfaceMember,
         )
     }
 
@@ -92,34 +101,36 @@ impl Parser {
                     {
                         return Err(ParseError::MultipleAccessModifiers(self.current.span));
                     }
-                    TokenKind::Final if collected.contains(&TokenKind::Abstract) => match target {
-                        FlagTarget::Class => {
-                            return Err(ParseError::FinalModifierOnAbstractClass(
-                                self.current.span,
-                            ));
-                        }
-                        FlagTarget::ClassMember => {
-                            return Err(ParseError::FinalModifierOnAbstractClassMember(
-                                self.current.span,
-                            ));
-                        }
-                        _ => {}
-                    },
-                    TokenKind::Abstract if collected.contains(&TokenKind::Final) => match target {
-                        FlagTarget::Class => {
-                            return Err(ParseError::FinalModifierOnAbstractClass(
-                                self.current.span,
-                            ));
-                        }
-                        FlagTarget::ClassMember => {
-                            return Err(ParseError::FinalModifierOnAbstractClassMember(
-                                self.current.span,
-                            ));
-                        }
-                        _ => {}
-                    },
                     _ => {}
                 };
+
+                if matches!(target, FlagTarget::ClassMember | FlagTarget::Class) {
+                    match self.current.kind {
+                        TokenKind::Final if collected.contains(&TokenKind::Abstract) => {
+                            if target == FlagTarget::Class {
+                                return Err(ParseError::FinalModifierOnAbstractClass(
+                                    self.current.span,
+                                ));
+                            } else {
+                                return Err(ParseError::FinalModifierOnAbstractClassMember(
+                                    self.current.span,
+                                ));
+                            }
+                        }
+                        TokenKind::Abstract if collected.contains(&TokenKind::Final) => {
+                            if target == FlagTarget::Class {
+                                return Err(ParseError::FinalModifierOnAbstractClass(
+                                    self.current.span,
+                                ));
+                            } else {
+                                return Err(ParseError::FinalModifierOnAbstractClassMember(
+                                    self.current.span,
+                                ));
+                            }
+                        }
+                        _ => {}
+                    };
+                }
 
                 collected.push(self.current.kind.clone());
                 self.next();
