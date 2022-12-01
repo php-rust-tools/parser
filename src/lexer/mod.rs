@@ -1,12 +1,16 @@
 pub mod byte_string;
 pub mod error;
-mod macros;
 pub mod token;
+
+mod macros;
+mod state;
 
 use std::num::IntErrorKind;
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::error::SyntaxError;
+use crate::lexer::state::StackState;
+use crate::lexer::state::State;
 use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::Span;
 use crate::lexer::token::Token;
@@ -15,104 +19,71 @@ use crate::lexer::token::TokenKind;
 use crate::ident;
 use crate::ident_start;
 
-#[derive(Debug, PartialEq, Eq)]
-pub enum LexerState {
-    Initial,
-    Scripting,
-    Halted,
-    DoubleQuote,
-    LookingForVarname,
-    LookingForProperty,
-    VarOffset,
-}
-
-pub struct Lexer {
-    state_stack: Vec<LexerState>,
-    chars: Vec<u8>,
-    cursor: usize,
-    current: Option<u8>,
-    span: Span,
-}
-
-impl Default for Lexer {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Default)]
+pub struct Lexer;
 
 impl Lexer {
-    pub fn new() -> Self {
-        Self {
-            state_stack: vec![LexerState::Initial],
-            chars: Vec::new(),
-            cursor: 0,
-            current: None,
-            span: (1, 1),
-        }
+    pub const fn new() -> Self {
+        Self {}
     }
 
-    pub fn tokenize<B: ?Sized + AsRef<[u8]>>(
-        &mut self,
-        input: &B,
-    ) -> Result<Vec<Token>, SyntaxError> {
+    pub fn tokenize<B: ?Sized + AsRef<[u8]>>(&self, input: &B) -> Result<Vec<Token>, SyntaxError> {
+        let mut state = State::new(input);
         let mut tokens = Vec::new();
-        self.chars = input.as_ref().to_vec();
 
-        self.current = self.chars.first().copied();
-
-        while self.current.is_some() {
-            match self.state_stack.last().unwrap() {
+        while state.current.is_some() {
+            match state.stack.last().unwrap() {
                 // The "Initial" state is used to parse inline HTML. It is essentially a catch-all
                 // state that will build up a single token buffer until it encounters an open tag
                 // of some description.
-                LexerState::Initial => {
-                    tokens.append(&mut self.initial()?);
+                StackState::Initial => {
+                    tokens.append(&mut self.initial(&mut state)?);
                 }
                 // The scripting state is entered when an open tag is encountered in the source code.
                 // This tells the lexer to start analysing characters at PHP tokens instead of inline HTML.
-                LexerState::Scripting => {
-                    self.skip_whitespace();
+                StackState::Scripting => {
+                    self.skip_whitespace(&mut state);
 
                     // If we have consumed whitespace and then reached the end of the file, we should break.
-                    if self.current.is_none() {
+                    if state.current.is_none() {
                         break;
                     }
 
-                    tokens.push(self.scripting()?);
+                    tokens.push(self.scripting(&mut state)?);
                 }
                 // The "Halted" state is entered when the `__halt_compiler` token is encountered.
                 // In this state, all the text that follows is no longer parsed as PHP as is collected
                 // into a single "InlineHtml" token (kind of cheating, oh well).
-                LexerState::Halted => {
+                StackState::Halted => {
                     tokens.push(Token {
-                        kind: TokenKind::InlineHtml(self.chars[self.cursor..].into()),
-                        span: self.span,
+                        kind: TokenKind::InlineHtml(state.chars[state.cursor..].into()),
+                        span: state.span,
                     });
                     break;
                 }
                 // The double quote state is entered when inside a double-quoted string that
                 // contains variables.
-                LexerState::DoubleQuote => tokens.extend(self.double_quote()?),
+                StackState::DoubleQuote => tokens.extend(self.double_quote(&mut state)?),
                 // LookingForProperty is entered inside double quotes,
                 // backticks, or a heredoc, expecting a variable name.
                 // If one isn't found, it switches to scripting.
-                LexerState::LookingForVarname => {
-                    if let Some(token) = self.looking_for_varname() {
+                StackState::LookingForVarname => {
+                    if let Some(token) = self.looking_for_varname(&mut state) {
                         tokens.push(token);
                     }
                 }
                 // LookingForProperty is entered inside double quotes,
                 // backticks, or a heredoc, expecting an arrow followed by a
                 // property name.
-                LexerState::LookingForProperty => {
-                    tokens.push(self.looking_for_property()?);
+                StackState::LookingForProperty => {
+                    tokens.push(self.looking_for_property(&mut state)?);
                 }
-                LexerState::VarOffset => {
-                    if self.current.is_none() {
+                StackState::VarOffset => {
+                    if state.current.is_none() {
                         break;
                     }
 
-                    tokens.push(self.var_offset()?);
+                    tokens.push(self.var_offset(&mut state)?);
                 }
             }
         }
@@ -120,21 +91,21 @@ impl Lexer {
         Ok(tokens)
     }
 
-    fn skip_whitespace(&mut self) {
-        while let Some(b' ' | b'\n' | b'\r' | b'\t') = self.current {
-            self.next();
+    fn skip_whitespace(&self, state: &mut State) {
+        while let Some(b' ' | b'\n' | b'\r' | b'\t') = state.current {
+            state.next();
         }
     }
 
-    fn initial(&mut self) -> Result<Vec<Token>, SyntaxError> {
-        let inline_span = self.span;
+    fn initial(&self, state: &mut State) -> Result<Vec<Token>, SyntaxError> {
+        let inline_span = state.span;
         let mut buffer = Vec::new();
-        while let Some(char) = self.current {
-            if self.try_read(b"<?php") {
-                let tag_span = self.span;
-                self.skip(5);
+        while let Some(char) = state.current {
+            if state.try_read(b"<?php") {
+                let tag_span = state.span;
+                state.skip(5);
 
-                self.enter_state(LexerState::Scripting);
+                state.enter_state(StackState::Scripting);
 
                 let mut tokens = vec![];
 
@@ -153,7 +124,7 @@ impl Lexer {
                 return Ok(tokens);
             }
 
-            self.next();
+            state.next();
             buffer.push(char);
         }
 
@@ -163,125 +134,125 @@ impl Lexer {
         }])
     }
 
-    fn scripting(&mut self) -> Result<Token, SyntaxError> {
-        let span = self.span;
-        let kind = match self.peek_buf() {
+    fn scripting(&self, state: &mut State) -> Result<Token, SyntaxError> {
+        let span = state.span;
+        let kind = match state.peek_buf() {
             [b'@', ..] => {
-                self.next();
+                state.next();
 
                 TokenKind::At
             }
             [b'!', b'=', b'=', ..] => {
-                self.skip(3);
+                state.skip(3);
                 TokenKind::BangDoubleEquals
             }
             [b'!', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::BangEquals
             }
             [b'!', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Bang
             }
             [b'&', b'&', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::BooleanAnd
             }
             [b'&', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::AmpersandEquals
             }
             [b'&', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Ampersand
             }
             [b'?', b'>', ..] => {
                 // This is a close tag, we can enter "Initial" mode again.
-                self.skip(2);
+                state.skip(2);
 
-                self.enter_state(LexerState::Initial);
+                state.enter_state(StackState::Initial);
 
                 TokenKind::CloseTag
             }
             [b'?', b'?', b'=', ..] => {
-                self.skip(3);
+                state.skip(3);
                 TokenKind::CoalesceEqual
             }
             [b'?', b'?', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::Coalesce
             }
             [b'?', b':', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::QuestionColon
             }
             [b'?', b'-', b'>', ..] => {
-                self.skip(3);
+                state.skip(3);
                 TokenKind::NullsafeArrow
             }
             [b'?', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Question
             }
             [b'=', b'>', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::DoubleArrow
             }
             [b'=', b'=', b'=', ..] => {
-                self.skip(3);
+                state.skip(3);
                 TokenKind::TripleEquals
             }
             [b'=', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::DoubleEquals
             }
             [b'=', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Equals
             }
             // Single quoted string.
             [b'\'', ..] => {
-                self.next();
-                self.tokenize_single_quote_string()?
+                state.next();
+                self.tokenize_single_quote_string(state)?
             }
             [b'b' | b'B', b'\'', ..] => {
-                self.skip(2);
-                self.tokenize_single_quote_string()?
+                state.skip(2);
+                self.tokenize_single_quote_string(state)?
             }
             [b'"', ..] => {
-                self.next();
-                self.tokenize_double_quote_string()?
+                state.next();
+                self.tokenize_double_quote_string(state)?
             }
             [b'b' | b'B', b'"', ..] => {
-                self.skip(2);
-                self.tokenize_double_quote_string()?
+                state.skip(2);
+                self.tokenize_double_quote_string(state)?
             }
             [b'$', ident_start!(), ..] => {
-                self.next();
-                self.tokenize_variable()
+                state.next();
+                self.tokenize_variable(state)
             }
             [b'$', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Dollar
             }
             [b'.', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::DotEquals
             }
-            [b'.', b'0'..=b'9', ..] => self.tokenize_number()?,
+            [b'.', b'0'..=b'9', ..] => self.tokenize_number(state)?,
             [b'.', b'.', b'.', ..] => {
-                self.skip(3);
+                state.skip(3);
                 TokenKind::Ellipsis
             }
             [b'.', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Dot
             }
-            &[b'0'..=b'9', ..] => self.tokenize_number()?,
+            &[b'0'..=b'9', ..] => self.tokenize_number(state)?,
             &[b'\\', ident_start!(), ..] => {
-                self.next();
+                state.next();
 
-                match self.scripting()? {
+                match self.scripting(state)? {
                     Token {
                         kind:
                             TokenKind::Identifier(ByteString(mut i))
@@ -295,19 +266,19 @@ impl Lexer {
                 }
             }
             [b'\\', ..] => {
-                self.next();
+                state.next();
                 TokenKind::NamespaceSeparator
             }
             &[b @ ident_start!(), ..] => {
-                self.next();
+                state.next();
                 let mut qualified = false;
                 let mut last_was_slash = false;
 
                 let mut buffer = vec![b];
-                while let Some(next) = self.current {
+                while let Some(next) = state.current {
                     if next.is_ascii_alphanumeric() || next == b'_' {
                         buffer.push(next);
-                        self.next();
+                        state.next();
                         last_was_slash = false;
                         continue;
                     }
@@ -316,7 +287,7 @@ impl Lexer {
                         qualified = true;
                         last_was_slash = true;
                         buffer.push(next);
-                        self.next();
+                        state.next();
                         continue;
                     }
 
@@ -330,12 +301,12 @@ impl Lexer {
                         .unwrap_or_else(|| TokenKind::Identifier(buffer.into()));
 
                     if kind == TokenKind::HaltCompiler {
-                        match self.peek_buf() {
+                        match state.peek_buf() {
                             [b'(', b')', b';', ..] => {
-                                self.skip(3);
-                                self.enter_state(LexerState::Halted);
+                                state.skip(3);
+                                state.enter_state(StackState::Halted);
                             }
-                            _ => return Err(SyntaxError::InvalidHaltCompiler(self.span)),
+                            _ => return Err(SyntaxError::InvalidHaltCompiler(state.span)),
                         }
                     }
 
@@ -343,24 +314,24 @@ impl Lexer {
                 }
             }
             [b'/', b'*', ..] => {
-                self.next();
+                state.next();
                 let mut buffer = vec![b'/'];
 
-                while self.current.is_some() {
-                    match self.peek_buf() {
+                while state.current.is_some() {
+                    match state.peek_buf() {
                         [b'*', b'/', ..] => {
-                            self.skip(2);
+                            state.skip(2);
                             buffer.extend_from_slice(b"*/");
                             break;
                         }
                         &[t, ..] => {
-                            self.next();
+                            state.next();
                             buffer.push(t);
                         }
                         [] => unreachable!(),
                     }
                 }
-                self.next();
+                state.next();
 
                 if buffer.starts_with(b"/**") {
                     TokenKind::DocComment(buffer.into())
@@ -369,287 +340,287 @@ impl Lexer {
                 }
             }
             [b'#', b'[', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::Attribute
             }
             &[ch @ b'/', b'/', ..] | &[ch @ b'#', ..] => {
                 let mut buffer = if ch == b'/' {
-                    self.skip(2);
+                    state.skip(2);
                     b"//".to_vec()
                 } else {
-                    self.next();
+                    state.next();
                     b"#".to_vec()
                 };
 
-                while let Some(c) = self.current {
+                while let Some(c) = state.current {
                     if c == b'\n' {
                         break;
                     }
 
                     buffer.push(c);
-                    self.next();
+                    state.next();
                 }
 
-                self.next();
+                state.next();
 
                 TokenKind::Comment(buffer.into())
             }
             [b'/', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::SlashEquals
             }
             [b'/', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Slash
             }
             [b'*', b'*', b'=', ..] => {
-                self.skip(3);
+                state.skip(3);
                 TokenKind::PowEquals
             }
             [b'*', b'*', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::Pow
             }
             [b'*', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::AsteriskEqual
             }
             [b'*', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Asterisk
             }
             [b'|', b'|', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::Pipe
             }
             [b'|', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::PipeEquals
             }
             [b'|', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Pipe
             }
             [b'^', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::CaretEquals
             }
             [b'^', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Caret
             }
             [b'{', ..] => {
-                self.next();
-                self.push_state(LexerState::Scripting);
+                state.next();
+                state.push_state(StackState::Scripting);
                 TokenKind::LeftBrace
             }
             [b'}', ..] => {
-                self.next();
-                self.pop_state();
+                state.next();
+                state.pop_state();
                 TokenKind::RightBrace
             }
             [b'(', ..] => {
-                self.next();
+                state.next();
 
-                if self.try_read(b"int)") {
-                    self.skip(4);
+                if state.try_read(b"int)") {
+                    state.skip(4);
                     TokenKind::IntCast
-                } else if self.try_read(b"integer)") {
-                    self.skip(8);
+                } else if state.try_read(b"integer)") {
+                    state.skip(8);
                     TokenKind::IntegerCast
-                } else if self.try_read(b"bool)") {
-                    self.skip(5);
+                } else if state.try_read(b"bool)") {
+                    state.skip(5);
                     TokenKind::BoolCast
-                } else if self.try_read(b"boolean)") {
-                    self.skip(8);
+                } else if state.try_read(b"boolean)") {
+                    state.skip(8);
                     TokenKind::BooleanCast
-                } else if self.try_read(b"float)") {
-                    self.skip(6);
+                } else if state.try_read(b"float)") {
+                    state.skip(6);
                     TokenKind::FloatCast
-                } else if self.try_read(b"double)") {
-                    self.skip(7);
+                } else if state.try_read(b"double)") {
+                    state.skip(7);
                     TokenKind::DoubleCast
-                } else if self.try_read(b"real)") {
-                    self.skip(5);
+                } else if state.try_read(b"real)") {
+                    state.skip(5);
                     TokenKind::RealCast
-                } else if self.try_read(b"string)") {
-                    self.skip(7);
+                } else if state.try_read(b"string)") {
+                    state.skip(7);
                     TokenKind::StringCast
-                } else if self.try_read(b"binary)") {
-                    self.skip(7);
+                } else if state.try_read(b"binary)") {
+                    state.skip(7);
                     TokenKind::BinaryCast
-                } else if self.try_read(b"array)") {
-                    self.skip(6);
+                } else if state.try_read(b"array)") {
+                    state.skip(6);
                     TokenKind::ArrayCast
-                } else if self.try_read(b"object)") {
-                    self.skip(7);
+                } else if state.try_read(b"object)") {
+                    state.skip(7);
                     TokenKind::ObjectCast
-                } else if self.try_read(b"unset)") {
-                    self.skip(6);
+                } else if state.try_read(b"unset)") {
+                    state.skip(6);
                     TokenKind::UnsetCast
                 } else {
                     TokenKind::LeftParen
                 }
             }
             [b')', ..] => {
-                self.next();
+                state.next();
                 TokenKind::RightParen
             }
             [b';', ..] => {
-                self.next();
+                state.next();
                 TokenKind::SemiColon
             }
             [b'+', b'+', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::Increment
             }
             [b'+', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::PlusEquals
             }
             [b'+', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Plus
             }
             [b'%', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::PercentEquals
             }
             [b'%', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Percent
             }
             [b'-', b'-', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::Decrement
             }
             [b'-', b'>', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::Arrow
             }
             [b'-', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::MinusEquals
             }
             [b'-', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Minus
             }
             [b'<', b'<', b'<', ..] => {
                 // TODO: Handle both heredocs and nowdocs.
-                self.skip(3);
+                state.skip(3);
 
                 todo!("heredocs & nowdocs");
             }
             [b'<', b'<', b'=', ..] => {
-                self.skip(3);
+                state.skip(3);
 
                 TokenKind::LeftShiftEquals
             }
             [b'<', b'<', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::LeftShift
             }
             [b'<', b'=', b'>', ..] => {
-                self.skip(3);
+                state.skip(3);
                 TokenKind::Spaceship
             }
             [b'<', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::LessThanEquals
             }
             [b'<', b'>', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::AngledLeftRight
             }
             [b'<', ..] => {
-                self.next();
+                state.next();
                 TokenKind::LessThan
             }
             [b'>', b'>', b'=', ..] => {
-                self.skip(3);
+                state.skip(3);
                 TokenKind::RightShiftEquals
             }
             [b'>', b'>', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::RightShift
             }
             [b'>', b'=', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::GreaterThanEquals
             }
             [b'>', ..] => {
-                self.next();
+                state.next();
                 TokenKind::GreaterThan
             }
             [b',', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Comma
             }
             [b'[', ..] => {
-                self.next();
+                state.next();
                 TokenKind::LeftBracket
             }
             [b']', ..] => {
-                self.next();
+                state.next();
                 TokenKind::RightBracket
             }
             [b':', b':', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::DoubleColon
             }
             [b':', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Colon
             }
             &[b'~', ..] => {
-                self.next();
+                state.next();
                 TokenKind::BitwiseNot
             }
             &[b, ..] => unimplemented!(
                 "<scripting> char: {}, line: {}, col: {}",
                 b as char,
-                self.span.0,
-                self.span.1
+                state.span.0,
+                state.span.1
             ),
             // We should never reach this point since we have the empty checks surrounding
             // the call to this function, but it's better to be safe than sorry.
-            [] => return Err(SyntaxError::UnexpectedEndOfFile(self.span)),
+            [] => return Err(SyntaxError::UnexpectedEndOfFile(state.span)),
         };
 
         Ok(Token { kind, span })
     }
 
-    fn double_quote(&mut self) -> Result<Vec<Token>, SyntaxError> {
-        let span = self.span;
+    fn double_quote(&self, state: &mut State) -> Result<Vec<Token>, SyntaxError> {
+        let span = state.span;
         let mut buffer = Vec::new();
         let kind = loop {
-            match self.peek_buf() {
+            match state.peek_buf() {
                 [b'$', b'{', ..] => {
-                    self.skip(2);
-                    self.push_state(LexerState::LookingForVarname);
+                    state.skip(2);
+                    state.push_state(StackState::LookingForVarname);
                     break TokenKind::DollarLeftBrace;
                 }
                 [b'{', b'$', ..] => {
                     // Intentionally only consume the left brace.
-                    self.next();
-                    self.push_state(LexerState::Scripting);
+                    state.next();
+                    state.push_state(StackState::Scripting);
                     break TokenKind::LeftBrace;
                 }
                 [b'"', ..] => {
-                    self.next();
-                    self.enter_state(LexerState::Scripting);
+                    state.next();
+                    state.enter_state(StackState::Scripting);
                     break TokenKind::DoubleQuote;
                 }
                 [b'$', ident_start!(), ..] => {
-                    self.next();
-                    let ident = self.consume_identifier();
+                    state.next();
+                    let ident = self.consume_identifier(state);
 
-                    match self.peek_buf() {
-                        [b'[', ..] => self.push_state(LexerState::VarOffset),
+                    match state.peek_buf() {
+                        [b'[', ..] => state.push_state(StackState::VarOffset),
                         [b'-', b'>', ident_start!(), ..]
                         | [b'?', b'-', b'>', ident_start!(), ..] => {
-                            self.push_state(LexerState::LookingForProperty)
+                            state.push_state(StackState::LookingForProperty)
                         }
                         _ => {}
                     }
@@ -657,10 +628,10 @@ impl Lexer {
                     break TokenKind::Variable(ident.into());
                 }
                 &[b, ..] => {
-                    self.next();
+                    state.next();
                     buffer.push(b);
                 }
-                [] => return Err(SyntaxError::UnexpectedEndOfFile(self.span)),
+                [] => return Err(SyntaxError::UnexpectedEndOfFile(state.span)),
             }
         };
 
@@ -676,13 +647,15 @@ impl Lexer {
         Ok(tokens)
     }
 
-    fn looking_for_varname(&mut self) -> Option<Token> {
-        if let Some(ident) = self.peek_identifier() {
-            if let Some(b'[' | b'}') = self.peek_byte(ident.len()) {
+    fn looking_for_varname(&self, state: &mut State) -> Option<Token> {
+        let identifier = self.peek_identifier(state);
+
+        if let Some(ident) = identifier {
+            if let Some(b'[' | b'}') = state.peek_byte(ident.len()) {
                 let ident = ident.to_vec();
-                let span = self.span;
-                self.skip(ident.len());
-                self.enter_state(LexerState::Scripting);
+                let span = state.span;
+                state.skip(ident.len());
+                state.enter_state(StackState::Scripting);
                 return Some(Token {
                     kind: TokenKind::Identifier(ident.into()),
                     span,
@@ -690,24 +663,24 @@ impl Lexer {
             }
         }
 
-        self.enter_state(LexerState::Scripting);
+        state.enter_state(StackState::Scripting);
         None
     }
 
-    fn looking_for_property(&mut self) -> Result<Token, SyntaxError> {
-        let span = self.span;
-        let kind = match self.peek_buf() {
+    fn looking_for_property(&self, state: &mut State) -> Result<Token, SyntaxError> {
+        let span = state.span;
+        let kind = match state.peek_buf() {
             [b'-', b'>', ..] => {
-                self.skip(2);
+                state.skip(2);
                 TokenKind::Arrow
             }
             [b'?', b'-', b'>', ..] => {
-                self.skip(3);
+                state.skip(3);
                 TokenKind::NullsafeArrow
             }
             &[ident_start!(), ..] => {
-                let buffer = self.consume_identifier();
-                self.pop_state();
+                let buffer = self.consume_identifier(state);
+                state.pop_state();
                 TokenKind::Identifier(buffer.into())
             }
             // Should be impossible as we already looked ahead this far inside double_quote.
@@ -716,114 +689,114 @@ impl Lexer {
         Ok(Token { kind, span })
     }
 
-    fn var_offset(&mut self) -> Result<Token, SyntaxError> {
-        let span = self.span;
-        let kind = match self.peek_buf() {
+    fn var_offset(&self, state: &mut State) -> Result<Token, SyntaxError> {
+        let span = state.span;
+        let kind = match state.peek_buf() {
             [b'$', ident_start!(), ..] => {
-                self.next();
-                self.tokenize_variable()
+                state.next();
+                self.tokenize_variable(state)
             }
             &[b'0'..=b'9', ..] => {
                 // TODO: all integer literals are allowed, but only decimal integers with no underscores
                 // are actually treated as numbers. Others are treated as strings.
                 // Float literals are not allowed, but that could be handled in the parser.
-                self.tokenize_number()?
+                self.tokenize_number(state)?
             }
             [b'[', ..] => {
-                self.next();
+                state.next();
                 TokenKind::LeftBracket
             }
             [b'-', ..] => {
-                self.next();
+                state.next();
                 TokenKind::Minus
             }
             [b']', ..] => {
-                self.next();
-                self.pop_state();
+                state.next();
+                state.pop_state();
                 TokenKind::RightBracket
             }
             &[ident_start!(), ..] => {
-                let label = self.consume_identifier();
+                let label = self.consume_identifier(state);
                 TokenKind::Identifier(label.into())
             }
             &[b, ..] => unimplemented!(
                 "<var offset> char: {}, line: {}, col: {}",
                 b as char,
-                self.span.0,
-                self.span.1
+                state.span.0,
+                state.span.1
             ),
-            [] => return Err(SyntaxError::UnexpectedEndOfFile(self.span)),
+            [] => return Err(SyntaxError::UnexpectedEndOfFile(state.span)),
         };
         Ok(Token { kind, span })
     }
 
-    fn tokenize_single_quote_string(&mut self) -> Result<TokenKind, SyntaxError> {
+    fn tokenize_single_quote_string(&self, state: &mut State) -> Result<TokenKind, SyntaxError> {
         let mut buffer = Vec::new();
 
         loop {
-            match self.peek_buf() {
+            match state.peek_buf() {
                 [b'\'', ..] => {
-                    self.next();
+                    state.next();
                     break;
                 }
                 &[b'\\', b @ b'\'' | b @ b'\\', ..] => {
-                    self.skip(2);
+                    state.skip(2);
                     buffer.push(b);
                 }
                 &[b, ..] => {
-                    self.next();
+                    state.next();
                     buffer.push(b);
                 }
-                [] => return Err(SyntaxError::UnexpectedEndOfFile(self.span)),
+                [] => return Err(SyntaxError::UnexpectedEndOfFile(state.span)),
             }
         }
 
         Ok(TokenKind::LiteralString(buffer.into()))
     }
 
-    fn tokenize_double_quote_string(&mut self) -> Result<TokenKind, SyntaxError> {
+    fn tokenize_double_quote_string(&self, state: &mut State) -> Result<TokenKind, SyntaxError> {
         let mut buffer = Vec::new();
 
         let constant = loop {
-            match self.peek_buf() {
+            match state.peek_buf() {
                 [b'"', ..] => {
-                    self.next();
+                    state.next();
                     break true;
                 }
                 &[b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
-                    self.skip(2);
+                    state.skip(2);
                     buffer.push(b);
                 }
                 &[b'\\', b'n', ..] => {
-                    self.skip(2);
+                    state.skip(2);
                     buffer.push(b'\n');
                 }
                 &[b'\\', b'r', ..] => {
-                    self.skip(2);
+                    state.skip(2);
                     buffer.push(b'\r');
                 }
                 &[b'\\', b't', ..] => {
-                    self.skip(2);
+                    state.skip(2);
                     buffer.push(b'\t');
                 }
                 &[b'\\', b'v', ..] => {
-                    self.skip(2);
+                    state.skip(2);
                     buffer.push(b'\x0b');
                 }
                 &[b'\\', b'e', ..] => {
-                    self.skip(2);
+                    state.skip(2);
                     buffer.push(b'\x1b');
                 }
                 &[b'\\', b'f', ..] => {
-                    self.skip(2);
+                    state.skip(2);
                     buffer.push(b'\x0c');
                 }
                 &[b'\\', b'x', b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F'), ..] => {
-                    self.skip(3);
+                    state.skip(3);
 
                     let mut hex = String::from(b as char);
-                    if let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = self.current {
-                        self.next();
+                    if let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = state.current {
+                        state.next();
                         hex.push(b as char);
                     }
 
@@ -831,23 +804,23 @@ impl Lexer {
                     buffer.push(b);
                 }
                 &[b'\\', b'u', b'{', ..] => {
-                    self.skip(3);
+                    state.skip(3);
 
                     let mut code_point = String::new();
-                    while let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = self.current {
-                        self.next();
+                    while let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = state.current {
+                        state.next();
                         code_point.push(b as char);
                     }
 
-                    if code_point.is_empty() || self.current != Some(b'}') {
-                        return Err(SyntaxError::InvalidUnicodeEscape(self.span));
+                    if code_point.is_empty() || state.current != Some(b'}') {
+                        return Err(SyntaxError::InvalidUnicodeEscape(state.span));
                     }
-                    self.next();
+                    state.next();
 
                     let c = if let Ok(c) = u32::from_str_radix(&code_point, 16) {
                         c
                     } else {
-                        return Err(SyntaxError::InvalidUnicodeEscape(self.span));
+                        return Err(SyntaxError::InvalidUnicodeEscape(state.span));
                     };
 
                     if let Some(c) = char::from_u32(c) {
@@ -855,85 +828,85 @@ impl Lexer {
                         let bytes = c.encode_utf8(&mut tmp);
                         buffer.extend(bytes.as_bytes());
                     } else {
-                        return Err(SyntaxError::InvalidUnicodeEscape(self.span));
+                        return Err(SyntaxError::InvalidUnicodeEscape(state.span));
                     }
                 }
                 &[b'\\', b @ b'0'..=b'7', ..] => {
-                    self.skip(2);
+                    state.skip(2);
 
                     let mut octal = String::from(b as char);
-                    if let Some(b @ b'0'..=b'7') = self.current {
-                        self.next();
+                    if let Some(b @ b'0'..=b'7') = state.current {
+                        state.next();
                         octal.push(b as char);
                     }
-                    if let Some(b @ b'0'..=b'7') = self.current {
-                        self.next();
+                    if let Some(b @ b'0'..=b'7') = state.current {
+                        state.next();
                         octal.push(b as char);
                     }
 
                     if let Ok(b) = u8::from_str_radix(&octal, 8) {
                         buffer.push(b);
                     } else {
-                        return Err(SyntaxError::InvalidOctalEscape(self.span));
+                        return Err(SyntaxError::InvalidOctalEscape(state.span));
                     }
                 }
                 [b'$', ident_start!(), ..] | [b'{', b'$', ..] | [b'$', b'{', ..] => {
                     break false;
                 }
                 &[b, ..] => {
-                    self.next();
+                    state.next();
                     buffer.push(b);
                 }
-                [] => return Err(SyntaxError::UnexpectedEndOfFile(self.span)),
+                [] => return Err(SyntaxError::UnexpectedEndOfFile(state.span)),
             }
         };
 
         Ok(if constant {
             TokenKind::LiteralString(buffer.into())
         } else {
-            self.enter_state(LexerState::DoubleQuote);
+            state.enter_state(StackState::DoubleQuote);
             TokenKind::StringPart(buffer.into())
         })
     }
 
-    fn peek_identifier(&self) -> Option<&[u8]> {
-        let mut cursor = self.cursor;
-        if let Some(ident_start!()) = self.chars.get(cursor) {
+    fn peek_identifier<'a>(&'a self, state: &'a State) -> Option<&[u8]> {
+        let mut cursor = state.cursor;
+        if let Some(ident_start!()) = state.chars.get(cursor) {
             cursor += 1;
-            while let Some(ident!()) = self.chars.get(cursor) {
+            while let Some(ident!()) = state.chars.get(cursor) {
                 cursor += 1;
             }
-            Some(&self.chars[self.cursor..cursor])
+            Some(&state.chars[state.cursor..cursor])
         } else {
             None
         }
     }
 
-    fn consume_identifier(&mut self) -> Vec<u8> {
-        let ident = self.peek_identifier().unwrap().to_vec();
-        self.skip(ident.len());
+    fn consume_identifier(&self, state: &mut State) -> Vec<u8> {
+        let ident = self.peek_identifier(state).unwrap().to_vec();
+        state.skip(ident.len());
 
         ident
     }
 
-    fn tokenize_variable(&mut self) -> TokenKind {
-        TokenKind::Variable(self.consume_identifier().into())
+    fn tokenize_variable(&self, state: &mut State) -> TokenKind {
+        TokenKind::Variable(self.consume_identifier(state).into())
     }
 
-    fn tokenize_number(&mut self) -> Result<TokenKind, SyntaxError> {
+    fn tokenize_number(&self, state: &mut State) -> Result<TokenKind, SyntaxError> {
         let mut buffer = String::new();
 
-        let (base, kind) = match self.peek_buf() {
+        let (base, kind) = match state.peek_buf() {
             [b'0', b'B' | b'b', ..] => {
-                self.skip(2);
+                state.skip(2);
                 (2, NumberKind::Int)
             }
             [b'0', b'O' | b'o', ..] => {
-                self.skip(2);
+                state.skip(2);
                 (8, NumberKind::Int)
             }
             [b'0', b'X' | b'x', ..] => {
-                self.skip(2);
+                state.skip(2);
                 (16, NumberKind::Int)
             }
             [b'0', ..] => (10, NumberKind::OctalOrFloat),
@@ -942,15 +915,15 @@ impl Lexer {
         };
 
         if kind != NumberKind::Float {
-            self.read_digits(&mut buffer, base);
+            self.read_digits(state, &mut buffer, base);
             if kind == NumberKind::Int {
-                return parse_int(&buffer, base as u32, self.span);
+                return parse_int(&buffer, base as u32, state.span);
             }
         }
 
         // Remaining cases: decimal integer, legacy octal integer, or float.
         let is_float = matches!(
-            self.peek_buf(),
+            state.peek_buf(),
             [b'.', ..]
                 | [b'e' | b'E', b'-' | b'+', b'0'..=b'9', ..]
                 | [b'e' | b'E', b'0'..=b'9', ..]
@@ -961,55 +934,60 @@ impl Lexer {
             } else {
                 10
             };
-            return parse_int(&buffer, base as u32, self.span);
+            return parse_int(&buffer, base as u32, state.span);
         }
 
-        if self.current == Some(b'.') {
+        if state.current == Some(b'.') {
             buffer.push('.');
-            self.next();
-            self.read_digits(&mut buffer, 10);
+            state.next();
+            self.read_digits(state, &mut buffer, 10);
         }
 
-        if let Some(b'e' | b'E') = self.current {
+        if let Some(b'e' | b'E') = state.current {
             buffer.push('e');
-            self.next();
-            if let Some(b @ (b'-' | b'+')) = self.current {
+            state.next();
+            if let Some(b @ (b'-' | b'+')) = state.current {
                 buffer.push(b as char);
-                self.next();
+                state.next();
             }
-            self.read_digits(&mut buffer, 10);
+            self.read_digits(state, &mut buffer, 10);
         }
 
         Ok(TokenKind::LiteralFloat(buffer.parse().unwrap()))
     }
 
-    fn read_digits(&mut self, buffer: &mut String, base: usize) {
+    fn read_digits(&self, state: &mut State, buffer: &mut String, base: usize) {
         if base == 16 {
-            self.read_digits_fn(buffer, u8::is_ascii_hexdigit);
+            self.read_digits_fn(state, buffer, u8::is_ascii_hexdigit);
         } else {
             let max = b'0' + base as u8;
-            self.read_digits_fn(buffer, |b| (b'0'..max).contains(b));
+            self.read_digits_fn(state, buffer, |b| (b'0'..max).contains(b));
         };
     }
 
-    fn read_digits_fn<F: Fn(&u8) -> bool>(&mut self, buffer: &mut String, is_digit: F) {
-        if let Some(b) = self.current {
+    fn read_digits_fn<F: Fn(&u8) -> bool>(
+        &self,
+        state: &mut State,
+        buffer: &mut String,
+        is_digit: F,
+    ) {
+        if let Some(b) = state.current {
             if is_digit(&b) {
-                self.next();
+                state.next();
                 buffer.push(b as char);
             } else {
                 return;
             }
         }
         loop {
-            match *self.peek_buf() {
+            match *state.peek_buf() {
                 [b, ..] if is_digit(&b) => {
-                    self.next();
+                    state.next();
                     buffer.push(b as char);
                 }
                 [b'_', b, ..] if is_digit(&b) => {
-                    self.next();
-                    self.next();
+                    state.next();
+                    state.next();
                     buffer.push(b as char);
                 }
                 _ => {
@@ -1017,49 +995,6 @@ impl Lexer {
                 }
             }
         }
-    }
-
-    fn enter_state(&mut self, state: LexerState) {
-        *self.state_stack.last_mut().unwrap() = state;
-    }
-
-    fn push_state(&mut self, state: LexerState) {
-        self.state_stack.push(state);
-    }
-
-    fn pop_state(&mut self) {
-        self.state_stack.pop();
-    }
-
-    fn peek_buf(&self) -> &[u8] {
-        &self.chars[self.cursor..]
-    }
-
-    fn peek_byte(&self, delta: usize) -> Option<u8> {
-        self.chars.get(self.cursor + delta).copied()
-    }
-
-    fn try_read(&self, search: &'static [u8]) -> bool {
-        self.peek_buf().starts_with(search)
-    }
-
-    fn skip(&mut self, count: usize) {
-        for _ in 0..count {
-            self.next();
-        }
-    }
-
-    fn next(&mut self) {
-        match self.current {
-            Some(b'\n') => {
-                self.span.0 += 1;
-                self.span.1 = 1;
-            }
-            Some(_) => self.span.1 += 1,
-            _ => {}
-        }
-        self.cursor += 1;
-        self.current = self.chars.get(self.cursor).copied();
     }
 }
 

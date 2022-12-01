@@ -1,71 +1,78 @@
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::TokenKind;
 use crate::parser::error::ParseResult;
+use crate::parser::state::State;
 use crate::parser::Parser;
 
 use crate::expect_token;
 
 impl Parser {
     /// Expect an unqualified identifier such as Foo or Bar.
-    pub(in crate::parser) fn ident(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn ident(&self, state: &mut State) -> ParseResult<ByteString> {
         Ok(expect_token!([
             TokenKind::Identifier(identifier) => identifier,
-        ], self, "an identifier"))
+        ], state, "an identifier"))
     }
 
     /// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
-    pub(in crate::parser) fn name(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn name(&self, state: &mut State) -> ParseResult<ByteString> {
         Ok(expect_token!([
             TokenKind::Identifier(identifier) => identifier,
             TokenKind::QualifiedIdentifier(qualified) => qualified,
-        ], self, "an identifier"))
+        ], state, "an identifier"))
     }
 
     /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
-    pub(in crate::parser) fn full_name(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn full_name(&self, state: &mut State) -> ParseResult<ByteString> {
         Ok(expect_token!([
             TokenKind::Identifier(identifier) => identifier,
             TokenKind::QualifiedIdentifier(qualified) => qualified,
             TokenKind::FullyQualifiedIdentifier(fully_qualified) => fully_qualified,
-        ], self, "an identifier"))
+        ], state, "an identifier"))
     }
 
-    pub(in crate::parser) fn var(&mut self) -> ParseResult<ByteString> {
+    pub(in crate::parser) fn var(&self, state: &mut State) -> ParseResult<ByteString> {
         Ok(expect_token!([
             TokenKind::Variable(v) => v,
-        ], self, "a variable"))
+        ], state, "a variable"))
     }
 
-    pub(in crate::parser) fn full_name_maybe_type_keyword(&mut self) -> ParseResult<ByteString> {
-        match self.current.kind {
+    pub(in crate::parser) fn full_name_maybe_type_keyword(
+        &self,
+        state: &mut State,
+    ) -> ParseResult<ByteString> {
+        match state.current.kind {
             TokenKind::Array | TokenKind::Callable => {
-                let r = Ok(self.current.kind.to_string().into());
-                self.next();
+                let r = Ok(state.current.kind.to_string().into());
+                state.next();
                 r
             }
-            _ => self.full_name(),
+            _ => self.full_name(state),
         }
     }
 
-    pub(in crate::parser) fn type_with_static(&mut self) -> ParseResult<ByteString> {
-        Ok(match self.current.kind {
+    pub(in crate::parser) fn type_with_static(&self, state: &mut State) -> ParseResult<ByteString> {
+        Ok(match state.current.kind {
             TokenKind::Static | TokenKind::Null | TokenKind::True | TokenKind::False => {
-                let str = self.current.kind.to_string();
-                self.next();
+                let str = state.current.kind.to_string();
+                state.next();
                 str.into()
             }
-            _ => self.full_name_maybe_type_keyword()?,
+            _ => self.full_name_maybe_type_keyword(state)?,
         })
     }
 
-    pub(in crate::parser) fn ident_maybe_reserved(&mut self) -> ParseResult<ByteString> {
-        match self.current.kind {
-            _ if is_reserved_ident(&self.current.kind) => {
-                let string = self.current.kind.to_string().into();
-                self.next();
+    pub(in crate::parser) fn ident_maybe_reserved(
+        &self,
+        state: &mut State,
+    ) -> ParseResult<ByteString> {
+        match state.current.kind {
+            _ if is_reserved_ident(&state.current.kind) => {
+                let string = state.current.kind.to_string().into();
+                state.next();
                 Ok(string)
             }
-            _ => self.ident(),
+            _ => self.ident(state),
         }
     }
 }

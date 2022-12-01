@@ -20,7 +20,7 @@ fn main() {
         }
     };
 
-    let mut lexer = Lexer::new();
+    let lexer = Lexer::new();
     let tokens = match lexer.tokenize(contents.as_bytes()) {
         Ok(tokens) => tokens,
         Err(error) => {
@@ -30,7 +30,7 @@ fn main() {
         }
     };
 
-    let mut parser = Parser::new(None);
+    let parser = Parser::new();
     let ast = match parser.parse(tokens) {
         Ok(ast) => ast,
         Err(error) => {

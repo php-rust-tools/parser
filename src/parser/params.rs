@@ -7,6 +7,7 @@ use crate::parser::ast::PropertyFlag;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::precedence::Precedence;
+use crate::parser::state::State;
 use crate::parser::Parser;
 
 use crate::expect_token;
@@ -20,16 +21,17 @@ pub enum ParamPosition {
 
 impl Parser {
     pub(in crate::parser) fn param_list(
-        &mut self,
+        &self,
+        state: &mut State,
         position: ParamPosition,
     ) -> Result<ParamList, ParseError> {
         let mut params = ParamList::new();
 
-        while !self.is_eof() && self.current.kind != TokenKind::RightParen {
+        while !state.is_eof() && state.current.kind != TokenKind::RightParen {
             let mut param_type = None;
 
             let flags: Vec<PropertyFlag> = self
-                .promoted_property_flags()?
+                .promoted_property_flags(state)?
                 .iter()
                 .map(|f| f.into())
                 .collect();
@@ -38,17 +40,17 @@ impl Parser {
                 match position {
                     ParamPosition::Method(name) if name != "__construct" => {
                         return Err(ParseError::PromotedPropertyOutsideConstructor(
-                            self.current.span,
+                            state.current.span,
                         ));
                     }
                     ParamPosition::AbstractMethod(name) => {
                         if name == "__construct" {
                             return Err(ParseError::PromotedPropertyOnAbstractConstructor(
-                                self.current.span,
+                                state.current.span,
                             ));
                         } else {
                             return Err(ParseError::PromotedPropertyOutsideConstructor(
-                                self.current.span,
+                                state.current.span,
                             ));
                         }
                     }
@@ -57,29 +59,28 @@ impl Parser {
             }
 
             // If this is a readonly promoted property, or we don't see a variable
-            if self.config.force_type_strings
-                || flags.contains(&PropertyFlag::Readonly)
+            if flags.contains(&PropertyFlag::Readonly)
                 || !matches!(
-                    self.current.kind,
+                    state.current.kind,
                     TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
                 )
             {
                 // Try to parse the type.
-                param_type = Some(self.type_string()?);
+                param_type = Some(self.type_string(state)?);
             }
 
             let mut variadic = false;
             let mut by_ref = false;
 
-            if matches!(self.current.kind, TokenKind::Ampersand) {
-                self.next();
+            if matches!(state.current.kind, TokenKind::Ampersand) {
+                state.next();
                 by_ref = true;
             }
 
-            if matches!(self.current.kind, TokenKind::Ellipsis) {
-                self.next();
+            if matches!(state.current.kind, TokenKind::Ellipsis) {
+                state.next();
                 if !flags.is_empty() {
-                    return Err(ParseError::VariadicPromotedProperty(self.current.span));
+                    return Err(ParseError::VariadicPromotedProperty(state.current.span));
                 }
 
                 variadic = true;
@@ -88,12 +89,12 @@ impl Parser {
             // 2. Then expect a variable.
             let var = expect_token!([
                 TokenKind::Variable(v) => v
-            ], self, "a varaible");
+            ], state, "a varaible");
 
             let mut default = None;
-            if self.current.kind == TokenKind::Equals {
-                self.next();
-                default = Some(self.expression(Precedence::Lowest)?);
+            if state.current.kind == TokenKind::Equals {
+                state.next();
+                default = Some(self.expression(state, Precedence::Lowest)?);
             }
 
             params.push(Param {
@@ -105,29 +106,29 @@ impl Parser {
                 by_ref,
             });
 
-            self.optional_comma()?;
+            self.optional_comma(state)?;
         }
 
         Ok(params)
     }
 
-    pub(in crate::parser) fn args_list(&mut self) -> ParseResult<Vec<Arg>> {
+    pub(in crate::parser) fn args_list(&self, state: &mut State) -> ParseResult<Vec<Arg>> {
         let mut args = Vec::new();
 
-        while !self.is_eof() && self.current.kind != TokenKind::RightParen {
+        while !state.is_eof() && state.current.kind != TokenKind::RightParen {
             let mut name = None;
             let mut unpack = false;
-            if matches!(self.current.kind, TokenKind::Identifier(_))
-                && self.peek.kind == TokenKind::Colon
+            if matches!(state.current.kind, TokenKind::Identifier(_))
+                && state.peek.kind == TokenKind::Colon
             {
-                name = Some(self.ident_maybe_reserved()?);
-                self.next();
-            } else if self.current.kind == TokenKind::Ellipsis {
-                self.next();
+                name = Some(self.ident_maybe_reserved(state)?);
+                state.next();
+            } else if state.current.kind == TokenKind::Ellipsis {
+                state.next();
                 unpack = true;
             }
 
-            if unpack && self.current.kind == TokenKind::RightParen {
+            if unpack && state.current.kind == TokenKind::RightParen {
                 args.push(Arg {
                     name: None,
                     unpack: false,
@@ -137,7 +138,7 @@ impl Parser {
                 break;
             }
 
-            let value = self.expression(Precedence::Lowest)?;
+            let value = self.expression(state, Precedence::Lowest)?;
 
             args.push(Arg {
                 name,
@@ -145,7 +146,7 @@ impl Parser {
                 value,
             });
 
-            self.optional_comma()?;
+            self.optional_comma(state)?;
         }
 
         Ok(args)

@@ -7,40 +7,41 @@ use crate::parser::classish_statement::ClassishDefinitionType;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::params::ParamPosition;
+use crate::parser::state::State;
 use crate::parser::Parser;
 
 impl Parser {
-    pub(in crate::parser) fn function(&mut self) -> ParseResult<Statement> {
-        self.next();
+    pub(in crate::parser) fn function(&self, state: &mut State) -> ParseResult<Statement> {
+        state.next();
 
-        let by_ref = if self.current.kind == TokenKind::Ampersand {
-            self.next();
+        let by_ref = if state.current.kind == TokenKind::Ampersand {
+            state.next();
             true
         } else {
             false
         };
 
-        let name = self.ident()?;
+        let name = self.ident(state)?;
 
-        self.lparen()?;
+        self.lparen(state)?;
 
-        let params = self.param_list(ParamPosition::Function)?;
+        let params = self.param_list(state, ParamPosition::Function)?;
 
-        self.rparen()?;
+        self.rparen(state)?;
 
         let mut return_type = None;
 
-        if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
-            self.colon()?;
+        if state.current.kind == TokenKind::Colon {
+            self.colon(state)?;
 
-            return_type = Some(self.type_string()?);
+            return_type = Some(self.type_string(state)?);
         }
 
-        self.lbrace()?;
+        self.lbrace(state)?;
 
-        let body = self.block(&TokenKind::RightBrace)?;
+        let body = self.block(state, &TokenKind::RightBrace)?;
 
-        self.rbrace()?;
+        self.rbrace(state)?;
 
         Ok(Statement::Function {
             name: name.into(),
@@ -52,7 +53,8 @@ impl Parser {
     }
 
     pub(in crate::parser) fn method(
-        &mut self,
+        &self,
+        state: &mut State,
         class_type: ClassishDefinitionType,
         flags: Vec<MethodFlag>,
     ) -> ParseResult<Statement> {
@@ -62,13 +64,13 @@ impl Parser {
                 if !cf.contains(&ClassFlag::Abstract) && flags.contains(&MethodFlag::Abstract) =>
             {
                 return Err(ParseError::AbstractModifierOnNonAbstractClassMethod(
-                    self.current.span,
+                    state.current.span,
                 ));
             }
             _ => (),
         }
 
-        self.next();
+        state.next();
 
         let has_body = match &class_type {
             ClassishDefinitionType::Class(_) | ClassishDefinitionType::Trait => {
@@ -78,33 +80,33 @@ impl Parser {
             ClassishDefinitionType::Enum | ClassishDefinitionType::AnonymousClass => true,
         };
 
-        let by_ref = if self.current.kind == TokenKind::Ampersand {
-            self.next();
+        let by_ref = if state.current.kind == TokenKind::Ampersand {
+            state.next();
             true
         } else {
             false
         };
 
-        let name = self.ident_maybe_reserved()?;
+        let name = self.ident_maybe_reserved(state)?;
 
-        self.lparen()?;
+        self.lparen(state)?;
 
         let position = position_from_flags_and_name(class_type, flags.clone(), name.clone());
 
-        let params = self.param_list(position)?;
+        let params = self.param_list(state, position)?;
 
-        self.rparen()?;
+        self.rparen(state)?;
 
         let mut return_type = None;
 
-        if self.current.kind == TokenKind::Colon || self.config.force_type_strings {
-            self.colon()?;
+        if state.current.kind == TokenKind::Colon {
+            self.colon(state)?;
 
-            return_type = Some(self.type_string()?);
+            return_type = Some(self.type_string(state)?);
         }
 
         if !has_body {
-            self.semi()?;
+            self.semi(state)?;
 
             Ok(Statement::AbstractMethod {
                 name: name.into(),
@@ -114,11 +116,11 @@ impl Parser {
                 by_ref,
             })
         } else {
-            self.lbrace()?;
+            self.lbrace(state)?;
 
-            let body = self.block(&TokenKind::RightBrace)?;
+            let body = self.block(state, &TokenKind::RightBrace)?;
 
-            self.rbrace()?;
+            self.rbrace(state)?;
 
             Ok(Statement::Method {
                 name: name.into(),

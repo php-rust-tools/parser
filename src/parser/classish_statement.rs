@@ -7,6 +7,7 @@ use crate::parser::ast::TraitAdaptation;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::precedence::Precedence;
+use crate::parser::state::State;
 use crate::parser::Parser;
 
 use crate::expect_token;
@@ -24,121 +25,136 @@ pub enum ClassishDefinitionType {
 
 impl Parser {
     pub(in crate::parser) fn class_statement(
-        &mut self,
+        &self,
+        state: &mut State,
         flags: Vec<ClassFlag>,
     ) -> ParseResult<Statement> {
-        self.complete_class_statement(ClassishDefinitionType::Class(flags))
+        self.complete_class_statement(state, ClassishDefinitionType::Class(flags))
     }
 
-    pub(in crate::parser) fn interface_statement(&mut self) -> ParseResult<Statement> {
-        if self.current.kind == TokenKind::Const {
-            return self.parse_classish_const(vec![]);
+    pub(in crate::parser) fn interface_statement(
+        &self,
+        state: &mut State,
+    ) -> ParseResult<Statement> {
+        if state.current.kind == TokenKind::Const {
+            return self.parse_classish_const(state, vec![]);
         }
 
-        if self.current.kind == TokenKind::Function {
-            return self.method(ClassishDefinitionType::Interface, vec![]);
+        if state.current.kind == TokenKind::Function {
+            return self.method(state, ClassishDefinitionType::Interface, vec![]);
         }
 
-        let member_flags = self.interface_members_flags()?;
+        let member_flags = self.interface_members_flags(state)?;
 
         peek_token!([
-            TokenKind::Const => self.parse_classish_const(member_flags),
+            TokenKind::Const => self.parse_classish_const(state, member_flags),
             TokenKind::Function => self.method(
+                state,
                 ClassishDefinitionType::Interface,
                 member_flags.iter().map(|t| t.clone().into()).collect(),
             )
-        ], self, ["`const`", "`function`"])
+        ], state, ["`const`", "`function`"])
     }
 
-    pub(in crate::parser) fn trait_statement(&mut self) -> ParseResult<Statement> {
-        self.complete_class_statement(ClassishDefinitionType::Trait)
+    pub(in crate::parser) fn trait_statement(&self, state: &mut State) -> ParseResult<Statement> {
+        self.complete_class_statement(state, ClassishDefinitionType::Trait)
     }
 
-    pub(in crate::parser) fn anonymous_class_statement(&mut self) -> ParseResult<Statement> {
-        self.complete_class_statement(ClassishDefinitionType::AnonymousClass)
+    pub(in crate::parser) fn anonymous_class_statement(
+        &self,
+        state: &mut State,
+    ) -> ParseResult<Statement> {
+        self.complete_class_statement(state, ClassishDefinitionType::AnonymousClass)
     }
 
-    pub(in crate::parser) fn enum_statement(&mut self, backed: bool) -> ParseResult<Statement> {
-        if self.current.kind == TokenKind::Case {
-            self.next();
+    pub(in crate::parser) fn enum_statement(
+        &self,
+        state: &mut State,
+        backed: bool,
+    ) -> ParseResult<Statement> {
+        if state.current.kind == TokenKind::Case {
+            state.next();
 
-            let name = self.ident()?;
+            let name = self.ident(state)?;
 
             if backed {
-                expect_token!([TokenKind::Equals], self, "`=`");
+                expect_token!([TokenKind::Equals], state, "`=`");
 
-                let value = self.expression(Precedence::Lowest)?;
-                self.semi()?;
+                let value = self.expression(state, Precedence::Lowest)?;
+                self.semi(state)?;
 
                 return Ok(Statement::BackedEnumCase {
                     name: name.into(),
                     value,
                 });
             } else {
-                self.semi()?;
+                self.semi(state)?;
 
                 return Ok(Statement::UnitEnumCase { name: name.into() });
             }
         }
 
-        if self.current.kind == TokenKind::Const {
-            return self.parse_classish_const(vec![]);
+        if state.current.kind == TokenKind::Const {
+            return self.parse_classish_const(state, vec![]);
         }
 
-        if self.current.kind == TokenKind::Function {
-            return self.method(ClassishDefinitionType::Enum, vec![]);
+        if state.current.kind == TokenKind::Function {
+            return self.method(state, ClassishDefinitionType::Enum, vec![]);
         }
 
-        let member_flags = self.enum_members_flags()?;
+        let member_flags = self.enum_members_flags(state)?;
 
         peek_token!([
-            TokenKind::Const => self.parse_classish_const(member_flags),
+            TokenKind::Const => self.parse_classish_const(state, member_flags),
             TokenKind::Function => self.method(
+                state,
                 ClassishDefinitionType::Enum,
                 member_flags.iter().map(|t| t.clone().into()).collect(),
             )
-        ], self, ["`const`", "`function`"])
+        ], state, ["`const`", "`function`"])
     }
 
     fn complete_class_statement(
-        &mut self,
+        &self,
+        state: &mut State,
         class_type: ClassishDefinitionType,
     ) -> ParseResult<Statement> {
-        if self.current.kind == TokenKind::Use {
-            return self.parse_classish_uses();
+        if state.current.kind == TokenKind::Use {
+            return self.parse_classish_uses(state);
         }
 
-        if self.current.kind == TokenKind::Var {
-            return self.parse_classish_var();
+        if state.current.kind == TokenKind::Var {
+            return self.parse_classish_var(state);
         }
 
-        if self.current.kind == TokenKind::Const {
-            return self.parse_classish_const(vec![]);
+        if state.current.kind == TokenKind::Const {
+            return self.parse_classish_const(state, vec![]);
         }
 
-        if self.current.kind == TokenKind::Function {
-            return self.method(class_type, vec![]);
+        if state.current.kind == TokenKind::Function {
+            return self.method(state, class_type, vec![]);
         }
 
-        let member_flags = self.class_members_flags()?;
+        let member_flags = self.class_members_flags(state)?;
 
-        match &self.current.kind {
-            TokenKind::Const => self.parse_classish_const(member_flags),
+        match &state.current.kind {
+            TokenKind::Const => self.parse_classish_const(state, member_flags),
             TokenKind::Function => self.method(
+                state,
                 class_type,
                 member_flags.iter().map(|t| t.clone().into()).collect(),
             ),
             // TODO
             TokenKind::Variable(_) => {
-                let var = self.var()?;
+                let var = self.var(state)?;
                 let mut value = None;
 
-                if self.current.kind == TokenKind::Equals {
-                    self.next();
-                    value = Some(self.expression(Precedence::Lowest)?);
+                if state.current.kind == TokenKind::Equals {
+                    state.next();
+                    value = Some(self.expression(state, Precedence::Lowest)?);
                 }
 
-                self.semi()?;
+                self.semi(state)?;
 
                 Ok(Statement::Property {
                     var,
@@ -153,19 +169,19 @@ impl Parser {
             | TokenKind::FullyQualifiedIdentifier(_)
             | TokenKind::Array
             | TokenKind::Null => {
-                let prop_type = self.type_string()?;
-                let var = self.var()?;
+                let prop_type = self.type_string(state)?;
+                let var = self.var(state)?;
                 let mut value = None;
 
-                if self.current.kind == TokenKind::Equals {
-                    self.next();
-                    value = Some(self.expression(Precedence::Lowest)?);
+                if state.current.kind == TokenKind::Equals {
+                    state.next();
+                    value = Some(self.expression(state, Precedence::Lowest)?);
                 }
 
                 // TODO: Support comma-separated property declarations.
                 //       nikic/php-parser does this with a single Property statement
                 //       that is capable of holding multiple property declarations.
-                self.semi()?;
+                self.semi(state)?;
 
                 Ok(Statement::Property {
                     var,
@@ -176,30 +192,30 @@ impl Parser {
             }
             _ => expected_token_err!(
                 ["`const`", "`function`", "an identifier", "a varaible"],
-                self
+                state
             ),
         }
     }
 
-    fn parse_classish_var(&mut self) -> ParseResult<Statement> {
-        self.next();
+    fn parse_classish_var(&self, state: &mut State) -> ParseResult<Statement> {
+        state.next();
 
         let mut var_type = None;
 
-        if !matches!(self.current.kind, TokenKind::Variable(_)) || self.config.force_type_strings {
-            var_type = Some(self.type_string()?);
+        if !matches!(state.current.kind, TokenKind::Variable(_)) {
+            var_type = Some(self.type_string(state)?);
         }
 
-        let var = self.var()?;
+        let var = self.var(state)?;
         let mut value = None;
 
-        if self.current.kind == TokenKind::Equals {
-            self.next();
+        if state.current.kind == TokenKind::Equals {
+            state.next();
 
-            value = Some(self.expression(Precedence::Lowest)?);
+            value = Some(self.expression(state, Precedence::Lowest)?);
         }
 
-        self.semi()?;
+        self.semi(state)?;
 
         Ok(Statement::Var {
             var,
@@ -208,51 +224,52 @@ impl Parser {
         })
     }
 
-    fn parse_classish_uses(&mut self) -> ParseResult<Statement> {
-        self.next();
+    fn parse_classish_uses(&self, state: &mut State) -> ParseResult<Statement> {
+        state.next();
 
         let mut traits = Vec::new();
 
-        while self.current.kind != TokenKind::SemiColon && self.current.kind != TokenKind::LeftBrace
+        while state.current.kind != TokenKind::SemiColon
+            && state.current.kind != TokenKind::LeftBrace
         {
-            self.optional_comma()?;
+            self.optional_comma(state)?;
 
-            let t = self.full_name()?;
+            let t = self.full_name(state)?;
             traits.push(t.into());
         }
 
         let mut adaptations = Vec::new();
-        if self.current.kind == TokenKind::LeftBrace {
-            self.lbrace()?;
+        if state.current.kind == TokenKind::LeftBrace {
+            self.lbrace(state)?;
 
-            while self.current.kind != TokenKind::RightBrace {
-                let (r#trait, method): (Option<Identifier>, Identifier) = match self.peek.kind {
+            while state.current.kind != TokenKind::RightBrace {
+                let (r#trait, method): (Option<Identifier>, Identifier) = match state.peek.kind {
                     TokenKind::DoubleColon => {
-                        let r#trait = self.full_name()?;
-                        self.next();
-                        let method = self.ident()?;
+                        let r#trait = self.full_name(state)?;
+                        state.next();
+                        let method = self.ident(state)?;
                         (Some(r#trait.into()), method.into())
                     }
-                    _ => (None, self.ident()?.into()),
+                    _ => (None, self.ident(state)?.into()),
                 };
 
-                match self.current.kind {
+                match state.current.kind {
                     TokenKind::As => {
-                        self.next();
+                        state.next();
 
-                        match self.current.kind {
+                        match state.current.kind {
                             TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
-                                let visibility: MethodFlag = self.current.kind.clone().into();
-                                self.next();
+                                let visibility: MethodFlag = state.current.kind.clone().into();
+                                state.next();
 
-                                if self.current.kind == TokenKind::SemiColon {
+                                if state.current.kind == TokenKind::SemiColon {
                                     adaptations.push(TraitAdaptation::Visibility {
                                         r#trait,
                                         method,
                                         visibility,
                                     });
                                 } else {
-                                    let alias: Identifier = self.name()?.into();
+                                    let alias: Identifier = self.name(state)?.into();
                                     adaptations.push(TraitAdaptation::Alias {
                                         r#trait,
                                         method,
@@ -262,7 +279,7 @@ impl Parser {
                                 }
                             }
                             _ => {
-                                let alias: Identifier = self.name()?.into();
+                                let alias: Identifier = self.name(state)?.into();
                                 adaptations.push(TraitAdaptation::Alias {
                                     r#trait,
                                     method,
@@ -273,13 +290,13 @@ impl Parser {
                         }
                     }
                     TokenKind::Insteadof => {
-                        self.next();
+                        state.next();
 
                         let mut insteadof = Vec::new();
-                        insteadof.push(self.full_name()?.into());
-                        while self.current.kind != TokenKind::SemiColon {
-                            self.optional_comma()?;
-                            insteadof.push(self.full_name()?.into());
+                        insteadof.push(self.full_name(state)?.into());
+                        while state.current.kind != TokenKind::SemiColon {
+                            self.optional_comma(state)?;
+                            insteadof.push(self.full_name(state)?.into());
                         }
 
                         adaptations.push(TraitAdaptation::Precedence {
@@ -290,18 +307,18 @@ impl Parser {
                     }
                     _ => {
                         return Err(ParseError::UnexpectedToken(
-                            self.current.kind.to_string(),
-                            self.current.span,
+                            state.current.kind.to_string(),
+                            state.current.span,
                         ))
                     }
                 };
 
-                self.semi()?;
+                self.semi(state)?;
             }
 
-            self.rbrace()?;
+            self.rbrace(state)?;
         } else {
-            self.semi()?;
+            self.semi(state)?;
         }
 
         Ok(Statement::TraitUse {
@@ -310,30 +327,34 @@ impl Parser {
         })
     }
 
-    fn parse_classish_const(&mut self, const_flags: Vec<TokenKind>) -> ParseResult<Statement> {
+    fn parse_classish_const(
+        &self,
+        state: &mut State,
+        const_flags: Vec<TokenKind>,
+    ) -> ParseResult<Statement> {
         if const_flags.contains(&TokenKind::Static) {
-            return Err(ParseError::StaticModifierOnConstant(self.current.span));
+            return Err(ParseError::StaticModifierOnConstant(state.current.span));
         }
 
         if const_flags.contains(&TokenKind::Readonly) {
-            return Err(ParseError::ReadonlyModifierOnConstant(self.current.span));
+            return Err(ParseError::ReadonlyModifierOnConstant(state.current.span));
         }
 
         if const_flags.contains(&TokenKind::Final) && const_flags.contains(&TokenKind::Private) {
             return Err(ParseError::FinalModifierOnPrivateConstant(
-                self.current.span,
+                state.current.span,
             ));
         }
 
-        self.next();
+        state.next();
 
-        let name = self.ident()?;
+        let name = self.ident(state)?;
 
-        expect_token!([TokenKind::Equals], self, "`=`");
+        expect_token!([TokenKind::Equals], state, "`=`");
 
-        let value = self.expression(Precedence::Lowest)?;
+        let value = self.expression(state, Precedence::Lowest)?;
 
-        self.semi()?;
+        self.semi(state)?;
 
         Ok(Statement::ClassishConstant {
             name: name.into(),

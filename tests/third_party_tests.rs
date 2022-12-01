@@ -76,7 +76,7 @@ fn test_file(name: &str, filename: PathBuf) {
     Lexer::new()
         .tokenize(code.as_bytes())
         .map(|tokens| {
-            Parser::new(None)
+            Parser::new()
                 .parse(tokens)
                 .map(|_| {
                     println!("✅ successfully parsed file: `\"{}\"`.", name);

@@ -6,49 +6,50 @@ use crate::parser::ast::Expression;
 use crate::parser::ast::Identifier;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
+use crate::parser::state::State;
 use crate::parser::Parser;
 
 use crate::expect_token;
 use crate::expected_token_err;
 
 impl Parser {
-    pub(in crate::parser) fn class_definition(&mut self) -> ParseResult<Statement> {
-        let flags: Vec<ClassFlag> = self.class_flags()?.iter().map(|f| f.into()).collect();
+    pub(in crate::parser) fn class_definition(&self, state: &mut State) -> ParseResult<Statement> {
+        let flags: Vec<ClassFlag> = self.class_flags(state)?.iter().map(|f| f.into()).collect();
 
-        expect_token!([TokenKind::Class], self, ["`class`"]);
+        expect_token!([TokenKind::Class], state, ["`class`"]);
 
-        let name = self.ident()?;
+        let name = self.ident(state)?;
         let mut extends: Option<Identifier> = None;
 
-        if self.current.kind == TokenKind::Extends {
-            self.next();
-            extends = Some(self.full_name()?.into());
+        if state.current.kind == TokenKind::Extends {
+            state.next();
+            extends = Some(self.full_name(state)?.into());
         }
 
-        let implements = if self.current.kind == TokenKind::Implements {
-            self.next();
+        let implements = if state.current.kind == TokenKind::Implements {
+            state.next();
 
-            self.at_least_one_comma_separated::<Identifier>(&|parser| {
-                Ok(parser.full_name()?.into())
+            self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
+                Ok(parser.full_name(state)?.into())
             })?
         } else {
             Vec::new()
         };
 
-        self.lbrace()?;
+        self.lbrace(state)?;
 
         let mut body = Vec::new();
-        while self.current.kind != TokenKind::RightBrace {
-            self.gather_comments();
+        while state.current.kind != TokenKind::RightBrace {
+            state.gather_comments();
 
-            if self.current.kind == TokenKind::RightBrace {
-                self.clear_comments();
+            if state.current.kind == TokenKind::RightBrace {
+                state.clear_comments();
                 break;
             }
 
-            body.push(self.class_statement(flags.clone())?);
+            body.push(self.class_statement(state, flags.clone())?);
         }
-        self.rbrace()?;
+        self.rbrace(state)?;
 
         Ok(Statement::Class {
             name: name.into(),
@@ -59,35 +60,38 @@ impl Parser {
         })
     }
 
-    pub(in crate::parser) fn interface_definition(&mut self) -> ParseResult<Statement> {
-        expect_token!([TokenKind::Interface], self, ["`interface`"]);
+    pub(in crate::parser) fn interface_definition(
+        &self,
+        state: &mut State,
+    ) -> ParseResult<Statement> {
+        expect_token!([TokenKind::Interface], state, ["`interface`"]);
 
-        let name = self.ident()?;
+        let name = self.ident(state)?;
 
-        let extends = if self.current.kind == TokenKind::Extends {
-            self.next();
+        let extends = if state.current.kind == TokenKind::Extends {
+            state.next();
 
-            self.at_least_one_comma_separated::<Identifier>(&|parser| {
-                Ok(parser.full_name()?.into())
+            self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
+                Ok(parser.full_name(state)?.into())
             })?
         } else {
             Vec::new()
         };
 
-        self.lbrace()?;
+        self.lbrace(state)?;
 
         let mut body = Vec::new();
-        while self.current.kind != TokenKind::RightBrace && !self.is_eof() {
-            self.gather_comments();
+        while state.current.kind != TokenKind::RightBrace && !state.is_eof() {
+            state.gather_comments();
 
-            if self.current.kind == TokenKind::RightBrace {
-                self.clear_comments();
+            if state.current.kind == TokenKind::RightBrace {
+                state.clear_comments();
                 break;
             }
 
-            body.push(self.interface_statement()?);
+            body.push(self.interface_statement(state)?);
         }
-        self.rbrace()?;
+        self.rbrace(state)?;
 
         Ok(Statement::Interface {
             name: name.into(),
@@ -96,25 +100,25 @@ impl Parser {
         })
     }
 
-    pub(in crate::parser) fn trait_definition(&mut self) -> ParseResult<Statement> {
-        expect_token!([TokenKind::Trait], self, ["`trait`"]);
+    pub(in crate::parser) fn trait_definition(&self, state: &mut State) -> ParseResult<Statement> {
+        expect_token!([TokenKind::Trait], state, ["`trait`"]);
 
-        let name = self.ident()?;
+        let name = self.ident(state)?;
 
-        self.lbrace()?;
+        self.lbrace(state)?;
 
         let mut body = Vec::new();
-        while self.current.kind != TokenKind::RightBrace && !self.is_eof() {
-            self.gather_comments();
+        while state.current.kind != TokenKind::RightBrace && !state.is_eof() {
+            state.gather_comments();
 
-            if self.current.kind == TokenKind::RightBrace {
-                self.clear_comments();
+            if state.current.kind == TokenKind::RightBrace {
+                state.clear_comments();
                 break;
             }
 
-            body.push(self.trait_statement()?);
+            body.push(self.trait_statement(state)?);
         }
-        self.rbrace()?;
+        self.rbrace(state)?;
 
         Ok(Statement::Trait {
             name: name.into(),
@@ -122,47 +126,50 @@ impl Parser {
         })
     }
 
-    pub(in crate::parser) fn anonymous_class_definition(&mut self) -> ParseResult<Expression> {
-        self.next();
+    pub(in crate::parser) fn anonymous_class_definition(
+        &self,
+        state: &mut State,
+    ) -> ParseResult<Expression> {
+        state.next();
 
-        expect_token!([TokenKind::Class], self, ["`class`"]);
+        expect_token!([TokenKind::Class], state, ["`class`"]);
 
         let mut args = vec![];
 
-        if self.current.kind == TokenKind::LeftParen {
-            self.lparen()?;
+        if state.current.kind == TokenKind::LeftParen {
+            self.lparen(state)?;
 
-            args = self.args_list()?;
+            args = self.args_list(state)?;
 
-            self.rparen()?;
+            self.rparen(state)?;
         }
 
         let mut extends: Option<Identifier> = None;
 
-        if self.current.kind == TokenKind::Extends {
-            self.next();
-            extends = Some(self.full_name()?.into());
+        if state.current.kind == TokenKind::Extends {
+            state.next();
+            extends = Some(self.full_name(state)?.into());
         }
 
         let mut implements = Vec::new();
-        if self.current.kind == TokenKind::Implements {
-            self.next();
+        if state.current.kind == TokenKind::Implements {
+            state.next();
 
-            while self.current.kind != TokenKind::LeftBrace {
-                self.optional_comma()?;
+            while state.current.kind != TokenKind::LeftBrace {
+                self.optional_comma(state)?;
 
-                implements.push(self.full_name()?.into());
+                implements.push(self.full_name(state)?.into());
             }
         }
 
-        self.lbrace()?;
+        self.lbrace(state)?;
 
         let mut body = Vec::new();
-        while self.current.kind != TokenKind::RightBrace && !self.is_eof() {
-            body.push(self.anonymous_class_statement()?);
+        while state.current.kind != TokenKind::RightBrace && !state.is_eof() {
+            body.push(self.anonymous_class_statement(state)?);
         }
 
-        self.rbrace()?;
+        self.rbrace(state)?;
 
         Ok(Expression::New {
             target: Box::new(Expression::AnonymousClass {
@@ -174,17 +181,17 @@ impl Parser {
         })
     }
 
-    pub(in crate::parser) fn enum_definition(&mut self) -> ParseResult<Statement> {
-        self.next();
+    pub(in crate::parser) fn enum_definition(&self, state: &mut State) -> ParseResult<Statement> {
+        state.next();
 
-        let name = self.ident()?;
+        let name = self.ident(state)?;
 
-        let backed_type: Option<BackedEnumType> = if self.current.kind == TokenKind::Colon {
-            self.colon()?;
+        let backed_type: Option<BackedEnumType> = if state.current.kind == TokenKind::Colon {
+            self.colon(state)?;
 
-            match self.current.kind.clone() {
+            match state.current.kind.clone() {
                 TokenKind::Identifier(s) if s == b"string" || s == b"int" => {
-                    self.next();
+                    state.next();
 
                     Some(match &s[..] {
                         b"string" => BackedEnumType::String,
@@ -193,7 +200,7 @@ impl Parser {
                     })
                 }
                 _ => {
-                    return expected_token_err!(["`string`", "`int`"], self);
+                    return expected_token_err!(["`string`", "`int`"], state);
                 }
             }
         } else {
@@ -201,25 +208,25 @@ impl Parser {
         };
 
         let mut implements = Vec::new();
-        if self.current.kind == TokenKind::Implements {
-            self.next();
+        if state.current.kind == TokenKind::Implements {
+            state.next();
 
-            while self.current.kind != TokenKind::LeftBrace {
-                implements.push(self.full_name()?.into());
+            while state.current.kind != TokenKind::LeftBrace {
+                implements.push(self.full_name(state)?.into());
 
-                self.optional_comma()?;
+                self.optional_comma(state)?;
             }
         }
 
-        self.lbrace()?;
+        self.lbrace(state)?;
 
         let mut body = Block::new();
-        while self.current.kind != TokenKind::RightBrace {
-            self.skip_comments();
-            body.push(self.enum_statement(backed_type.is_some())?);
+        while state.current.kind != TokenKind::RightBrace {
+            state.skip_comments();
+            body.push(self.enum_statement(state, backed_type.is_some())?);
         }
 
-        self.rbrace()?;
+        self.rbrace(state)?;
 
         match backed_type {
             Some(backed_type) => Ok(Statement::BackedEnum {
@@ -237,17 +244,18 @@ impl Parser {
     }
 
     fn at_least_one_comma_separated<T>(
-        &mut self,
-        func: &(dyn Fn(&mut Parser) -> ParseResult<T>),
+        &self,
+        state: &mut State,
+        func: &(dyn Fn(&Parser, &mut State) -> ParseResult<T>),
     ) -> ParseResult<Vec<T>> {
         let mut result: Vec<T> = vec![];
         loop {
-            result.push(func(self)?);
-            if self.current.kind != TokenKind::Comma {
+            result.push(func(self, state)?);
+            if state.current.kind != TokenKind::Comma {
                 break;
             }
 
-            self.next();
+            state.next();
         }
 
         Ok(result)
