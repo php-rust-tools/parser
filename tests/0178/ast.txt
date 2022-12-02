@@ -1,0 +1,309 @@
+[
+    Declare {
+        declares: [
+            DeclareItem {
+                key: Identifier {
+                    name: "strict_types",
+                },
+                value: LiteralInteger {
+                    i: 1,
+                },
+            },
+        ],
+        body: [],
+    },
+    Namespace {
+        name: "Psl\Internal",
+        body: [
+            Noop,
+            Use {
+                uses: [
+                    Use {
+                        name: Identifier {
+                            name: "Closure",
+                        },
+                        alias: None,
+                    },
+                ],
+                kind: Normal,
+            },
+            Use {
+                uses: [
+                    Use {
+                        name: Identifier {
+                            name: "Psl\Str",
+                        },
+                        alias: None,
+                    },
+                ],
+                kind: Normal,
+            },
+            Use {
+                uses: [
+                    Use {
+                        name: Identifier {
+                            name: "restore_error_handler",
+                        },
+                        alias: None,
+                    },
+                ],
+                kind: Function,
+            },
+            Use {
+                uses: [
+                    Use {
+                        name: Identifier {
+                            name: "set_error_handler",
+                        },
+                        alias: None,
+                    },
+                ],
+                kind: Function,
+            },
+            Function {
+                name: Identifier {
+                    name: "box",
+                },
+                params: [
+                    Param {
+                        name: Variable {
+                            name: "fun",
+                        },
+                        type: Some(
+                            Identifier(
+                                Identifier {
+                                    name: "Closure",
+                                },
+                            ),
+                        ),
+                        variadic: false,
+                        default: None,
+                        flags: [],
+                        by_ref: false,
+                    },
+                ],
+                body: [
+                    Expression {
+                        expr: Infix {
+                            lhs: Variable {
+                                name: "last_message",
+                            },
+                            op: Assign,
+                            rhs: Null,
+                        },
+                    },
+                    Expression {
+                        expr: Call {
+                            target: Identifier {
+                                name: "set_error_handler",
+                            },
+                            args: [
+                                Arg {
+                                    name: None,
+                                    value: Closure {
+                                        params: [
+                                            Param {
+                                                name: Variable {
+                                                    name: "_type",
+                                                },
+                                                type: Some(
+                                                    Integer,
+                                                ),
+                                                variadic: false,
+                                                default: None,
+                                                flags: [],
+                                                by_ref: false,
+                                            },
+                                            Param {
+                                                name: Variable {
+                                                    name: "message",
+                                                },
+                                                type: Some(
+                                                    String,
+                                                ),
+                                                variadic: false,
+                                                default: None,
+                                                flags: [],
+                                                by_ref: false,
+                                            },
+                                        ],
+                                        uses: [
+                                            ClosureUse {
+                                                var: Variable {
+                                                    name: "last_message",
+                                                },
+                                                by_ref: true,
+                                            },
+                                        ],
+                                        return_type: None,
+                                        body: [
+                                            Expression {
+                                                expr: Infix {
+                                                    lhs: Variable {
+                                                        name: "last_message",
+                                                    },
+                                                    op: Assign,
+                                                    rhs: Variable {
+                                                        name: "message",
+                                                    },
+                                                },
+                                            },
+                                        ],
+                                        static: true,
+                                        by_ref: false,
+                                    },
+                                    unpack: false,
+                                },
+                            ],
+                        },
+                    },
+                    If {
+                        condition: Infix {
+                            lhs: Infix {
+                                lhs: Null,
+                                op: NotIdentical,
+                                rhs: Variable {
+                                    name: "last_message",
+                                },
+                            },
+                            op: And,
+                            rhs: Call {
+                                target: Identifier {
+                                    name: "Str\contains",
+                                },
+                                args: [
+                                    Arg {
+                                        name: None,
+                                        value: Variable {
+                                            name: "last_message",
+                                        },
+                                        unpack: false,
+                                    },
+                                    Arg {
+                                        name: None,
+                                        value: LiteralString {
+                                            value: "): ",
+                                        },
+                                        unpack: false,
+                                    },
+                                ],
+                            },
+                        },
+                        then: [
+                            Expression {
+                                expr: Infix {
+                                    lhs: Variable {
+                                        name: "last_message",
+                                    },
+                                    op: Assign,
+                                    rhs: Call {
+                                        target: Identifier {
+                                            name: "Str\after",
+                                        },
+                                        args: [
+                                            Arg {
+                                                name: None,
+                                                value: Call {
+                                                    target: Identifier {
+                                                        name: "Str\lowercase",
+                                                    },
+                                                    args: [
+                                                        Arg {
+                                                            name: None,
+                                                            value: Variable {
+                                                                name: "last_message",
+                                                            },
+                                                            unpack: false,
+                                                        },
+                                                    ],
+                                                },
+                                                unpack: false,
+                                            },
+                                            Arg {
+                                                name: None,
+                                                value: LiteralString {
+                                                    value: "): ",
+                                                },
+                                                unpack: false,
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                        else_ifs: [],
+                        else: None,
+                    },
+                    Try {
+                        body: [
+                            Expression {
+                                expr: Infix {
+                                    lhs: Variable {
+                                        name: "value",
+                                    },
+                                    op: Assign,
+                                    rhs: Call {
+                                        target: Variable {
+                                            name: "fun",
+                                        },
+                                        args: [],
+                                    },
+                                },
+                            },
+                            Expression {
+                                expr: Infix {
+                                    lhs: Variable {
+                                        name: "result",
+                                    },
+                                    op: Assign,
+                                    rhs: Array {
+                                        items: [
+                                            ArrayItem {
+                                                key: None,
+                                                value: Variable {
+                                                    name: "value",
+                                                },
+                                                unpack: false,
+                                            },
+                                            ArrayItem {
+                                                key: None,
+                                                value: Variable {
+                                                    name: "last_message",
+                                                },
+                                                unpack: false,
+                                            },
+                                        ],
+                                    },
+                                },
+                            },
+                            Return {
+                                value: Some(
+                                    Variable {
+                                        name: "result",
+                                    },
+                                ),
+                            },
+                        ],
+                        catches: [],
+                        finally: Some(
+                            [
+                                Expression {
+                                    expr: Call {
+                                        target: Identifier {
+                                            name: "restore_error_handler",
+                                        },
+                                        args: [],
+                                    },
+                                },
+                            ],
+                        ),
+                    },
+                ],
+                return_type: Some(
+                    Array,
+                ),
+                by_ref: false,
+            },
+        ],
+    },
+]

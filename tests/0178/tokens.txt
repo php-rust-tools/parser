@@ -1,0 +1,1001 @@
+[
+    Token {
+        kind: OpenTag(
+            Full,
+        ),
+        span: (
+            1,
+            1,
+        ),
+    },
+    Token {
+        kind: Comment(
+            "// The following code was taken from of PSL.",
+        ),
+        span: (
+            3,
+            1,
+        ),
+    },
+    Token {
+        kind: Comment(
+            "//",
+        ),
+        span: (
+            4,
+            1,
+        ),
+    },
+    Token {
+        kind: Comment(
+            "// https://github.com/azjezz/psl/blob/657ce9888be47cee49418989420b83661f7cf1c4/src/Psl/Internal/box.php",
+        ),
+        span: (
+            5,
+            1,
+        ),
+    },
+    Token {
+        kind: Comment(
+            "//",
+        ),
+        span: (
+            6,
+            1,
+        ),
+    },
+    Token {
+        kind: Comment(
+            "// Code subject to the MIT license (https://github.com/azjezz/psl/blob/657ce9888be47cee49418989420b83661f7cf1c4/LICENSE).",
+        ),
+        span: (
+            7,
+            1,
+        ),
+    },
+    Token {
+        kind: Comment(
+            "//",
+        ),
+        span: (
+            8,
+            1,
+        ),
+    },
+    Token {
+        kind: Comment(
+            "// Copyright (c) 2019-2022 Saif Eddin Gmati <azjezz@protonmail.com>",
+        ),
+        span: (
+            9,
+            1,
+        ),
+    },
+    Token {
+        kind: Declare,
+        span: (
+            11,
+            1,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            11,
+            8,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "strict_types",
+        ),
+        span: (
+            11,
+            9,
+        ),
+    },
+    Token {
+        kind: Equals,
+        span: (
+            11,
+            21,
+        ),
+    },
+    Token {
+        kind: LiteralInteger(
+            1,
+        ),
+        span: (
+            11,
+            22,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            11,
+            23,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            11,
+            24,
+        ),
+    },
+    Token {
+        kind: Namespace,
+        span: (
+            13,
+            1,
+        ),
+    },
+    Token {
+        kind: QualifiedIdentifier(
+            "Psl\Internal",
+        ),
+        span: (
+            13,
+            11,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            13,
+            23,
+        ),
+    },
+    Token {
+        kind: Use,
+        span: (
+            15,
+            1,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "Closure",
+        ),
+        span: (
+            15,
+            5,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            15,
+            12,
+        ),
+    },
+    Token {
+        kind: Use,
+        span: (
+            16,
+            1,
+        ),
+    },
+    Token {
+        kind: QualifiedIdentifier(
+            "Psl\Str",
+        ),
+        span: (
+            16,
+            5,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            16,
+            12,
+        ),
+    },
+    Token {
+        kind: Use,
+        span: (
+            18,
+            1,
+        ),
+    },
+    Token {
+        kind: Function,
+        span: (
+            18,
+            5,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "restore_error_handler",
+        ),
+        span: (
+            18,
+            14,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            18,
+            35,
+        ),
+    },
+    Token {
+        kind: Use,
+        span: (
+            19,
+            1,
+        ),
+    },
+    Token {
+        kind: Function,
+        span: (
+            19,
+            5,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "set_error_handler",
+        ),
+        span: (
+            19,
+            14,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            19,
+            31,
+        ),
+    },
+    Token {
+        kind: DocComment(
+            "/**\n * @template T\n *\n * @param (Closure(): T) $fun\n *\n * @return array{0: T, 1: ?string}\n *\n * @internal\n *\n * @psalm-suppress MissingThrowsDocblock\n */",
+        ),
+        span: (
+            21,
+            1,
+        ),
+    },
+    Token {
+        kind: Function,
+        span: (
+            32,
+            1,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "box",
+        ),
+        span: (
+            32,
+            10,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            32,
+            13,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "Closure",
+        ),
+        span: (
+            32,
+            14,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "fun",
+        ),
+        span: (
+            32,
+            22,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            32,
+            26,
+        ),
+    },
+    Token {
+        kind: Colon,
+        span: (
+            32,
+            27,
+        ),
+    },
+    Token {
+        kind: Array,
+        span: (
+            32,
+            29,
+        ),
+    },
+    Token {
+        kind: LeftBrace,
+        span: (
+            33,
+            1,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "last_message",
+        ),
+        span: (
+            34,
+            5,
+        ),
+    },
+    Token {
+        kind: Equals,
+        span: (
+            34,
+            19,
+        ),
+    },
+    Token {
+        kind: Null,
+        span: (
+            34,
+            21,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            34,
+            25,
+        ),
+    },
+    Token {
+        kind: DocComment(
+            "/** @psalm-suppress InvalidArgument */",
+        ),
+        span: (
+            35,
+            5,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "set_error_handler",
+        ),
+        span: (
+            36,
+            5,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            36,
+            22,
+        ),
+    },
+    Token {
+        kind: Static,
+        span: (
+            36,
+            23,
+        ),
+    },
+    Token {
+        kind: Function,
+        span: (
+            36,
+            30,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            36,
+            39,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "int",
+        ),
+        span: (
+            36,
+            40,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "_type",
+        ),
+        span: (
+            36,
+            44,
+        ),
+    },
+    Token {
+        kind: Comma,
+        span: (
+            36,
+            50,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "string",
+        ),
+        span: (
+            36,
+            52,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "message",
+        ),
+        span: (
+            36,
+            59,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            36,
+            67,
+        ),
+    },
+    Token {
+        kind: Use,
+        span: (
+            36,
+            69,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            36,
+            73,
+        ),
+    },
+    Token {
+        kind: Ampersand,
+        span: (
+            36,
+            74,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "last_message",
+        ),
+        span: (
+            36,
+            75,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            36,
+            88,
+        ),
+    },
+    Token {
+        kind: LeftBrace,
+        span: (
+            36,
+            90,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "last_message",
+        ),
+        span: (
+            37,
+            9,
+        ),
+    },
+    Token {
+        kind: Equals,
+        span: (
+            37,
+            23,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "message",
+        ),
+        span: (
+            37,
+            25,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            37,
+            33,
+        ),
+    },
+    Token {
+        kind: RightBrace,
+        span: (
+            38,
+            5,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            38,
+            6,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            38,
+            7,
+        ),
+    },
+    Token {
+        kind: DocComment(
+            "/**\n     * @var string|null $last_message\n     */",
+        ),
+        span: (
+            40,
+            5,
+        ),
+    },
+    Token {
+        kind: If,
+        span: (
+            43,
+            5,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            43,
+            8,
+        ),
+    },
+    Token {
+        kind: Null,
+        span: (
+            43,
+            9,
+        ),
+    },
+    Token {
+        kind: BangDoubleEquals,
+        span: (
+            43,
+            14,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "last_message",
+        ),
+        span: (
+            43,
+            18,
+        ),
+    },
+    Token {
+        kind: BooleanAnd,
+        span: (
+            43,
+            32,
+        ),
+    },
+    Token {
+        kind: QualifiedIdentifier(
+            "Str\contains",
+        ),
+        span: (
+            43,
+            35,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            43,
+            47,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "last_message",
+        ),
+        span: (
+            43,
+            48,
+        ),
+    },
+    Token {
+        kind: Comma,
+        span: (
+            43,
+            61,
+        ),
+    },
+    Token {
+        kind: LiteralString(
+            "): ",
+        ),
+        span: (
+            43,
+            63,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            43,
+            68,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            43,
+            69,
+        ),
+    },
+    Token {
+        kind: LeftBrace,
+        span: (
+            43,
+            71,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "last_message",
+        ),
+        span: (
+            44,
+            9,
+        ),
+    },
+    Token {
+        kind: Equals,
+        span: (
+            44,
+            23,
+        ),
+    },
+    Token {
+        kind: QualifiedIdentifier(
+            "Str\after",
+        ),
+        span: (
+            44,
+            25,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            44,
+            34,
+        ),
+    },
+    Token {
+        kind: QualifiedIdentifier(
+            "Str\lowercase",
+        ),
+        span: (
+            45,
+            13,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            45,
+            26,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "last_message",
+        ),
+        span: (
+            45,
+            27,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            45,
+            40,
+        ),
+    },
+    Token {
+        kind: Comma,
+        span: (
+            45,
+            41,
+        ),
+    },
+    Token {
+        kind: Comment(
+            "// how i feel toward PHP error handling:",
+        ),
+        span: (
+            46,
+            13,
+        ),
+    },
+    Token {
+        kind: LiteralString(
+            "): ",
+        ),
+        span: (
+            47,
+            13,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            48,
+            9,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            48,
+            10,
+        ),
+    },
+    Token {
+        kind: RightBrace,
+        span: (
+            49,
+            5,
+        ),
+    },
+    Token {
+        kind: Try,
+        span: (
+            51,
+            5,
+        ),
+    },
+    Token {
+        kind: LeftBrace,
+        span: (
+            51,
+            9,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "value",
+        ),
+        span: (
+            52,
+            9,
+        ),
+    },
+    Token {
+        kind: Equals,
+        span: (
+            52,
+            16,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "fun",
+        ),
+        span: (
+            52,
+            18,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            52,
+            22,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            52,
+            23,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            52,
+            24,
+        ),
+    },
+    Token {
+        kind: DocComment(
+            "/** @var array{0: T, 1: ?string} $result */",
+        ),
+        span: (
+            54,
+            9,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "result",
+        ),
+        span: (
+            55,
+            9,
+        ),
+    },
+    Token {
+        kind: Equals,
+        span: (
+            55,
+            17,
+        ),
+    },
+    Token {
+        kind: LeftBracket,
+        span: (
+            55,
+            19,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "value",
+        ),
+        span: (
+            55,
+            20,
+        ),
+    },
+    Token {
+        kind: Comma,
+        span: (
+            55,
+            26,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "last_message",
+        ),
+        span: (
+            55,
+            28,
+        ),
+    },
+    Token {
+        kind: RightBracket,
+        span: (
+            55,
+            41,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            55,
+            42,
+        ),
+    },
+    Token {
+        kind: Return,
+        span: (
+            57,
+            9,
+        ),
+    },
+    Token {
+        kind: Variable(
+            "result",
+        ),
+        span: (
+            57,
+            16,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            57,
+            23,
+        ),
+    },
+    Token {
+        kind: RightBrace,
+        span: (
+            58,
+            5,
+        ),
+    },
+    Token {
+        kind: Finally,
+        span: (
+            58,
+            7,
+        ),
+    },
+    Token {
+        kind: LeftBrace,
+        span: (
+            58,
+            15,
+        ),
+    },
+    Token {
+        kind: Identifier(
+            "restore_error_handler",
+        ),
+        span: (
+            59,
+            9,
+        ),
+    },
+    Token {
+        kind: LeftParen,
+        span: (
+            59,
+            30,
+        ),
+    },
+    Token {
+        kind: RightParen,
+        span: (
+            59,
+            31,
+        ),
+    },
+    Token {
+        kind: SemiColon,
+        span: (
+            59,
+            32,
+        ),
+    },
+    Token {
+        kind: RightBrace,
+        span: (
+            60,
+            5,
+        ),
+    },
+    Token {
+        kind: RightBrace,
+        span: (
+            61,
+            1,
+        ),
+    },
+]

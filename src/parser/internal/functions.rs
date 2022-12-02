@@ -48,6 +48,8 @@ impl Parser {
                 while state.current.kind != TokenKind::RightParen {
                     let mut by_ref = false;
                     if state.current.kind == TokenKind::Ampersand {
+                        state.next();
+
                         by_ref = true;
                     }
 
