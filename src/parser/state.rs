@@ -10,6 +10,12 @@ use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
+pub enum NamespaceType {
+    Braced,
+    Unbraced,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Scope {
     Namespace(ByteString),
     BracedNamespace(Option<ByteString>),
@@ -33,6 +39,7 @@ pub struct State {
     pub peek: Token,
     pub iter: IntoIter<Token>,
     pub comments: Vec<Token>,
+    pub namespace_type: Option<NamespaceType>,
 }
 
 impl State {
@@ -45,30 +52,40 @@ impl State {
             peek: iter.next().unwrap_or_default(),
             iter,
             comments: vec![],
+            namespace_type: None,
         }
     }
 
-    pub fn named(&self, name: &ByteString) -> String {
-        let mut namespace = None;
+    /// Return the namespace type used in the current state
+    ///
+    /// The namespace type is retrieve from the last entered
+    /// namespace scope.
+    ///
+    /// Note: even when a namespace scope is exited, the namespace type
+    /// is retained, until the next namespace scope is entered.
+    pub fn namespace_type(&self) -> Option<NamespaceType> {
+        self.namespace_type.clone()
+    }
+
+    pub fn namespace(&self) -> Option<&Scope> {
         for scope in &self.stack {
             match scope {
-                Scope::Namespace(n) => {
-                    namespace = Some(n.to_string());
-
-                    break;
-                }
-                Scope::BracedNamespace(n) => {
-                    namespace = n.as_ref().map(|s| s.to_string());
-
-                    break;
+                Scope::Namespace(_) | Scope::BracedNamespace(_) => {
+                    return Some(scope);
                 }
                 _ => {}
             }
         }
 
-        match namespace {
-            Some(v) => format!("{}\\{}", v, name),
-            None => name.to_string(),
+        None
+    }
+
+    pub fn named(&self, name: &ByteString) -> String {
+        match self.namespace() {
+            Some(Scope::Namespace(n)) | Some(Scope::BracedNamespace(Some(n))) => {
+                format!("{}\\{}", n, name)
+            }
+            _ => name.to_string(),
         }
     }
 
@@ -84,8 +101,18 @@ impl State {
             .ok_or(ParseError::UnpredictableState(self.current.span))
     }
 
-    pub fn enter(&mut self, state: Scope) {
-        self.stack.push_back(state);
+    pub fn enter(&mut self, scope: Scope) {
+        match &scope {
+            Scope::Namespace(_) => {
+                self.namespace_type = Some(NamespaceType::Unbraced);
+            }
+            Scope::BracedNamespace(_) => {
+                self.namespace_type = Some(NamespaceType::Braced);
+            }
+            _ => {}
+        }
+
+        self.stack.push_back(scope);
     }
 
     pub fn exit(&mut self) {

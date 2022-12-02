@@ -30,6 +30,8 @@ pub enum ParseError {
     UnpredictableState(Span),
     StaticPropertyUsingReadonlyModifier(String, String, Span),
     ReadonlyPropertyHasDefaultValue(String, String, Span),
+    MixingBracedAndUnBracedNamespaceDeclarations(Span),
+    NestedNamespaceDeclarations(Span),
 }
 
 impl Display for ParseError {
@@ -72,6 +74,8 @@ impl Display for ParseError {
             Self::UnpredictableState(span) => write!(f, "Parse Error: Reached an unpredictable state on line {} column {}", span.0, span.1),
             Self::StaticPropertyUsingReadonlyModifier(class, prop, span) => write!(f, "Parse Error: Static property {}:${} cannot be readonly on line {} column {}", class, prop, span.0, span.1),
             Self::ReadonlyPropertyHasDefaultValue(class, prop, span) => write!(f, "Parse Error: Readonly property {}:${} cannot have a default value on line {} column {}", class, prop, span.0, span.1),
+            Self::MixingBracedAndUnBracedNamespaceDeclarations(span) => write!(f, "Parse Error: Cannot mix braced namespace declarations with unbraced namespace declarations on line {} column {}", span.0, span.1),
+            Self::NestedNamespaceDeclarations(span) => write!(f, "Parse Error: Namespace declarations cannot be mixed on line {} column {}", span.0, span.1),
         }
     }
 }

@@ -1,0 +1,32 @@
+[
+    Namespace {
+        name: "Foo\Bar",
+        body: [
+            Noop,
+            Function {
+                name: Identifier {
+                    name: "foo",
+                },
+                params: [],
+                body: [],
+                return_type: None,
+                by_ref: false,
+            },
+            Namespace {
+                name: "Foo\Baz",
+                body: [
+                    Noop,
+                    Function {
+                        name: Identifier {
+                            name: "foo",
+                        },
+                        params: [],
+                        body: [],
+                        return_type: None,
+                        by_ref: false,
+                    },
+                ],
+            },
+        ],
+    },
+]
