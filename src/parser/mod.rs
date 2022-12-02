@@ -11,9 +11,7 @@ use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::ident::is_reserved_ident;
 use crate::parser::internal::precedence::{Associativity, Precedence};
-use crate::parser::state::Scope;
 use crate::parser::state::State;
-use crate::scoped;
 
 pub mod ast;
 pub mod error;
@@ -62,49 +60,7 @@ impl Parser {
         state.skip_comments();
 
         let statement = match &state.current.kind {
-            TokenKind::Namespace => {
-                state.next();
-
-                if state.current.kind != TokenKind::LeftBrace {
-                    let name = self.name(state)?;
-
-                    if state.current.kind == TokenKind::LeftBrace {
-                        self.lbrace(state)?;
-
-                        let body = scoped!(state, Scope::BracedNamespace(Some(name.clone())), {
-                            self.block(state, &TokenKind::RightBrace)
-                        })?;
-
-                        self.rbrace(state)?;
-
-                        Statement::BracedNamespace {
-                            name: Some(name),
-                            body,
-                        }
-                    } else {
-                        let body = scoped!(state, Scope::Namespace(name.clone()), {
-                            let mut body = Block::new();
-                            while !state.is_eof() {
-                                body.push(self.top_level_statement(state)?);
-                            }
-
-                            Ok(body)
-                        })?;
-
-                        Statement::Namespace { name, body }
-                    }
-                } else {
-                    self.lbrace(state)?;
-
-                    let body = scoped!(state, Scope::BracedNamespace(None), {
-                        self.block(state, &TokenKind::RightBrace)
-                    })?;
-
-                    self.rbrace(state)?;
-
-                    Statement::BracedNamespace { name: None, body }
-                }
-            }
+            TokenKind::Namespace => self.namespace(state)?,
             TokenKind::Use => {
                 state.next();
 
@@ -521,11 +477,7 @@ impl Parser {
                 };
 
                 let mut cases = Vec::new();
-                loop {
-                    if state.current.kind == end_token {
-                        break;
-                    }
-
+                while state.current.kind != end_token {
                     match state.current.kind {
                         TokenKind::Case => {
                             state.next();

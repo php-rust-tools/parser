@@ -16,10 +16,21 @@ impl Parser {
 
     /// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
     pub(in crate::parser) fn name(&self, state: &mut State) -> ParseResult<ByteString> {
-        Ok(expect_token!([
-            TokenKind::Identifier(identifier) => identifier,
-            TokenKind::QualifiedIdentifier(qualified) => qualified,
-        ], state, "an identifier"))
+        expect_token!([
+            TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => Ok(name),
+        ], state, "an identifier")
+    }
+
+    /// Expect an optional unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
+    pub(in crate::parser) fn optional_name(&self, state: &mut State) -> Option<ByteString> {
+        match state.current.kind.clone() {
+            TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => {
+                state.next();
+
+                Some(name)
+            }
+            _ => None,
+        }
     }
 
     /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
