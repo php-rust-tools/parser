@@ -1,4 +1,4 @@
-use crate::lexer::byte_string::ByteString;
+use crate::expected_token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::TryBlockCaughtType;
 use crate::parser::ast::Type;
@@ -36,39 +36,36 @@ impl Parser {
         Ok(TryBlockCaughtType::Identifier(id.into()))
     }
 
-    pub(in crate::parser) fn type_string(&self, state: &mut State) -> ParseResult<Type> {
-        if state.current.kind == TokenKind::Question {
-            state.next();
-            let t = self.type_with_static(state)?;
-            return Ok(Type::Nullable(Box::new(parse_simple_type(t))));
-        }
+    pub(in crate::parser) fn get_type(&self, state: &mut State) -> ParseResult<Type> {
+        let ty = self.maybe_nullable(state, &|state| {
+            self.maybe_static(state, &|state| self.get_simple_type(state))
+        })?;
 
-        let id = self.type_with_static(state)?;
+        if ty.nullable() {
+            return Ok(ty);
+        }
 
         if state.current.kind == TokenKind::Pipe {
             state.next();
 
-            let r#type = parse_simple_type(id);
-            if r#type.standalone() {
+            if ty.standalone() {
                 return Err(ParseError::StandaloneTypeUsedInCombination(
-                    r#type,
+                    ty,
                     state.current.span,
                 ));
             }
 
-            let mut types = vec![r#type];
-
+            let mut types = vec![ty];
             while !state.is_eof() {
-                let id = self.type_with_static(state)?;
-                let r#type = parse_simple_type(id);
-                if r#type.standalone() {
+                let ty = self.maybe_static(state, &|state| self.get_simple_type(state))?;
+                if ty.standalone() {
                     return Err(ParseError::StandaloneTypeUsedInCombination(
-                        r#type,
+                        ty,
                         state.current.span,
                     ));
                 }
 
-                types.push(r#type);
+                types.push(ty);
 
                 if state.current.kind != TokenKind::Pipe {
                     break;
@@ -85,27 +82,24 @@ impl Parser {
         {
             state.next();
 
-            let r#type = parse_simple_type(id);
-            if r#type.standalone() {
+            if ty.standalone() {
                 return Err(ParseError::StandaloneTypeUsedInCombination(
-                    r#type,
+                    ty,
                     state.current.span,
                 ));
             }
 
-            let mut types = vec![r#type];
-
+            let mut types = vec![ty];
             while !state.is_eof() {
-                let id = self.type_with_static(state)?;
-                let r#type = parse_simple_type(id);
-                if r#type.standalone() {
+                let ty = self.maybe_static(state, &|state| self.get_simple_type(state))?;
+                if ty.standalone() {
                     return Err(ParseError::StandaloneTypeUsedInCombination(
-                        r#type,
+                        ty,
                         state.current.span,
                     ));
                 }
 
-                types.push(r#type);
+                types.push(ty);
 
                 if state.current.kind != TokenKind::Ampersand {
                     break;
@@ -117,28 +111,248 @@ impl Parser {
             return Ok(Type::Intersection(types));
         }
 
-        Ok(parse_simple_type(id))
+        Ok(ty)
     }
-}
 
-fn parse_simple_type(id: ByteString) -> Type {
-    let name = &id[..];
-    let lowered_name = name.to_ascii_lowercase();
-    match lowered_name.as_slice() {
-        b"void" => Type::Void,
-        b"never" => Type::Never,
-        b"null" => Type::Null,
-        b"true" => Type::True,
-        b"false" => Type::False,
-        b"float" => Type::Float,
-        b"bool" => Type::Boolean,
-        b"int" => Type::Integer,
-        b"string" => Type::String,
-        b"array" => Type::Array,
-        b"object" => Type::Object,
-        b"mixed" => Type::Mixed,
-        b"iterable" => Type::Iterable,
-        b"callable" => Type::Callable,
-        _ => Type::Identifier(id.into()),
+    pub(in crate::parser) fn get_optional_type(
+        &self,
+        state: &mut State,
+    ) -> ParseResult<Option<Type>> {
+        let ty = self.maybe_optional_nullable(state, &|state| {
+            self.maybe_optional_static(state, &|state| self.get_optional_simple_type(state))
+        });
+
+        match ty {
+            Some(ty) => {
+                if ty.nullable() {
+                    return Ok(Some(ty));
+                }
+
+                if state.current.kind == TokenKind::Pipe {
+                    state.next();
+
+                    if ty.standalone() {
+                        return Err(ParseError::StandaloneTypeUsedInCombination(
+                            ty,
+                            state.current.span,
+                        ));
+                    }
+
+                    let mut types = vec![ty];
+                    while !state.is_eof() {
+                        let ty = self.maybe_static(state, &|state| self.get_simple_type(state))?;
+                        if ty.standalone() {
+                            return Err(ParseError::StandaloneTypeUsedInCombination(
+                                ty,
+                                state.current.span,
+                            ));
+                        }
+
+                        types.push(ty);
+
+                        if state.current.kind != TokenKind::Pipe {
+                            break;
+                        } else {
+                            state.next();
+                        }
+                    }
+
+                    return Ok(Some(Type::Union(types)));
+                }
+
+                if state.current.kind == TokenKind::Ampersand
+                    && !matches!(state.peek.kind, TokenKind::Variable(_))
+                {
+                    state.next();
+
+                    if ty.standalone() {
+                        return Err(ParseError::StandaloneTypeUsedInCombination(
+                            ty,
+                            state.current.span,
+                        ));
+                    }
+
+                    let mut types = vec![ty];
+                    while !state.is_eof() {
+                        let ty = self.maybe_static(state, &|state| self.get_simple_type(state))?;
+                        if ty.standalone() {
+                            return Err(ParseError::StandaloneTypeUsedInCombination(
+                                ty,
+                                state.current.span,
+                            ));
+                        }
+
+                        types.push(ty);
+
+                        if state.current.kind != TokenKind::Ampersand {
+                            break;
+                        } else {
+                            state.next();
+                        }
+                    }
+
+                    return Ok(Some(Type::Intersection(types)));
+                }
+
+                Ok(Some(ty))
+            }
+            None => Ok(None),
+        }
+    }
+
+    fn get_optional_simple_type(&self, state: &mut State) -> Option<Type> {
+        match state.current.kind.clone() {
+            TokenKind::Array => {
+                state.next();
+
+                Some(Type::Array)
+            }
+            TokenKind::Callable => {
+                state.next();
+
+                Some(Type::Callable)
+            }
+            TokenKind::Null => {
+                state.next();
+
+                Some(Type::Null)
+            }
+            TokenKind::True => {
+                state.next();
+
+                Some(Type::True)
+            }
+            TokenKind::False => {
+                state.next();
+
+                Some(Type::False)
+            }
+            TokenKind::Identifier(id) => {
+                state.next();
+
+                let name = &id[..];
+                let lowered_name = name.to_ascii_lowercase();
+                match lowered_name.as_slice() {
+                    b"void" => Some(Type::Void),
+                    b"never" => Some(Type::Never),
+                    b"float" => Some(Type::Float),
+                    b"bool" => Some(Type::Boolean),
+                    b"int" => Some(Type::Integer),
+                    b"string" => Some(Type::String),
+                    b"object" => Some(Type::Object),
+                    b"mixed" => Some(Type::Mixed),
+                    b"iterable" => Some(Type::Iterable),
+                    b"null" => Some(Type::Null),
+                    b"true" => Some(Type::True),
+                    b"false" => Some(Type::False),
+                    b"array" => Some(Type::Array),
+                    b"callable" => Some(Type::Callable),
+                    _ => Some(Type::Identifier(id.into())),
+                }
+            }
+            TokenKind::QualifiedIdentifier(id) | TokenKind::FullyQualifiedIdentifier(id) => {
+                state.next();
+
+                Some(Type::Identifier(id.into()))
+            }
+            _ => None,
+        }
+    }
+
+    fn get_simple_type(&self, state: &mut State) -> ParseResult<Type> {
+        self.get_optional_simple_type(state)
+            .ok_or_else(|| expected_token!(["a type"], state))
+    }
+
+    fn maybe_nullable(
+        &self,
+        state: &mut State,
+        otherwise: &(dyn Fn(&mut State) -> ParseResult<Type>),
+    ) -> ParseResult<Type> {
+        if state.current.kind == TokenKind::Question {
+            state.next();
+
+            Ok(Type::Nullable(Box::new(otherwise(state)?)))
+        } else {
+            otherwise(state)
+        }
+    }
+
+    fn maybe_static(
+        &self,
+        state: &mut State,
+        otherwise: &(dyn Fn(&mut State) -> ParseResult<Type>),
+    ) -> ParseResult<Type> {
+        if TokenKind::Static == state.current.kind {
+            state.next();
+
+            return Ok(Type::StaticReference);
+        }
+
+        if let TokenKind::Identifier(id) = &state.current.kind {
+            let name = &id[..];
+            let lowered_name = name.to_ascii_lowercase();
+            match lowered_name.as_slice() {
+                b"self" => {
+                    state.next();
+
+                    return Ok(Type::SelfReference);
+                }
+                b"parent" => {
+                    state.next();
+
+                    return Ok(Type::ParentReference);
+                }
+                _ => {}
+            };
+        }
+
+        otherwise(state)
+    }
+
+    fn maybe_optional_nullable(
+        &self,
+        state: &mut State,
+        otherwise: &(dyn Fn(&mut State) -> Option<Type>),
+    ) -> Option<Type> {
+        if state.current.kind == TokenKind::Question {
+            state.next();
+
+            Some(Type::Nullable(Box::new(otherwise(state)?)))
+        } else {
+            otherwise(state)
+        }
+    }
+
+    fn maybe_optional_static(
+        &self,
+        state: &mut State,
+        otherwise: &(dyn Fn(&mut State) -> Option<Type>),
+    ) -> Option<Type> {
+        if TokenKind::Static == state.current.kind {
+            state.next();
+
+            return Some(Type::StaticReference);
+        }
+
+        if let TokenKind::Identifier(id) = &state.current.kind {
+            let name = &id[..];
+            let lowered_name = name.to_ascii_lowercase();
+            match lowered_name.as_slice() {
+                b"self" => {
+                    state.next();
+
+                    return Some(Type::SelfReference);
+                }
+                b"parent" => {
+                    state.next();
+
+                    return Some(Type::ParentReference);
+                }
+                _ => {}
+            };
+        }
+
+        otherwise(state)
     }
 }

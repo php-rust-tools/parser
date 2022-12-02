@@ -79,7 +79,7 @@ impl Parser {
             if state.current.kind == TokenKind::Colon {
                 self.colon(state)?;
 
-                return_type = Some(self.type_string(state)?);
+                return_type = Some(self.get_type(state)?);
             }
 
             self.lbrace(state)?;
@@ -128,7 +128,7 @@ impl Parser {
             if state.current.kind == TokenKind::Colon {
                 self.colon(state)?;
 
-                return_type = Some(self.type_string(state)?);
+                return_type = Some(self.get_type(state)?);
             }
 
             expect_token!([TokenKind::DoubleArrow], state, ["`=>`"]);
@@ -169,7 +169,7 @@ impl Parser {
             if state.current.kind == TokenKind::Colon {
                 self.colon(state)?;
 
-                return_type = Some(self.type_string(state)?);
+                return_type = Some(self.get_type(state)?);
             }
 
             self.lbrace(state)?;
@@ -241,7 +241,7 @@ impl Parser {
             if state.current.kind == TokenKind::Colon {
                 self.colon(state)?;
 
-                return_type = Some(self.type_string(state)?);
+                return_type = Some(self.get_type(state)?);
             }
 
             if !has_body {

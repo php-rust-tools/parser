@@ -18,6 +18,7 @@ impl Parser {
     pub(in crate::parser) fn param_list(&self, state: &mut State) -> Result<ParamList, ParseError> {
         let mut params = ParamList::new();
 
+        let mut class_name = String::new();
         let construct: i8 = match state.scope()? {
             Scope::Function(_) | Scope::AnonymousFunction(_) | Scope::ArrowFunction(_) => 0,
             Scope::Method(name, flags) => {
@@ -28,13 +29,19 @@ impl Parser {
                         // can only have abstract ctor
                         Scope::Interface(_) => 1,
                         // can only have concret ctor
-                        Scope::AnonymousClass => 2,
+                        Scope::AnonymousClass => {
+                            class_name = state.named(&"class@anonymous".into());
+
+                            2
+                        }
                         // can have either abstract or concret ctor,
                         // depens on method flag.
-                        Scope::Class(_, _) | Scope::Trait(_) => {
+                        Scope::Class(name, _) | Scope::Trait(name) => {
                             if flags.contains(&MethodFlag::Abstract) {
                                 1
                             } else {
+                                class_name = state.named(name);
+
                                 2
                             }
                         }
@@ -70,15 +77,12 @@ impl Parser {
                 }
             }
 
-            // If this is a readonly promoted property, or we don't see a variable
-            if flags.contains(&PropertyFlag::Readonly)
-                || !matches!(
-                    state.current.kind,
-                    TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
-                )
-            {
+            if !matches!(
+                state.current.kind,
+                TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
+            ) {
                 // Try to parse the type.
-                param_type = Some(self.type_string(state)?);
+                param_type = Some(self.get_type(state)?);
             }
 
             let mut variadic = false;
@@ -102,6 +106,14 @@ impl Parser {
             let var = expect_token!([
                 TokenKind::Variable(v) => v
             ], state, "a varaible");
+
+            if flags.contains(&PropertyFlag::Readonly) && param_type.is_none() {
+                return Err(ParseError::MissingTypeForReadonlyProperty(
+                    class_name,
+                    var.to_string(),
+                    state.current.span,
+                ));
+            }
 
             let mut default = None;
             if state.current.kind == TokenKind::Equals {

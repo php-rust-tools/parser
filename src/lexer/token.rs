@@ -282,7 +282,7 @@ impl Display for TokenKind {
             Self::EndSwitch => "endswitch",
             Self::EndWhile => "endwhile",
             Self::Enum => "enum",
-            Self::Eof => "",
+            Self::Eof => "[end of file]",
             Self::Equals => "=",
             Self::Extends => "extends",
             Self::False => "false",
@@ -382,8 +382,10 @@ impl Display for TokenKind {
             Self::Interface => "interface",
             Self::NamespaceConstant => "__NAMESPACE__",
             Self::PowEquals => "**=",
+            Self::Variable(v) => {
+                return write!(f, "${}", v);
+            }
             Self::StringPart(v)
-            | Self::Variable(v)
             | Self::QualifiedIdentifier(v)
             | Self::Identifier(v)
             | Self::FullyQualifiedIdentifier(v)
