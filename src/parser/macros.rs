@@ -71,26 +71,37 @@ macro_rules! expect_literal {
 #[macro_export]
 macro_rules! expected_token_err {
     ([ $($expected:literal),+ $(,)? ], $state:expr $(,)?) => {{
+        Err($crate::expected_token!([$($expected),+], $state))
+    }};
+
+    ($expected:literal, $state:expr $(,)?) => {
+        $crate::expected_token_err!([$expected], $state)
+    };
+}
+
+#[macro_export]
+macro_rules! expected_token {
+    ([ $($expected:literal),+ $(,)? ], $state:expr $(,)?) => {{
         match &$state.current.kind {
             TokenKind::Eof => {
-                Err($crate::parser::error::ParseError::ExpectedToken(
+                $crate::parser::error::ParseError::ExpectedToken(
                     vec![$($expected.into()),+],
                     None,
                     $state.current.span,
-                ))
+                )
             },
             _ => {
-                Err($crate::parser::error::ParseError::ExpectedToken(
+                $crate::parser::error::ParseError::ExpectedToken(
                     vec![$($expected.into()),+],
                     Some($state.current.kind.to_string()),
                     $state.current.span,
-                ))
+                )
             }
         }
     }};
 
     ($expected:literal, $state:expr $(,)?) => {
-        $crate::expected_token_err!([$expected], $state)
+        $crate::expected_token!([$expected], $state)
     };
 }
 

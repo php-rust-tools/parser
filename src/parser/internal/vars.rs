@@ -1,16 +1,16 @@
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::Expression;
-use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::precedence::Precedence;
 use crate::parser::state::State;
 use crate::parser::Parser;
+use crate::peek_token;
 
 impl Parser {
     pub(in crate::parser) fn dynamic_variable(&self, state: &mut State) -> ParseResult<Expression> {
         state.next();
 
-        Ok(match &state.current.kind {
+        let expr = peek_token!([
             TokenKind::LeftBrace => {
                 state.next();
 
@@ -21,9 +21,9 @@ impl Parser {
                 Expression::DynamicVariable {
                     name: Box::new(name),
                 }
-            }
+            },
             TokenKind::Variable(variable) => {
-                let variable = variable.clone();
+                let variable = variable;
 
                 state.next();
 
@@ -31,12 +31,8 @@ impl Parser {
                     name: Box::new(Expression::Variable { name: variable }),
                 }
             }
-            _ => {
-                return Err(ParseError::UnexpectedToken(
-                    state.current.kind.to_string(),
-                    state.current.span,
-                ))
-            }
-        })
+        ], state, ["`{`", "a variable"]);
+
+        Ok(expr)
     }
 }

@@ -2,6 +2,7 @@ use crate::expected_scope;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::Identifier;
 use crate::parser::ast::MethodFlag;
+use crate::parser::ast::PropertyFlag;
 use crate::parser::ast::Statement;
 use crate::parser::ast::TraitAdaptation;
 use crate::parser::error::ParseError;
@@ -12,7 +13,6 @@ use crate::parser::state::State;
 use crate::parser::Parser;
 
 use crate::expect_token;
-use crate::expected_token_err;
 use crate::peek_token;
 
 impl Parser {
@@ -123,74 +123,67 @@ impl Parser {
 
         let member_flags = self.class_members_flags(state)?;
 
-        match &state.current.kind {
-            TokenKind::Const => self.parse_classish_const(state, member_flags),
-            TokenKind::Function => self.method(
+        if state.current.kind == TokenKind::Const {
+            return self.parse_classish_const(state, member_flags);
+        }
+
+        if state.current.kind == TokenKind::Function {
+            return self.method(
                 state,
                 member_flags.iter().map(|t| t.clone().into()).collect(),
-            ),
-            // TODO
-            TokenKind::Variable(_) => {
-                let var = self.var(state)?;
-                let mut value = None;
-
-                if state.current.kind == TokenKind::Equals {
-                    state.next();
-                    value = Some(self.expression(state, Precedence::Lowest)?);
-                }
-
-                self.semi(state)?;
-
-                Ok(Statement::Property {
-                    var,
-                    value,
-                    r#type: None,
-                    flags: member_flags.into_iter().map(|f| f.into()).collect(),
-                })
-            }
-            TokenKind::Question
-            | TokenKind::Identifier(_)
-            | TokenKind::QualifiedIdentifier(_)
-            | TokenKind::FullyQualifiedIdentifier(_)
-            | TokenKind::Array
-            | TokenKind::Null => {
-                let prop_type = self.type_string(state)?;
-                let var = self.var(state)?;
-                let mut value = None;
-
-                if state.current.kind == TokenKind::Equals {
-                    state.next();
-                    value = Some(self.expression(state, Precedence::Lowest)?);
-                }
-
-                // TODO: Support comma-separated property declarations.
-                //       nikic/php-parser does this with a single Property statement
-                //       that is capable of holding multiple property declarations.
-                self.semi(state)?;
-
-                Ok(Statement::Property {
-                    var,
-                    value,
-                    r#type: Some(prop_type),
-                    flags: member_flags.into_iter().map(|f| f.into()).collect(),
-                })
-            }
-            _ => expected_token_err!(
-                ["`const`", "`function`", "an identifier", "a varaible"],
-                state
-            ),
+            );
         }
+
+        let ty = self.get_optional_type(state)?;
+
+        expect_token!([
+            TokenKind::Variable(var) => {
+                let flags: Vec<PropertyFlag> = member_flags.into_iter().map(|f| f.into()).collect();
+                let mut value = None;
+
+                if state.current.kind == TokenKind::Equals {
+                    state.next();
+                    value = Some(self.expression(state, Precedence::Lowest)?);
+                }
+
+                self.semi(state)?;
+
+                if flags.contains(&PropertyFlag::Readonly) {
+                    if flags.contains(&PropertyFlag::Static) {
+                        let class_name: String = expected_scope!([
+                            Scope::Class(name, _) => state.named(&name),
+                            Scope::Trait(name) => state.named(&name),
+                            Scope::AnonymousClass => state.named(&"class@anonymous".into()),
+                        ], state);
+
+                        return Err(ParseError::StaticPropertyUsingReadonlyModifier(class_name, var.to_string(), state.current.span));
+                    }
+
+                    if value.is_some() {
+                        let class_name: String = expected_scope!([
+                            Scope::Class(name, _) => state.named(&name),
+                            Scope::Trait(name) => state.named(&name),
+                            Scope::AnonymousClass => state.named(&"class@anonymous".into()),
+                        ], state);
+
+                        return Err(ParseError::ReadonlyPropertyHasDefaultValue(class_name, var.to_string(), state.current.span));
+                    }
+                }
+
+                Ok(Statement::Property {
+                    var,
+                    value,
+                    r#type: ty,
+                    flags,
+                })
+            }
+        ], state, ["a varaible"])
     }
 
     fn parse_classish_var(&self, state: &mut State) -> ParseResult<Statement> {
         state.next();
 
-        let mut var_type = None;
-
-        if !matches!(state.current.kind, TokenKind::Variable(_)) {
-            var_type = Some(self.type_string(state)?);
-        }
-
+        let ty = self.get_optional_type(state)?;
         let var = self.var(state)?;
         let mut value = None;
 
@@ -205,7 +198,7 @@ impl Parser {
         Ok(Statement::Var {
             var,
             value,
-            r#type: var_type,
+            r#type: ty,
         })
     }
 
@@ -238,10 +231,8 @@ impl Parser {
                     _ => (None, self.ident(state)?.into()),
                 };
 
-                match state.current.kind {
+                expect_token!([
                     TokenKind::As => {
-                        state.next();
-
                         match state.current.kind {
                             TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
                                 let visibility: MethodFlag = state.current.kind.clone().into();
@@ -273,10 +264,8 @@ impl Parser {
                                 });
                             }
                         }
-                    }
+                    },
                     TokenKind::Insteadof => {
-                        state.next();
-
                         let mut insteadof = Vec::new();
                         insteadof.push(self.full_name(state)?.into());
                         while state.current.kind != TokenKind::SemiColon {
@@ -290,13 +279,7 @@ impl Parser {
                             insteadof,
                         });
                     }
-                    _ => {
-                        return Err(ParseError::UnexpectedToken(
-                            state.current.kind.to_string(),
-                            state.current.span,
-                        ))
-                    }
-                };
+                ], state, ["`as`", "`insteadof`"]);
 
                 self.semi(state)?;
             }

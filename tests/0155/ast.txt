@@ -1,0 +1,31 @@
+[
+    Namespace {
+        name: "Foo\Bar",
+        body: [
+            Noop,
+            Class {
+                name: Identifier {
+                    name: "Baz",
+                },
+                extends: None,
+                implements: [],
+                body: [
+                    Property {
+                        var: "foo",
+                        value: None,
+                        type: Some(
+                            String,
+                        ),
+                        flags: [
+                            Public,
+                            Readonly,
+                        ],
+                    },
+                ],
+                flags: [
+                    Final,
+                ],
+            },
+        ],
+    },
+]

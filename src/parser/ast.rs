@@ -32,11 +32,38 @@ pub enum Type {
     Mixed,
     Callable,
     Iterable,
+    StaticReference,
+    SelfReference,
+    ParentReference,
 }
 
 impl Type {
     pub fn standalone(&self) -> bool {
         matches!(self, Type::Mixed | Type::Never | Type::Void)
+    }
+
+    pub fn nullable(&self) -> bool {
+        matches!(self, Type::Nullable(_))
+    }
+
+    pub fn includes_callable(&self) -> bool {
+        match &self {
+            Self::Callable => true,
+            Self::Union(types) | Self::Intersection(types) => {
+                types.iter().any(|x| x.includes_callable())
+            }
+            _ => false,
+        }
+    }
+
+    pub fn includes_class_scoped(&self) -> bool {
+        match &self {
+            Self::StaticReference | Self::SelfReference | Self::ParentReference => true,
+            Self::Union(types) | Self::Intersection(types) => {
+                types.iter().any(|x| x.includes_class_scoped())
+            }
+            _ => false,
+        }
     }
 }
 
@@ -77,6 +104,9 @@ impl Display for Type {
             Type::Mixed => write!(f, "mixed"),
             Type::Callable => write!(f, "callable"),
             Type::Iterable => write!(f, "iterable"),
+            Type::StaticReference => write!(f, "static"),
+            Type::SelfReference => write!(f, "self"),
+            Type::ParentReference => write!(f, "parent"),
         }
     }
 }

@@ -37,31 +37,6 @@ impl Parser {
         ], state, "a variable"))
     }
 
-    pub(in crate::parser) fn full_name_maybe_type_keyword(
-        &self,
-        state: &mut State,
-    ) -> ParseResult<ByteString> {
-        match state.current.kind {
-            TokenKind::Array | TokenKind::Callable => {
-                let r = Ok(state.current.kind.to_string().into());
-                state.next();
-                r
-            }
-            _ => self.full_name(state),
-        }
-    }
-
-    pub(in crate::parser) fn type_with_static(&self, state: &mut State) -> ParseResult<ByteString> {
-        Ok(match state.current.kind {
-            TokenKind::Static | TokenKind::Null | TokenKind::True | TokenKind::False => {
-                let str = state.current.kind.to_string();
-                state.next();
-                str.into()
-            }
-            _ => self.full_name_maybe_type_keyword(state)?,
-        })
-    }
-
     pub(in crate::parser) fn ident_maybe_reserved(
         &self,
         state: &mut State,
