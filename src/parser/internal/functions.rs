@@ -37,11 +37,7 @@ impl Parser {
         };
 
         scoped!(state, Scope::AnonymousFunction(is_static), {
-            self.lparen(state)?;
-
             let params = self.param_list(state)?;
-
-            self.rparen(state)?;
 
             let mut uses = vec![];
             if state.current.kind == TokenKind::Use {
@@ -118,11 +114,7 @@ impl Parser {
         };
 
         scoped!(state, Scope::ArrowFunction(is_static), {
-            self.lparen(state)?;
-
             let params = self.param_list(state)?;
-
-            self.rparen(state)?;
 
             let mut return_type = None;
             if state.current.kind == TokenKind::Colon {
@@ -158,11 +150,7 @@ impl Parser {
         let name = self.ident(state)?;
 
         scoped!(state, Scope::Function(name.clone()), {
-            self.lparen(state)?;
-
             let params = self.param_list(state)?;
-
-            self.rparen(state)?;
 
             let mut return_type = None;
 
@@ -230,11 +218,7 @@ impl Parser {
         ], state);
 
         scoped!(state, Scope::Method(name.clone(), flags.clone()), {
-            self.lparen(state)?;
-
             let params = self.param_list(state)?;
-
-            self.rparen(state)?;
 
             let mut return_type = None;
 
