@@ -118,16 +118,14 @@ impl Parser {
         &self,
         state: &mut State,
     ) -> ParseResult<Option<Type>> {
-        let ty = self.maybe_optional_nullable(state, &|state| {
-            self.maybe_optional_static(state, &|state| self.get_optional_simple_type(state))
-        });
+        if state.current.kind == TokenKind::Question {
+            return Ok(Some(self.get_type(state)?));
+        }
+
+        let ty = self.maybe_optional_static(state, &|state| self.get_optional_simple_type(state));
 
         match ty {
             Some(ty) => {
-                if ty.nullable() {
-                    return Ok(Some(ty));
-                }
-
                 if state.current.kind == TokenKind::Pipe {
                     state.next();
 
@@ -271,8 +269,15 @@ impl Parser {
     ) -> ParseResult<Type> {
         if state.current.kind == TokenKind::Question {
             state.next();
+            let inner = otherwise(state)?;
+            if inner.standalone() {
+                return Err(ParseError::StandaloneTypeUsedInCombination(
+                    inner,
+                    state.current.span,
+                ));
+            }
 
-            Ok(Type::Nullable(Box::new(otherwise(state)?)))
+            Ok(Type::Nullable(Box::new(inner)))
         } else {
             otherwise(state)
         }
@@ -308,20 +313,6 @@ impl Parser {
         }
 
         otherwise(state)
-    }
-
-    fn maybe_optional_nullable(
-        &self,
-        state: &mut State,
-        otherwise: &(dyn Fn(&mut State) -> Option<Type>),
-    ) -> Option<Type> {
-        if state.current.kind == TokenKind::Question {
-            state.next();
-
-            Some(Type::Nullable(Box::new(otherwise(state)?)))
-        } else {
-            otherwise(state)
-        }
     }
 
     fn maybe_optional_static(

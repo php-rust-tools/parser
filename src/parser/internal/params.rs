@@ -53,37 +53,13 @@ impl Parser {
         };
 
         while !state.is_eof() && state.current.kind != TokenKind::RightParen {
-            let mut param_type = None;
-
             let flags: Vec<PropertyFlag> = self
                 .promoted_property_flags(state)?
                 .iter()
                 .map(|f| f.into())
                 .collect();
 
-            if !flags.is_empty() {
-                match construct {
-                    0 => {
-                        return Err(ParseError::PromotedPropertyOutsideConstructor(
-                            state.current.span,
-                        ));
-                    }
-                    1 => {
-                        return Err(ParseError::PromotedPropertyOnAbstractConstructor(
-                            state.current.span,
-                        ));
-                    }
-                    _ => {}
-                }
-            }
-
-            if !matches!(
-                state.current.kind,
-                TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
-            ) {
-                // Try to parse the type.
-                param_type = Some(self.get_type(state)?);
-            }
+            let ty = self.get_optional_type(state)?;
 
             let mut variadic = false;
             let mut by_ref = false;
@@ -107,12 +83,42 @@ impl Parser {
                 TokenKind::Variable(v) => v
             ], state, "a varaible");
 
-            if flags.contains(&PropertyFlag::Readonly) && param_type.is_none() {
-                return Err(ParseError::MissingTypeForReadonlyProperty(
-                    class_name,
-                    var.to_string(),
-                    state.current.span,
-                ));
+            if !flags.is_empty() {
+                match construct {
+                    0 => {
+                        return Err(ParseError::PromotedPropertyOutsideConstructor(
+                            state.current.span,
+                        ));
+                    }
+                    1 => {
+                        return Err(ParseError::PromotedPropertyOnAbstractConstructor(
+                            state.current.span,
+                        ));
+                    }
+                    _ => {}
+                }
+
+                match &ty {
+                    Some(ty) => {
+                        if ty.includes_callable() || ty.is_bottom() {
+                            return Err(ParseError::ForbiddenTypeUsedInProperty(
+                                class_name,
+                                var.to_string(),
+                                ty.clone(),
+                                state.current.span,
+                            ));
+                        }
+                    }
+                    None => {
+                        if flags.contains(&PropertyFlag::Readonly) {
+                            return Err(ParseError::MissingTypeForReadonlyProperty(
+                                class_name,
+                                var.to_string(),
+                                state.current.span,
+                            ));
+                        }
+                    }
+                }
             }
 
             let mut default = None;
@@ -123,13 +129,15 @@ impl Parser {
 
             params.push(Param {
                 name: Expression::Variable { name: var },
-                r#type: param_type,
+                r#type: ty,
                 variadic,
                 default,
                 flags,
                 by_ref,
             });
 
+            // TODO: bug! this allows `function foo(string $a ...$b &$c) {}`
+            // TODO: if `,` is found, look for next param, otherwise break out of the loop.
             self.optional_comma(state)?;
         }
 

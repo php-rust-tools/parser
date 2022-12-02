@@ -65,6 +65,10 @@ impl Type {
             _ => false,
         }
     }
+
+    pub fn is_bottom(&self) -> bool {
+        matches!(self, Type::Never | Type::Void)
+    }
 }
 
 impl Display for Type {
