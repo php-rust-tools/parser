@@ -146,29 +146,46 @@ impl Parser {
                     value = Some(self.expression(state, Precedence::Lowest)?);
                 }
 
-                self.semi(state)?;
+                let class_name: String = expected_scope!([
+                    Scope::Class(name, _) => state.named(&name),
+                    Scope::Trait(name) => state.named(&name),
+                    Scope::AnonymousClass => state.named(&"class@anonymous".into()),
+                ], state);
 
                 if flags.contains(&PropertyFlag::Readonly) {
                     if flags.contains(&PropertyFlag::Static) {
-                        let class_name: String = expected_scope!([
-                            Scope::Class(name, _) => state.named(&name),
-                            Scope::Trait(name) => state.named(&name),
-                            Scope::AnonymousClass => state.named(&"class@anonymous".into()),
-                        ], state);
-
                         return Err(ParseError::StaticPropertyUsingReadonlyModifier(class_name, var.to_string(), state.current.span));
                     }
 
                     if value.is_some() {
-                        let class_name: String = expected_scope!([
-                            Scope::Class(name, _) => state.named(&name),
-                            Scope::Trait(name) => state.named(&name),
-                            Scope::AnonymousClass => state.named(&"class@anonymous".into()),
-                        ], state);
 
                         return Err(ParseError::ReadonlyPropertyHasDefaultValue(class_name, var.to_string(), state.current.span));
                     }
                 }
+
+                match &ty {
+                    Some(ty) => {
+                        if ty.includes_callable() || ty.is_bottom() {
+                            return Err(ParseError::ForbiddenTypeUsedInProperty(
+                                class_name,
+                                var.to_string(),
+                                ty.clone(),
+                                state.current.span,
+                            ));
+                        }
+                    }
+                    None => {
+                        if flags.contains(&PropertyFlag::Readonly) {
+                            return Err(ParseError::MissingTypeForReadonlyProperty(
+                                class_name,
+                                var.to_string(),
+                                state.current.span,
+                            ));
+                        }
+                    }
+                }
+
+                self.semi(state)?;
 
                 Ok(Statement::Property {
                     var,

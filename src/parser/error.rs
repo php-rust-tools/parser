@@ -32,6 +32,7 @@ pub enum ParseError {
     ReadonlyPropertyHasDefaultValue(String, String, Span),
     MixingBracedAndUnBracedNamespaceDeclarations(Span),
     NestedNamespaceDeclarations(Span),
+    ForbiddenTypeUsedInProperty(String, String, Type, Span),
 }
 
 impl Display for ParseError {
@@ -71,11 +72,12 @@ impl Display for ParseError {
             Self::ConstructorInEnum(name, span) => write!(f, "Parse Error: Enum '{}' cannot have a constructor on line {} column {}", name, span.0, span.1),
             Self::MissingCaseValueForBackedEnum(case, name, span) => write!(f, "Parse Error: Case `{}` of backed enum `{}` must have a value on line {} column {}", case, name, span.0, span.1),
             Self::CaseValueForUnitEnum(case, name, span) => write!(f, "Parse Error: Case `{}` of unit enum `{}` must not have a value on line {} column {}", case, name, span.0, span.1),
-            Self::UnpredictableState(span) => write!(f, "Parse Error: Reached an unpredictable state on line {} column {}", span.0, span.1),
             Self::StaticPropertyUsingReadonlyModifier(class, prop, span) => write!(f, "Parse Error: Static property {}:${} cannot be readonly on line {} column {}", class, prop, span.0, span.1),
             Self::ReadonlyPropertyHasDefaultValue(class, prop, span) => write!(f, "Parse Error: Readonly property {}:${} cannot have a default value on line {} column {}", class, prop, span.0, span.1),
             Self::MixingBracedAndUnBracedNamespaceDeclarations(span) => write!(f, "Parse Error: Cannot mix braced namespace declarations with unbraced namespace declarations on line {} column {}", span.0, span.1),
             Self::NestedNamespaceDeclarations(span) => write!(f, "Parse Error: Namespace declarations cannot be mixed on line {} column {}", span.0, span.1),
+            Self::UnpredictableState(span) => write!(f, "Parse Error: Reached an unpredictable state on line {} column {}", span.0, span.1),
+            Self::ForbiddenTypeUsedInProperty(class, prop, ty, span) => write!(f, "Parse Error: Property {}::${} cannot have type `{}` on line {} column {}", class, prop, ty, span.0, span.1),
         }
     }
 }
