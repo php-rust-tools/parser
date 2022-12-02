@@ -52,6 +52,8 @@ impl Parser {
             _ => unreachable!(),
         };
 
+        self.lparen(state)?;
+
         while !state.is_eof() && state.current.kind != TokenKind::RightParen {
             let flags: Vec<PropertyFlag> = self
                 .promoted_property_flags(state)?
@@ -136,10 +138,14 @@ impl Parser {
                 by_ref,
             });
 
-            // TODO: bug! this allows `function foo(string $a ...$b &$c) {}`
-            // TODO: if `,` is found, look for next param, otherwise break out of the loop.
-            self.optional_comma(state)?;
+            if state.current.kind == TokenKind::Comma {
+                self.comma(state)?;
+            } else {
+                break;
+            }
         }
+
+        self.rparen(state)?;
 
         Ok(params)
     }
