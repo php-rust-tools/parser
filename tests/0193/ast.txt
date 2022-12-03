@@ -1,0 +1,27 @@
+[
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "a",
+            },
+            op: Assign,
+            rhs: LiteralInteger {
+                i: 4,
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "b",
+            },
+            op: Assign,
+            rhs: Match {
+                condition: Variable {
+                    name: "a",
+                },
+                arms: [],
+            },
+        },
+    },
+]

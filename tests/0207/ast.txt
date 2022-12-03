@@ -1,0 +1,45 @@
+[
+    Class {
+        name: Identifier {
+            name: "foo",
+        },
+        extends: None,
+        implements: [],
+        body: [
+            TraitUse {
+                traits: [
+                    Identifier {
+                        name: "a",
+                    },
+                    Identifier {
+                        name: "b",
+                    },
+                    Identifier {
+                        name: "c",
+                    },
+                ],
+                adaptations: [
+                    Precedence {
+                        trait: Some(
+                            Identifier {
+                                name: "a",
+                            },
+                        ),
+                        method: Identifier {
+                            name: "s",
+                        },
+                        insteadof: [
+                            Identifier {
+                                name: "b",
+                            },
+                            Identifier {
+                                name: "c",
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+        flags: [],
+    },
+]

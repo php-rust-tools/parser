@@ -1,0 +1,51 @@
+[
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "a",
+            },
+            op: Assign,
+            rhs: LiteralInteger {
+                i: 4,
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "b",
+            },
+            op: Assign,
+            rhs: Match {
+                condition: Variable {
+                    name: "a",
+                },
+                arms: [
+                    MatchArm {
+                        conditions: Some(
+                            [
+                                LiteralInteger {
+                                    i: 1,
+                                },
+                                LiteralInteger {
+                                    i: 2,
+                                },
+                                LiteralInteger {
+                                    i: 3,
+                                },
+                                LiteralInteger {
+                                    i: 4,
+                                },
+                            ],
+                        ),
+                        body: Null,
+                    },
+                    MatchArm {
+                        conditions: None,
+                        body: Null,
+                    },
+                ],
+            },
+        },
+    },
+]
