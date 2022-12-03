@@ -139,7 +139,7 @@ impl Parser {
             });
 
             if state.current.kind == TokenKind::Comma {
-                self.comma(state)?;
+                state.next();
             } else {
                 break;
             }
@@ -151,6 +151,8 @@ impl Parser {
     }
 
     pub(in crate::parser) fn args_list(&self, state: &mut State) -> ParseResult<Vec<Arg>> {
+        self.lparen(state)?;
+
         let mut args = Vec::new();
 
         while !state.is_eof() && state.current.kind != TokenKind::RightParen {
@@ -184,8 +186,14 @@ impl Parser {
                 value,
             });
 
-            self.optional_comma(state)?;
+            if state.current.kind == TokenKind::Comma {
+                state.next();
+            } else {
+                break;
+            }
         }
+
+        self.rparen(state)?;
 
         Ok(args)
     }

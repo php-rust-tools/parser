@@ -30,18 +30,6 @@ impl Parser {
         expect_token!([TokenKind::RightBracket => Ok(())], state, "`]`")
     }
 
-    pub(in crate::parser) fn comma(&self, state: &mut State) -> ParseResult<()> {
-        expect_token!([TokenKind::Comma => Ok(())], state, "`,`")
-    }
-
-    pub(in crate::parser) fn optional_comma(&self, state: &mut State) -> ParseResult<()> {
-        if state.current.kind == TokenKind::Comma {
-            expect_token!([TokenKind::Comma], state, "`,`");
-        }
-
-        Ok(())
-    }
-
     pub(in crate::parser) fn colon(&self, state: &mut State) -> ParseResult<()> {
         expect_token!([TokenKind::Colon => Ok(())], state, "`:`")
     }

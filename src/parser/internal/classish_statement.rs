@@ -227,10 +227,24 @@ impl Parser {
         while state.current.kind != TokenKind::SemiColon
             && state.current.kind != TokenKind::LeftBrace
         {
-            self.optional_comma(state)?;
-
             let t = self.full_name(state)?;
             traits.push(t.into());
+
+            if state.current.kind == TokenKind::Comma {
+                if state.peek.kind == TokenKind::SemiColon {
+                    // will fail with unexpected token `,`
+                    // as `use` doesn't allow for trailing commas.
+                    self.semi(state)?;
+                } else if state.peek.kind == TokenKind::LeftBrace {
+                    // will fail with unexpected token `{`
+                    // as `use` doesn't allow for trailing commas.
+                    self.lbrace(state)?;
+                } else {
+                    state.next();
+                }
+            } else {
+                break;
+            }
         }
 
         let mut adaptations = Vec::new();
@@ -285,9 +299,31 @@ impl Parser {
                     TokenKind::Insteadof => {
                         let mut insteadof = Vec::new();
                         insteadof.push(self.full_name(state)?.into());
-                        while state.current.kind != TokenKind::SemiColon {
-                            self.optional_comma(state)?;
-                            insteadof.push(self.full_name(state)?.into());
+
+                        if state.current.kind == TokenKind::Comma {
+                            if state.peek.kind == TokenKind::SemiColon {
+                                // will fail with unexpected token `,`
+                                // as `insteadof` doesn't allow for trailing commas.
+                                self.semi(state)?;
+                            }
+
+                            state.next();
+
+                            while state.current.kind != TokenKind::SemiColon {
+                                insteadof.push(self.full_name(state)?.into());
+
+                                if state.current.kind == TokenKind::Comma {
+                                    if state.peek.kind == TokenKind::SemiColon {
+                                        // will fail with unexpected token `,`
+                                        // as `insteadof` doesn't allow for trailing commas.
+                                        self.semi(state)?;
+                                    } else {
+                                        state.next();
+                                    }
+                                } else {
+                                    break;
+                                }
+                            }
                         }
 
                         adaptations.push(TraitAdaptation::Precedence {

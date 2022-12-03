@@ -144,11 +144,7 @@ impl Parser {
             let mut args = vec![];
 
             if state.current.kind == TokenKind::LeftParen {
-                self.lparen(state)?;
-
                 args = self.args_list(state)?;
-
-                self.rparen(state)?;
             }
 
             let mut extends: Option<Identifier> = None;
@@ -163,9 +159,13 @@ impl Parser {
                 state.next();
 
                 while state.current.kind != TokenKind::LeftBrace {
-                    self.optional_comma(state)?;
-
                     implements.push(self.full_name(state)?.into());
+
+                    if state.current.kind == TokenKind::Comma {
+                        state.next();
+                    } else {
+                        break;
+                    }
                 }
             }
 
@@ -218,7 +218,11 @@ impl Parser {
                 while state.current.kind != TokenKind::LeftBrace {
                     implements.push(self.full_name(state)?.into());
 
-                    self.optional_comma(state)?;
+                    if state.current.kind == TokenKind::Comma {
+                        state.next();
+                    } else {
+                        break;
+                    }
                 }
             }
 

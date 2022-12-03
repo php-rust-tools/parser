@@ -67,7 +67,11 @@ impl Parser {
 
                     uses.push(var);
 
-                    self.optional_comma(state)?;
+                    if state.current.kind == TokenKind::Comma {
+                        state.next();
+                    } else {
+                        break;
+                    }
                 }
 
                 self.rparen(state)?;
