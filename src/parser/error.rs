@@ -33,6 +33,7 @@ pub enum ParseError {
     MixingBracedAndUnBracedNamespaceDeclarations(Span),
     NestedNamespaceDeclarations(Span),
     ForbiddenTypeUsedInProperty(String, String, Type, Span),
+    MatchExpressionWithMultipleDefaultArms(Span),
 }
 
 impl Display for ParseError {
@@ -78,6 +79,7 @@ impl Display for ParseError {
             Self::NestedNamespaceDeclarations(span) => write!(f, "Parse Error: Namespace declarations cannot be mixed on line {} column {}", span.0, span.1),
             Self::UnpredictableState(span) => write!(f, "Parse Error: Reached an unpredictable state on line {} column {}", span.0, span.1),
             Self::ForbiddenTypeUsedInProperty(class, prop, ty, span) => write!(f, "Parse Error: Property {}::${} cannot have type `{}` on line {} column {}", class, prop, ty, span.0, span.1),
+            Self::MatchExpressionWithMultipleDefaultArms(span) => write!(f, "Parse Error: Match expressions may only contain one default arm on line {} column {}", span.0, span.1),
         }
     }
 }

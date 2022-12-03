@@ -12,6 +12,7 @@ use crate::parser::error::ParseResult;
 use crate::parser::internal::ident::is_reserved_ident;
 use crate::parser::internal::precedence::{Associativity, Precedence};
 use crate::parser::state::State;
+use crate::prelude::DefaultMatchArm;
 
 pub mod ast;
 pub mod error;
@@ -998,11 +999,18 @@ impl Parser {
                 self.rparen(state)?;
                 self.lbrace(state)?;
 
+                let mut default = None;
                 let mut arms = Vec::new();
                 while state.current.kind != TokenKind::RightBrace {
                     state.skip_comments();
 
-                    let conditions = if state.current.kind == TokenKind::Default {
+                    if state.current.kind == TokenKind::Default {
+                        if default.is_some() {
+                            return Err(ParseError::MatchExpressionWithMultipleDefaultArms(
+                                state.current.span,
+                            ));
+                        }
+
                         state.next();
 
                         // match conditions can have an extra comma at the end, including `default`.
@@ -1010,7 +1018,11 @@ impl Parser {
                             state.next();
                         }
 
-                        None
+                        expect_token!([TokenKind::DoubleArrow], state, "`=>`");
+
+                        let body = self.expression(state, Precedence::Lowest)?;
+
+                        default = Some(Box::new(DefaultMatchArm { body }));
                     } else {
                         let mut conditions = Vec::new();
                         while state.current.kind != TokenKind::DoubleArrow {
@@ -1023,14 +1035,16 @@ impl Parser {
                             }
                         }
 
-                        Some(conditions)
-                    };
+                        if !conditions.is_empty() {
+                            expect_token!([TokenKind::DoubleArrow], state, "`=>`");
+                        } else {
+                            break;
+                        }
 
-                    expect_token!([TokenKind::DoubleArrow], state, "`=>`");
+                        let body = self.expression(state, Precedence::Lowest)?;
 
-                    let body = self.expression(state, Precedence::Lowest)?;
-
-                    arms.push(MatchArm { conditions, body });
+                        arms.push(MatchArm { conditions, body });
+                    }
 
                     if state.current.kind == TokenKind::Comma {
                         state.next();
@@ -1041,7 +1055,11 @@ impl Parser {
 
                 self.rbrace(state)?;
 
-                Expression::Match { condition, arms }
+                Expression::Match {
+                    condition,
+                    default,
+                    arms,
+                }
             }
             TokenKind::Array => {
                 let mut items = vec![];
