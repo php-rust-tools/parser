@@ -1,0 +1,58 @@
+[
+    Class {
+        name: Identifier {
+            name: "bar",
+        },
+        extends: None,
+        implements: [],
+        body: [],
+        flags: [],
+    },
+    Noop,
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "e",
+            },
+            op: Assign,
+            rhs: New {
+                target: AnonymousClass {
+                    extends: Some(
+                        Identifier {
+                            name: "bar",
+                        },
+                    ),
+                    implements: [],
+                    body: [
+                        Method {
+                            name: Identifier {
+                                name: "bar",
+                            },
+                            params: [],
+                            body: [
+                                Return {
+                                    value: Some(
+                                        New {
+                                            target: Identifier {
+                                                name: "bar",
+                                            },
+                                            args: [],
+                                        },
+                                    ),
+                                },
+                            ],
+                            flags: [
+                                Public,
+                            ],
+                            return_type: Some(
+                                ParentReference,
+                            ),
+                            by_ref: false,
+                        },
+                    ],
+                },
+                args: [],
+            },
+        },
+    },
+]

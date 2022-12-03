@@ -37,9 +37,7 @@ impl Parser {
     }
 
     pub(in crate::parser) fn get_type(&self, state: &mut State) -> ParseResult<Type> {
-        let ty = self.maybe_nullable(state, &|state| {
-            self.maybe_static(state, &|state| self.get_simple_type(state))
-        })?;
+        let ty = self.maybe_nullable(state, &|state| self.get_simple_type(state))?;
 
         if ty.nullable() {
             return Ok(ty);
@@ -57,7 +55,7 @@ impl Parser {
 
             let mut types = vec![ty];
             while !state.is_eof() {
-                let ty = self.maybe_static(state, &|state| self.get_simple_type(state))?;
+                let ty = self.get_simple_type(state)?;
                 if ty.standalone() {
                     return Err(ParseError::StandaloneTypeUsedInCombination(
                         ty,
@@ -91,7 +89,7 @@ impl Parser {
 
             let mut types = vec![ty];
             while !state.is_eof() {
-                let ty = self.maybe_static(state, &|state| self.get_simple_type(state))?;
+                let ty = self.get_simple_type(state)?;
                 if ty.standalone() {
                     return Err(ParseError::StandaloneTypeUsedInCombination(
                         ty,
@@ -122,7 +120,7 @@ impl Parser {
             return Ok(Some(self.get_type(state)?));
         }
 
-        let ty = self.maybe_optional_static(state, &|state| self.get_optional_simple_type(state));
+        let ty = self.get_optional_simple_type(state)?;
 
         match ty {
             Some(ty) => {
@@ -138,7 +136,7 @@ impl Parser {
 
                     let mut types = vec![ty];
                     while !state.is_eof() {
-                        let ty = self.maybe_static(state, &|state| self.get_simple_type(state))?;
+                        let ty = self.get_simple_type(state)?;
                         if ty.standalone() {
                             return Err(ParseError::StandaloneTypeUsedInCombination(
                                 ty,
@@ -172,7 +170,7 @@ impl Parser {
 
                     let mut types = vec![ty];
                     while !state.is_eof() {
-                        let ty = self.maybe_static(state, &|state| self.get_simple_type(state))?;
+                        let ty = self.get_simple_type(state)?;
                         if ty.standalone() {
                             return Err(ParseError::StandaloneTypeUsedInCombination(
                                 ty,
@@ -198,32 +196,44 @@ impl Parser {
         }
     }
 
-    fn get_optional_simple_type(&self, state: &mut State) -> Option<Type> {
+    fn get_optional_simple_type(&self, state: &mut State) -> ParseResult<Option<Type>> {
         match state.current.kind.clone() {
             TokenKind::Array => {
                 state.next();
 
-                Some(Type::Array)
+                Ok(Some(Type::Array))
             }
             TokenKind::Callable => {
                 state.next();
 
-                Some(Type::Callable)
+                Ok(Some(Type::Callable))
             }
             TokenKind::Null => {
                 state.next();
 
-                Some(Type::Null)
+                Ok(Some(Type::Null))
             }
             TokenKind::True => {
                 state.next();
 
-                Some(Type::True)
+                Ok(Some(Type::True))
             }
             TokenKind::False => {
                 state.next();
 
-                Some(Type::False)
+                Ok(Some(Type::False))
+            }
+            TokenKind::Static => {
+                state.next();
+
+                if !state.has_class_scope {
+                    return Err(ParseError::CannotFindTypeInCurrentScope(
+                        "static".to_owned(),
+                        state.current.span,
+                    ));
+                }
+
+                Ok(Some(Type::StaticReference))
             }
             TokenKind::Identifier(id) => {
                 state.next();
@@ -231,34 +241,54 @@ impl Parser {
                 let name = &id[..];
                 let lowered_name = name.to_ascii_lowercase();
                 match lowered_name.as_slice() {
-                    b"void" => Some(Type::Void),
-                    b"never" => Some(Type::Never),
-                    b"float" => Some(Type::Float),
-                    b"bool" => Some(Type::Boolean),
-                    b"int" => Some(Type::Integer),
-                    b"string" => Some(Type::String),
-                    b"object" => Some(Type::Object),
-                    b"mixed" => Some(Type::Mixed),
-                    b"iterable" => Some(Type::Iterable),
-                    b"null" => Some(Type::Null),
-                    b"true" => Some(Type::True),
-                    b"false" => Some(Type::False),
-                    b"array" => Some(Type::Array),
-                    b"callable" => Some(Type::Callable),
-                    _ => Some(Type::Identifier(id.into())),
+                    b"void" => Ok(Some(Type::Void)),
+                    b"never" => Ok(Some(Type::Never)),
+                    b"float" => Ok(Some(Type::Float)),
+                    b"bool" => Ok(Some(Type::Boolean)),
+                    b"int" => Ok(Some(Type::Integer)),
+                    b"string" => Ok(Some(Type::String)),
+                    b"object" => Ok(Some(Type::Object)),
+                    b"mixed" => Ok(Some(Type::Mixed)),
+                    b"iterable" => Ok(Some(Type::Iterable)),
+                    b"null" => Ok(Some(Type::Null)),
+                    b"true" => Ok(Some(Type::True)),
+                    b"false" => Ok(Some(Type::False)),
+                    b"array" => Ok(Some(Type::Array)),
+                    b"callable" => Ok(Some(Type::Callable)),
+                    b"self" => {
+                        if !state.has_class_scope {
+                            return Err(ParseError::CannotFindTypeInCurrentScope(
+                                "self".to_owned(),
+                                state.current.span,
+                            ));
+                        }
+
+                        Ok(Some(Type::SelfReference))
+                    }
+                    b"parent" => {
+                        if !state.has_class_parent_scope {
+                            return Err(ParseError::CannotFindTypeInCurrentScope(
+                                "parent".to_owned(),
+                                state.current.span,
+                            ));
+                        }
+
+                        Ok(Some(Type::ParentReference))
+                    }
+                    _ => Ok(Some(Type::Identifier(id.into()))),
                 }
             }
             TokenKind::QualifiedIdentifier(id) | TokenKind::FullyQualifiedIdentifier(id) => {
                 state.next();
 
-                Some(Type::Identifier(id.into()))
+                Ok(Some(Type::Identifier(id.into())))
             }
-            _ => None,
+            _ => Ok(None),
         }
     }
 
     fn get_simple_type(&self, state: &mut State) -> ParseResult<Type> {
-        self.get_optional_simple_type(state)
+        self.get_optional_simple_type(state)?
             .ok_or_else(|| expected_token!(["a type"], state))
     }
 
@@ -281,69 +311,5 @@ impl Parser {
         } else {
             otherwise(state)
         }
-    }
-
-    fn maybe_static(
-        &self,
-        state: &mut State,
-        otherwise: &(dyn Fn(&mut State) -> ParseResult<Type>),
-    ) -> ParseResult<Type> {
-        if TokenKind::Static == state.current.kind {
-            state.next();
-
-            return Ok(Type::StaticReference);
-        }
-
-        if let TokenKind::Identifier(id) = &state.current.kind {
-            let name = &id[..];
-            let lowered_name = name.to_ascii_lowercase();
-            match lowered_name.as_slice() {
-                b"self" => {
-                    state.next();
-
-                    return Ok(Type::SelfReference);
-                }
-                b"parent" => {
-                    state.next();
-
-                    return Ok(Type::ParentReference);
-                }
-                _ => {}
-            };
-        }
-
-        otherwise(state)
-    }
-
-    fn maybe_optional_static(
-        &self,
-        state: &mut State,
-        otherwise: &(dyn Fn(&mut State) -> Option<Type>),
-    ) -> Option<Type> {
-        if TokenKind::Static == state.current.kind {
-            state.next();
-
-            return Some(Type::StaticReference);
-        }
-
-        if let TokenKind::Identifier(id) = &state.current.kind {
-            let name = &id[..];
-            let lowered_name = name.to_ascii_lowercase();
-            match lowered_name.as_slice() {
-                b"self" => {
-                    state.next();
-
-                    return Some(Type::SelfReference);
-                }
-                b"parent" => {
-                    state.next();
-
-                    return Some(Type::ParentReference);
-                }
-                _ => {}
-            };
-        }
-
-        otherwise(state)
     }
 }

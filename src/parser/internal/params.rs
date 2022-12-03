@@ -29,14 +29,14 @@ impl Parser {
                         // can only have abstract ctor
                         Scope::Interface(_) => 1,
                         // can only have concret ctor
-                        Scope::AnonymousClass => {
+                        Scope::AnonymousClass(_) => {
                             class_name = state.named(&"class@anonymous".into());
 
                             2
                         }
                         // can have either abstract or concret ctor,
                         // depens on method flag.
-                        Scope::Class(name, _) | Scope::Trait(name) => {
+                        Scope::Class(name, _, _) | Scope::Trait(name) => {
                             if flags.contains(&MethodFlag::Abstract) {
                                 1
                             } else {

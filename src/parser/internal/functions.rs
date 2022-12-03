@@ -199,7 +199,7 @@ impl Parser {
         let name = self.ident_maybe_reserved(state)?;
 
         let has_body = expected_scope!([
-            Scope::Class(_, cf) => {
+            Scope::Class(_, cf, _) => {
                 if !cf.contains(&ClassFlag::Abstract) && flags.contains(&MethodFlag::Abstract) {
                     return Err(ParseError::AbstractModifierOnNonAbstractClassMethod(
                         state.current.span,
@@ -220,7 +220,7 @@ impl Parser {
 
                 true
             },
-            Scope::AnonymousClass => true,
+            Scope::AnonymousClass(_) => true,
         ], state);
 
         scoped!(state, Scope::Method(name.clone(), flags.clone()), {

@@ -21,47 +21,53 @@ impl Parser {
 
         let name = self.ident(state)?;
 
-        scoped!(state, Scope::Class(name.clone(), flags.clone()), {
-            let mut extends: Option<Identifier> = None;
+        let mut has_parent = false;
+        let mut extends: Option<Identifier> = None;
 
-            if state.current.kind == TokenKind::Extends {
-                state.next();
-                extends = Some(self.full_name(state)?.into());
-            }
+        if state.current.kind == TokenKind::Extends {
+            state.next();
+            extends = Some(self.full_name(state)?.into());
+            has_parent = true;
+        }
 
-            let implements = if state.current.kind == TokenKind::Implements {
-                state.next();
+        scoped!(
+            state,
+            Scope::Class(name.clone(), flags.clone(), has_parent),
+            {
+                let implements = if state.current.kind == TokenKind::Implements {
+                    state.next();
 
-                self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
-                    Ok(parser.full_name(state)?.into())
-                })?
-            } else {
-                Vec::new()
-            };
+                    self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
+                        Ok(parser.full_name(state)?.into())
+                    })?
+                } else {
+                    Vec::new()
+                };
 
-            self.lbrace(state)?;
+                self.lbrace(state)?;
 
-            let mut body = Vec::new();
-            while state.current.kind != TokenKind::RightBrace {
-                state.gather_comments();
+                let mut body = Vec::new();
+                while state.current.kind != TokenKind::RightBrace {
+                    state.gather_comments();
 
-                if state.current.kind == TokenKind::RightBrace {
-                    state.clear_comments();
-                    break;
+                    if state.current.kind == TokenKind::RightBrace {
+                        state.clear_comments();
+                        break;
+                    }
+
+                    body.push(self.class_like_statement(state)?);
                 }
+                self.rbrace(state)?;
 
-                body.push(self.class_like_statement(state)?);
+                Ok(Statement::Class {
+                    name: name.into(),
+                    extends,
+                    implements,
+                    body,
+                    flags,
+                })
             }
-            self.rbrace(state)?;
-
-            Ok(Statement::Class {
-                name: name.into(),
-                extends,
-                implements,
-                body,
-                flags,
-            })
-        })
+        )
     }
 
     pub(in crate::parser) fn interface_definition(
@@ -140,20 +146,22 @@ impl Parser {
         expect_token!([TokenKind::New], state, ["`new`"]);
         expect_token!([TokenKind::Class], state, ["`class`"]);
 
-        scoped!(state, Scope::AnonymousClass, {
-            let mut args = vec![];
+        let mut args = vec![];
 
-            if state.current.kind == TokenKind::LeftParen {
-                args = self.args_list(state)?;
-            }
+        if state.current.kind == TokenKind::LeftParen {
+            args = self.args_list(state)?;
+        }
 
-            let mut extends: Option<Identifier> = None;
+        let mut has_parent = false;
+        let mut extends: Option<Identifier> = None;
 
-            if state.current.kind == TokenKind::Extends {
-                state.next();
-                extends = Some(self.full_name(state)?.into());
-            }
+        if state.current.kind == TokenKind::Extends {
+            state.next();
+            extends = Some(self.full_name(state)?.into());
+            has_parent = true;
+        }
 
+        scoped!(state, Scope::AnonymousClass(has_parent), {
             let mut implements = Vec::new();
             if state.current.kind == TokenKind::Implements {
                 state.next();

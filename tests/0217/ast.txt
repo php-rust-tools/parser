@@ -1,0 +1,50 @@
+[
+    Class {
+        name: Identifier {
+            name: "s",
+        },
+        extends: None,
+        implements: [],
+        body: [],
+        flags: [],
+    },
+    Class {
+        name: Identifier {
+            name: "foo",
+        },
+        extends: Some(
+            Identifier {
+                name: "s",
+            },
+        ),
+        implements: [],
+        body: [
+            Method {
+                name: Identifier {
+                    name: "bar",
+                },
+                params: [],
+                body: [
+                    Return {
+                        value: Some(
+                            New {
+                                target: Identifier {
+                                    name: "s",
+                                },
+                                args: [],
+                            },
+                        ),
+                    },
+                ],
+                flags: [
+                    Public,
+                ],
+                return_type: Some(
+                    ParentReference,
+                ),
+                by_ref: false,
+            },
+        ],
+        flags: [],
+    },
+]
