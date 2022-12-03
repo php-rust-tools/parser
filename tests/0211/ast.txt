@@ -1,0 +1,74 @@
+[
+    Expression {
+        expr: Match {
+            condition: Variable {
+                name: "s",
+            },
+            default: Some(
+                DefaultMatchArm {
+                    body: LiteralInteger {
+                        i: 124,
+                    },
+                },
+            ),
+            arms: [
+                MatchArm {
+                    conditions: [
+                        LiteralInteger {
+                            i: 1,
+                        },
+                    ],
+                    body: LiteralInteger {
+                        i: 2,
+                    },
+                },
+                MatchArm {
+                    conditions: [
+                        LiteralInteger {
+                            i: 3,
+                        },
+                    ],
+                    body: LiteralInteger {
+                        i: 4,
+                    },
+                },
+                MatchArm {
+                    conditions: [
+                        LiteralInteger {
+                            i: 5,
+                        },
+                        LiteralInteger {
+                            i: 6,
+                        },
+                    ],
+                    body: LiteralInteger {
+                        i: 4,
+                    },
+                },
+                MatchArm {
+                    conditions: [
+                        LiteralInteger {
+                            i: 9,
+                        },
+                        LiteralInteger {
+                            i: 123,
+                        },
+                    ],
+                    body: LiteralInteger {
+                        i: 4,
+                    },
+                },
+                MatchArm {
+                    conditions: [
+                        Identifier {
+                            name: "_",
+                        },
+                    ],
+                    body: LiteralInteger {
+                        i: 43,
+                    },
+                },
+            ],
+        },
+    },
+]

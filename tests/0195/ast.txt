@@ -20,24 +20,23 @@
                 condition: Variable {
                     name: "a",
                 },
+                default: None,
                 arms: [
                     MatchArm {
-                        conditions: Some(
-                            [
-                                LiteralInteger {
-                                    i: 1,
-                                },
-                                LiteralInteger {
-                                    i: 2,
-                                },
-                                LiteralInteger {
-                                    i: 3,
-                                },
-                                LiteralInteger {
-                                    i: 4,
-                                },
-                            ],
-                        ),
+                        conditions: [
+                            LiteralInteger {
+                                i: 1,
+                            },
+                            LiteralInteger {
+                                i: 2,
+                            },
+                            LiteralInteger {
+                                i: 3,
+                            },
+                            LiteralInteger {
+                                i: 4,
+                            },
+                        ],
                         body: Null,
                     },
                 ],

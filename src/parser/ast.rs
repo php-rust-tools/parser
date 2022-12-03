@@ -706,6 +706,7 @@ pub enum Expression {
     },
     Match {
         condition: Box<Self>,
+        default: Option<Box<DefaultMatchArm>>,
         arms: Vec<MatchArm>,
     },
     Throw {
@@ -756,8 +757,13 @@ pub struct ClosureUse {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct DefaultMatchArm {
+    pub body: Expression,
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct MatchArm {
-    pub conditions: Option<Vec<Expression>>,
+    pub conditions: Vec<Expression>,
     pub body: Expression,
 }
 
