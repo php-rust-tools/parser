@@ -21,10 +21,10 @@ pub enum Scope {
     BracedNamespace(Option<ByteString>),
 
     Interface(ByteString),
-    Class(ByteString, Vec<ClassFlag>),
+    Class(ByteString, Vec<ClassFlag>, bool),
     Trait(ByteString),
     Enum(ByteString, bool),
-    AnonymousClass,
+    AnonymousClass(bool),
 
     Function(ByteString),
     Method(ByteString, Vec<MethodFlag>),
@@ -40,6 +40,8 @@ pub struct State {
     pub iter: IntoIter<Token>,
     pub comments: Vec<Token>,
     pub namespace_type: Option<NamespaceType>,
+    pub has_class_scope: bool,
+    pub has_class_parent_scope: bool,
 }
 
 impl State {
@@ -53,6 +55,8 @@ impl State {
             iter,
             comments: vec![],
             namespace_type: None,
+            has_class_scope: false,
+            has_class_parent_scope: false,
         }
     }
 
@@ -113,10 +117,12 @@ impl State {
         }
 
         self.stack.push_back(scope);
+        self.update_scope();
     }
 
     pub fn exit(&mut self) {
         self.stack.pop_back();
+        self.update_scope();
     }
 
     pub fn skip_comments(&mut self) {
@@ -151,5 +157,68 @@ impl State {
     pub fn next(&mut self) {
         self.current = self.peek.clone();
         self.peek = self.iter.next().unwrap_or_default()
+    }
+
+    fn update_scope(&mut self) {
+        self.has_class_scope = self.has_class_scope();
+        self.has_class_parent_scope = if self.has_class_scope {
+            self.has_class_parent_scope()
+        } else {
+            false
+        };
+    }
+
+    fn has_class_scope(&self) -> bool {
+        for scope in self.stack.iter().rev() {
+            match &scope {
+                Scope::ArrowFunction(s) | Scope::AnonymousFunction(s) => {
+                    // if it's a static closure, don't allow `static` type.
+                    if *s {
+                        return false;
+                    }
+                }
+                Scope::BracedNamespace(_) | Scope::Namespace(_) | Scope::Function(_) => {
+                    return false;
+                }
+                _ => {
+                    return true;
+                }
+            };
+        }
+
+        false
+    }
+
+    fn has_class_parent_scope(&self) -> bool {
+        for scope in self.stack.iter().rev() {
+            match &scope {
+                Scope::ArrowFunction(s) | Scope::AnonymousFunction(s) => {
+                    // static closures don't have a parent
+                    if *s {
+                        return false;
+                    }
+                }
+                Scope::BracedNamespace(_) | Scope::Namespace(_) | Scope::Function(_) => {
+                    return false;
+                }
+                // we don't know if the trait has a parent at this point
+                // the only time that we can determine if a trait has a parent
+                // is when it's used in a class.
+                Scope::Trait(_) => {
+                    return true;
+                }
+                // interfaces and enums don't have a parent.
+                Scope::Interface(_) | Scope::Enum(_, _) => {
+                    return false;
+                }
+                Scope::Class(_, _, has_parent) | Scope::AnonymousClass(has_parent) => {
+                    return *has_parent;
+                }
+                // we can't determine this from method, wait until we reach the classish scope.
+                Scope::Method(_, _) => {}
+            };
+        }
+
+        false
     }
 }

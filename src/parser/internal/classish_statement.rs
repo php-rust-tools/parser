@@ -147,9 +147,8 @@ impl Parser {
                 }
 
                 let class_name: String = expected_scope!([
-                    Scope::Class(name, _) => state.named(&name),
-                    Scope::Trait(name) => state.named(&name),
-                    Scope::AnonymousClass => state.named(&"class@anonymous".into()),
+                    Scope::Trait(name) | Scope::Class(name, _, _) => state.named(&name),
+                    Scope::AnonymousClass(_) => state.named(&"class@anonymous".into()),
                 ], state);
 
                 if flags.contains(&PropertyFlag::Readonly) {
@@ -158,7 +157,6 @@ impl Parser {
                     }
 
                     if value.is_some() {
-
                         return Err(ParseError::ReadonlyPropertyHasDefaultValue(class_name, var.to_string(), state.current.span));
                     }
                 }

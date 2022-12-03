@@ -1,26 +1,14 @@
 [
-    Namespace {
-        name: "A\B\C\D\E",
+    Trait {
+        name: Identifier {
+            name: "foo",
+        },
         body: [
-            Noop,
-            Function {
+            Method {
                 name: Identifier {
-                    name: "foo",
+                    name: "bar",
                 },
-                params: [
-                    Param {
-                        name: Variable {
-                            name: "s",
-                        },
-                        type: Some(
-                            String,
-                        ),
-                        variadic: false,
-                        default: None,
-                        flags: [],
-                        by_ref: false,
-                    },
-                ],
+                params: [],
                 body: [
                     Expression {
                         expr: Call {
@@ -31,13 +19,16 @@
                                 Arg {
                                     name: None,
                                     value: LiteralInteger {
-                                        i: 0,
+                                        i: 1,
                                     },
                                     unpack: false,
                                 },
                             ],
                         },
                     },
+                ],
+                flags: [
+                    Public,
                 ],
                 return_type: Some(
                     ParentReference,
