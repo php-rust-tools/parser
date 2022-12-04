@@ -967,6 +967,7 @@ impl Parser {
                 e
             }
             TokenKind::StringPart(_) => self.interpolated_string(state)?,
+            TokenKind::StartHeredoc(_) => self.interpolated_string(state)?,
             TokenKind::True => {
                 let e = Expression::Bool { value: true };
                 state.next();
@@ -1477,135 +1478,145 @@ impl Parser {
         let mut parts = Vec::new();
 
         while state.current.kind != TokenKind::DoubleQuote {
-            match &state.current.kind {
-                TokenKind::StringPart(s) => {
-                    if s.len() > 0 {
-                        parts.push(StringPart::Const(s.clone()));
-                    }
-                    state.next();
-                }
-                TokenKind::DollarLeftBrace => {
-                    state.next();
-                    let e = match (&state.current.kind, &state.peek.kind) {
-                        (TokenKind::Identifier(var), TokenKind::RightBrace) => {
-                            // "${var}"
-                            let e = Expression::Variable { name: var.clone() };
-                            state.next();
-                            state.next();
-                            e
-                        }
-                        (TokenKind::Identifier(var), TokenKind::LeftBracket) => {
-                            // "${var[e]}"
-                            let var = Expression::Variable { name: var.clone() };
-                            state.next();
-                            state.next();
-                            let e = self.expression(state, Precedence::Lowest)?;
-                            expect_token!([TokenKind::RightBracket], state, "`]`");
-                            expect_token!([TokenKind::RightBrace], state, "`}`");
-                            Expression::ArrayIndex {
-                                array: Box::new(var),
-                                index: Some(Box::new(e)),
-                            }
-                        }
-                        _ => {
-                            // Arbitrary expressions are allowed, but are treated as variable variables.
-                            let e = self.expression(state, Precedence::Lowest)?;
-                            expect_token!([TokenKind::RightBrace], state, "`}`");
-
-                            Expression::DynamicVariable { name: Box::new(e) }
-                        }
-                    };
-                    parts.push(StringPart::Expr(Box::new(e)));
-                }
-                TokenKind::LeftBrace => {
-                    // "{$expr}"
-                    state.next();
-                    let e = self.expression(state, Precedence::Lowest)?;
-                    expect_token!([TokenKind::RightBrace], state, "`}`");
-                    parts.push(StringPart::Expr(Box::new(e)));
-                }
-                TokenKind::Variable(var) => {
-                    // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
-                    let var = Expression::Variable { name: var.clone() };
-                    state.next();
-                    let e = match state.current.kind {
-                        TokenKind::LeftBracket => {
-                            state.next();
-                            // Full expression syntax is not allowed here,
-                            // so we can't call self.expression.
-                            let index = match &state.current.kind {
-                                &TokenKind::LiteralInteger(i) => {
-                                    state.next();
-                                    Expression::LiteralInteger { i }
-                                }
-                                TokenKind::Minus => {
-                                    state.next();
-                                    if let TokenKind::LiteralInteger(i) = state.current.kind {
-                                        state.next();
-                                        Expression::Negate {
-                                            value: Box::new(Expression::LiteralInteger { i }),
-                                        }
-                                    } else {
-                                        return expected_token_err!("an integer", state);
-                                    }
-                                }
-                                TokenKind::Identifier(ident) => {
-                                    let e = Expression::LiteralString {
-                                        value: ident.clone(),
-                                    };
-                                    state.next();
-                                    e
-                                }
-                                TokenKind::Variable(var) => {
-                                    let e = Expression::Variable { name: var.clone() };
-                                    state.next();
-                                    e
-                                }
-                                _ => {
-                                    return expected_token_err!(
-                                        ["`-`", "an integer", "an identifier", "a variable"],
-                                        state
-                                    );
-                                }
-                            };
-
-                            expect_token!([TokenKind::RightBracket], state, "`]`");
-                            Expression::ArrayIndex {
-                                array: Box::new(var),
-                                index: Some(Box::new(index)),
-                            }
-                        }
-                        TokenKind::Arrow => {
-                            state.next();
-                            Expression::PropertyFetch {
-                                target: Box::new(var),
-                                property: Box::new(Expression::Identifier {
-                                    name: self.ident_maybe_reserved(state)?,
-                                }),
-                            }
-                        }
-                        TokenKind::NullsafeArrow => {
-                            state.next();
-                            Expression::NullsafePropertyFetch {
-                                target: Box::new(var),
-                                property: Box::new(Expression::Identifier {
-                                    name: self.ident_maybe_reserved(state)?,
-                                }),
-                            }
-                        }
-                        _ => var,
-                    };
-                    parts.push(StringPart::Expr(Box::new(e)));
-                }
-                _ => {
-                    return expected_token_err!(["`${`", "`{$", "`\"`", "a variable"], state);
-                }
+            if let Some(part) = self.interpolated_string_part(state)? {
+                parts.push(part);
             }
         }
 
         state.next();
 
         Ok(Expression::InterpolatedString { parts })
+    }
+
+    fn interpolated_string_part(&self, state: &mut State) -> ParseResult<Option<StringPart>> {
+        Ok(match &state.current.kind {
+            TokenKind::StringPart(s) => {
+                let part = if s.len() > 0 {
+                    Some(StringPart::Const(s.clone()))
+                } else {
+                    None
+                };
+
+                state.next();
+                part
+            }
+            TokenKind::DollarLeftBrace => {
+                state.next();
+                let e = match (&state.current.kind, &state.peek.kind) {
+                    (TokenKind::Identifier(var), TokenKind::RightBrace) => {
+                        // "${var}"
+                        let e = Expression::Variable { name: var.clone() };
+                        state.next();
+                        state.next();
+                        e
+                    }
+                    (TokenKind::Identifier(var), TokenKind::LeftBracket) => {
+                        // "${var[e]}"
+                        let var = Expression::Variable { name: var.clone() };
+                        state.next();
+                        state.next();
+                        let e = self.expression(state, Precedence::Lowest)?;
+                        expect_token!([TokenKind::RightBracket], state, "`]`");
+                        expect_token!([TokenKind::RightBrace], state, "`}`");
+                        Expression::ArrayIndex {
+                            array: Box::new(var),
+                            index: Some(Box::new(e)),
+                        }
+                    }
+                    _ => {
+                        // Arbitrary expressions are allowed, but are treated as variable variables.
+                        let e = self.expression(state, Precedence::Lowest)?;
+                        expect_token!([TokenKind::RightBrace], state, "`}`");
+
+                        Expression::DynamicVariable { name: Box::new(e) }
+                    }
+                };
+                Some(StringPart::Expr(Box::new(e)))
+            }
+            TokenKind::LeftBrace => {
+                // "{$expr}"
+                state.next();
+                let e = self.expression(state, Precedence::Lowest)?;
+                expect_token!([TokenKind::RightBrace], state, "`}`");
+                Some(StringPart::Expr(Box::new(e)))
+            }
+            TokenKind::Variable(var) => {
+                // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
+                let var = Expression::Variable { name: var.clone() };
+                state.next();
+                let e = match state.current.kind {
+                    TokenKind::LeftBracket => {
+                        state.next();
+                        // Full expression syntax is not allowed here,
+                        // so we can't call self.expression.
+                        let index = match &state.current.kind {
+                            &TokenKind::LiteralInteger(i) => {
+                                state.next();
+                                Expression::LiteralInteger { i }
+                            }
+                            TokenKind::Minus => {
+                                state.next();
+                                if let TokenKind::LiteralInteger(i) = state.current.kind {
+                                    state.next();
+                                    Expression::Negate {
+                                        value: Box::new(Expression::LiteralInteger { i }),
+                                    }
+                                } else {
+                                    return expected_token_err!("an integer", state);
+                                }
+                            }
+                            TokenKind::Identifier(ident) => {
+                                let e = Expression::LiteralString {
+                                    value: ident.clone(),
+                                };
+                                state.next();
+                                e
+                            }
+                            TokenKind::Variable(var) => {
+                                let e = Expression::Variable { name: var.clone() };
+                                state.next();
+                                e
+                            }
+                            _ => {
+                                return expected_token_err!(
+                                    ["`-`", "an integer", "an identifier", "a variable"],
+                                    state
+                                );
+                            }
+                        };
+
+                        expect_token!([TokenKind::RightBracket], state, "`]`");
+                        Expression::ArrayIndex {
+                            array: Box::new(var),
+                            index: Some(Box::new(index)),
+                        }
+                    }
+                    TokenKind::Arrow => {
+                        state.next();
+                        Expression::PropertyFetch {
+                            target: Box::new(var),
+                            property: Box::new(Expression::Identifier {
+                                name: self.ident_maybe_reserved(state)?,
+                            }),
+                        }
+                    }
+                    TokenKind::NullsafeArrow => {
+                        state.next();
+                        Expression::NullsafePropertyFetch {
+                            target: Box::new(var),
+                            property: Box::new(Expression::Identifier {
+                                name: self.ident_maybe_reserved(state)?,
+                            }),
+                        }
+                    }
+                    _ => var,
+                };
+                Some(StringPart::Expr(Box::new(e)))
+            }
+            _ => {
+                return expected_token_err!(["`${`", "`{$", "`\"`", "a variable"], state);
+            }
+        })
     }
 }
 
