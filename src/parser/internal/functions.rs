@@ -153,7 +153,13 @@ impl Parser {
             false
         };
 
-        let name = self.ident(state)?;
+        let name = match state.current.kind {
+            TokenKind::Null => {
+                state.next();
+                "null".into()
+            },
+            _ => self.ident(state)?,
+        };
 
         scoped!(state, Scope::Function(name.clone()), {
             let params = self.param_list(state)?;

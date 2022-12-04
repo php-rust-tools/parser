@@ -757,7 +757,7 @@ impl Parser {
             TokenKind::Function
                 if matches!(
                     state.peek.kind,
-                    TokenKind::Identifier(_) | TokenKind::Ampersand
+                    TokenKind::Identifier(_) | TokenKind::Null | TokenKind::Ampersand
                 ) =>
             {
                 // FIXME: This is incredibly hacky but we don't have a way to look at
