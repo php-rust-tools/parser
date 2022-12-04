@@ -24,14 +24,6 @@ impl Parser {
                             state.current.span,
                         ));
                     }
-                    Some(NamespaceType::Unbraced) => {
-                        // exit the current namespace scope.
-                        // we don't need to check if the current scope is a namespace
-                        // because we know it is, it is not possible for it to be anything else.
-                        // as using `namespace` anywhere aside from a top-level stmt would result
-                        // in a parse error.
-                        state.exit();
-                    }
                     _ => {}
                 }
 
@@ -53,7 +45,10 @@ impl Parser {
     fn unbraced_namespace(&self, state: &mut State, name: ByteString) -> ParseResult<Statement> {
         let body = scoped!(state, Scope::Namespace(name.clone()), {
             let mut body = Block::new();
-            while !state.is_eof() {
+            // since this is an unbraced namespace, as soon as we encouter another
+            // `namespace` token as a top level statement, this namespace scope ends.
+            // otherwise we will end up with nested namespace statements.
+            while state.current.kind != TokenKind::Namespace && !state.is_eof() {
                 body.push(self.top_level_statement(state)?);
             }
 
