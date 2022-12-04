@@ -46,6 +46,8 @@ impl Parser {
 
                 self.lbrace(state)?;
 
+                let attributes = state.get_attributes();
+
                 let mut body = Vec::new();
                 while state.current.kind != TokenKind::RightBrace {
                     state.gather_comments();
@@ -61,6 +63,7 @@ impl Parser {
 
                 Ok(Statement::Class {
                     name: name.into(),
+                    attributes,
                     extends,
                     implements,
                     body,
@@ -90,6 +93,8 @@ impl Parser {
 
             self.lbrace(state)?;
 
+            let attributes = state.get_attributes();
+
             let mut body = Vec::new();
             while state.current.kind != TokenKind::RightBrace && !state.is_eof() {
                 state.gather_comments();
@@ -105,6 +110,7 @@ impl Parser {
 
             Ok(Statement::Interface {
                 name: name.into(),
+                attributes,
                 extends,
                 body,
             })
@@ -118,6 +124,8 @@ impl Parser {
 
         scoped!(state, Scope::Trait(name.clone()), {
             self.lbrace(state)?;
+
+            let attributes = state.get_attributes();
 
             let mut body = Vec::new();
             while state.current.kind != TokenKind::RightBrace && !state.is_eof() {
@@ -134,6 +142,7 @@ impl Parser {
 
             Ok(Statement::Trait {
                 name: name.into(),
+                attributes,
                 body,
             })
         })
@@ -144,6 +153,9 @@ impl Parser {
         state: &mut State,
     ) -> ParseResult<Expression> {
         expect_token!([TokenKind::New], state, ["`new`"]);
+
+        self.gather_attributes(state)?;
+
         expect_token!([TokenKind::Class], state, ["`class`"]);
 
         let mut args = vec![];
@@ -179,6 +191,8 @@ impl Parser {
 
             self.lbrace(state)?;
 
+            let attributes = state.get_attributes();
+
             let mut body = Vec::new();
             while state.current.kind != TokenKind::RightBrace && !state.is_eof() {
                 body.push(self.class_like_statement(state)?);
@@ -188,6 +202,7 @@ impl Parser {
 
             Ok(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
+                    attributes,
                     extends,
                     implements,
                     body,
@@ -234,6 +249,8 @@ impl Parser {
                 }
             }
 
+            let attributes = state.get_attributes();
+
             self.lbrace(state)?;
 
             let mut body = Block::new();
@@ -247,12 +264,14 @@ impl Parser {
             match backed_type {
                 Some(backed_type) => Ok(Statement::BackedEnum {
                     name: name.into(),
+                    attributes,
                     backed_type,
                     implements,
                     body,
                 }),
                 None => Ok(Statement::UnitEnum {
                     name: name.into(),
+                    attributes,
                     implements,
                     body,
                 }),

@@ -187,678 +187,729 @@ impl Parser {
     }
 
     fn statement(&self, state: &mut State) -> ParseResult<Statement> {
-        state.skip_comments();
+        let has_attributes = self.gather_attributes(state)?;
 
-        let statement = match &state.current.kind {
-            TokenKind::Goto => {
-                state.next();
+        let statement = if has_attributes {
+            match &state.current.kind {
+                TokenKind::Abstract => self.class_definition(state)?,
+                TokenKind::Readonly => self.class_definition(state)?,
+                TokenKind::Final => self.class_definition(state)?,
+                TokenKind::Class => self.class_definition(state)?,
+                TokenKind::Interface => self.interface_definition(state)?,
+                TokenKind::Trait => self.trait_definition(state)?,
+                TokenKind::Enum => self.enum_definition(state)?,
+                TokenKind::Function
+                    if matches!(
+                        state.peek.kind,
+                        TokenKind::Identifier(_) | TokenKind::Null | TokenKind::Ampersand
+                    ) =>
+                {
+                    // FIXME: This is incredibly hacky but we don't have a way to look at
+                    // the next N tokens right now. We could probably do with a `peek_buf()`
+                    // method like the Lexer has.
+                    if state.peek.kind == TokenKind::Ampersand {
+                        let mut cloned = state.iter.clone();
+                        if let Some((index, _)) = state.iter.clone().enumerate().next() {
+                            if !matches!(
+                                cloned.nth(index),
+                                Some(Token {
+                                    kind: TokenKind::Identifier(_),
+                                    ..
+                                })
+                            ) {
+                                let expr = self.expression(state, Precedence::Lowest)?;
 
-                let label = self.ident(state)?.into();
+                                self.semi(state)?;
 
-                self.semi(state)?;
+                                return Ok(Statement::Expression { expr });
+                            }
+                        }
 
-                Statement::Goto { label }
-            }
-            TokenKind::Identifier(_) if state.peek.kind == TokenKind::Colon => {
-                let label = self.ident(state)?.into();
-
-                self.colon(state)?;
-
-                Statement::Label { label }
-            }
-            TokenKind::Declare => {
-                state.next();
-                self.lparen(state)?;
-
-                let mut declares = Vec::new();
-                loop {
-                    let key = self.ident(state)?;
-
-                    expect_token!([TokenKind::Equals], state, "`=`");
-
-                    let value = expect_literal!(state);
-
-                    declares.push(DeclareItem {
-                        key: key.into(),
-                        value,
-                    });
-
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
+                        self.function(state)?
                     } else {
-                        break;
+                        self.function(state)?
                     }
                 }
+                _ => {
+                    // Note, we can get attributes and know their span, maybe use that in the
+                    // error in the future?
+                    return Err(ParseError::ExpectedItemDefinitionAfterAttributes(
+                        state.current.span,
+                    ));
+                }
+            }
+        } else {
+            match &state.current.kind {
+                TokenKind::Abstract => self.class_definition(state)?,
+                TokenKind::Readonly => self.class_definition(state)?,
+                TokenKind::Final => self.class_definition(state)?,
+                TokenKind::Class => self.class_definition(state)?,
+                TokenKind::Interface => self.interface_definition(state)?,
+                TokenKind::Trait => self.trait_definition(state)?,
+                TokenKind::Enum => self.enum_definition(state)?,
+                TokenKind::Function
+                    if matches!(
+                        state.peek.kind,
+                        TokenKind::Identifier(_) | TokenKind::Null | TokenKind::Ampersand
+                    ) =>
+                {
+                    // FIXME: This is incredibly hacky but we don't have a way to look at
+                    // the next N tokens right now. We could probably do with a `peek_buf()`
+                    // method like the Lexer has.
+                    if state.peek.kind == TokenKind::Ampersand {
+                        let mut cloned = state.iter.clone();
+                        if let Some((index, _)) = state.iter.clone().enumerate().next() {
+                            if !matches!(
+                                cloned.nth(index),
+                                Some(Token {
+                                    kind: TokenKind::Identifier(_),
+                                    ..
+                                })
+                            ) {
+                                let expr = self.expression(state, Precedence::Lowest)?;
 
-                self.rparen(state)?;
+                                self.semi(state)?;
 
-                let body = if state.current.kind == TokenKind::LeftBrace {
+                                return Ok(Statement::Expression { expr });
+                            }
+                        }
+
+                        self.function(state)?
+                    } else {
+                        self.function(state)?
+                    }
+                }
+                TokenKind::Goto => {
                     state.next();
-                    let b = self.block(state, &TokenKind::RightBrace)?;
-                    self.rbrace(state)?;
-                    b
-                } else if state.current.kind == TokenKind::Colon {
-                    self.colon(state)?;
-                    let b = self.block(state, &TokenKind::EndDeclare)?;
-                    expect_token!([TokenKind::EndDeclare], state, "`enddeclare`");
+
+                    let label = self.ident(state)?.into();
+
                     self.semi(state)?;
-                    b
-                } else {
-                    self.semi(state)?;
-                    vec![]
-                };
 
-                Statement::Declare { declares, body }
-            }
-            TokenKind::Global => {
-                state.next();
-
-                let mut vars = vec![];
-                // `loop` instead of `while` as we don't allow for extra commas.
-                loop {
-                    vars.push(self.var(state)?.into());
-
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
-                    } else {
-                        break;
-                    }
+                    Statement::Goto { label }
                 }
+                TokenKind::Identifier(_) if state.peek.kind == TokenKind::Colon => {
+                    let label = self.ident(state)?.into();
 
-                self.semi(state)?;
-                Statement::Global { vars }
-            }
-            TokenKind::Static if matches!(state.peek.kind, TokenKind::Variable(_)) => {
-                state.next();
+                    self.colon(state)?;
 
-                let mut vars = vec![];
+                    Statement::Label { label }
+                }
+                TokenKind::Declare => {
+                    state.next();
+                    self.lparen(state)?;
 
-                // `loop` instead of `while` as we don't allow for extra commas.
-                loop {
-                    let var = Expression::Variable {
-                        name: self.var(state)?,
+                    let mut declares = Vec::new();
+                    loop {
+                        let key = self.ident(state)?;
+
+                        expect_token!([TokenKind::Equals], state, "`=`");
+
+                        let value = expect_literal!(state);
+
+                        declares.push(DeclareItem {
+                            key: key.into(),
+                            value,
+                        });
+
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                        } else {
+                            break;
+                        }
+                    }
+
+                    self.rparen(state)?;
+
+                    let body = if state.current.kind == TokenKind::LeftBrace {
+                        state.next();
+                        let b = self.block(state, &TokenKind::RightBrace)?;
+                        self.rbrace(state)?;
+                        b
+                    } else if state.current.kind == TokenKind::Colon {
+                        self.colon(state)?;
+                        let b = self.block(state, &TokenKind::EndDeclare)?;
+                        expect_token!([TokenKind::EndDeclare], state, "`enddeclare`");
+                        self.semi(state)?;
+                        b
+                    } else {
+                        self.semi(state)?;
+                        vec![]
                     };
-                    let mut default = None;
 
-                    if state.current.kind == TokenKind::Equals {
-                        state.next();
+                    Statement::Declare { declares, body }
+                }
+                TokenKind::Global => {
+                    state.next();
 
-                        default = Some(self.expression(state, Precedence::Lowest)?);
+                    let mut vars = vec![];
+                    // `loop` instead of `while` as we don't allow for extra commas.
+                    loop {
+                        vars.push(self.var(state)?.into());
+
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                        } else {
+                            break;
+                        }
                     }
 
-                    vars.push(StaticVar { var, default });
+                    self.semi(state)?;
+                    Statement::Global { vars }
+                }
+                TokenKind::Static if matches!(state.peek.kind, TokenKind::Variable(_)) => {
+                    state.next();
 
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
+                    let mut vars = vec![];
+
+                    // `loop` instead of `while` as we don't allow for extra commas.
+                    loop {
+                        let var = Expression::Variable {
+                            name: self.var(state)?,
+                        };
+                        let mut default = None;
+
+                        if state.current.kind == TokenKind::Equals {
+                            state.next();
+
+                            default = Some(self.expression(state, Precedence::Lowest)?);
+                        }
+
+                        vars.push(StaticVar { var, default });
+
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                        } else {
+                            break;
+                        }
+                    }
+
+                    self.semi(state)?;
+
+                    Statement::Static { vars }
+                }
+                TokenKind::InlineHtml(html) => {
+                    let s = Statement::InlineHtml(html.clone());
+                    state.next();
+                    s
+                }
+                TokenKind::Comment(comment) => {
+                    let s = Statement::Comment {
+                        comment: comment.clone(),
+                    };
+                    state.next();
+                    s
+                }
+                TokenKind::Do => {
+                    state.next();
+
+                    self.lbrace(state)?;
+                    let body = self.block(state, &TokenKind::RightBrace)?;
+                    self.rbrace(state)?;
+
+                    expect_token!([TokenKind::While], state, "`while`");
+
+                    self.lparen(state)?;
+                    let condition = self.expression(state, Precedence::Lowest)?;
+                    self.rparen(state)?;
+                    self.semi(state)?;
+
+                    Statement::DoWhile { condition, body }
+                }
+                TokenKind::While => {
+                    state.next();
+                    self.lparen(state)?;
+
+                    let condition = self.expression(state, Precedence::Lowest)?;
+
+                    self.rparen(state)?;
+
+                    let end_token = if state.current.kind == TokenKind::Colon {
+                        self.colon(state)?;
+                        TokenKind::EndWhile
                     } else {
-                        break;
+                        self.lbrace(state)?;
+                        TokenKind::RightBrace
+                    };
+
+                    let body = self.block(state, &end_token)?;
+
+                    if end_token == TokenKind::RightBrace {
+                        self.rbrace(state)?;
+                    } else {
+                        expect_token!([TokenKind::EndWhile], state, "`endwhile`");
+                        self.semi(state)?;
+                    }
+
+                    Statement::While { condition, body }
+                }
+                TokenKind::Include
+                | TokenKind::IncludeOnce
+                | TokenKind::Require
+                | TokenKind::RequireOnce => {
+                    let kind: IncludeKind = (&state.current.kind).into();
+                    state.next();
+
+                    let path = self.expression(state, Precedence::Lowest)?;
+
+                    self.semi(state)?;
+
+                    Statement::Include { kind, path }
+                }
+                TokenKind::For => {
+                    state.next();
+
+                    self.lparen(state)?;
+
+                    let mut init = None;
+                    if state.current.kind != TokenKind::SemiColon {
+                        init = Some(self.expression(state, Precedence::Lowest)?);
+                    }
+                    self.semi(state)?;
+
+                    let mut condition = None;
+                    if state.current.kind != TokenKind::SemiColon {
+                        condition = Some(self.expression(state, Precedence::Lowest)?);
+                    }
+                    self.semi(state)?;
+
+                    let mut r#loop = None;
+                    if state.current.kind != TokenKind::RightParen {
+                        r#loop = Some(self.expression(state, Precedence::Lowest)?);
+                    }
+
+                    self.rparen(state)?;
+
+                    let end_token = if state.current.kind == TokenKind::Colon {
+                        self.colon(state)?;
+                        TokenKind::EndFor
+                    } else {
+                        self.lbrace(state)?;
+                        TokenKind::RightBrace
+                    };
+
+                    let then = self.block(state, &end_token)?;
+
+                    if end_token == TokenKind::EndFor {
+                        expect_token!([TokenKind::EndFor], state, "`endfor`");
+                        self.semi(state)?;
+                    } else {
+                        self.rbrace(state)?;
+                    };
+
+                    Statement::For {
+                        init,
+                        condition,
+                        r#loop,
+                        then,
                     }
                 }
-
-                self.semi(state)?;
-
-                Statement::Static { vars }
-            }
-            TokenKind::InlineHtml(html) => {
-                let s = Statement::InlineHtml(html.clone());
-                state.next();
-                s
-            }
-            TokenKind::Comment(comment) => {
-                let s = Statement::Comment {
-                    comment: comment.clone(),
-                };
-                state.next();
-                s
-            }
-            TokenKind::Do => {
-                state.next();
-
-                self.lbrace(state)?;
-                let body = self.block(state, &TokenKind::RightBrace)?;
-                self.rbrace(state)?;
-
-                expect_token!([TokenKind::While], state, "`while`");
-
-                self.lparen(state)?;
-                let condition = self.expression(state, Precedence::Lowest)?;
-                self.rparen(state)?;
-                self.semi(state)?;
-
-                Statement::DoWhile { condition, body }
-            }
-            TokenKind::While => {
-                state.next();
-                self.lparen(state)?;
-
-                let condition = self.expression(state, Precedence::Lowest)?;
-
-                self.rparen(state)?;
-
-                let end_token = if state.current.kind == TokenKind::Colon {
-                    self.colon(state)?;
-                    TokenKind::EndWhile
-                } else {
-                    self.lbrace(state)?;
-                    TokenKind::RightBrace
-                };
-
-                let body = self.block(state, &end_token)?;
-
-                if end_token == TokenKind::RightBrace {
-                    self.rbrace(state)?;
-                } else {
-                    expect_token!([TokenKind::EndWhile], state, "`endwhile`");
-                    self.semi(state)?;
-                }
-
-                Statement::While { condition, body }
-            }
-            TokenKind::Include
-            | TokenKind::IncludeOnce
-            | TokenKind::Require
-            | TokenKind::RequireOnce => {
-                let kind: IncludeKind = (&state.current.kind).into();
-                state.next();
-
-                let path = self.expression(state, Precedence::Lowest)?;
-
-                self.semi(state)?;
-
-                Statement::Include { kind, path }
-            }
-            TokenKind::For => {
-                state.next();
-
-                self.lparen(state)?;
-
-                let mut init = None;
-                if state.current.kind != TokenKind::SemiColon {
-                    init = Some(self.expression(state, Precedence::Lowest)?);
-                }
-                self.semi(state)?;
-
-                let mut condition = None;
-                if state.current.kind != TokenKind::SemiColon {
-                    condition = Some(self.expression(state, Precedence::Lowest)?);
-                }
-                self.semi(state)?;
-
-                let mut r#loop = None;
-                if state.current.kind != TokenKind::RightParen {
-                    r#loop = Some(self.expression(state, Precedence::Lowest)?);
-                }
-
-                self.rparen(state)?;
-
-                let end_token = if state.current.kind == TokenKind::Colon {
-                    self.colon(state)?;
-                    TokenKind::EndFor
-                } else {
-                    self.lbrace(state)?;
-                    TokenKind::RightBrace
-                };
-
-                let then = self.block(state, &end_token)?;
-
-                if end_token == TokenKind::EndFor {
-                    expect_token!([TokenKind::EndFor], state, "`endfor`");
-                    self.semi(state)?;
-                } else {
-                    self.rbrace(state)?;
-                };
-
-                Statement::For {
-                    init,
-                    condition,
-                    r#loop,
-                    then,
-                }
-            }
-            TokenKind::Foreach => {
-                state.next();
-
-                self.lparen(state)?;
-
-                let expr = self.expression(state, Precedence::Lowest)?;
-
-                expect_token!([TokenKind::As], state, ["`as`"]);
-
-                let mut by_ref = state.current.kind == TokenKind::Ampersand;
-                if by_ref {
-                    state.next();
-                }
-
-                let mut key_var = None;
-                let mut value_var = self.expression(state, Precedence::Lowest)?;
-
-                if state.current.kind == TokenKind::DoubleArrow {
+                TokenKind::Foreach => {
                     state.next();
 
-                    key_var = Some(value_var.clone());
+                    self.lparen(state)?;
 
-                    by_ref = state.current.kind == TokenKind::Ampersand;
+                    let expr = self.expression(state, Precedence::Lowest)?;
+
+                    expect_token!([TokenKind::As], state, ["`as`"]);
+
+                    let mut by_ref = state.current.kind == TokenKind::Ampersand;
                     if by_ref {
                         state.next();
                     }
 
-                    value_var = self.expression(state, Precedence::Lowest)?;
-                }
+                    let mut key_var = None;
+                    let mut value_var = self.expression(state, Precedence::Lowest)?;
 
-                self.rparen(state)?;
-
-                let end_token = if state.current.kind == TokenKind::Colon {
-                    self.colon(state)?;
-                    TokenKind::EndForeach
-                } else {
-                    self.lbrace(state)?;
-                    TokenKind::RightBrace
-                };
-
-                let body = self.block(state, &end_token)?;
-
-                if end_token == TokenKind::EndForeach {
-                    expect_token!([TokenKind::EndForeach], state, "`endforeach`");
-                    self.semi(state)?;
-                } else {
-                    self.rbrace(state)?;
-                }
-
-                Statement::Foreach {
-                    expr,
-                    by_ref,
-                    key_var,
-                    value_var,
-                    body,
-                }
-            }
-            TokenKind::Abstract => self.class_definition(state)?,
-            TokenKind::Readonly => self.class_definition(state)?,
-            TokenKind::Final => self.class_definition(state)?,
-            TokenKind::Class => self.class_definition(state)?,
-            TokenKind::Interface => self.interface_definition(state)?,
-            TokenKind::Trait => self.trait_definition(state)?,
-            TokenKind::Enum => self.enum_definition(state)?,
-            TokenKind::Switch => {
-                state.next();
-
-                self.lparen(state)?;
-
-                let condition = self.expression(state, Precedence::Lowest)?;
-
-                self.rparen(state)?;
-
-                let end_token = if state.current.kind == TokenKind::Colon {
-                    self.colon(state)?;
-                    TokenKind::EndSwitch
-                } else {
-                    self.lbrace(state)?;
-                    TokenKind::RightBrace
-                };
-
-                let mut cases = Vec::new();
-                while state.current.kind != end_token {
-                    match state.current.kind {
-                        TokenKind::Case => {
-                            state.next();
-
-                            let condition = self.expression(state, Precedence::Lowest)?;
-
-                            expect_token!(
-                                [TokenKind::Colon, TokenKind::SemiColon],
-                                state,
-                                ["`:`", "`;`"]
-                            );
-                            let mut body = Block::new();
-
-                            while state.current.kind != TokenKind::Case
-                                && state.current.kind != TokenKind::Default
-                                && state.current.kind != TokenKind::RightBrace
-                            {
-                                body.push(self.statement(state)?);
-                            }
-
-                            cases.push(Case {
-                                condition: Some(condition),
-                                body,
-                            });
-                        }
-                        TokenKind::Default => {
-                            state.next();
-
-                            expect_token!(
-                                [TokenKind::Colon, TokenKind::SemiColon],
-                                state,
-                                ["`:`", "`;`"]
-                            );
-
-                            let mut body = Block::new();
-
-                            while state.current.kind != TokenKind::Case
-                                && state.current.kind != TokenKind::Default
-                                && state.current.kind != TokenKind::RightBrace
-                            {
-                                body.push(self.statement(state)?);
-                            }
-
-                            cases.push(Case {
-                                condition: None,
-                                body,
-                            });
-                        }
-                        _ => {
-                            return expected_token_err!(["`case`", "`default`"], state);
-                        }
-                    }
-                }
-
-                if end_token == TokenKind::EndSwitch {
-                    expect_token!([TokenKind::EndSwitch], state, ["`endswitch`"]);
-                    self.semi(state)?;
-                } else {
-                    self.rbrace(state)?;
-                }
-
-                Statement::Switch { condition, cases }
-            }
-            TokenKind::If => {
-                state.next();
-
-                self.lparen(state)?;
-
-                let condition = self.expression(state, Precedence::Lowest)?;
-
-                self.rparen(state)?;
-
-                // FIXME: Tidy up duplication and make the intent a bit clearer.
-                match state.current.kind {
-                    TokenKind::Colon => {
+                    if state.current.kind == TokenKind::DoubleArrow {
                         state.next();
 
-                        let mut then = vec![];
-                        while !matches!(
-                            state.current.kind,
-                            TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
-                        ) {
-                            then.push(self.statement(state)?);
+                        key_var = Some(value_var.clone());
+
+                        by_ref = state.current.kind == TokenKind::Ampersand;
+                        if by_ref {
+                            state.next();
                         }
 
-                        let mut else_ifs = vec![];
-                        loop {
-                            if state.current.kind != TokenKind::ElseIf {
-                                break;
-                            }
+                        value_var = self.expression(state, Precedence::Lowest)?;
+                    }
 
+                    self.rparen(state)?;
+
+                    let end_token = if state.current.kind == TokenKind::Colon {
+                        self.colon(state)?;
+                        TokenKind::EndForeach
+                    } else {
+                        self.lbrace(state)?;
+                        TokenKind::RightBrace
+                    };
+
+                    let body = self.block(state, &end_token)?;
+
+                    if end_token == TokenKind::EndForeach {
+                        expect_token!([TokenKind::EndForeach], state, "`endforeach`");
+                        self.semi(state)?;
+                    } else {
+                        self.rbrace(state)?;
+                    }
+
+                    Statement::Foreach {
+                        expr,
+                        by_ref,
+                        key_var,
+                        value_var,
+                        body,
+                    }
+                }
+                TokenKind::Switch => {
+                    state.next();
+
+                    self.lparen(state)?;
+
+                    let condition = self.expression(state, Precedence::Lowest)?;
+
+                    self.rparen(state)?;
+
+                    let end_token = if state.current.kind == TokenKind::Colon {
+                        self.colon(state)?;
+                        TokenKind::EndSwitch
+                    } else {
+                        self.lbrace(state)?;
+                        TokenKind::RightBrace
+                    };
+
+                    let mut cases = Vec::new();
+                    while state.current.kind != end_token {
+                        match state.current.kind {
+                            TokenKind::Case => {
+                                state.next();
+
+                                let condition = self.expression(state, Precedence::Lowest)?;
+
+                                expect_token!(
+                                    [TokenKind::Colon, TokenKind::SemiColon],
+                                    state,
+                                    ["`:`", "`;`"]
+                                );
+                                let mut body = Block::new();
+
+                                while state.current.kind != TokenKind::Case
+                                    && state.current.kind != TokenKind::Default
+                                    && state.current.kind != TokenKind::RightBrace
+                                {
+                                    body.push(self.statement(state)?);
+                                }
+
+                                cases.push(Case {
+                                    condition: Some(condition),
+                                    body,
+                                });
+                            }
+                            TokenKind::Default => {
+                                state.next();
+
+                                expect_token!(
+                                    [TokenKind::Colon, TokenKind::SemiColon],
+                                    state,
+                                    ["`:`", "`;`"]
+                                );
+
+                                let mut body = Block::new();
+
+                                while state.current.kind != TokenKind::Case
+                                    && state.current.kind != TokenKind::Default
+                                    && state.current.kind != TokenKind::RightBrace
+                                {
+                                    body.push(self.statement(state)?);
+                                }
+
+                                cases.push(Case {
+                                    condition: None,
+                                    body,
+                                });
+                            }
+                            _ => {
+                                return expected_token_err!(["`case`", "`default`"], state);
+                            }
+                        }
+                    }
+
+                    if end_token == TokenKind::EndSwitch {
+                        expect_token!([TokenKind::EndSwitch], state, ["`endswitch`"]);
+                        self.semi(state)?;
+                    } else {
+                        self.rbrace(state)?;
+                    }
+
+                    Statement::Switch { condition, cases }
+                }
+                TokenKind::If => {
+                    state.next();
+
+                    self.lparen(state)?;
+
+                    let condition = self.expression(state, Precedence::Lowest)?;
+
+                    self.rparen(state)?;
+
+                    // FIXME: Tidy up duplication and make the intent a bit clearer.
+                    match state.current.kind {
+                        TokenKind::Colon => {
                             state.next();
 
-                            self.lparen(state)?;
-                            let condition = self.expression(state, Precedence::Lowest)?;
-                            self.rparen(state)?;
-
-                            self.colon(state)?;
-
-                            let mut body = vec![];
+                            let mut then = vec![];
                             while !matches!(
                                 state.current.kind,
                                 TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
                             ) {
-                                body.push(self.statement(state)?);
+                                then.push(self.statement(state)?);
                             }
 
-                            else_ifs.push(ElseIf { condition, body });
-                        }
+                            let mut else_ifs = vec![];
+                            loop {
+                                if state.current.kind != TokenKind::ElseIf {
+                                    break;
+                                }
 
-                        let mut r#else = None;
-                        if state.current.kind == TokenKind::Else {
-                            state.next();
-                            self.colon(state)?;
-
-                            let mut body = vec![];
-                            while state.current.kind != TokenKind::EndIf {
-                                body.push(self.statement(state)?);
-                            }
-                            r#else = Some(body);
-                        }
-
-                        expect_token!([TokenKind::EndIf], state, ["`endif`"]);
-                        self.semi(state)?;
-
-                        Statement::If {
-                            condition,
-                            then,
-                            else_ifs,
-                            r#else,
-                        }
-                    }
-                    _ => {
-                        let body_end_token = if state.current.kind == TokenKind::LeftBrace {
-                            state.next();
-
-                            TokenKind::RightBrace
-                        } else {
-                            TokenKind::SemiColon
-                        };
-
-                        let then = self.block(state, &body_end_token)?;
-
-                        if body_end_token == TokenKind::RightBrace {
-                            self.rbrace(state)?;
-                        }
-
-                        let mut else_ifs: Vec<ElseIf> = Vec::new();
-                        loop {
-                            if state.current.kind == TokenKind::ElseIf {
                                 state.next();
 
                                 self.lparen(state)?;
-
                                 let condition = self.expression(state, Precedence::Lowest)?;
-
                                 self.rparen(state)?;
 
-                                self.lbrace(state)?;
+                                self.colon(state)?;
 
-                                let body = self.block(state, &TokenKind::RightBrace)?;
-
-                                self.rbrace(state)?;
+                                let mut body = vec![];
+                                while !matches!(
+                                    state.current.kind,
+                                    TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
+                                ) {
+                                    body.push(self.statement(state)?);
+                                }
 
                                 else_ifs.push(ElseIf { condition, body });
-                            } else {
-                                break;
                             }
-                        }
 
-                        if state.current.kind != TokenKind::Else {
-                            return Ok(Statement::If {
+                            let mut r#else = None;
+                            if state.current.kind == TokenKind::Else {
+                                state.next();
+                                self.colon(state)?;
+
+                                let mut body = vec![];
+                                while state.current.kind != TokenKind::EndIf {
+                                    body.push(self.statement(state)?);
+                                }
+                                r#else = Some(body);
+                            }
+
+                            expect_token!([TokenKind::EndIf], state, ["`endif`"]);
+                            self.semi(state)?;
+
+                            Statement::If {
                                 condition,
                                 then,
                                 else_ifs,
-                                r#else: None,
-                            });
+                                r#else,
+                            }
                         }
+                        _ => {
+                            let body_end_token = if state.current.kind == TokenKind::LeftBrace {
+                                state.next();
 
-                        expect_token!([TokenKind::Else], state, ["`else`"]);
+                                TokenKind::RightBrace
+                            } else {
+                                TokenKind::SemiColon
+                            };
 
-                        self.lbrace(state)?;
+                            let then = self.block(state, &body_end_token)?;
 
-                        let r#else = self.block(state, &TokenKind::RightBrace)?;
+                            if body_end_token == TokenKind::RightBrace {
+                                self.rbrace(state)?;
+                            }
 
-                        self.rbrace(state)?;
+                            let mut else_ifs: Vec<ElseIf> = Vec::new();
+                            loop {
+                                if state.current.kind == TokenKind::ElseIf {
+                                    state.next();
 
-                        Statement::If {
-                            condition,
-                            then,
-                            else_ifs,
-                            r#else: Some(r#else),
+                                    self.lparen(state)?;
+
+                                    let condition = self.expression(state, Precedence::Lowest)?;
+
+                                    self.rparen(state)?;
+
+                                    self.lbrace(state)?;
+
+                                    let body = self.block(state, &TokenKind::RightBrace)?;
+
+                                    self.rbrace(state)?;
+
+                                    else_ifs.push(ElseIf { condition, body });
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            if state.current.kind != TokenKind::Else {
+                                return Ok(Statement::If {
+                                    condition,
+                                    then,
+                                    else_ifs,
+                                    r#else: None,
+                                });
+                            }
+
+                            expect_token!([TokenKind::Else], state, ["`else`"]);
+
+                            self.lbrace(state)?;
+
+                            let r#else = self.block(state, &TokenKind::RightBrace)?;
+
+                            self.rbrace(state)?;
+
+                            Statement::If {
+                                condition,
+                                then,
+                                else_ifs,
+                                r#else: Some(r#else),
+                            }
                         }
                     }
                 }
-            }
-            TokenKind::Echo => {
-                state.next();
+                TokenKind::Echo => {
+                    state.next();
 
-                let mut values = Vec::new();
-                loop {
-                    values.push(self.expression(state, Precedence::Lowest)?);
+                    let mut values = Vec::new();
+                    loop {
+                        values.push(self.expression(state, Precedence::Lowest)?);
 
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                        } else {
+                            break;
+                        }
+                    }
+
+                    self.semi(state)?;
+                    Statement::Echo { values }
+                }
+                TokenKind::Continue => {
+                    state.next();
+
+                    let mut num = None;
+                    if state.current.kind != TokenKind::SemiColon {
+                        num = Some(self.expression(state, Precedence::Lowest)?);
+                    }
+
+                    self.semi(state)?;
+
+                    Statement::Continue { num }
+                }
+                TokenKind::Break => {
+                    state.next();
+
+                    let mut num = None;
+                    if state.current.kind != TokenKind::SemiColon {
+                        num = Some(self.expression(state, Precedence::Lowest)?);
+                    }
+
+                    self.semi(state)?;
+
+                    Statement::Break { num }
+                }
+                TokenKind::Return => {
+                    state.next();
+
+                    if let Token {
+                        kind: TokenKind::SemiColon,
+                        ..
+                    } = state.current
+                    {
+                        let ret = Statement::Return { value: None };
+                        self.semi(state)?;
+                        ret
                     } else {
-                        break;
+                        let ret = Statement::Return {
+                            value: self.expression(state, Precedence::Lowest).ok(),
+                        };
+                        self.semi(state)?;
+                        ret
                     }
                 }
+                TokenKind::SemiColon => {
+                    state.next();
 
-                self.semi(state)?;
-                Statement::Echo { values }
-            }
-            TokenKind::Continue => {
-                state.next();
-
-                let mut num = None;
-                if state.current.kind != TokenKind::SemiColon {
-                    num = Some(self.expression(state, Precedence::Lowest)?);
+                    Statement::Noop
                 }
-
-                self.semi(state)?;
-
-                Statement::Continue { num }
-            }
-            TokenKind::Break => {
-                state.next();
-
-                let mut num = None;
-                if state.current.kind != TokenKind::SemiColon {
-                    num = Some(self.expression(state, Precedence::Lowest)?);
-                }
-
-                self.semi(state)?;
-
-                Statement::Break { num }
-            }
-            TokenKind::Return => {
-                state.next();
-
-                if let Token {
-                    kind: TokenKind::SemiColon,
-                    ..
-                } = state.current
-                {
-                    let ret = Statement::Return { value: None };
-                    self.semi(state)?;
-                    ret
-                } else {
-                    let ret = Statement::Return {
-                        value: self.expression(state, Precedence::Lowest).ok(),
-                    };
-                    self.semi(state)?;
-                    ret
-                }
-            }
-            TokenKind::Function
-                if matches!(
-                    state.peek.kind,
-                    TokenKind::Identifier(_) | TokenKind::Null | TokenKind::Ampersand
-                ) =>
-            {
-                // FIXME: This is incredibly hacky but we don't have a way to look at
-                // the next N tokens right now. We could probably do with a `peek_buf()`
-                // method like the Lexer has.
-                if state.peek.kind == TokenKind::Ampersand {
-                    let mut cloned = state.iter.clone();
-                    if let Some((index, _)) = state.iter.clone().enumerate().next() {
-                        if !matches!(
-                            cloned.nth(index),
-                            Some(Token {
-                                kind: TokenKind::Identifier(_),
-                                ..
-                            })
-                        ) {
-                            let expr = self.expression(state, Precedence::Lowest)?;
-
-                            self.semi(state)?;
-
-                            return Ok(Statement::Expression { expr });
-                        }
-                    }
-
-                    self.function(state)?
-                } else {
-                    self.function(state)?
-                }
-            }
-            TokenKind::SemiColon => {
-                state.next();
-
-                Statement::Noop
-            }
-            TokenKind::Try => {
-                let start_span = state.current.span;
-
-                state.next();
-                self.lbrace(state)?;
-
-                let body = self.block(state, &TokenKind::RightBrace)?;
-
-                self.rbrace(state)?;
-
-                let mut catches = Vec::new();
-                loop {
-                    if state.current.kind != TokenKind::Catch {
-                        break;
-                    }
+                TokenKind::Try => {
+                    let start_span = state.current.span;
 
                     state.next();
-                    self.lparen(state)?;
-
-                    let types = self.try_block_caught_type_string(state)?;
-                    let var = if state.current.kind == TokenKind::RightParen {
-                        None
-                    } else {
-                        Some(self.expression(state, Precedence::Lowest)?)
-                    };
-
-                    self.rparen(state)?;
                     self.lbrace(state)?;
 
                     let body = self.block(state, &TokenKind::RightBrace)?;
 
                     self.rbrace(state)?;
 
-                    catches.push(Catch { types, var, body })
-                }
+                    let mut catches = Vec::new();
+                    loop {
+                        if state.current.kind != TokenKind::Catch {
+                            break;
+                        }
 
-                let mut finally = None;
-                if state.current.kind == TokenKind::Finally {
+                        state.next();
+                        self.lparen(state)?;
+
+                        let types = self.try_block_caught_type_string(state)?;
+                        let var = if state.current.kind == TokenKind::RightParen {
+                            None
+                        } else {
+                            Some(self.expression(state, Precedence::Lowest)?)
+                        };
+
+                        self.rparen(state)?;
+                        self.lbrace(state)?;
+
+                        let body = self.block(state, &TokenKind::RightBrace)?;
+
+                        self.rbrace(state)?;
+
+                        catches.push(Catch { types, var, body })
+                    }
+
+                    let mut finally = None;
+                    if state.current.kind == TokenKind::Finally {
+                        state.next();
+                        self.lbrace(state)?;
+
+                        finally = Some(self.block(state, &TokenKind::RightBrace)?);
+
+                        self.rbrace(state)?;
+                    }
+
+                    if catches.is_empty() && finally.is_none() {
+                        return Err(ParseError::TryWithoutCatchOrFinally(start_span));
+                    }
+
+                    Statement::Try {
+                        body,
+                        catches,
+                        finally,
+                    }
+                }
+                TokenKind::LeftBrace => {
                     state.next();
-                    self.lbrace(state)?;
-
-                    finally = Some(self.block(state, &TokenKind::RightBrace)?);
-
+                    let body = self.block(state, &TokenKind::RightBrace)?;
                     self.rbrace(state)?;
+                    Statement::Block { body }
                 }
+                _ => {
+                    let expr = self.expression(state, Precedence::Lowest)?;
 
-                if catches.is_empty() && finally.is_none() {
-                    return Err(ParseError::TryWithoutCatchOrFinally(start_span));
+                    self.semi(state)?;
+
+                    Statement::Expression { expr }
                 }
-
-                Statement::Try {
-                    body,
-                    catches,
-                    finally,
-                }
-            }
-            TokenKind::LeftBrace => {
-                state.next();
-                let body = self.block(state, &TokenKind::RightBrace)?;
-                self.rbrace(state)?;
-                Statement::Block { body }
-            }
-            _ => {
-                let expr = self.expression(state, Precedence::Lowest)?;
-
-                self.semi(state)?;
-
-                Statement::Expression { expr }
             }
         };
 
@@ -872,336 +923,361 @@ impl Parser {
             return Err(ParseError::UnexpectedEndOfFile);
         }
 
-        state.skip_comments();
+        let has_attributes = self.gather_attributes(state)?;
 
-        let mut left = match &state.current.kind {
-            TokenKind::Throw => {
-                state.next();
-
-                let value = self.expression(state, Precedence::Lowest)?;
-
-                Expression::Throw {
-                    value: Box::new(value),
+        let mut left = if has_attributes {
+            match &state.current.kind {
+                TokenKind::Static if state.peek.kind == TokenKind::Function => {
+                    self.anonymous_function(state)?
+                }
+                TokenKind::Static if state.peek.kind == TokenKind::Fn => {
+                    self.arrow_function(state)?
+                }
+                TokenKind::Function => self.anonymous_function(state)?,
+                TokenKind::Fn => self.arrow_function(state)?,
+                _ => {
+                    // Note, we can get attributes and know their span, maybe use that in the
+                    // error in the future?
+                    return Err(ParseError::ExpectedItemDefinitionAfterAttributes(
+                        state.current.span,
+                    ));
                 }
             }
-            TokenKind::Yield => {
-                state.next();
+        } else {
+            match &state.current.kind {
+                TokenKind::Static if state.peek.kind == TokenKind::Function => {
+                    self.anonymous_function(state)?
+                }
+                TokenKind::Static if state.peek.kind == TokenKind::Fn => {
+                    self.arrow_function(state)?
+                }
+                TokenKind::Function => self.anonymous_function(state)?,
+                TokenKind::Fn => self.arrow_function(state)?,
+                TokenKind::New
+                    if state.peek.kind == TokenKind::Class
+                        || state.peek.kind == TokenKind::Attribute =>
+                {
+                    self.anonymous_class_definition(state)?
+                }
+                TokenKind::Throw => {
+                    state.next();
 
-                if state.current.kind == TokenKind::SemiColon {
-                    Expression::Yield {
-                        key: None,
-                        value: None,
+                    let value = self.expression(state, Precedence::Lowest)?;
+
+                    Expression::Throw {
+                        value: Box::new(value),
                     }
-                } else {
-                    let mut from = false;
+                }
+                TokenKind::Yield => {
+                    state.next();
 
-                    if state.current.kind == TokenKind::From {
-                        state.next();
-                        from = true;
-                    }
-
-                    let mut key = None;
-                    let mut value = Box::new(self.expression(
-                        state,
-                        if from {
-                            Precedence::YieldFrom
-                        } else {
-                            Precedence::Yield
-                        },
-                    )?);
-
-                    if state.current.kind == TokenKind::DoubleArrow && !from {
-                        state.next();
-                        key = Some(value.clone());
-                        value = Box::new(self.expression(state, Precedence::Yield)?);
-                    }
-
-                    if from {
-                        Expression::YieldFrom { value }
-                    } else {
+                    if state.current.kind == TokenKind::SemiColon {
                         Expression::Yield {
-                            key,
-                            value: Some(value),
+                            key: None,
+                            value: None,
+                        }
+                    } else {
+                        let mut from = false;
+
+                        if state.current.kind == TokenKind::From {
+                            state.next();
+                            from = true;
+                        }
+
+                        let mut key = None;
+                        let mut value = Box::new(self.expression(
+                            state,
+                            if from {
+                                Precedence::YieldFrom
+                            } else {
+                                Precedence::Yield
+                            },
+                        )?);
+
+                        if state.current.kind == TokenKind::DoubleArrow && !from {
+                            state.next();
+                            key = Some(value.clone());
+                            value = Box::new(self.expression(state, Precedence::Yield)?);
+                        }
+
+                        if from {
+                            Expression::YieldFrom { value }
+                        } else {
+                            Expression::Yield {
+                                key,
+                                value: Some(value),
+                            }
                         }
                     }
                 }
-            }
-            TokenKind::Clone => {
-                state.next();
+                TokenKind::Clone => {
+                    state.next();
 
-                let target = self.expression(state, Precedence::CloneOrNew)?;
+                    let target = self.expression(state, Precedence::CloneOrNew)?;
 
-                Expression::Clone {
-                    target: Box::new(target),
+                    Expression::Clone {
+                        target: Box::new(target),
+                    }
                 }
-            }
-            TokenKind::Variable(v) => {
-                let e = Expression::Variable { name: v.clone() };
-                state.next();
-                e
-            }
-            TokenKind::LiteralInteger(i) => {
-                let e = Expression::LiteralInteger { i: *i };
-                state.next();
-                e
-            }
-            TokenKind::LiteralFloat(f) => {
-                let f = Expression::LiteralFloat { f: *f };
-                state.next();
-                f
-            }
-            TokenKind::Identifier(i)
-            | TokenKind::QualifiedIdentifier(i)
-            | TokenKind::FullyQualifiedIdentifier(i) => {
-                let e = Expression::Identifier { name: i.clone() };
-                state.next();
-                e
-            }
-            TokenKind::Static if matches!(state.peek.kind, TokenKind::DoubleColon) => {
-                state.next();
-                Expression::Static
-            }
-            TokenKind::LiteralString(s) => {
-                let e = Expression::LiteralString { value: s.clone() };
-                state.next();
-                e
-            }
-            TokenKind::StringPart(_) => self.interpolated_string(state)?,
-            TokenKind::StartHeredoc(_) => self.heredoc_string(state)?,
-            TokenKind::True => {
-                let e = Expression::Bool { value: true };
-                state.next();
-                e
-            }
-            TokenKind::False => {
-                let e = Expression::Bool { value: false };
-                state.next();
-                e
-            }
-            TokenKind::Null => {
-                state.next();
-                Expression::Null
-            }
-            TokenKind::LeftParen => {
-                state.next();
+                TokenKind::Variable(v) => {
+                    let e = Expression::Variable { name: v.clone() };
+                    state.next();
+                    e
+                }
+                TokenKind::LiteralInteger(i) => {
+                    let e = Expression::LiteralInteger { i: *i };
+                    state.next();
+                    e
+                }
+                TokenKind::LiteralFloat(f) => {
+                    let f = Expression::LiteralFloat { f: *f };
+                    state.next();
+                    f
+                }
+                TokenKind::Identifier(i)
+                | TokenKind::QualifiedIdentifier(i)
+                | TokenKind::FullyQualifiedIdentifier(i) => {
+                    let e = Expression::Identifier { name: i.clone() };
+                    state.next();
+                    e
+                }
+                TokenKind::Static if matches!(state.peek.kind, TokenKind::DoubleColon) => {
+                    state.next();
+                    Expression::Static
+                }
+                TokenKind::LiteralString(s) => {
+                    let e = Expression::LiteralString { value: s.clone() };
+                    state.next();
+                    e
+                }
+                TokenKind::StringPart(_) => self.interpolated_string(state)?,
+                TokenKind::StartHeredoc(_) => self.heredoc_string(state)?,
+                TokenKind::True => {
+                    let e = Expression::Bool { value: true };
+                    state.next();
+                    e
+                }
+                TokenKind::False => {
+                    let e = Expression::Bool { value: false };
+                    state.next();
+                    e
+                }
+                TokenKind::Null => {
+                    state.next();
+                    Expression::Null
+                }
+                TokenKind::LeftParen => {
+                    state.next();
 
-                let e = self.expression(state, Precedence::Lowest)?;
+                    let e = self.expression(state, Precedence::Lowest)?;
 
-                self.rparen(state)?;
+                    self.rparen(state)?;
 
-                e
-            }
-            TokenKind::Match => {
-                state.next();
-                self.lparen(state)?;
+                    e
+                }
+                TokenKind::Match => {
+                    state.next();
+                    self.lparen(state)?;
 
-                let condition = Box::new(self.expression(state, Precedence::Lowest)?);
+                    let condition = Box::new(self.expression(state, Precedence::Lowest)?);
 
-                self.rparen(state)?;
-                self.lbrace(state)?;
+                    self.rparen(state)?;
+                    self.lbrace(state)?;
 
-                let mut default = None;
-                let mut arms = Vec::new();
-                while state.current.kind != TokenKind::RightBrace {
-                    state.skip_comments();
+                    let mut default = None;
+                    let mut arms = Vec::new();
+                    while state.current.kind != TokenKind::RightBrace {
+                        state.skip_comments();
 
-                    if state.current.kind == TokenKind::Default {
-                        if default.is_some() {
-                            return Err(ParseError::MatchExpressionWithMultipleDefaultArms(
-                                state.current.span,
-                            ));
-                        }
+                        if state.current.kind == TokenKind::Default {
+                            if default.is_some() {
+                                return Err(ParseError::MatchExpressionWithMultipleDefaultArms(
+                                    state.current.span,
+                                ));
+                            }
 
-                        state.next();
-
-                        // match conditions can have an extra comma at the end, including `default`.
-                        if state.current.kind == TokenKind::Comma {
                             state.next();
-                        }
 
-                        expect_token!([TokenKind::DoubleArrow], state, "`=>`");
-
-                        let body = self.expression(state, Precedence::Lowest)?;
-
-                        default = Some(Box::new(DefaultMatchArm { body }));
-                    } else {
-                        let mut conditions = Vec::new();
-                        while state.current.kind != TokenKind::DoubleArrow {
-                            conditions.push(self.expression(state, Precedence::Lowest)?);
-
+                            // match conditions can have an extra comma at the end, including `default`.
                             if state.current.kind == TokenKind::Comma {
                                 state.next();
+                            }
+
+                            expect_token!([TokenKind::DoubleArrow], state, "`=>`");
+
+                            let body = self.expression(state, Precedence::Lowest)?;
+
+                            default = Some(Box::new(DefaultMatchArm { body }));
+                        } else {
+                            let mut conditions = Vec::new();
+                            while state.current.kind != TokenKind::DoubleArrow {
+                                conditions.push(self.expression(state, Precedence::Lowest)?);
+
+                                if state.current.kind == TokenKind::Comma {
+                                    state.next();
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            if !conditions.is_empty() {
+                                expect_token!([TokenKind::DoubleArrow], state, "`=>`");
                             } else {
                                 break;
                             }
+
+                            let body = self.expression(state, Precedence::Lowest)?;
+
+                            arms.push(MatchArm { conditions, body });
                         }
 
-                        if !conditions.is_empty() {
-                            expect_token!([TokenKind::DoubleArrow], state, "`=>`");
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                        } else {
+                            break;
+                        }
+                    }
+
+                    self.rbrace(state)?;
+
+                    Expression::Match {
+                        condition,
+                        default,
+                        arms,
+                    }
+                }
+                TokenKind::Array => {
+                    let mut items = vec![];
+
+                    state.next();
+
+                    self.lparen(state)?;
+
+                    while state.current.kind != TokenKind::RightParen {
+                        let mut key = None;
+                        let unpack = if state.current.kind == TokenKind::Ellipsis {
+                            state.next();
+                            true
+                        } else {
+                            false
+                        };
+
+                        let mut value = self.expression(state, Precedence::Lowest)?;
+
+                        // TODO: return error for `[...$a => $b]`.
+                        if state.current.kind == TokenKind::DoubleArrow {
+                            state.next();
+
+                            key = Some(value);
+                            value = self.expression(state, Precedence::Lowest)?;
+                        }
+
+                        items.push(ArrayItem { key, value, unpack });
+
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
                         } else {
                             break;
                         }
 
-                        let body = self.expression(state, Precedence::Lowest)?;
-
-                        arms.push(MatchArm { conditions, body });
+                        state.skip_comments();
                     }
 
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
-                    } else {
-                        break;
-                    }
+                    self.rparen(state)?;
+
+                    Expression::Array { items }
                 }
+                TokenKind::LeftBracket => {
+                    let mut items = Vec::new();
+                    state.next();
 
-                self.rbrace(state)?;
+                    state.skip_comments();
 
-                Expression::Match {
-                    condition,
-                    default,
-                    arms,
-                }
-            }
-            TokenKind::Array => {
-                let mut items = vec![];
+                    while state.current.kind != TokenKind::RightBracket {
+                        // TODO: return an error here instead of
+                        // an empty array element
+                        // see: https://3v4l.org/uLTVA
+                        if state.current.kind == TokenKind::Comma {
+                            items.push(ArrayItem {
+                                key: None,
+                                value: Expression::Empty,
+                                unpack: false,
+                            });
+                            state.next();
+                            continue;
+                        }
 
-                state.next();
+                        let mut key = None;
+                        let unpack = if state.current.kind == TokenKind::Ellipsis {
+                            state.next();
+                            true
+                        } else {
+                            false
+                        };
 
-                self.lparen(state)?;
+                        let mut value = self.expression(state, Precedence::Lowest)?;
 
-                while state.current.kind != TokenKind::RightParen {
-                    let mut key = None;
-                    let unpack = if state.current.kind == TokenKind::Ellipsis {
-                        state.next();
-                        true
-                    } else {
-                        false
-                    };
+                        if state.current.kind == TokenKind::DoubleArrow {
+                            state.next();
 
-                    let mut value = self.expression(state, Precedence::Lowest)?;
+                            key = Some(value);
+                            value = self.expression(state, Precedence::Lowest)?;
+                        }
 
-                    // TODO: return error for `[...$a => $b]`.
-                    if state.current.kind == TokenKind::DoubleArrow {
-                        state.next();
+                        items.push(ArrayItem { key, value, unpack });
 
-                        key = Some(value);
-                        value = self.expression(state, Precedence::Lowest)?;
-                    }
-
-                    items.push(ArrayItem { key, value, unpack });
-
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
-                    } else {
-                        break;
+                        state.skip_comments();
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                        } else {
+                            break;
+                        }
                     }
 
                     state.skip_comments();
+
+                    self.rbracket(state)?;
+
+                    Expression::Array { items }
                 }
+                TokenKind::New => {
+                    state.next();
 
-                self.rparen(state)?;
+                    let mut args = vec![];
+                    let target = self.expression(state, Precedence::CloneOrNew)?;
 
-                Expression::Array { items }
-            }
-            TokenKind::LeftBracket => {
-                let mut items = Vec::new();
-                state.next();
-
-                state.skip_comments();
-
-                while state.current.kind != TokenKind::RightBracket {
-                    // TODO: return an error here instead of
-                    // an empty array element
-                    // see: https://3v4l.org/uLTVA
-                    if state.current.kind == TokenKind::Comma {
-                        items.push(ArrayItem {
-                            key: None,
-                            value: Expression::Empty,
-                            unpack: false,
-                        });
-                        state.next();
-                        continue;
+                    if state.current.kind == TokenKind::LeftParen {
+                        args = self.args_list(state)?;
                     }
 
-                    let mut key = None;
-                    let unpack = if state.current.kind == TokenKind::Ellipsis {
-                        state.next();
-                        true
-                    } else {
-                        false
-                    };
-
-                    let mut value = self.expression(state, Precedence::Lowest)?;
-
-                    if state.current.kind == TokenKind::DoubleArrow {
-                        state.next();
-
-                        key = Some(value);
-                        value = self.expression(state, Precedence::Lowest)?;
-                    }
-
-                    items.push(ArrayItem { key, value, unpack });
-
-                    state.skip_comments();
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
-                    } else {
-                        break;
+                    Expression::New {
+                        target: Box::new(target),
+                        args,
                     }
                 }
-
-                state.skip_comments();
-
-                self.rbracket(state)?;
-
-                Expression::Array { items }
-            }
-            TokenKind::Static if state.peek.kind == TokenKind::Function => {
-                self.anonymous_function(state)?
-            }
-            TokenKind::Static if state.peek.kind == TokenKind::Fn => self.arrow_function(state)?,
-            TokenKind::Function => self.anonymous_function(state)?,
-            TokenKind::Fn => self.arrow_function(state)?,
-            TokenKind::New if state.peek.kind == TokenKind::Class => {
-                self.anonymous_class_definition(state)?
-            }
-            TokenKind::New => {
-                state.next();
-
-                let mut args = vec![];
-                let target = self.expression(state, Precedence::CloneOrNew)?;
-
-                if state.current.kind == TokenKind::LeftParen {
-                    args = self.args_list(state)?;
+                TokenKind::DirConstant => {
+                    state.next();
+                    Expression::MagicConst {
+                        constant: MagicConst::Dir,
+                    }
                 }
+                _ if is_prefix(&state.current.kind) => {
+                    let op = state.current.kind.clone();
 
-                Expression::New {
-                    target: Box::new(target),
-                    args,
+                    state.next();
+
+                    let rpred = Precedence::prefix(&op);
+                    let rhs = self.expression(state, rpred)?;
+
+                    prefix(&op, rhs)
                 }
-            }
-            TokenKind::DirConstant => {
-                state.next();
-                Expression::MagicConst {
-                    constant: MagicConst::Dir,
+                TokenKind::Dollar => self.dynamic_variable(state)?,
+                _ => {
+                    return Err(ParseError::UnexpectedToken(
+                        state.current.kind.to_string(),
+                        state.current.span,
+                    ))
                 }
-            }
-            _ if is_prefix(&state.current.kind) => {
-                let op = state.current.kind.clone();
-
-                state.next();
-
-                let rpred = Precedence::prefix(&op);
-                let rhs = self.expression(state, rpred)?;
-
-                prefix(&op, rhs)
-            }
-            TokenKind::Dollar => self.dynamic_variable(state)?,
-            _ => {
-                return Err(ParseError::UnexpectedToken(
-                    state.current.kind.to_string(),
-                    state.current.span,
-                ))
             }
         };
 
@@ -1490,10 +1566,10 @@ impl Parser {
 
     fn heredoc_string(&self, state: &mut State) -> ParseResult<Expression> {
         state.next();
-        
+
         let mut parts = Vec::new();
 
-        while ! matches!(state.current.kind, TokenKind::EndHeredoc(_)) {
+        while !matches!(state.current.kind, TokenKind::EndHeredoc(_)) {
             if let Some(part) = self.interpolated_string_part(state)? {
                 parts.push(part);
             }

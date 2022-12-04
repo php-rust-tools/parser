@@ -91,6 +91,7 @@ impl Parser {
             self.rbrace(state)?;
 
             Ok(Expression::Closure {
+                attributes: state.get_attributes(),
                 params,
                 uses,
                 return_type,
@@ -134,6 +135,7 @@ impl Parser {
             let value = self.expression(state, Precedence::Lowest)?;
 
             Ok(Expression::ArrowFunction {
+                attributes: state.get_attributes(),
                 params,
                 return_type,
                 expr: Box::new(value),
@@ -157,11 +159,15 @@ impl Parser {
             TokenKind::Null => {
                 state.next();
                 "null".into()
-            },
+            }
             _ => self.ident(state)?,
         };
 
         scoped!(state, Scope::Function(name.clone()), {
+            // get attributes before processing parameters, otherwise
+            // parameters will steal attributes of this function.
+            let attributes = state.get_attributes();
+
             let params = self.param_list(state)?;
 
             let mut return_type = None;
@@ -179,6 +185,7 @@ impl Parser {
             self.rbrace(state)?;
 
             Ok(Statement::Function {
+                attributes,
                 name: name.into(),
                 params,
                 body,
@@ -230,6 +237,10 @@ impl Parser {
         ], state);
 
         scoped!(state, Scope::Method(name.clone(), flags.clone()), {
+            // get attributes before processing parameters, otherwise
+            // parameters will steal attributes of this method.
+            let attributes = state.get_attributes();
+
             let params = self.param_list(state)?;
 
             let mut return_type = None;
@@ -244,6 +255,7 @@ impl Parser {
                 self.semi(state)?;
 
                 Ok(Statement::AbstractMethod {
+                    attributes,
                     name: name.into(),
                     params,
                     return_type,
@@ -258,6 +270,7 @@ impl Parser {
                 self.rbrace(state)?;
 
                 Ok(Statement::Method {
+                    attributes,
                     name: name.into(),
                     params,
                     body,

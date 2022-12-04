@@ -20,7 +20,9 @@ impl Parser {
         &self,
         state: &mut State,
     ) -> ParseResult<Statement> {
-        if state.current.kind == TokenKind::Const {
+        let has_attributes = self.gather_attributes(state)?;
+
+        if !has_attributes && state.current.kind == TokenKind::Const {
             return self.parse_classish_const(state, vec![]);
         }
 
@@ -29,6 +31,14 @@ impl Parser {
         }
 
         let member_flags = self.interface_members_flags(state)?;
+
+        if has_attributes {
+            // if we have attributes, don't check const, we need a method.
+            return self.method(
+                state,
+                member_flags.iter().map(|t| t.clone().into()).collect(),
+            );
+        }
 
         peek_token!([
             TokenKind::Const => self.parse_classish_const(state, member_flags),
@@ -44,7 +54,9 @@ impl Parser {
             Scope::Enum(enum_name, backed) => (enum_name, backed),
         ], state);
 
-        if state.current.kind == TokenKind::Case {
+        let has_attributes = self.gather_attributes(state)?;
+
+        if !has_attributes && state.current.kind == TokenKind::Case {
             state.next();
 
             let name = self.ident(state)?;
@@ -82,7 +94,7 @@ impl Parser {
             }
         }
 
-        if state.current.kind == TokenKind::Const {
+        if !has_attributes && state.current.kind == TokenKind::Const {
             return self.parse_classish_const(state, vec![]);
         }
 
@@ -91,6 +103,14 @@ impl Parser {
         }
 
         let member_flags = self.enum_members_flags(state)?;
+
+        if has_attributes {
+            // if we have attributes, don't check const, we need a method.
+            return self.method(
+                state,
+                member_flags.iter().map(|t| t.clone().into()).collect(),
+            );
+        }
 
         peek_token!([
             TokenKind::Const => self.parse_classish_const(state, member_flags),
@@ -105,16 +125,20 @@ impl Parser {
         &self,
         state: &mut State,
     ) -> ParseResult<Statement> {
-        if state.current.kind == TokenKind::Use {
-            return self.parse_classish_uses(state);
+        let has_attributes = self.gather_attributes(state)?;
+
+        if !has_attributes {
+            if state.current.kind == TokenKind::Use {
+                return self.parse_classish_uses(state);
+            }
+
+            if state.current.kind == TokenKind::Const {
+                return self.parse_classish_const(state, vec![]);
+            }
         }
 
         if state.current.kind == TokenKind::Var {
             return self.parse_classish_var(state);
-        }
-
-        if state.current.kind == TokenKind::Const {
-            return self.parse_classish_const(state, vec![]);
         }
 
         if state.current.kind == TokenKind::Function {
@@ -123,7 +147,7 @@ impl Parser {
 
         let member_flags = self.class_members_flags(state)?;
 
-        if state.current.kind == TokenKind::Const {
+        if !has_attributes && state.current.kind == TokenKind::Const {
             return self.parse_classish_const(state, member_flags);
         }
 
@@ -185,12 +209,7 @@ impl Parser {
 
                 self.semi(state)?;
 
-                Ok(Statement::Property {
-                    var,
-                    value,
-                    r#type: ty,
-                    flags,
-                })
+                Ok(Statement::Property {var,value,r#type:ty,flags, attributes: state.get_attributes() })
             }
         ], state, ["a varaible"])
     }
@@ -202,6 +221,8 @@ impl Parser {
         let var = self.var(state)?;
         let mut value = None;
 
+        let attributes = state.get_attributes();
+
         if state.current.kind == TokenKind::Equals {
             state.next();
 
@@ -211,6 +232,7 @@ impl Parser {
         self.semi(state)?;
 
         Ok(Statement::Var {
+            attributes,
             var,
             value,
             r#type: ty,
