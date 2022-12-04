@@ -3,6 +3,7 @@ use std::collections::VecDeque;
 use crate::lexer::error::SyntaxError;
 use crate::lexer::error::SyntaxResult;
 use crate::lexer::token::Span;
+use crate::prelude::ByteString;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum StackFrame {
@@ -10,6 +11,7 @@ pub enum StackFrame {
     Scripting,
     Halted,
     DoubleQuote,
+    Heredoc(ByteString),
     LookingForVarname,
     LookingForProperty,
     VarOffset,
@@ -69,7 +71,7 @@ impl State {
         self.chars.get(self.cursor + delta).copied()
     }
 
-    pub fn try_read(&self, search: &'static [u8]) -> bool {
+    pub fn try_read(&self, search: &[u8]) -> bool {
         self.peek_buf().starts_with(search)
     }
 

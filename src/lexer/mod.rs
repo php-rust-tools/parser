@@ -65,6 +65,11 @@ impl Lexer {
                 // The double quote state is entered when inside a double-quoted string that
                 // contains variables.
                 StackFrame::DoubleQuote => tokens.extend(self.double_quote(&mut state)?),
+                StackFrame::Heredoc(label) => {
+                    let label = label.clone();
+
+                    tokens.extend(self.heredoc(&mut state, label)?)
+                },
                 // LookingForProperty is entered inside double quotes,
                 // backticks, or a heredoc, expecting a variable name.
                 // If one isn't found, it switches to scripting.
@@ -507,11 +512,22 @@ impl Lexer {
                 state.next();
                 TokenKind::Minus
             }
-            [b'<', b'<', b'<', ..] => {
-                // TODO: Handle both heredocs and nowdocs.
+            [b'<', b'<', b'<', ident_start!(), ..] => {
                 state.skip(3);
 
-                todo!("heredocs & nowdocs");
+                let label: ByteString = match self.peek_identifier(state) {
+                    Some(_) => self.consume_identifier(state).into(),
+                    None => unreachable!(),
+                };
+
+                if ! matches!(state.peek_buf(), [b'\n', ..]) {
+                    return Err(SyntaxError::UnexpectedCharacter(state.current.unwrap(), state.span));
+                }
+
+                state.next();
+                state.set(StackFrame::Heredoc(label.clone().into()))?;
+
+                TokenKind::StartHeredoc(label.into())
             }
             [b'<', b'<', b'=', ..] => {
                 state.skip(3);
@@ -629,6 +645,66 @@ impl Lexer {
                     break TokenKind::Variable(ident.into());
                 }
                 &[b, ..] => {
+                    state.next();
+                    buffer.push(b);
+                }
+                [] => return Err(SyntaxError::UnexpectedEndOfFile(state.span)),
+            }
+        };
+
+        let mut tokens = Vec::new();
+        if !buffer.is_empty() {
+            tokens.push(Token {
+                kind: TokenKind::StringPart(buffer.into()),
+                span,
+            })
+        }
+
+        tokens.push(Token { kind, span });
+        Ok(tokens)
+    }
+
+    fn heredoc(&self, state: &mut State, label: ByteString) -> SyntaxResult<Vec<Token>> {
+        let span = state.span;
+        let mut buffer = Vec::new();
+        let kind = loop {
+            match state.peek_buf() {
+                [b'$', b'{', ..] => {
+                    state.skip(2);
+                    state.enter(StackFrame::LookingForVarname);
+                    break TokenKind::DollarLeftBrace;
+                }
+                [b'{', b'$', ..] => {
+                    // Intentionally only consume the left brace.
+                    state.next();
+                    state.enter(StackFrame::Scripting);
+                    break TokenKind::LeftBrace;
+                }
+                [b'$', ident_start!(), ..] => {
+                    state.next();
+                    let ident = self.consume_identifier(state);
+
+                    match state.peek_buf() {
+                        [b'[', ..] => state.enter(StackFrame::VarOffset),
+                        [b'-', b'>', ident_start!(), ..]
+                        | [b'?', b'-', b'>', ident_start!(), ..] => {
+                            state.enter(StackFrame::LookingForProperty)
+                        }
+                        _ => {}
+                    }
+
+                    break TokenKind::Variable(ident.into());
+                }
+                &[b, ..] => {
+                    // FIXME: Hacky.
+                    // If the last character we parsed was a line break, we'll know we're at the start of a new line
+                    // where the closing heredoc label might be found.
+                    if matches!(buffer.last(), Some(b'\n')) && state.try_read(&label.0) {
+                        state.skip(label.len());
+                        state.set(StackFrame::Scripting)?;
+                        break TokenKind::EndHeredoc(label.clone());
+                    }
+
                     state.next();
                     buffer.push(b);
                 }

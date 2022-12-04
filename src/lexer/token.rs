@@ -11,6 +11,8 @@ pub enum OpenTagKind {
 
 #[derive(Debug, PartialEq, PartialOrd, Clone)]
 pub enum TokenKind {
+    StartHeredoc(ByteString),
+    EndHeredoc(ByteString),
     From,
     Print,
     Dollar,
@@ -210,6 +212,12 @@ impl Default for Token {
 impl Display for TokenKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
+            Self::StartHeredoc(label) => {
+                return write!(f, "<<<{}", label)
+            },
+            Self::EndHeredoc(label) => {
+                return write!(f, "{}", label)
+            },
             Self::BangEquals => "!=",
             Self::From => "from",
             Self::Print => "print",
