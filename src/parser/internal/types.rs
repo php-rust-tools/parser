@@ -1,3 +1,4 @@
+use crate::expect_token;
 use crate::expected_token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::TryBlockCaughtType;
@@ -44,69 +45,13 @@ impl Parser {
         }
 
         if state.current.kind == TokenKind::Pipe {
-            state.next();
-
-            if ty.standalone() {
-                return Err(ParseError::StandaloneTypeUsedInCombination(
-                    ty,
-                    state.current.span,
-                ));
-            }
-
-            let mut types = vec![ty];
-            while !state.is_eof() {
-                let ty = self.get_simple_type(state)?;
-                if ty.standalone() {
-                    return Err(ParseError::StandaloneTypeUsedInCombination(
-                        ty,
-                        state.current.span,
-                    ));
-                }
-
-                types.push(ty);
-
-                if state.current.kind != TokenKind::Pipe {
-                    break;
-                } else {
-                    state.next();
-                }
-            }
-
-            return Ok(Type::Union(types));
+            return self.parse_union(state, ty);
         }
 
         if state.current.kind == TokenKind::Ampersand
             && !matches!(state.peek.kind, TokenKind::Variable(_))
         {
-            state.next();
-
-            if ty.standalone() {
-                return Err(ParseError::StandaloneTypeUsedInCombination(
-                    ty,
-                    state.current.span,
-                ));
-            }
-
-            let mut types = vec![ty];
-            while !state.is_eof() {
-                let ty = self.get_simple_type(state)?;
-                if ty.standalone() {
-                    return Err(ParseError::StandaloneTypeUsedInCombination(
-                        ty,
-                        state.current.span,
-                    ));
-                }
-
-                types.push(ty);
-
-                if state.current.kind != TokenKind::Ampersand {
-                    break;
-                } else {
-                    state.next();
-                }
-            }
-
-            return Ok(Type::Intersection(types));
+            return self.parse_intersection(state, ty);
         }
 
         Ok(ty)
@@ -125,69 +70,13 @@ impl Parser {
         match ty {
             Some(ty) => {
                 if state.current.kind == TokenKind::Pipe {
-                    state.next();
-
-                    if ty.standalone() {
-                        return Err(ParseError::StandaloneTypeUsedInCombination(
-                            ty,
-                            state.current.span,
-                        ));
-                    }
-
-                    let mut types = vec![ty];
-                    while !state.is_eof() {
-                        let ty = self.get_simple_type(state)?;
-                        if ty.standalone() {
-                            return Err(ParseError::StandaloneTypeUsedInCombination(
-                                ty,
-                                state.current.span,
-                            ));
-                        }
-
-                        types.push(ty);
-
-                        if state.current.kind != TokenKind::Pipe {
-                            break;
-                        } else {
-                            state.next();
-                        }
-                    }
-
-                    return Ok(Some(Type::Union(types)));
+                    return Ok(Some(self.parse_union(state, ty)?));
                 }
 
                 if state.current.kind == TokenKind::Ampersand
                     && !matches!(state.peek.kind, TokenKind::Variable(_))
                 {
-                    state.next();
-
-                    if ty.standalone() {
-                        return Err(ParseError::StandaloneTypeUsedInCombination(
-                            ty,
-                            state.current.span,
-                        ));
-                    }
-
-                    let mut types = vec![ty];
-                    while !state.is_eof() {
-                        let ty = self.get_simple_type(state)?;
-                        if ty.standalone() {
-                            return Err(ParseError::StandaloneTypeUsedInCombination(
-                                ty,
-                                state.current.span,
-                            ));
-                        }
-
-                        types.push(ty);
-
-                        if state.current.kind != TokenKind::Ampersand {
-                            break;
-                        } else {
-                            state.next();
-                        }
-                    }
-
-                    return Ok(Some(Type::Intersection(types)));
+                    return Ok(Some(self.parse_intersection(state, ty)?));
                 }
 
                 Ok(Some(ty))
@@ -290,6 +179,98 @@ impl Parser {
     fn get_simple_type(&self, state: &mut State) -> ParseResult<Type> {
         self.get_optional_simple_type(state)?
             .ok_or_else(|| expected_token!(["a type"], state))
+    }
+
+    fn parse_union(&self, state: &mut State, other: Type) -> ParseResult<Type> {
+        if other.standalone() {
+            return Err(ParseError::StandaloneTypeUsedInCombination(
+                other,
+                state.current.span,
+            ));
+        }
+
+        let mut types = vec![other];
+
+        expect_token!([TokenKind::Pipe], state, ["|"]);
+        loop {
+            let ty = if state.current.kind == TokenKind::LeftParen {
+                state.next();
+
+                let other = self.get_simple_type(state)?;
+                let ty = self.parse_intersection(state, other)?;
+
+                self.rparen(state)?;
+
+                ty
+            } else {
+                let ty = self.get_simple_type(state)?;
+                if ty.standalone() {
+                    return Err(ParseError::StandaloneTypeUsedInCombination(
+                        ty,
+                        state.current.span,
+                    ));
+                }
+
+                ty
+            };
+
+            types.push(ty);
+
+            if state.current.kind == TokenKind::Pipe {
+                state.next();
+            } else {
+                break;
+            }
+        }
+
+        Ok(Type::Union(types))
+    }
+
+    fn parse_intersection(&self, state: &mut State, other: Type) -> ParseResult<Type> {
+        if other.standalone() {
+            return Err(ParseError::StandaloneTypeUsedInCombination(
+                other,
+                state.current.span,
+            ));
+        }
+
+        let mut types = vec![other];
+
+        expect_token!([TokenKind::Ampersand], state, ["&"]);
+        loop {
+            let ty = if state.current.kind == TokenKind::LeftParen {
+                state.next();
+
+                let other = self.get_simple_type(state)?;
+                let ty = self.parse_union(state, other)?;
+
+                self.rparen(state)?;
+
+                ty
+            } else {
+                let ty = self.get_simple_type(state)?;
+                if ty.standalone() {
+                    return Err(ParseError::StandaloneTypeUsedInCombination(
+                        ty,
+                        state.current.span,
+                    ));
+                }
+
+                ty
+            };
+
+            types.push(ty);
+
+            if state.current.kind == TokenKind::Ampersand
+                && !matches!(state.peek.kind, TokenKind::Variable(_))
+            {
+                state.next();
+            } else {
+                break;
+            }
+        }
+
+        Ok(Type::Intersection(types))
     }
 
     fn maybe_nullable(
