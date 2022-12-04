@@ -1,6 +1,7 @@
 use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
+use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 
 pub type Block = Vec<Statement>;
@@ -143,6 +144,7 @@ pub type ParamList = Vec<Param>;
 #[derive(Debug, PartialEq, Clone)]
 pub struct Param {
     pub name: Expression,
+    pub attributes: Vec<Attribute>,
     pub r#type: Option<Type>,
     pub variadic: bool,
     pub default: Option<Expression>,
@@ -154,6 +156,7 @@ impl From<ByteString> for Param {
     fn from(name: ByteString) -> Self {
         Self {
             name: Expression::Variable { name },
+            attributes: vec![],
             r#type: None,
             variadic: false,
             default: None,
@@ -305,6 +308,12 @@ pub enum TraitAdaptation {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct Attribute {
+    pub span: Span,
+    pub expression: Expression,
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(ByteString),
     Goto {
@@ -346,11 +355,13 @@ pub enum Statement {
     },
     Var {
         var: ByteString,
+        attributes: Vec<Attribute>,
         value: Option<Expression>,
         r#type: Option<Type>,
     },
     Property {
         var: ByteString,
+        attributes: Vec<Attribute>,
         value: Option<Expression>,
         r#type: Option<Type>,
         flags: Vec<PropertyFlag>,
@@ -365,6 +376,7 @@ pub enum Statement {
     },
     Function {
         name: Identifier,
+        attributes: Vec<Attribute>,
         params: Vec<Param>,
         body: Block,
         return_type: Option<Type>,
@@ -372,6 +384,7 @@ pub enum Statement {
     },
     Class {
         name: Identifier,
+        attributes: Vec<Attribute>,
         extends: Option<Identifier>,
         implements: Vec<Identifier>,
         body: Block,
@@ -379,6 +392,7 @@ pub enum Statement {
     },
     Trait {
         name: Identifier,
+        attributes: Vec<Attribute>,
         body: Block,
     },
     TraitUse {
@@ -387,11 +401,13 @@ pub enum Statement {
     },
     Interface {
         name: Identifier,
+        attributes: Vec<Attribute>,
         extends: Vec<Identifier>,
         body: Block,
     },
     Method {
         name: Identifier,
+        attributes: Vec<Attribute>,
         params: Vec<Param>,
         body: Block,
         flags: Vec<MethodFlag>,
@@ -400,6 +416,7 @@ pub enum Statement {
     },
     AbstractMethod {
         name: Identifier,
+        attributes: Vec<Attribute>,
         params: Vec<Param>,
         flags: Vec<MethodFlag>,
         return_type: Option<Type>,
@@ -457,11 +474,13 @@ pub enum Statement {
     },
     UnitEnum {
         name: Identifier,
+        attributes: Vec<Attribute>,
         implements: Vec<Identifier>,
         body: Block,
     },
     BackedEnum {
         name: Identifier,
+        attributes: Vec<Attribute>,
         implements: Vec<Identifier>,
         backed_type: BackedEnumType,
         body: Block,
@@ -619,6 +638,7 @@ pub enum Expression {
     },
     Closure {
         params: Vec<Param>,
+        attributes: Vec<Attribute>,
         uses: Vec<ClosureUse>,
         return_type: Option<Type>,
         body: Block,
@@ -627,6 +647,7 @@ pub enum Expression {
     },
     ArrowFunction {
         params: Vec<Param>,
+        attributes: Vec<Attribute>,
         return_type: Option<Type>,
         expr: Box<Self>,
         by_ref: bool,
@@ -674,6 +695,7 @@ pub enum Expression {
         args: Vec<Arg>,
     },
     AnonymousClass {
+        attributes: Vec<Attribute>,
         extends: Option<Identifier>,
         implements: Vec<Identifier>,
         body: Block,

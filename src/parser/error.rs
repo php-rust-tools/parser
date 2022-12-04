@@ -35,6 +35,7 @@ pub enum ParseError {
     ForbiddenTypeUsedInProperty(String, String, Type, Span),
     MatchExpressionWithMultipleDefaultArms(Span),
     CannotFindTypeInCurrentScope(String, Span),
+    ExpectedItemDefinitionAfterAttributes(Span),
 }
 
 impl Display for ParseError {
@@ -82,6 +83,7 @@ impl Display for ParseError {
             Self::ForbiddenTypeUsedInProperty(class, prop, ty, span) => write!(f, "Parse Error: Property {}::${} cannot have type `{}` on line {} column {}", class, prop, ty, span.0, span.1),
             Self::MatchExpressionWithMultipleDefaultArms(span) => write!(f, "Parse Error: Match expressions may only contain one default arm on line {} column {}", span.0, span.1),
             Self::CannotFindTypeInCurrentScope(ty, span) => write!(f, "Parse Error: Cannot find type `{}` in this scope on line {} on column {}", ty, span.0, span.1),
+            Self::ExpectedItemDefinitionAfterAttributes(span) => write!(f, "Parse Error: Expected item definition after attribute on line {} column {}", span.0, span.1),
         }
     }
 }

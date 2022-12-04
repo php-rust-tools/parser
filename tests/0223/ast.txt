@@ -1,0 +1,561 @@
+[
+    Function {
+        name: Identifier {
+            name: "a",
+        },
+        attributes: [
+            Attribute {
+                span: (
+                    4,
+                    5,
+                ),
+                expression: Identifier {
+                    name: "A1",
+                },
+            },
+            Attribute {
+                span: (
+                    5,
+                    5,
+                ),
+                expression: Call {
+                    target: Identifier {
+                        name: "A2",
+                    },
+                    args: [],
+                },
+            },
+            Attribute {
+                span: (
+                    6,
+                    5,
+                ),
+                expression: Call {
+                    target: Identifier {
+                        name: "A3",
+                    },
+                    args: [
+                        Arg {
+                            name: None,
+                            value: LiteralInteger {
+                                i: 0,
+                            },
+                            unpack: false,
+                        },
+                    ],
+                },
+            },
+            Attribute {
+                span: (
+                    7,
+                    5,
+                ),
+                expression: Call {
+                    target: Identifier {
+                        name: "A4",
+                    },
+                    args: [
+                        Arg {
+                            name: Some(
+                                "x",
+                            ),
+                            value: LiteralInteger {
+                                i: 1,
+                            },
+                            unpack: false,
+                        },
+                    ],
+                },
+            },
+        ],
+        params: [
+            Param {
+                name: Variable {
+                    name: "a",
+                },
+                attributes: [
+                    Attribute {
+                        span: (
+                            10,
+                            7,
+                        ),
+                        expression: Identifier {
+                            name: "A5",
+                        },
+                    },
+                ],
+                type: Some(
+                    Union(
+                        [
+                            Integer,
+                            Float,
+                        ],
+                    ),
+                ),
+                variadic: false,
+                default: None,
+                flags: [],
+                by_ref: false,
+            },
+            Param {
+                name: Variable {
+                    name: "c",
+                },
+                attributes: [
+                    Attribute {
+                        span: (
+                            12,
+                            7,
+                        ),
+                        expression: Identifier {
+                            name: "A6",
+                        },
+                    },
+                ],
+                type: None,
+                variadic: false,
+                default: None,
+                flags: [],
+                by_ref: false,
+            },
+            Param {
+                name: Variable {
+                    name: "b",
+                },
+                attributes: [
+                    Attribute {
+                        span: (
+                            14,
+                            7,
+                        ),
+                        expression: Identifier {
+                            name: "A7",
+                        },
+                    },
+                ],
+                type: Some(
+                    String,
+                ),
+                variadic: false,
+                default: None,
+                flags: [],
+                by_ref: false,
+            },
+        ],
+        body: [],
+        return_type: None,
+        by_ref: false,
+    },
+    Class {
+        name: Identifier {
+            name: "C",
+        },
+        attributes: [
+            Attribute {
+                span: (
+                    19,
+                    3,
+                ),
+                expression: Identifier {
+                    name: "A8",
+                },
+            },
+            Attribute {
+                span: (
+                    19,
+                    7,
+                ),
+                expression: Call {
+                    target: Identifier {
+                        name: "A9",
+                    },
+                    args: [],
+                },
+            },
+            Attribute {
+                span: (
+                    19,
+                    13,
+                ),
+                expression: Call {
+                    target: Identifier {
+                        name: "A10",
+                    },
+                    args: [
+                        Arg {
+                            name: Some(
+                                "foo",
+                            ),
+                            value: Identifier {
+                                name: "bar",
+                            },
+                            unpack: false,
+                        },
+                    ],
+                },
+            },
+        ],
+        extends: None,
+        implements: [],
+        body: [
+            Method {
+                name: Identifier {
+                    name: "__construct",
+                },
+                attributes: [
+                    Attribute {
+                        span: (
+                            21,
+                            7,
+                        ),
+                        expression: Identifier {
+                            name: "A11",
+                        },
+                    },
+                ],
+                params: [
+                    Param {
+                        name: Variable {
+                            name: "s",
+                        },
+                        attributes: [
+                            Attribute {
+                                span: (
+                                    23,
+                                    11,
+                                ),
+                                expression: Identifier {
+                                    name: "A12",
+                                },
+                            },
+                        ],
+                        type: Some(
+                            String,
+                        ),
+                        variadic: false,
+                        default: None,
+                        flags: [
+                            Public,
+                            Readonly,
+                        ],
+                        by_ref: false,
+                    },
+                ],
+                body: [],
+                flags: [
+                    Public,
+                ],
+                return_type: None,
+                by_ref: false,
+            },
+            Method {
+                name: Identifier {
+                    name: "m",
+                },
+                attributes: [
+                    Attribute {
+                        span: (
+                            27,
+                            7,
+                        ),
+                        expression: Identifier {
+                            name: "A13",
+                        },
+                    },
+                ],
+                params: [
+                    Param {
+                        name: Variable {
+                            name: "param",
+                        },
+                        attributes: [
+                            Attribute {
+                                span: (
+                                    29,
+                                    11,
+                                ),
+                                expression: Identifier {
+                                    name: "A14",
+                                },
+                            },
+                        ],
+                        type: None,
+                        variadic: false,
+                        default: None,
+                        flags: [],
+                        by_ref: false,
+                    },
+                ],
+                body: [],
+                flags: [
+                    Public,
+                ],
+                return_type: None,
+                by_ref: false,
+            },
+            Property {
+                var: "prop",
+                attributes: [
+                    Attribute {
+                        span: (
+                            32,
+                            7,
+                        ),
+                        expression: Identifier {
+                            name: "A15",
+                        },
+                    },
+                ],
+                value: None,
+                type: None,
+                flags: [
+                    Public,
+                ],
+            },
+        ],
+        flags: [],
+    },
+    Trait {
+        name: Identifier {
+            name: "F",
+        },
+        attributes: [
+            Attribute {
+                span: (
+                    36,
+                    3,
+                ),
+                expression: Identifier {
+                    name: "A16",
+                },
+            },
+        ],
+        body: [],
+    },
+    UnitEnum {
+        name: Identifier {
+            name: "P",
+        },
+        attributes: [
+            Attribute {
+                span: (
+                    39,
+                    3,
+                ),
+                expression: Identifier {
+                    name: "A17",
+                },
+            },
+        ],
+        implements: [],
+        body: [],
+    },
+    BackedEnum {
+        name: Identifier {
+            name: "B",
+        },
+        attributes: [
+            Attribute {
+                span: (
+                    42,
+                    3,
+                ),
+                expression: Identifier {
+                    name: "A18",
+                },
+            },
+        ],
+        implements: [],
+        backed_type: Int,
+        body: [],
+    },
+    Interface {
+        name: Identifier {
+            name: "I",
+        },
+        attributes: [
+            Attribute {
+                span: (
+                    45,
+                    3,
+                ),
+                expression: Identifier {
+                    name: "A19",
+                },
+            },
+        ],
+        extends: [],
+        body: [],
+    },
+    Trait {
+        name: Identifier {
+            name: "T",
+        },
+        attributes: [
+            Attribute {
+                span: (
+                    48,
+                    3,
+                ),
+                expression: Identifier {
+                    name: "A20",
+                },
+            },
+        ],
+        body: [],
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "x",
+            },
+            op: Assign,
+            rhs: Closure {
+                params: [],
+                attributes: [
+                    Attribute {
+                        span: (
+                            51,
+                            8,
+                        ),
+                        expression: Identifier {
+                            name: "A21",
+                        },
+                    },
+                ],
+                uses: [],
+                return_type: None,
+                body: [],
+                static: false,
+                by_ref: false,
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "y",
+            },
+            op: Assign,
+            rhs: ArrowFunction {
+                params: [],
+                attributes: [
+                    Attribute {
+                        span: (
+                            52,
+                            8,
+                        ),
+                        expression: Identifier {
+                            name: "A22",
+                        },
+                    },
+                ],
+                return_type: None,
+                expr: LiteralInteger {
+                    i: 0,
+                },
+                by_ref: false,
+                static: false,
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "a",
+            },
+            op: Assign,
+            rhs: Closure {
+                params: [],
+                attributes: [
+                    Attribute {
+                        span: (
+                            53,
+                            8,
+                        ),
+                        expression: Identifier {
+                            name: "A23",
+                        },
+                    },
+                ],
+                uses: [],
+                return_type: None,
+                body: [],
+                static: true,
+                by_ref: false,
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "b",
+            },
+            op: Assign,
+            rhs: ArrowFunction {
+                params: [],
+                attributes: [
+                    Attribute {
+                        span: (
+                            54,
+                            8,
+                        ),
+                        expression: Identifier {
+                            name: "A24",
+                        },
+                    },
+                ],
+                return_type: None,
+                expr: LiteralInteger {
+                    i: 0,
+                },
+                by_ref: false,
+                static: true,
+            },
+        },
+    },
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "z",
+            },
+            op: Assign,
+            rhs: New {
+                target: AnonymousClass {
+                    attributes: [
+                        Attribute {
+                            span: (
+                                55,
+                                12,
+                            ),
+                            expression: Identifier {
+                                name: "A25",
+                            },
+                        },
+                    ],
+                    extends: None,
+                    implements: [],
+                    body: [
+                        Var {
+                            var: "s",
+                            attributes: [
+                                Attribute {
+                                    span: (
+                                        56,
+                                        7,
+                                    ),
+                                    expression: Identifier {
+                                        name: "A26",
+                                    },
+                                },
+                            ],
+                            value: None,
+                            type: None,
+                        },
+                    ],
+                },
+                args: [],
+            },
+        },
+    },
+]

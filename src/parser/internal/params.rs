@@ -55,6 +55,8 @@ impl Parser {
         self.lparen(state)?;
 
         while !state.is_eof() && state.current.kind != TokenKind::RightParen {
+            self.gather_attributes(state)?;
+
             let flags: Vec<PropertyFlag> = self
                 .promoted_property_flags(state)?
                 .iter()
@@ -131,6 +133,7 @@ impl Parser {
 
             params.push(Param {
                 name: Expression::Variable { name: var },
+                attributes: state.get_attributes(),
                 r#type: ty,
                 variadic,
                 default,
