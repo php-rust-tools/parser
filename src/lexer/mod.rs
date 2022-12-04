@@ -667,6 +667,8 @@ impl Lexer {
     fn heredoc(&self, state: &mut State, label: ByteString) -> SyntaxResult<Vec<Token>> {
         let span = state.span;
         let mut buffer = Vec::new();
+        // FIXME: We need to track whitespace amount here. It's a bit painful, so skipping for now
+        //        so we can find other things to fix first.
         let kind = loop {
             match state.peek_buf() {
                 [b'$', b'{', ..] => {
