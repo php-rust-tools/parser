@@ -967,7 +967,7 @@ impl Parser {
                 e
             }
             TokenKind::StringPart(_) => self.interpolated_string(state)?,
-            TokenKind::StartHeredoc(_) => self.interpolated_string(state)?,
+            TokenKind::StartHeredoc(_) => self.heredoc_string(state)?,
             TokenKind::True => {
                 let e = Expression::Bool { value: true };
                 state.next();
@@ -1478,6 +1478,22 @@ impl Parser {
         let mut parts = Vec::new();
 
         while state.current.kind != TokenKind::DoubleQuote {
+            if let Some(part) = self.interpolated_string_part(state)? {
+                parts.push(part);
+            }
+        }
+
+        state.next();
+
+        Ok(Expression::InterpolatedString { parts })
+    }
+
+    fn heredoc_string(&self, state: &mut State) -> ParseResult<Expression> {
+        state.next();
+        
+        let mut parts = Vec::new();
+
+        while ! matches!(state.current.kind, TokenKind::EndHeredoc(_)) {
             if let Some(part) = self.interpolated_string_part(state)? {
                 parts.push(part);
             }
