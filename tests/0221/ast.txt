@@ -1,0 +1,125 @@
+[
+    Interface {
+        name: Identifier {
+            name: "A",
+        },
+        extends: [],
+        body: [],
+    },
+    Interface {
+        name: Identifier {
+            name: "B",
+        },
+        extends: [],
+        body: [],
+    },
+    Interface {
+        name: Identifier {
+            name: "C",
+        },
+        extends: [],
+        body: [],
+    },
+    Interface {
+        name: Identifier {
+            name: "D",
+        },
+        extends: [],
+        body: [],
+    },
+    Function {
+        name: Identifier {
+            name: "foo",
+        },
+        params: [
+            Param {
+                name: Variable {
+                    name: "a",
+                },
+                type: Some(
+                    Union(
+                        [
+                            Identifier(
+                                Identifier {
+                                    name: "A",
+                                },
+                            ),
+                            Intersection(
+                                [
+                                    Identifier(
+                                        Identifier {
+                                            name: "B",
+                                        },
+                                    ),
+                                    Identifier(
+                                        Identifier {
+                                            name: "C",
+                                        },
+                                    ),
+                                    Identifier(
+                                        Identifier {
+                                            name: "D",
+                                        },
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ),
+                variadic: false,
+                default: None,
+                flags: [],
+                by_ref: false,
+            },
+        ],
+        body: [
+            Expression {
+                expr: Call {
+                    target: Identifier {
+                        name: "exit",
+                    },
+                    args: [
+                        Arg {
+                            name: None,
+                            value: LiteralInteger {
+                                i: 0,
+                            },
+                            unpack: false,
+                        },
+                    ],
+                },
+            },
+        ],
+        return_type: Some(
+            Intersection(
+                [
+                    Identifier(
+                        Identifier {
+                            name: "A",
+                        },
+                    ),
+                    Union(
+                        [
+                            Identifier(
+                                Identifier {
+                                    name: "B",
+                                },
+                            ),
+                            Identifier(
+                                Identifier {
+                                    name: "C",
+                                },
+                            ),
+                            Identifier(
+                                Identifier {
+                                    name: "D",
+                                },
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+        ),
+        by_ref: false,
+    },
+]

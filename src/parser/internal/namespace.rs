@@ -18,13 +18,10 @@ impl Parser {
 
         if let Some(name) = &name {
             if state.current.kind != TokenKind::LeftBrace {
-                match state.namespace_type() {
-                    Some(NamespaceType::Braced) => {
-                        return Err(ParseError::MixingBracedAndUnBracedNamespaceDeclarations(
-                            state.current.span,
-                        ));
-                    }
-                    _ => {}
+                if let Some(NamespaceType::Braced) = state.namespace_type() {
+                    return Err(ParseError::MixingBracedAndUnBracedNamespaceDeclarations(
+                        state.current.span,
+                    ));
                 }
 
                 return self.unbraced_namespace(state, name.clone());
