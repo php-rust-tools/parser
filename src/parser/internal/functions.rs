@@ -157,7 +157,7 @@ impl Parser {
             TokenKind::Null => {
                 state.next();
                 "null".into()
-            },
+            }
             _ => self.ident(state)?,
         };
 

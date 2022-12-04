@@ -69,7 +69,7 @@ impl Lexer {
                     let label = label.clone();
 
                     tokens.extend(self.heredoc(&mut state, label)?)
-                },
+                }
                 // LookingForProperty is entered inside double quotes,
                 // backticks, or a heredoc, expecting a variable name.
                 // If one isn't found, it switches to scripting.
@@ -520,14 +520,17 @@ impl Lexer {
                     None => unreachable!(),
                 };
 
-                if ! matches!(state.peek_buf(), [b'\n', ..]) {
-                    return Err(SyntaxError::UnexpectedCharacter(state.current.unwrap(), state.span));
+                if !matches!(state.peek_buf(), [b'\n', ..]) {
+                    return Err(SyntaxError::UnexpectedCharacter(
+                        state.current.unwrap(),
+                        state.span,
+                    ));
                 }
 
                 state.next();
-                state.set(StackFrame::Heredoc(label.clone().into()))?;
+                state.set(StackFrame::Heredoc(label.clone()))?;
 
-                TokenKind::StartHeredoc(label.into())
+                TokenKind::StartHeredoc(label)
             }
             [b'<', b'<', b'=', ..] => {
                 state.skip(3);
@@ -704,7 +707,7 @@ impl Lexer {
                     if matches!(buffer.last(), Some(b'\n')) && state.try_read(&label.0) {
                         state.skip(label.len());
                         state.set(StackFrame::Scripting)?;
-                        break TokenKind::EndHeredoc(label.clone());
+                        break TokenKind::EndHeredoc(label);
                     }
 
                     state.next();

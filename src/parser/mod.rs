@@ -1490,10 +1490,10 @@ impl Parser {
 
     fn heredoc_string(&self, state: &mut State) -> ParseResult<Expression> {
         state.next();
-        
+
         let mut parts = Vec::new();
 
-        while ! matches!(state.current.kind, TokenKind::EndHeredoc(_)) {
+        while !matches!(state.current.kind, TokenKind::EndHeredoc(_)) {
             if let Some(part) = self.interpolated_string_part(state)? {
                 parts.push(part);
             }
