@@ -189,12 +189,8 @@ impl State {
     fn has_class_scope(&self) -> bool {
         for scope in self.stack.iter().rev() {
             match &scope {
-                Scope::ArrowFunction(s) | Scope::AnonymousFunction(s) => {
-                    // if it's a static closure, don't allow `static` type.
-                    if *s {
-                        return false;
-                    }
-                }
+                // we can't determine this from here, wait until we reach the classish scope.
+                Scope::ArrowFunction(_) | Scope::AnonymousFunction(_) => {}
                 Scope::BracedNamespace(_) | Scope::Namespace(_) | Scope::Function(_) => {
                     return false;
                 }
@@ -210,12 +206,6 @@ impl State {
     fn has_class_parent_scope(&self) -> bool {
         for scope in self.stack.iter().rev() {
             match &scope {
-                Scope::ArrowFunction(s) | Scope::AnonymousFunction(s) => {
-                    // static closures don't have a parent
-                    if *s {
-                        return false;
-                    }
-                }
                 Scope::BracedNamespace(_) | Scope::Namespace(_) | Scope::Function(_) => {
                     return false;
                 }
@@ -232,8 +222,8 @@ impl State {
                 Scope::Class(_, _, has_parent) | Scope::AnonymousClass(has_parent) => {
                     return *has_parent;
                 }
-                // we can't determine this from method, wait until we reach the classish scope.
-                Scope::Method(_, _) => {}
+                // we can't determine this from here, wait until we reach the classish scope.
+                Scope::ArrowFunction(_) | Scope::AnonymousFunction(_) | Scope::Method(_, _) => {}
             };
         }
 

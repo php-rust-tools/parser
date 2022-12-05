@@ -1,0 +1,74 @@
+[
+    Class {
+        name: Identifier {
+            start: (
+                3,
+                7,
+            ),
+            name: "Foo",
+            end: (
+                4,
+                1,
+            ),
+        },
+        attributes: [],
+        extends: None,
+        implements: [],
+        body: [
+            Method {
+                name: Identifier {
+                    start: (
+                        5,
+                        14,
+                    ),
+                    name: "bar",
+                    end: (
+                        5,
+                        17,
+                    ),
+                },
+                attributes: [],
+                params: [],
+                body: [
+                    Expression {
+                        expr: Closure {
+                            params: [
+                                Param {
+                                    name: Variable {
+                                        start: (
+                                            7,
+                                            31,
+                                        ),
+                                        name: "foo",
+                                        end: (
+                                            7,
+                                            35,
+                                        ),
+                                    },
+                                    attributes: [],
+                                    type: Some(
+                                        SelfReference,
+                                    ),
+                                    variadic: false,
+                                    default: None,
+                                    flags: [],
+                                    by_ref: false,
+                                },
+                            ],
+                            attributes: [],
+                            uses: [],
+                            return_type: None,
+                            body: [],
+                            static: true,
+                            by_ref: false,
+                        },
+                    },
+                ],
+                flags: [],
+                return_type: None,
+                by_ref: false,
+            },
+        ],
+        flags: [],
+    },
+]
