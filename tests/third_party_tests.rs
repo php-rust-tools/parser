@@ -16,6 +16,16 @@ fn third_party_php_standard_library() {
     );
 }
 
+#[test]
+fn third_party_laravel_framework() {
+    test_repository(
+        "laravel-framework",
+        "https://github.com/laravel/framework",
+        "9.x",
+        &["src", "tests"],
+    );
+}
+
 fn test_repository(name: &str, repository: &str, branch: &str, directories: &[&str]) {
     let out_dir = env::var_os("OUT_DIR").expect("failed to get OUT_DIR");
     let out_path = PathBuf::from(out_dir).join(name);
