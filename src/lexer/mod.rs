@@ -668,6 +668,93 @@ impl Lexer {
                     state.set(StackFrame::Scripting)?;
                     break TokenKind::DoubleQuote;
                 }
+                &[b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
+                    state.skip(2);
+                    buffer.push(b);
+                }
+                &[b'\\', b'n', ..] => {
+                    state.skip(2);
+                    buffer.push(b'\n');
+                }
+                &[b'\\', b'r', ..] => {
+                    state.skip(2);
+                    buffer.push(b'\r');
+                }
+                &[b'\\', b't', ..] => {
+                    state.skip(2);
+                    buffer.push(b'\t');
+                }
+                &[b'\\', b'v', ..] => {
+                    state.skip(2);
+                    buffer.push(b'\x0b');
+                }
+                &[b'\\', b'e', ..] => {
+                    state.skip(2);
+                    buffer.push(b'\x1b');
+                }
+                &[b'\\', b'f', ..] => {
+                    state.skip(2);
+                    buffer.push(b'\x0c');
+                }
+                &[b'\\', b'x', b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F'), ..] => {
+                    state.skip(3);
+
+                    let mut hex = String::from(b as char);
+                    if let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = state.current {
+                        state.next();
+                        hex.push(b as char);
+                    }
+
+                    let b = u8::from_str_radix(&hex, 16).unwrap();
+                    buffer.push(b);
+                }
+                &[b'\\', b'u', b'{', ..] => {
+                    state.skip(3);
+
+                    let mut code_point = String::new();
+                    while let Some(b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')) = state.current {
+                        state.next();
+                        code_point.push(b as char);
+                    }
+
+                    if code_point.is_empty() || state.current != Some(b'}') {
+                        return Err(SyntaxError::InvalidUnicodeEscape(state.span));
+                    }
+                    state.next();
+
+                    let c = if let Ok(c) = u32::from_str_radix(&code_point, 16) {
+                        c
+                    } else {
+                        return Err(SyntaxError::InvalidUnicodeEscape(state.span));
+                    };
+
+                    if let Some(c) = char::from_u32(c) {
+                        let mut tmp = [0; 4];
+                        let bytes = c.encode_utf8(&mut tmp);
+                        buffer.extend(bytes.as_bytes());
+                    } else {
+                        return Err(SyntaxError::InvalidUnicodeEscape(state.span));
+                    }
+                }
+                &[b'\\', b @ b'0'..=b'7', ..] => {
+                    state.skip(2);
+
+                    let mut octal = String::from(b as char);
+                    if let Some(b @ b'0'..=b'7') = state.current {
+                        state.next();
+                        octal.push(b as char);
+                    }
+                    if let Some(b @ b'0'..=b'7') = state.current {
+                        state.next();
+                        octal.push(b as char);
+                    }
+
+                    if let Ok(b) = u8::from_str_radix(&octal, 8) {
+                        buffer.push(b);
+                    } else {
+                        return Err(SyntaxError::InvalidOctalEscape(state.span));
+                    }
+                }
                 [b'$', ident_start!(), ..] => {
                     state.next();
                     let ident = self.consume_identifier(state);
