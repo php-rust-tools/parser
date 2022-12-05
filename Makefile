@@ -1,18 +1,16 @@
-# If the first argument is "dump"...
 ifeq (dump,$(firstword $(MAKECMDGOALS)))
   # use the rest as arguments for "dump"
   DUMP_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
   # ...and turn them into do-nothing targets
   $(eval $(DUMP_ARGS):;@:)
-endif# If the first argument is "dump"...
+endif
 
-# If the first argument is "dump"...
 ifeq (test,$(firstword $(MAKECMDGOALS)))
-  # use the rest as arguments for "dump"
+  # use the rest as arguments for "test"
   TEST_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
   # ...and turn them into do-nothing targets
   $(eval $(TEST_ARGS):;@:)
-endif# If the first argument is "dump"...
+endif
 
 .PHONY: help
 
