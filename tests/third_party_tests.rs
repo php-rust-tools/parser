@@ -41,6 +41,7 @@ fn third_party_3_symfony_framework() {
             // FIXME: Remove this one once I've found the energy to sort out heredocs / nowdocs.
             "src/Symfony/Component/DependencyInjection/LazyProxy/PhpDumper/LazyServiceDumper.php",
             "src/Symfony/Component/Cache/Tests/Traits/RedisProxiesTest.php",
+            "src/Symfony/Component/Mailer/Tests/Transport/NativeTransportFactoryTest.php",
             // FIXME: Remove these once we can support arbitrary opening and closing tags.
             "src/Symfony/Component/ErrorHandler/Resources/views/exception.html.php",
             "src/Symfony/Component/ErrorHandler/Resources/views/exception_full.html.php",
