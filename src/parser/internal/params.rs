@@ -164,7 +164,8 @@ impl Parser {
         while !state.is_eof() && state.current.kind != TokenKind::RightParen {
             let mut name = None;
             let mut unpack = false;
-            if (matches!(state.current.kind, TokenKind::Identifier(_)) || is_reserved_ident(&state.current.kind))
+            if (matches!(state.current.kind, TokenKind::Identifier(_))
+                || is_reserved_ident(&state.current.kind))
                 && state.peek.kind == TokenKind::Colon
             {
                 name = Some(self.ident_maybe_reserved(state)?);
