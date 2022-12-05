@@ -1234,6 +1234,7 @@ impl Parser {
                         state.skip_comments();
                         if state.current.kind == TokenKind::Comma {
                             state.next();
+                            state.skip_comments();
                         } else {
                             break;
                         }
