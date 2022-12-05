@@ -463,7 +463,7 @@ impl Parser {
                             break;
                         }
                     }
-                    
+
                     self.semi(state)?;
 
                     let mut condition = Vec::new();
@@ -487,7 +487,7 @@ impl Parser {
                         if state.current.kind == TokenKind::RightParen {
                             break;
                         }
-                        
+
                         r#loop.push(self.expression(state, Precedence::Lowest)?);
 
                         if state.current.kind == TokenKind::Comma {

@@ -13,7 +13,7 @@ fn third_party_1_php_standard_library() {
         "https://github.com/azjezz/psl.git",
         "2.2.x",
         &["src", "tests", "examples"],
-        &[]
+        &[],
     );
 }
 
@@ -24,7 +24,7 @@ fn third_party_2_laravel_framework() {
         "https://github.com/laravel/framework",
         "9.x",
         &["src", "tests"],
-        &[]
+        &[],
     );
 }
 
@@ -35,11 +35,17 @@ fn third_party_3_symfony_framework() {
         "https://github.com/symfony/symfony",
         "6.3",
         &["src/Symfony"],
-        &["src/Symfony/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php"]
+        &["src/Symfony/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php"],
     );
 }
 
-fn test_repository(name: &str, repository: &str, branch: &str, directories: &[&str], ignore: &[&str]) {
+fn test_repository(
+    name: &str,
+    repository: &str,
+    branch: &str,
+    directories: &[&str],
+    ignore: &[&str],
+) {
     let out_dir = env::var_os("OUT_DIR").expect("failed to get OUT_DIR");
     let out_path = PathBuf::from(out_dir).join(name);
 
@@ -81,7 +87,17 @@ fn test_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) {
             continue;
         }
 
-        if entry.is_file() && entry.extension().unwrap_or_default() == "php" && ! ignore.contains(&entry.as_path().strip_prefix(&root).unwrap().to_str().unwrap()) {
+        if entry.is_file()
+            && entry.extension().unwrap_or_default() == "php"
+            && !ignore.contains(
+                &entry
+                    .as_path()
+                    .strip_prefix(&root)
+                    .unwrap()
+                    .to_str()
+                    .unwrap(),
+            )
+        {
             let name_entry = entry.clone();
             let fullanme_string = name_entry.to_string_lossy();
             let name = fullanme_string
