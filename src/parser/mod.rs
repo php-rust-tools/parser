@@ -617,6 +617,7 @@ impl Parser {
                                     && state.current.kind != TokenKind::RightBrace
                                 {
                                     body.push(self.statement(state)?);
+                                    state.skip_comments();
                                 }
 
                                 cases.push(Case {

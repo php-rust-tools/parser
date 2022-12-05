@@ -37,7 +37,9 @@ fn third_party_3_symfony_framework() {
         &["src/Symfony"],
         &[
             "src/Symfony/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php",
+            "src/Symfony/Component/Config/Tests/Fixtures/ParseError.php",
             // FIXME: Remove this one once I've found the energy to sort out heredocs / nowdocs.
+            "src/Symfony/Component/DependencyInjection/LazyProxy/PhpDumper/LazyServiceDumper.php",
             "src/Symfony/Component/Cache/Tests/Traits/RedisProxiesTest.php"
         ],
     );
