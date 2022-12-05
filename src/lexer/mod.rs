@@ -349,7 +349,6 @@ impl Lexer {
                         [] => unreachable!(),
                     }
                 }
-                state.next();
 
                 if buffer.starts_with(b"/**") {
                     TokenKind::DocComment(buffer.into())

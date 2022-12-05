@@ -155,6 +155,7 @@ impl Parser {
 
     pub(in crate::parser) fn args_list(&self, state: &mut State) -> ParseResult<Vec<Arg>> {
         self.lparen(state)?;
+        state.skip_comments();
 
         let mut args = Vec::new();
 

@@ -1,0 +1,3 @@
+<?php
+
+[foo(/* comment here */)];
