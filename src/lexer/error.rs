@@ -16,6 +16,7 @@ pub enum SyntaxError {
     UnpredictableState(Span),
     InvalidDocIndentation(Span),
     InvalidDocBodyIndentationLevel(usize, Span),
+    UnrecognisedToken(u8, Span),
 }
 
 impl Display for SyntaxError {
@@ -72,6 +73,13 @@ impl Display for SyntaxError {
                 expected,
                 span.0
             ),
+            Self::UnrecognisedToken(token, span) => write!(
+                f,
+                "Syntax Error: Unrecognised token {} on line {} column {}",
+                token,
+                span.0,
+                span.1
+            )
         }
     }
 }

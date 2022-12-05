@@ -1126,12 +1126,7 @@ impl Lexer {
                 let label = self.consume_identifier(state);
                 TokenKind::Identifier(label.into())
             }
-            &[b, ..] => unimplemented!(
-                "<var offset> char: {}, line: {}, col: {}",
-                b as char,
-                state.span.0,
-                state.span.1
-            ),
+            &[b, ..] => return Err(SyntaxError::UnrecognisedToken(b, state.span)),
             [] => return Err(SyntaxError::UnexpectedEndOfFile(state.span)),
         };
         Ok(Token { kind, span })
