@@ -1,5 +1,6 @@
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::Attribute;
+use crate::parser::ast::AttributeGroup;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::precedence::Precedence;
 use crate::parser::state::State;
@@ -13,13 +14,16 @@ impl Parser {
             return Ok(false);
         }
 
+        let start = state.current.span;
+        let mut members = vec![];
+
         state.next();
 
         while state.current.kind != TokenKind::RightBracket {
             let span = state.current.span;
             let expression = self.expression(state, Precedence::Lowest)?;
 
-            state.attribute(Attribute { span, expression });
+            members.push(Attribute { span, expression });
 
             if state.current.kind == TokenKind::Comma {
                 state.next();
@@ -28,7 +32,14 @@ impl Parser {
             }
         }
 
+        let end = state.current.span;
         self.rbracket(state)?;
+
+        state.attribute(AttributeGroup {
+            start,
+            members,
+            end,
+        });
 
         // recursive, looking for multiple attribute brackets after each other.
         self.gather_attributes(state).map(|_| true)

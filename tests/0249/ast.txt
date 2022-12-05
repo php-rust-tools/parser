@@ -4,27 +4,39 @@
             name: "Bar",
         },
         attributes: [
-            Attribute {
-                span: (
+            AttributeGroup {
+                start: (
                     3,
-                    3,
+                    1,
                 ),
-                expression: Call {
-                    target: Identifier {
-                        name: "Foo",
-                    },
-                    args: [
-                        Arg {
-                            name: Some(
-                                "public",
-                            ),
-                            value: Bool {
-                                value: true,
+                members: [
+                    Attribute {
+                        span: (
+                            3,
+                            3,
+                        ),
+                        expression: Call {
+                            target: Identifier {
+                                name: "Foo",
                             },
-                            unpack: false,
+                            args: [
+                                Arg {
+                                    name: Some(
+                                        "public",
+                                    ),
+                                    value: Bool {
+                                        value: true,
+                                    },
+                                    unpack: false,
+                                },
+                            ],
                         },
-                    ],
-                },
+                    },
+                ],
+                end: (
+                    3,
+                    20,
+                ),
             },
         ],
         extends: None,

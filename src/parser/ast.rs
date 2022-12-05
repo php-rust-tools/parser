@@ -144,7 +144,7 @@ pub type ParamList = Vec<Param>;
 #[derive(Debug, PartialEq, Clone)]
 pub struct Param {
     pub name: Expression,
-    pub attributes: Vec<Attribute>,
+    pub attributes: Vec<AttributeGroup>,
     pub r#type: Option<Type>,
     pub variadic: bool,
     pub default: Option<Expression>,
@@ -314,6 +314,13 @@ pub struct Attribute {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct AttributeGroup {
+    pub start: Span,
+    pub members: Vec<Attribute>,
+    pub end: Span,
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(ByteString),
     Goto {
@@ -351,13 +358,13 @@ pub enum Statement {
     },
     Var {
         var: ByteString,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         value: Option<Expression>,
         r#type: Option<Type>,
     },
     Property {
         var: ByteString,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         value: Option<Expression>,
         r#type: Option<Type>,
         flags: Vec<PropertyFlag>,
@@ -372,7 +379,7 @@ pub enum Statement {
     },
     Function {
         name: Identifier,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         params: Vec<Param>,
         body: Block,
         return_type: Option<Type>,
@@ -380,7 +387,7 @@ pub enum Statement {
     },
     Class {
         name: Identifier,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         extends: Option<Identifier>,
         implements: Vec<Identifier>,
         body: Block,
@@ -388,7 +395,7 @@ pub enum Statement {
     },
     Trait {
         name: Identifier,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         body: Block,
     },
     TraitUse {
@@ -397,13 +404,13 @@ pub enum Statement {
     },
     Interface {
         name: Identifier,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         extends: Vec<Identifier>,
         body: Block,
     },
     Method {
         name: Identifier,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         params: Vec<Param>,
         body: Block,
         flags: Vec<MethodFlag>,
@@ -412,7 +419,7 @@ pub enum Statement {
     },
     AbstractMethod {
         name: Identifier,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         params: Vec<Param>,
         flags: Vec<MethodFlag>,
         return_type: Option<Type>,
@@ -470,13 +477,13 @@ pub enum Statement {
     },
     UnitEnum {
         name: Identifier,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         implements: Vec<Identifier>,
         body: Block,
     },
     BackedEnum {
         name: Identifier,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         implements: Vec<Identifier>,
         backed_type: BackedEnumType,
         body: Block,
@@ -638,7 +645,7 @@ pub enum Expression {
     },
     Closure {
         params: Vec<Param>,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         uses: Vec<ClosureUse>,
         return_type: Option<Type>,
         body: Block,
@@ -647,7 +654,7 @@ pub enum Expression {
     },
     ArrowFunction {
         params: Vec<Param>,
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         return_type: Option<Type>,
         expr: Box<Self>,
         by_ref: bool,
@@ -704,7 +711,7 @@ pub enum Expression {
         args: Vec<Arg>,
     },
     AnonymousClass {
-        attributes: Vec<Attribute>,
+        attributes: Vec<AttributeGroup>,
         extends: Option<Identifier>,
         implements: Vec<Identifier>,
         body: Block,
