@@ -12,12 +12,12 @@ pub enum OpenTagKind {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub enum DocStringIndentationType {
+pub enum DocStringIndentationKind {
     Space,
     Tab,
 }
 
-impl From<u8> for DocStringIndentationType {
+impl From<u8> for DocStringIndentationKind {
     fn from(byte: u8) -> Self {
         match byte {
             b' ' => Self::Space,
@@ -27,11 +27,11 @@ impl From<u8> for DocStringIndentationType {
     }
 }
 
-impl From<DocStringIndentationType> for u8 {
-    fn from(kind: DocStringIndentationType) -> Self {
+impl From<DocStringIndentationKind> for u8 {
+    fn from(kind: DocStringIndentationKind) -> Self {
         match kind {
-            DocStringIndentationType::Space => b' ',
-            DocStringIndentationType::Tab => b'\t',
+            DocStringIndentationKind::Space => b' ',
+            DocStringIndentationKind::Tab => b'\t',
         }
     }
 }
@@ -39,7 +39,7 @@ impl From<DocStringIndentationType> for u8 {
 #[derive(Debug, PartialEq, PartialOrd, Clone)]
 pub enum TokenKind {
     StartDocString(ByteString, DocStringKind),
-    EndDocString(ByteString, Option<DocStringIndentationType>, usize),
+    EndDocString(ByteString, Option<DocStringIndentationKind>, usize),
     From,
     Print,
     Dollar,

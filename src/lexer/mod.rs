@@ -21,7 +21,7 @@ use crate::ident;
 use crate::ident_start;
 
 pub use self::state::DocStringKind;
-use self::token::DocStringIndentationType;
+use self::token::DocStringIndentationKind;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Default)]
 pub struct Lexer;
@@ -706,24 +706,24 @@ impl Lexer {
         let mut buffer = Vec::new();
         let mut new_line = false;
 
-        let mut indentation_type: Option<DocStringIndentationType> = None;
+        let mut indentation_type: Option<DocStringIndentationKind> = None;
         let mut indentation_amount: usize = 0;
 
         // 1. Check if there's any whitespace here. It can either be a space or tab character.
         if matches!(state.peek_buf(), [b' ' | b'\t', ..]) {
-            indentation_type = Some(DocStringIndentationType::from(state.current.unwrap()));
+            indentation_type = Some(DocStringIndentationKind::from(state.current.unwrap()));
         }
 
         // 2. Count how much whitespace there is on this line.
         if let Some(indentation_type) = indentation_type {
             loop {
                 match (indentation_type, state.peek_buf()) {
-                    (DocStringIndentationType::Space, [b' ', ..]) => {
+                    (DocStringIndentationKind::Space, [b' ', ..]) => {
                         indentation_amount += 1;
                         state.next();
                         buffer.push(b' ');
                     }
-                    (DocStringIndentationType::Tab, [b'\t', ..]) => {
+                    (DocStringIndentationKind::Tab, [b'\t', ..]) => {
                         indentation_amount += 1;
                         state.next();
                         buffer.push(b'\t');
@@ -794,8 +794,8 @@ impl Lexer {
                         
 
                         let current_indentation_type = match state.peek_buf() {
-                            [b' ', ..] => DocStringIndentationType::Space,
-                            [b'\t', ..] => DocStringIndentationType::Tab,
+                            [b' ', ..] => DocStringIndentationKind::Space,
+                            [b'\t', ..] => DocStringIndentationKind::Tab,
                             _ => unreachable!(),
                         };
 
@@ -815,12 +815,12 @@ impl Lexer {
                         // the smallest amount of whitespace in this case.
                         loop {
                             match (current_indentation_type, state.peek_buf()) {
-                                (DocStringIndentationType::Space, [b' ', ..]) => {
+                                (DocStringIndentationKind::Space, [b' ', ..]) => {
                                     leading_whitespace_buffer.push(b' ');
                                     current_indentation_amount += 1;
                                     state.next();
                                 }
-                                (DocStringIndentationType::Tab, [b'\t', ..]) => {
+                                (DocStringIndentationKind::Tab, [b'\t', ..]) => {
                                     leading_whitespace_buffer.push(b'\t');
                                     current_indentation_amount += 1;
                                     state.next();
