@@ -85,7 +85,7 @@ impl Parser {
             // 2. Then expect a variable.
             let var = expect_token!([
                 TokenKind::Variable(v) => v
-            ], state, "a varaible");
+            ], state, "a variable");
 
             if !flags.is_empty() {
                 match construct {

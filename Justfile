@@ -9,6 +9,10 @@ build:
 build-integration-tests:
     BUILD_INTEGRATION_TESTS="1" cargo build
 
+# regenerate test snapshots
+snapshot:
+    cargo run --bin snapshot
+
 # detect linting problems.
 lint:
     cargo fmt --all -- --check

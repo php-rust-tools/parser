@@ -211,7 +211,7 @@ impl Parser {
 
                 Ok(Statement::Property {var,value,r#type:ty,flags, attributes: state.get_attributes() })
             }
-        ], state, ["a varaible"])
+        ], state, ["a variable"])
     }
 
     fn parse_classish_var(&self, state: &mut State) -> ParseResult<Statement> {
