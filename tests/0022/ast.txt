@@ -1,19 +1,49 @@
 [
     Foreach {
-        expr: Variable {
-            name: "a",
-        },
+        expr: Variable(
+            Variable {
+                start: (
+                    3,
+                    10,
+                ),
+                name: "a",
+                end: (
+                    3,
+                    13,
+                ),
+            },
+        ),
         by_ref: false,
         key_var: None,
-        value_var: Variable {
-            name: "b",
-        },
+        value_var: Variable(
+            Variable {
+                start: (
+                    3,
+                    16,
+                ),
+                name: "b",
+                end: (
+                    3,
+                    18,
+                ),
+            },
+        ),
         body: [
             Echo {
                 values: [
-                    Variable {
-                        name: "a",
-                    },
+                    Variable(
+                        Variable {
+                            start: (
+                                4,
+                                10,
+                            ),
+                            name: "a",
+                            end: (
+                                4,
+                                12,
+                            ),
+                        },
+                    ),
                 ],
             },
         ],
@@ -24,33 +54,83 @@
         },
         body: [
             Expression {
-                expr: Variable {
-                    name: "a",
-                },
+                expr: Variable(
+                    Variable {
+                        start: (
+                            8,
+                            5,
+                        ),
+                        name: "a",
+                        end: (
+                            8,
+                            7,
+                        ),
+                    },
+                ),
             },
         ],
     },
     For {
         init: [
-            Variable {
-                name: "a",
-            },
+            Variable(
+                Variable {
+                    start: (
+                        11,
+                        6,
+                    ),
+                    name: "a",
+                    end: (
+                        11,
+                        8,
+                    ),
+                },
+            ),
         ],
         condition: [
-            Variable {
-                name: "b",
-            },
+            Variable(
+                Variable {
+                    start: (
+                        11,
+                        10,
+                    ),
+                    name: "b",
+                    end: (
+                        11,
+                        12,
+                    ),
+                },
+            ),
         ],
         loop: [
-            Variable {
-                name: "c",
-            },
+            Variable(
+                Variable {
+                    start: (
+                        11,
+                        14,
+                    ),
+                    name: "c",
+                    end: (
+                        11,
+                        16,
+                    ),
+                },
+            ),
         ],
         then: [
             Expression {
-                expr: Variable {
-                    name: "d",
-                },
+                expr: Variable(
+                    Variable {
+                        start: (
+                            12,
+                            5,
+                        ),
+                        name: "d",
+                        end: (
+                            12,
+                            7,
+                        ),
+                    },
+                ),
             },
         ],
     },

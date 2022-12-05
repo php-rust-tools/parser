@@ -2,18 +2,38 @@
     For {
         init: [
             Infix {
-                lhs: Variable {
-                    name: "i",
-                },
+                lhs: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            6,
+                        ),
+                        name: "i",
+                        end: (
+                            3,
+                            9,
+                        ),
+                    },
+                ),
                 op: Assign,
                 rhs: LiteralInteger {
                     i: 0,
                 },
             },
             Infix {
-                lhs: Variable {
-                    name: "i",
-                },
+                lhs: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            14,
+                        ),
+                        name: "i",
+                        end: (
+                            3,
+                            17,
+                        ),
+                    },
+                ),
                 op: Assign,
                 rhs: LiteralInteger {
                     i: 1,

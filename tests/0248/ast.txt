@@ -4,13 +4,33 @@
             items: [
                 ArrayItem {
                     key: Some(
+                        Variable(
+                            Variable {
+                                start: (
+                                    3,
+                                    2,
+                                ),
+                                name: "foo",
+                                end: (
+                                    3,
+                                    7,
+                                ),
+                            },
+                        ),
+                    ),
+                    value: Variable(
                         Variable {
-                            name: "foo",
+                            start: (
+                                3,
+                                11,
+                            ),
+                            name: "bar",
+                            end: (
+                                3,
+                                15,
+                            ),
                         },
                     ),
-                    value: Variable {
-                        name: "bar",
-                    },
                     unpack: false,
                     by_ref: true,
                 },

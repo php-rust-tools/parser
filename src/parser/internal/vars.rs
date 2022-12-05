@@ -22,13 +22,9 @@ impl Parser {
                     name: Box::new(name),
                 }
             },
-            TokenKind::Variable(variable) => {
-                let variable = variable;
-
-                state.next();
-
+            TokenKind::Variable(_) => {
                 Expression::DynamicVariable {
-                    name: Box::new(Expression::Variable { name: variable }),
+                    name: Box::new(Expression::Variable(self.var(state)?)),
                 }
             }
         ], state, ["`{`", "a variable"]);

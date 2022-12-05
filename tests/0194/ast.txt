@@ -1,9 +1,19 @@
 [
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "a",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        4,
+                        1,
+                    ),
+                    name: "a",
+                    end: (
+                        4,
+                        4,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: LiteralInteger {
                 i: 4,
@@ -12,14 +22,34 @@
     },
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "b",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        6,
+                        1,
+                    ),
+                    name: "b",
+                    end: (
+                        6,
+                        4,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: Match {
-                condition: Variable {
-                    name: "a",
-                },
+                condition: Variable(
+                    Variable {
+                        start: (
+                            6,
+                            13,
+                        ),
+                        name: "a",
+                        end: (
+                            6,
+                            15,
+                        ),
+                    },
+                ),
                 default: None,
                 arms: [
                     MatchArm {

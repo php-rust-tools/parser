@@ -1,6 +1,6 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::Attribute;
-use crate::parser::ast::AttributeGroup;
+use crate::parser::ast::attribute::Attribute;
+use crate::parser::ast::attribute::AttributeGroup;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::precedence::Precedence;
 use crate::parser::state::State;

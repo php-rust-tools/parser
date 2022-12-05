@@ -3,15 +3,35 @@
         expr: InterpolatedString {
             parts: [
                 Expr(
-                    Variable {
-                        name: "foo",
-                    },
+                    Variable(
+                        Variable {
+                            start: (
+                                1,
+                                10,
+                            ),
+                            name: "foo",
+                            end: (
+                                1,
+                                14,
+                            ),
+                        },
+                    ),
                 ),
                 Expr(
                     ArrayIndex {
-                        array: Variable {
-                            name: "foo",
-                        },
+                        array: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    16,
+                                ),
+                                name: "foo",
+                                end: (
+                                    1,
+                                    20,
+                                ),
+                            },
+                        ),
                         index: Some(
                             LiteralInteger {
                                 i: 0,
@@ -21,9 +41,19 @@
                 ),
                 Expr(
                     ArrayIndex {
-                        array: Variable {
-                            name: "foo",
-                        },
+                        array: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    25,
+                                ),
+                                name: "foo",
+                                end: (
+                                    1,
+                                    29,
+                                ),
+                            },
+                        ),
                         index: Some(
                             LiteralString {
                                 value: "bar",
@@ -33,9 +63,19 @@
                 ),
                 Expr(
                     DynamicVariable {
-                        name: Variable {
-                            name: "foo",
-                        },
+                        name: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    39,
+                                ),
+                                name: "foo",
+                                end: (
+                                    1,
+                                    43,
+                                ),
+                            },
+                        ),
                     },
                 ),
             ],

@@ -3,21 +3,51 @@
         expr: InterpolatedString {
             parts: [
                 Expr(
-                    Variable {
-                        name: "foo",
-                    },
+                    Variable(
+                        Variable {
+                            start: (
+                                1,
+                                8,
+                            ),
+                            name: "foo",
+                            end: (
+                                1,
+                                12,
+                            ),
+                        },
+                    ),
                 ),
                 Const(
                     " abc ",
                 ),
                 Expr(
                     PropertyFetch {
-                        target: Variable {
-                            name: "bar",
-                        },
-                        property: Identifier {
-                            name: "a",
-                        },
+                        target: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    12,
+                                ),
+                                name: "bar",
+                                end: (
+                                    1,
+                                    21,
+                                ),
+                            },
+                        ),
+                        property: Identifier(
+                            Identifier {
+                                start: (
+                                    1,
+                                    23,
+                                ),
+                                name: "a",
+                                end: (
+                                    1,
+                                    24,
+                                ),
+                            },
+                        ),
                     },
                 ),
                 Const(
@@ -25,9 +55,19 @@
                 ),
                 Expr(
                     ArrayIndex {
-                        array: Variable {
-                            name: "bar",
-                        },
+                        array: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    24,
+                                ),
+                                name: "bar",
+                                end: (
+                                    1,
+                                    33,
+                                ),
+                            },
+                        ),
                         index: Some(
                             LiteralInteger {
                                 i: 0,
@@ -40,9 +80,19 @@
                 ),
                 Expr(
                     ArrayIndex {
-                        array: Variable {
-                            name: "bar",
-                        },
+                        array: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    36,
+                                ),
+                                name: "bar",
+                                end: (
+                                    1,
+                                    45,
+                                ),
+                            },
+                        ),
                         index: Some(
                             LiteralString {
                                 value: "baz",

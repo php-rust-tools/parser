@@ -1,7 +1,15 @@
 [
     Class {
         name: Identifier {
+            start: (
+                4,
+                7,
+            ),
             name: "Bar",
+            end: (
+                4,
+                11,
+            ),
         },
         attributes: [
             AttributeGroup {
@@ -16,13 +24,33 @@
                             3,
                         ),
                         expression: Call {
-                            target: Identifier {
-                                name: "Foo",
-                            },
+                            target: Identifier(
+                                Identifier {
+                                    start: (
+                                        3,
+                                        3,
+                                    ),
+                                    name: "Foo",
+                                    end: (
+                                        3,
+                                        6,
+                                    ),
+                                },
+                            ),
                             args: [
                                 Arg {
                                     name: Some(
-                                        "public",
+                                        Identifier {
+                                            start: (
+                                                3,
+                                                7,
+                                            ),
+                                            name: "public",
+                                            end: (
+                                                3,
+                                                13,
+                                            ),
+                                        },
                                     ),
                                     value: Bool {
                                         value: true,

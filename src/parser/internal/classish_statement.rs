@@ -1,6 +1,6 @@
 use crate::expected_scope;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::Identifier;
+use crate::parser::ast::identifier::Identifier;
 use crate::parser::ast::MethodFlag;
 use crate::parser::ast::PropertyFlag;
 use crate::parser::ast::Statement;
@@ -75,10 +75,7 @@ impl Parser {
                 let value = self.expression(state, Precedence::Lowest)?;
                 self.semi(state)?;
 
-                return Ok(Statement::BackedEnumCase {
-                    name: name.into(),
-                    value,
-                });
+                return Ok(Statement::BackedEnumCase { name, value });
             } else {
                 if state.current.kind == TokenKind::Equals {
                     return Err(ParseError::CaseValueForUnitEnum(
@@ -90,7 +87,7 @@ impl Parser {
 
                 self.semi(state)?;
 
-                return Ok(Statement::UnitEnumCase { name: name.into() });
+                return Ok(Statement::UnitEnumCase { name });
             }
         }
 
@@ -160,58 +157,70 @@ impl Parser {
 
         let ty = self.get_optional_type(state)?;
 
-        expect_token!([
-            TokenKind::Variable(var) => {
-                let flags: Vec<PropertyFlag> = member_flags.into_iter().map(|f| f.into()).collect();
-                let mut value = None;
+        let var = self.var(state)?;
 
-                if state.current.kind == TokenKind::Equals {
-                    state.next();
-                    value = Some(self.expression(state, Precedence::Lowest)?);
-                }
+        let flags: Vec<PropertyFlag> = member_flags.into_iter().map(|f| f.into()).collect();
+        let mut value = None;
 
-                let class_name: String = expected_scope!([
+        if state.current.kind == TokenKind::Equals {
+            state.next();
+            value = Some(self.expression(state, Precedence::Lowest)?);
+        }
+
+        let class_name: String = expected_scope!([
                     Scope::Trait(name) | Scope::Class(name, _, _) => state.named(&name),
-                    Scope::AnonymousClass(_) => state.named(&"class@anonymous".into()),
+                    Scope::AnonymousClass(_) => state.named("class@anonymous"),
                 ], state);
 
-                if flags.contains(&PropertyFlag::Readonly) {
-                    if flags.contains(&PropertyFlag::Static) {
-                        return Err(ParseError::StaticPropertyUsingReadonlyModifier(class_name, var.to_string(), state.current.span));
-                    }
-
-                    if value.is_some() {
-                        return Err(ParseError::ReadonlyPropertyHasDefaultValue(class_name, var.to_string(), state.current.span));
-                    }
-                }
-
-                match &ty {
-                    Some(ty) => {
-                        if ty.includes_callable() || ty.is_bottom() {
-                            return Err(ParseError::ForbiddenTypeUsedInProperty(
-                                class_name,
-                                var.to_string(),
-                                ty.clone(),
-                                state.current.span,
-                            ));
-                        }
-                    }
-                    None => {
-                        if flags.contains(&PropertyFlag::Readonly) {
-                            return Err(ParseError::MissingTypeForReadonlyProperty(
-                                class_name,
-                                var.to_string(),
-                                state.current.span,
-                            ));
-                        }
-                    }
-                }
-
-                self.semi(state)?;
-
-                Ok(Statement::Property {var,value,r#type:ty,flags, attributes: state.get_attributes() })
+        if flags.contains(&PropertyFlag::Readonly) {
+            if flags.contains(&PropertyFlag::Static) {
+                return Err(ParseError::StaticPropertyUsingReadonlyModifier(
+                    class_name,
+                    var.to_string(),
+                    state.current.span,
+                ));
             }
-        ], state, ["a variable"])
+
+            if value.is_some() {
+                return Err(ParseError::ReadonlyPropertyHasDefaultValue(
+                    class_name,
+                    var.to_string(),
+                    state.current.span,
+                ));
+            }
+        }
+
+        match &ty {
+            Some(ty) => {
+                if ty.includes_callable() || ty.is_bottom() {
+                    return Err(ParseError::ForbiddenTypeUsedInProperty(
+                        class_name,
+                        var.to_string(),
+                        ty.clone(),
+                        state.current.span,
+                    ));
+                }
+            }
+            None => {
+                if flags.contains(&PropertyFlag::Readonly) {
+                    return Err(ParseError::MissingTypeForReadonlyProperty(
+                        class_name,
+                        var.to_string(),
+                        state.current.span,
+                    ));
+                }
+            }
+        }
+
+        self.semi(state)?;
+
+        Ok(Statement::Property {
+            var,
+            value,
+            r#type: ty,
+            flags,
+            attributes: state.get_attributes(),
+        })
     }
 
     fn parse_classish_var(&self, state: &mut State) -> ParseResult<Statement> {
@@ -248,7 +257,7 @@ impl Parser {
             && state.current.kind != TokenKind::LeftBrace
         {
             let t = self.full_name(state)?;
-            traits.push(t.into());
+            traits.push(t);
 
             if state.current.kind == TokenKind::Comma {
                 if state.peek.kind == TokenKind::SemiColon {
@@ -277,9 +286,9 @@ impl Parser {
                         let r#trait = self.full_name(state)?;
                         state.next();
                         let method = self.ident(state)?;
-                        (Some(r#trait.into()), method.into())
+                        (Some(r#trait), method)
                     }
-                    _ => (None, self.ident(state)?.into()),
+                    _ => (None, self.ident(state)?),
                 };
 
                 expect_token!([
@@ -296,7 +305,7 @@ impl Parser {
                                         visibility,
                                     });
                                 } else {
-                                    let alias: Identifier = self.name(state)?.into();
+                                    let alias: Identifier = self.name(state)?;
                                     adaptations.push(TraitAdaptation::Alias {
                                         r#trait,
                                         method,
@@ -306,7 +315,7 @@ impl Parser {
                                 }
                             }
                             _ => {
-                                let alias: Identifier = self.name(state)?.into();
+                                let alias: Identifier = self.name(state)?;
                                 adaptations.push(TraitAdaptation::Alias {
                                     r#trait,
                                     method,
@@ -318,7 +327,7 @@ impl Parser {
                     },
                     TokenKind::Insteadof => {
                         let mut insteadof = Vec::new();
-                        insteadof.push(self.full_name(state)?.into());
+                        insteadof.push(self.full_name(state)?);
 
                         if state.current.kind == TokenKind::Comma {
                             if state.peek.kind == TokenKind::SemiColon {
@@ -330,7 +339,7 @@ impl Parser {
                             state.next();
 
                             while state.current.kind != TokenKind::SemiColon {
-                                insteadof.push(self.full_name(state)?.into());
+                                insteadof.push(self.full_name(state)?);
 
                                 if state.current.kind == TokenKind::Comma {
                                     if state.peek.kind == TokenKind::SemiColon {
@@ -398,7 +407,7 @@ impl Parser {
         self.semi(state)?;
 
         Ok(Statement::ClassishConstant {
-            name: name.into(),
+            name,
             value,
             flags: const_flags.into_iter().map(|f| f.into()).collect(),
         })

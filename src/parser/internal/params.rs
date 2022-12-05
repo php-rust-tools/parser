@@ -12,8 +12,6 @@ use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
-use crate::expect_token;
-
 use super::ident::is_reserved_ident;
 
 impl Parser {
@@ -32,7 +30,7 @@ impl Parser {
                         Scope::Interface(_) => 1,
                         // can only have concret ctor
                         Scope::AnonymousClass(_) => {
-                            class_name = state.named(&"class@anonymous".into());
+                            class_name = state.named("class@anonymous");
 
                             2
                         }
@@ -87,9 +85,7 @@ impl Parser {
             }
 
             // 2. Then expect a variable.
-            let var = expect_token!([
-                TokenKind::Variable(v) => v
-            ], state, "a variable");
+            let var = self.var(state)?;
 
             if !flags.is_empty() {
                 match construct {
@@ -136,7 +132,7 @@ impl Parser {
             }
 
             params.push(Param {
-                name: Expression::Variable { name: var },
+                name: var,
                 attributes: state.get_attributes(),
                 r#type: ty,
                 variadic,

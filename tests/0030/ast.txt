@@ -1,41 +1,111 @@
 [
     Expression {
         expr: MethodCall {
-            target: Variable {
-                name: "foo",
-            },
-            method: Identifier {
-                name: "bar",
-            },
+            target: Variable(
+                Variable {
+                    start: (
+                        1,
+                        7,
+                    ),
+                    name: "foo",
+                    end: (
+                        1,
+                        11,
+                    ),
+                },
+            ),
+            method: Identifier(
+                Identifier {
+                    start: (
+                        1,
+                        13,
+                    ),
+                    name: "bar",
+                    end: (
+                        1,
+                        16,
+                    ),
+                },
+            ),
             args: [],
         },
     },
     Expression {
         expr: MethodCall {
             target: MethodCall {
-                target: Variable {
-                    name: "foo",
-                },
-                method: Identifier {
-                    name: "bar",
-                },
+                target: Variable(
+                    Variable {
+                        start: (
+                            1,
+                            20,
+                        ),
+                        name: "foo",
+                        end: (
+                            1,
+                            24,
+                        ),
+                    },
+                ),
+                method: Identifier(
+                    Identifier {
+                        start: (
+                            1,
+                            26,
+                        ),
+                        name: "bar",
+                        end: (
+                            1,
+                            29,
+                        ),
+                    },
+                ),
                 args: [],
             },
-            method: Identifier {
-                name: "baz",
-            },
+            method: Identifier(
+                Identifier {
+                    start: (
+                        1,
+                        33,
+                    ),
+                    name: "baz",
+                    end: (
+                        1,
+                        36,
+                    ),
+                },
+            ),
             args: [],
         },
     },
     Expression {
         expr: Call {
             target: MethodCall {
-                target: Variable {
-                    name: "foo",
-                },
-                method: Identifier {
-                    name: "bar",
-                },
+                target: Variable(
+                    Variable {
+                        start: (
+                            1,
+                            40,
+                        ),
+                        name: "foo",
+                        end: (
+                            1,
+                            44,
+                        ),
+                    },
+                ),
+                method: Identifier(
+                    Identifier {
+                        start: (
+                            1,
+                            46,
+                        ),
+                        name: "bar",
+                        end: (
+                            1,
+                            49,
+                        ),
+                    },
+                ),
                 args: [],
             },
             args: [],

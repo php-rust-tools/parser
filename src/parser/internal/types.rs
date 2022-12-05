@@ -1,6 +1,7 @@
 use crate::expect_token;
 use crate::expected_token;
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::identifier::Identifier;
 use crate::parser::ast::TryBlockCaughtType;
 use crate::parser::ast::Type;
 use crate::parser::error::ParseError;
@@ -18,11 +19,11 @@ impl Parser {
         if state.current.kind == TokenKind::Pipe {
             state.next();
 
-            let mut types = vec![id.into()];
+            let mut types = vec![id];
 
             while !state.is_eof() {
                 let id = self.full_name(state)?;
-                types.push(id.into());
+                types.push(id);
 
                 if state.current.kind != TokenKind::Pipe {
                     break;
@@ -34,7 +35,7 @@ impl Parser {
             return Ok(TryBlockCaughtType::Union(types));
         }
 
-        Ok(TryBlockCaughtType::Identifier(id.into()))
+        Ok(TryBlockCaughtType::Identifier(id))
     }
 
     pub(in crate::parser) fn get_type(&self, state: &mut State) -> ParseResult<Type> {
@@ -125,7 +126,9 @@ impl Parser {
                 Ok(Some(Type::StaticReference))
             }
             TokenKind::Identifier(id) => {
+                let start = state.current.span;
                 state.next();
+                let end = state.current.span;
 
                 let name = &id[..];
                 let lowered_name = name.to_ascii_lowercase();
@@ -164,13 +167,19 @@ impl Parser {
 
                         Ok(Some(Type::ParentReference))
                     }
-                    _ => Ok(Some(Type::Identifier(id.into()))),
+                    _ => Ok(Some(Type::Identifier(Identifier {
+                        start,
+                        name: id,
+                        end,
+                    }))),
                 }
             }
-            TokenKind::QualifiedIdentifier(id) | TokenKind::FullyQualifiedIdentifier(id) => {
+            TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
+                let start = state.current.span;
                 state.next();
+                let end = state.current.span;
 
-                Ok(Some(Type::Identifier(id.into())))
+                Ok(Some(Type::Identifier(Identifier { start, name, end })))
             }
             _ => Ok(None),
         }

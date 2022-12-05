@@ -1,36 +1,86 @@
 [
     If {
-        condition: Variable {
-            name: "a",
-        },
+        condition: Variable(
+            Variable {
+                start: (
+                    3,
+                    5,
+                ),
+                name: "a",
+                end: (
+                    3,
+                    7,
+                ),
+            },
+        ),
         then: [
             Expression {
-                expr: Variable {
-                    name: "a",
-                },
+                expr: Variable(
+                    Variable {
+                        start: (
+                            4,
+                            5,
+                        ),
+                        name: "a",
+                        end: (
+                            4,
+                            7,
+                        ),
+                    },
+                ),
             },
         ],
         else_ifs: [],
         else: None,
     },
     If {
-        condition: Variable {
-            name: "a",
-        },
+        condition: Variable(
+            Variable {
+                start: (
+                    7,
+                    5,
+                ),
+                name: "a",
+                end: (
+                    7,
+                    7,
+                ),
+            },
+        ),
         then: [
             Expression {
-                expr: Variable {
-                    name: "a",
-                },
+                expr: Variable(
+                    Variable {
+                        start: (
+                            8,
+                            5,
+                        ),
+                        name: "a",
+                        end: (
+                            8,
+                            7,
+                        ),
+                    },
+                ),
             },
         ],
         else_ifs: [],
         else: Some(
             [
                 Expression {
-                    expr: Variable {
-                        name: "b",
-                    },
+                    expr: Variable(
+                        Variable {
+                            start: (
+                                10,
+                                5,
+                            ),
+                            name: "b",
+                            end: (
+                                10,
+                                7,
+                            ),
+                        },
+                    ),
                 },
             ],
         ),
@@ -41,44 +91,114 @@
         },
         then: [
             Expression {
-                expr: Variable {
-                    name: "a",
-                },
+                expr: Variable(
+                    Variable {
+                        start: (
+                            14,
+                            5,
+                        ),
+                        name: "a",
+                        end: (
+                            14,
+                            7,
+                        ),
+                    },
+                ),
             },
         ],
         else_ifs: [
             ElseIf {
                 condition: Infix {
                     lhs: MethodCall {
-                        target: Variable {
-                            name: "foo",
-                        },
-                        method: Identifier {
-                            name: "bar",
-                        },
+                        target: Variable(
+                            Variable {
+                                start: (
+                                    15,
+                                    9,
+                                ),
+                                name: "foo",
+                                end: (
+                                    15,
+                                    13,
+                                ),
+                            },
+                        ),
+                        method: Identifier(
+                            Identifier {
+                                start: (
+                                    15,
+                                    15,
+                                ),
+                                name: "bar",
+                                end: (
+                                    15,
+                                    18,
+                                ),
+                            },
+                        ),
                         args: [],
                     },
                     op: And,
                     rhs: NullsafeMethodCall {
                         target: PropertyFetch {
-                            target: Variable {
-                                name: "baz",
-                            },
-                            property: Identifier {
-                                name: "bar",
-                            },
+                            target: Variable(
+                                Variable {
+                                    start: (
+                                        15,
+                                        24,
+                                    ),
+                                    name: "baz",
+                                    end: (
+                                        15,
+                                        28,
+                                    ),
+                                },
+                            ),
+                            property: Identifier(
+                                Identifier {
+                                    start: (
+                                        15,
+                                        30,
+                                    ),
+                                    name: "bar",
+                                    end: (
+                                        15,
+                                        33,
+                                    ),
+                                },
+                            ),
                         },
-                        method: Identifier {
-                            name: "qux",
-                        },
+                        method: Identifier(
+                            Identifier {
+                                start: (
+                                    15,
+                                    36,
+                                ),
+                                name: "qux",
+                                end: (
+                                    15,
+                                    39,
+                                ),
+                            },
+                        ),
                         args: [],
                     },
                 },
                 body: [
                     Expression {
-                        expr: Variable {
-                            name: "b",
-                        },
+                        expr: Variable(
+                            Variable {
+                                start: (
+                                    16,
+                                    5,
+                                ),
+                                name: "b",
+                                end: (
+                                    16,
+                                    7,
+                                ),
+                            },
+                        ),
                     },
                 ],
             },
@@ -91,9 +211,19 @@
         },
         then: [
             Expression {
-                expr: Variable {
-                    name: "a",
-                },
+                expr: Variable(
+                    Variable {
+                        start: (
+                            20,
+                            5,
+                        ),
+                        name: "a",
+                        end: (
+                            20,
+                            7,
+                        ),
+                    },
+                ),
             },
         ],
         else_ifs: [
@@ -103,9 +233,19 @@
                 },
                 body: [
                     Expression {
-                        expr: Variable {
-                            name: "b",
-                        },
+                        expr: Variable(
+                            Variable {
+                                start: (
+                                    22,
+                                    5,
+                                ),
+                                name: "b",
+                                end: (
+                                    22,
+                                    7,
+                                ),
+                            },
+                        ),
                     },
                 ],
             },
@@ -115,9 +255,19 @@
                 },
                 body: [
                     Expression {
-                        expr: Variable {
-                            name: "c",
-                        },
+                        expr: Variable(
+                            Variable {
+                                start: (
+                                    24,
+                                    5,
+                                ),
+                                name: "c",
+                                end: (
+                                    24,
+                                    7,
+                                ),
+                            },
+                        ),
                     },
                 ],
             },

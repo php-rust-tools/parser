@@ -1,9 +1,19 @@
 [
     Expression {
         expr: Match {
-            condition: Variable {
-                name: "s",
-            },
+            condition: Variable(
+                Variable {
+                    start: (
+                        4,
+                        8,
+                    ),
+                    name: "s",
+                    end: (
+                        4,
+                        10,
+                    ),
+                },
+            ),
             default: Some(
                 DefaultMatchArm {
                     body: LiteralInteger {
@@ -60,9 +70,19 @@
                 },
                 MatchArm {
                     conditions: [
-                        Identifier {
-                            name: "_",
-                        },
+                        Identifier(
+                            Identifier {
+                                start: (
+                                    9,
+                                    5,
+                                ),
+                                name: "_",
+                                end: (
+                                    9,
+                                    7,
+                                ),
+                            },
+                        ),
                     ],
                     body: LiteralInteger {
                         i: 43,

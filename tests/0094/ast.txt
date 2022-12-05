@@ -2,9 +2,19 @@
     Expression {
         expr: DynamicVariable {
             name: Call {
-                target: Identifier {
-                    name: "foo",
-                },
+                target: Identifier(
+                    Identifier {
+                        start: (
+                            1,
+                            9,
+                        ),
+                        name: "foo",
+                        end: (
+                            1,
+                            12,
+                        ),
+                    },
+                ),
                 args: [],
             },
         },

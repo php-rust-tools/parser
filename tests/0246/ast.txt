@@ -4,9 +4,19 @@
             items: [
                 ArrayItem {
                     key: None,
-                    value: Variable {
-                        name: "foo",
-                    },
+                    value: Variable(
+                        Variable {
+                            start: (
+                                3,
+                                3,
+                            ),
+                            name: "foo",
+                            end: (
+                                3,
+                                7,
+                            ),
+                        },
+                    ),
                     unpack: false,
                     by_ref: true,
                 },

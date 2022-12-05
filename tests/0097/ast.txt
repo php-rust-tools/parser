@@ -1,13 +1,33 @@
 [
     Expression {
         expr: MethodCall {
-            target: Variable {
-                name: "a",
-            },
-            method: DynamicVariable {
-                name: Variable {
-                    name: "b",
+            target: Variable(
+                Variable {
+                    start: (
+                        1,
+                        7,
+                    ),
+                    name: "a",
+                    end: (
+                        1,
+                        9,
+                    ),
                 },
+            ),
+            method: DynamicVariable {
+                name: Variable(
+                    Variable {
+                        start: (
+                            1,
+                            12,
+                        ),
+                        name: "b",
+                        end: (
+                            1,
+                            14,
+                        ),
+                    },
+                ),
             },
             args: [],
         },

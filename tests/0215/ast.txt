@@ -1,22 +1,48 @@
 [
     Trait {
         name: Identifier {
+            start: (
+                3,
+                7,
+            ),
             name: "foo",
+            end: (
+                3,
+                11,
+            ),
         },
         attributes: [],
         body: [
             Method {
                 name: Identifier {
+                    start: (
+                        7,
+                        21,
+                    ),
                     name: "bar",
+                    end: (
+                        7,
+                        24,
+                    ),
                 },
                 attributes: [],
                 params: [],
                 body: [
                     Expression {
                         expr: Call {
-                            target: Identifier {
-                                name: "exit",
-                            },
+                            target: Identifier(
+                                Identifier {
+                                    start: (
+                                        8,
+                                        9,
+                                    ),
+                                    name: "exit",
+                                    end: (
+                                        8,
+                                        13,
+                                    ),
+                                },
+                            ),
                             args: [
                                 Arg {
                                     name: None,

@@ -1,9 +1,9 @@
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::identifier::Identifier;
 use crate::parser::ast::BackedEnumType;
 use crate::parser::ast::Block;
 use crate::parser::ast::ClassFlag;
 use crate::parser::ast::Expression;
-use crate::parser::ast::Identifier;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::state::Scope;
@@ -26,7 +26,7 @@ impl Parser {
 
         if state.current.kind == TokenKind::Extends {
             state.next();
-            extends = Some(self.full_name(state)?.into());
+            extends = Some(self.full_name(state)?);
             has_parent = true;
         }
 
@@ -38,7 +38,7 @@ impl Parser {
                     state.next();
 
                     self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
-                        Ok(parser.full_name(state)?.into())
+                        parser.full_name(state)
                     })?
                 } else {
                     Vec::new()
@@ -62,7 +62,7 @@ impl Parser {
                 self.rbrace(state)?;
 
                 Ok(Statement::Class {
-                    name: name.into(),
+                    name,
                     attributes,
                     extends,
                     implements,
@@ -85,7 +85,7 @@ impl Parser {
                 state.next();
 
                 self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
-                    Ok(parser.full_name(state)?.into())
+                    parser.full_name(state)
                 })?
             } else {
                 Vec::new()
@@ -109,7 +109,7 @@ impl Parser {
             self.rbrace(state)?;
 
             Ok(Statement::Interface {
-                name: name.into(),
+                name,
                 attributes,
                 extends,
                 body,
@@ -141,7 +141,7 @@ impl Parser {
             self.rbrace(state)?;
 
             Ok(Statement::Trait {
-                name: name.into(),
+                name,
                 attributes,
                 body,
             })
@@ -169,7 +169,7 @@ impl Parser {
 
         if state.current.kind == TokenKind::Extends {
             state.next();
-            extends = Some(self.full_name(state)?.into());
+            extends = Some(self.full_name(state)?);
             has_parent = true;
         }
 
@@ -179,7 +179,7 @@ impl Parser {
                 state.next();
 
                 while state.current.kind != TokenKind::LeftBrace {
-                    implements.push(self.full_name(state)?.into());
+                    implements.push(self.full_name(state)?);
 
                     if state.current.kind == TokenKind::Comma {
                         state.next();
@@ -239,7 +239,7 @@ impl Parser {
                 state.next();
 
                 while state.current.kind != TokenKind::LeftBrace {
-                    implements.push(self.full_name(state)?.into());
+                    implements.push(self.full_name(state)?);
 
                     if state.current.kind == TokenKind::Comma {
                         state.next();
@@ -263,14 +263,14 @@ impl Parser {
 
             match backed_type {
                 Some(backed_type) => Ok(Statement::BackedEnum {
-                    name: name.into(),
+                    name,
                     attributes,
                     backed_type,
                     implements,
                     body,
                 }),
                 None => Ok(Statement::UnitEnum {
-                    name: name.into(),
+                    name,
                     attributes,
                     implements,
                     body,

@@ -1,10 +1,11 @@
 use std::collections::VecDeque;
+use std::fmt::Display;
 use std::vec::IntoIter;
 
-use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::AttributeGroup;
+use crate::parser::ast::attribute::AttributeGroup;
+use crate::parser::ast::identifier::Identifier;
 use crate::parser::ast::ClassFlag;
 use crate::parser::ast::MethodFlag;
 use crate::parser::error::ParseError;
@@ -18,17 +19,17 @@ pub enum NamespaceType {
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Scope {
-    Namespace(ByteString),
-    BracedNamespace(Option<ByteString>),
+    Namespace(Identifier),
+    BracedNamespace(Option<Identifier>),
 
-    Interface(ByteString),
-    Class(ByteString, Vec<ClassFlag>, bool),
-    Trait(ByteString),
-    Enum(ByteString, bool),
+    Interface(Identifier),
+    Class(Identifier, Vec<ClassFlag>, bool),
+    Trait(Identifier),
+    Enum(Identifier, bool),
     AnonymousClass(bool),
 
-    Function(ByteString),
-    Method(ByteString, Vec<MethodFlag>),
+    Function(Identifier),
+    Method(Identifier, Vec<MethodFlag>),
     AnonymousFunction(bool),
     ArrowFunction(bool),
 }
@@ -99,7 +100,7 @@ impl State {
         None
     }
 
-    pub fn named(&self, name: &ByteString) -> String {
+    pub fn named<T: Display + ?Sized>(&self, name: &T) -> String {
         match self.namespace() {
             Some(Scope::Namespace(n)) | Some(Scope::BracedNamespace(Some(n))) => {
                 format!("{}\\{}", n, name)

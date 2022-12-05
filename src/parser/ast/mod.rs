@@ -1,8 +1,14 @@
+pub mod attribute;
+pub mod identifier;
+pub mod variable;
+
 use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
-use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::attribute::AttributeGroup;
+use crate::parser::ast::identifier::Identifier;
+use crate::parser::ast::variable::Variable;
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
@@ -16,6 +22,7 @@ pub enum TryBlockCaughtType {
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum Type {
     Identifier(Identifier),
+    // TODO: add `start` and `end` for all types.
     Nullable(Box<Type>),
     Union(Vec<Type>),
     Intersection(Vec<Type>),
@@ -116,66 +123,17 @@ impl Display for Type {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Clone)]
-pub struct Identifier {
-    pub name: ByteString,
-}
-
-impl Display for Identifier {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name)
-    }
-}
-
-impl From<ByteString> for Identifier {
-    fn from(name: ByteString) -> Self {
-        Self { name }
-    }
-}
-
-impl From<&ByteString> for Identifier {
-    fn from(name: &ByteString) -> Self {
-        Self::from(name.clone())
-    }
-}
-
 pub type ParamList = Vec<Param>;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Param {
-    pub name: Expression,
+    pub name: Variable,
     pub attributes: Vec<AttributeGroup>,
     pub r#type: Option<Type>,
     pub variadic: bool,
     pub default: Option<Expression>,
     pub flags: Vec<PropertyFlag>,
     pub by_ref: bool,
-}
-
-impl From<ByteString> for Param {
-    fn from(name: ByteString) -> Self {
-        Self {
-            name: Expression::Variable { name },
-            attributes: vec![],
-            r#type: None,
-            variadic: false,
-            default: None,
-            flags: vec![],
-            by_ref: false,
-        }
-    }
-}
-
-impl From<&ByteString> for Param {
-    fn from(name: &ByteString) -> Self {
-        Self::from(name.clone())
-    }
-}
-
-impl From<&[u8]> for Param {
-    fn from(name: &[u8]) -> Self {
-        Self::from(ByteString::from(name))
-    }
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -263,7 +221,7 @@ pub enum UseKind {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct StaticVar {
-    pub var: Expression,
+    pub var: Variable,
     pub default: Option<Expression>,
 }
 
@@ -308,19 +266,6 @@ pub enum TraitAdaptation {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct Attribute {
-    pub span: Span,
-    pub expression: Expression,
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct AttributeGroup {
-    pub start: Span,
-    pub members: Vec<Attribute>,
-    pub end: Span,
-}
-
-#[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(ByteString),
     Goto {
@@ -357,13 +302,13 @@ pub enum Statement {
         body: Block,
     },
     Var {
-        var: ByteString,
+        var: Variable,
         attributes: Vec<AttributeGroup>,
         value: Option<Expression>,
         r#type: Option<Type>,
     },
     Property {
-        var: ByteString,
+        var: Variable,
         attributes: Vec<AttributeGroup>,
         value: Option<Expression>,
         r#type: Option<Type>,
@@ -451,11 +396,11 @@ pub enum Statement {
         expr: Expression,
     },
     Namespace {
-        name: ByteString,
+        name: Identifier,
         body: Block,
     },
     BracedNamespace {
-        name: Option<ByteString>,
+        name: Option<Identifier>,
         body: Block,
     },
     Use {
@@ -499,7 +444,7 @@ pub enum Statement {
         body: Block,
     },
     Global {
-        vars: Vec<Identifier>,
+        vars: Vec<Variable>,
     },
     Declare {
         declares: Vec<DeclareItem>,
@@ -617,9 +562,7 @@ pub enum Expression {
     LiteralFloat {
         f: f64,
     },
-    Variable {
-        name: ByteString,
-    },
+    Variable(Variable),
     DynamicVariable {
         name: Box<Self>,
     },
@@ -636,9 +579,7 @@ pub enum Expression {
         target: Box<Self>,
         args: Vec<Arg>,
     },
-    Identifier {
-        name: ByteString,
-    },
+    Identifier(Identifier),
     Static,
     Array {
         items: Vec<ArrayItem>,
@@ -783,7 +724,7 @@ pub enum Expression {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Arg {
-    pub name: Option<ByteString>,
+    pub name: Option<Identifier>,
     pub value: Expression,
     pub unpack: bool,
 }
