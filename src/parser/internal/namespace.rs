@@ -49,8 +49,8 @@ impl Parser {
                 body.push(self.top_level_statement(state)?);
             }
 
-            Ok(body)
-        })?;
+            body
+        });
 
         Ok(Statement::Namespace { name, body })
     }
@@ -68,8 +68,8 @@ impl Parser {
                 body.push(self.top_level_statement(state)?);
             }
 
-            Ok(body)
-        })?;
+            body
+        });
 
         self.rbrace(state)?;
 

@@ -30,24 +30,23 @@ impl Parser {
             has_parent = true;
         }
 
-        scoped!(
+        let implements = if state.current.kind == TokenKind::Implements {
+            state.next();
+
+            self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
+                parser.full_name(state)
+            })?
+        } else {
+            Vec::new()
+        };
+
+        let attributes = state.get_attributes();
+        self.lbrace(state)?;
+
+        let body = scoped!(
             state,
             Scope::Class(name.clone(), flags.clone(), has_parent),
             {
-                let implements = if state.current.kind == TokenKind::Implements {
-                    state.next();
-
-                    self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
-                        parser.full_name(state)
-                    })?
-                } else {
-                    Vec::new()
-                };
-
-                self.lbrace(state)?;
-
-                let attributes = state.get_attributes();
-
                 let mut body = Vec::new();
                 while state.current.kind != TokenKind::RightBrace {
                     state.gather_comments();
@@ -59,18 +58,21 @@ impl Parser {
 
                     body.push(self.class_like_statement(state)?);
                 }
-                self.rbrace(state)?;
 
-                Ok(Statement::Class {
-                    name,
-                    attributes,
-                    extends,
-                    implements,
-                    body,
-                    flags,
-                })
+                body
             }
-        )
+        );
+
+        self.rbrace(state)?;
+
+        Ok(Statement::Class {
+            name,
+            attributes,
+            extends,
+            implements,
+            body,
+            flags,
+        })
     }
 
     pub(in crate::parser) fn interface_definition(

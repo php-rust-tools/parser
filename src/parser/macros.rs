@@ -125,10 +125,10 @@ macro_rules! scoped {
         let scope = $scope;
         $state.enter(scope.clone());
 
-        let result = $block?;
+        let result = $block;
 
         $state.exit();
 
-        Ok(result)
+        result
     }};
 }

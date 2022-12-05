@@ -1,7 +1,6 @@
-use php_parser_rs::prelude::Lexer;
-use php_parser_rs::prelude::Parser;
+use php_parser_rs::prelude::*;
 
-fn main() {
+fn main() -> ParseResult<()> {
     let file = match std::env::args().nth(1) {
         Some(file) => file,
         None => {
@@ -21,24 +20,13 @@ fn main() {
     };
 
     let lexer = Lexer::new();
-    let tokens = match lexer.tokenize(contents.as_bytes()) {
-        Ok(tokens) => tokens,
-        Err(error) => {
-            println!("{}", error);
-
-            ::std::process::exit(1);
-        }
-    };
-
     let parser = Parser::new();
-    let ast = match parser.parse(tokens) {
-        Ok(ast) => ast,
-        Err(error) => {
-            println!("{}", error);
 
-            ::std::process::exit(1);
-        }
-    };
+    let tokens = lexer.tokenize(contents.as_bytes())?;
+
+    let ast = parser.parse(tokens)?;
 
     dbg!(ast);
+
+    Ok(())
 }

@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+use crate::lexer::error::SyntaxError;
 use crate::lexer::token::Span;
 use crate::parser::ast::Type;
 
@@ -7,6 +8,7 @@ pub type ParseResult<T> = Result<T, ParseError>;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum ParseError {
+    SyntaxError(SyntaxError),
     ExpectedToken(Vec<String>, Option<String>, Span),
     MultipleModifiers(String, Span),
     MultipleAccessModifiers(Span),
@@ -39,9 +41,16 @@ pub enum ParseError {
     NestedDisjunctiveNormalFormTypes(Span),
 }
 
+impl From<SyntaxError> for ParseError {
+    fn from(e: SyntaxError) -> Self {
+        ParseError::SyntaxError(e)
+    }
+}
+
 impl Display for ParseError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Self::SyntaxError(e) => e.fmt(f),
             Self::ExpectedToken(expected, found, span) => {
                 let length  = expected.len();
                 let expected = if length >= 2 {
