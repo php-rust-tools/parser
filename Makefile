@@ -1,11 +1,18 @@
 # If the first argument is "dump"...
 ifeq (dump,$(firstword $(MAKECMDGOALS)))
   # use the rest as arguments for "dump"
-  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  DUMP_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
   # ...and turn them into do-nothing targets
-  $(eval $(RUN_ARGS):;@:)
+  $(eval $(DUMP_ARGS):;@:)
 endif# If the first argument is "dump"...
 
+# If the first argument is "dump"...
+ifeq (test,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "dump"
+  TEST_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(TEST_ARGS):;@:)
+endif# If the first argument is "dump"...
 
 .PHONY: help
 
@@ -21,14 +28,14 @@ fix: ## fix linting problems.
 	cargo clippy --fix --allow-dirty --allow-staged
 
 dump: ## dump AST for given files.
-	cargo run --bin php-parser-rs -- $(RUN_ARGS)
+	cargo run --bin php-parser-rs -- $(DUMP_ARGS)
 
 snapshot: ## dump a snapshot for intergration tests.
 	cargo run --bin snapshot
 
-test: ## run integration tests, use filter="..." argument to filter out a specific test.
+test: ## run integration tests.
 	BUILD_INTEGRATION_TESTS="1" cargo build
-	cargo test --all $(filter) -- --skip third_party
+	cargo test --all $(TEST_ARGS) -- --skip third_party
 
 test-third-party: ## run integration tests against third-party libraries.
 	BUILD_INTEGRATION_TESTS="1" cargo build
