@@ -3,6 +3,7 @@ use crate::expect_token;
 use crate::expected_token_err;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
+use crate::lexer::DocStringKind;
 use crate::parser::ast::{
     ArrayItem, Block, Case, Catch, Constant, DeclareItem, ElseIf, Expression, IncludeKind,
     MagicConst, MatchArm, Program, Statement, StaticVar, StringPart, Use, UseKind,
@@ -12,6 +13,7 @@ use crate::parser::error::ParseResult;
 use crate::parser::internal::ident::is_reserved_ident;
 use crate::parser::internal::precedence::{Associativity, Precedence};
 use crate::parser::state::State;
+use crate::prelude::ByteString;
 use crate::prelude::DefaultMatchArm;
 
 pub mod ast;
@@ -1051,7 +1053,12 @@ impl Parser {
                     e
                 }
                 TokenKind::StringPart(_) => self.interpolated_string(state)?,
-                TokenKind::StartHeredoc(_) => self.heredoc_string(state)?,
+                TokenKind::StartDocString(label, kind) => {
+                    let kind = kind.clone();
+                    let label = label.clone();
+
+                    self.doc_string(state, label, kind)?
+                }
                 TokenKind::True => {
                     let e = Expression::Bool { value: true };
                     state.next();
@@ -1564,20 +1571,89 @@ impl Parser {
         Ok(Expression::InterpolatedString { parts })
     }
 
-    fn heredoc_string(&self, state: &mut State) -> ParseResult<Expression> {
+    fn doc_string(
+        &self,
+        state: &mut State,
+        label: ByteString,
+        kind: DocStringKind,
+    ) -> ParseResult<Expression> {
         state.next();
 
-        let mut parts = Vec::new();
+        Ok(match kind {
+            DocStringKind::Heredoc => {
+                let mut parts = Vec::new();
 
-        while !matches!(state.current.kind, TokenKind::EndHeredoc(_)) {
-            if let Some(part) = self.interpolated_string_part(state)? {
-                parts.push(part);
+                while !matches!(state.current.kind, TokenKind::EndDocString(_, _, _)) {
+                    if let Some(part) = self.interpolated_string_part(state)? {
+                        parts.push(part);
+                    }
+                }
+
+                let (indentation_type, indentation_amount) = match state.current.kind {
+                    TokenKind::EndDocString(_, indentation_type, indentation_amount) => {
+                        (indentation_type, indentation_amount)
+                    }
+                    _ => unreachable!(),
+                };
+
+                state.next();
+
+                // FIXME: Can we move this logic above into the loop, by peeking ahead in
+                //        the token stream for the EndHeredoc? Might be more performant.
+                if let Some(indentation_type) = indentation_type {
+                    let search_char: u8 = indentation_type.into();
+
+                    for part in parts.iter_mut() {
+                        match part {
+                            StringPart::Const(bytes) => {
+                                for _ in 0..indentation_amount {
+                                    if bytes.starts_with(&[search_char]) {
+                                        bytes.remove(0);
+                                    }
+                                }
+                            }
+                            _ => continue,
+                        }
+                    }
+                }
+
+                Expression::Heredoc { parts }
             }
-        }
+            DocStringKind::Nowdoc => {
+                // FIXME: This feels hacky. We should probably produce different tokens from the lexer
+                //        but since I already had the logic in place for parsing heredocs, this was
+                //        the fastest way to get nowdocs working too.
+                let mut s =
+                    expect_token!([TokenKind::StringPart(s) => s], state, "constant string");
+                let (indentation_type, indentation_amount) = expect_token!([TokenKind::EndDocString(_, indentation_type, indentation_amount) => (indentation_type, indentation_amount)], state, "label");
 
-        state.next();
+                // FIXME: Hacky code, but it's late and I want to get this done.
+                if let Some(indentation_type) = indentation_type {
+                    let search_char: u8 = indentation_type.into();
+                    let mut lines = s
+                        .split(|b| *b == b'\n')
+                        .map(|s| s.to_vec())
+                        .collect::<Vec<Vec<u8>>>();
+                    for line in lines.iter_mut() {
+                        for _ in 0..indentation_amount {
+                            if line.starts_with(&[search_char]) {
+                                line.remove(0);
+                            }
+                        }
+                    }
+                    let mut bytes = Vec::new();
+                    for (i, line) in lines.iter().enumerate() {
+                        bytes.extend(line);
+                        if i < lines.len() - 1 {
+                            bytes.push(b'\n');
+                        }
+                    }
+                    s = bytes.into();
+                }
 
-        Ok(Expression::InterpolatedString { parts })
+                Expression::Nowdoc { value: s }
+            }
+        })
     }
 
     fn interpolated_string_part(&self, state: &mut State) -> ParseResult<Option<StringPart>> {

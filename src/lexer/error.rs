@@ -14,6 +14,8 @@ pub enum SyntaxError {
     InvalidOctalLiteral(Span),
     InvalidUnicodeEscape(Span),
     UnpredictableState(Span),
+    InvalidDocIndentation(Span),
+    InvalidDocBodyIndentationLevel(usize, Span),
 }
 
 impl Display for SyntaxError {
@@ -58,6 +60,17 @@ impl Display for SyntaxError {
                 f,
                 "Syntax Error: Reached an unpredictable state on line {} column {}",
                 span.0, span.1
+            ),
+            Self::InvalidDocIndentation(span) => write!(
+                f,
+                "Syntax Error: Invalid indentation - cannot use tabs and spaces on line {}",
+                span.0
+            ),
+            Self::InvalidDocBodyIndentationLevel(expected, span) => write!(
+                f,
+                "Syntax Error: Invalid body indentation level - expecting an indentation level of at least {} on line {}",
+                expected,
+                span.0
             ),
         }
     }

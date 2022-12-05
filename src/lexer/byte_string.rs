@@ -1,6 +1,6 @@
 use std::cmp::{Eq, PartialEq};
 use std::fmt::{Debug, Display, Formatter, Result};
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 use std::str::from_utf8;
 
 /// A wrapper for Vec<u8> that provides a human-readable Debug impl and
@@ -95,6 +95,12 @@ impl Deref for ByteString {
 
     fn deref(&self) -> &Vec<u8> {
         &self.0
+    }
+}
+
+impl DerefMut for ByteString {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
     }
 }
 

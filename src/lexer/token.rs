@@ -2,6 +2,8 @@ use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
 
+use super::state::DocStringKind;
+
 pub type Span = (usize, usize);
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Clone)]
@@ -9,10 +11,35 @@ pub enum OpenTagKind {
     Full,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub enum DocStringIndentationType {
+    Space,
+    Tab,
+}
+
+impl From<u8> for DocStringIndentationType {
+    fn from(byte: u8) -> Self {
+        match byte {
+            b' ' => Self::Space,
+            b'\t' => Self::Tab,
+            _ => unreachable!(),
+        }
+    }
+}
+
+impl Into<u8> for DocStringIndentationType {
+    fn into(self) -> u8 {
+        match self {
+            Self::Space => b' ',
+            Self::Tab => b'\t',
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, PartialOrd, Clone)]
 pub enum TokenKind {
-    StartHeredoc(ByteString),
-    EndHeredoc(ByteString),
+    StartDocString(ByteString, DocStringKind),
+    EndDocString(ByteString, Option<DocStringIndentationType>, usize),
     From,
     Print,
     Dollar,
@@ -212,8 +239,14 @@ impl Default for Token {
 impl Display for TokenKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
-            Self::StartHeredoc(label) => return write!(f, "<<<{}", label),
-            Self::EndHeredoc(label) => return write!(f, "{}", label),
+            Self::StartDocString(label, kind) => {
+                if kind == &DocStringKind::Nowdoc {
+                    return write!(f, "<<<'{}'", label);
+                } else {
+                    return write!(f, "<<<{}", label);
+                }
+            }
+            Self::EndDocString(label, ..) => return write!(f, "{}", label),
             Self::BangEquals => "!=",
             Self::From => "from",
             Self::Print => "print",
