@@ -1264,7 +1264,10 @@ impl Parser {
 
                     let path = self.expression(state, Precedence::Lowest)?;
 
-                    Expression::Include { kind, path: Box::new(path) }
+                    Expression::Include {
+                        kind,
+                        path: Box::new(path),
+                    }
                 }
                 _ if is_prefix(&state.current.kind) => {
                     let op = state.current.kind.clone();

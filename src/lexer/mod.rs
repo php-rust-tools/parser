@@ -154,7 +154,7 @@ impl Lexer {
                 state.next();
                 state.set(StackFrame::ShellExec)?;
                 TokenKind::Backtick
-            },
+            }
             [b'@', ..] => {
                 state.next();
 
