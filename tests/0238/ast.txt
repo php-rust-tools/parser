@@ -1,0 +1,22 @@
+[
+    Expression {
+        expr: Infix {
+            lhs: Variable {
+                name: "foo",
+            },
+            op: Assign,
+            rhs: Include {
+                kind: Require,
+                path: Infix {
+                    lhs: MagicConst {
+                        constant: Dir,
+                    },
+                    op: Concat,
+                    rhs: LiteralString {
+                        value: "/foo.php",
+                    },
+                },
+            },
+        },
+    },
+]

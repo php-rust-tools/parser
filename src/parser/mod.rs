@@ -444,19 +444,6 @@ impl Parser {
 
                     Statement::While { condition, body }
                 }
-                TokenKind::Include
-                | TokenKind::IncludeOnce
-                | TokenKind::Require
-                | TokenKind::RequireOnce => {
-                    let kind: IncludeKind = (&state.current.kind).into();
-                    state.next();
-
-                    let path = self.expression(state, Precedence::Lowest)?;
-
-                    self.semi(state)?;
-
-                    Statement::Include { kind, path }
-                }
                 TokenKind::For => {
                     state.next();
 
@@ -1266,6 +1253,17 @@ impl Parser {
                     Expression::MagicConst {
                         constant: MagicConst::Dir,
                     }
+                }
+                TokenKind::Include
+                | TokenKind::IncludeOnce
+                | TokenKind::Require
+                | TokenKind::RequireOnce => {
+                    let kind: IncludeKind = (&state.current.kind).into();
+                    state.next();
+
+                    let path = self.expression(state, Precedence::Lowest)?;
+
+                    Expression::Include { kind, path: Box::new(path) }
                 }
                 _ if is_prefix(&state.current.kind) => {
                     let op = state.current.kind.clone();

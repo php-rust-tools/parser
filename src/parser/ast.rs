@@ -349,10 +349,6 @@ pub enum Statement {
         value_var: Expression,
         body: Block,
     },
-    Include {
-        kind: IncludeKind,
-        path: Expression,
-    },
     Var {
         var: ByteString,
         attributes: Vec<Attribute>,
@@ -624,6 +620,10 @@ pub enum Expression {
         lhs: Box<Self>,
         op: InfixOp,
         rhs: Box<Self>,
+    },
+    Include {
+        kind: IncludeKind,
+        path: Box<Expression>,
     },
     Call {
         target: Box<Self>,

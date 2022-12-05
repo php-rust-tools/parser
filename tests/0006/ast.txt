@@ -1,26 +1,34 @@
 [
-    Include {
-        kind: Include,
-        path: LiteralString {
-            value: "foo.php",
+    Expression {
+        expr: Include {
+            kind: Include,
+            path: LiteralString {
+                value: "foo.php",
+            },
         },
     },
-    Include {
-        kind: IncludeOnce,
-        path: LiteralString {
-            value: "bar.php",
+    Expression {
+        expr: Include {
+            kind: IncludeOnce,
+            path: LiteralString {
+                value: "bar.php",
+            },
         },
     },
-    Include {
-        kind: Require,
-        path: LiteralString {
-            value: "baz.php",
+    Expression {
+        expr: Include {
+            kind: Require,
+            path: LiteralString {
+                value: "baz.php",
+            },
         },
     },
-    Include {
-        kind: RequireOnce,
-        path: LiteralString {
-            value: "qux.php",
+    Expression {
+        expr: Include {
+            kind: RequireOnce,
+            path: LiteralString {
+                value: "qux.php",
+            },
         },
     },
 ]
