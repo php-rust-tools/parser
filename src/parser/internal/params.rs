@@ -56,6 +56,8 @@ impl Parser {
 
         self.lparen(state)?;
 
+        state.skip_comments();
+
         while !state.is_eof() && state.current.kind != TokenKind::RightParen {
             self.gather_attributes(state)?;
 
@@ -142,6 +144,8 @@ impl Parser {
                 flags,
                 by_ref,
             });
+
+            state.skip_comments();
 
             if state.current.kind == TokenKind::Comma {
                 state.next();
