@@ -833,6 +833,7 @@ pub enum InfixOp {
     And,
     Or,
     Assign,
+    AssignRef,
     AddAssign,
     Pow,
     Instanceof,

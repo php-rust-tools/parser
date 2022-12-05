@@ -1353,8 +1353,15 @@ impl Parser {
                         }
                     }
                     _ => {
+                        // FIXME: Hacky, should probably be refactored.
+                        let by_ref = kind == TokenKind::Equals && state.current.kind == TokenKind::Ampersand;
+                        if by_ref {
+                            state.next();
+                        }
+                        
                         let rhs = self.expression(state, rpred)?;
-                        left = infix(left, kind, rhs);
+
+                        left = infix(left, kind, rhs, by_ref);
                     }
                 }
 
@@ -1853,10 +1860,13 @@ fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
     }
 }
 
-fn infix(lhs: Expression, op: TokenKind, rhs: Expression) -> Expression {
+fn infix(lhs: Expression, op: TokenKind, rhs: Expression, by_ref: bool) -> Expression {
     Expression::Infix {
         lhs: Box::new(lhs),
-        op: op.into(),
+        op: match (&op, by_ref) {
+            (TokenKind::Equals, true) => ast::InfixOp::AssignRef,
+            _ => op.into()
+        },
         rhs: Box::new(rhs),
     }
 }
