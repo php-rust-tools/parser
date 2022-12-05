@@ -15,11 +15,17 @@ impl Parser {
     }
 
     pub(in crate::parser) fn lbrace(&self, state: &mut State) -> ParseResult<()> {
-        expect_token!([TokenKind::LeftBrace => Ok(())], state, "`{`")
+        state.skip_comments();
+        expect_token!([TokenKind::LeftBrace], state, "`{`");
+        state.skip_comments();
+        Ok(())
     }
 
     pub(in crate::parser) fn rbrace(&self, state: &mut State) -> ParseResult<()> {
-        expect_token!([TokenKind::RightBrace => Ok(())], state, "`}`")
+        state.skip_comments();
+        expect_token!([TokenKind::RightBrace], state, "`}`");
+        state.skip_comments();
+        Ok(())
     }
 
     pub(in crate::parser) fn lparen(&self, state: &mut State) -> ParseResult<()> {
