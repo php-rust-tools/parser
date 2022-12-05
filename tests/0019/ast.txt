@@ -4,7 +4,15 @@
         body: [
             Function {
                 name: Identifier {
+                    start: (
+                        4,
+                        14,
+                    ),
                     name: "globalFunc",
+                    end: (
+                        4,
+                        24,
+                    ),
                 },
                 attributes: [],
                 params: [],
@@ -16,14 +24,34 @@
     },
     BracedNamespace {
         name: Some(
-            "foo",
+            Identifier {
+                start: (
+                    7,
+                    11,
+                ),
+                name: "foo",
+                end: (
+                    7,
+                    15,
+                ),
+            },
         ),
         body: [
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "a",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                8,
+                                5,
+                            ),
+                            name: "a",
+                            end: (
+                                8,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: Closure {
                         params: [],
@@ -38,15 +66,33 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "b",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                9,
+                                5,
+                            ),
+                            name: "b",
+                            end: (
+                                9,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: Closure {
                         params: [
                             Param {
                                 name: Variable {
+                                    start: (
+                                        9,
+                                        21,
+                                    ),
                                     name: "b",
+                                    end: (
+                                        9,
+                                        23,
+                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -67,9 +113,19 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "c",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                10,
+                                5,
+                            ),
+                            name: "c",
+                            end: (
+                                10,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: Closure {
                         params: [],
@@ -84,15 +140,33 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "d",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                11,
+                                5,
+                            ),
+                            name: "d",
+                            end: (
+                                11,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: Closure {
                         params: [
                             Param {
                                 name: Variable {
+                                    start: (
+                                        11,
+                                        22,
+                                    ),
                                     name: "b",
+                                    end: (
+                                        11,
+                                        24,
+                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -108,9 +182,19 @@
                         body: [
                             Return {
                                 value: Some(
-                                    Variable {
-                                        name: "b",
-                                    },
+                                    Variable(
+                                        Variable {
+                                            start: (
+                                                11,
+                                                35,
+                                            ),
+                                            name: "b",
+                                            end: (
+                                                11,
+                                                37,
+                                            ),
+                                        },
+                                    ),
                                 ),
                             },
                         ],
@@ -121,9 +205,19 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "e",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                12,
+                                5,
+                            ),
+                            name: "e",
+                            end: (
+                                12,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: ArrowFunction {
                         params: [],
@@ -137,15 +231,33 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "f",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                13,
+                                5,
+                            ),
+                            name: "f",
+                            end: (
+                                13,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: ArrowFunction {
                         params: [
                             Param {
                                 name: Variable {
+                                    start: (
+                                        13,
+                                        15,
+                                    ),
                                     name: "b",
+                                    end: (
+                                        13,
+                                        17,
+                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -165,9 +277,19 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "g",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                14,
+                                5,
+                            ),
+                            name: "g",
+                            end: (
+                                14,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: ArrowFunction {
                         params: [],
@@ -181,15 +303,33 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "h",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                15,
+                                5,
+                            ),
+                            name: "h",
+                            end: (
+                                15,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: ArrowFunction {
                         params: [
                             Param {
                                 name: Variable {
+                                    start: (
+                                        15,
+                                        16,
+                                    ),
                                     name: "b",
+                                    end: (
+                                        15,
+                                        18,
+                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -201,9 +341,19 @@
                         ],
                         attributes: [],
                         return_type: None,
-                        expr: Variable {
-                            name: "b",
-                        },
+                        expr: Variable(
+                            Variable {
+                                start: (
+                                    15,
+                                    23,
+                                ),
+                                name: "b",
+                                end: (
+                                    15,
+                                    25,
+                                ),
+                            },
+                        ),
                         by_ref: true,
                         static: false,
                     },
@@ -213,14 +363,34 @@
     },
     BracedNamespace {
         name: Some(
-            "bar",
+            Identifier {
+                start: (
+                    18,
+                    11,
+                ),
+                name: "bar",
+                end: (
+                    18,
+                    15,
+                ),
+            },
         ),
         body: [
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "a",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                19,
+                                5,
+                            ),
+                            name: "a",
+                            end: (
+                                19,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: Closure {
                         params: [],
@@ -235,15 +405,33 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "b",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                20,
+                                5,
+                            ),
+                            name: "b",
+                            end: (
+                                20,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: Closure {
                         params: [
                             Param {
                                 name: Variable {
+                                    start: (
+                                        20,
+                                        28,
+                                    ),
                                     name: "b",
+                                    end: (
+                                        20,
+                                        30,
+                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -264,9 +452,19 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "c",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                21,
+                                5,
+                            ),
+                            name: "c",
+                            end: (
+                                21,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: Closure {
                         params: [],
@@ -281,15 +479,33 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "d",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                22,
+                                5,
+                            ),
+                            name: "d",
+                            end: (
+                                22,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: Closure {
                         params: [
                             Param {
                                 name: Variable {
+                                    start: (
+                                        22,
+                                        29,
+                                    ),
                                     name: "b",
+                                    end: (
+                                        22,
+                                        31,
+                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -305,9 +521,19 @@
                         body: [
                             Return {
                                 value: Some(
-                                    Variable {
-                                        name: "b",
-                                    },
+                                    Variable(
+                                        Variable {
+                                            start: (
+                                                22,
+                                                42,
+                                            ),
+                                            name: "b",
+                                            end: (
+                                                22,
+                                                44,
+                                            ),
+                                        },
+                                    ),
                                 ),
                             },
                         ],
@@ -318,9 +544,19 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "e",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                23,
+                                5,
+                            ),
+                            name: "e",
+                            end: (
+                                23,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: ArrowFunction {
                         params: [],
@@ -334,15 +570,33 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "f",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                24,
+                                5,
+                            ),
+                            name: "f",
+                            end: (
+                                24,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: ArrowFunction {
                         params: [
                             Param {
                                 name: Variable {
+                                    start: (
+                                        24,
+                                        22,
+                                    ),
                                     name: "b",
+                                    end: (
+                                        24,
+                                        24,
+                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -362,9 +616,19 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "g",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                25,
+                                5,
+                            ),
+                            name: "g",
+                            end: (
+                                25,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: ArrowFunction {
                         params: [],
@@ -378,15 +642,33 @@
             },
             Expression {
                 expr: Infix {
-                    lhs: Variable {
-                        name: "h",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                26,
+                                5,
+                            ),
+                            name: "h",
+                            end: (
+                                26,
+                                8,
+                            ),
+                        },
+                    ),
                     op: Assign,
                     rhs: ArrowFunction {
                         params: [
                             Param {
                                 name: Variable {
+                                    start: (
+                                        26,
+                                        23,
+                                    ),
                                     name: "b",
+                                    end: (
+                                        26,
+                                        25,
+                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -398,9 +680,19 @@
                         ],
                         attributes: [],
                         return_type: None,
-                        expr: Variable {
-                            name: "b",
-                        },
+                        expr: Variable(
+                            Variable {
+                                start: (
+                                    26,
+                                    30,
+                                ),
+                                name: "b",
+                                end: (
+                                    26,
+                                    32,
+                                ),
+                            },
+                        ),
                         by_ref: true,
                         static: true,
                     },
@@ -410,18 +702,44 @@
     },
     BracedNamespace {
         name: Some(
-            "baz",
+            Identifier {
+                start: (
+                    29,
+                    11,
+                ),
+                name: "baz",
+                end: (
+                    29,
+                    15,
+                ),
+            },
         ),
         body: [
             Function {
                 name: Identifier {
+                    start: (
+                        30,
+                        14,
+                    ),
                     name: "a",
+                    end: (
+                        30,
+                        15,
+                    ),
                 },
                 attributes: [],
                 params: [
                     Param {
                         name: Variable {
+                            start: (
+                                30,
+                                17,
+                            ),
                             name: "b",
+                            end: (
+                                30,
+                                19,
+                            ),
                         },
                         attributes: [],
                         type: None,
@@ -437,13 +755,29 @@
             },
             Function {
                 name: Identifier {
+                    start: (
+                        31,
+                        15,
+                    ),
                     name: "b",
+                    end: (
+                        31,
+                        16,
+                    ),
                 },
                 attributes: [],
                 params: [
                     Param {
                         name: Variable {
+                            start: (
+                                31,
+                                17,
+                            ),
                             name: "b",
+                            end: (
+                                31,
+                                19,
+                            ),
                         },
                         attributes: [],
                         type: None,
@@ -456,9 +790,19 @@
                 body: [
                     Return {
                         value: Some(
-                            Variable {
-                                name: "b",
-                            },
+                            Variable(
+                                Variable {
+                                    start: (
+                                        31,
+                                        30,
+                                    ),
+                                    name: "b",
+                                    end: (
+                                        31,
+                                        32,
+                                    ),
+                                },
+                            ),
                         ),
                     },
                 ],
@@ -467,16 +811,34 @@
             },
             Function {
                 name: Identifier {
+                    start: (
+                        32,
+                        15,
+                    ),
                     name: "c",
+                    end: (
+                        32,
+                        16,
+                    ),
                 },
                 attributes: [],
                 params: [],
                 body: [
                     Return {
                         value: Some(
-                            Variable {
-                                name: "b",
-                            },
+                            Variable(
+                                Variable {
+                                    start: (
+                                        32,
+                                        28,
+                                    ),
+                                    name: "b",
+                                    end: (
+                                        32,
+                                        30,
+                                    ),
+                                },
+                            ),
                         ),
                     },
                 ],

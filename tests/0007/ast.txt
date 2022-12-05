@@ -1,23 +1,53 @@
 [
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "foo",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        3,
+                        1,
+                    ),
+                    name: "foo",
+                    end: (
+                        3,
+                        6,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: Call {
-                target: Identifier {
-                    name: "give_me_foo",
-                },
+                target: Identifier(
+                    Identifier {
+                        start: (
+                            3,
+                            8,
+                        ),
+                        name: "give_me_foo",
+                        end: (
+                            3,
+                            19,
+                        ),
+                    },
+                ),
                 args: [],
             },
         },
     },
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "a",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        5,
+                        1,
+                    ),
+                    name: "a",
+                    end: (
+                        5,
+                        4,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: Array {
                 items: [
@@ -28,13 +58,33 @@
                             },
                         ),
                         value: Infix {
-                            lhs: Variable {
-                                name: "foo",
-                            },
+                            lhs: Variable(
+                                Variable {
+                                    start: (
+                                        6,
+                                        17,
+                                    ),
+                                    name: "foo",
+                                    end: (
+                                        6,
+                                        22,
+                                    ),
+                                },
+                            ),
                             op: Instanceof,
-                            rhs: Identifier {
-                                name: "Foo",
-                            },
+                            rhs: Identifier(
+                                Identifier {
+                                    start: (
+                                        6,
+                                        33,
+                                    ),
+                                    name: "Foo",
+                                    end: (
+                                        6,
+                                        36,
+                                    ),
+                                },
+                            ),
                         },
                         unpack: false,
                         by_ref: false,
@@ -47,23 +97,63 @@
                         ),
                         value: Infix {
                             lhs: Infix {
-                                lhs: Variable {
-                                    name: "foo",
-                                },
+                                lhs: Variable(
+                                    Variable {
+                                        start: (
+                                            7,
+                                            19,
+                                        ),
+                                        name: "foo",
+                                        end: (
+                                            7,
+                                            24,
+                                        ),
+                                    },
+                                ),
                                 op: Instanceof,
-                                rhs: Identifier {
-                                    name: "Bar",
-                                },
+                                rhs: Identifier(
+                                    Identifier {
+                                        start: (
+                                            7,
+                                            35,
+                                        ),
+                                        name: "Bar",
+                                        end: (
+                                            7,
+                                            39,
+                                        ),
+                                    },
+                                ),
                             },
                             op: And,
                             rhs: Infix {
-                                lhs: Variable {
-                                    name: "foo",
-                                },
+                                lhs: Variable(
+                                    Variable {
+                                        start: (
+                                            7,
+                                            42,
+                                        ),
+                                        name: "foo",
+                                        end: (
+                                            7,
+                                            47,
+                                        ),
+                                    },
+                                ),
                                 op: Instanceof,
-                                rhs: Identifier {
-                                    name: "Baz",
-                                },
+                                rhs: Identifier(
+                                    Identifier {
+                                        start: (
+                                            7,
+                                            58,
+                                        ),
+                                        name: "Baz",
+                                        end: (
+                                            8,
+                                            1,
+                                        ),
+                                    },
+                                ),
                             },
                         },
                         unpack: false,

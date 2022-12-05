@@ -1,7 +1,15 @@
 [
     Function {
         name: Identifier {
+            start: (
+                3,
+                10,
+            ),
             name: "a",
+            end: (
+                3,
+                11,
+            ),
         },
         attributes: [],
         params: [],
@@ -26,14 +34,34 @@
     },
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "bar",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        9,
+                        1,
+                    ),
+                    name: "bar",
+                    end: (
+                        9,
+                        6,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: Call {
-                target: Identifier {
-                    name: "a",
-                },
+                target: Identifier(
+                    Identifier {
+                        start: (
+                            9,
+                            8,
+                        ),
+                        name: "a",
+                        end: (
+                            9,
+                            9,
+                        ),
+                    },
+                ),
                 args: [
                     Arg {
                         name: None,
@@ -46,20 +74,46 @@
     },
     Label {
         label: Identifier {
+            start: (
+                11,
+                1,
+            ),
             name: "foo",
+            end: (
+                11,
+                4,
+            ),
         },
     },
     Expression {
         expr: Call {
-            target: Variable {
-                name: "bar",
-            },
+            target: Variable(
+                Variable {
+                    start: (
+                        12,
+                        5,
+                    ),
+                    name: "bar",
+                    end: (
+                        12,
+                        9,
+                    ),
+                },
+            ),
             args: [],
         },
     },
     Goto {
         label: Identifier {
+            start: (
+                13,
+                10,
+            ),
             name: "foo",
+            end: (
+                13,
+                13,
+            ),
         },
     },
 ]

@@ -3,15 +3,35 @@
         expr: InterpolatedString {
             parts: [
                 Expr(
-                    Variable {
-                        name: "foo",
-                    },
+                    Variable(
+                        Variable {
+                            start: (
+                                1,
+                                9,
+                            ),
+                            name: "foo",
+                            end: (
+                                1,
+                                13,
+                            ),
+                        },
+                    ),
                 ),
                 Expr(
                     ArrayIndex {
-                        array: Variable {
-                            name: "foo",
-                        },
+                        array: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    15,
+                                ),
+                                name: "foo",
+                                end: (
+                                    1,
+                                    19,
+                                ),
+                            },
+                        ),
                         index: Some(
                             LiteralInteger {
                                 i: 0,
@@ -21,9 +41,19 @@
                 ),
                 Expr(
                     ArrayIndex {
-                        array: Variable {
-                            name: "foo",
-                        },
+                        array: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    24,
+                                ),
+                                name: "foo",
+                                end: (
+                                    1,
+                                    28,
+                                ),
+                            },
+                        ),
                         index: Some(
                             LiteralString {
                                 value: "bar",
@@ -33,22 +63,62 @@
                 ),
                 Expr(
                     PropertyFetch {
-                        target: Variable {
-                            name: "foo",
-                        },
-                        property: Identifier {
-                            name: "bar",
-                        },
+                        target: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    37,
+                                ),
+                                name: "foo",
+                                end: (
+                                    1,
+                                    41,
+                                ),
+                            },
+                        ),
+                        property: Identifier(
+                            Identifier {
+                                start: (
+                                    1,
+                                    43,
+                                ),
+                                name: "bar",
+                                end: (
+                                    1,
+                                    46,
+                                ),
+                            },
+                        ),
                     },
                 ),
                 Expr(
                     MethodCall {
-                        target: Variable {
-                            name: "foo",
-                        },
-                        method: Identifier {
-                            name: "bar",
-                        },
+                        target: Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    48,
+                                ),
+                                name: "foo",
+                                end: (
+                                    1,
+                                    52,
+                                ),
+                            },
+                        ),
+                        method: Identifier(
+                            Identifier {
+                                start: (
+                                    1,
+                                    54,
+                                ),
+                                name: "bar",
+                                end: (
+                                    1,
+                                    57,
+                                ),
+                            },
+                        ),
                         args: [],
                     },
                 ),

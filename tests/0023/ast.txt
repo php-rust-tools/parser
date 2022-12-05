@@ -1,34 +1,94 @@
 [
     Foreach {
-        expr: Variable {
-            name: "a",
-        },
+        expr: Variable(
+            Variable {
+                start: (
+                    3,
+                    10,
+                ),
+                name: "a",
+                end: (
+                    3,
+                    13,
+                ),
+            },
+        ),
         by_ref: true,
         key_var: None,
-        value_var: Variable {
-            name: "b",
-        },
+        value_var: Variable(
+            Variable {
+                start: (
+                    3,
+                    17,
+                ),
+                name: "b",
+                end: (
+                    3,
+                    19,
+                ),
+            },
+        ),
         body: [],
     },
     Foreach {
-        expr: Variable {
-            name: "a",
-        },
-        by_ref: true,
-        key_var: Some(
+        expr: Variable(
             Variable {
-                name: "b",
+                start: (
+                    5,
+                    10,
+                ),
+                name: "a",
+                end: (
+                    5,
+                    13,
+                ),
             },
         ),
-        value_var: Variable {
-            name: "c",
-        },
+        by_ref: true,
+        key_var: Some(
+            Variable(
+                Variable {
+                    start: (
+                        5,
+                        16,
+                    ),
+                    name: "b",
+                    end: (
+                        5,
+                        19,
+                    ),
+                },
+            ),
+        ),
+        value_var: Variable(
+            Variable {
+                start: (
+                    5,
+                    23,
+                ),
+                name: "c",
+                end: (
+                    5,
+                    25,
+                ),
+            },
+        ),
         body: [],
     },
     Switch {
-        condition: Variable {
-            name: "a",
-        },
+        condition: Variable(
+            Variable {
+                start: (
+                    7,
+                    9,
+                ),
+                name: "a",
+                end: (
+                    7,
+                    11,
+                ),
+            },
+        ),
         cases: [
             Case {
                 condition: Some(
@@ -57,26 +117,56 @@
         ],
     },
     Foreach {
-        expr: Variable {
-            name: "foo",
-        },
+        expr: Variable(
+            Variable {
+                start: (
+                    14,
+                    10,
+                ),
+                name: "foo",
+                end: (
+                    14,
+                    15,
+                ),
+            },
+        ),
         by_ref: false,
         key_var: None,
         value_var: Array {
             items: [
                 ArrayItem {
                     key: None,
-                    value: Variable {
-                        name: "baz",
-                    },
+                    value: Variable(
+                        Variable {
+                            start: (
+                                14,
+                                19,
+                            ),
+                            name: "baz",
+                            end: (
+                                14,
+                                23,
+                            ),
+                        },
+                    ),
                     unpack: false,
                     by_ref: false,
                 },
                 ArrayItem {
                     key: None,
-                    value: Variable {
-                        name: "car",
-                    },
+                    value: Variable(
+                        Variable {
+                            start: (
+                                14,
+                                25,
+                            ),
+                            name: "car",
+                            end: (
+                                14,
+                                29,
+                            ),
+                        },
+                    ),
                     unpack: false,
                     by_ref: false,
                 },
@@ -85,29 +175,79 @@
         body: [],
     },
     Foreach {
-        expr: Variable {
-            name: "foo",
-        },
-        by_ref: false,
-        key_var: Some(
+        expr: Variable(
             Variable {
-                name: "bar",
+                start: (
+                    16,
+                    10,
+                ),
+                name: "foo",
+                end: (
+                    16,
+                    15,
+                ),
             },
         ),
-        value_var: Variable {
-            name: "baz",
-        },
+        by_ref: false,
+        key_var: Some(
+            Variable(
+                Variable {
+                    start: (
+                        16,
+                        18,
+                    ),
+                    name: "bar",
+                    end: (
+                        16,
+                        23,
+                    ),
+                },
+            ),
+        ),
+        value_var: Variable(
+            Variable {
+                start: (
+                    16,
+                    26,
+                ),
+                name: "baz",
+                end: (
+                    16,
+                    30,
+                ),
+            },
+        ),
         body: [],
     },
     Foreach {
-        expr: Variable {
-            name: "foo",
-        },
+        expr: Variable(
+            Variable {
+                start: (
+                    18,
+                    10,
+                ),
+                name: "foo",
+                end: (
+                    18,
+                    15,
+                ),
+            },
+        ),
         by_ref: false,
         key_var: None,
-        value_var: Variable {
-            name: "bar",
-        },
+        value_var: Variable(
+            Variable {
+                start: (
+                    18,
+                    18,
+                ),
+                name: "bar",
+                end: (
+                    18,
+                    22,
+                ),
+            },
+        ),
         body: [],
     },
 ]

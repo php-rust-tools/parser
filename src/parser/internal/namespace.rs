@@ -1,4 +1,5 @@
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::identifier::Identifier;
 use crate::parser::ast::Block;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
@@ -7,7 +8,6 @@ use crate::parser::state::NamespaceType;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::parser::Parser;
-use crate::prelude::ByteString;
 use crate::scoped;
 
 impl Parser {
@@ -39,7 +39,7 @@ impl Parser {
         }
     }
 
-    fn unbraced_namespace(&self, state: &mut State, name: ByteString) -> ParseResult<Statement> {
+    fn unbraced_namespace(&self, state: &mut State, name: Identifier) -> ParseResult<Statement> {
         let body = scoped!(state, Scope::Namespace(name.clone()), {
             let mut body = Block::new();
             // since this is an unbraced namespace, as soon as we encouter another
@@ -58,7 +58,7 @@ impl Parser {
     fn braced_namespace(
         &self,
         state: &mut State,
-        name: Option<ByteString>,
+        name: Option<Identifier>,
     ) -> ParseResult<Statement> {
         self.lbrace(state)?;
 

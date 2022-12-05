@@ -1,9 +1,19 @@
 [
     Expression {
         expr: StaticMethodCall {
-            target: Identifier {
-                name: "Foo",
-            },
+            target: Identifier(
+                Identifier {
+                    start: (
+                        1,
+                        7,
+                    ),
+                    name: "Foo",
+                    end: (
+                        1,
+                        10,
+                    ),
+                },
+            ),
             method: DynamicVariable {
                 name: LiteralString {
                     value: "foo",

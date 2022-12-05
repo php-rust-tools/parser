@@ -2,16 +2,46 @@
     Expression {
         expr: NullsafeMethodCall {
             target: NullsafePropertyFetch {
-                target: Variable {
-                    name: "a",
-                },
-                property: Identifier {
-                    name: "b",
-                },
+                target: Variable(
+                    Variable {
+                        start: (
+                            1,
+                            7,
+                        ),
+                        name: "a",
+                        end: (
+                            1,
+                            9,
+                        ),
+                    },
+                ),
+                property: Identifier(
+                    Identifier {
+                        start: (
+                            1,
+                            12,
+                        ),
+                        name: "b",
+                        end: (
+                            1,
+                            13,
+                        ),
+                    },
+                ),
             },
-            method: Identifier {
-                name: "c",
-            },
+            method: Identifier(
+                Identifier {
+                    start: (
+                        1,
+                        16,
+                    ),
+                    name: "c",
+                    end: (
+                        1,
+                        17,
+                    ),
+                },
+            ),
             args: [],
         },
     },

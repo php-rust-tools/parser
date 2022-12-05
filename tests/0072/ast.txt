@@ -2,9 +2,19 @@
     Expression {
         expr: ErrorSuppress {
             expr: Call {
-                target: Identifier {
-                    name: "hello",
-                },
+                target: Identifier(
+                    Identifier {
+                        start: (
+                            1,
+                            8,
+                        ),
+                        name: "hello",
+                        end: (
+                            1,
+                            13,
+                        ),
+                    },
+                ),
                 args: [],
             },
         },

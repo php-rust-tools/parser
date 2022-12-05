@@ -4,6 +4,8 @@ use crate::expected_token_err;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::lexer::DocStringKind;
+use crate::parser::ast::identifier::Identifier;
+use crate::parser::ast::variable::Variable;
 use crate::parser::ast::{
     ArrayItem, Block, Case, Catch, Constant, DeclareItem, ElseIf, Expression, IncludeKind,
     MagicConst, MatchArm, Program, Statement, StaticVar, StringPart, Use, UseKind,
@@ -89,13 +91,10 @@ impl Parser {
 
                         if state.current.kind == TokenKind::As {
                             state.next();
-                            alias = Some(self.ident(state)?.into());
+                            alias = Some(self.ident(state)?);
                         }
 
-                        uses.push(Use {
-                            name: name.into(),
-                            alias,
-                        });
+                        uses.push(Use { name, alias });
 
                         if state.current.kind == TokenKind::Comma {
                             state.next();
@@ -106,11 +105,7 @@ impl Parser {
                     self.rbrace(state)?;
                     self.semi(state)?;
 
-                    Statement::GroupUse {
-                        prefix: prefix.into(),
-                        kind,
-                        uses,
-                    }
+                    Statement::GroupUse { prefix, kind, uses }
                 } else {
                     let mut uses = Vec::new();
                     while !state.is_eof() {
@@ -119,13 +114,10 @@ impl Parser {
 
                         if state.current.kind == TokenKind::As {
                             state.next();
-                            alias = Some(self.ident(state)?.into());
+                            alias = Some(self.ident(state)?);
                         }
 
-                        uses.push(Use {
-                            name: name.into(),
-                            alias,
-                        });
+                        uses.push(Use { name, alias });
 
                         if state.current.kind == TokenKind::Comma {
                             state.next();
@@ -151,10 +143,7 @@ impl Parser {
 
                     let value = self.expression(state, Precedence::Lowest)?;
 
-                    constants.push(Constant {
-                        name: name.into(),
-                        value,
-                    });
+                    constants.push(Constant { name, value });
 
                     if state.current.kind == TokenKind::Comma {
                         state.next();
@@ -283,14 +272,14 @@ impl Parser {
                 TokenKind::Goto => {
                     state.next();
 
-                    let label = self.ident(state)?.into();
+                    let label = self.ident(state)?;
 
                     self.semi(state)?;
 
                     Statement::Goto { label }
                 }
                 TokenKind::Identifier(_) if state.peek.kind == TokenKind::Colon => {
-                    let label = self.ident(state)?.into();
+                    let label = self.ident(state)?;
 
                     self.colon(state)?;
 
@@ -308,10 +297,7 @@ impl Parser {
 
                         let value = expect_literal!(state);
 
-                        declares.push(DeclareItem {
-                            key: key.into(),
-                            value,
-                        });
+                        declares.push(DeclareItem { key, value });
 
                         if state.current.kind == TokenKind::Comma {
                             state.next();
@@ -346,7 +332,7 @@ impl Parser {
                     let mut vars = vec![];
                     // `loop` instead of `while` as we don't allow for extra commas.
                     loop {
-                        vars.push(self.var(state)?.into());
+                        vars.push(self.var(state)?);
 
                         if state.current.kind == TokenKind::Comma {
                             state.next();
@@ -365,9 +351,7 @@ impl Parser {
 
                     // `loop` instead of `while` as we don't allow for extra commas.
                     loop {
-                        let var = Expression::Variable {
-                            name: self.var(state)?,
-                        };
+                        let var = self.var(state)?;
                         let mut default = None;
 
                         if state.current.kind == TokenKind::Equals {
@@ -376,6 +360,7 @@ impl Parser {
                             default = Some(self.expression(state, Precedence::Lowest)?);
                         }
 
+                        // TODO: group static vars.
                         vars.push(StaticVar { var, default });
 
                         if state.current.kind == TokenKind::Comma {
@@ -1039,11 +1024,7 @@ impl Parser {
                         target: Box::new(target),
                     }
                 }
-                TokenKind::Variable(v) => {
-                    let e = Expression::Variable { name: v.clone() };
-                    state.next();
-                    e
-                }
+                TokenKind::Variable(_) => Expression::Variable(self.var(state)?),
                 TokenKind::LiteralInteger(i) => {
                     let e = Expression::LiteralInteger { i: *i };
                     state.next();
@@ -1054,12 +1035,10 @@ impl Parser {
                     state.next();
                     f
                 }
-                TokenKind::Identifier(i)
-                | TokenKind::QualifiedIdentifier(i)
-                | TokenKind::FullyQualifiedIdentifier(i) => {
-                    let e = Expression::Identifier { name: i.clone() };
-                    state.next();
-                    e
+                TokenKind::Identifier(_)
+                | TokenKind::QualifiedIdentifier(_)
+                | TokenKind::FullyQualifiedIdentifier(_) => {
+                    Expression::Identifier(self.full_name(state)?)
                 }
                 TokenKind::Static => {
                     state.next();
@@ -1520,10 +1499,8 @@ impl Parser {
 
                 let property = match state.current.kind.clone() {
                     TokenKind::Dollar => self.dynamic_variable(state)?,
-                    TokenKind::Variable(var) => {
-                        state.next();
-                        Expression::Variable { name: var }
-                    }
+                    TokenKind::Variable(_) => Expression::Variable(self.var(state)?),
+                    TokenKind::Identifier(_) => Expression::Identifier(self.ident(state)?),
                     TokenKind::LeftBrace => {
                         must_be_method_call = true;
                         state.next();
@@ -1536,20 +1513,20 @@ impl Parser {
                             name: Box::new(name),
                         }
                     }
-                    TokenKind::Identifier(ident) => {
-                        state.next();
-                        Expression::Identifier { name: ident }
-                    }
                     TokenKind::Class => {
+                        let start = state.current.span;
                         state.next();
-                        // FIXME: Can this be represented in a nicer way? Kind of hacky.
-                        Expression::Identifier {
+                        let end = state.current.span;
+
+                        Expression::Identifier(Identifier {
+                            start,
                             name: "class".into(),
-                        }
+                            end,
+                        })
                     }
-                    _ if is_reserved_ident(&state.current.kind) => Expression::Identifier {
-                        name: self.ident_maybe_reserved(state)?,
-                    },
+                    _ if is_reserved_ident(&state.current.kind) => {
+                        Expression::Identifier(self.ident_maybe_reserved(state)?)
+                    }
                     _ => {
                         return expected_token_err!(["`{`", "`$`", "an identifier"], state);
                     }
@@ -1560,12 +1537,12 @@ impl Parser {
                 match property {
                     // 1. If we have an identifier and the current token is not a left paren,
                     //    the resulting expression must be a constant fetch.
-                    Expression::Identifier { name }
+                    Expression::Identifier(identifier)
                         if state.current.kind != TokenKind::LeftParen =>
                     {
                         Expression::ConstFetch {
                             target: lhs,
-                            constant: name.into(),
+                            constant: identifier,
                         }
                     }
                     // 2. If the current token is a left paren, or if we know the property expression
@@ -1598,15 +1575,9 @@ impl Parser {
                         self.rbrace(state)?;
                         expr
                     }
-                    TokenKind::Variable(ref var) => {
-                        let var = Expression::Variable { name: var.clone() };
-                        state.next();
-                        var
-                    }
+                    TokenKind::Variable(_) => Expression::Variable(self.var(state)?),
                     TokenKind::Dollar => self.dynamic_variable(state)?,
-                    _ => Expression::Identifier {
-                        name: self.ident_maybe_reserved(state)?,
-                    },
+                    _ => Expression::Identifier(self.ident_maybe_reserved(state)?),
                 };
 
                 if state.current.kind == TokenKind::LeftParen {
@@ -1778,22 +1749,28 @@ impl Parser {
             }
             TokenKind::DollarLeftBrace => {
                 state.next();
-                let e = match (&state.current.kind, &state.peek.kind) {
-                    (TokenKind::Identifier(var), TokenKind::RightBrace) => {
+                let e = match (state.current.kind.clone(), state.peek.kind.clone()) {
+                    (TokenKind::Identifier(name), TokenKind::RightBrace) => {
+                        let start = state.current.span;
+                        state.next();
+                        state.next();
+                        let end = state.current.span;
                         // "${var}"
-                        let e = Expression::Variable { name: var.clone() };
-                        state.next();
-                        state.next();
-                        e
+                        // TODO: we should use a different node for this.
+                        Expression::Variable(Variable { start, name, end })
                     }
-                    (TokenKind::Identifier(var), TokenKind::LeftBracket) => {
-                        // "${var[e]}"
-                        let var = Expression::Variable { name: var.clone() };
+                    (TokenKind::Identifier(name), TokenKind::LeftBracket) => {
+                        let start = state.current.span;
                         state.next();
                         state.next();
+                        let end = state.current.span;
+                        let var = Expression::Variable(Variable { start, name, end });
+
                         let e = self.expression(state, Precedence::Lowest)?;
-                        expect_token!([TokenKind::RightBracket], state, "`]`");
-                        expect_token!([TokenKind::RightBrace], state, "`}`");
+                        self.rbracket(state)?;
+                        self.rbrace(state)?;
+
+                        // TODO: we should use a different node for this.
                         Expression::ArrayIndex {
                             array: Box::new(var),
                             index: Some(Box::new(e)),
@@ -1802,7 +1779,7 @@ impl Parser {
                     _ => {
                         // Arbitrary expressions are allowed, but are treated as variable variables.
                         let e = self.expression(state, Precedence::Lowest)?;
-                        expect_token!([TokenKind::RightBrace], state, "`}`");
+                        self.rbrace(state)?;
 
                         Expression::DynamicVariable { name: Box::new(e) }
                     }
@@ -1816,10 +1793,9 @@ impl Parser {
                 expect_token!([TokenKind::RightBrace], state, "`}`");
                 Some(StringPart::Expr(Box::new(e)))
             }
-            TokenKind::Variable(var) => {
+            TokenKind::Variable(_) => {
                 // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
-                let var = Expression::Variable { name: var.clone() };
-                state.next();
+                let var = Expression::Variable(self.var(state)?);
                 let e = match state.current.kind {
                     TokenKind::LeftBracket => {
                         state.next();
@@ -1848,10 +1824,9 @@ impl Parser {
                                 state.next();
                                 e
                             }
-                            TokenKind::Variable(var) => {
-                                let e = Expression::Variable { name: var.clone() };
-                                state.next();
-                                e
+                            TokenKind::Variable(_) => {
+                                let v = self.var(state)?;
+                                Expression::Variable(v)
                             }
                             _ => {
                                 return expected_token_err!(
@@ -1871,18 +1846,18 @@ impl Parser {
                         state.next();
                         Expression::PropertyFetch {
                             target: Box::new(var),
-                            property: Box::new(Expression::Identifier {
-                                name: self.ident_maybe_reserved(state)?,
-                            }),
+                            property: Box::new(Expression::Identifier(
+                                self.ident_maybe_reserved(state)?,
+                            )),
                         }
                     }
                     TokenKind::NullsafeArrow => {
                         state.next();
                         Expression::NullsafePropertyFetch {
                             target: Box::new(var),
-                            property: Box::new(Expression::Identifier {
-                                name: self.ident_maybe_reserved(state)?,
-                            }),
+                            property: Box::new(Expression::Identifier(
+                                self.ident_maybe_reserved(state)?,
+                            )),
                         }
                     }
                     _ => var,

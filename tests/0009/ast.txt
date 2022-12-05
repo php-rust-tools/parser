@@ -1,9 +1,19 @@
 [
     Expression {
         expr: ArrayIndex {
-            array: Variable {
-                name: "foo",
-            },
+            array: Variable(
+                Variable {
+                    start: (
+                        3,
+                        1,
+                    ),
+                    name: "foo",
+                    end: (
+                        3,
+                        5,
+                    ),
+                },
+            ),
             index: Some(
                 LiteralString {
                     value: "bar",
@@ -14,9 +24,19 @@
     Expression {
         expr: ArrayIndex {
             array: ArrayIndex {
-                array: Variable {
-                    name: "foo",
-                },
+                array: Variable(
+                    Variable {
+                        start: (
+                            5,
+                            1,
+                        ),
+                        name: "foo",
+                        end: (
+                            5,
+                            5,
+                        ),
+                    },
+                ),
                 index: Some(
                     LiteralString {
                         value: "bar",
@@ -33,9 +53,19 @@
     Expression {
         expr: Infix {
             lhs: ArrayIndex {
-                array: Variable {
-                    name: "foo",
-                },
+                array: Variable(
+                    Variable {
+                        start: (
+                            7,
+                            1,
+                        ),
+                        name: "foo",
+                        end: (
+                            7,
+                            5,
+                        ),
+                    },
+                ),
                 index: Some(
                     LiteralString {
                         value: "bar",

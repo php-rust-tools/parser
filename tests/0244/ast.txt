@@ -2,18 +2,38 @@
     For {
         init: [
             Infix {
-                lhs: Variable {
-                    name: "i",
-                },
+                lhs: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            6,
+                        ),
+                        name: "i",
+                        end: (
+                            3,
+                            9,
+                        ),
+                    },
+                ),
                 op: Assign,
                 rhs: LiteralInteger {
                     i: 0,
                 },
             },
             Infix {
-                lhs: Variable {
-                    name: "i",
-                },
+                lhs: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            14,
+                        ),
+                        name: "i",
+                        end: (
+                            3,
+                            17,
+                        ),
+                    },
+                ),
                 op: Assign,
                 rhs: LiteralInteger {
                     i: 1,
@@ -22,18 +42,38 @@
         ],
         condition: [
             Infix {
-                lhs: Variable {
-                    name: "j",
-                },
+                lhs: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            22,
+                        ),
+                        name: "j",
+                        end: (
+                            3,
+                            25,
+                        ),
+                    },
+                ),
                 op: LessThan,
                 rhs: LiteralInteger {
                     i: 2,
                 },
             },
             Decrement {
-                value: Variable {
-                    name: "j",
-                },
+                value: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            30,
+                        ),
+                        name: "j",
+                        end: (
+                            3,
+                            32,
+                        ),
+                    },
+                ),
             },
         ],
         loop: [],

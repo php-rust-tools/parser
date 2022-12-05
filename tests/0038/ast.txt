@@ -1,13 +1,29 @@
 [
     Function {
         name: Identifier {
+            start: (
+                3,
+                10,
+            ),
             name: "fib",
+            end: (
+                3,
+                13,
+            ),
         },
         attributes: [],
         params: [
             Param {
                 name: Variable {
+                    start: (
+                        3,
+                        14,
+                    ),
                     name: "n",
+                    end: (
+                        3,
+                        16,
+                    ),
                 },
                 attributes: [],
                 type: None,
@@ -20,9 +36,19 @@
         body: [
             If {
                 condition: Infix {
-                    lhs: Variable {
-                        name: "n",
-                    },
+                    lhs: Variable(
+                        Variable {
+                            start: (
+                                4,
+                                9,
+                            ),
+                            name: "n",
+                            end: (
+                                4,
+                                12,
+                            ),
+                        },
+                    ),
                     op: LessThan,
                     rhs: LiteralInteger {
                         i: 2,
@@ -31,9 +57,19 @@
                 then: [
                     Return {
                         value: Some(
-                            Variable {
-                                name: "n",
-                            },
+                            Variable(
+                                Variable {
+                                    start: (
+                                        5,
+                                        16,
+                                    ),
+                                    name: "n",
+                                    end: (
+                                        5,
+                                        18,
+                                    ),
+                                },
+                            ),
                         ),
                     },
                 ],
@@ -44,16 +80,36 @@
                 value: Some(
                     Infix {
                         lhs: Call {
-                            target: Identifier {
-                                name: "fib",
-                            },
+                            target: Identifier(
+                                Identifier {
+                                    start: (
+                                        8,
+                                        12,
+                                    ),
+                                    name: "fib",
+                                    end: (
+                                        8,
+                                        15,
+                                    ),
+                                },
+                            ),
                             args: [
                                 Arg {
                                     name: None,
                                     value: Infix {
-                                        lhs: Variable {
-                                            name: "n",
-                                        },
+                                        lhs: Variable(
+                                            Variable {
+                                                start: (
+                                                    8,
+                                                    16,
+                                                ),
+                                                name: "n",
+                                                end: (
+                                                    8,
+                                                    19,
+                                                ),
+                                            },
+                                        ),
                                         op: Sub,
                                         rhs: LiteralInteger {
                                             i: 1,
@@ -65,16 +121,36 @@
                         },
                         op: Add,
                         rhs: Call {
-                            target: Identifier {
-                                name: "fib",
-                            },
+                            target: Identifier(
+                                Identifier {
+                                    start: (
+                                        8,
+                                        26,
+                                    ),
+                                    name: "fib",
+                                    end: (
+                                        8,
+                                        29,
+                                    ),
+                                },
+                            ),
                             args: [
                                 Arg {
                                     name: None,
                                     value: Infix {
-                                        lhs: Variable {
-                                            name: "n",
-                                        },
+                                        lhs: Variable(
+                                            Variable {
+                                                start: (
+                                                    8,
+                                                    30,
+                                                ),
+                                                name: "n",
+                                                end: (
+                                                    8,
+                                                    33,
+                                                ),
+                                            },
+                                        ),
                                         op: Sub,
                                         rhs: LiteralInteger {
                                             i: 2,

@@ -1,7 +1,15 @@
 [
     Class {
         name: Identifier {
+            start: (
+                3,
+                7,
+            ),
             name: "bar",
+            end: (
+                3,
+                11,
+            ),
         },
         attributes: [],
         extends: None,
@@ -12,23 +20,49 @@
     Noop,
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "e",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        5,
+                        1,
+                    ),
+                    name: "e",
+                    end: (
+                        5,
+                        4,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: New {
                 target: AnonymousClass {
                     attributes: [],
                     extends: Some(
                         Identifier {
+                            start: (
+                                5,
+                                24,
+                            ),
                             name: "bar",
+                            end: (
+                                5,
+                                28,
+                            ),
                         },
                     ),
                     implements: [],
                     body: [
                         Method {
                             name: Identifier {
+                                start: (
+                                    6,
+                                    21,
+                                ),
                                 name: "bar",
+                                end: (
+                                    6,
+                                    24,
+                                ),
                             },
                             attributes: [],
                             params: [],
@@ -36,9 +70,19 @@
                                 Return {
                                     value: Some(
                                         New {
-                                            target: Identifier {
-                                                name: "bar",
-                                            },
+                                            target: Identifier(
+                                                Identifier {
+                                                    start: (
+                                                        7,
+                                                        20,
+                                                    ),
+                                                    name: "bar",
+                                                    end: (
+                                                        7,
+                                                        23,
+                                                    ),
+                                                },
+                                            ),
                                             args: [],
                                         },
                                     ),

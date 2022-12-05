@@ -1,12 +1,32 @@
 [
     Expression {
         expr: StaticMethodCall {
-            target: Identifier {
-                name: "A",
-            },
-            method: Identifier {
-                name: "foo",
-            },
+            target: Identifier(
+                Identifier {
+                    start: (
+                        1,
+                        7,
+                    ),
+                    name: "A",
+                    end: (
+                        1,
+                        8,
+                    ),
+                },
+            ),
+            method: Identifier(
+                Identifier {
+                    start: (
+                        1,
+                        10,
+                    ),
+                    name: "foo",
+                    end: (
+                        1,
+                        13,
+                    ),
+                },
+            ),
             args: [
                 Arg {
                     name: None,

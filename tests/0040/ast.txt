@@ -1,14 +1,34 @@
 [
     If {
-        condition: Variable {
-            name: "foo",
-        },
+        condition: Variable(
+            Variable {
+                start: (
+                    1,
+                    10,
+                ),
+                name: "foo",
+                end: (
+                    1,
+                    14,
+                ),
+            },
+        ),
         then: [
             Return {
                 value: Some(
-                    Variable {
-                        name: "foo",
-                    },
+                    Variable(
+                        Variable {
+                            start: (
+                                1,
+                                25,
+                            ),
+                            name: "foo",
+                            end: (
+                                1,
+                                29,
+                            ),
+                        },
+                    ),
                 ),
             },
         ],
@@ -17,9 +37,19 @@
             [
                 Return {
                     value: Some(
-                        Variable {
-                            name: "foo",
-                        },
+                        Variable(
+                            Variable {
+                                start: (
+                                    1,
+                                    47,
+                                ),
+                                name: "foo",
+                                end: (
+                                    1,
+                                    51,
+                                ),
+                            },
+                        ),
                     ),
                 },
             ],

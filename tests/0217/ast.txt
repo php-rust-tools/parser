@@ -1,7 +1,15 @@
 [
     Class {
         name: Identifier {
+            start: (
+                3,
+                7,
+            ),
             name: "s",
+            end: (
+                3,
+                9,
+            ),
         },
         attributes: [],
         extends: None,
@@ -11,19 +19,43 @@
     },
     Class {
         name: Identifier {
+            start: (
+                5,
+                7,
+            ),
             name: "foo",
+            end: (
+                5,
+                11,
+            ),
         },
         attributes: [],
         extends: Some(
             Identifier {
+                start: (
+                    5,
+                    19,
+                ),
                 name: "s",
+                end: (
+                    5,
+                    21,
+                ),
             },
         ),
         implements: [],
         body: [
             Method {
                 name: Identifier {
+                    start: (
+                        6,
+                        21,
+                    ),
                     name: "bar",
+                    end: (
+                        6,
+                        24,
+                    ),
                 },
                 attributes: [],
                 params: [],
@@ -31,9 +63,19 @@
                     Return {
                         value: Some(
                             New {
-                                target: Identifier {
-                                    name: "s",
-                                },
+                                target: Identifier(
+                                    Identifier {
+                                        start: (
+                                            7,
+                                            20,
+                                        ),
+                                        name: "s",
+                                        end: (
+                                            7,
+                                            21,
+                                        ),
+                                    },
+                                ),
                                 args: [],
                             },
                         ),

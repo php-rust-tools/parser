@@ -1,23 +1,53 @@
 [
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "a",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        3,
+                        1,
+                    ),
+                    name: "a",
+                    end: (
+                        3,
+                        4,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: New {
-                target: Identifier {
-                    name: "Foo",
-                },
+                target: Identifier(
+                    Identifier {
+                        start: (
+                            3,
+                            10,
+                        ),
+                        name: "Foo",
+                        end: (
+                            3,
+                            13,
+                        ),
+                    },
+                ),
                 args: [],
             },
         },
     },
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "b",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        4,
+                        1,
+                    ),
+                    name: "b",
+                    end: (
+                        4,
+                        4,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: UnaryPlus {
                 value: LiteralInteger {
@@ -28,9 +58,19 @@
     },
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "c",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        5,
+                        1,
+                    ),
+                    name: "c",
+                    end: (
+                        5,
+                        4,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: BitwiseNot {
                 value: LiteralInteger {
@@ -41,27 +81,67 @@
     },
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "d",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        6,
+                        1,
+                    ),
+                    name: "d",
+                    end: (
+                        6,
+                        4,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: PreDecrement {
-                value: Variable {
-                    name: "b",
-                },
+                value: Variable(
+                    Variable {
+                        start: (
+                            6,
+                            8,
+                        ),
+                        name: "b",
+                        end: (
+                            6,
+                            10,
+                        ),
+                    },
+                ),
             },
         },
     },
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "e",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        7,
+                        1,
+                    ),
+                    name: "e",
+                    end: (
+                        7,
+                        4,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: PreIncrement {
-                value: Variable {
-                    name: "d",
-                },
+                value: Variable(
+                    Variable {
+                        start: (
+                            7,
+                            8,
+                        ),
+                        name: "d",
+                        end: (
+                            7,
+                            10,
+                        ),
+                    },
+                ),
             },
         },
     },

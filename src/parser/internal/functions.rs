@@ -1,6 +1,7 @@
 use crate::expect_token;
 use crate::expected_scope;
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::identifier::Identifier;
 use crate::parser::ast::ClassFlag;
 use crate::parser::ast::ClosureUse;
 use crate::parser::ast::Expression;
@@ -155,12 +156,15 @@ impl Parser {
             false
         };
 
-        let name = match state.current.kind {
-            TokenKind::Null => {
-                state.next();
-                "null".into()
-            }
-            _ => self.ident(state)?,
+        let name = if state.current.kind == TokenKind::Null {
+            let start = state.current.span;
+            let name = "null".into();
+            state.next();
+            let end = state.current.span;
+
+            Identifier { start, name, end }
+        } else {
+            self.ident(state)?
         };
 
         scoped!(state, Scope::Function(name.clone()), {
@@ -186,7 +190,7 @@ impl Parser {
 
             Ok(Statement::Function {
                 attributes,
-                name: name.into(),
+                name,
                 params,
                 body,
                 return_type,
@@ -256,7 +260,7 @@ impl Parser {
 
                 Ok(Statement::AbstractMethod {
                     attributes,
-                    name: name.into(),
+                    name,
                     params,
                     return_type,
                     flags: flags.to_vec(),
@@ -271,7 +275,7 @@ impl Parser {
 
                 Ok(Statement::Method {
                     attributes,
-                    name: name.into(),
+                    name,
                     params,
                     body,
                     return_type,

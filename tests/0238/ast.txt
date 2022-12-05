@@ -1,9 +1,19 @@
 [
     Expression {
         expr: Infix {
-            lhs: Variable {
-                name: "foo",
-            },
+            lhs: Variable(
+                Variable {
+                    start: (
+                        3,
+                        1,
+                    ),
+                    name: "foo",
+                    end: (
+                        3,
+                        6,
+                    ),
+                },
+            ),
             op: Assign,
             rhs: Include {
                 kind: Require,

@@ -1,18 +1,46 @@
 [
     Namespace {
-        name: "Foo\Bar",
+        name: Identifier {
+            start: (
+                3,
+                11,
+            ),
+            name: "Foo\Bar",
+            end: (
+                3,
+                18,
+            ),
+        },
         body: [
             Noop,
             Class {
                 name: Identifier {
+                    start: (
+                        5,
+                        13,
+                    ),
                     name: "Baz",
+                    end: (
+                        5,
+                        17,
+                    ),
                 },
                 attributes: [],
                 extends: None,
                 implements: [],
                 body: [
                     Property {
-                        var: "foo",
+                        var: Variable {
+                            start: (
+                                6,
+                                29,
+                            ),
+                            name: "foo",
+                            end: (
+                                6,
+                                33,
+                            ),
+                        },
                         attributes: [],
                         value: None,
                         type: Some(

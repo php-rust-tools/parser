@@ -1,12 +1,32 @@
 [
     Expression {
         expr: MethodCall {
-            target: Variable {
-                name: "this",
-            },
-            method: Identifier {
-                name: "foo",
-            },
+            target: Variable(
+                Variable {
+                    start: (
+                        1,
+                        7,
+                    ),
+                    name: "this",
+                    end: (
+                        1,
+                        12,
+                    ),
+                },
+            ),
+            method: Identifier(
+                Identifier {
+                    start: (
+                        1,
+                        14,
+                    ),
+                    name: "foo",
+                    end: (
+                        1,
+                        17,
+                    ),
+                },
+            ),
             args: [
                 Arg {
                     name: None,

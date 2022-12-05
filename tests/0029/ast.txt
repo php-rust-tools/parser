@@ -1,27 +1,77 @@
 [
     Expression {
         expr: PropertyFetch {
-            target: Variable {
-                name: "foo",
-            },
-            property: Identifier {
-                name: "bar",
-            },
+            target: Variable(
+                Variable {
+                    start: (
+                        1,
+                        7,
+                    ),
+                    name: "foo",
+                    end: (
+                        1,
+                        11,
+                    ),
+                },
+            ),
+            property: Identifier(
+                Identifier {
+                    start: (
+                        1,
+                        13,
+                    ),
+                    name: "bar",
+                    end: (
+                        1,
+                        16,
+                    ),
+                },
+            ),
         },
     },
     Expression {
         expr: PropertyFetch {
             target: PropertyFetch {
-                target: Variable {
-                    name: "foo",
-                },
-                property: Identifier {
-                    name: "bar",
-                },
+                target: Variable(
+                    Variable {
+                        start: (
+                            1,
+                            18,
+                        ),
+                        name: "foo",
+                        end: (
+                            1,
+                            22,
+                        ),
+                    },
+                ),
+                property: Identifier(
+                    Identifier {
+                        start: (
+                            1,
+                            24,
+                        ),
+                        name: "bar",
+                        end: (
+                            1,
+                            27,
+                        ),
+                    },
+                ),
             },
-            property: Identifier {
-                name: "baz",
-            },
+            property: Identifier(
+                Identifier {
+                    start: (
+                        1,
+                        29,
+                    ),
+                    name: "baz",
+                    end: (
+                        1,
+                        32,
+                    ),
+                },
+            ),
         },
     },
 ]

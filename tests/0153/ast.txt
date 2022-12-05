@@ -1,11 +1,29 @@
 [
     Namespace {
-        name: "Foo\Bar",
+        name: Identifier {
+            start: (
+                3,
+                11,
+            ),
+            name: "Foo\Bar",
+            end: (
+                3,
+                18,
+            ),
+        },
         body: [
             Noop,
             Class {
                 name: Identifier {
+                    start: (
+                        5,
+                        13,
+                    ),
                     name: "Baz",
+                    end: (
+                        5,
+                        17,
+                    ),
                 },
                 attributes: [],
                 extends: None,
@@ -13,13 +31,29 @@
                 body: [
                     Method {
                         name: Identifier {
+                            start: (
+                                6,
+                                22,
+                            ),
                             name: "__construct",
+                            end: (
+                                6,
+                                33,
+                            ),
                         },
                         attributes: [],
                         params: [
                             Param {
                                 name: Variable {
+                                    start: (
+                                        7,
+                                        34,
+                                    ),
                                     name: "name",
+                                    end: (
+                                        7,
+                                        40,
+                                    ),
                                 },
                                 attributes: [],
                                 type: Some(
