@@ -68,6 +68,8 @@ impl Lexer {
                 // The double quote state is entered when inside a double-quoted string that
                 // contains variables.
                 StackFrame::DoubleQuote => tokens.extend(self.double_quote(&mut state)?),
+                // The shell exec state is entered when inside of a execution string (`).
+                StackFrame::ShellExec => tokens.extend(self.shell_exec(&mut state)?),
                 // The doc string state is entered when tokenizing heredocs and nowdocs.
                 StackFrame::DocString(kind, label) => {
                     let kind = *kind;
@@ -148,6 +150,11 @@ impl Lexer {
     fn scripting(&self, state: &mut State) -> SyntaxResult<Token> {
         let span = state.span;
         let kind = match state.peek_buf() {
+            [b'`', ..] => {
+                state.next();
+                state.set(StackFrame::ShellExec)?;
+                TokenKind::Backtick
+            },
             [b'@', ..] => {
                 state.next();
 
@@ -660,6 +667,62 @@ impl Lexer {
                     state.next();
                     state.set(StackFrame::Scripting)?;
                     break TokenKind::DoubleQuote;
+                }
+                [b'$', ident_start!(), ..] => {
+                    state.next();
+                    let ident = self.consume_identifier(state);
+
+                    match state.peek_buf() {
+                        [b'[', ..] => state.enter(StackFrame::VarOffset),
+                        [b'-', b'>', ident_start!(), ..]
+                        | [b'?', b'-', b'>', ident_start!(), ..] => {
+                            state.enter(StackFrame::LookingForProperty)
+                        }
+                        _ => {}
+                    }
+
+                    break TokenKind::Variable(ident.into());
+                }
+                &[b, ..] => {
+                    state.next();
+                    buffer.push(b);
+                }
+                [] => return Err(SyntaxError::UnexpectedEndOfFile(state.span)),
+            }
+        };
+
+        let mut tokens = Vec::new();
+        if !buffer.is_empty() {
+            tokens.push(Token {
+                kind: TokenKind::StringPart(buffer.into()),
+                span,
+            })
+        }
+
+        tokens.push(Token { kind, span });
+        Ok(tokens)
+    }
+
+    fn shell_exec(&self, state: &mut State) -> SyntaxResult<Vec<Token>> {
+        let span = state.span;
+        let mut buffer = Vec::new();
+        let kind = loop {
+            match state.peek_buf() {
+                [b'$', b'{', ..] => {
+                    state.skip(2);
+                    state.enter(StackFrame::LookingForVarname);
+                    break TokenKind::DollarLeftBrace;
+                }
+                [b'{', b'$', ..] => {
+                    // Intentionally only consume the left brace.
+                    state.next();
+                    state.enter(StackFrame::Scripting);
+                    break TokenKind::LeftBrace;
+                }
+                [b'`', ..] => {
+                    state.next();
+                    state.set(StackFrame::Scripting)?;
+                    break TokenKind::Backtick;
                 }
                 [b'$', ident_start!(), ..] => {
                     state.next();

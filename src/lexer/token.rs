@@ -38,6 +38,7 @@ impl From<DocStringIndentationKind> for u8 {
 
 #[derive(Debug, PartialEq, PartialOrd, Clone)]
 pub enum TokenKind {
+    Backtick,
     StartDocString(ByteString, DocStringKind),
     EndDocString(ByteString, Option<DocStringIndentationKind>, usize),
     From,
@@ -239,6 +240,7 @@ impl Default for Token {
 impl Display for TokenKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
+            Self::Backtick => "`",
             Self::StartDocString(label, kind) => {
                 if kind == &DocStringKind::Nowdoc {
                     return write!(f, "<<<'{}'", label);

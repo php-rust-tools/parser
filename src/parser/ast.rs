@@ -669,6 +669,9 @@ pub enum Expression {
     Nowdoc {
         value: ByteString,
     },
+    ShellExec {
+        parts: Vec<StringPart>,
+    },
     PropertyFetch {
         target: Box<Self>,
         property: Box<Self>,

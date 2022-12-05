@@ -1044,6 +1044,7 @@ impl Parser {
 
                     self.doc_string(state, kind)?
                 }
+                TokenKind::Backtick => self.shell_exec(state)?,
                 TokenKind::True => {
                     let e = Expression::Bool { value: true };
                     state.next();
@@ -1574,6 +1575,22 @@ impl Parser {
         state.next();
 
         Ok(Expression::InterpolatedString { parts })
+    }
+
+    fn shell_exec(&self, state: &mut State) -> ParseResult<Expression> {
+        state.next();
+
+        let mut parts = Vec::new();
+
+        while state.current.kind != TokenKind::Backtick {
+            if let Some(part) = self.interpolated_string_part(state)? {
+                parts.push(part);
+            }
+        }
+
+        state.next();
+
+        Ok(Expression::ShellExec { parts })
     }
 
     fn doc_string(&self, state: &mut State, kind: DocStringKind) -> ParseResult<Expression> {

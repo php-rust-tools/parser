@@ -17,6 +17,7 @@ pub enum StackFrame {
     Scripting,
     Halted,
     DoubleQuote,
+    ShellExec,
     DocString(DocStringKind, ByteString),
     LookingForVarname,
     LookingForProperty,
