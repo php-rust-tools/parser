@@ -21,6 +21,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: install just
+        uses: extractions/setup-just@v1
+
       - name: install rust
         uses: actions-rs/toolchain@v1
         with:
@@ -32,5 +35,5 @@ jobs:
         uses: Swatinem/rust-cache@v2.0.0
 
       - name: test third-party
-        run: make test-third-party
+        run: just test-third-party
 

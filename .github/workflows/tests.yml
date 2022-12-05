@@ -22,6 +22,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: install just
+        uses: extractions/setup-just@v1
+
       - name: install rust
         uses: actions-rs/toolchain@v1
         with:
@@ -34,7 +37,7 @@ jobs:
 
       - name: check
         if: matrix.rust == 'stable'
-        run: make lint
+        run: just lint
 
       - name: test
-        run: make test
+        run: just test
