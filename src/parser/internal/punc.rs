@@ -7,7 +7,11 @@ use crate::expect_token;
 
 impl Parser {
     pub(in crate::parser) fn semi(&self, state: &mut State) -> ParseResult<()> {
-        expect_token!([TokenKind::SemiColon => Ok(())], state, "`;`")
+        if state.current.kind != TokenKind::CloseTag {
+            expect_token!([TokenKind::SemiColon => Ok(())], state, "`;`")
+        } else {
+            Ok(())
+        }
     }
 
     pub(in crate::parser) fn lbrace(&self, state: &mut State) -> ParseResult<()> {
