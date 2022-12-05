@@ -15,11 +15,13 @@ snapshot:
 
 # detect linting problems.
 lint:
+    rm -f tests/integration_test.rs
     cargo fmt --all -- --check
     cargo clippy
 
 # fix linting problems.
 fix:
+    rm -f tests/integration_test.rs
     cargo fmt
     cargo clippy --fix --allow-dirty --allow-staged
 

@@ -4,7 +4,7 @@ use std::vec::IntoIter;
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::Attribute;
+use crate::parser::ast::AttributeGroup;
 use crate::parser::ast::ClassFlag;
 use crate::parser::ast::MethodFlag;
 use crate::parser::error::ParseError;
@@ -40,7 +40,7 @@ pub struct State {
     pub peek: Token,
     pub iter: IntoIter<Token>,
     pub comments: Vec<Token>,
-    pub attributes: Vec<Attribute>,
+    pub attributes: Vec<AttributeGroup>,
     pub namespace_type: Option<NamespaceType>,
     pub has_class_scope: bool,
     pub has_class_parent_scope: bool,
@@ -63,11 +63,11 @@ impl State {
         }
     }
 
-    pub fn attribute(&mut self, attr: Attribute) {
+    pub fn attribute(&mut self, attr: AttributeGroup) {
         self.attributes.push(attr);
     }
 
-    pub fn get_attributes(&mut self) -> Vec<Attribute> {
+    pub fn get_attributes(&mut self) -> Vec<AttributeGroup> {
         let mut attributes = vec![];
 
         std::mem::swap(&mut self.attributes, &mut attributes);
