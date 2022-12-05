@@ -8,7 +8,7 @@ static LEXER: Lexer = Lexer::new();
 
 fn main() {
     let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-    let mut entries = read_dir(manifest.join("tests"))
+    let mut entries = read_dir(manifest.join("tests").join("fixtures"))
         .unwrap()
         .flatten()
         .map(|entry| entry.path())

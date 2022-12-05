@@ -1,0 +1,100 @@
+use std::env;
+use std::fs::read_dir;
+use std::path::PathBuf;
+
+use pretty_assertions::assert_str_eq;
+
+use php_parser_rs::prelude::{Lexer, Parser};
+
+static LEXER: Lexer = Lexer::new();
+static PARSER: Parser = Parser::new();
+
+#[test]
+fn test_fixtures() {
+    let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+    let tests = manifest.join("tests").join("fixtures");
+
+    let mut entries = read_dir(tests)
+        .unwrap()
+        .flatten()
+        .map(|entry| entry.path())
+        .filter(|entry| entry.is_dir())
+        .collect::<Vec<PathBuf>>();
+
+    entries.sort();
+
+    for entry in entries {
+        let fixture = entry.file_name().unwrap().to_string_lossy();
+
+        let code_file = entry.join("code.php");
+        let ast_file = entry.join("ast.txt");
+        let tokens_file = entry.join("tokens.txt");
+        let lex_err_file = entry.join("lexer-error.txt");
+        let parse_err_file = entry.join("parser-error.txt");
+
+        if !code_file.exists() {
+            continue;
+        }
+
+        let code = std::fs::read_to_string(&code_file).unwrap();
+
+        if lex_err_file.exists() {
+            let expected_error = std::fs::read_to_string(&lex_err_file).unwrap();
+            let error = LEXER.tokenize(code.as_bytes()).err().unwrap();
+
+            assert_str_eq!(
+                expected_error.trim(),
+                format!("{:?} -> {}", error, error),
+                "lexer error mismatch for fixture `{}`",
+                fixture
+            );
+
+            continue;
+        }
+
+        assert!(
+            tokens_file.exists(),
+            "unable to find `tokens.txt` for `{}`.",
+            fixture
+        );
+
+        let expected_tokens = std::fs::read_to_string(&tokens_file).unwrap();
+        let tokens = LEXER.tokenize(code.as_bytes()).unwrap();
+
+        assert_str_eq!(
+            expected_tokens.trim(),
+            format!("{:#?}", tokens),
+            "tokens mismatch for fixture `{}`",
+            fixture
+        );
+
+        if ast_file.exists() {
+            let expected_ast = std::fs::read_to_string(&ast_file).unwrap();
+            let ast = PARSER.parse(tokens).unwrap();
+            assert_str_eq!(
+                expected_ast.trim(),
+                format!("{:#?}", ast),
+                "ast mismatch for fixture `{}`",
+                fixture
+            );
+
+            continue;
+        }
+
+        assert!(
+            parse_err_file.exists(),
+            "unable to find `parser-error.txt` for `{}`.",
+            fixture
+        );
+
+        let expected_error = std::fs::read_to_string(&parse_err_file).unwrap();
+        let error = PARSER.parse(tokens).err().unwrap();
+
+        assert_str_eq!(
+            expected_error.trim(),
+            format!("{:?} -> {}", error, error),
+            "parse error mismatch for fixture `{}`",
+            fixture
+        );
+    }
+}
