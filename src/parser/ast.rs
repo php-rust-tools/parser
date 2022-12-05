@@ -663,6 +663,12 @@ pub enum Expression {
     InterpolatedString {
         parts: Vec<StringPart>,
     },
+    Heredoc {
+        parts: Vec<StringPart>,
+    },
+    Nowdoc {
+        value: ByteString,
+    },
     PropertyFetch {
         target: Box<Self>,
         property: Box<Self>,

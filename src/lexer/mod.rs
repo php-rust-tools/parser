@@ -20,6 +20,9 @@ use crate::lexer::token::TokenKind;
 use crate::ident;
 use crate::ident_start;
 
+pub use self::state::DocStringKind;
+use self::token::DocStringIndentationType;
+
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Default)]
 pub struct Lexer;
 
@@ -65,10 +68,12 @@ impl Lexer {
                 // The double quote state is entered when inside a double-quoted string that
                 // contains variables.
                 StackFrame::DoubleQuote => tokens.extend(self.double_quote(&mut state)?),
-                StackFrame::Heredoc(label) => {
+                // The doc string state is entered when tokenizing heredocs and nowdocs.
+                StackFrame::DocString(kind, label) => {
+                    let kind = kind.clone();
                     let label = label.clone();
 
-                    tokens.extend(self.heredoc(&mut state, label)?)
+                    tokens.extend(self.docstring(&mut state, kind, label)?)
                 }
                 // LookingForProperty is entered inside double quotes,
                 // backticks, or a heredoc, expecting a variable name.
@@ -512,13 +517,37 @@ impl Lexer {
                 state.next();
                 TokenKind::Minus
             }
-            [b'<', b'<', b'<', ident_start!(), ..] => {
+            [b'<', b'<', b'<', ..] => {
                 state.skip(3);
 
+                self.skip_whitespace(state);
+
+                let doc_string_kind = match state.peek_buf() {
+                    [b'\'', ..] => {
+                        state.next();
+                        DocStringKind::Nowdoc
+                    }
+                    _ => DocStringKind::Heredoc,
+                };
+
+                // FIXME: Add support for nowdocs too by checking if a `'`
+                //        character is present before and after the identifier.
                 let label: ByteString = match self.peek_identifier(state) {
                     Some(_) => self.consume_identifier(state).into(),
                     None => unreachable!(),
                 };
+
+                if doc_string_kind == DocStringKind::Nowdoc {
+                    match state.current {
+                        Some(b'\'') => state.next(),
+                        _ => {
+                            return Err(SyntaxError::UnexpectedCharacter(
+                                state.current.unwrap(),
+                                state.span,
+                            ))
+                        }
+                    };
+                }
 
                 if !matches!(state.peek_buf(), [b'\n', ..]) {
                     return Err(SyntaxError::UnexpectedCharacter(
@@ -528,9 +557,9 @@ impl Lexer {
                 }
 
                 state.next();
-                state.set(StackFrame::Heredoc(label.clone()))?;
+                state.set(StackFrame::DocString(doc_string_kind, label.clone()))?;
 
-                TokenKind::StartHeredoc(label)
+                TokenKind::StartDocString(label, doc_string_kind)
             }
             [b'<', b'<', b'=', ..] => {
                 state.skip(3);
@@ -667,25 +696,57 @@ impl Lexer {
         Ok(tokens)
     }
 
-    fn heredoc(&self, state: &mut State, label: ByteString) -> SyntaxResult<Vec<Token>> {
+    fn docstring(
+        &self,
+        state: &mut State,
+        kind: DocStringKind,
+        label: ByteString,
+    ) -> SyntaxResult<Vec<Token>> {
         let span = state.span;
         let mut buffer = Vec::new();
-        // FIXME: We need to track whitespace amount here. It's a bit painful, so skipping for now
-        //        so we can find other things to fix first.
+        let mut new_line = false;
+
+        let mut indentation_type: Option<DocStringIndentationType> = None;
+        let mut indentation_amount: usize = 0;
+
+        // 1. Check if there's any whitespace here. It can either be a space or tab character.
+        if matches!(state.peek_buf(), [b' ' | b'\t', ..]) {
+            indentation_type = Some(DocStringIndentationType::from(state.current.unwrap()));
+        }
+
+        // 2. Count how much whitespace there is on this line.
+        if let Some(indentation_type) = indentation_type {
+            loop {
+                match (indentation_type, state.peek_buf()) {
+                    (DocStringIndentationType::Space, [b' ', ..]) => {
+                        indentation_amount += 1;
+                        state.next();
+                        buffer.push(b' ');
+                    }
+                    (DocStringIndentationType::Tab, [b'\t', ..]) => {
+                        indentation_amount += 1;
+                        state.next();
+                        buffer.push(b'\t');
+                    }
+                    _ => break,
+                };
+            }
+        }
+
         let kind = loop {
             match state.peek_buf() {
-                [b'$', b'{', ..] => {
+                [b'$', b'{', ..] if kind == DocStringKind::Heredoc => {
                     state.skip(2);
                     state.enter(StackFrame::LookingForVarname);
                     break TokenKind::DollarLeftBrace;
                 }
-                [b'{', b'$', ..] => {
+                [b'{', b'$', ..] if kind == DocStringKind::Heredoc => {
                     // Intentionally only consume the left brace.
                     state.next();
                     state.enter(StackFrame::Scripting);
                     break TokenKind::LeftBrace;
                 }
-                [b'$', ident_start!(), ..] => {
+                [b'$', ident_start!(), ..] if kind == DocStringKind::Heredoc => {
                     state.next();
                     let ident = self.consume_identifier(state);
 
@@ -700,22 +761,147 @@ impl Lexer {
 
                     break TokenKind::Variable(ident.into());
                 }
+                &[b'\n', ..] => {
+                    new_line = true;
+                    state.next();
+                    buffer.push(b'\n');
+                }
                 &[b, ..] => {
-                    // FIXME: Hacky.
-                    // If the last character we parsed was a line break, we'll know we're at the start of a new line
-                    // where the closing heredoc label might be found.
-                    if matches!(buffer.last(), Some(b'\n')) && state.try_read(&label.0) {
-                        state.skip(label.len());
-                        state.set(StackFrame::Scripting)?;
-                        break TokenKind::EndHeredoc(label);
+                    // If we're not on a new line, just add to the buffer as usual.
+                    if !new_line {
+                        new_line = false;
+                        state.next();
+                        buffer.push(b);
+                        continue;
                     }
 
-                    state.next();
-                    buffer.push(b);
+                    // If we can see the label here, we can consume it and exit early.
+                    if state.try_read(&label) {
+                        state.skip(label.len());
+                        state.set(StackFrame::Scripting)?;
+                        break TokenKind::EndDocString(label, None, 0);
+                    }
+
+                    // We know the label isn't at the start of the line, so we can
+                    // check if the line starts with any whitespace.
+                    let line_starts_with_whitespace =
+                        matches!(state.peek_buf(), [b' ' | b'\t', ..]);
+                    let mut current_indentation_amount = 0;
+
+                    // If the line does start with whitespace, let's figure out what the current
+                    // indentation type is and how much whitespace there is.
+                    if line_starts_with_whitespace {
+                        let current_indentation_type;
+
+                        match state.peek_buf() {
+                            [b' ', ..] => {
+                                current_indentation_type = DocStringIndentationType::Space;
+                            }
+                            [b'\t', ..] => {
+                                current_indentation_type = DocStringIndentationType::Tab;
+                            }
+                            _ => unreachable!(),
+                        };
+
+                        // If there was indentation on a previous line, we need to check
+                        // if the current indentation type is the same or different.
+                        // If it's different, we need to produce an error.
+                        if let Some(indentation_type) = indentation_type {
+                            if indentation_type != current_indentation_type {
+                                return Err(SyntaxError::InvalidDocIndentation(state.span));
+                            }
+                        }
+
+                        let mut leading_whitespace_buffer = Vec::new();
+
+                        // If the type of whitespace is the same, we want to know
+                        // how much whitespace is on this line. We only care about
+                        // the smallest amount of whitespace in this case.
+                        loop {
+                            match (current_indentation_type, state.peek_buf()) {
+                                (DocStringIndentationType::Space, [b' ', ..]) => {
+                                    leading_whitespace_buffer.push(b' ');
+                                    current_indentation_amount += 1;
+                                    state.next();
+                                }
+                                (DocStringIndentationType::Tab, [b'\t', ..]) => {
+                                    leading_whitespace_buffer.push(b'\t');
+                                    current_indentation_amount += 1;
+                                    state.next();
+                                }
+                                _ => break,
+                            };
+                        }
+
+                        // If we can read the label at this point, we then need to check if the amount
+                        // of indentation is the same or less than the smallest amount encountered thus far.
+                        if state.try_read(&label) && current_indentation_amount > indentation_amount
+                        {
+                            return Err(SyntaxError::InvalidDocBodyIndentationLevel(
+                                current_indentation_amount,
+                                state.span,
+                            ));
+                        }
+
+                        // If we've found less whitespace here, we should update the minimum.
+                        if current_indentation_amount < indentation_amount {
+                            indentation_amount = current_indentation_amount;
+                        }
+
+                        let mut whitespace_buffer = Vec::new();
+
+                        // We should now try to consume anymore whitespace, since the doc body
+                        // can include spaces or tabs. We should also push it to the buffer,
+                        // in case we don't encounter the label. In theory, the only whitespace
+                        // we'll encounter here is the character not found by the checks above.
+                        loop {
+                            match state.peek_buf() {
+                                [b @ b' ' | b @ b'\t', ..] => {
+                                    whitespace_buffer.push(b.clone());
+                                    state.next();
+                                }
+                                _ => break,
+                            }
+                        }
+
+                        // Check if we can read the label again now.
+                        if state.try_read(&label) {
+                            // If there was extra whitespace after indentation, we need
+                            // to error out about mixed indentation types.
+                            if !whitespace_buffer.is_empty() {
+                                return Err(SyntaxError::InvalidDocIndentation(state.span));
+                            }
+
+                            // If no extra whitespace was found, we've reached the end of the heredoc
+                            // and can consume the label, sending the indentation amount along to the parser
+                            // to normalize.
+                            state.skip(label.len());
+                            state.set(StackFrame::Scripting)?;
+                            break TokenKind::EndDocString(
+                                label,
+                                indentation_type,
+                                current_indentation_amount,
+                            );
+                        } else {
+                            buffer.extend(leading_whitespace_buffer);
+                            buffer.extend(whitespace_buffer);
+                            continue;
+                        }
+                    } else {
+                        new_line = false;
+                        state.next();
+                        buffer.push(b);
+                    }
                 }
                 [] => return Err(SyntaxError::UnexpectedEndOfFile(state.span)),
             }
         };
+
+        // Trailing line breaks in the last segment of a heredoc
+        // shouldn't end up in the final string.
+        if buffer.last() == Some(&b'\n') {
+            buffer.pop();
+        }
 
         let mut tokens = Vec::new();
         if !buffer.is_empty() {

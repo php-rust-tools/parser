@@ -5,13 +5,19 @@ use crate::lexer::error::SyntaxResult;
 use crate::lexer::token::Span;
 use crate::prelude::ByteString;
 
+#[derive(Debug, PartialEq, Eq, PartialOrd, Clone, Copy)]
+pub enum DocStringKind {
+    Heredoc,
+    Nowdoc,
+}
+
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum StackFrame {
     Initial,
     Scripting,
     Halted,
     DoubleQuote,
-    Heredoc(ByteString),
+    DocString(DocStringKind, ByteString),
     LookingForVarname,
     LookingForProperty,
     VarOffset,
@@ -69,6 +75,10 @@ impl State {
 
     pub fn peek_byte(&self, delta: usize) -> Option<u8> {
         self.chars.get(self.cursor + delta).copied()
+    }
+
+    pub fn peek_len(&self, len: usize) -> &[u8] {
+        &self.chars[self.cursor..self.cursor + len]
     }
 
     pub fn try_read(&self, search: &[u8]) -> bool {
