@@ -34,9 +34,7 @@ jobs:
 
       - name: check
         if: matrix.rust == 'stable'
-        run: |
-          cargo fmt --all -- --check
-          cargo clippy
+        run: make lint
 
       - name: test
-        run: ./meta/test --all -- --skip third_party
+        run: make test
