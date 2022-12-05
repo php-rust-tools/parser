@@ -791,8 +791,6 @@ impl Lexer {
                     // If the line does start with whitespace, let's figure out what the current
                     // indentation type is and how much whitespace there is.
                     if line_starts_with_whitespace {
-                        
-
                         let current_indentation_type = match state.peek_buf() {
                             [b' ', ..] => DocStringIndentationKind::Space,
                             [b'\t', ..] => DocStringIndentationKind::Tab,

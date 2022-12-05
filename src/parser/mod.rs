@@ -1570,11 +1570,7 @@ impl Parser {
         Ok(Expression::InterpolatedString { parts })
     }
 
-    fn doc_string(
-        &self,
-        state: &mut State,
-        kind: DocStringKind,
-    ) -> ParseResult<Expression> {
+    fn doc_string(&self, state: &mut State, kind: DocStringKind) -> ParseResult<Expression> {
         state.next();
 
         Ok(match kind {
