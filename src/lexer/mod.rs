@@ -293,8 +293,8 @@ impl Lexer {
                 let mut last_was_slash = false;
 
                 let mut buffer = vec![b];
-                while let Some(next) = state.current {
-                    if next.is_ascii_alphanumeric() || next == b'_' {
+                while let Some(next @ ident!() | next @ b'\\') = state.current {
+                    if matches!(next, ident!()) {
                         buffer.push(next);
                         state.next();
                         last_was_slash = false;
