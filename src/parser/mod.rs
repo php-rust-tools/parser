@@ -1042,7 +1042,7 @@ impl Parser {
                     state.next();
                     e
                 }
-                TokenKind::Static if matches!(state.peek.kind, TokenKind::DoubleColon) => {
+                TokenKind::Static => {
                     state.next();
                     Expression::Static
                 }
