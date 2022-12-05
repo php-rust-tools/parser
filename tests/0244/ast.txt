@@ -1,0 +1,42 @@
+[
+    For {
+        init: [
+            Infix {
+                lhs: Variable {
+                    name: "i",
+                },
+                op: Assign,
+                rhs: LiteralInteger {
+                    i: 0,
+                },
+            },
+            Infix {
+                lhs: Variable {
+                    name: "i",
+                },
+                op: Assign,
+                rhs: LiteralInteger {
+                    i: 1,
+                },
+            },
+        ],
+        condition: [
+            Infix {
+                lhs: Variable {
+                    name: "j",
+                },
+                op: LessThan,
+                rhs: LiteralInteger {
+                    i: 2,
+                },
+            },
+            Decrement {
+                value: Variable {
+                    name: "j",
+                },
+            },
+        ],
+        loop: [],
+        then: [],
+    },
+]

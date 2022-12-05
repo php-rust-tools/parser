@@ -337,9 +337,9 @@ pub enum Statement {
         body: Block,
     },
     For {
-        init: Option<Expression>,
-        condition: Option<Expression>,
-        r#loop: Option<Expression>,
+        init: Vec<Expression>,
+        condition: Vec<Expression>,
+        r#loop: Vec<Expression>,
         then: Block,
     },
     Foreach {

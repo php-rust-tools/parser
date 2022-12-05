@@ -449,21 +449,52 @@ impl Parser {
 
                     self.lparen(state)?;
 
-                    let mut init = None;
-                    if state.current.kind != TokenKind::SemiColon {
-                        init = Some(self.expression(state, Precedence::Lowest)?);
+                    let mut init = Vec::new();
+                    loop {
+                        if state.current.kind == TokenKind::SemiColon {
+                            break;
+                        }
+
+                        init.push(self.expression(state, Precedence::Lowest)?);
+
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                        } else {
+                            break;
+                        }
+                    }
+                    
+                    self.semi(state)?;
+
+                    let mut condition = Vec::new();
+                    loop {
+                        if state.current.kind == TokenKind::SemiColon {
+                            break;
+                        }
+
+                        condition.push(self.expression(state, Precedence::Lowest)?);
+
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                        } else {
+                            break;
+                        }
                     }
                     self.semi(state)?;
 
-                    let mut condition = None;
-                    if state.current.kind != TokenKind::SemiColon {
-                        condition = Some(self.expression(state, Precedence::Lowest)?);
-                    }
-                    self.semi(state)?;
+                    let mut r#loop = Vec::new();
+                    loop {
+                        if state.current.kind == TokenKind::RightParen {
+                            break;
+                        }
+                        
+                        r#loop.push(self.expression(state, Precedence::Lowest)?);
 
-                    let mut r#loop = None;
-                    if state.current.kind != TokenKind::RightParen {
-                        r#loop = Some(self.expression(state, Precedence::Lowest)?);
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                        } else {
+                            break;
+                        }
                     }
 
                     self.rparen(state)?;
