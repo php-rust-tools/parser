@@ -1187,17 +1187,46 @@ impl Parser {
                             false
                         };
 
+                        let (mut by_ref, amper_span) = if state.current.kind == TokenKind::Ampersand
+                        {
+                            let span = state.current.span;
+                            state.next();
+                            (true, span)
+                        } else {
+                            (false, (0, 0))
+                        };
+
                         let mut value = self.expression(state, Precedence::Lowest)?;
 
                         // TODO: return error for `[...$a => $b]`.
                         if state.current.kind == TokenKind::DoubleArrow {
                             state.next();
 
+                            if by_ref {
+                                return Err(ParseError::UnexpectedToken(
+                                    TokenKind::Ampersand.to_string(),
+                                    amper_span,
+                                ));
+                            }
+
                             key = Some(value);
+
+                            by_ref = if state.current.kind == TokenKind::Ampersand {
+                                state.next();
+                                true
+                            } else {
+                                false
+                            };
+
                             value = self.expression(state, Precedence::Lowest)?;
                         }
 
-                        items.push(ArrayItem { key, value, unpack });
+                        items.push(ArrayItem {
+                            key,
+                            value,
+                            unpack,
+                            by_ref,
+                        });
 
                         if state.current.kind == TokenKind::Comma {
                             state.next();
@@ -1227,6 +1256,7 @@ impl Parser {
                                 key: None,
                                 value: Expression::Empty,
                                 unpack: false,
+                                by_ref: false,
                             });
                             state.next();
                             continue;
@@ -1240,16 +1270,42 @@ impl Parser {
                             false
                         };
 
-                        let mut value = self.expression(state, Precedence::Lowest)?;
+                        let (mut by_ref, amper_span) = if state.current.kind == TokenKind::Ampersand
+                        {
+                            let span = state.current.span;
+                            state.next();
+                            (true, span)
+                        } else {
+                            (false, (0, 0))
+                        };
 
+                        let mut value = self.expression(state, Precedence::Lowest)?;
                         if state.current.kind == TokenKind::DoubleArrow {
                             state.next();
 
+                            if by_ref {
+                                return Err(ParseError::UnexpectedToken(
+                                    TokenKind::Ampersand.to_string(),
+                                    amper_span,
+                                ));
+                            }
+
                             key = Some(value);
+                            by_ref = if state.current.kind == TokenKind::Ampersand {
+                                state.next();
+                                true
+                            } else {
+                                false
+                            };
                             value = self.expression(state, Precedence::Lowest)?;
                         }
 
-                        items.push(ArrayItem { key, value, unpack });
+                        items.push(ArrayItem {
+                            key,
+                            value,
+                            unpack,
+                            by_ref,
+                        });
 
                         state.skip_comments();
                         if state.current.kind == TokenKind::Comma {

@@ -814,6 +814,7 @@ pub struct ArrayItem {
     pub key: Option<Expression>,
     pub value: Expression,
     pub unpack: bool,
+    pub by_ref: bool,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]

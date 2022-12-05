@@ -3,15 +3,16 @@
         expr: Array {
             items: [
                 ArrayItem {
-                    key: None,
-                    value: Call {
-                        target: Identifier {
+                    key: Some(
+                        Variable {
                             name: "foo",
                         },
-                        args: [],
+                    ),
+                    value: Variable {
+                        name: "bar",
                     },
                     unpack: false,
-                    by_ref: false,
+                    by_ref: true,
                 },
             ],
         },
