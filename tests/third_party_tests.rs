@@ -7,7 +7,7 @@ use php_parser_rs::prelude::Lexer;
 use php_parser_rs::prelude::Parser;
 
 #[test]
-fn third_party_php_standard_library() {
+fn third_party_1_php_standard_library() {
     test_repository(
         "php-standard-library",
         "https://github.com/azjezz/psl.git",
@@ -17,12 +17,22 @@ fn third_party_php_standard_library() {
 }
 
 #[test]
-fn third_party_laravel_framework() {
+fn third_party_2_laravel_framework() {
     test_repository(
         "laravel-framework",
         "https://github.com/laravel/framework",
         "9.x",
         &["src", "tests"],
+    );
+}
+
+#[test]
+fn third_party_3_symfony_framework() {
+    test_repository(
+        "symfony-framework",
+        "https://github.com/symfony/symfony",
+        "6.3",
+        &["src/Symfony"],
     );
 }
 
