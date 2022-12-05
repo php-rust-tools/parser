@@ -59,8 +59,13 @@ fn test_repository(
     directories: &[&str],
     ignore: &[&str],
 ) {
-    let out_dir = env::var_os("OUT_DIR").expect("failed to get OUT_DIR");
-    let out_path = PathBuf::from(out_dir).join(name);
+    let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+    let out_dir = manifest.join("target").join("third-party");
+    if !out_dir.exists() {
+        std::fs::create_dir(&out_dir).unwrap();
+    }
+
+    let out_path = out_dir.join(name);
 
     if !out_path.exists() {
         let output = Command::new("git")
