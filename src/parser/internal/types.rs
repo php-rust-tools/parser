@@ -8,6 +8,7 @@ use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 use crate::parser::Parser;
+use crate::peek_token;
 
 impl Parser {
     pub(in crate::parser) fn try_block_caught_type_string(
@@ -39,20 +40,42 @@ impl Parser {
     }
 
     pub(in crate::parser) fn get_type(&self, state: &mut State) -> ParseResult<Type> {
-        let ty = self.maybe_nullable(state, &|state| self.get_simple_type(state))?;
-
-        if ty.nullable() {
-            return Ok(ty);
+        if state.current.kind == TokenKind::Question {
+            return self.get_nullable_type(state);
         }
 
+        // (A|B|..)&C.. or (A&B&..)|C..
+        if state.current.kind == TokenKind::LeftParen {
+            state.next();
+            let ty = self.get_simple_type(state)?;
+            return peek_token!([
+                TokenKind::Pipe => {
+                    let union = self.get_union_type(state, ty, true)?;
+
+                    self.rparen(state)?;
+
+                    self.get_intersection_type(state, union, false)
+                },
+                TokenKind::Ampersand => {
+                    let intersection = self.get_intersection_type(state, ty, true)?;
+
+                    self.rparen(state)?;
+
+                    self.get_union_type(state, intersection, false)
+                },
+            ], state, ["`|`", "`&`"]);
+        }
+
+        let ty = self.get_simple_type(state)?;
+
         if state.current.kind == TokenKind::Pipe {
-            return self.parse_union(state, ty);
+            return self.get_union_type(state, ty, false);
         }
 
         if state.current.kind == TokenKind::Ampersand
             && !matches!(state.peek.kind, TokenKind::Variable(_))
         {
-            return self.parse_intersection(state, ty);
+            return self.get_intersection_type(state, ty, false);
         }
 
         Ok(ty)
@@ -63,7 +86,29 @@ impl Parser {
         state: &mut State,
     ) -> ParseResult<Option<Type>> {
         if state.current.kind == TokenKind::Question {
-            return Ok(Some(self.get_type(state)?));
+            return self.get_nullable_type(state).map(Some);
+        }
+
+        // (A|B|..)&C.. or (A&B&..)|C..
+        if state.current.kind == TokenKind::LeftParen {
+            state.next();
+            let ty = self.get_simple_type(state)?;
+            return peek_token!([
+                TokenKind::Pipe => {
+                    let union = self.get_union_type(state, ty, true)?;
+
+                    self.rparen(state)?;
+
+                    self.get_intersection_type(state, union, false).map(Some)
+                },
+                TokenKind::Ampersand => {
+                    let intersection = self.get_intersection_type(state, ty, true)?;
+
+                    self.rparen(state)?;
+
+                    self.get_union_type(state, intersection, false).map(Some)
+                },
+            ], state, ["`|`", "`&`"]);
         }
 
         let ty = self.get_optional_simple_type(state)?;
@@ -71,19 +116,34 @@ impl Parser {
         match ty {
             Some(ty) => {
                 if state.current.kind == TokenKind::Pipe {
-                    return Ok(Some(self.parse_union(state, ty)?));
+                    return Ok(Some(self.get_union_type(state, ty, false)?));
                 }
 
                 if state.current.kind == TokenKind::Ampersand
                     && !matches!(state.peek.kind, TokenKind::Variable(_))
                 {
-                    return Ok(Some(self.parse_intersection(state, ty)?));
+                    return Ok(Some(self.get_intersection_type(state, ty, false)?));
                 }
 
                 Ok(Some(ty))
             }
             None => Ok(None),
         }
+    }
+
+    fn get_nullable_type(&self, state: &mut State) -> ParseResult<Type> {
+        state.next();
+
+        let ty = self.get_simple_type(state)?;
+
+        if ty.standalone() {
+            return Err(ParseError::StandaloneTypeUsedInCombination(
+                ty,
+                state.current.span,
+            ));
+        }
+
+        Ok(Type::Nullable(Box::new(ty)))
     }
 
     fn get_optional_simple_type(&self, state: &mut State) -> ParseResult<Option<Type>> {
@@ -190,7 +250,12 @@ impl Parser {
             .ok_or_else(|| expected_token!(["a type"], state))
     }
 
-    fn parse_union(&self, state: &mut State, other: Type) -> ParseResult<Type> {
+    fn get_union_type(
+        &self,
+        state: &mut State,
+        other: Type,
+        within_dnf: bool,
+    ) -> ParseResult<Type> {
         if other.standalone() {
             return Err(ParseError::StandaloneTypeUsedInCombination(
                 other,
@@ -203,10 +268,29 @@ impl Parser {
         expect_token!([TokenKind::Pipe], state, ["|"]);
         loop {
             let ty = if state.current.kind == TokenKind::LeftParen {
+                if within_dnf {
+                    // don't allow nesting.
+                    //
+                    // examples on how we got here:
+                    //
+                    // v-- get_intersection_type: within_dnf = fasle
+                    //     v-- get_union_type: within_dnf = true
+                    //      v-- error
+                    // F&(A|(D&S))
+                    //
+                    // v-- get_intersection_type: within_dnf = fasle
+                    //     v-- get_union_type: within_dnf = true
+                    //        v-- error
+                    // F&(A|B|(D&S))
+                    return Err(ParseError::NestedDisjunctiveNormalFormTypes(
+                        state.current.span,
+                    ));
+                }
+
                 state.next();
 
                 let other = self.get_simple_type(state)?;
-                let ty = self.parse_intersection(state, other)?;
+                let ty = self.get_intersection_type(state, other, true)?;
 
                 self.rparen(state)?;
 
@@ -235,7 +319,12 @@ impl Parser {
         Ok(Type::Union(types))
     }
 
-    fn parse_intersection(&self, state: &mut State, other: Type) -> ParseResult<Type> {
+    fn get_intersection_type(
+        &self,
+        state: &mut State,
+        other: Type,
+        within_dnf: bool,
+    ) -> ParseResult<Type> {
         if other.standalone() {
             return Err(ParseError::StandaloneTypeUsedInCombination(
                 other,
@@ -248,10 +337,29 @@ impl Parser {
         expect_token!([TokenKind::Ampersand], state, ["&"]);
         loop {
             let ty = if state.current.kind == TokenKind::LeftParen {
+                if within_dnf {
+                    // don't allow nesting.
+                    //
+                    // examples on how we got here:
+                    //
+                    //  v-- get_union_type: within_dnf = fasle
+                    //     v-- get_intersection_type: within_dnf = true
+                    //      v-- error
+                    // F|(A&(D|S))
+                    //
+                    //  v-- get_union_type: within_dnf = fasle
+                    //     v-- get_intersection_type: within_dnf = true
+                    //        v-- error
+                    // F|(A&B&(D|S))
+                    return Err(ParseError::NestedDisjunctiveNormalFormTypes(
+                        state.current.span,
+                    ));
+                }
+
                 state.next();
 
                 let other = self.get_simple_type(state)?;
-                let ty = self.parse_union(state, other)?;
+                let ty = self.get_union_type(state, other, true)?;
 
                 self.rparen(state)?;
 
@@ -280,26 +388,5 @@ impl Parser {
         }
 
         Ok(Type::Intersection(types))
-    }
-
-    fn maybe_nullable(
-        &self,
-        state: &mut State,
-        otherwise: &(dyn Fn(&mut State) -> ParseResult<Type>),
-    ) -> ParseResult<Type> {
-        if state.current.kind == TokenKind::Question {
-            state.next();
-            let inner = otherwise(state)?;
-            if inner.standalone() {
-                return Err(ParseError::StandaloneTypeUsedInCombination(
-                    inner,
-                    state.current.span,
-                ));
-            }
-
-            Ok(Type::Nullable(Box::new(inner)))
-        } else {
-            otherwise(state)
-        }
     }
 }

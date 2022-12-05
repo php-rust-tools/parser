@@ -36,6 +36,7 @@ pub enum ParseError {
     MatchExpressionWithMultipleDefaultArms(Span),
     CannotFindTypeInCurrentScope(String, Span),
     ExpectedItemDefinitionAfterAttributes(Span),
+    NestedDisjunctiveNormalFormTypes(Span),
 }
 
 impl Display for ParseError {
@@ -84,6 +85,7 @@ impl Display for ParseError {
             Self::MatchExpressionWithMultipleDefaultArms(span) => write!(f, "Parse Error: Match expressions may only contain one default arm on line {} column {}", span.0, span.1),
             Self::CannotFindTypeInCurrentScope(ty, span) => write!(f, "Parse Error: Cannot find type `{}` in this scope on line {} on column {}", ty, span.0, span.1),
             Self::ExpectedItemDefinitionAfterAttributes(span) => write!(f, "Parse Error: Expected item definition after attribute on line {} column {}", span.0, span.1),
+            Self::NestedDisjunctiveNormalFormTypes(span) => write!(f, "Parse Error: Nested disjunctive normal form types are not allowed on line {} column {}", span.0, span.1),
         }
     }
 }

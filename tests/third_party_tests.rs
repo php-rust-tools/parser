@@ -41,15 +41,13 @@ fn third_party_3_symfony_framework() {
             // FIXME: Remove this one once I've found the energy to sort out heredocs / nowdocs.
             "src/Symfony/Component/DependencyInjection/LazyProxy/PhpDumper/LazyServiceDumper.php",
             "src/Symfony/Component/Cache/Tests/Traits/RedisProxiesTest.php",
-            // FIXME: Remove this once we can support (A&B)|C DNF types.
-            "src/Symfony/Component/DependencyInjection/Tests/Fixtures/includes/compositetype_classes.php",
             // FIXME: Remove these once we can support arbitrary opening and closing tags.
             "src/Symfony/Component/ErrorHandler/Resources/views/exception.html.php",
             "src/Symfony/Component/ErrorHandler/Resources/views/exception_full.html.php",
             "src/Symfony/Component/ErrorHandler/Resources/views/logs.html.php",
             "src/Symfony/Component/ErrorHandler/Resources/views/trace.html.php",
             "src/Symfony/Component/ErrorHandler/Resources/views/traces.html.php",
-            "src/Symfony/Component/ErrorHandler/Resources/views/traces_text.html.php"
+            "src/Symfony/Component/ErrorHandler/Resources/views/traces_text.html.php",
         ],
     );
 }
