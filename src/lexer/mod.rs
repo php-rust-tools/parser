@@ -70,7 +70,7 @@ impl Lexer {
                 StackFrame::DoubleQuote => tokens.extend(self.double_quote(&mut state)?),
                 // The doc string state is entered when tokenizing heredocs and nowdocs.
                 StackFrame::DocString(kind, label) => {
-                    let kind = kind.clone();
+                    let kind = *kind;
                     let label = label.clone();
 
                     tokens.extend(self.docstring(&mut state, kind, label)?)
@@ -791,15 +791,11 @@ impl Lexer {
                     // If the line does start with whitespace, let's figure out what the current
                     // indentation type is and how much whitespace there is.
                     if line_starts_with_whitespace {
-                        let current_indentation_type;
+                        
 
-                        match state.peek_buf() {
-                            [b' ', ..] => {
-                                current_indentation_type = DocStringIndentationType::Space;
-                            }
-                            [b'\t', ..] => {
-                                current_indentation_type = DocStringIndentationType::Tab;
-                            }
+                        let current_indentation_type = match state.peek_buf() {
+                            [b' ', ..] => DocStringIndentationType::Space,
+                            [b'\t', ..] => DocStringIndentationType::Tab,
                             _ => unreachable!(),
                         };
 
@@ -854,14 +850,9 @@ impl Lexer {
                         // can include spaces or tabs. We should also push it to the buffer,
                         // in case we don't encounter the label. In theory, the only whitespace
                         // we'll encounter here is the character not found by the checks above.
-                        loop {
-                            match state.peek_buf() {
-                                [b @ b' ' | b @ b'\t', ..] => {
-                                    whitespace_buffer.push(b.clone());
-                                    state.next();
-                                }
-                                _ => break,
-                            }
+                        while let [b @ b' ' | b @ b'\t', ..] = state.peek_buf() {
+                            whitespace_buffer.push(*b);
+                            state.next();
                         }
 
                         // Check if we can read the label again now.

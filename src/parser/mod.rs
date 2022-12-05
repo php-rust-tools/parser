@@ -13,7 +13,6 @@ use crate::parser::error::ParseResult;
 use crate::parser::internal::ident::is_reserved_ident;
 use crate::parser::internal::precedence::{Associativity, Precedence};
 use crate::parser::state::State;
-use crate::prelude::ByteString;
 use crate::prelude::DefaultMatchArm;
 
 pub mod ast;
@@ -1053,11 +1052,10 @@ impl Parser {
                     e
                 }
                 TokenKind::StringPart(_) => self.interpolated_string(state)?,
-                TokenKind::StartDocString(label, kind) => {
-                    let kind = kind.clone();
-                    let label = label.clone();
+                TokenKind::StartDocString(_, kind) => {
+                    let kind = *kind;
 
-                    self.doc_string(state, label, kind)?
+                    self.doc_string(state, kind)?
                 }
                 TokenKind::True => {
                     let e = Expression::Bool { value: true };
@@ -1574,7 +1572,6 @@ impl Parser {
     fn doc_string(
         &self,
         state: &mut State,
-        label: ByteString,
         kind: DocStringKind,
     ) -> ParseResult<Expression> {
         state.next();

@@ -27,11 +27,11 @@ impl From<u8> for DocStringIndentationType {
     }
 }
 
-impl Into<u8> for DocStringIndentationType {
-    fn into(self) -> u8 {
-        match self {
-            Self::Space => b' ',
-            Self::Tab => b'\t',
+impl From<DocStringIndentationType> for u8 {
+    fn from(kind: DocStringIndentationType) -> Self {
+        match kind {
+            DocStringIndentationType::Space => b' ',
+            DocStringIndentationType::Tab => b'\t',
         }
     }
 }

@@ -77,10 +77,6 @@ impl State {
         self.chars.get(self.cursor + delta).copied()
     }
 
-    pub fn peek_len(&self, len: usize) -> &[u8] {
-        &self.chars[self.cursor..self.cursor + len]
-    }
-
     pub fn try_read(&self, search: &[u8]) -> bool {
         self.peek_buf().starts_with(search)
     }
