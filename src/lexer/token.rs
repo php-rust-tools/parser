@@ -36,7 +36,7 @@ impl From<DocStringIndentationKind> for u8 {
     }
 }
 
-#[derive(Debug, PartialEq, PartialOrd, Clone)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Clone)]
 pub enum TokenKind {
     // Can't use `Self` as a name here, so suffixing with an underscore.
     Self_,
@@ -137,7 +137,7 @@ pub enum TokenKind {
     False,
     Final,
     Finally,
-    LiteralFloat(f64),
+    LiteralFloat(ByteString),
     Fn,
     For,
     Foreach,
@@ -160,7 +160,7 @@ pub enum TokenKind {
     Unset,
     Isset,
     List,
-    LiteralInteger(i64),
+    LiteralInteger(ByteString),
     IntCast,
     IntegerCast,
     Interface,
@@ -227,7 +227,7 @@ pub enum TokenKind {
     LogicalXor,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Token {
     pub kind: TokenKind,
     pub span: Span,
@@ -334,7 +334,7 @@ impl Display for TokenKind {
             Self::False => "false",
             Self::Final => "final",
             Self::Finally => "finally",
-            Self::LiteralFloat(_) => "float",
+            Self::LiteralFloat(bytes) => return write!(f, "{}", bytes),
             Self::Fn => "fn",
             Self::For => "for",
             Self::Function => "function",
@@ -345,7 +345,7 @@ impl Display for TokenKind {
             Self::Implements => "implements",
             Self::Increment => "++",
             Self::InlineHtml(_) => "InlineHtml",
-            Self::LiteralInteger(_) => "int",
+            Self::LiteralInteger(bytes) => return write!(f, "{}", bytes),
             Self::LeftBrace => "{",
             Self::LeftBracket => "[",
             Self::LeftParen => "(",

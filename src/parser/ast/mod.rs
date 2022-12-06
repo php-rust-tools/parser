@@ -399,10 +399,10 @@ pub enum Expression {
         value: Box<Self>,
     },
     LiteralInteger {
-        i: i64,
+        i: ByteString,
     },
     LiteralFloat {
-        f: f64,
+        f: ByteString,
     },
     Variable(Variable),
     DynamicVariable {
