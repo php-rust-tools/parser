@@ -180,6 +180,20 @@ impl State {
         self.current.kind == TokenKind::Eof
     }
 
+    pub fn pull(&mut self) -> Token {
+        let mut current: Token = Default::default();
+
+        std::mem::swap(&mut current, &mut self.current);
+        std::mem::swap(&mut self.current, &mut self.peek);
+
+        // peek already contains default.
+        if let Some(t) = self.iter.next() {
+            self.peek = t;
+        }
+
+        current
+    }
+
     pub fn next(&mut self) {
         // move peek to current
         std::mem::swap(&mut self.current, &mut self.peek);

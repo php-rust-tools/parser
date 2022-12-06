@@ -118,7 +118,7 @@ impl Parser {
                 ));
             }
 
-            expect_token!([TokenKind::Equals], state, "`=`");
+            self.skip(state, TokenKind::Equals)?;
 
             let value = self.expression(state, Precedence::Lowest)?;
 
@@ -404,7 +404,7 @@ impl Parser {
 
         let name = self.ident(state)?;
 
-        expect_token!([TokenKind::Equals], state, "`=`");
+        self.skip(state, TokenKind::Equals)?;
 
         let value = self.expression(state, Precedence::Lowest)?;
 

@@ -2,7 +2,7 @@
 macro_rules! peek_token {
     ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
         $state.skip_comments();
-        match $state.current.kind.clone() {
+        match &$state.current.kind {
             $(
                 $( $pattern )|+ $( if $guard )? => $out,
             )+
@@ -27,17 +27,33 @@ macro_rules! peek_token {
 
 #[macro_export]
 macro_rules! expect_token {
-    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {
-        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )? => { $state.next(); $out },)+ ], $state, [$($message,)+])
-    };
-    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )?),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {
-        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )? => { $state.next(); },)+ ], $state, [$($message,)+])
-    };
+    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
+        $state.skip_comments();
+        let token = $state.pull();
+        match token.kind {
+            $(
+                $( $pattern )|+ $( if $guard )? => {
+                    $out
+                },
+            )+
+            TokenKind::Eof => {
+                return Err($crate::parser::error::ParseError::ExpectedToken(
+                    vec![$($message.into(),)+],
+                    None,
+                    token.span,
+                ))
+            },
+            _ => {
+                return Err($crate::parser::error::ParseError::ExpectedToken(
+                    vec![$($message.into(),)+],
+                    Some(token.kind.to_string()),
+                    token.span,
+                ))
+            }
+        }
+    }};
     ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, $message:literal) => {
-        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )? => { $state.next(); $out },)+ ], $state, [$message])
-    };
-    ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )?),+ $(,)? ], $state:expr, $message:literal) => {
-        $crate::peek_token!([ $($( $pattern )|+ $( if $guard )? => { $state.next(); },)+ ], $state, [$message])
+        $crate::expect_token!([ $($( $pattern )|+ $( if $guard )? => $out,)+ ], $state, [$message])
     };
 }
 
