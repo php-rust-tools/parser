@@ -1,0 +1,113 @@
+[
+    Expression {
+        expr: Infix {
+            lhs: Variable(
+                Variable {
+                    start: (
+                        3,
+                        1,
+                    ),
+                    name: "e",
+                    end: (
+                        3,
+                        4,
+                    ),
+                },
+            ),
+            op: Assign,
+            rhs: New {
+                target: AnonymousClass {
+                    attributes: [],
+                    extends: None,
+                    implements: [],
+                    body: [
+                        Method(
+                            Method {
+                                start: (
+                                    4,
+                                    5,
+                                ),
+                                end: (
+                                    6,
+                                    5,
+                                ),
+                                name: Identifier {
+                                    start: (
+                                        4,
+                                        21,
+                                    ),
+                                    name: "bar",
+                                    end: (
+                                        4,
+                                        24,
+                                    ),
+                                },
+                                attributes: [],
+                                parameters: MethodParameterList {
+                                    start: (
+                                        4,
+                                        24,
+                                    ),
+                                    end: (
+                                        4,
+                                        26,
+                                    ),
+                                    members: [],
+                                },
+                                body: Some(
+                                    [
+                                        Expression {
+                                            expr: Call {
+                                                target: Identifier(
+                                                    Identifier {
+                                                        start: (
+                                                            5,
+                                                            9,
+                                                        ),
+                                                        name: "exit",
+                                                        end: (
+                                                            5,
+                                                            13,
+                                                        ),
+                                                    },
+                                                ),
+                                                args: [
+                                                    Arg {
+                                                        name: None,
+                                                        value: LiteralInteger {
+                                                            i: 1,
+                                                        },
+                                                        unpack: false,
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                    ],
+                                ),
+                                modifiers: MethodModifierGroup {
+                                    modifiers: [
+                                        Public {
+                                            start: (
+                                                4,
+                                                5,
+                                            ),
+                                            end: (
+                                                4,
+                                                12,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                return_type: Some(
+                                    ParentReference,
+                                ),
+                                by_ref: false,
+                            },
+                        ),
+                    ],
+                },
+                args: [],
+            },
+        },
+    },
+]

@@ -1495,6 +1495,8 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
         b"while" => TokenKind::While,
         b"insteadof" => TokenKind::Insteadof,
         b"list" => TokenKind::List,
+        b"self" => TokenKind::Self_,
+        b"parent" => TokenKind::Parent,
         _ => return None,
     })
 }
