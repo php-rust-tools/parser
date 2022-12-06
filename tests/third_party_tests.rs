@@ -42,6 +42,9 @@ fn third_party_3_symfony_framework() {
             "src/Symfony/Component/DependencyInjection/LazyProxy/PhpDumper/LazyServiceDumper.php",
             "src/Symfony/Component/Cache/Tests/Traits/RedisProxiesTest.php",
             "src/Symfony/Component/Mailer/Tests/Transport/NativeTransportFactoryTest.php",
+            "src/Symfony/Component/VarDumper/Tests/Caster/FFICasterTest.php",
+            "src/Symfony/Component/VarExporter/ProxyHelper.php",
+            "src/Symfony/Component/VarExporter/Tests/ProxyHelperTest.php",
             // FIXME: Remove these once we can support arbitrary opening and closing tags.
             "src/Symfony/Component/ErrorHandler/Resources/views/exception.html.php",
             "src/Symfony/Component/ErrorHandler/Resources/views/exception_full.html.php",
