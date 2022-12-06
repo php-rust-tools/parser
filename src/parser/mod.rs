@@ -19,6 +19,8 @@ use crate::parser::internal::identifiers::is_reserved_ident;
 use crate::parser::internal::precedences::{Associativity, Precedence};
 use crate::parser::state::State;
 
+use self::ast::ListItem;
+
 pub mod ast;
 pub mod error;
 
@@ -946,6 +948,83 @@ impl Parser {
             }
         } else {
             match &state.current.kind {
+                TokenKind::List => {
+                    state.next();
+                    self.lparen(state)?;
+
+                    let mut items = Vec::new();
+                    let mut has_atleast_one_key = false;
+
+                    while state.current.kind != TokenKind::RightParen {
+                        if state.current.kind == TokenKind::Comma {
+                            items.push(ListItem {
+                                key: None,
+                                value: Expression::Empty,
+                            });
+                            state.next();
+                            continue;
+                        }
+
+                        let mut key = None;
+
+                        if state.current.kind == TokenKind::Ellipsis {
+                            return Err(ParseError::IllegalSpreadOperator(state.current.span));
+                        }
+
+                        if state.current.kind == TokenKind::Ampersand {
+                            return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
+                                state.current.span,
+                            ));
+                        }
+
+                        let mut value = self.expression(state, Precedence::Lowest)?;
+
+                        if state.current.kind == TokenKind::DoubleArrow {
+                            if !has_atleast_one_key && !items.is_empty() {
+                                return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(
+                                    state.current.span,
+                                ));
+                            }
+
+                            state.next();
+
+                            key = Some(value);
+
+                            if state.current.kind == TokenKind::Ellipsis {
+                                return Err(ParseError::IllegalSpreadOperator(state.current.span));
+                            }
+
+                            if state.current.kind == TokenKind::Ampersand {
+                                return Err(
+                                    ParseError::CannotAssignReferenceToNonReferencableValue(
+                                        state.current.span,
+                                    ),
+                                );
+                            }
+
+                            has_atleast_one_key = true;
+                            value = self.expression(state, Precedence::Lowest)?;
+                        } else if has_atleast_one_key {
+                            return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(
+                                state.current.span,
+                            ));
+                        }
+
+                        items.push(ListItem { key, value });
+
+                        state.skip_comments();
+                        if state.current.kind == TokenKind::Comma {
+                            state.next();
+                            state.skip_comments();
+                        } else {
+                            break;
+                        }
+                    }
+
+                    self.rparen(state)?;
+
+                    Expression::List { items }
+                }
                 TokenKind::Static if state.peek.kind == TokenKind::Function => {
                     self.anonymous_function(state)?
                 }

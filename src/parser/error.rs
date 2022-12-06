@@ -45,6 +45,9 @@ pub enum ParseError {
     CannotFindTypeInCurrentScope(String, Span),
     ExpectedItemDefinitionAfterAttributes(Span),
     NestedDisjunctiveNormalFormTypes(Span),
+    IllegalSpreadOperator(Span),
+    CannotAssignReferenceToNonReferencableValue(Span),
+    CannotMixKeyedAndUnkeyedEntries(Span),
 }
 
 impl From<SyntaxError> for ParseError {
@@ -107,6 +110,9 @@ impl Display for ParseError {
             Self::CannotFindTypeInCurrentScope(ty, span) => write!(f, "Parse Error: Cannot find type `{}` in this scope on line {} on column {}", ty, span.0, span.1),
             Self::ExpectedItemDefinitionAfterAttributes(span) => write!(f, "Parse Error: Expected item definition after attribute on line {} column {}", span.0, span.1),
             Self::NestedDisjunctiveNormalFormTypes(span) => write!(f, "Parse Error: Nested disjunctive normal form types are not allowed on line {} column {}", span.0, span.1),
+            Self::IllegalSpreadOperator(span) => write!(f, "Parse Error: Cannot use spread operator on line {} column {}.", span.0, span.1),
+            Self::CannotAssignReferenceToNonReferencableValue(span) => write!(f, "Parse Error: cannot assign reference to non-referencable value on line {} column {}", span.0, span.1),
+            Self::CannotMixKeyedAndUnkeyedEntries(span) => write!(f, "Parse Error: cannot mix keyed and un-keyed entries on line {}", span.0),
         }
     }
 }
