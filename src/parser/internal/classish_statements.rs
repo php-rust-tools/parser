@@ -70,9 +70,7 @@ impl Parser {
                 ));
             }
 
-            self.semi(state)?;
-
-            let end = state.current.span;
+            let end = self.semicolon(state)?;
 
             return Ok(UnitEnumMember::Case(UnitEnumCase { start, end, name }));
         }
@@ -123,9 +121,8 @@ impl Parser {
             expect_token!([TokenKind::Equals], state, "`=`");
 
             let value = self.expression(state, Precedence::Lowest)?;
-            self.semi(state)?;
 
-            let end = state.current.span;
+            let end = self.semicolon(state)?;
 
             return Ok(BackedEnumMember::Case(BackedEnumCase {
                 start,
@@ -244,7 +241,7 @@ impl Parser {
             }
         }
 
-        self.semi(state)?;
+        self.semicolon(state)?;
 
         Ok(Statement::Property {
             var,
@@ -270,11 +267,11 @@ impl Parser {
                 if state.peek.kind == TokenKind::SemiColon {
                     // will fail with unexpected token `,`
                     // as `use` doesn't allow for trailing commas.
-                    self.semi(state)?;
+                    self.semicolon(state)?;
                 } else if state.peek.kind == TokenKind::LeftBrace {
                     // will fail with unexpected token `{`
                     // as `use` doesn't allow for trailing commas.
-                    self.lbrace(state)?;
+                    self.left_brace(state)?;
                 } else {
                     state.next();
                 }
@@ -285,7 +282,7 @@ impl Parser {
 
         let mut adaptations = Vec::new();
         if state.current.kind == TokenKind::LeftBrace {
-            self.lbrace(state)?;
+            self.left_brace(state)?;
 
             while state.current.kind != TokenKind::RightBrace {
                 let (r#trait, method): (Option<Identifier>, Identifier) = match state.peek.kind {
@@ -353,7 +350,7 @@ impl Parser {
                             if state.peek.kind == TokenKind::SemiColon {
                                 // will fail with unexpected token `,`
                                 // as `insteadof` doesn't allow for trailing commas.
-                                self.semi(state)?;
+                                self.semicolon(state)?;
                             }
 
                             state.next();
@@ -365,7 +362,7 @@ impl Parser {
                                     if state.peek.kind == TokenKind::SemiColon {
                                         // will fail with unexpected token `,`
                                         // as `insteadof` doesn't allow for trailing commas.
-                                        self.semi(state)?;
+                                        self.semicolon(state)?;
                                     } else {
                                         state.next();
                                     }
@@ -383,12 +380,12 @@ impl Parser {
                     }
                 ], state, ["`as`", "`insteadof`"]);
 
-                self.semi(state)?;
+                self.semicolon(state)?;
             }
 
-            self.rbrace(state)?;
+            self.right_brace(state)?;
         } else {
-            self.semi(state)?;
+            self.semicolon(state)?;
         }
 
         Ok(Statement::TraitUse {
@@ -411,9 +408,7 @@ impl Parser {
 
         let value = self.expression(state, Precedence::Lowest)?;
 
-        self.semi(state)?;
-
-        let end = state.current.span;
+        let end = self.semicolon(state)?;
 
         Ok(ClassishConstant {
             start,

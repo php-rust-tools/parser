@@ -50,7 +50,7 @@ impl Parser {
         if state.current.kind == TokenKind::Use {
             state.next();
 
-            self.lparen(state)?;
+            self.left_parenthesis(state)?;
 
             while state.current.kind != TokenKind::RightParen {
                 let mut by_ref = false;
@@ -81,7 +81,7 @@ impl Parser {
                 }
             }
 
-            self.rparen(state)?;
+            self.right_parenthesis(state)?;
         }
 
         let mut return_ty = None;
@@ -92,12 +92,10 @@ impl Parser {
         }
 
         let (body, end) = scoped!(state, Scope::AnonymousFunction(is_static), {
-            self.lbrace(state)?;
+            self.left_brace(state)?;
 
             let body = self.block(state, &TokenKind::RightBrace)?;
-            let end = state.current.span;
-
-            self.rbrace(state)?;
+            let end = self.right_brace(state)?;
 
             (body, end)
         });
@@ -179,11 +177,15 @@ impl Parser {
 
         let name = if state.current.kind == TokenKind::Null {
             let start = state.current.span;
-            let name = "null".into();
-            state.next();
-            let end = state.current.span;
+            let end = (start.0, start.1 + 4);
 
-            Identifier { start, name, end }
+            state.next();
+
+            Identifier {
+                start,
+                name: "null".into(),
+                end,
+            }
         } else {
             self.ident(state)?
         };
@@ -203,12 +205,10 @@ impl Parser {
         }
 
         let (body, end) = scoped!(state, Scope::Function(name.clone()), {
-            self.lbrace(state)?;
+            self.left_brace(state)?;
 
             let body = self.block(state, &TokenKind::RightBrace)?;
-            let end = state.current.span;
-
-            self.rbrace(state)?;
+            let end = self.right_brace(state)?;
 
             (body, end)
         });
@@ -284,17 +284,15 @@ impl Parser {
                 }
 
                 if !has_body {
-                    let end = state.current.span;
-                    self.semi(state)?;
+                    let end = self.semicolon(state)?;
 
                     (parameters, None, return_type, end)
                 } else {
-                    self.lbrace(state)?;
+                    self.left_brace(state)?;
 
                     let body = self.block(state, &TokenKind::RightBrace)?;
 
-                    let end = state.current.span;
-                    self.rbrace(state)?;
+                    let end = self.right_brace(state)?;
 
                     (parameters, Some(body), return_type, end)
                 }

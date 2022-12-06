@@ -60,7 +60,7 @@ impl Parser {
         state: &mut State,
         name: Option<Identifier>,
     ) -> ParseResult<Statement> {
-        self.lbrace(state)?;
+        self.left_brace(state)?;
 
         let body = scoped!(state, Scope::BracedNamespace(name.clone()), {
             let mut body = Block::new();
@@ -71,7 +71,7 @@ impl Parser {
             body
         });
 
-        self.rbrace(state)?;
+        self.right_brace(state)?;
 
         Ok(Statement::BracedNamespace { name, body })
     }

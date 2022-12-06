@@ -181,7 +181,9 @@ impl State {
     }
 
     pub fn next(&mut self) {
-        self.current = self.peek.clone();
+        // move peek to current
+        std::mem::swap(&mut self.current, &mut self.peek);
+
         self.peek = self.iter.next().unwrap_or_default()
     }
 

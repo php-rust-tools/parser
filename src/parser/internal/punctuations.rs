@@ -1,46 +1,183 @@
+use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
+use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
-use crate::expect_token;
-
 impl Parser {
-    pub(in crate::parser) fn semi(&self, state: &mut State) -> ParseResult<()> {
-        if state.current.kind != TokenKind::CloseTag {
-            expect_token!([TokenKind::SemiColon => Ok(())], state, "`;`")
-        } else {
-            Ok(())
+    pub(in crate::parser) fn semicolon(&self, state: &mut State) -> ParseResult<Span> {
+        state.skip_comments();
+
+        let end = state.current.span;
+
+        if state.current.kind == TokenKind::SemiColon {
+            state.next();
+            state.skip_comments();
+        } else if state.current.kind != TokenKind::CloseTag {
+            let found = if state.current.kind == TokenKind::Eof {
+                None
+            } else {
+                Some(state.current.kind.to_string())
+            };
+
+            return Err(ParseError::ExpectedToken(
+                vec!["`;`".to_string()],
+                found,
+                state.current.span,
+            ));
         }
+
+        Ok(end)
     }
 
-    pub(in crate::parser) fn lbrace(&self, state: &mut State) -> ParseResult<()> {
+    pub(in crate::parser) fn left_brace(&self, state: &mut State) -> ParseResult<Span> {
         state.skip_comments();
-        expect_token!([TokenKind::LeftBrace], state, "`{`");
+
+        let end = state.current.span;
+
+        if state.current.kind == TokenKind::LeftBrace {
+            state.next();
+            state.skip_comments();
+        } else {
+            let found = if state.current.kind == TokenKind::Eof {
+                None
+            } else {
+                Some(state.current.kind.to_string())
+            };
+
+            return Err(ParseError::ExpectedToken(
+                vec!["`{`".to_string()],
+                found,
+                state.current.span,
+            ));
+        }
+
+        Ok(end)
+    }
+
+    pub(in crate::parser) fn right_brace(&self, state: &mut State) -> ParseResult<Span> {
         state.skip_comments();
-        Ok(())
+
+        let end = state.current.span;
+
+        if state.current.kind == TokenKind::RightBrace {
+            state.next();
+            state.skip_comments();
+        } else {
+            let found = if state.current.kind == TokenKind::Eof {
+                None
+            } else {
+                Some(state.current.kind.to_string())
+            };
+
+            return Err(ParseError::ExpectedToken(
+                vec!["`}`".to_string()],
+                found,
+                state.current.span,
+            ));
+        }
+
+        Ok(end)
     }
 
-    pub(in crate::parser) fn rbrace(&self, state: &mut State) -> ParseResult<()> {
+    pub(in crate::parser) fn left_parenthesis(&self, state: &mut State) -> ParseResult<Span> {
         state.skip_comments();
-        expect_token!([TokenKind::RightBrace], state, "`}`");
+
+        let end = state.current.span;
+
+        if state.current.kind == TokenKind::LeftParen {
+            state.next();
+            state.skip_comments();
+        } else {
+            let found = if state.current.kind == TokenKind::Eof {
+                None
+            } else {
+                Some(state.current.kind.to_string())
+            };
+
+            return Err(ParseError::ExpectedToken(
+                vec!["`(`".to_string()],
+                found,
+                state.current.span,
+            ));
+        }
+
+        Ok(end)
+    }
+
+    pub(in crate::parser) fn right_parenthesis(&self, state: &mut State) -> ParseResult<Span> {
         state.skip_comments();
-        Ok(())
+
+        let end = state.current.span;
+
+        if state.current.kind == TokenKind::RightParen {
+            state.next();
+            state.skip_comments();
+        } else {
+            let found = if state.current.kind == TokenKind::Eof {
+                None
+            } else {
+                Some(state.current.kind.to_string())
+            };
+
+            return Err(ParseError::ExpectedToken(
+                vec!["`)`".to_string()],
+                found,
+                state.current.span,
+            ));
+        }
+
+        Ok(end)
     }
 
-    pub(in crate::parser) fn lparen(&self, state: &mut State) -> ParseResult<()> {
-        expect_token!([TokenKind::LeftParen => Ok(())], state, "`(`")
+    pub(in crate::parser) fn right_bracket(&self, state: &mut State) -> ParseResult<Span> {
+        state.skip_comments();
+
+        let end = state.current.span;
+
+        if state.current.kind == TokenKind::RightBracket {
+            state.next();
+            state.skip_comments();
+        } else {
+            let found = if state.current.kind == TokenKind::Eof {
+                None
+            } else {
+                Some(state.current.kind.to_string())
+            };
+
+            return Err(ParseError::ExpectedToken(
+                vec!["`]`".to_string()],
+                found,
+                state.current.span,
+            ));
+        }
+
+        Ok(end)
     }
 
-    pub(in crate::parser) fn rparen(&self, state: &mut State) -> ParseResult<()> {
-        expect_token!([TokenKind::RightParen => Ok(())], state, "`)`")
-    }
+    pub(in crate::parser) fn colon(&self, state: &mut State) -> ParseResult<Span> {
+        state.skip_comments();
 
-    pub(in crate::parser) fn rbracket(&self, state: &mut State) -> ParseResult<()> {
-        expect_token!([TokenKind::RightBracket => Ok(())], state, "`]`")
-    }
+        let end = state.current.span;
 
-    pub(in crate::parser) fn colon(&self, state: &mut State) -> ParseResult<()> {
-        expect_token!([TokenKind::Colon => Ok(())], state, "`:`")
+        if state.current.kind == TokenKind::Colon {
+            state.next();
+            state.skip_comments();
+        } else {
+            let found = if state.current.kind == TokenKind::Eof {
+                None
+            } else {
+                Some(state.current.kind.to_string())
+            };
+
+            return Err(ParseError::ExpectedToken(
+                vec!["`:`".to_string()],
+                found,
+                state.current.span,
+            ));
+        }
+
+        Ok(end)
     }
 }

@@ -22,7 +22,7 @@ impl Parser {
         let mut members = Vec::new();
 
         let list_start = state.current.span;
-        self.lparen(state)?;
+        self.left_parenthesis(state)?;
 
         state.skip_comments();
 
@@ -78,7 +78,7 @@ impl Parser {
             }
         }
 
-        self.rparen(state)?;
+        self.right_parenthesis(state)?;
 
         let list_end = state.current.span;
 
@@ -132,7 +132,7 @@ impl Parser {
         let mut members = Vec::new();
 
         let list_start = state.current.span;
-        self.lparen(state)?;
+        self.left_parenthesis(state)?;
 
         state.skip_comments();
 
@@ -232,7 +232,7 @@ impl Parser {
             }
         }
 
-        self.rparen(state)?;
+        self.right_parenthesis(state)?;
 
         let list_end = state.current.span;
 
@@ -244,7 +244,7 @@ impl Parser {
     }
 
     pub(in crate::parser) fn args_list(&self, state: &mut State) -> ParseResult<Vec<Arg>> {
-        self.lparen(state)?;
+        self.left_parenthesis(state)?;
         state.skip_comments();
 
         let mut args = Vec::new();
@@ -288,7 +288,7 @@ impl Parser {
             }
         }
 
-        self.rparen(state)?;
+        self.right_parenthesis(state)?;
 
         Ok(args)
     }
