@@ -26,17 +26,17 @@ pub enum PromotedPropertyModifier {
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
 pub struct PromotedPropertyModifierGroup {
-    pub flags: Vec<PromotedPropertyModifier>,
+    pub modifiers: Vec<PromotedPropertyModifier>,
 }
 
 impl PromotedPropertyModifierGroup {
     pub fn is_empty(&self) -> bool {
-        self.flags.is_empty()
+        self.modifiers.is_empty()
     }
 
     pub fn has_readonly(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, PromotedPropertyModifier::Readonly { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, PromotedPropertyModifier::Readonly { .. }) {
                 return true;
             }
         }
@@ -45,12 +45,12 @@ impl PromotedPropertyModifierGroup {
     }
 
     pub fn visibility(&self) -> Visibility {
-        for flag in &self.flags {
-            if matches!(flag, PromotedPropertyModifier::Private { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, PromotedPropertyModifier::Private { .. }) {
                 return Visibility::Private;
             }
 
-            if matches!(flag, PromotedPropertyModifier::Protected { .. }) {
+            if matches!(modifier, PromotedPropertyModifier::Protected { .. }) {
                 return Visibility::Protected;
             }
         }
@@ -70,17 +70,17 @@ pub enum PropertyModifier {
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
 pub struct PropertyModifierGroup {
-    pub flags: Vec<PropertyModifier>,
+    pub modifiers: Vec<PropertyModifier>,
 }
 
 impl PropertyModifierGroup {
     pub fn is_empty(&self) -> bool {
-        self.flags.is_empty()
+        self.modifiers.is_empty()
     }
 
     pub fn has_readonly(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, PropertyModifier::Readonly { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, PropertyModifier::Readonly { .. }) {
                 return true;
             }
         }
@@ -89,8 +89,8 @@ impl PropertyModifierGroup {
     }
 
     pub fn has_static(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, PropertyModifier::Static { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, PropertyModifier::Static { .. }) {
                 return true;
             }
         }
@@ -99,12 +99,12 @@ impl PropertyModifierGroup {
     }
 
     pub fn visibility(&self) -> Visibility {
-        for flag in &self.flags {
-            if matches!(flag, PropertyModifier::Private { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, PropertyModifier::Private { .. }) {
                 return Visibility::Private;
             }
 
-            if matches!(flag, PropertyModifier::Protected { .. }) {
+            if matches!(modifier, PropertyModifier::Protected { .. }) {
                 return Visibility::Protected;
             }
         }
@@ -125,17 +125,17 @@ pub enum MethodModifier {
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
 pub struct MethodModifierGroup {
-    pub flags: Vec<MethodModifier>,
+    pub modifiers: Vec<MethodModifier>,
 }
 
 impl MethodModifierGroup {
     pub fn is_empty(&self) -> bool {
-        self.flags.is_empty()
+        self.modifiers.is_empty()
     }
 
     pub fn has_final(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, MethodModifier::Final { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, MethodModifier::Final { .. }) {
                 return true;
             }
         }
@@ -144,8 +144,8 @@ impl MethodModifierGroup {
     }
 
     pub fn has_static(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, MethodModifier::Static { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, MethodModifier::Static { .. }) {
                 return true;
             }
         }
@@ -154,8 +154,8 @@ impl MethodModifierGroup {
     }
 
     pub fn has_abstract(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, MethodModifier::Abstract { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, MethodModifier::Abstract { .. }) {
                 return true;
             }
         }
@@ -164,12 +164,12 @@ impl MethodModifierGroup {
     }
 
     pub fn visibility(&self) -> Visibility {
-        for flag in &self.flags {
-            if matches!(flag, MethodModifier::Private { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, MethodModifier::Private { .. }) {
                 return Visibility::Private;
             }
 
-            if matches!(flag, MethodModifier::Protected { .. }) {
+            if matches!(modifier, MethodModifier::Protected { .. }) {
                 return Visibility::Protected;
             }
         }
@@ -187,17 +187,17 @@ pub enum ClassModifier {
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
 pub struct ClassModifierGroup {
-    pub flags: Vec<ClassModifier>,
+    pub modifiers: Vec<ClassModifier>,
 }
 
 impl ClassModifierGroup {
     pub fn is_empty(&self) -> bool {
-        self.flags.is_empty()
+        self.modifiers.is_empty()
     }
 
     pub fn has_final(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, ClassModifier::Final { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, ClassModifier::Final { .. }) {
                 return true;
             }
         }
@@ -206,8 +206,8 @@ impl ClassModifierGroup {
     }
 
     pub fn has_readonly(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, ClassModifier::Readonly { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, ClassModifier::Readonly { .. }) {
                 return true;
             }
         }
@@ -216,8 +216,8 @@ impl ClassModifierGroup {
     }
 
     pub fn has_abstract(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, ClassModifier::Abstract { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, ClassModifier::Abstract { .. }) {
                 return true;
             }
         }
@@ -236,17 +236,17 @@ pub enum ConstantModifier {
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
 pub struct ConstantModifierGroup {
-    pub flags: Vec<ConstantModifier>,
+    pub modifiers: Vec<ConstantModifier>,
 }
 
 impl ConstantModifierGroup {
     pub fn is_empty(&self) -> bool {
-        self.flags.is_empty()
+        self.modifiers.is_empty()
     }
 
     pub fn has_final(&self) -> bool {
-        for flag in &self.flags {
-            if matches!(flag, ConstantModifier::Final { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, ConstantModifier::Final { .. }) {
                 return true;
             }
         }
@@ -255,12 +255,12 @@ impl ConstantModifierGroup {
     }
 
     pub fn visibility(&self) -> Visibility {
-        for flag in &self.flags {
-            if matches!(flag, ConstantModifier::Private { .. }) {
+        for modifier in &self.modifiers {
+            if matches!(modifier, ConstantModifier::Private { .. }) {
                 return Visibility::Private;
             }
 
-            if matches!(flag, ConstantModifier::Protected { .. }) {
+            if matches!(modifier, ConstantModifier::Protected { .. }) {
                 return Visibility::Protected;
             }
         }

@@ -1,5 +1,6 @@
 use crate::expect_token;
 use crate::expected_scope;
+use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::functions::ArrowFunction;
 use crate::parser::ast::functions::Closure;
@@ -90,17 +91,16 @@ impl Parser {
             return_ty = Some(self.get_type(state)?);
         }
 
-        let body = scoped!(state, Scope::AnonymousFunction(is_static), {
+        let (body, end) = scoped!(state, Scope::AnonymousFunction(is_static), {
             self.lbrace(state)?;
 
             let body = self.block(state, &TokenKind::RightBrace)?;
+            let end = state.current.span;
 
             self.rbrace(state)?;
 
-            body
+            (body, end)
         });
-
-        let end = state.current.span;
 
         Ok(Expression::Closure(Closure {
             start,
@@ -202,17 +202,16 @@ impl Parser {
             return_type = Some(self.get_type(state)?);
         }
 
-        let body = scoped!(state, Scope::Function(name.clone()), {
+        let (body, end) = scoped!(state, Scope::Function(name.clone()), {
             self.lbrace(state)?;
 
             let body = self.block(state, &TokenKind::RightBrace)?;
+            let end = state.current.span;
 
             self.rbrace(state)?;
 
-            body
+            (body, end)
         });
-
-        let end = state.current.span;
 
         Ok(Statement::Function(Function {
             start,
@@ -229,12 +228,9 @@ impl Parser {
     pub(in crate::parser) fn method(
         &self,
         state: &mut State,
-        flags: MethodModifierGroup,
+        modifiers: MethodModifierGroup,
+        start: Span,
     ) -> ParseResult<Method> {
-        // TODO(azjezz): this is incorrect.
-        // start span is actually the start span of the first flag.
-        let start = state.current.span;
-
         expect_token!([TokenKind::Function], state, ["`function`"]);
 
         let by_ref = if state.current.kind == TokenKind::Ampersand {
@@ -247,16 +243,16 @@ impl Parser {
         let name = self.ident_maybe_reserved(state)?;
 
         let has_body = expected_scope!([
-            Scope::Class(_, flags_group, _) => {
-                if !flags_group.has_abstract() && flags.has_abstract() {
+            Scope::Class(_, class_modifiers, _) => {
+                if !class_modifiers.has_abstract() && modifiers.has_abstract() {
                     return Err(ParseError::AbstractModifierOnNonAbstractClassMethod(
                         state.current.span,
                     ));
                 }
 
-                !flags.has_abstract()
+                !modifiers.has_abstract()
             },
-            Scope::Trait(_) => !flags.has_abstract(),
+            Scope::Trait(_) => !modifiers.has_abstract(),
             Scope::Interface(_) => false,
             Scope::Enum(enum_name, _) => {
                 if name.to_string() == "__construct" {
@@ -275,8 +271,8 @@ impl Parser {
         // parameters will steal attributes of this method.
         let attributes = state.get_attributes();
 
-        let (parameters, body, return_type) =
-            scoped!(state, Scope::Method(name.clone(), flags.clone()), {
+        let (parameters, body, return_type, end) =
+            scoped!(state, Scope::Method(name.clone(), modifiers.clone()), {
                 let parameters = self.method_parameter_list(state)?;
 
                 let mut return_type = None;
@@ -288,21 +284,21 @@ impl Parser {
                 }
 
                 if !has_body {
+                    let end = state.current.span;
                     self.semi(state)?;
 
-                    (parameters, None, return_type)
+                    (parameters, None, return_type, end)
                 } else {
                     self.lbrace(state)?;
 
                     let body = self.block(state, &TokenKind::RightBrace)?;
 
+                    let end = state.current.span;
                     self.rbrace(state)?;
 
-                    (parameters, Some(body), return_type)
+                    (parameters, Some(body), return_type, end)
                 }
             });
-
-        let end = state.current.span;
 
         Ok(Method {
             start,
@@ -313,7 +309,7 @@ impl Parser {
             body,
             return_type,
             by_ref,
-            flags,
+            modifiers,
         })
     }
 }

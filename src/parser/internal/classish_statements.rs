@@ -1,4 +1,5 @@
 use crate::expected_scope;
+use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::classish::ClassishConstant;
 use crate::parser::ast::enums::BackedEnumCase;
@@ -26,6 +27,7 @@ impl Parser {
         state: &mut State,
     ) -> ParseResult<Statement> {
         let has_attributes = self.gather_attributes(state)?;
+        let start = state.current.span;
         let modifiers = self.modifiers(state)?;
 
         // if we have attributes, don't check const, we need a method.
@@ -33,11 +35,13 @@ impl Parser {
             Ok(Statement::Method(self.method(
                 state,
                 self.get_interface_method_modifier_group(modifiers)?,
+                start,
             )?))
         } else {
             Ok(Statement::ClassishConstant(self.constant(
                 state,
                 self.get_interface_constant_modifier_group(modifiers)?,
+                start,
             )?))
         }
     }
@@ -73,18 +77,21 @@ impl Parser {
             return Ok(UnitEnumMember::Case(UnitEnumCase { start, end, name }));
         }
 
-        let member_flags = self.modifiers(state)?;
+        let start = state.current.span;
+        let modifiers = self.modifiers(state)?;
 
         // if we have attributes, don't check const, we need a method.
         if has_attributes || state.current.kind == TokenKind::Function {
             Ok(UnitEnumMember::Method(self.method(
                 state,
-                self.get_enum_method_modifier_group(member_flags)?,
+                self.get_enum_method_modifier_group(modifiers)?,
+                start,
             )?))
         } else {
             Ok(UnitEnumMember::Constant(self.constant(
                 state,
-                self.get_constant_modifier_group(member_flags)?,
+                self.get_constant_modifier_group(modifiers)?,
+                start,
             )?))
         }
     }
@@ -128,18 +135,21 @@ impl Parser {
             }));
         }
 
-        let member_flags = self.modifiers(state)?;
+        let start = state.current.span;
+        let modifiers = self.modifiers(state)?;
 
         // if we have attributes, don't check const, we need a method.
         if has_attributes || state.current.kind == TokenKind::Function {
             Ok(BackedEnumMember::Method(self.method(
                 state,
-                self.get_enum_method_modifier_group(member_flags)?,
+                self.get_enum_method_modifier_group(modifiers)?,
+                start,
             )?))
         } else {
             Ok(BackedEnumMember::Constant(self.constant(
                 state,
-                self.get_constant_modifier_group(member_flags)?,
+                self.get_constant_modifier_group(modifiers)?,
+                start,
             )?))
         }
     }
@@ -150,6 +160,7 @@ impl Parser {
     ) -> ParseResult<Statement> {
         let has_attributes = self.gather_attributes(state)?;
 
+        let start = state.current.span;
         let modifiers = self.modifiers(state)?;
 
         if !has_attributes {
@@ -158,16 +169,20 @@ impl Parser {
             }
 
             if state.current.kind == TokenKind::Const {
-                return Ok(Statement::ClassishConstant(
-                    self.constant(state, self.get_constant_modifier_group(modifiers)?)?,
-                ));
+                return Ok(Statement::ClassishConstant(self.constant(
+                    state,
+                    self.get_constant_modifier_group(modifiers)?,
+                    start,
+                )?));
             }
         }
 
         if state.current.kind == TokenKind::Function {
-            return Ok(Statement::Method(
-                self.method(state, self.get_method_modifier_group(modifiers)?)?,
-            ));
+            return Ok(Statement::Method(self.method(
+                state,
+                self.get_method_modifier_group(modifiers)?,
+                start,
+            )?));
         }
 
         // e.g: public static
@@ -235,7 +250,7 @@ impl Parser {
             var,
             value,
             r#type: ty,
-            flags: modifiers,
+            modifiers,
             attributes: state.get_attributes(),
         })
     }
@@ -385,10 +400,9 @@ impl Parser {
     fn constant(
         &self,
         state: &mut State,
-        flags: ConstantModifierGroup,
+        modifiers: ConstantModifierGroup,
+        start: Span,
     ) -> ParseResult<ClassishConstant> {
-        let start = state.current.span;
-
         state.next();
 
         let name = self.ident(state)?;
@@ -406,7 +420,7 @@ impl Parser {
             end,
             name,
             value,
-            flags,
+            modifiers,
         })
     }
 }

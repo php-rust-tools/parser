@@ -98,7 +98,7 @@ impl Parser {
     ) -> Result<MethodParameterList, ParseError> {
         let mut class_name = String::new();
         let construct: i8 = match state.scope()? {
-            Scope::Method(name, flags) => {
+            Scope::Method(name, modifiers) => {
                 if name.to_string() != "__construct" {
                     0
                 } else {
@@ -112,9 +112,9 @@ impl Parser {
                             2
                         }
                         // can have either abstract or concret ctor,
-                        // depens on method flag.
+                        // depens on method modifiers.
                         Scope::Class(name, _, _) | Scope::Trait(name) => {
-                            if flags.has_abstract() {
+                            if modifiers.has_abstract() {
                                 1
                             } else {
                                 class_name = state.named(name);
@@ -141,7 +141,7 @@ impl Parser {
 
             self.gather_attributes(state)?;
 
-            let flags = self.get_promoted_property_modifier_group(self.modifiers(state)?)?;
+            let modifiers = self.get_promoted_property_modifier_group(self.modifiers(state)?)?;
 
             let ty = self.get_optional_type(state)?;
 
@@ -155,7 +155,7 @@ impl Parser {
 
             if matches!(state.current.kind, TokenKind::Ellipsis) {
                 state.next();
-                if !flags.is_empty() {
+                if !modifiers.is_empty() {
                     return Err(ParseError::VariadicPromotedProperty(state.current.span));
                 }
 
@@ -165,7 +165,7 @@ impl Parser {
             // 2. Then expect a variable.
             let var = self.var(state)?;
 
-            if !flags.is_empty() {
+            if !modifiers.is_empty() {
                 match construct {
                     0 => {
                         return Err(ParseError::PromotedPropertyOutsideConstructor(
@@ -192,7 +192,7 @@ impl Parser {
                         }
                     }
                     None => {
-                        if flags.has_readonly() {
+                        if modifiers.has_readonly() {
                             return Err(ParseError::MissingTypeForReadonlyProperty(
                                 class_name,
                                 var.to_string(),
@@ -219,7 +219,7 @@ impl Parser {
                 r#type: ty,
                 variadic,
                 default,
-                flags,
+                modifiers,
                 by_ref,
             });
 

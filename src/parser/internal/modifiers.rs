@@ -23,7 +23,7 @@ impl Parser {
         let mut has_final = false;
         let mut has_abstract = false;
 
-        let flags = input
+        let modifiers = input
             .iter()
             .map(|(start, token, end)| match token {
                 TokenKind::Readonly => Ok(ClassModifier::Readonly {
@@ -59,7 +59,7 @@ impl Parser {
             })
             .collect::<ParseResult<Vec<ClassModifier>>>()?;
 
-        Ok(ClassModifierGroup { flags })
+        Ok(ClassModifierGroup { modifiers })
     }
 
     pub(in crate::parser) fn get_method_modifier_group(
@@ -69,7 +69,7 @@ impl Parser {
         let mut has_final = false;
         let mut has_abstract = false;
 
-        let flags = input
+        let modifiers = input
             .iter()
             .map(|(start, token, end)| match token {
                 TokenKind::Final => {
@@ -117,14 +117,14 @@ impl Parser {
             })
             .collect::<ParseResult<Vec<MethodModifier>>>()?;
 
-        Ok(MethodModifierGroup { flags })
+        Ok(MethodModifierGroup { modifiers })
     }
 
     pub(in crate::parser) fn get_enum_method_modifier_group(
         &self,
         input: Vec<(Span, TokenKind, Span)>,
     ) -> ParseResult<MethodModifierGroup> {
-        let flags = input
+        let modifiers = input
             .iter()
             .map(|(start, token, end)| match token {
                 TokenKind::Final => Ok(MethodModifier::Final {
@@ -154,14 +154,14 @@ impl Parser {
             })
             .collect::<ParseResult<Vec<MethodModifier>>>()?;
 
-        Ok(MethodModifierGroup { flags })
+        Ok(MethodModifierGroup { modifiers })
     }
 
     pub(in crate::parser) fn get_interface_method_modifier_group(
         &self,
         input: Vec<(Span, TokenKind, Span)>,
     ) -> ParseResult<MethodModifierGroup> {
-        let flags = input
+        let modifiers = input
             .iter()
             .map(|(start, token, end)| match token {
                 TokenKind::Public => Ok(MethodModifier::Public {
@@ -179,14 +179,14 @@ impl Parser {
             })
             .collect::<ParseResult<Vec<MethodModifier>>>()?;
 
-        Ok(MethodModifierGroup { flags })
+        Ok(MethodModifierGroup { modifiers })
     }
 
     pub(in crate::parser) fn get_property_modifier_group(
         &self,
         input: Vec<(Span, TokenKind, Span)>,
     ) -> ParseResult<PropertyModifierGroup> {
-        let flags = input
+        let modifiers = input
             .iter()
             .map(|(start, token, end)| match token {
                 TokenKind::Readonly => Ok(PropertyModifier::Readonly {
@@ -217,14 +217,14 @@ impl Parser {
             })
             .collect::<ParseResult<Vec<PropertyModifier>>>()?;
 
-        Ok(PropertyModifierGroup { flags })
+        Ok(PropertyModifierGroup { modifiers })
     }
 
     pub(in crate::parser) fn get_promoted_property_modifier_group(
         &self,
         input: Vec<(Span, TokenKind, Span)>,
     ) -> ParseResult<PromotedPropertyModifierGroup> {
-        let flags = input
+        let modifiers = input
             .iter()
             .map(|(start, token, end)| match token {
                 TokenKind::Readonly => Ok(PromotedPropertyModifier::Readonly {
@@ -250,7 +250,7 @@ impl Parser {
             })
             .collect::<ParseResult<Vec<PromotedPropertyModifier>>>()?;
 
-        Ok(PromotedPropertyModifierGroup { flags })
+        Ok(PromotedPropertyModifierGroup { modifiers })
     }
 
     pub(in crate::parser) fn get_constant_modifier_group(
@@ -259,7 +259,8 @@ impl Parser {
     ) -> ParseResult<ConstantModifierGroup> {
         let mut has_final = false;
         let mut has_private = false;
-        let flags = input
+
+        let modifiers = input
             .iter()
             .map(|(start, token, end)| match token {
                 TokenKind::Protected => Ok(ConstantModifier::Protected {
@@ -299,14 +300,14 @@ impl Parser {
             })
             .collect::<ParseResult<Vec<ConstantModifier>>>()?;
 
-        Ok(ConstantModifierGroup { flags })
+        Ok(ConstantModifierGroup { modifiers })
     }
 
     pub(in crate::parser) fn get_interface_constant_modifier_group(
         &self,
         input: Vec<(Span, TokenKind, Span)>,
     ) -> ParseResult<ConstantModifierGroup> {
-        let flags = input
+        let modifiers = input
             .iter()
             .map(|(start, token, end)| match token {
                 TokenKind::Public => Ok(ConstantModifier::Public {
@@ -324,7 +325,7 @@ impl Parser {
             })
             .collect::<ParseResult<Vec<ConstantModifier>>>()?;
 
-        Ok(ConstantModifierGroup { flags })
+        Ok(ConstantModifierGroup { modifiers })
     }
 
     pub(in crate::parser) fn modifiers(

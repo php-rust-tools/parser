@@ -229,7 +229,7 @@ pub enum Statement {
         attributes: Vec<AttributeGroup>,
         value: Option<Expression>,
         r#type: Option<Type>,
-        flags: PropertyModifierGroup,
+        modifiers: PropertyModifierGroup,
     },
     Constant {
         constants: Vec<Constant>,

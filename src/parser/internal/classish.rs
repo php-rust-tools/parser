@@ -255,7 +255,7 @@ impl Parser {
 
         let attributes = state.get_attributes();
         if let Some(backed_type) = backed_type {
-            let members = scoped!(state, Scope::Enum(name.clone(), true), {
+            let (members, end) = scoped!(state, Scope::Enum(name.clone(), true), {
                 self.lbrace(state)?;
 
                 // TODO(azjezz): we know members might have corrupted start span, we could updated it here?
@@ -266,12 +266,12 @@ impl Parser {
                     members.push(self.backed_enum_member(state)?);
                 }
 
+                let end = state.current.span;
+
                 self.rbrace(state)?;
 
-                members
+                (members, end)
             });
-
-            let end = state.current.span;
 
             Ok(Statement::BackedEnum(BackedEnum {
                 start,

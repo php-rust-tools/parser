@@ -9,5 +9,5 @@ pub struct ClassishConstant {
     pub end: Span,
     pub name: Identifier,
     pub value: Expression,
-    pub flags: ConstantModifierGroup,
+    pub modifiers: ConstantModifierGroup,
 }
