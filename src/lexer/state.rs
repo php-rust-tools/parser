@@ -38,8 +38,11 @@ impl State {
         let chars = input.as_ref().to_vec();
         let current = chars.first().copied();
 
+        let mut stack = VecDeque::with_capacity(32);
+        stack.push_back(StackFrame::Initial);
+
         Self {
-            stack: VecDeque::from([StackFrame::Initial]),
+            stack,
             chars,
             current,
             cursor: 0,
@@ -47,19 +50,16 @@ impl State {
         }
     }
 
-    pub fn set(&mut self, state: StackFrame) -> SyntaxResult<()> {
-        *self
-            .stack
-            .back_mut()
-            .ok_or(SyntaxError::UnpredictableState(self.span))? = state;
-
-        Ok(())
-    }
-
     pub fn frame(&self) -> SyntaxResult<&StackFrame> {
         self.stack
             .back()
             .ok_or(SyntaxError::UnpredictableState(self.span))
+    }
+
+    pub fn replace(&mut self, state: StackFrame) {
+        let i = self.stack.len() - 1;
+
+        self.stack[i] = state;
     }
 
     pub fn enter(&mut self, state: StackFrame) {

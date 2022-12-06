@@ -54,7 +54,7 @@ impl State {
         let mut iter = tokens.into_iter();
 
         Self {
-            stack: VecDeque::with_capacity(3),
+            stack: VecDeque::with_capacity(32),
             current: iter.next().unwrap_or_default(),
             peek: iter.next().unwrap_or_default(),
             iter,
