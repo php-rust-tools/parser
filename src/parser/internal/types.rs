@@ -166,7 +166,7 @@ impl Parser {
                 }
 
                 Ok(Some(Type::SelfReference))
-            },
+            }
             TokenKind::Parent => {
                 state.next();
 
@@ -178,7 +178,7 @@ impl Parser {
                 }
 
                 Ok(Some(Type::ParentReference))
-            },
+            }
             TokenKind::Identifier(id) => {
                 let start = state.current.span;
                 state.next();

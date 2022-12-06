@@ -266,7 +266,9 @@ impl Parser {
             }
 
             if name.is_none() && has_used_named_arguments {
-                return Err(ParseError::CannotUsePositionalArgumentAfterNamedArgument(state.current.span));
+                return Err(ParseError::CannotUsePositionalArgumentAfterNamedArgument(
+                    state.current.span,
+                ));
             }
 
             if unpack && state.current.kind == TokenKind::RightParen {
