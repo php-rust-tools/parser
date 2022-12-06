@@ -22,9 +22,6 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: install just
-        uses: extractions/setup-just@v1
-
       - name: install rust
         uses: actions-rs/toolchain@v1
         with:
@@ -35,9 +32,18 @@ jobs:
       - name: cache
         uses: Swatinem/rust-cache@v2.0.0
 
+      - name: install just and hyperfine
+        run: |
+          cargo install just
+          cargo install hyperfine
+
       - name: check
         if: matrix.rust == 'stable'
         run: just lint
 
       - name: test
         run: just test
+
+      - name: bench
+        if: matrix.rust == 'stable'
+        run: hyperfine --prepare "cargo build -r" --runs 10 --warmup 2 -i "cargo test --all -r"
