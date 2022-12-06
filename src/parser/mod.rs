@@ -106,8 +106,8 @@ impl Parser {
                         }
                     }
 
-                    self.rbrace(state)?;
-                    self.semi(state)?;
+                    self.right_brace(state)?;
+                    self.semicolon(state)?;
 
                     Statement::GroupUse { prefix, kind, uses }
                 } else {
@@ -128,7 +128,7 @@ impl Parser {
                             continue;
                         }
 
-                        self.semi(state)?;
+                        self.semicolon(state)?;
                         break;
                     }
 
@@ -156,7 +156,7 @@ impl Parser {
                     }
                 }
 
-                self.semi(state)?;
+                self.semicolon(state)?;
 
                 Statement::Constant { constants }
             }
@@ -213,7 +213,7 @@ impl Parser {
                             ) {
                                 let expr = self.expression(state, Precedence::Lowest)?;
 
-                                self.semi(state)?;
+                                self.semicolon(state)?;
 
                                 return Ok(Statement::Expression { expr });
                             }
@@ -262,7 +262,7 @@ impl Parser {
                             ) {
                                 let expr = self.expression(state, Precedence::Lowest)?;
 
-                                self.semi(state)?;
+                                self.semicolon(state)?;
 
                                 return Ok(Statement::Expression { expr });
                             }
@@ -278,7 +278,7 @@ impl Parser {
 
                     let label = self.ident(state)?;
 
-                    self.semi(state)?;
+                    self.semicolon(state)?;
 
                     Statement::Goto { label }
                 }
@@ -291,7 +291,7 @@ impl Parser {
                 }
                 TokenKind::Declare => {
                     state.next();
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
 
                     let mut declares = Vec::new();
                     loop {
@@ -310,21 +310,21 @@ impl Parser {
                         }
                     }
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     let body = if state.current.kind == TokenKind::LeftBrace {
                         state.next();
                         let b = self.block(state, &TokenKind::RightBrace)?;
-                        self.rbrace(state)?;
+                        self.right_brace(state)?;
                         b
                     } else if state.current.kind == TokenKind::Colon {
                         self.colon(state)?;
                         let b = self.block(state, &TokenKind::EndDeclare)?;
                         expect_token!([TokenKind::EndDeclare], state, "`enddeclare`");
-                        self.semi(state)?;
+                        self.semicolon(state)?;
                         b
                     } else {
-                        self.semi(state)?;
+                        self.semicolon(state)?;
                         vec![]
                     };
 
@@ -345,7 +345,7 @@ impl Parser {
                         }
                     }
 
-                    self.semi(state)?;
+                    self.semicolon(state)?;
                     Statement::Global { vars }
                 }
                 TokenKind::Static if matches!(state.peek.kind, TokenKind::Variable(_)) => {
@@ -374,7 +374,7 @@ impl Parser {
                         }
                     }
 
-                    self.semi(state)?;
+                    self.semicolon(state)?;
 
                     Statement::Static { vars }
                 }
@@ -442,42 +442,42 @@ impl Parser {
                 TokenKind::Do => {
                     state.next();
 
-                    self.lbrace(state)?;
+                    self.left_brace(state)?;
                     let body = self.block(state, &TokenKind::RightBrace)?;
-                    self.rbrace(state)?;
+                    self.right_brace(state)?;
 
                     expect_token!([TokenKind::While], state, "`while`");
 
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
                     let condition = self.expression(state, Precedence::Lowest)?;
-                    self.rparen(state)?;
-                    self.semi(state)?;
+                    self.right_parenthesis(state)?;
+                    self.semicolon(state)?;
 
                     Statement::DoWhile { condition, body }
                 }
                 TokenKind::While => {
                     state.next();
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
 
                     let condition = self.expression(state, Precedence::Lowest)?;
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     let end_token = if state.current.kind == TokenKind::Colon {
                         self.colon(state)?;
                         TokenKind::EndWhile
                     } else {
-                        self.lbrace(state)?;
+                        self.left_brace(state)?;
                         TokenKind::RightBrace
                     };
 
                     let body = self.block(state, &end_token)?;
 
                     if end_token == TokenKind::RightBrace {
-                        self.rbrace(state)?;
+                        self.right_brace(state)?;
                     } else {
                         expect_token!([TokenKind::EndWhile], state, "`endwhile`");
-                        self.semi(state)?;
+                        self.semicolon(state)?;
                     }
 
                     Statement::While { condition, body }
@@ -485,7 +485,7 @@ impl Parser {
                 TokenKind::For => {
                     state.next();
 
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
 
                     let mut init = Vec::new();
                     loop {
@@ -502,7 +502,7 @@ impl Parser {
                         }
                     }
 
-                    self.semi(state)?;
+                    self.semicolon(state)?;
 
                     let mut condition = Vec::new();
                     loop {
@@ -518,7 +518,7 @@ impl Parser {
                             break;
                         }
                     }
-                    self.semi(state)?;
+                    self.semicolon(state)?;
 
                     let mut r#loop = Vec::new();
                     loop {
@@ -535,13 +535,13 @@ impl Parser {
                         }
                     }
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     let end_token = if state.current.kind == TokenKind::Colon {
                         self.colon(state)?;
                         TokenKind::EndFor
                     } else {
-                        self.lbrace(state)?;
+                        self.left_brace(state)?;
                         TokenKind::RightBrace
                     };
 
@@ -549,9 +549,9 @@ impl Parser {
 
                     if end_token == TokenKind::EndFor {
                         expect_token!([TokenKind::EndFor], state, "`endfor`");
-                        self.semi(state)?;
+                        self.semicolon(state)?;
                     } else {
-                        self.rbrace(state)?;
+                        self.right_brace(state)?;
                     };
 
                     Statement::For {
@@ -564,7 +564,7 @@ impl Parser {
                 TokenKind::Foreach => {
                     state.next();
 
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
 
                     let expr = self.expression(state, Precedence::Lowest)?;
 
@@ -591,13 +591,13 @@ impl Parser {
                         value_var = self.expression(state, Precedence::Lowest)?;
                     }
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     let end_token = if state.current.kind == TokenKind::Colon {
                         self.colon(state)?;
                         TokenKind::EndForeach
                     } else {
-                        self.lbrace(state)?;
+                        self.left_brace(state)?;
                         TokenKind::RightBrace
                     };
 
@@ -605,9 +605,9 @@ impl Parser {
 
                     if end_token == TokenKind::EndForeach {
                         expect_token!([TokenKind::EndForeach], state, "`endforeach`");
-                        self.semi(state)?;
+                        self.semicolon(state)?;
                     } else {
-                        self.rbrace(state)?;
+                        self.right_brace(state)?;
                     }
 
                     Statement::Foreach {
@@ -621,17 +621,17 @@ impl Parser {
                 TokenKind::Switch => {
                     state.next();
 
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
 
                     let condition = self.expression(state, Precedence::Lowest)?;
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     let end_token = if state.current.kind == TokenKind::Colon {
                         self.colon(state)?;
                         TokenKind::EndSwitch
                     } else {
-                        self.lbrace(state)?;
+                        self.left_brace(state)?;
                         TokenKind::RightBrace
                     };
 
@@ -694,9 +694,9 @@ impl Parser {
 
                     if end_token == TokenKind::EndSwitch {
                         expect_token!([TokenKind::EndSwitch], state, ["`endswitch`"]);
-                        self.semi(state)?;
+                        self.semicolon(state)?;
                     } else {
-                        self.rbrace(state)?;
+                        self.right_brace(state)?;
                     }
 
                     Statement::Switch { condition, cases }
@@ -704,11 +704,11 @@ impl Parser {
                 TokenKind::If => {
                     state.next();
 
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
 
                     let condition = self.expression(state, Precedence::Lowest)?;
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     // FIXME: Tidy up duplication and make the intent a bit clearer.
                     match state.current.kind {
@@ -731,9 +731,9 @@ impl Parser {
 
                                 state.next();
 
-                                self.lparen(state)?;
+                                self.left_parenthesis(state)?;
                                 let condition = self.expression(state, Precedence::Lowest)?;
-                                self.rparen(state)?;
+                                self.right_parenthesis(state)?;
 
                                 self.colon(state)?;
 
@@ -761,7 +761,7 @@ impl Parser {
                             }
 
                             expect_token!([TokenKind::EndIf], state, ["`endif`"]);
-                            self.semi(state)?;
+                            self.semicolon(state)?;
 
                             Statement::If {
                                 condition,
@@ -782,7 +782,7 @@ impl Parser {
                             let then = self.block(state, &body_end_token)?;
 
                             if body_end_token == TokenKind::RightBrace {
-                                self.rbrace(state)?;
+                                self.right_brace(state)?;
                             }
 
                             let mut else_ifs: Vec<ElseIf> = Vec::new();
@@ -790,17 +790,17 @@ impl Parser {
                                 if state.current.kind == TokenKind::ElseIf {
                                     state.next();
 
-                                    self.lparen(state)?;
+                                    self.left_parenthesis(state)?;
 
                                     let condition = self.expression(state, Precedence::Lowest)?;
 
-                                    self.rparen(state)?;
+                                    self.right_parenthesis(state)?;
 
-                                    self.lbrace(state)?;
+                                    self.left_brace(state)?;
 
                                     let body = self.block(state, &TokenKind::RightBrace)?;
 
-                                    self.rbrace(state)?;
+                                    self.right_brace(state)?;
 
                                     else_ifs.push(ElseIf { condition, body });
                                 } else {
@@ -819,11 +819,11 @@ impl Parser {
 
                             expect_token!([TokenKind::Else], state, ["`else`"]);
 
-                            self.lbrace(state)?;
+                            self.left_brace(state)?;
 
                             let r#else = self.block(state, &TokenKind::RightBrace)?;
 
-                            self.rbrace(state)?;
+                            self.right_brace(state)?;
 
                             Statement::If {
                                 condition,
@@ -848,7 +848,7 @@ impl Parser {
                         }
                     }
 
-                    self.semi(state)?;
+                    self.semicolon(state)?;
                     Statement::Echo { values }
                 }
                 TokenKind::Continue => {
@@ -859,7 +859,7 @@ impl Parser {
                         num = Some(self.expression(state, Precedence::Lowest)?);
                     }
 
-                    self.semi(state)?;
+                    self.semicolon(state)?;
 
                     Statement::Continue { num }
                 }
@@ -871,7 +871,7 @@ impl Parser {
                         num = Some(self.expression(state, Precedence::Lowest)?);
                     }
 
-                    self.semi(state)?;
+                    self.semicolon(state)?;
 
                     Statement::Break { num }
                 }
@@ -884,13 +884,13 @@ impl Parser {
                     } = state.current
                     {
                         let ret = Statement::Return { value: None };
-                        self.semi(state)?;
+                        self.semicolon(state)?;
                         ret
                     } else {
                         let ret = Statement::Return {
                             value: self.expression(state, Precedence::Lowest).ok(),
                         };
-                        self.semi(state)?;
+                        self.semicolon(state)?;
                         ret
                     }
                 }
@@ -903,13 +903,13 @@ impl Parser {
                 TokenKind::LeftBrace => {
                     state.next();
                     let body = self.block(state, &TokenKind::RightBrace)?;
-                    self.rbrace(state)?;
+                    self.right_brace(state)?;
                     Statement::Block { body }
                 }
                 _ => {
                     let expr = self.expression(state, Precedence::Lowest)?;
 
-                    self.semi(state)?;
+                    self.semicolon(state)?;
 
                     Statement::Expression { expr }
                 }
@@ -950,7 +950,7 @@ impl Parser {
             match &state.current.kind {
                 TokenKind::List => {
                     state.next();
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
 
                     let mut items = Vec::new();
                     let mut has_atleast_one_key = false;
@@ -1021,7 +1021,7 @@ impl Parser {
                         }
                     }
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     Expression::List { items }
                 }
@@ -1150,18 +1150,18 @@ impl Parser {
 
                     let e = self.expression(state, Precedence::Lowest)?;
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     e
                 }
                 TokenKind::Match => {
                     state.next();
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
 
                     let condition = Box::new(self.expression(state, Precedence::Lowest)?);
 
-                    self.rparen(state)?;
-                    self.lbrace(state)?;
+                    self.right_parenthesis(state)?;
+                    self.left_brace(state)?;
 
                     let mut default = None;
                     let mut arms = Vec::new();
@@ -1217,7 +1217,7 @@ impl Parser {
                         }
                     }
 
-                    self.rbrace(state)?;
+                    self.right_brace(state)?;
 
                     Expression::Match {
                         condition,
@@ -1230,7 +1230,7 @@ impl Parser {
 
                     state.next();
 
-                    self.lparen(state)?;
+                    self.left_parenthesis(state)?;
 
                     while state.current.kind != TokenKind::RightParen {
                         let mut key = None;
@@ -1291,7 +1291,7 @@ impl Parser {
                         state.skip_comments();
                     }
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     Expression::Array { items }
                 }
@@ -1372,7 +1372,7 @@ impl Parser {
 
                     state.skip_comments();
 
-                    self.rbracket(state)?;
+                    self.right_bracket(state)?;
 
                     Expression::Array { items }
                 }
@@ -1582,7 +1582,7 @@ impl Parser {
 
                         let name = self.expression(state, Precedence::Lowest)?;
 
-                        self.rbrace(state)?;
+                        self.right_brace(state)?;
 
                         Expression::DynamicVariable {
                             name: Box::new(name),
@@ -1645,9 +1645,9 @@ impl Parser {
 
                 let property = match state.current.kind {
                     TokenKind::LeftBrace => {
-                        self.lbrace(state)?;
+                        self.left_brace(state)?;
                         let expr = self.expression(state, Precedence::Lowest)?;
-                        self.rbrace(state)?;
+                        self.right_brace(state)?;
                         expr
                     }
                     TokenKind::Variable(_) => Expression::Variable(self.var(state)?),
@@ -1827,23 +1827,24 @@ impl Parser {
                 let e = match (state.current.kind.clone(), state.peek.kind.clone()) {
                     (TokenKind::Identifier(name), TokenKind::RightBrace) => {
                         let start = state.current.span;
+                        let end = state.peek.span;
+
                         state.next();
                         state.next();
-                        let end = state.current.span;
                         // "${var}"
                         // TODO: we should use a different node for this.
                         Expression::Variable(Variable { start, name, end })
                     }
                     (TokenKind::Identifier(name), TokenKind::LeftBracket) => {
                         let start = state.current.span;
+                        let end = state.peek.span;
                         state.next();
                         state.next();
-                        let end = state.current.span;
                         let var = Expression::Variable(Variable { start, name, end });
 
                         let e = self.expression(state, Precedence::Lowest)?;
-                        self.rbracket(state)?;
-                        self.rbrace(state)?;
+                        self.right_bracket(state)?;
+                        self.right_brace(state)?;
 
                         // TODO: we should use a different node for this.
                         Expression::ArrayIndex {
@@ -1854,7 +1855,7 @@ impl Parser {
                     _ => {
                         // Arbitrary expressions are allowed, but are treated as variable variables.
                         let e = self.expression(state, Precedence::Lowest)?;
-                        self.rbrace(state)?;
+                        self.right_brace(state)?;
 
                         Expression::DynamicVariable { name: Box::new(e) }
                     }

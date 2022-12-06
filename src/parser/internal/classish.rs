@@ -42,7 +42,7 @@ impl Parser {
         };
 
         let attributes = state.get_attributes();
-        self.lbrace(state)?;
+        self.left_brace(state)?;
 
         let body = scoped!(
             state,
@@ -64,7 +64,7 @@ impl Parser {
             }
         );
 
-        self.rbrace(state)?;
+        self.right_brace(state)?;
 
         Ok(Statement::Class {
             name,
@@ -94,7 +94,7 @@ impl Parser {
                 Vec::new()
             };
 
-            self.lbrace(state)?;
+            self.left_brace(state)?;
 
             let attributes = state.get_attributes();
 
@@ -109,7 +109,7 @@ impl Parser {
 
                 body.push(self.interface_statement(state)?);
             }
-            self.rbrace(state)?;
+            self.right_brace(state)?;
 
             Ok(Statement::Interface {
                 name,
@@ -126,7 +126,7 @@ impl Parser {
         let name = self.ident(state)?;
 
         scoped!(state, Scope::Trait(name.clone()), {
-            self.lbrace(state)?;
+            self.left_brace(state)?;
 
             let attributes = state.get_attributes();
 
@@ -141,7 +141,7 @@ impl Parser {
 
                 body.push(self.class_like_statement(state)?);
             }
-            self.rbrace(state)?;
+            self.right_brace(state)?;
 
             Ok(Statement::Trait {
                 name,
@@ -192,7 +192,7 @@ impl Parser {
                 }
             }
 
-            self.lbrace(state)?;
+            self.left_brace(state)?;
 
             let attributes = state.get_attributes();
 
@@ -201,7 +201,7 @@ impl Parser {
                 body.push(self.class_like_statement(state)?);
             }
 
-            self.rbrace(state)?;
+            self.right_brace(state)?;
 
             Ok(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
@@ -256,7 +256,7 @@ impl Parser {
         let attributes = state.get_attributes();
         if let Some(backed_type) = backed_type {
             let (members, end) = scoped!(state, Scope::Enum(name.clone(), true), {
-                self.lbrace(state)?;
+                self.left_brace(state)?;
 
                 // TODO(azjezz): we know members might have corrupted start span, we could updated it here?
                 // as we know the correct start span is `state.current.span`.
@@ -266,9 +266,7 @@ impl Parser {
                     members.push(self.backed_enum_member(state)?);
                 }
 
-                let end = state.current.span;
-
-                self.rbrace(state)?;
+                let end = self.right_brace(state)?;
 
                 (members, end)
             });
@@ -283,23 +281,17 @@ impl Parser {
                 members,
             }))
         } else {
-            let members = scoped!(state, Scope::Enum(name.clone(), false), {
-                self.lbrace(state)?;
+            let (members, end) = scoped!(state, Scope::Enum(name.clone(), false), {
+                self.left_brace(state)?;
 
-                // TODO(azjezz): we know members might have corrupted start span, we could updated it here?
-                // as we know the correct start span is `state.current.span`.
                 let mut members = Vec::new();
                 while state.current.kind != TokenKind::RightBrace {
                     state.skip_comments();
                     members.push(self.unit_enum_member(state)?);
                 }
 
-                self.rbrace(state)?;
-
-                members
+                (members, self.right_brace(state)?)
             });
-
-            let end = state.current.span;
 
             Ok(Statement::UnitEnum(UnitEnum {
                 start,

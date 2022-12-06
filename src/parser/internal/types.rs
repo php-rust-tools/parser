@@ -23,14 +23,14 @@ impl Parser {
                 TokenKind::Pipe => {
                     let union = self.get_union_type(state, ty, true)?;
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     self.get_intersection_type(state, union, false)
                 },
                 TokenKind::Ampersand => {
                     let intersection = self.get_intersection_type(state, ty, true)?;
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     self.get_union_type(state, intersection, false)
                 },
@@ -68,14 +68,14 @@ impl Parser {
                 TokenKind::Pipe => {
                     let union = self.get_union_type(state, ty, true)?;
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     self.get_intersection_type(state, union, false).map(Some)
                 },
                 TokenKind::Ampersand => {
                     let intersection = self.get_intersection_type(state, ty, true)?;
 
-                    self.rparen(state)?;
+                    self.right_parenthesis(state)?;
 
                     self.get_union_type(state, intersection, false).map(Some)
                 },
@@ -263,7 +263,7 @@ impl Parser {
                 let other = self.get_simple_type(state)?;
                 let ty = self.get_intersection_type(state, other, true)?;
 
-                self.rparen(state)?;
+                self.right_parenthesis(state)?;
 
                 ty
             } else {
@@ -332,7 +332,7 @@ impl Parser {
                 let other = self.get_simple_type(state)?;
                 let ty = self.get_union_type(state, other, true)?;
 
-                self.rparen(state)?;
+                self.right_parenthesis(state)?;
 
                 ty
             } else {

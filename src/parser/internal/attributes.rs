@@ -37,8 +37,7 @@ impl Parser {
             }
         }
 
-        let end = state.current.span;
-        self.rbracket(state)?;
+        let end = self.right_bracket(state)?;
 
         state.attribute(AttributeGroup {
             start,

@@ -16,7 +16,7 @@ impl Parser {
 
                 let name = self.expression(state, Precedence::Lowest)?;
 
-                self.rbrace(state)?;
+                self.right_brace(state)?;
 
                 Expression::DynamicVariable {
                     name: Box::new(name),
