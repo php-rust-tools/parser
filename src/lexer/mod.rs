@@ -67,15 +67,15 @@ impl Lexer {
                 }
                 // The double quote state is entered when inside a double-quoted string that
                 // contains variables.
-                StackFrame::DoubleQuote => tokens.extend(self.double_quote(&mut state)?),
+                StackFrame::DoubleQuote => self.double_quote(&mut state, &mut tokens)?,
                 // The shell exec state is entered when inside of a execution string (`).
-                StackFrame::ShellExec => tokens.extend(self.shell_exec(&mut state)?),
+                StackFrame::ShellExec => self.shell_exec(&mut state, &mut tokens)?,
                 // The doc string state is entered when tokenizing heredocs and nowdocs.
                 StackFrame::DocString(kind, label) => {
                     let kind = *kind;
                     let label = label.clone();
 
-                    tokens.extend(self.docstring(&mut state, kind, label)?)
+                    self.docstring(&mut state, &mut tokens, kind, label)?;
                 }
                 // LookingForProperty is entered inside double quotes,
                 // backticks, or a heredoc, expecting a variable name.
@@ -118,7 +118,7 @@ impl Lexer {
                 let tag_span = state.span;
                 state.skip(5);
 
-                state.set(StackFrame::Scripting)?;
+                state.replace(StackFrame::Scripting);
 
                 let mut tokens = vec![];
 
@@ -152,7 +152,7 @@ impl Lexer {
         let kind = match state.peek_buf() {
             [b'`', ..] => {
                 state.next();
-                state.set(StackFrame::ShellExec)?;
+                state.replace(StackFrame::ShellExec);
                 TokenKind::Backtick
             }
             [b'@', ..] => {
@@ -188,7 +188,7 @@ impl Lexer {
                 // This is a close tag, we can enter "Initial" mode again.
                 state.skip(2);
 
-                state.set(StackFrame::Initial)?;
+                state.replace(StackFrame::Initial);
 
                 TokenKind::CloseTag
             }
@@ -322,7 +322,7 @@ impl Lexer {
                         match state.peek_buf() {
                             [b'(', b')', b';', ..] => {
                                 state.skip(3);
-                                state.set(StackFrame::Halted)?;
+                                state.replace(StackFrame::Halted);
                             }
                             _ => return Err(SyntaxError::InvalidHaltCompiler(state.span)),
                         }
@@ -335,7 +335,7 @@ impl Lexer {
                 state.next();
                 let mut buffer = vec![b'/'];
 
-                while state.current.is_some() {
+                loop {
                     match state.peek_buf() {
                         [b'*', b'/', ..] => {
                             state.skip(2);
@@ -346,7 +346,9 @@ impl Lexer {
                             state.next();
                             buffer.push(t);
                         }
-                        [] => unreachable!(),
+                        _ => {
+                            break;
+                        }
                     }
                 }
 
@@ -567,7 +569,7 @@ impl Lexer {
                 }
 
                 state.next();
-                state.set(StackFrame::DocString(doc_string_kind, label.clone()))?;
+                state.replace(StackFrame::DocString(doc_string_kind, label.clone()));
 
                 TokenKind::StartDocString(label, doc_string_kind)
             }
@@ -650,7 +652,7 @@ impl Lexer {
         Ok(Token { kind, span })
     }
 
-    fn double_quote(&self, state: &mut State) -> SyntaxResult<Vec<Token>> {
+    fn double_quote(&self, state: &mut State, tokens: &mut Vec<Token>) -> SyntaxResult<()> {
         let span = state.span;
         let mut buffer = Vec::new();
         let kind = loop {
@@ -668,7 +670,7 @@ impl Lexer {
                 }
                 [b'"', ..] => {
                     state.next();
-                    state.set(StackFrame::Scripting)?;
+                    state.replace(StackFrame::Scripting);
                     break TokenKind::DoubleQuote;
                 }
                 &[b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
@@ -781,7 +783,6 @@ impl Lexer {
             }
         };
 
-        let mut tokens = Vec::new();
         if !buffer.is_empty() {
             tokens.push(Token {
                 kind: TokenKind::StringPart(buffer.into()),
@@ -790,10 +791,10 @@ impl Lexer {
         }
 
         tokens.push(Token { kind, span });
-        Ok(tokens)
+        Ok(())
     }
 
-    fn shell_exec(&self, state: &mut State) -> SyntaxResult<Vec<Token>> {
+    fn shell_exec(&self, state: &mut State, tokens: &mut Vec<Token>) -> SyntaxResult<()> {
         let span = state.span;
         let mut buffer = Vec::new();
         let kind = loop {
@@ -811,7 +812,7 @@ impl Lexer {
                 }
                 [b'`', ..] => {
                     state.next();
-                    state.set(StackFrame::Scripting)?;
+                    state.replace(StackFrame::Scripting);
                     break TokenKind::Backtick;
                 }
                 [b'$', ident_start!(), ..] => {
@@ -837,7 +838,6 @@ impl Lexer {
             }
         };
 
-        let mut tokens = Vec::new();
         if !buffer.is_empty() {
             tokens.push(Token {
                 kind: TokenKind::StringPart(buffer.into()),
@@ -846,15 +846,17 @@ impl Lexer {
         }
 
         tokens.push(Token { kind, span });
-        Ok(tokens)
+
+        Ok(())
     }
 
     fn docstring(
         &self,
         state: &mut State,
+        tokens: &mut Vec<Token>,
         kind: DocStringKind,
         label: ByteString,
-    ) -> SyntaxResult<Vec<Token>> {
+    ) -> SyntaxResult<()> {
         let span = state.span;
         let mut buffer = Vec::new();
         let mut new_line = false;
@@ -931,7 +933,7 @@ impl Lexer {
                     // If we can see the label here, we can consume it and exit early.
                     if state.try_read(&label) {
                         state.skip(label.len());
-                        state.set(StackFrame::Scripting)?;
+                        state.replace(StackFrame::Scripting);
                         break TokenKind::EndDocString(label, None, 0);
                     }
 
@@ -1018,7 +1020,7 @@ impl Lexer {
                             // and can consume the label, sending the indentation amount along to the parser
                             // to normalize.
                             state.skip(label.len());
-                            state.set(StackFrame::Scripting)?;
+                            state.replace(StackFrame::Scripting);
                             break TokenKind::EndDocString(
                                 label,
                                 indentation_type,
@@ -1045,7 +1047,6 @@ impl Lexer {
             buffer.pop();
         }
 
-        let mut tokens = Vec::new();
         if !buffer.is_empty() {
             tokens.push(Token {
                 kind: TokenKind::StringPart(buffer.into()),
@@ -1054,7 +1055,7 @@ impl Lexer {
         }
 
         tokens.push(Token { kind, span });
-        Ok(tokens)
+        Ok(())
     }
 
     fn looking_for_varname(&self, state: &mut State) -> SyntaxResult<Option<Token>> {
@@ -1065,7 +1066,7 @@ impl Lexer {
                 let ident = ident.to_vec();
                 let span = state.span;
                 state.skip(ident.len());
-                state.set(StackFrame::Scripting)?;
+                state.replace(StackFrame::Scripting);
                 return Ok(Some(Token {
                     kind: TokenKind::Identifier(ident.into()),
                     span,
@@ -1073,7 +1074,7 @@ impl Lexer {
             }
         }
 
-        state.set(StackFrame::Scripting)?;
+        state.replace(StackFrame::Scripting);
 
         Ok(None)
     }
@@ -1270,7 +1271,7 @@ impl Lexer {
         Ok(if constant {
             TokenKind::LiteralString(buffer.into())
         } else {
-            state.set(StackFrame::DoubleQuote)?;
+            state.replace(StackFrame::DoubleQuote);
             TokenKind::StringPart(buffer.into())
         })
     }
