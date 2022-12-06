@@ -1493,6 +1493,7 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
         b"__DIR__" => TokenKind::DirConstant,
         b"while" => TokenKind::While,
         b"insteadof" => TokenKind::Insteadof,
+        b"list" => TokenKind::List,
         _ => return None,
     })
 }

@@ -384,6 +384,9 @@ pub struct Use {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
+    List {
+        items: Vec<ListItem>,
+    },
     Empty,
     VariadicPlaceholder,
     ErrorSuppress {
@@ -587,6 +590,12 @@ pub struct ArrayItem {
     pub value: Expression,
     pub unpack: bool,
     pub by_ref: bool,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ListItem {
+    pub key: Option<Expression>,
+    pub value: Expression,
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
