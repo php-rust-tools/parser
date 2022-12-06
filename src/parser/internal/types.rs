@@ -155,6 +155,30 @@ impl Parser {
 
                 Ok(Some(Type::StaticReference))
             }
+            TokenKind::Self_ => {
+                state.next();
+
+                if !state.has_class_scope {
+                    return Err(ParseError::CannotFindTypeInCurrentScope(
+                        "self".to_owned(),
+                        state.current.span,
+                    ));
+                }
+
+                Ok(Some(Type::SelfReference))
+            },
+            TokenKind::Parent => {
+                state.next();
+
+                if !state.has_class_scope {
+                    return Err(ParseError::CannotFindTypeInCurrentScope(
+                        "parent".to_owned(),
+                        state.current.span,
+                    ));
+                }
+
+                Ok(Some(Type::ParentReference))
+            },
             TokenKind::Identifier(id) => {
                 let start = state.current.span;
                 state.next();
@@ -177,26 +201,6 @@ impl Parser {
                     b"false" => Ok(Some(Type::False)),
                     b"array" => Ok(Some(Type::Array)),
                     b"callable" => Ok(Some(Type::Callable)),
-                    b"self" => {
-                        if !state.has_class_scope {
-                            return Err(ParseError::CannotFindTypeInCurrentScope(
-                                "self".to_owned(),
-                                state.current.span,
-                            ));
-                        }
-
-                        Ok(Some(Type::SelfReference))
-                    }
-                    b"parent" => {
-                        if !state.has_class_parent_scope {
-                            return Err(ParseError::CannotFindTypeInCurrentScope(
-                                "parent".to_owned(),
-                                state.current.span,
-                            ));
-                        }
-
-                        Ok(Some(Type::ParentReference))
-                    }
                     _ => Ok(Some(Type::Identifier(Identifier {
                         start,
                         name: id,
