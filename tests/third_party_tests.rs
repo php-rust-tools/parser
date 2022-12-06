@@ -3,8 +3,8 @@ use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
 
-use php_parser_rs::prelude::Lexer;
-use php_parser_rs::prelude::Parser;
+use php_parser_rs::lexer::Lexer;
+use php_parser_rs::parser::Parser;
 
 #[test]
 fn third_party_1_php_standard_library() {

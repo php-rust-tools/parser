@@ -1,8 +1,9 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifier::Identifier;
-use crate::parser::ast::BackedEnumType;
-use crate::parser::ast::Block;
-use crate::parser::ast::ClassFlag;
+
+use crate::parser::ast::enums::BackedEnum;
+use crate::parser::ast::enums::BackedEnumType;
+use crate::parser::ast::enums::UnitEnum;
+use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
@@ -15,7 +16,7 @@ use crate::scoped;
 
 impl Parser {
     pub(in crate::parser) fn class_definition(&self, state: &mut State) -> ParseResult<Statement> {
-        let flags: Vec<ClassFlag> = self.class_flags(state)?.iter().map(|f| f.into()).collect();
+        let modifiers = self.get_class_modifier_group(self.modifiers(state)?)?;
 
         expect_token!([TokenKind::Class], state, ["`class`"]);
 
@@ -45,7 +46,7 @@ impl Parser {
 
         let body = scoped!(
             state,
-            Scope::Class(name.clone(), flags.clone(), has_parent),
+            Scope::Class(name.clone(), modifiers.clone(), has_parent),
             {
                 let mut body = Vec::new();
                 while state.current.kind != TokenKind::RightBrace {
@@ -71,7 +72,7 @@ impl Parser {
             extends,
             implements,
             body,
-            flags,
+            modifiers,
         })
     }
 
@@ -215,6 +216,8 @@ impl Parser {
     }
 
     pub(in crate::parser) fn enum_definition(&self, state: &mut State) -> ParseResult<Statement> {
+        let start = state.current.span;
+
         expect_token!([TokenKind::Enum], state, ["`enum`"]);
 
         let name = self.ident(state)?;
@@ -235,50 +238,78 @@ impl Parser {
             None
         };
 
-        scoped!(state, Scope::Enum(name.clone(), backed_type.is_some()), {
-            let mut implements = Vec::new();
-            if state.current.kind == TokenKind::Implements {
-                state.next();
+        let mut implements = Vec::new();
+        if state.current.kind == TokenKind::Implements {
+            state.next();
 
-                while state.current.kind != TokenKind::LeftBrace {
-                    implements.push(self.full_name(state)?);
+            while state.current.kind != TokenKind::LeftBrace {
+                implements.push(self.full_name(state)?);
 
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
-                    } else {
-                        break;
-                    }
+                if state.current.kind == TokenKind::Comma {
+                    state.next();
+                } else {
+                    break;
                 }
             }
+        }
 
-            let attributes = state.get_attributes();
+        let attributes = state.get_attributes();
+        if let Some(backed_type) = backed_type {
+            let members = scoped!(state, Scope::Enum(name.clone(), true), {
+                self.lbrace(state)?;
 
-            self.lbrace(state)?;
+                // TODO(azjezz): we know members might have corrupted start span, we could updated it here?
+                // as we know the correct start span is `state.current.span`.
+                let mut members = Vec::new();
+                while state.current.kind != TokenKind::RightBrace {
+                    state.skip_comments();
+                    members.push(self.backed_enum_member(state)?);
+                }
 
-            let mut body = Block::new();
-            while state.current.kind != TokenKind::RightBrace {
-                state.skip_comments();
-                body.push(self.enum_statement(state)?);
-            }
+                self.rbrace(state)?;
 
-            self.rbrace(state)?;
+                members
+            });
 
-            match backed_type {
-                Some(backed_type) => Ok(Statement::BackedEnum {
-                    name,
-                    attributes,
-                    backed_type,
-                    implements,
-                    body,
-                }),
-                None => Ok(Statement::UnitEnum {
-                    name,
-                    attributes,
-                    implements,
-                    body,
-                }),
-            }
-        })
+            let end = state.current.span;
+
+            Ok(Statement::BackedEnum(BackedEnum {
+                start,
+                end,
+                name,
+                backed_type,
+                attributes,
+                implements,
+                members,
+            }))
+        } else {
+            let members = scoped!(state, Scope::Enum(name.clone(), false), {
+                self.lbrace(state)?;
+
+                // TODO(azjezz): we know members might have corrupted start span, we could updated it here?
+                // as we know the correct start span is `state.current.span`.
+                let mut members = Vec::new();
+                while state.current.kind != TokenKind::RightBrace {
+                    state.skip_comments();
+                    members.push(self.unit_enum_member(state)?);
+                }
+
+                self.rbrace(state)?;
+
+                members
+            });
+
+            let end = state.current.span;
+
+            Ok(Statement::UnitEnum(UnitEnum {
+                start,
+                end,
+                name,
+                attributes,
+                implements,
+                members,
+            }))
+        }
     }
 
     fn at_least_one_comma_separated<T>(

@@ -110,487 +110,568 @@
                 ],
                 kind: Function,
             },
-            Function {
-                name: Identifier {
+            Function(
+                Function {
                     start: (
                         32,
-                        10,
+                        1,
                     ),
-                    name: "box",
                     end: (
-                        32,
-                        13,
+                        0,
+                        0,
                     ),
-                },
-                attributes: [],
-                params: [
-                    Param {
-                        name: Variable {
-                            start: (
-                                32,
-                                22,
-                            ),
-                            name: "fun",
-                            end: (
-                                32,
-                                26,
-                            ),
-                        },
-                        attributes: [],
-                        type: Some(
-                            Identifier(
-                                Identifier {
-                                    start: (
-                                        32,
-                                        14,
-                                    ),
-                                    name: "Closure",
-                                    end: (
-                                        32,
-                                        22,
-                                    ),
-                                },
-                            ),
+                    name: Identifier {
+                        start: (
+                            32,
+                            10,
                         ),
-                        variadic: false,
-                        default: None,
-                        flags: [],
-                        by_ref: false,
+                        name: "box",
+                        end: (
+                            32,
+                            13,
+                        ),
                     },
-                ],
-                body: [
-                    Expression {
-                        expr: Infix {
-                            lhs: Variable(
-                                Variable {
+                    attributes: [],
+                    parameters: FunctionParameterList {
+                        start: (
+                            32,
+                            13,
+                        ),
+                        end: (
+                            32,
+                            27,
+                        ),
+                        members: [
+                            FunctionParameter {
+                                start: (
+                                    32,
+                                    14,
+                                ),
+                                end: (
+                                    32,
+                                    26,
+                                ),
+                                name: Variable {
                                     start: (
-                                        34,
-                                        5,
-                                    ),
-                                    name: "last_message",
-                                    end: (
-                                        34,
-                                        19,
-                                    ),
-                                },
-                            ),
-                            op: Assign,
-                            rhs: Null,
-                        },
-                    },
-                    Expression {
-                        expr: Call {
-                            target: Identifier(
-                                Identifier {
-                                    start: (
-                                        36,
-                                        5,
-                                    ),
-                                    name: "set_error_handler",
-                                    end: (
-                                        36,
+                                        32,
                                         22,
                                     ),
+                                    name: "fun",
+                                    end: (
+                                        32,
+                                        26,
+                                    ),
                                 },
-                            ),
-                            args: [
-                                Arg {
-                                    name: None,
-                                    value: Closure {
-                                        params: [
-                                            Param {
-                                                name: Variable {
-                                                    start: (
-                                                        36,
-                                                        44,
-                                                    ),
-                                                    name: "_type",
-                                                    end: (
-                                                        36,
-                                                        50,
-                                                    ),
-                                                },
-                                                attributes: [],
-                                                type: Some(
-                                                    Integer,
-                                                ),
-                                                variadic: false,
-                                                default: None,
-                                                flags: [],
-                                                by_ref: false,
-                                            },
-                                            Param {
-                                                name: Variable {
-                                                    start: (
-                                                        36,
-                                                        59,
-                                                    ),
-                                                    name: "message",
-                                                    end: (
-                                                        36,
-                                                        67,
-                                                    ),
-                                                },
-                                                attributes: [],
-                                                type: Some(
-                                                    String,
-                                                ),
-                                                variadic: false,
-                                                default: None,
-                                                flags: [],
-                                                by_ref: false,
-                                            },
-                                        ],
-                                        attributes: [],
-                                        uses: [
-                                            ClosureUse {
-                                                var: Variable(
-                                                    Variable {
-                                                        start: (
-                                                            36,
-                                                            75,
-                                                        ),
-                                                        name: "last_message",
-                                                        end: (
-                                                            36,
-                                                            88,
-                                                        ),
-                                                    },
-                                                ),
-                                                by_ref: true,
-                                            },
-                                        ],
-                                        return_type: None,
-                                        body: [
-                                            Expression {
-                                                expr: Infix {
-                                                    lhs: Variable(
-                                                        Variable {
-                                                            start: (
-                                                                37,
-                                                                9,
-                                                            ),
-                                                            name: "last_message",
-                                                            end: (
-                                                                37,
-                                                                23,
-                                                            ),
-                                                        },
-                                                    ),
-                                                    op: Assign,
-                                                    rhs: Variable(
-                                                        Variable {
-                                                            start: (
-                                                                37,
-                                                                25,
-                                                            ),
-                                                            name: "message",
-                                                            end: (
-                                                                37,
-                                                                33,
-                                                            ),
-                                                        },
-                                                    ),
-                                                },
-                                            },
-                                        ],
-                                        static: true,
-                                        by_ref: false,
-                                    },
-                                    unpack: false,
-                                },
-                            ],
-                        },
+                                attributes: [],
+                                type: Some(
+                                    Identifier(
+                                        Identifier {
+                                            start: (
+                                                32,
+                                                14,
+                                            ),
+                                            name: "Closure",
+                                            end: (
+                                                32,
+                                                22,
+                                            ),
+                                        },
+                                    ),
+                                ),
+                                variadic: false,
+                                default: None,
+                                by_ref: false,
+                            },
+                        ],
                     },
-                    If {
-                        condition: Infix {
-                            lhs: Infix {
-                                lhs: Null,
-                                op: NotIdentical,
-                                rhs: Variable(
+                    return_type: Some(
+                        Array,
+                    ),
+                    by_ref: false,
+                    body: [
+                        Expression {
+                            expr: Infix {
+                                lhs: Variable(
                                     Variable {
                                         start: (
-                                            43,
-                                            18,
+                                            34,
+                                            5,
                                         ),
                                         name: "last_message",
                                         end: (
-                                            43,
-                                            32,
+                                            34,
+                                            19,
                                         ),
                                     },
                                 ),
+                                op: Assign,
+                                rhs: Null,
                             },
-                            op: And,
-                            rhs: Call {
+                        },
+                        Expression {
+                            expr: Call {
                                 target: Identifier(
                                     Identifier {
                                         start: (
-                                            43,
-                                            35,
+                                            36,
+                                            5,
                                         ),
-                                        name: "Str\contains",
+                                        name: "set_error_handler",
                                         end: (
-                                            43,
-                                            47,
+                                            36,
+                                            22,
                                         ),
                                     },
                                 ),
                                 args: [
                                     Arg {
                                         name: None,
-                                        value: Variable(
-                                            Variable {
+                                        value: Closure(
+                                            Closure {
                                                 start: (
-                                                    43,
-                                                    48,
+                                                    36,
+                                                    23,
                                                 ),
-                                                name: "last_message",
                                                 end: (
-                                                    43,
-                                                    61,
+                                                    38,
+                                                    6,
                                                 ),
+                                                attributes: [],
+                                                parameters: FunctionParameterList {
+                                                    start: (
+                                                        36,
+                                                        39,
+                                                    ),
+                                                    end: (
+                                                        36,
+                                                        69,
+                                                    ),
+                                                    members: [
+                                                        FunctionParameter {
+                                                            start: (
+                                                                36,
+                                                                40,
+                                                            ),
+                                                            end: (
+                                                                36,
+                                                                50,
+                                                            ),
+                                                            name: Variable {
+                                                                start: (
+                                                                    36,
+                                                                    44,
+                                                                ),
+                                                                name: "_type",
+                                                                end: (
+                                                                    36,
+                                                                    50,
+                                                                ),
+                                                            },
+                                                            attributes: [],
+                                                            type: Some(
+                                                                Integer,
+                                                            ),
+                                                            variadic: false,
+                                                            default: None,
+                                                            by_ref: false,
+                                                        },
+                                                        FunctionParameter {
+                                                            start: (
+                                                                36,
+                                                                52,
+                                                            ),
+                                                            end: (
+                                                                36,
+                                                                67,
+                                                            ),
+                                                            name: Variable {
+                                                                start: (
+                                                                    36,
+                                                                    59,
+                                                                ),
+                                                                name: "message",
+                                                                end: (
+                                                                    36,
+                                                                    67,
+                                                                ),
+                                                            },
+                                                            attributes: [],
+                                                            type: Some(
+                                                                String,
+                                                            ),
+                                                            variadic: false,
+                                                            default: None,
+                                                            by_ref: false,
+                                                        },
+                                                    ],
+                                                },
+                                                return_ty: None,
+                                                uses: [
+                                                    ClosureUse {
+                                                        var: Variable(
+                                                            Variable {
+                                                                start: (
+                                                                    36,
+                                                                    75,
+                                                                ),
+                                                                name: "last_message",
+                                                                end: (
+                                                                    36,
+                                                                    88,
+                                                                ),
+                                                            },
+                                                        ),
+                                                        by_ref: true,
+                                                    },
+                                                ],
+                                                by_ref: false,
+                                                body: [
+                                                    Expression {
+                                                        expr: Infix {
+                                                            lhs: Variable(
+                                                                Variable {
+                                                                    start: (
+                                                                        37,
+                                                                        9,
+                                                                    ),
+                                                                    name: "last_message",
+                                                                    end: (
+                                                                        37,
+                                                                        23,
+                                                                    ),
+                                                                },
+                                                            ),
+                                                            op: Assign,
+                                                            rhs: Variable(
+                                                                Variable {
+                                                                    start: (
+                                                                        37,
+                                                                        25,
+                                                                    ),
+                                                                    name: "message",
+                                                                    end: (
+                                                                        37,
+                                                                        33,
+                                                                    ),
+                                                                },
+                                                            ),
+                                                        },
+                                                    },
+                                                ],
+                                                static: true,
                                             },
                                         ),
-                                        unpack: false,
-                                    },
-                                    Arg {
-                                        name: None,
-                                        value: LiteralString {
-                                            value: "): ",
-                                        },
                                         unpack: false,
                                     },
                                 ],
                             },
                         },
-                        then: [
-                            Expression {
-                                expr: Infix {
-                                    lhs: Variable(
+                        If {
+                            condition: Infix {
+                                lhs: Infix {
+                                    lhs: Null,
+                                    op: NotIdentical,
+                                    rhs: Variable(
                                         Variable {
                                             start: (
-                                                44,
-                                                9,
+                                                43,
+                                                18,
                                             ),
                                             name: "last_message",
                                             end: (
-                                                44,
-                                                23,
+                                                43,
+                                                32,
                                             ),
                                         },
                                     ),
-                                    op: Assign,
-                                    rhs: Call {
-                                        target: Identifier(
-                                            Identifier {
-                                                start: (
-                                                    44,
-                                                    25,
-                                                ),
-                                                name: "Str\after",
-                                                end: (
-                                                    44,
-                                                    34,
-                                                ),
-                                            },
-                                        ),
-                                        args: [
-                                            Arg {
-                                                name: None,
-                                                value: Call {
-                                                    target: Identifier(
-                                                        Identifier {
-                                                            start: (
-                                                                45,
-                                                                13,
-                                                            ),
-                                                            name: "Str\lowercase",
-                                                            end: (
-                                                                45,
-                                                                26,
-                                                            ),
-                                                        },
+                                },
+                                op: And,
+                                rhs: Call {
+                                    target: Identifier(
+                                        Identifier {
+                                            start: (
+                                                43,
+                                                35,
+                                            ),
+                                            name: "Str\contains",
+                                            end: (
+                                                43,
+                                                47,
+                                            ),
+                                        },
+                                    ),
+                                    args: [
+                                        Arg {
+                                            name: None,
+                                            value: Variable(
+                                                Variable {
+                                                    start: (
+                                                        43,
+                                                        48,
                                                     ),
-                                                    args: [
-                                                        Arg {
-                                                            name: None,
-                                                            value: Variable(
-                                                                Variable {
-                                                                    start: (
-                                                                        45,
-                                                                        27,
-                                                                    ),
-                                                                    name: "last_message",
-                                                                    end: (
-                                                                        45,
-                                                                        40,
-                                                                    ),
-                                                                },
-                                                            ),
-                                                            unpack: false,
-                                                        },
-                                                    ],
+                                                    name: "last_message",
+                                                    end: (
+                                                        43,
+                                                        61,
+                                                    ),
                                                 },
-                                                unpack: false,
+                                            ),
+                                            unpack: false,
+                                        },
+                                        Arg {
+                                            name: None,
+                                            value: LiteralString {
+                                                value: "): ",
                                             },
-                                            Arg {
-                                                name: None,
-                                                value: LiteralString {
-                                                    value: "): ",
-                                                },
-                                                unpack: false,
-                                            },
-                                        ],
-                                    },
+                                            unpack: false,
+                                        },
+                                    ],
                                 },
                             },
-                        ],
-                        else_ifs: [],
-                        else: None,
-                    },
-                    Try {
-                        body: [
-                            Expression {
-                                expr: Infix {
-                                    lhs: Variable(
-                                        Variable {
-                                            start: (
-                                                52,
-                                                9,
-                                            ),
-                                            name: "value",
-                                            end: (
-                                                52,
-                                                16,
-                                            ),
-                                        },
-                                    ),
-                                    op: Assign,
-                                    rhs: Call {
-                                        target: Variable(
+                            then: [
+                                Expression {
+                                    expr: Infix {
+                                        lhs: Variable(
                                             Variable {
                                                 start: (
-                                                    52,
-                                                    18,
-                                                ),
-                                                name: "fun",
-                                                end: (
-                                                    52,
-                                                    22,
-                                                ),
-                                            },
-                                        ),
-                                        args: [],
-                                    },
-                                },
-                            },
-                            Expression {
-                                expr: Infix {
-                                    lhs: Variable(
-                                        Variable {
-                                            start: (
-                                                55,
-                                                9,
-                                            ),
-                                            name: "result",
-                                            end: (
-                                                55,
-                                                17,
-                                            ),
-                                        },
-                                    ),
-                                    op: Assign,
-                                    rhs: Array {
-                                        items: [
-                                            ArrayItem {
-                                                key: None,
-                                                value: Variable(
-                                                    Variable {
-                                                        start: (
-                                                            55,
-                                                            20,
-                                                        ),
-                                                        name: "value",
-                                                        end: (
-                                                            55,
-                                                            26,
-                                                        ),
-                                                    },
-                                                ),
-                                                unpack: false,
-                                                by_ref: false,
-                                            },
-                                            ArrayItem {
-                                                key: None,
-                                                value: Variable(
-                                                    Variable {
-                                                        start: (
-                                                            55,
-                                                            28,
-                                                        ),
-                                                        name: "last_message",
-                                                        end: (
-                                                            55,
-                                                            41,
-                                                        ),
-                                                    },
-                                                ),
-                                                unpack: false,
-                                                by_ref: false,
-                                            },
-                                        ],
-                                    },
-                                },
-                            },
-                            Return {
-                                value: Some(
-                                    Variable(
-                                        Variable {
-                                            start: (
-                                                57,
-                                                16,
-                                            ),
-                                            name: "result",
-                                            end: (
-                                                57,
-                                                23,
-                                            ),
-                                        },
-                                    ),
-                                ),
-                            },
-                        ],
-                        catches: [],
-                        finally: Some(
-                            [
-                                Expression {
-                                    expr: Call {
-                                        target: Identifier(
-                                            Identifier {
-                                                start: (
-                                                    59,
+                                                    44,
                                                     9,
                                                 ),
-                                                name: "restore_error_handler",
+                                                name: "last_message",
                                                 end: (
-                                                    59,
-                                                    30,
+                                                    44,
+                                                    23,
                                                 ),
                                             },
                                         ),
-                                        args: [],
+                                        op: Assign,
+                                        rhs: Call {
+                                            target: Identifier(
+                                                Identifier {
+                                                    start: (
+                                                        44,
+                                                        25,
+                                                    ),
+                                                    name: "Str\after",
+                                                    end: (
+                                                        44,
+                                                        34,
+                                                    ),
+                                                },
+                                            ),
+                                            args: [
+                                                Arg {
+                                                    name: None,
+                                                    value: Call {
+                                                        target: Identifier(
+                                                            Identifier {
+                                                                start: (
+                                                                    45,
+                                                                    13,
+                                                                ),
+                                                                name: "Str\lowercase",
+                                                                end: (
+                                                                    45,
+                                                                    26,
+                                                                ),
+                                                            },
+                                                        ),
+                                                        args: [
+                                                            Arg {
+                                                                name: None,
+                                                                value: Variable(
+                                                                    Variable {
+                                                                        start: (
+                                                                            45,
+                                                                            27,
+                                                                        ),
+                                                                        name: "last_message",
+                                                                        end: (
+                                                                            45,
+                                                                            40,
+                                                                        ),
+                                                                    },
+                                                                ),
+                                                                unpack: false,
+                                                            },
+                                                        ],
+                                                    },
+                                                    unpack: false,
+                                                },
+                                                Arg {
+                                                    name: None,
+                                                    value: LiteralString {
+                                                        value: "): ",
+                                                    },
+                                                    unpack: false,
+                                                },
+                                            ],
+                                        },
                                     },
                                 },
                             ],
+                            else_ifs: [],
+                            else: None,
+                        },
+                        Try(
+                            TryBlock {
+                                start: (
+                                    51,
+                                    5,
+                                ),
+                                end: (
+                                    61,
+                                    1,
+                                ),
+                                body: [
+                                    Expression {
+                                        expr: Infix {
+                                            lhs: Variable(
+                                                Variable {
+                                                    start: (
+                                                        52,
+                                                        9,
+                                                    ),
+                                                    name: "value",
+                                                    end: (
+                                                        52,
+                                                        16,
+                                                    ),
+                                                },
+                                            ),
+                                            op: Assign,
+                                            rhs: Call {
+                                                target: Variable(
+                                                    Variable {
+                                                        start: (
+                                                            52,
+                                                            18,
+                                                        ),
+                                                        name: "fun",
+                                                        end: (
+                                                            52,
+                                                            22,
+                                                        ),
+                                                    },
+                                                ),
+                                                args: [],
+                                            },
+                                        },
+                                    },
+                                    Expression {
+                                        expr: Infix {
+                                            lhs: Variable(
+                                                Variable {
+                                                    start: (
+                                                        55,
+                                                        9,
+                                                    ),
+                                                    name: "result",
+                                                    end: (
+                                                        55,
+                                                        17,
+                                                    ),
+                                                },
+                                            ),
+                                            op: Assign,
+                                            rhs: Array {
+                                                items: [
+                                                    ArrayItem {
+                                                        key: None,
+                                                        value: Variable(
+                                                            Variable {
+                                                                start: (
+                                                                    55,
+                                                                    20,
+                                                                ),
+                                                                name: "value",
+                                                                end: (
+                                                                    55,
+                                                                    26,
+                                                                ),
+                                                            },
+                                                        ),
+                                                        unpack: false,
+                                                        by_ref: false,
+                                                    },
+                                                    ArrayItem {
+                                                        key: None,
+                                                        value: Variable(
+                                                            Variable {
+                                                                start: (
+                                                                    55,
+                                                                    28,
+                                                                ),
+                                                                name: "last_message",
+                                                                end: (
+                                                                    55,
+                                                                    41,
+                                                                ),
+                                                            },
+                                                        ),
+                                                        unpack: false,
+                                                        by_ref: false,
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                    },
+                                    Return {
+                                        value: Some(
+                                            Variable(
+                                                Variable {
+                                                    start: (
+                                                        57,
+                                                        16,
+                                                    ),
+                                                    name: "result",
+                                                    end: (
+                                                        57,
+                                                        23,
+                                                    ),
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                ],
+                                catches: [],
+                                finally: Some(
+                                    FinallyBlock {
+                                        start: (
+                                            58,
+                                            7,
+                                        ),
+                                        end: (
+                                            61,
+                                            1,
+                                        ),
+                                        body: [
+                                            Expression {
+                                                expr: Call {
+                                                    target: Identifier(
+                                                        Identifier {
+                                                            start: (
+                                                                59,
+                                                                9,
+                                                            ),
+                                                            name: "restore_error_handler",
+                                                            end: (
+                                                                59,
+                                                                30,
+                                                            ),
+                                                        },
+                                                    ),
+                                                    args: [],
+                                                },
+                                            },
+                                        ],
+                                    },
+                                ),
+                            },
                         ),
-                    },
-                ],
-                return_type: Some(
-                    Array,
-                ),
-                by_ref: false,
-            },
+                    ],
+                },
+            ),
         ],
     },
 ]

@@ -15,57 +15,120 @@
         extends: None,
         implements: [],
         body: [
-            Method {
-                name: Identifier {
+            Method(
+                Method {
                     start: (
                         4,
-                        21,
+                        12,
                     ),
-                    name: "__construct",
                     end: (
-                        4,
-                        32,
+                        7,
+                        1,
                     ),
-                },
-                attributes: [],
-                params: [
-                    Param {
-                        name: Variable {
-                            start: (
-                                5,
-                                32,
-                            ),
-                            name: "s",
-                            end: (
-                                5,
-                                35,
-                            ),
-                        },
-                        attributes: [],
-                        type: Some(
-                            String,
+                    name: Identifier {
+                        start: (
+                            4,
+                            21,
                         ),
-                        variadic: false,
-                        default: Some(
-                            LiteralString {
-                                value: "h",
-                            },
+                        name: "__construct",
+                        end: (
+                            4,
+                            32,
                         ),
-                        flags: [
-                            Readonly,
-                            Public,
-                        ],
-                        by_ref: false,
                     },
-                ],
-                body: [],
-                flags: [
-                    Public,
-                ],
-                return_type: None,
-                by_ref: false,
-            },
+                    attributes: [],
+                    parameters: MethodParameterList {
+                        start: (
+                            4,
+                            32,
+                        ),
+                        end: (
+                            6,
+                            7,
+                        ),
+                        members: [
+                            MethodParameter {
+                                start: (
+                                    5,
+                                    9,
+                                ),
+                                end: (
+                                    5,
+                                    40,
+                                ),
+                                name: Variable {
+                                    start: (
+                                        5,
+                                        32,
+                                    ),
+                                    name: "s",
+                                    end: (
+                                        5,
+                                        35,
+                                    ),
+                                },
+                                attributes: [],
+                                type: Some(
+                                    String,
+                                ),
+                                variadic: false,
+                                default: Some(
+                                    LiteralString {
+                                        value: "h",
+                                    },
+                                ),
+                                flags: PromotedPropertyModifierGroup {
+                                    flags: [
+                                        Readonly {
+                                            start: (
+                                                5,
+                                                9,
+                                            ),
+                                            end: (
+                                                5,
+                                                18,
+                                            ),
+                                        },
+                                        Public {
+                                            start: (
+                                                5,
+                                                18,
+                                            ),
+                                            end: (
+                                                5,
+                                                25,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                by_ref: false,
+                            },
+                        ],
+                    },
+                    body: Some(
+                        [],
+                    ),
+                    flags: MethodModifierGroup {
+                        flags: [
+                            Public {
+                                start: (
+                                    4,
+                                    5,
+                                ),
+                                end: (
+                                    4,
+                                    12,
+                                ),
+                            },
+                        ],
+                    },
+                    return_type: None,
+                    by_ref: false,
+                },
+            ),
         ],
-        flags: [],
+        modifiers: ClassModifierGroup {
+            flags: [],
+        },
     },
 ]

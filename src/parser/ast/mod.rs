@@ -1,23 +1,35 @@
-pub mod attribute;
-pub mod identifier;
-pub mod variable;
+pub mod attributes;
+pub mod classish;
+pub mod comments;
+pub mod enums;
+pub mod functions;
+pub mod identifiers;
+pub mod modifiers;
+pub mod try_block;
+pub mod variables;
 
 use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::attribute::AttributeGroup;
-use crate::parser::ast::identifier::Identifier;
-use crate::parser::ast::variable::Variable;
+use crate::parser::ast::attributes::AttributeGroup;
+use crate::parser::ast::classish::ClassishConstant;
+use crate::parser::ast::comments::Comment;
+use crate::parser::ast::enums::BackedEnum;
+use crate::parser::ast::enums::UnitEnum;
+use crate::parser::ast::functions::ArrowFunction;
+use crate::parser::ast::functions::Closure;
+use crate::parser::ast::functions::Function;
+use crate::parser::ast::functions::Method;
+use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::modifiers::ClassModifierGroup;
+use crate::parser::ast::modifiers::PropertyModifierGroup;
+use crate::parser::ast::modifiers::VisibilityModifier;
+use crate::parser::ast::try_block::TryBlock;
+use crate::parser::ast::variables::Variable;
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
-
-#[derive(Debug, Eq, PartialEq, Clone)]
-pub enum TryBlockCaughtType {
-    Identifier(Identifier),
-    Union(Vec<Identifier>),
-}
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum Type {
@@ -123,95 +135,6 @@ impl Display for Type {
     }
 }
 
-pub type ParamList = Vec<Param>;
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct Param {
-    pub name: Variable,
-    pub attributes: Vec<AttributeGroup>,
-    pub r#type: Option<Type>,
-    pub variadic: bool,
-    pub default: Option<Expression>,
-    pub flags: Vec<PropertyFlag>,
-    pub by_ref: bool,
-}
-
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub enum PropertyFlag {
-    Public,
-    Protected,
-    Private,
-    Static,
-    Readonly,
-}
-
-impl From<TokenKind> for PropertyFlag {
-    fn from(k: TokenKind) -> Self {
-        (&k).into()
-    }
-}
-
-impl From<&TokenKind> for PropertyFlag {
-    fn from(k: &TokenKind) -> Self {
-        match k {
-            TokenKind::Public => Self::Public,
-            TokenKind::Protected => Self::Protected,
-            TokenKind::Private => Self::Private,
-            TokenKind::Static => Self::Static,
-            TokenKind::Readonly => Self::Readonly,
-            _ => unreachable!("token {:?} can't be converted into property flag.", k),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub enum MethodFlag {
-    Final,
-    Abstract,
-    Public,
-    Protected,
-    Private,
-    Static,
-}
-
-impl From<TokenKind> for MethodFlag {
-    fn from(k: TokenKind) -> Self {
-        match k {
-            TokenKind::Final => Self::Final,
-            TokenKind::Abstract => Self::Abstract,
-            TokenKind::Public => Self::Public,
-            TokenKind::Protected => Self::Protected,
-            TokenKind::Private => Self::Private,
-            TokenKind::Static => Self::Static,
-            _ => unreachable!("token {:?} can't be converted into method flag.", k),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub enum ClassFlag {
-    Final,
-    Abstract,
-    Readonly,
-}
-
-impl From<TokenKind> for ClassFlag {
-    fn from(k: TokenKind) -> Self {
-        (&k).into()
-    }
-}
-
-impl From<&TokenKind> for ClassFlag {
-    fn from(k: &TokenKind) -> Self {
-        match k {
-            TokenKind::Final => Self::Final,
-            TokenKind::Abstract => Self::Abstract,
-            TokenKind::Readonly => Self::Readonly,
-            _ => unreachable!("token {:?} can't be converted into class flag.", k),
-        }
-    }
-}
-
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum UseKind {
     Normal,
@@ -251,12 +174,12 @@ pub enum TraitAdaptation {
         r#trait: Option<Identifier>,
         method: Identifier,
         alias: Identifier,
-        visibility: Option<MethodFlag>,
+        visibility: Option<VisibilityModifier>,
     },
     Visibility {
         r#trait: Option<Identifier>,
         method: Identifier,
-        visibility: MethodFlag,
+        visibility: VisibilityModifier,
     },
     Precedence {
         r#trait: Option<Identifier>,
@@ -301,42 +224,25 @@ pub enum Statement {
         value_var: Expression,
         body: Block,
     },
-    Var {
-        var: Variable,
-        attributes: Vec<AttributeGroup>,
-        value: Option<Expression>,
-        r#type: Option<Type>,
-    },
     Property {
         var: Variable,
         attributes: Vec<AttributeGroup>,
         value: Option<Expression>,
         r#type: Option<Type>,
-        flags: Vec<PropertyFlag>,
+        flags: PropertyModifierGroup,
     },
     Constant {
         constants: Vec<Constant>,
     },
-    ClassishConstant {
-        name: Identifier,
-        value: Expression,
-        flags: Vec<ConstFlag>,
-    },
-    Function {
-        name: Identifier,
-        attributes: Vec<AttributeGroup>,
-        params: Vec<Param>,
-        body: Block,
-        return_type: Option<Type>,
-        by_ref: bool,
-    },
+    ClassishConstant(ClassishConstant),
+    Function(Function),
     Class {
         name: Identifier,
         attributes: Vec<AttributeGroup>,
         extends: Option<Identifier>,
         implements: Vec<Identifier>,
         body: Block,
-        flags: Vec<ClassFlag>,
+        modifiers: ClassModifierGroup,
     },
     Trait {
         name: Identifier,
@@ -353,23 +259,7 @@ pub enum Statement {
         extends: Vec<Identifier>,
         body: Block,
     },
-    Method {
-        name: Identifier,
-        attributes: Vec<AttributeGroup>,
-        params: Vec<Param>,
-        body: Block,
-        flags: Vec<MethodFlag>,
-        return_type: Option<Type>,
-        by_ref: bool,
-    },
-    AbstractMethod {
-        name: Identifier,
-        attributes: Vec<AttributeGroup>,
-        params: Vec<Param>,
-        flags: Vec<MethodFlag>,
-        return_type: Option<Type>,
-        by_ref: bool,
-    },
+    Method(Method),
     If {
         condition: Expression,
         then: Block,
@@ -412,34 +302,10 @@ pub enum Statement {
         kind: UseKind,
         uses: Vec<Use>,
     },
-    Comment {
-        comment: ByteString,
-    },
-    Try {
-        body: Block,
-        catches: Vec<Catch>,
-        finally: Option<Block>,
-    },
-    UnitEnum {
-        name: Identifier,
-        attributes: Vec<AttributeGroup>,
-        implements: Vec<Identifier>,
-        body: Block,
-    },
-    BackedEnum {
-        name: Identifier,
-        attributes: Vec<AttributeGroup>,
-        implements: Vec<Identifier>,
-        backed_type: BackedEnumType,
-        body: Block,
-    },
-    UnitEnumCase {
-        name: Identifier,
-    },
-    BackedEnumCase {
-        name: Identifier,
-        value: Expression,
-    },
+    Comment(Comment),
+    Try(TryBlock),
+    UnitEnum(UnitEnum),
+    BackedEnum(BackedEnum),
     Block {
         body: Block,
     },
@@ -510,33 +376,6 @@ pub struct Case {
     pub body: Block,
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct Catch {
-    pub types: TryBlockCaughtType,
-    pub var: Option<Expression>,
-    pub body: Block,
-}
-
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub enum ConstFlag {
-    Final,
-    Public,
-    Protected,
-    Private,
-}
-
-impl From<TokenKind> for ConstFlag {
-    fn from(k: TokenKind) -> Self {
-        match k {
-            TokenKind::Final => Self::Final,
-            TokenKind::Public => Self::Public,
-            TokenKind::Protected => Self::Protected,
-            TokenKind::Private => Self::Private,
-            _ => unreachable!("token {:?} can't be converted into const flag.", k),
-        }
-    }
-}
-
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Use {
     pub name: Identifier,
@@ -584,23 +423,8 @@ pub enum Expression {
     Array {
         items: Vec<ArrayItem>,
     },
-    Closure {
-        params: Vec<Param>,
-        attributes: Vec<AttributeGroup>,
-        uses: Vec<ClosureUse>,
-        return_type: Option<Type>,
-        body: Block,
-        r#static: bool,
-        by_ref: bool,
-    },
-    ArrowFunction {
-        params: Vec<Param>,
-        attributes: Vec<AttributeGroup>,
-        return_type: Option<Type>,
-        expr: Box<Self>,
-        by_ref: bool,
-        r#static: bool,
-    },
+    Closure(Closure),
+    ArrowFunction(ArrowFunction),
     New {
         target: Box<Self>,
         args: Vec<Arg>,

@@ -1,52 +1,82 @@
 [
-    BackedEnum {
-        name: Identifier {
+    BackedEnum(
+        BackedEnum {
             start: (
                 3,
-                6,
+                1,
             ),
-            name: "Foo",
             end: (
-                3,
-                9,
+                0,
+                0,
             ),
+            name: Identifier {
+                start: (
+                    3,
+                    6,
+                ),
+                name: "Foo",
+                end: (
+                    3,
+                    9,
+                ),
+            },
+            attributes: [],
+            implements: [],
+            backed_type: String,
+            members: [
+                Case(
+                    BackedEnumCase {
+                        start: (
+                            4,
+                            5,
+                        ),
+                        end: (
+                            5,
+                            5,
+                        ),
+                        name: Identifier {
+                            start: (
+                                4,
+                                10,
+                            ),
+                            name: "Bar",
+                            end: (
+                                4,
+                                14,
+                            ),
+                        },
+                        value: LiteralString {
+                            value: "3",
+                        },
+                    },
+                ),
+                Case(
+                    BackedEnumCase {
+                        start: (
+                            5,
+                            5,
+                        ),
+                        end: (
+                            6,
+                            1,
+                        ),
+                        name: Identifier {
+                            start: (
+                                5,
+                                10,
+                            ),
+                            name: "Baz",
+                            end: (
+                                5,
+                                14,
+                            ),
+                        },
+                        value: LiteralString {
+                            value: "g",
+                        },
+                    },
+                ),
+            ],
         },
-        attributes: [],
-        implements: [],
-        backed_type: String,
-        body: [
-            BackedEnumCase {
-                name: Identifier {
-                    start: (
-                        4,
-                        10,
-                    ),
-                    name: "Bar",
-                    end: (
-                        4,
-                        14,
-                    ),
-                },
-                value: LiteralString {
-                    value: "3",
-                },
-            },
-            BackedEnumCase {
-                name: Identifier {
-                    start: (
-                        5,
-                        10,
-                    ),
-                    name: "Baz",
-                    end: (
-                        5,
-                        14,
-                    ),
-                },
-                value: LiteralString {
-                    value: "g",
-                },
-            },
-        ],
-    },
+    ),
 ]

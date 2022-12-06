@@ -351,9 +351,9 @@ impl Lexer {
                 }
 
                 if buffer.starts_with(b"/**") {
-                    TokenKind::DocComment(buffer.into())
+                    TokenKind::DocumentComment(buffer.into())
                 } else {
-                    TokenKind::Comment(buffer.into())
+                    TokenKind::MultiLineComment(buffer.into())
                 }
             }
             [b'#', b'[', ..] => {
@@ -380,7 +380,11 @@ impl Lexer {
 
                 state.next();
 
-                TokenKind::Comment(buffer.into())
+                if buffer.starts_with(b"#") {
+                    TokenKind::HashMarkComment(buffer.into())
+                } else {
+                    TokenKind::SingleLineComment(buffer.into())
+                }
             }
             [b'/', b'=', ..] => {
                 state.skip(2);

@@ -15,119 +15,239 @@
         extends: None,
         implements: [],
         body: [
-            Method {
-                name: Identifier {
+            Method(
+                Method {
                     start: (
                         4,
-                        21,
+                        12,
                     ),
-                    name: "__construct",
                     end: (
-                        4,
-                        32,
+                        10,
+                        1,
                     ),
+                    name: Identifier {
+                        start: (
+                            4,
+                            21,
+                        ),
+                        name: "__construct",
+                        end: (
+                            4,
+                            32,
+                        ),
+                    },
+                    attributes: [],
+                    parameters: MethodParameterList {
+                        start: (
+                            4,
+                            32,
+                        ),
+                        end: (
+                            9,
+                            7,
+                        ),
+                        members: [
+                            MethodParameter {
+                                start: (
+                                    5,
+                                    9,
+                                ),
+                                end: (
+                                    5,
+                                    25,
+                                ),
+                                name: Variable {
+                                    start: (
+                                        5,
+                                        23,
+                                    ),
+                                    name: "a",
+                                    end: (
+                                        5,
+                                        25,
+                                    ),
+                                },
+                                attributes: [],
+                                type: Some(
+                                    String,
+                                ),
+                                variadic: false,
+                                default: None,
+                                flags: PromotedPropertyModifierGroup {
+                                    flags: [
+                                        Public {
+                                            start: (
+                                                5,
+                                                9,
+                                            ),
+                                            end: (
+                                                5,
+                                                16,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                by_ref: false,
+                            },
+                            MethodParameter {
+                                start: (
+                                    6,
+                                    9,
+                                ),
+                                end: (
+                                    6,
+                                    31,
+                                ),
+                                name: Variable {
+                                    start: (
+                                        6,
+                                        29,
+                                    ),
+                                    name: "b",
+                                    end: (
+                                        6,
+                                        31,
+                                    ),
+                                },
+                                attributes: [],
+                                type: Some(
+                                    Integer,
+                                ),
+                                variadic: false,
+                                default: None,
+                                flags: PromotedPropertyModifierGroup {
+                                    flags: [
+                                        Public {
+                                            start: (
+                                                6,
+                                                9,
+                                            ),
+                                            end: (
+                                                6,
+                                                16,
+                                            ),
+                                        },
+                                        Readonly {
+                                            start: (
+                                                6,
+                                                16,
+                                            ),
+                                            end: (
+                                                6,
+                                                25,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                by_ref: false,
+                            },
+                            MethodParameter {
+                                start: (
+                                    7,
+                                    9,
+                                ),
+                                end: (
+                                    7,
+                                    34,
+                                ),
+                                name: Variable {
+                                    start: (
+                                        7,
+                                        32,
+                                    ),
+                                    name: "c",
+                                    end: (
+                                        7,
+                                        34,
+                                    ),
+                                },
+                                attributes: [],
+                                type: Some(
+                                    Float,
+                                ),
+                                variadic: false,
+                                default: None,
+                                flags: PromotedPropertyModifierGroup {
+                                    flags: [
+                                        Public {
+                                            start: (
+                                                7,
+                                                9,
+                                            ),
+                                            end: (
+                                                7,
+                                                16,
+                                            ),
+                                        },
+                                        Readonly {
+                                            start: (
+                                                7,
+                                                16,
+                                            ),
+                                            end: (
+                                                7,
+                                                25,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                by_ref: true,
+                            },
+                            MethodParameter {
+                                start: (
+                                    8,
+                                    9,
+                                ),
+                                end: (
+                                    8,
+                                    14,
+                                ),
+                                name: Variable {
+                                    start: (
+                                        8,
+                                        12,
+                                    ),
+                                    name: "e",
+                                    end: (
+                                        8,
+                                        14,
+                                    ),
+                                },
+                                attributes: [],
+                                type: None,
+                                variadic: true,
+                                default: None,
+                                flags: PromotedPropertyModifierGroup {
+                                    flags: [],
+                                },
+                                by_ref: false,
+                            },
+                        ],
+                    },
+                    body: Some(
+                        [],
+                    ),
+                    flags: MethodModifierGroup {
+                        flags: [
+                            Public {
+                                start: (
+                                    4,
+                                    5,
+                                ),
+                                end: (
+                                    4,
+                                    12,
+                                ),
+                            },
+                        ],
+                    },
+                    return_type: None,
+                    by_ref: false,
                 },
-                attributes: [],
-                params: [
-                    Param {
-                        name: Variable {
-                            start: (
-                                5,
-                                23,
-                            ),
-                            name: "a",
-                            end: (
-                                5,
-                                25,
-                            ),
-                        },
-                        attributes: [],
-                        type: Some(
-                            String,
-                        ),
-                        variadic: false,
-                        default: None,
-                        flags: [
-                            Public,
-                        ],
-                        by_ref: false,
-                    },
-                    Param {
-                        name: Variable {
-                            start: (
-                                6,
-                                29,
-                            ),
-                            name: "b",
-                            end: (
-                                6,
-                                31,
-                            ),
-                        },
-                        attributes: [],
-                        type: Some(
-                            Integer,
-                        ),
-                        variadic: false,
-                        default: None,
-                        flags: [
-                            Public,
-                            Readonly,
-                        ],
-                        by_ref: false,
-                    },
-                    Param {
-                        name: Variable {
-                            start: (
-                                7,
-                                32,
-                            ),
-                            name: "c",
-                            end: (
-                                7,
-                                34,
-                            ),
-                        },
-                        attributes: [],
-                        type: Some(
-                            Float,
-                        ),
-                        variadic: false,
-                        default: None,
-                        flags: [
-                            Public,
-                            Readonly,
-                        ],
-                        by_ref: true,
-                    },
-                    Param {
-                        name: Variable {
-                            start: (
-                                8,
-                                12,
-                            ),
-                            name: "e",
-                            end: (
-                                8,
-                                14,
-                            ),
-                        },
-                        attributes: [],
-                        type: None,
-                        variadic: true,
-                        default: None,
-                        flags: [],
-                        by_ref: false,
-                    },
-                ],
-                body: [],
-                flags: [
-                    Public,
-                ],
-                return_type: None,
-                by_ref: false,
-            },
+            ),
         ],
-        flags: [],
+        modifiers: ClassModifierGroup {
+            flags: [],
+        },
     },
 ]

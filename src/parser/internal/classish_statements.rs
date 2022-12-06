@@ -1,13 +1,18 @@
 use crate::expected_scope;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifier::Identifier;
-use crate::parser::ast::MethodFlag;
-use crate::parser::ast::PropertyFlag;
+use crate::parser::ast::classish::ClassishConstant;
+use crate::parser::ast::enums::BackedEnumCase;
+use crate::parser::ast::enums::BackedEnumMember;
+use crate::parser::ast::enums::UnitEnumCase;
+use crate::parser::ast::enums::UnitEnumMember;
+use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::modifiers::ConstantModifierGroup;
+use crate::parser::ast::modifiers::VisibilityModifier;
 use crate::parser::ast::Statement;
 use crate::parser::ast::TraitAdaptation;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
-use crate::parser::internal::precedence::Precedence;
+use crate::parser::internal::precedences::Precedence;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::parser::Parser;
@@ -21,101 +26,122 @@ impl Parser {
         state: &mut State,
     ) -> ParseResult<Statement> {
         let has_attributes = self.gather_attributes(state)?;
+        let modifiers = self.modifiers(state)?;
 
-        if !has_attributes && state.current.kind == TokenKind::Const {
-            return self.parse_classish_const(state, vec![]);
-        }
-
-        if state.current.kind == TokenKind::Function {
-            return self.method(state, vec![]);
-        }
-
-        let member_flags = self.interface_members_flags(state)?;
-
-        if has_attributes {
-            // if we have attributes, don't check const, we need a method.
-            return self.method(
+        // if we have attributes, don't check const, we need a method.
+        if has_attributes || state.current.kind == TokenKind::Function {
+            Ok(Statement::Method(self.method(
                 state,
-                member_flags.iter().map(|t| t.clone().into()).collect(),
-            );
-        }
-
-        peek_token!([
-            TokenKind::Const => self.parse_classish_const(state, member_flags),
-            TokenKind::Function => self.method(
+                self.get_interface_method_modifier_group(modifiers)?,
+            )?))
+        } else {
+            Ok(Statement::ClassishConstant(self.constant(
                 state,
-                member_flags.iter().map(|t| t.clone().into()).collect(),
-            )
-        ], state, ["`const`", "`function`"])
+                self.get_interface_constant_modifier_group(modifiers)?,
+            )?))
+        }
     }
 
-    pub(in crate::parser) fn enum_statement(&self, state: &mut State) -> ParseResult<Statement> {
-        let (enum_name, backed) = expected_scope!([
-            Scope::Enum(enum_name, backed) => (enum_name, backed),
+    pub(in crate::parser) fn unit_enum_member(
+        &self,
+        state: &mut State,
+    ) -> ParseResult<UnitEnumMember> {
+        let enum_name = expected_scope!([
+            Scope::Enum(enum_name, _) => enum_name,
         ], state);
 
         let has_attributes = self.gather_attributes(state)?;
 
         if !has_attributes && state.current.kind == TokenKind::Case {
+            let start = state.current.span;
             state.next();
 
             let name = self.ident(state)?;
 
-            if backed {
-                if state.current.kind == TokenKind::SemiColon {
-                    return Err(ParseError::MissingCaseValueForBackedEnum(
-                        name.to_string(),
-                        state.named(&enum_name),
-                        state.current.span,
-                    ));
-                }
-
-                expect_token!([TokenKind::Equals], state, "`=`");
-
-                let value = self.expression(state, Precedence::Lowest)?;
-                self.semi(state)?;
-
-                return Ok(Statement::BackedEnumCase { name, value });
-            } else {
-                if state.current.kind == TokenKind::Equals {
-                    return Err(ParseError::CaseValueForUnitEnum(
-                        name.to_string(),
-                        state.named(&enum_name),
-                        state.current.span,
-                    ));
-                }
-
-                self.semi(state)?;
-
-                return Ok(Statement::UnitEnumCase { name });
+            if state.current.kind == TokenKind::Equals {
+                return Err(ParseError::CaseValueForUnitEnum(
+                    name.to_string(),
+                    state.named(&enum_name),
+                    state.current.span,
+                ));
             }
+
+            self.semi(state)?;
+
+            let end = state.current.span;
+
+            return Ok(UnitEnumMember::Case(UnitEnumCase { start, end, name }));
         }
 
-        if !has_attributes && state.current.kind == TokenKind::Const {
-            return self.parse_classish_const(state, vec![]);
-        }
+        let member_flags = self.modifiers(state)?;
 
-        if state.current.kind == TokenKind::Function {
-            return self.method(state, vec![]);
-        }
-
-        let member_flags = self.enum_members_flags(state)?;
-
-        if has_attributes {
-            // if we have attributes, don't check const, we need a method.
-            return self.method(
+        // if we have attributes, don't check const, we need a method.
+        if has_attributes || state.current.kind == TokenKind::Function {
+            Ok(UnitEnumMember::Method(self.method(
                 state,
-                member_flags.iter().map(|t| t.clone().into()).collect(),
-            );
+                self.get_enum_method_modifier_group(member_flags)?,
+            )?))
+        } else {
+            Ok(UnitEnumMember::Constant(self.constant(
+                state,
+                self.get_constant_modifier_group(member_flags)?,
+            )?))
+        }
+    }
+
+    pub(in crate::parser) fn backed_enum_member(
+        &self,
+        state: &mut State,
+    ) -> ParseResult<BackedEnumMember> {
+        let enum_name = expected_scope!([
+            Scope::Enum(enum_name, _) => enum_name,
+        ], state);
+
+        let has_attributes = self.gather_attributes(state)?;
+
+        if !has_attributes && state.current.kind == TokenKind::Case {
+            let start = state.current.span;
+            state.next();
+
+            let name = self.ident(state)?;
+
+            if state.current.kind == TokenKind::SemiColon {
+                return Err(ParseError::MissingCaseValueForBackedEnum(
+                    name.to_string(),
+                    state.named(&enum_name),
+                    state.current.span,
+                ));
+            }
+
+            expect_token!([TokenKind::Equals], state, "`=`");
+
+            let value = self.expression(state, Precedence::Lowest)?;
+            self.semi(state)?;
+
+            let end = state.current.span;
+
+            return Ok(BackedEnumMember::Case(BackedEnumCase {
+                start,
+                end,
+                name,
+                value,
+            }));
         }
 
-        peek_token!([
-            TokenKind::Const => self.parse_classish_const(state, member_flags),
-            TokenKind::Function => self.method(
+        let member_flags = self.modifiers(state)?;
+
+        // if we have attributes, don't check const, we need a method.
+        if has_attributes || state.current.kind == TokenKind::Function {
+            Ok(BackedEnumMember::Method(self.method(
                 state,
-                member_flags.iter().map(|t| t.clone().into()).collect(),
-            )
-        ], state, ["`const`", "`function`"])
+                self.get_enum_method_modifier_group(member_flags)?,
+            )?))
+        } else {
+            Ok(BackedEnumMember::Constant(self.constant(
+                state,
+                self.get_constant_modifier_group(member_flags)?,
+            )?))
+        }
     }
 
     pub(in crate::parser) fn class_like_statement(
@@ -124,56 +150,47 @@ impl Parser {
     ) -> ParseResult<Statement> {
         let has_attributes = self.gather_attributes(state)?;
 
+        let modifiers = self.modifiers(state)?;
+
         if !has_attributes {
             if state.current.kind == TokenKind::Use {
                 return self.parse_classish_uses(state);
             }
 
             if state.current.kind == TokenKind::Const {
-                return self.parse_classish_const(state, vec![]);
+                return Ok(Statement::ClassishConstant(
+                    self.constant(state, self.get_constant_modifier_group(modifiers)?)?,
+                ));
             }
         }
 
-        if state.current.kind == TokenKind::Var {
-            return self.parse_classish_var(state);
-        }
-
         if state.current.kind == TokenKind::Function {
-            return self.method(state, vec![]);
+            return Ok(Statement::Method(
+                self.method(state, self.get_method_modifier_group(modifiers)?)?,
+            ));
         }
 
-        let member_flags = self.class_members_flags(state)?;
-
-        if !has_attributes && state.current.kind == TokenKind::Const {
-            return self.parse_classish_const(state, member_flags);
-        }
-
-        if state.current.kind == TokenKind::Function {
-            return self.method(
-                state,
-                member_flags.iter().map(|t| t.clone().into()).collect(),
-            );
-        }
-
+        // e.g: public static
+        let modifiers = self.get_property_modifier_group(modifiers)?;
+        // e.g: string
         let ty = self.get_optional_type(state)?;
-
+        // e.g: $name
         let var = self.var(state)?;
 
-        let flags: Vec<PropertyFlag> = member_flags.into_iter().map(|f| f.into()).collect();
         let mut value = None;
-
+        // e.g: = "foo";
         if state.current.kind == TokenKind::Equals {
             state.next();
             value = Some(self.expression(state, Precedence::Lowest)?);
         }
 
         let class_name: String = expected_scope!([
-                    Scope::Trait(name) | Scope::Class(name, _, _) => state.named(&name),
-                    Scope::AnonymousClass(_) => state.named("class@anonymous"),
-                ], state);
+            Scope::Trait(name) | Scope::Class(name, _, _) => state.named(&name),
+            Scope::AnonymousClass(_) => state.named("class@anonymous"),
+        ], state);
 
-        if flags.contains(&PropertyFlag::Readonly) {
-            if flags.contains(&PropertyFlag::Static) {
+        if modifiers.has_readonly() {
+            if modifiers.has_static() {
                 return Err(ParseError::StaticPropertyUsingReadonlyModifier(
                     class_name,
                     var.to_string(),
@@ -202,7 +219,7 @@ impl Parser {
                 }
             }
             None => {
-                if flags.contains(&PropertyFlag::Readonly) {
+                if modifiers.has_readonly() {
                     return Err(ParseError::MissingTypeForReadonlyProperty(
                         class_name,
                         var.to_string(),
@@ -218,33 +235,8 @@ impl Parser {
             var,
             value,
             r#type: ty,
-            flags,
+            flags: modifiers,
             attributes: state.get_attributes(),
-        })
-    }
-
-    fn parse_classish_var(&self, state: &mut State) -> ParseResult<Statement> {
-        state.next();
-
-        let ty = self.get_optional_type(state)?;
-        let var = self.var(state)?;
-        let mut value = None;
-
-        let attributes = state.get_attributes();
-
-        if state.current.kind == TokenKind::Equals {
-            state.next();
-
-            value = Some(self.expression(state, Precedence::Lowest)?);
-        }
-
-        self.semi(state)?;
-
-        Ok(Statement::Var {
-            attributes,
-            var,
-            value,
-            r#type: ty,
         })
     }
 
@@ -295,7 +287,20 @@ impl Parser {
                     TokenKind::As => {
                         match state.current.kind {
                             TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
-                                let visibility: MethodFlag = state.current.kind.clone().into();
+                                let visibility = peek_token!([
+                                    TokenKind::Public => VisibilityModifier::Public {
+                                        start: state.current.span,
+                                        end: state.peek.span
+                                    },
+                                    TokenKind::Protected => VisibilityModifier::Protected {
+                                        start: state.current.span,
+                                        end: state.peek.span
+                                    },
+                                    TokenKind::Private => VisibilityModifier::Private {
+                                        start: state.current.span,
+                                        end: state.peek.span
+                                    },
+                                ], state, ["`private`", "`protected`", "`public`"]);
                                 state.next();
 
                                 if state.current.kind == TokenKind::SemiColon {
@@ -377,24 +382,12 @@ impl Parser {
         })
     }
 
-    fn parse_classish_const(
+    fn constant(
         &self,
         state: &mut State,
-        const_flags: Vec<TokenKind>,
-    ) -> ParseResult<Statement> {
-        if const_flags.contains(&TokenKind::Static) {
-            return Err(ParseError::StaticModifierOnConstant(state.current.span));
-        }
-
-        if const_flags.contains(&TokenKind::Readonly) {
-            return Err(ParseError::ReadonlyModifierOnConstant(state.current.span));
-        }
-
-        if const_flags.contains(&TokenKind::Final) && const_flags.contains(&TokenKind::Private) {
-            return Err(ParseError::FinalModifierOnPrivateConstant(
-                state.current.span,
-            ));
-        }
+        flags: ConstantModifierGroup,
+    ) -> ParseResult<ClassishConstant> {
+        let start = state.current.span;
 
         state.next();
 
@@ -406,10 +399,14 @@ impl Parser {
 
         self.semi(state)?;
 
-        Ok(Statement::ClassishConstant {
+        let end = state.current.span;
+
+        Ok(ClassishConstant {
+            start,
+            end,
             name,
             value,
-            flags: const_flags.into_iter().map(|f| f.into()).collect(),
+            flags,
         })
     }
 }

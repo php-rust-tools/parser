@@ -1,6 +1,6 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifier::Identifier;
-use crate::parser::ast::variable::Variable;
+use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::variables::Variable;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 use crate::parser::Parser;

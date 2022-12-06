@@ -1,9 +1,11 @@
 use std::fmt::Display;
 
+use serde::{Deserialize, Serialize};
+
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Debug, Eq, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Identifier {
     pub start: Span,
     pub name: ByteString,

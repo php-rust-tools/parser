@@ -4,18 +4,20 @@ use crate::expected_token_err;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::lexer::DocStringKind;
-use crate::parser::ast::identifier::Identifier;
-use crate::parser::ast::variable::Variable;
+use crate::parser::ast::comments::Comment;
+use crate::parser::ast::comments::CommentFormat;
+use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::variables::Variable;
+use crate::parser::ast::DefaultMatchArm;
 use crate::parser::ast::{
-    ArrayItem, Block, Case, Catch, Constant, DeclareItem, ElseIf, Expression, IncludeKind,
-    MagicConst, MatchArm, Program, Statement, StaticVar, StringPart, Use, UseKind,
+    ArrayItem, Block, Case, Constant, DeclareItem, ElseIf, Expression, IncludeKind, MagicConst,
+    MatchArm, Program, Statement, StaticVar, StringPart, Use, UseKind,
 };
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
-use crate::parser::internal::ident::is_reserved_ident;
-use crate::parser::internal::precedence::{Associativity, Precedence};
+use crate::parser::internal::identifiers::is_reserved_ident;
+use crate::parser::internal::precedences::{Associativity, Precedence};
 use crate::parser::state::State;
-use crate::prelude::DefaultMatchArm;
 
 pub mod ast;
 pub mod error;
@@ -379,12 +381,61 @@ impl Parser {
                     state.next();
                     s
                 }
-                TokenKind::Comment(comment) => {
-                    let s = Statement::Comment {
-                        comment: comment.clone(),
-                    };
+                TokenKind::SingleLineComment(comment) => {
+                    let start = state.current.span;
+                    let content = comment.clone();
                     state.next();
-                    s
+                    let end = state.current.span;
+                    let format = CommentFormat::SingleLine;
+
+                    Statement::Comment(Comment {
+                        start,
+                        end,
+                        format,
+                        content,
+                    })
+                }
+                TokenKind::MultiLineComment(comment) => {
+                    let start = state.current.span;
+                    let content = comment.clone();
+                    state.next();
+                    let end = state.current.span;
+                    let format = CommentFormat::MultiLine;
+
+                    Statement::Comment(Comment {
+                        start,
+                        end,
+                        format,
+                        content,
+                    })
+                }
+                TokenKind::HashMarkComment(comment) => {
+                    let start = state.current.span;
+                    let content = comment.clone();
+                    state.next();
+                    let end = state.current.span;
+                    let format = CommentFormat::HashMark;
+
+                    Statement::Comment(Comment {
+                        start,
+                        end,
+                        format,
+                        content,
+                    })
+                }
+                TokenKind::DocumentComment(comment) => {
+                    let start = state.current.span;
+                    let content = comment.clone();
+                    state.next();
+                    let end = state.current.span;
+                    let format = CommentFormat::Document;
+
+                    Statement::Comment(Comment {
+                        start,
+                        end,
+                        format,
+                        content,
+                    })
                 }
                 TokenKind::Do => {
                     state.next();
@@ -846,62 +897,7 @@ impl Parser {
 
                     Statement::Noop
                 }
-                TokenKind::Try => {
-                    let start_span = state.current.span;
-
-                    state.next();
-                    self.lbrace(state)?;
-
-                    let body = self.block(state, &TokenKind::RightBrace)?;
-
-                    self.rbrace(state)?;
-
-                    let mut catches = Vec::new();
-                    loop {
-                        if state.current.kind != TokenKind::Catch {
-                            break;
-                        }
-
-                        state.next();
-                        self.lparen(state)?;
-
-                        let types = self.try_block_caught_type_string(state)?;
-                        let var = if state.current.kind == TokenKind::RightParen {
-                            None
-                        } else {
-                            Some(self.expression(state, Precedence::Lowest)?)
-                        };
-
-                        self.rparen(state)?;
-                        self.lbrace(state)?;
-
-                        let body = self.block(state, &TokenKind::RightBrace)?;
-
-                        self.rbrace(state)?;
-
-                        catches.push(Catch { types, var, body })
-                    }
-
-                    let mut finally = None;
-                    if state.current.kind == TokenKind::Finally {
-                        state.next();
-                        self.lbrace(state)?;
-
-                        finally = Some(self.block(state, &TokenKind::RightBrace)?);
-
-                        self.rbrace(state)?;
-                    }
-
-                    if catches.is_empty() && finally.is_none() {
-                        return Err(ParseError::TryWithoutCatchOrFinally(start_span));
-                    }
-
-                    Statement::Try {
-                        body,
-                        catches,
-                        finally,
-                    }
-                }
+                TokenKind::Try => self.try_block(state)?,
                 TokenKind::LeftBrace => {
                     state.next();
                     let body = self.block(state, &TokenKind::RightBrace)?;

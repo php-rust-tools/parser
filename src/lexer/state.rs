@@ -1,9 +1,9 @@
 use std::collections::VecDeque;
 
+use crate::lexer::byte_string::ByteString;
 use crate::lexer::error::SyntaxError;
 use crate::lexer::error::SyntaxResult;
 use crate::lexer::token::Span;
-use crate::prelude::ByteString;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Clone, Copy)]
 pub enum DocStringKind {

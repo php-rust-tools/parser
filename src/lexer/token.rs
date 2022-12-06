@@ -90,7 +90,10 @@ pub enum TokenKind {
     AsteriskEqual,
     Colon,
     Comma,
-    Comment(ByteString),
+    SingleLineComment(ByteString),
+    HashMarkComment(ByteString),
+    MultiLineComment(ByteString),
+    DocumentComment(ByteString),
     ConcatEqual,
     Const,
     LiteralString(ByteString),
@@ -102,7 +105,6 @@ pub enum TokenKind {
     DirConstant,
     DivEqual,
     Do,
-    DocComment(ByteString),
     DocOpen(ByteString),
     DollarLeftBrace,
     Dot,
@@ -428,10 +430,12 @@ impl Display for TokenKind {
             | Self::QualifiedIdentifier(v)
             | Self::Identifier(v)
             | Self::FullyQualifiedIdentifier(v)
-            | Self::DocComment(v)
             | Self::DocOpen(v)
-            | Self::Comment(v)
-            | Self::LiteralString(v) => {
+            | Self::LiteralString(v)
+            | Self::SingleLineComment(v)
+            | Self::MultiLineComment(v)
+            | Self::HashMarkComment(v)
+            | Self::DocumentComment(v) => {
                 return write!(f, "{}", v);
             }
         };

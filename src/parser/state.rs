@@ -4,10 +4,12 @@ use std::vec::IntoIter;
 
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::attribute::AttributeGroup;
-use crate::parser::ast::identifier::Identifier;
-use crate::parser::ast::ClassFlag;
-use crate::parser::ast::MethodFlag;
+use crate::parser::ast::attributes::AttributeGroup;
+
+use crate::parser::ast::modifiers::ClassModifierGroup;
+
+use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 
@@ -23,13 +25,13 @@ pub enum Scope {
     BracedNamespace(Option<Identifier>),
 
     Interface(Identifier),
-    Class(Identifier, Vec<ClassFlag>, bool),
+    Class(Identifier, ClassModifierGroup, bool),
     Trait(Identifier),
     Enum(Identifier, bool),
     AnonymousClass(bool),
 
     Function(Identifier),
-    Method(Identifier, Vec<MethodFlag>),
+    Method(Identifier, MethodModifierGroup),
     AnonymousFunction(bool),
     ArrowFunction(bool),
 }
@@ -144,7 +146,10 @@ impl State {
     pub fn skip_comments(&mut self) {
         while matches!(
             self.current.kind,
-            TokenKind::Comment(_) | TokenKind::DocComment(_)
+            TokenKind::SingleLineComment(_)
+                | TokenKind::MultiLineComment(_)
+                | TokenKind::HashMarkComment(_)
+                | TokenKind::DocumentComment(_)
         ) {
             self.next();
         }
@@ -153,7 +158,10 @@ impl State {
     pub fn gather_comments(&mut self) {
         while matches!(
             self.current.kind,
-            TokenKind::Comment(_) | TokenKind::DocComment(_)
+            TokenKind::SingleLineComment(_)
+                | TokenKind::MultiLineComment(_)
+                | TokenKind::HashMarkComment(_)
+                | TokenKind::DocumentComment(_)
         ) {
             self.comments.push(self.current.clone());
             self.next();

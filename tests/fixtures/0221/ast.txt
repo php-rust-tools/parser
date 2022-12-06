@@ -63,191 +63,218 @@
         extends: [],
         body: [],
     },
-    Function {
-        name: Identifier {
+    Function(
+        Function {
             start: (
                 8,
-                10,
+                1,
             ),
-            name: "foo",
             end: (
-                8,
-                13,
+                0,
+                0,
             ),
-        },
-        attributes: [],
-        params: [
-            Param {
-                name: Variable {
-                    start: (
-                        8,
-                        24,
-                    ),
-                    name: "a",
-                    end: (
-                        8,
-                        26,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    Union(
-                        [
-                            Identifier(
-                                Identifier {
-                                    start: (
-                                        8,
-                                        14,
-                                    ),
-                                    name: "A",
-                                    end: (
-                                        8,
-                                        15,
-                                    ),
-                                },
+            name: Identifier {
+                start: (
+                    8,
+                    10,
+                ),
+                name: "foo",
+                end: (
+                    8,
+                    13,
+                ),
+            },
+            attributes: [],
+            parameters: FunctionParameterList {
+                start: (
+                    8,
+                    13,
+                ),
+                end: (
+                    8,
+                    27,
+                ),
+                members: [
+                    FunctionParameter {
+                        start: (
+                            8,
+                            14,
+                        ),
+                        end: (
+                            8,
+                            26,
+                        ),
+                        name: Variable {
+                            start: (
+                                8,
+                                24,
                             ),
-                            Intersection(
+                            name: "a",
+                            end: (
+                                8,
+                                26,
+                            ),
+                        },
+                        attributes: [],
+                        type: Some(
+                            Union(
                                 [
                                     Identifier(
                                         Identifier {
                                             start: (
                                                 8,
-                                                17,
+                                                14,
                                             ),
-                                            name: "B",
+                                            name: "A",
                                             end: (
                                                 8,
-                                                18,
+                                                15,
                                             ),
                                         },
                                     ),
-                                    Identifier(
-                                        Identifier {
-                                            start: (
-                                                8,
-                                                19,
+                                    Intersection(
+                                        [
+                                            Identifier(
+                                                Identifier {
+                                                    start: (
+                                                        8,
+                                                        17,
+                                                    ),
+                                                    name: "B",
+                                                    end: (
+                                                        8,
+                                                        18,
+                                                    ),
+                                                },
                                             ),
-                                            name: "C",
-                                            end: (
-                                                8,
-                                                20,
+                                            Identifier(
+                                                Identifier {
+                                                    start: (
+                                                        8,
+                                                        19,
+                                                    ),
+                                                    name: "C",
+                                                    end: (
+                                                        8,
+                                                        20,
+                                                    ),
+                                                },
                                             ),
-                                        },
-                                    ),
-                                    Identifier(
-                                        Identifier {
-                                            start: (
-                                                8,
-                                                21,
+                                            Identifier(
+                                                Identifier {
+                                                    start: (
+                                                        8,
+                                                        21,
+                                                    ),
+                                                    name: "D",
+                                                    end: (
+                                                        8,
+                                                        22,
+                                                    ),
+                                                },
                                             ),
-                                            name: "D",
-                                            end: (
-                                                8,
-                                                22,
-                                            ),
-                                        },
+                                        ],
                                     ),
                                 ],
                             ),
-                        ],
-                    ),
-                ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
-            },
-        ],
-        body: [
-            Expression {
-                expr: Call {
-                    target: Identifier(
-                        Identifier {
-                            start: (
-                                9,
-                                5,
-                            ),
-                            name: "exit",
-                            end: (
-                                9,
-                                9,
-                            ),
-                        },
-                    ),
-                    args: [
-                        Arg {
-                            name: None,
-                            value: LiteralInteger {
-                                i: 0,
-                            },
-                            unpack: false,
-                        },
-                    ],
-                },
-            },
-        ],
-        return_type: Some(
-            Intersection(
-                [
-                    Identifier(
-                        Identifier {
-                            start: (
-                                8,
-                                29,
-                            ),
-                            name: "A",
-                            end: (
-                                8,
-                                30,
-                            ),
-                        },
-                    ),
-                    Union(
-                        [
-                            Identifier(
-                                Identifier {
-                                    start: (
-                                        8,
-                                        32,
-                                    ),
-                                    name: "B",
-                                    end: (
-                                        8,
-                                        33,
-                                    ),
-                                },
-                            ),
-                            Identifier(
-                                Identifier {
-                                    start: (
-                                        8,
-                                        34,
-                                    ),
-                                    name: "C",
-                                    end: (
-                                        8,
-                                        35,
-                                    ),
-                                },
-                            ),
-                            Identifier(
-                                Identifier {
-                                    start: (
-                                        8,
-                                        36,
-                                    ),
-                                    name: "D",
-                                    end: (
-                                        8,
-                                        37,
-                                    ),
-                                },
-                            ),
-                        ],
-                    ),
+                        ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
+                    },
                 ],
+            },
+            return_type: Some(
+                Intersection(
+                    [
+                        Identifier(
+                            Identifier {
+                                start: (
+                                    8,
+                                    29,
+                                ),
+                                name: "A",
+                                end: (
+                                    8,
+                                    30,
+                                ),
+                            },
+                        ),
+                        Union(
+                            [
+                                Identifier(
+                                    Identifier {
+                                        start: (
+                                            8,
+                                            32,
+                                        ),
+                                        name: "B",
+                                        end: (
+                                            8,
+                                            33,
+                                        ),
+                                    },
+                                ),
+                                Identifier(
+                                    Identifier {
+                                        start: (
+                                            8,
+                                            34,
+                                        ),
+                                        name: "C",
+                                        end: (
+                                            8,
+                                            35,
+                                        ),
+                                    },
+                                ),
+                                Identifier(
+                                    Identifier {
+                                        start: (
+                                            8,
+                                            36,
+                                        ),
+                                        name: "D",
+                                        end: (
+                                            8,
+                                            37,
+                                        ),
+                                    },
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
             ),
-        ),
-        by_ref: false,
-    },
+            by_ref: false,
+            body: [
+                Expression {
+                    expr: Call {
+                        target: Identifier(
+                            Identifier {
+                                start: (
+                                    9,
+                                    5,
+                                ),
+                                name: "exit",
+                                end: (
+                                    9,
+                                    9,
+                                ),
+                            },
+                        ),
+                        args: [
+                            Arg {
+                                name: None,
+                                value: LiteralInteger {
+                                    i: 0,
+                                },
+                                unpack: false,
+                            },
+                        ],
+                    },
+                },
+            ],
+        },
+    ),
 ]

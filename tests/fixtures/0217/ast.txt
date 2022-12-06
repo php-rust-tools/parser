@@ -15,7 +15,9 @@
         extends: None,
         implements: [],
         body: [],
-        flags: [],
+        modifiers: ClassModifierGroup {
+            flags: [],
+        },
     },
     Class {
         name: Identifier {
@@ -45,51 +47,86 @@
         ),
         implements: [],
         body: [
-            Method {
-                name: Identifier {
+            Method(
+                Method {
                     start: (
                         6,
-                        21,
+                        12,
                     ),
-                    name: "bar",
                     end: (
-                        6,
-                        24,
+                        9,
+                        1,
                     ),
-                },
-                attributes: [],
-                params: [],
-                body: [
-                    Return {
-                        value: Some(
-                            New {
-                                target: Identifier(
-                                    Identifier {
-                                        start: (
-                                            7,
-                                            20,
-                                        ),
-                                        name: "s",
-                                        end: (
-                                            7,
-                                            21,
-                                        ),
-                                    },
-                                ),
-                                args: [],
-                            },
+                    name: Identifier {
+                        start: (
+                            6,
+                            21,
+                        ),
+                        name: "bar",
+                        end: (
+                            6,
+                            24,
                         ),
                     },
-                ],
-                flags: [
-                    Public,
-                ],
-                return_type: Some(
-                    ParentReference,
-                ),
-                by_ref: false,
-            },
+                    attributes: [],
+                    parameters: MethodParameterList {
+                        start: (
+                            6,
+                            24,
+                        ),
+                        end: (
+                            6,
+                            26,
+                        ),
+                        members: [],
+                    },
+                    body: Some(
+                        [
+                            Return {
+                                value: Some(
+                                    New {
+                                        target: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    7,
+                                                    20,
+                                                ),
+                                                name: "s",
+                                                end: (
+                                                    7,
+                                                    21,
+                                                ),
+                                            },
+                                        ),
+                                        args: [],
+                                    },
+                                ),
+                            },
+                        ],
+                    ),
+                    flags: MethodModifierGroup {
+                        flags: [
+                            Public {
+                                start: (
+                                    6,
+                                    5,
+                                ),
+                                end: (
+                                    6,
+                                    12,
+                                ),
+                            },
+                        ],
+                    },
+                    return_type: Some(
+                        ParentReference,
+                    ),
+                    by_ref: false,
+                },
+            ),
         ],
-        flags: [],
+        modifiers: ClassModifierGroup {
+            flags: [],
+        },
     },
 ]
