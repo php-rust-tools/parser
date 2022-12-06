@@ -1112,7 +1112,15 @@ impl Parser {
                 TokenKind::Static => {
                     state.next();
                     Expression::Static
-                }
+                },
+                TokenKind::Self_ => {
+                    state.next();
+                    Expression::Self_
+                },
+                TokenKind::Parent => {
+                    state.next();
+                    Expression::Parent
+                },
                 TokenKind::LiteralString(s) => {
                     let e = Expression::LiteralString { value: s.clone() };
                     state.next();

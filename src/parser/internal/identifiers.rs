@@ -108,6 +108,8 @@ pub fn is_reserved_ident(kind: &TokenKind) -> bool {
     matches!(
         kind,
         TokenKind::Static
+            | TokenKind::Parent
+            | TokenKind::Self_
             | TokenKind::Abstract
             | TokenKind::Final
             | TokenKind::For

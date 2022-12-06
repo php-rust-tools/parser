@@ -423,6 +423,8 @@ pub enum Expression {
     },
     Identifier(Identifier),
     Static,
+    Self_,
+    Parent,
     Array {
         items: Vec<ArrayItem>,
     },
