@@ -4,7 +4,8 @@ use std::path::PathBuf;
 
 use pretty_assertions::assert_str_eq;
 
-use php_parser_rs::prelude::{Lexer, Parser};
+use php_parser_rs::lexer::Lexer;
+use php_parser_rs::parser::Parser;
 
 static LEXER: Lexer = Lexer::new();
 static PARSER: Parser = Parser::new();

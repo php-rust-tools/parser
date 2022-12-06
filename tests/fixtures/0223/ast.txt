@@ -1,311 +1,380 @@
 [
-    Function {
-        name: Identifier {
+    Function(
+        Function {
             start: (
                 9,
-                10,
+                1,
             ),
-            name: "a",
             end: (
-                9,
-                11,
+                19,
+                1,
             ),
-        },
-        attributes: [
-            AttributeGroup {
+            name: Identifier {
                 start: (
+                    9,
+                    10,
+                ),
+                name: "a",
+                end: (
+                    9,
+                    11,
+                ),
+            },
+            attributes: [
+                AttributeGroup {
+                    start: (
+                        3,
+                        1,
+                    ),
+                    end: (
+                        8,
+                        1,
+                    ),
+                    members: [
+                        Attribute {
+                            start: (
+                                4,
+                                5,
+                            ),
+                            end: (
+                                4,
+                                7,
+                            ),
+                            expression: Identifier(
+                                Identifier {
+                                    start: (
+                                        4,
+                                        5,
+                                    ),
+                                    name: "A1",
+                                    end: (
+                                        4,
+                                        7,
+                                    ),
+                                },
+                            ),
+                        },
+                        Attribute {
+                            start: (
+                                5,
+                                5,
+                            ),
+                            end: (
+                                5,
+                                9,
+                            ),
+                            expression: Call {
+                                target: Identifier(
+                                    Identifier {
+                                        start: (
+                                            5,
+                                            5,
+                                        ),
+                                        name: "A2",
+                                        end: (
+                                            5,
+                                            7,
+                                        ),
+                                    },
+                                ),
+                                args: [],
+                            },
+                        },
+                        Attribute {
+                            start: (
+                                6,
+                                5,
+                            ),
+                            end: (
+                                6,
+                                10,
+                            ),
+                            expression: Call {
+                                target: Identifier(
+                                    Identifier {
+                                        start: (
+                                            6,
+                                            5,
+                                        ),
+                                        name: "A3",
+                                        end: (
+                                            6,
+                                            7,
+                                        ),
+                                    },
+                                ),
+                                args: [
+                                    Arg {
+                                        name: None,
+                                        value: LiteralInteger {
+                                            i: 0,
+                                        },
+                                        unpack: false,
+                                    },
+                                ],
+                            },
+                        },
+                        Attribute {
+                            start: (
+                                7,
+                                5,
+                            ),
+                            end: (
+                                7,
+                                13,
+                            ),
+                            expression: Call {
+                                target: Identifier(
+                                    Identifier {
+                                        start: (
+                                            7,
+                                            5,
+                                        ),
+                                        name: "A4",
+                                        end: (
+                                            7,
+                                            7,
+                                        ),
+                                    },
+                                ),
+                                args: [
+                                    Arg {
+                                        name: Some(
+                                            Identifier {
+                                                start: (
+                                                    7,
+                                                    8,
+                                                ),
+                                                name: "x",
+                                                end: (
+                                                    7,
+                                                    9,
+                                                ),
+                                            },
+                                        ),
+                                        value: LiteralInteger {
+                                            i: 1,
+                                        },
+                                        unpack: false,
+                                    },
+                                ],
+                            },
+                        },
+                    ],
+                },
+            ],
+            parameters: FunctionParameterList {
+                start: (
+                    9,
+                    11,
+                ),
+                end: (
+                    15,
                     3,
-                    1,
                 ),
                 members: [
-                    Attribute {
-                        span: (
-                            4,
+                    FunctionParameter {
+                        start: (
+                            10,
                             5,
                         ),
-                        expression: Identifier(
-                            Identifier {
+                        end: (
+                            11,
+                            17,
+                        ),
+                        name: Variable {
+                            start: (
+                                11,
+                                15,
+                            ),
+                            name: "a",
+                            end: (
+                                11,
+                                17,
+                            ),
+                        },
+                        attributes: [
+                            AttributeGroup {
                                 start: (
-                                    4,
+                                    10,
                                     5,
                                 ),
-                                name: "A1",
                                 end: (
-                                    4,
-                                    7,
-                                ),
-                            },
-                        ),
-                    },
-                    Attribute {
-                        span: (
-                            5,
-                            5,
-                        ),
-                        expression: Call {
-                            target: Identifier(
-                                Identifier {
-                                    start: (
-                                        5,
-                                        5,
-                                    ),
-                                    name: "A2",
-                                    end: (
-                                        5,
-                                        7,
-                                    ),
-                                },
-                            ),
-                            args: [],
-                        },
-                    },
-                    Attribute {
-                        span: (
-                            6,
-                            5,
-                        ),
-                        expression: Call {
-                            target: Identifier(
-                                Identifier {
-                                    start: (
-                                        6,
-                                        5,
-                                    ),
-                                    name: "A3",
-                                    end: (
-                                        6,
-                                        7,
-                                    ),
-                                },
-                            ),
-                            args: [
-                                Arg {
-                                    name: None,
-                                    value: LiteralInteger {
-                                        i: 0,
-                                    },
-                                    unpack: false,
-                                },
-                            ],
-                        },
-                    },
-                    Attribute {
-                        span: (
-                            7,
-                            5,
-                        ),
-                        expression: Call {
-                            target: Identifier(
-                                Identifier {
-                                    start: (
-                                        7,
-                                        5,
-                                    ),
-                                    name: "A4",
-                                    end: (
-                                        7,
-                                        7,
-                                    ),
-                                },
-                            ),
-                            args: [
-                                Arg {
-                                    name: Some(
-                                        Identifier {
-                                            start: (
-                                                7,
-                                                8,
-                                            ),
-                                            name: "x",
-                                            end: (
-                                                7,
-                                                9,
-                                            ),
-                                        },
-                                    ),
-                                    value: LiteralInteger {
-                                        i: 1,
-                                    },
-                                    unpack: false,
-                                },
-                            ],
-                        },
-                    },
-                ],
-                end: (
-                    8,
-                    1,
-                ),
-            },
-        ],
-        params: [
-            Param {
-                name: Variable {
-                    start: (
-                        11,
-                        15,
-                    ),
-                    name: "a",
-                    end: (
-                        11,
-                        17,
-                    ),
-                },
-                attributes: [
-                    AttributeGroup {
-                        start: (
-                            10,
-                            5,
-                        ),
-                        members: [
-                            Attribute {
-                                span: (
                                     10,
-                                    7,
+                                    9,
                                 ),
-                                expression: Identifier(
-                                    Identifier {
+                                members: [
+                                    Attribute {
                                         start: (
                                             10,
                                             7,
                                         ),
-                                        name: "A5",
                                         end: (
                                             10,
                                             9,
                                         ),
+                                        expression: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    10,
+                                                    7,
+                                                ),
+                                                name: "A5",
+                                                end: (
+                                                    10,
+                                                    9,
+                                                ),
+                                            },
+                                        ),
                                     },
-                                ),
+                                ],
                             },
                         ],
-                        end: (
-                            10,
-                            9,
+                        type: Some(
+                            Union(
+                                [
+                                    Integer,
+                                    Float,
+                                ],
+                            ),
                         ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
                     },
-                ],
-                type: Some(
-                    Union(
-                        [
-                            Integer,
-                            Float,
-                        ],
-                    ),
-                ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
-            },
-            Param {
-                name: Variable {
-                    start: (
-                        13,
-                        5,
-                    ),
-                    name: "c",
-                    end: (
-                        13,
-                        7,
-                    ),
-                },
-                attributes: [
-                    AttributeGroup {
+                    FunctionParameter {
                         start: (
                             12,
                             5,
                         ),
-                        members: [
-                            Attribute {
-                                span: (
+                        end: (
+                            13,
+                            7,
+                        ),
+                        name: Variable {
+                            start: (
+                                13,
+                                5,
+                            ),
+                            name: "c",
+                            end: (
+                                13,
+                                7,
+                            ),
+                        },
+                        attributes: [
+                            AttributeGroup {
+                                start: (
                                     12,
-                                    7,
+                                    5,
                                 ),
-                                expression: Identifier(
-                                    Identifier {
+                                end: (
+                                    12,
+                                    9,
+                                ),
+                                members: [
+                                    Attribute {
                                         start: (
                                             12,
                                             7,
                                         ),
-                                        name: "A6",
                                         end: (
                                             12,
                                             9,
                                         ),
+                                        expression: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    12,
+                                                    7,
+                                                ),
+                                                name: "A6",
+                                                end: (
+                                                    12,
+                                                    9,
+                                                ),
+                                            },
+                                        ),
                                     },
-                                ),
+                                ],
                             },
                         ],
-                        end: (
-                            12,
-                            9,
-                        ),
+                        type: None,
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
                     },
-                ],
-                type: None,
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
-            },
-            Param {
-                name: Variable {
-                    start: (
-                        14,
-                        18,
-                    ),
-                    name: "b",
-                    end: (
-                        14,
-                        20,
-                    ),
-                },
-                attributes: [
-                    AttributeGroup {
+                    FunctionParameter {
                         start: (
                             14,
                             5,
                         ),
-                        members: [
-                            Attribute {
-                                span: (
+                        end: (
+                            14,
+                            20,
+                        ),
+                        name: Variable {
+                            start: (
+                                14,
+                                18,
+                            ),
+                            name: "b",
+                            end: (
+                                14,
+                                20,
+                            ),
+                        },
+                        attributes: [
+                            AttributeGroup {
+                                start: (
                                     14,
-                                    7,
+                                    5,
                                 ),
-                                expression: Identifier(
-                                    Identifier {
+                                end: (
+                                    14,
+                                    9,
+                                ),
+                                members: [
+                                    Attribute {
                                         start: (
                                             14,
                                             7,
                                         ),
-                                        name: "A7",
                                         end: (
                                             14,
                                             9,
                                         ),
+                                        expression: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    14,
+                                                    7,
+                                                ),
+                                                name: "A7",
+                                                end: (
+                                                    14,
+                                                    9,
+                                                ),
+                                            },
+                                        ),
                                     },
-                                ),
+                                ],
                             },
                         ],
-                        end: (
-                            14,
-                            9,
+                        type: Some(
+                            String,
                         ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
                     },
                 ],
-                type: Some(
-                    String,
-                ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
             },
-        ],
-        body: [],
-        return_type: None,
-        by_ref: false,
-    },
+            return_type: None,
+            by_ref: false,
+            body: [],
+        },
+    ),
     Class {
         name: Identifier {
             start: (
@@ -324,11 +393,19 @@
                     19,
                     1,
                 ),
+                end: (
+                    19,
+                    26,
+                ),
                 members: [
                     Attribute {
-                        span: (
+                        start: (
                             19,
                             3,
+                        ),
+                        end: (
+                            19,
+                            5,
                         ),
                         expression: Identifier(
                             Identifier {
@@ -345,9 +422,13 @@
                         ),
                     },
                     Attribute {
-                        span: (
+                        start: (
                             19,
                             7,
+                        ),
+                        end: (
+                            19,
+                            11,
                         ),
                         expression: Call {
                             target: Identifier(
@@ -367,9 +448,13 @@
                         },
                     },
                     Attribute {
-                        span: (
+                        start: (
                             19,
                             13,
+                        ),
+                        end: (
+                            19,
+                            26,
                         ),
                         expression: Call {
                             target: Identifier(
@@ -419,230 +504,346 @@
                         },
                     },
                 ],
-                end: (
-                    19,
-                    26,
-                ),
             },
         ],
         extends: None,
         implements: [],
         body: [
-            Method {
-                name: Identifier {
+            Method(
+                Method {
                     start: (
                         22,
-                        21,
+                        12,
                     ),
-                    name: "__construct",
                     end: (
-                        22,
-                        32,
+                        27,
+                        5,
                     ),
-                },
-                attributes: [
-                    AttributeGroup {
+                    name: Identifier {
                         start: (
+                            22,
                             21,
-                            5,
                         ),
-                        members: [
-                            Attribute {
-                                span: (
-                                    21,
-                                    7,
-                                ),
-                                expression: Identifier(
-                                    Identifier {
-                                        start: (
-                                            21,
-                                            7,
-                                        ),
-                                        name: "A11",
-                                        end: (
-                                            21,
-                                            10,
-                                        ),
-                                    },
-                                ),
-                            },
-                        ],
+                        name: "__construct",
                         end: (
-                            21,
-                            10,
+                            22,
+                            32,
                         ),
                     },
-                ],
-                params: [
-                    Param {
-                        name: Variable {
+                    attributes: [
+                        AttributeGroup {
                             start: (
-                                24,
-                                32,
+                                21,
+                                5,
                             ),
-                            name: "s",
                             end: (
-                                24,
-                                34,
+                                21,
+                                10,
                             ),
+                            members: [
+                                Attribute {
+                                    start: (
+                                        21,
+                                        7,
+                                    ),
+                                    end: (
+                                        21,
+                                        10,
+                                    ),
+                                    expression: Identifier(
+                                        Identifier {
+                                            start: (
+                                                21,
+                                                7,
+                                            ),
+                                            name: "A11",
+                                            end: (
+                                                21,
+                                                10,
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
                         },
-                        attributes: [
-                            AttributeGroup {
+                    ],
+                    parameters: MethodParameterList {
+                        start: (
+                            22,
+                            32,
+                        ),
+                        end: (
+                            25,
+                            7,
+                        ),
+                        members: [
+                            MethodParameter {
                                 start: (
                                     23,
                                     9,
                                 ),
-                                members: [
-                                    Attribute {
-                                        span: (
+                                end: (
+                                    24,
+                                    34,
+                                ),
+                                name: Variable {
+                                    start: (
+                                        24,
+                                        32,
+                                    ),
+                                    name: "s",
+                                    end: (
+                                        24,
+                                        34,
+                                    ),
+                                },
+                                attributes: [
+                                    AttributeGroup {
+                                        start: (
                                             23,
-                                            11,
+                                            9,
                                         ),
-                                        expression: Identifier(
-                                            Identifier {
+                                        end: (
+                                            23,
+                                            14,
+                                        ),
+                                        members: [
+                                            Attribute {
                                                 start: (
                                                     23,
                                                     11,
                                                 ),
-                                                name: "A12",
                                                 end: (
                                                     23,
                                                     14,
                                                 ),
+                                                expression: Identifier(
+                                                    Identifier {
+                                                        start: (
+                                                            23,
+                                                            11,
+                                                        ),
+                                                        name: "A12",
+                                                        end: (
+                                                            23,
+                                                            14,
+                                                        ),
+                                                    },
+                                                ),
                                             },
-                                        ),
+                                        ],
                                     },
                                 ],
+                                type: Some(
+                                    String,
+                                ),
+                                variadic: false,
+                                default: None,
+                                flags: PromotedPropertyModifierGroup {
+                                    flags: [
+                                        Public {
+                                            start: (
+                                                24,
+                                                9,
+                                            ),
+                                            end: (
+                                                24,
+                                                16,
+                                            ),
+                                        },
+                                        Readonly {
+                                            start: (
+                                                24,
+                                                16,
+                                            ),
+                                            end: (
+                                                24,
+                                                25,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                by_ref: false,
+                            },
+                        ],
+                    },
+                    body: Some(
+                        [],
+                    ),
+                    flags: MethodModifierGroup {
+                        flags: [
+                            Public {
+                                start: (
+                                    22,
+                                    5,
+                                ),
                                 end: (
-                                    23,
-                                    14,
+                                    22,
+                                    12,
                                 ),
                             },
                         ],
-                        type: Some(
-                            String,
-                        ),
-                        variadic: false,
-                        default: None,
-                        flags: [
-                            Public,
-                            Readonly,
-                        ],
-                        by_ref: false,
                     },
-                ],
-                body: [],
-                flags: [
-                    Public,
-                ],
-                return_type: None,
-                by_ref: false,
-            },
-            Method {
-                name: Identifier {
+                    return_type: None,
+                    by_ref: false,
+                },
+            ),
+            Method(
+                Method {
                     start: (
                         28,
-                        21,
+                        12,
                     ),
-                    name: "m",
                     end: (
-                        28,
-                        22,
+                        32,
+                        5,
                     ),
-                },
-                attributes: [
-                    AttributeGroup {
+                    name: Identifier {
                         start: (
-                            27,
-                            5,
+                            28,
+                            21,
                         ),
-                        members: [
-                            Attribute {
-                                span: (
-                                    27,
-                                    7,
-                                ),
-                                expression: Identifier(
-                                    Identifier {
-                                        start: (
-                                            27,
-                                            7,
-                                        ),
-                                        name: "A13",
-                                        end: (
-                                            27,
-                                            10,
-                                        ),
-                                    },
-                                ),
-                            },
-                        ],
+                        name: "m",
                         end: (
-                            27,
-                            10,
+                            28,
+                            22,
                         ),
                     },
-                ],
-                params: [
-                    Param {
-                        name: Variable {
+                    attributes: [
+                        AttributeGroup {
                             start: (
-                                29,
-                                16,
+                                27,
+                                5,
                             ),
-                            name: "param",
                             end: (
-                                29,
-                                22,
+                                27,
+                                10,
                             ),
+                            members: [
+                                Attribute {
+                                    start: (
+                                        27,
+                                        7,
+                                    ),
+                                    end: (
+                                        27,
+                                        10,
+                                    ),
+                                    expression: Identifier(
+                                        Identifier {
+                                            start: (
+                                                27,
+                                                7,
+                                            ),
+                                            name: "A13",
+                                            end: (
+                                                27,
+                                                10,
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
                         },
-                        attributes: [
-                            AttributeGroup {
+                    ],
+                    parameters: MethodParameterList {
+                        start: (
+                            28,
+                            22,
+                        ),
+                        end: (
+                            30,
+                            7,
+                        ),
+                        members: [
+                            MethodParameter {
                                 start: (
                                     29,
                                     9,
                                 ),
-                                members: [
-                                    Attribute {
-                                        span: (
+                                end: (
+                                    29,
+                                    22,
+                                ),
+                                name: Variable {
+                                    start: (
+                                        29,
+                                        16,
+                                    ),
+                                    name: "param",
+                                    end: (
+                                        29,
+                                        22,
+                                    ),
+                                },
+                                attributes: [
+                                    AttributeGroup {
+                                        start: (
                                             29,
-                                            11,
+                                            9,
                                         ),
-                                        expression: Identifier(
-                                            Identifier {
+                                        end: (
+                                            29,
+                                            14,
+                                        ),
+                                        members: [
+                                            Attribute {
                                                 start: (
                                                     29,
                                                     11,
                                                 ),
-                                                name: "A14",
                                                 end: (
                                                     29,
                                                     14,
                                                 ),
+                                                expression: Identifier(
+                                                    Identifier {
+                                                        start: (
+                                                            29,
+                                                            11,
+                                                        ),
+                                                        name: "A14",
+                                                        end: (
+                                                            29,
+                                                            14,
+                                                        ),
+                                                    },
+                                                ),
                                             },
-                                        ),
+                                        ],
                                     },
                                 ],
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                flags: PromotedPropertyModifierGroup {
+                                    flags: [],
+                                },
+                                by_ref: false,
+                            },
+                        ],
+                    },
+                    body: Some(
+                        [],
+                    ),
+                    flags: MethodModifierGroup {
+                        flags: [
+                            Public {
+                                start: (
+                                    28,
+                                    5,
+                                ),
                                 end: (
-                                    29,
-                                    14,
+                                    28,
+                                    12,
                                 ),
                             },
                         ],
-                        type: None,
-                        variadic: false,
-                        default: None,
-                        flags: [],
-                        by_ref: false,
                     },
-                ],
-                body: [],
-                flags: [
-                    Public,
-                ],
-                return_type: None,
-                by_ref: false,
-            },
+                    return_type: None,
+                    by_ref: false,
+                },
+            ),
             Property {
                 var: Variable {
                     start: (
@@ -661,11 +862,19 @@
                             32,
                             5,
                         ),
+                        end: (
+                            32,
+                            10,
+                        ),
                         members: [
                             Attribute {
-                                span: (
+                                start: (
                                     32,
                                     7,
+                                ),
+                                end: (
+                                    32,
+                                    10,
                                 ),
                                 expression: Identifier(
                                     Identifier {
@@ -682,20 +891,29 @@
                                 ),
                             },
                         ],
-                        end: (
-                            32,
-                            10,
-                        ),
                     },
                 ],
                 value: None,
                 type: None,
-                flags: [
-                    Public,
-                ],
+                flags: PropertyModifierGroup {
+                    flags: [
+                        Public {
+                            start: (
+                                33,
+                                5,
+                            ),
+                            end: (
+                                33,
+                                12,
+                            ),
+                        },
+                    ],
+                },
             },
         ],
-        flags: [],
+        modifiers: ClassModifierGroup {
+            flags: [],
+        },
     },
     Trait {
         name: Identifier {
@@ -715,11 +933,19 @@
                     36,
                     1,
                 ),
+                end: (
+                    36,
+                    6,
+                ),
                 members: [
                     Attribute {
-                        span: (
+                        start: (
                             36,
                             3,
+                        ),
+                        end: (
+                            36,
+                            6,
                         ),
                         expression: Identifier(
                             Identifier {
@@ -736,111 +962,135 @@
                         ),
                     },
                 ],
-                end: (
-                    36,
-                    6,
-                ),
             },
         ],
         body: [],
     },
-    UnitEnum {
-        name: Identifier {
+    UnitEnum(
+        UnitEnum {
             start: (
                 40,
-                6,
+                1,
             ),
-            name: "P",
             end: (
-                40,
-                8,
+                42,
+                1,
             ),
-        },
-        attributes: [
-            AttributeGroup {
+            name: Identifier {
                 start: (
-                    39,
-                    1,
-                ),
-                members: [
-                    Attribute {
-                        span: (
-                            39,
-                            3,
-                        ),
-                        expression: Identifier(
-                            Identifier {
-                                start: (
-                                    39,
-                                    3,
-                                ),
-                                name: "A17",
-                                end: (
-                                    39,
-                                    6,
-                                ),
-                            },
-                        ),
-                    },
-                ],
-                end: (
-                    39,
+                    40,
                     6,
                 ),
+                name: "P",
+                end: (
+                    40,
+                    8,
+                ),
             },
-        ],
-        implements: [],
-        body: [],
-    },
-    BackedEnum {
-        name: Identifier {
+            attributes: [
+                AttributeGroup {
+                    start: (
+                        39,
+                        1,
+                    ),
+                    end: (
+                        39,
+                        6,
+                    ),
+                    members: [
+                        Attribute {
+                            start: (
+                                39,
+                                3,
+                            ),
+                            end: (
+                                39,
+                                6,
+                            ),
+                            expression: Identifier(
+                                Identifier {
+                                    start: (
+                                        39,
+                                        3,
+                                    ),
+                                    name: "A17",
+                                    end: (
+                                        39,
+                                        6,
+                                    ),
+                                },
+                            ),
+                        },
+                    ],
+                },
+            ],
+            implements: [],
+            members: [],
+        },
+    ),
+    BackedEnum(
+        BackedEnum {
             start: (
                 43,
-                6,
+                1,
             ),
-            name: "B",
             end: (
-                43,
-                7,
+                45,
+                1,
             ),
-        },
-        attributes: [
-            AttributeGroup {
+            name: Identifier {
                 start: (
-                    42,
-                    1,
-                ),
-                members: [
-                    Attribute {
-                        span: (
-                            42,
-                            3,
-                        ),
-                        expression: Identifier(
-                            Identifier {
-                                start: (
-                                    42,
-                                    3,
-                                ),
-                                name: "A18",
-                                end: (
-                                    42,
-                                    6,
-                                ),
-                            },
-                        ),
-                    },
-                ],
-                end: (
-                    42,
+                    43,
                     6,
                 ),
+                name: "B",
+                end: (
+                    43,
+                    7,
+                ),
             },
-        ],
-        implements: [],
-        backed_type: Int,
-        body: [],
-    },
+            attributes: [
+                AttributeGroup {
+                    start: (
+                        42,
+                        1,
+                    ),
+                    end: (
+                        42,
+                        6,
+                    ),
+                    members: [
+                        Attribute {
+                            start: (
+                                42,
+                                3,
+                            ),
+                            end: (
+                                42,
+                                6,
+                            ),
+                            expression: Identifier(
+                                Identifier {
+                                    start: (
+                                        42,
+                                        3,
+                                    ),
+                                    name: "A18",
+                                    end: (
+                                        42,
+                                        6,
+                                    ),
+                                },
+                            ),
+                        },
+                    ],
+                },
+            ],
+            implements: [],
+            backed_type: Int,
+            members: [],
+        },
+    ),
     Interface {
         name: Identifier {
             start: (
@@ -859,11 +1109,19 @@
                     45,
                     1,
                 ),
+                end: (
+                    45,
+                    6,
+                ),
                 members: [
                     Attribute {
-                        span: (
+                        start: (
                             45,
                             3,
+                        ),
+                        end: (
+                            45,
+                            6,
                         ),
                         expression: Identifier(
                             Identifier {
@@ -880,10 +1138,6 @@
                         ),
                     },
                 ],
-                end: (
-                    45,
-                    6,
-                ),
             },
         ],
         extends: [],
@@ -907,11 +1161,19 @@
                     48,
                     1,
                 ),
+                end: (
+                    48,
+                    6,
+                ),
                 members: [
                     Attribute {
-                        span: (
+                        start: (
                             48,
                             3,
+                        ),
+                        end: (
+                            48,
+                            6,
                         ),
                         expression: Identifier(
                             Identifier {
@@ -928,10 +1190,6 @@
                         ),
                     },
                 ],
-                end: (
-                    48,
-                    6,
-                ),
             },
         ],
         body: [],
@@ -952,47 +1210,71 @@
                 },
             ),
             op: Assign,
-            rhs: Closure {
-                params: [],
-                attributes: [
-                    AttributeGroup {
+            rhs: Closure(
+                Closure {
+                    start: (
+                        51,
+                        13,
+                    ),
+                    end: (
+                        51,
+                        26,
+                    ),
+                    attributes: [
+                        AttributeGroup {
+                            start: (
+                                51,
+                                6,
+                            ),
+                            end: (
+                                51,
+                                11,
+                            ),
+                            members: [
+                                Attribute {
+                                    start: (
+                                        51,
+                                        8,
+                                    ),
+                                    end: (
+                                        51,
+                                        11,
+                                    ),
+                                    expression: Identifier(
+                                        Identifier {
+                                            start: (
+                                                51,
+                                                8,
+                                            ),
+                                            name: "A21",
+                                            end: (
+                                                51,
+                                                11,
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
+                        },
+                    ],
+                    parameters: FunctionParameterList {
                         start: (
                             51,
-                            6,
+                            21,
                         ),
-                        members: [
-                            Attribute {
-                                span: (
-                                    51,
-                                    8,
-                                ),
-                                expression: Identifier(
-                                    Identifier {
-                                        start: (
-                                            51,
-                                            8,
-                                        ),
-                                        name: "A21",
-                                        end: (
-                                            51,
-                                            11,
-                                        ),
-                                    },
-                                ),
-                            },
-                        ],
                         end: (
                             51,
-                            11,
+                            24,
                         ),
+                        members: [],
                     },
-                ],
-                uses: [],
-                return_type: None,
-                body: [],
-                static: false,
-                by_ref: false,
-            },
+                    return_ty: None,
+                    uses: [],
+                    by_ref: false,
+                    body: [],
+                    static: false,
+                },
+            ),
         },
     },
     Expression {
@@ -1011,48 +1293,72 @@
                 },
             ),
             op: Assign,
-            rhs: ArrowFunction {
-                params: [],
-                attributes: [
-                    AttributeGroup {
+            rhs: ArrowFunction(
+                ArrowFunction {
+                    start: (
+                        52,
+                        13,
+                    ),
+                    end: (
+                        52,
+                        22,
+                    ),
+                    attributes: [
+                        AttributeGroup {
+                            start: (
+                                52,
+                                6,
+                            ),
+                            end: (
+                                52,
+                                11,
+                            ),
+                            members: [
+                                Attribute {
+                                    start: (
+                                        52,
+                                        8,
+                                    ),
+                                    end: (
+                                        52,
+                                        11,
+                                    ),
+                                    expression: Identifier(
+                                        Identifier {
+                                            start: (
+                                                52,
+                                                8,
+                                            ),
+                                            name: "A22",
+                                            end: (
+                                                52,
+                                                11,
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
+                        },
+                    ],
+                    parameters: FunctionParameterList {
                         start: (
                             52,
-                            6,
+                            15,
                         ),
-                        members: [
-                            Attribute {
-                                span: (
-                                    52,
-                                    8,
-                                ),
-                                expression: Identifier(
-                                    Identifier {
-                                        start: (
-                                            52,
-                                            8,
-                                        ),
-                                        name: "A22",
-                                        end: (
-                                            52,
-                                            11,
-                                        ),
-                                    },
-                                ),
-                            },
-                        ],
                         end: (
                             52,
-                            11,
+                            18,
                         ),
+                        members: [],
                     },
-                ],
-                return_type: None,
-                expr: LiteralInteger {
-                    i: 0,
+                    return_type: None,
+                    by_ref: false,
+                    body: LiteralInteger {
+                        i: 0,
+                    },
+                    static: false,
                 },
-                by_ref: false,
-                static: false,
-            },
+            ),
         },
     },
     Expression {
@@ -1071,47 +1377,71 @@
                 },
             ),
             op: Assign,
-            rhs: Closure {
-                params: [],
-                attributes: [
-                    AttributeGroup {
+            rhs: Closure(
+                Closure {
+                    start: (
+                        53,
+                        13,
+                    ),
+                    end: (
+                        53,
+                        33,
+                    ),
+                    attributes: [
+                        AttributeGroup {
+                            start: (
+                                53,
+                                6,
+                            ),
+                            end: (
+                                53,
+                                11,
+                            ),
+                            members: [
+                                Attribute {
+                                    start: (
+                                        53,
+                                        8,
+                                    ),
+                                    end: (
+                                        53,
+                                        11,
+                                    ),
+                                    expression: Identifier(
+                                        Identifier {
+                                            start: (
+                                                53,
+                                                8,
+                                            ),
+                                            name: "A23",
+                                            end: (
+                                                53,
+                                                11,
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
+                        },
+                    ],
+                    parameters: FunctionParameterList {
                         start: (
                             53,
-                            6,
+                            28,
                         ),
-                        members: [
-                            Attribute {
-                                span: (
-                                    53,
-                                    8,
-                                ),
-                                expression: Identifier(
-                                    Identifier {
-                                        start: (
-                                            53,
-                                            8,
-                                        ),
-                                        name: "A23",
-                                        end: (
-                                            53,
-                                            11,
-                                        ),
-                                    },
-                                ),
-                            },
-                        ],
                         end: (
                             53,
-                            11,
+                            31,
                         ),
+                        members: [],
                     },
-                ],
-                uses: [],
-                return_type: None,
-                body: [],
-                static: true,
-                by_ref: false,
-            },
+                    return_ty: None,
+                    uses: [],
+                    by_ref: false,
+                    body: [],
+                    static: true,
+                },
+            ),
         },
     },
     Expression {
@@ -1130,48 +1460,72 @@
                 },
             ),
             op: Assign,
-            rhs: ArrowFunction {
-                params: [],
-                attributes: [
-                    AttributeGroup {
+            rhs: ArrowFunction(
+                ArrowFunction {
+                    start: (
+                        54,
+                        13,
+                    ),
+                    end: (
+                        54,
+                        29,
+                    ),
+                    attributes: [
+                        AttributeGroup {
+                            start: (
+                                54,
+                                6,
+                            ),
+                            end: (
+                                54,
+                                11,
+                            ),
+                            members: [
+                                Attribute {
+                                    start: (
+                                        54,
+                                        8,
+                                    ),
+                                    end: (
+                                        54,
+                                        11,
+                                    ),
+                                    expression: Identifier(
+                                        Identifier {
+                                            start: (
+                                                54,
+                                                8,
+                                            ),
+                                            name: "A24",
+                                            end: (
+                                                54,
+                                                11,
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
+                        },
+                    ],
+                    parameters: FunctionParameterList {
                         start: (
                             54,
-                            6,
+                            22,
                         ),
-                        members: [
-                            Attribute {
-                                span: (
-                                    54,
-                                    8,
-                                ),
-                                expression: Identifier(
-                                    Identifier {
-                                        start: (
-                                            54,
-                                            8,
-                                        ),
-                                        name: "A24",
-                                        end: (
-                                            54,
-                                            11,
-                                        ),
-                                    },
-                                ),
-                            },
-                        ],
                         end: (
                             54,
-                            11,
+                            25,
                         ),
+                        members: [],
                     },
-                ],
-                return_type: None,
-                expr: LiteralInteger {
-                    i: 0,
+                    return_type: None,
+                    by_ref: false,
+                    body: LiteralInteger {
+                        i: 0,
+                    },
+                    static: true,
                 },
-                by_ref: false,
-                static: true,
-            },
+            ),
         },
     },
     Expression {
@@ -1198,11 +1552,19 @@
                                 55,
                                 10,
                             ),
+                            end: (
+                                55,
+                                15,
+                            ),
                             members: [
                                 Attribute {
-                                    span: (
+                                    start: (
                                         55,
                                         12,
+                                    ),
+                                    end: (
+                                        55,
+                                        15,
                                     ),
                                     expression: Identifier(
                                         Identifier {
@@ -1219,16 +1581,12 @@
                                     ),
                                 },
                             ],
-                            end: (
-                                55,
-                                15,
-                            ),
                         },
                     ],
                     extends: None,
                     implements: [],
                     body: [
-                        Var {
+                        Property {
                             var: Variable {
                                 start: (
                                     57,
@@ -1246,11 +1604,19 @@
                                         56,
                                         5,
                                     ),
+                                    end: (
+                                        56,
+                                        10,
+                                    ),
                                     members: [
                                         Attribute {
-                                            span: (
+                                            start: (
                                                 56,
                                                 7,
+                                            ),
+                                            end: (
+                                                56,
+                                                10,
                                             ),
                                             expression: Identifier(
                                                 Identifier {
@@ -1267,14 +1633,24 @@
                                             ),
                                         },
                                     ],
-                                    end: (
-                                        56,
-                                        10,
-                                    ),
                                 },
                             ],
                             value: None,
                             type: None,
+                            flags: PropertyModifierGroup {
+                                flags: [
+                                    Public {
+                                        start: (
+                                            57,
+                                            5,
+                                        ),
+                                        end: (
+                                            57,
+                                            9,
+                                        ),
+                                    },
+                                ],
+                            },
                         },
                     ],
                 },

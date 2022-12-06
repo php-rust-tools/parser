@@ -1,5 +1,5 @@
+use serde::{Deserialize, Serialize};
 use std::cmp::{Eq, PartialEq};
-use std::fmt::{Debug, Display, Formatter, Result};
 use std::ops::{Deref, DerefMut};
 use std::str::from_utf8;
 
@@ -8,7 +8,7 @@ use std::str::from_utf8;
 ///
 /// The Trunk lexer and parser work mainly with byte strings because
 /// valid PHP code is not required to be valid UTF-8.
-#[derive(PartialEq, Eq, PartialOrd, Clone)]
+#[derive(PartialEq, Eq, PartialOrd, Clone, Serialize, Deserialize)]
 pub struct ByteString(pub(crate) Vec<u8>);
 
 impl ByteString {
@@ -17,8 +17,8 @@ impl ByteString {
     }
 }
 
-impl Display for ByteString {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+impl std::fmt::Display for ByteString {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         for &b in &self.0 {
             match b {
                 0 => write!(f, "\\0")?,
@@ -32,8 +32,8 @@ impl Display for ByteString {
     }
 }
 
-impl Debug for ByteString {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+impl std::fmt::Debug for ByteString {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "\"")?;
         for &b in &self.0 {
             match b {

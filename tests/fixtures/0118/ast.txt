@@ -1,45 +1,75 @@
 [
-    UnitEnum {
-        name: Identifier {
+    UnitEnum(
+        UnitEnum {
             start: (
                 3,
-                6,
+                1,
             ),
-            name: "Foo",
             end: (
-                3,
-                10,
+                0,
+                0,
             ),
+            name: Identifier {
+                start: (
+                    3,
+                    6,
+                ),
+                name: "Foo",
+                end: (
+                    3,
+                    10,
+                ),
+            },
+            attributes: [],
+            implements: [],
+            members: [
+                Case(
+                    UnitEnumCase {
+                        start: (
+                            4,
+                            5,
+                        ),
+                        end: (
+                            5,
+                            5,
+                        ),
+                        name: Identifier {
+                            start: (
+                                4,
+                                10,
+                            ),
+                            name: "Bar",
+                            end: (
+                                4,
+                                13,
+                            ),
+                        },
+                    },
+                ),
+                Case(
+                    UnitEnumCase {
+                        start: (
+                            5,
+                            5,
+                        ),
+                        end: (
+                            6,
+                            1,
+                        ),
+                        name: Identifier {
+                            start: (
+                                5,
+                                10,
+                            ),
+                            name: "Baz",
+                            end: (
+                                5,
+                                13,
+                            ),
+                        },
+                    },
+                ),
+            ],
         },
-        attributes: [],
-        implements: [],
-        body: [
-            UnitEnumCase {
-                name: Identifier {
-                    start: (
-                        4,
-                        10,
-                    ),
-                    name: "Bar",
-                    end: (
-                        4,
-                        13,
-                    ),
-                },
-            },
-            UnitEnumCase {
-                name: Identifier {
-                    start: (
-                        5,
-                        10,
-                    ),
-                    name: "Baz",
-                    end: (
-                        5,
-                        13,
-                    ),
-                },
-            },
-        ],
-    },
+    ),
 ]

@@ -1,176 +1,286 @@
 [
-    Try {
-        body: [],
-        catches: [
-            Catch {
-                types: Identifier(
-                    Identifier {
-                        start: (
-                            5,
-                            10,
-                        ),
-                        name: "Exception",
-                        end: (
-                            5,
-                            20,
-                        ),
-                    },
-                ),
-                var: Some(
-                    Variable(
-                        Variable {
+    Try(
+        TryBlock {
+            start: (
+                3,
+                1,
+            ),
+            end: (
+                11,
+                1,
+            ),
+            body: [],
+            catches: [
+                CatchBlock {
+                    start: (
+                        5,
+                        3,
+                    ),
+                    end: (
+                        7,
+                        3,
+                    ),
+                    types: Identifier(
+                        Identifier {
                             start: (
+                                5,
+                                10,
+                            ),
+                            name: "Exception",
+                            end: (
                                 5,
                                 20,
                             ),
-                            name: "e",
-                            end: (
-                                5,
-                                22,
-                            ),
                         },
                     ),
-                ),
-                body: [],
-            },
-            Catch {
-                types: Identifier(
-                    Identifier {
-                        start: (
-                            7,
-                            10,
+                    var: Some(
+                        Variable(
+                            Variable {
+                                start: (
+                                    5,
+                                    20,
+                                ),
+                                name: "e",
+                                end: (
+                                    5,
+                                    22,
+                                ),
+                            },
                         ),
-                        name: "CustomException",
-                        end: (
-                            7,
-                            26,
-                        ),
-                    },
-                ),
-                var: Some(
-                    Variable(
-                        Variable {
+                    ),
+                    body: [],
+                },
+                CatchBlock {
+                    start: (
+                        7,
+                        3,
+                    ),
+                    end: (
+                        11,
+                        1,
+                    ),
+                    types: Identifier(
+                        Identifier {
                             start: (
+                                7,
+                                10,
+                            ),
+                            name: "CustomException",
+                            end: (
                                 7,
                                 26,
                             ),
-                            name: "e",
-                            end: (
-                                7,
-                                28,
-                            ),
                         },
                     ),
-                ),
-                body: [],
-            },
-        ],
-        finally: None,
-    },
-    Try {
-        body: [],
-        catches: [
-            Catch {
-                types: Identifier(
-                    Identifier {
-                        start: (
-                            13,
-                            10,
+                    var: Some(
+                        Variable(
+                            Variable {
+                                start: (
+                                    7,
+                                    26,
+                                ),
+                                name: "e",
+                                end: (
+                                    7,
+                                    28,
+                                ),
+                            },
                         ),
-                        name: "Exception",
-                        end: (
-                            13,
-                            20,
-                        ),
-                    },
-                ),
-                var: Some(
-                    Variable(
-                        Variable {
+                    ),
+                    body: [],
+                },
+            ],
+            finally: None,
+        },
+    ),
+    Try(
+        TryBlock {
+            start: (
+                11,
+                1,
+            ),
+            end: (
+                19,
+                1,
+            ),
+            body: [],
+            catches: [
+                CatchBlock {
+                    start: (
+                        13,
+                        3,
+                    ),
+                    end: (
+                        15,
+                        3,
+                    ),
+                    types: Identifier(
+                        Identifier {
                             start: (
+                                13,
+                                10,
+                            ),
+                            name: "Exception",
+                            end: (
                                 13,
                                 20,
                             ),
-                            name: "e",
+                        },
+                    ),
+                    var: Some(
+                        Variable(
+                            Variable {
+                                start: (
+                                    13,
+                                    20,
+                                ),
+                                name: "e",
+                                end: (
+                                    13,
+                                    22,
+                                ),
+                            },
+                        ),
+                    ),
+                    body: [],
+                },
+            ],
+            finally: Some(
+                FinallyBlock {
+                    start: (
+                        15,
+                        3,
+                    ),
+                    end: (
+                        19,
+                        1,
+                    ),
+                    body: [],
+                },
+            ),
+        },
+    ),
+    Try(
+        TryBlock {
+            start: (
+                19,
+                1,
+            ),
+            end: (
+                23,
+                1,
+            ),
+            body: [],
+            catches: [],
+            finally: Some(
+                FinallyBlock {
+                    start: (
+                        21,
+                        3,
+                    ),
+                    end: (
+                        23,
+                        1,
+                    ),
+                    body: [],
+                },
+            ),
+        },
+    ),
+    Try(
+        TryBlock {
+            start: (
+                23,
+                1,
+            ),
+            end: (
+                29,
+                1,
+            ),
+            body: [],
+            catches: [
+                CatchBlock {
+                    start: (
+                        25,
+                        3,
+                    ),
+                    end: (
+                        29,
+                        1,
+                    ),
+                    types: Identifier(
+                        Identifier {
+                            start: (
+                                25,
+                                10,
+                            ),
+                            name: "Exception",
                             end: (
-                                13,
-                                22,
+                                25,
+                                19,
                             ),
                         },
                     ),
-                ),
-                body: [],
-            },
-        ],
-        finally: Some(
-            [],
-        ),
-    },
-    Try {
-        body: [],
-        catches: [],
-        finally: Some(
-            [],
-        ),
-    },
-    Try {
-        body: [],
-        catches: [
-            Catch {
-                types: Identifier(
-                    Identifier {
-                        start: (
-                            25,
-                            10,
-                        ),
-                        name: "Exception",
-                        end: (
-                            25,
-                            19,
-                        ),
-                    },
-                ),
-                var: None,
-                body: [],
-            },
-        ],
-        finally: None,
-    },
-    Try {
-        body: [],
-        catches: [
-            Catch {
-                types: Identifier(
-                    Identifier {
-                        start: (
-                            31,
-                            10,
-                        ),
-                        name: "Exception",
-                        end: (
-                            31,
-                            20,
-                        ),
-                    },
-                ),
-                var: Some(
-                    Variable(
-                        Variable {
+                    var: None,
+                    body: [],
+                },
+            ],
+            finally: None,
+        },
+    ),
+    Try(
+        TryBlock {
+            start: (
+                29,
+                1,
+            ),
+            end: (
+                0,
+                0,
+            ),
+            body: [],
+            catches: [
+                CatchBlock {
+                    start: (
+                        31,
+                        3,
+                    ),
+                    end: (
+                        0,
+                        0,
+                    ),
+                    types: Identifier(
+                        Identifier {
                             start: (
+                                31,
+                                10,
+                            ),
+                            name: "Exception",
+                            end: (
                                 31,
                                 20,
                             ),
-                            name: "e",
-                            end: (
-                                31,
-                                22,
-                            ),
                         },
                     ),
-                ),
-                body: [],
-            },
-        ],
-        finally: None,
-    },
+                    var: Some(
+                        Variable(
+                            Variable {
+                                start: (
+                                    31,
+                                    20,
+                                ),
+                                name: "e",
+                                end: (
+                                    31,
+                                    22,
+                                ),
+                            },
+                        ),
+                    ),
+                    body: [],
+                },
+            ],
+            finally: None,
+        },
+    ),
 ]

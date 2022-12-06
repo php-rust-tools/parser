@@ -1,4 +1,6 @@
-use php_parser_rs::prelude::*;
+use php_parser_rs::lexer::Lexer;
+use php_parser_rs::parser::error::ParseResult;
+use php_parser_rs::parser::Parser;
 
 fn main() -> ParseResult<()> {
     let file = match std::env::args().nth(1) {

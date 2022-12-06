@@ -1,7 +1,7 @@
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::Expression;
 use crate::parser::error::ParseResult;
-use crate::parser::internal::precedence::Precedence;
+use crate::parser::internal::precedences::Precedence;
 use crate::parser::state::State;
 use crate::parser::Parser;
 use crate::peek_token;

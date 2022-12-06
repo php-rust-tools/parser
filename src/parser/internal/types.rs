@@ -1,8 +1,7 @@
 use crate::expect_token;
 use crate::expected_token;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifier::Identifier;
-use crate::parser::ast::TryBlockCaughtType;
+use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::Type;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
@@ -11,34 +10,6 @@ use crate::parser::Parser;
 use crate::peek_token;
 
 impl Parser {
-    pub(in crate::parser) fn try_block_caught_type_string(
-        &self,
-        state: &mut State,
-    ) -> ParseResult<TryBlockCaughtType> {
-        let id = self.full_name(state)?;
-
-        if state.current.kind == TokenKind::Pipe {
-            state.next();
-
-            let mut types = vec![id];
-
-            while !state.is_eof() {
-                let id = self.full_name(state)?;
-                types.push(id);
-
-                if state.current.kind != TokenKind::Pipe {
-                    break;
-                }
-
-                state.next();
-            }
-
-            return Ok(TryBlockCaughtType::Union(types));
-        }
-
-        Ok(TryBlockCaughtType::Identifier(id))
-    }
-
     pub(in crate::parser) fn get_type(&self, state: &mut State) -> ParseResult<Type> {
         if state.current.kind == TokenKind::Question {
             return self.get_nullable_type(state);

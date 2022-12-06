@@ -15,34 +15,60 @@
         extends: None,
         implements: [],
         body: [
-            Method {
-                name: Identifier {
+            Method(
+                Method {
                     start: (
                         4,
-                        14,
+                        5,
                     ),
-                    name: "bar",
                     end: (
-                        4,
-                        17,
+                        7,
+                        1,
                     ),
-                },
-                attributes: [],
-                params: [],
-                body: [
-                    Echo {
-                        values: [
-                            LiteralInteger {
-                                i: 1,
+                    name: Identifier {
+                        start: (
+                            4,
+                            14,
+                        ),
+                        name: "bar",
+                        end: (
+                            4,
+                            17,
+                        ),
+                    },
+                    attributes: [],
+                    parameters: MethodParameterList {
+                        start: (
+                            4,
+                            17,
+                        ),
+                        end: (
+                            4,
+                            20,
+                        ),
+                        members: [],
+                    },
+                    body: Some(
+                        [
+                            Echo {
+                                values: [
+                                    LiteralInteger {
+                                        i: 1,
+                                    },
+                                ],
                             },
                         ],
+                    ),
+                    flags: MethodModifierGroup {
+                        flags: [],
                     },
-                ],
-                flags: [],
-                return_type: None,
-                by_ref: false,
-            },
+                    return_type: None,
+                    by_ref: false,
+                },
+            ),
         ],
-        flags: [],
+        modifiers: ClassModifierGroup {
+            flags: [],
+        },
     },
 ]

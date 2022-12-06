@@ -1,170 +1,197 @@
 [
-    Function {
-        name: Identifier {
+    Function(
+        Function {
             start: (
                 3,
-                10,
+                1,
             ),
-            name: "fib",
             end: (
-                3,
-                13,
+                0,
+                0,
             ),
-        },
-        attributes: [],
-        params: [
-            Param {
-                name: Variable {
-                    start: (
-                        3,
-                        14,
-                    ),
-                    name: "n",
-                    end: (
-                        3,
-                        16,
-                    ),
-                },
-                attributes: [],
-                type: None,
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
+            name: Identifier {
+                start: (
+                    3,
+                    10,
+                ),
+                name: "fib",
+                end: (
+                    3,
+                    13,
+                ),
             },
-        ],
-        body: [
-            If {
-                condition: Infix {
-                    lhs: Variable(
-                        Variable {
+            attributes: [],
+            parameters: FunctionParameterList {
+                start: (
+                    3,
+                    13,
+                ),
+                end: (
+                    3,
+                    18,
+                ),
+                members: [
+                    FunctionParameter {
+                        start: (
+                            3,
+                            14,
+                        ),
+                        end: (
+                            3,
+                            16,
+                        ),
+                        name: Variable {
                             start: (
-                                4,
-                                9,
+                                3,
+                                14,
                             ),
                             name: "n",
                             end: (
-                                4,
-                                12,
+                                3,
+                                16,
                             ),
                         },
-                    ),
-                    op: LessThan,
-                    rhs: LiteralInteger {
-                        i: 2,
-                    },
-                },
-                then: [
-                    Return {
-                        value: Some(
-                            Variable(
-                                Variable {
-                                    start: (
-                                        5,
-                                        16,
-                                    ),
-                                    name: "n",
-                                    end: (
-                                        5,
-                                        18,
-                                    ),
-                                },
-                            ),
-                        ),
+                        attributes: [],
+                        type: None,
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
                     },
                 ],
-                else_ifs: [],
-                else: None,
             },
-            Return {
-                value: Some(
-                    Infix {
-                        lhs: Call {
-                            target: Identifier(
-                                Identifier {
-                                    start: (
-                                        8,
-                                        12,
-                                    ),
-                                    name: "fib",
-                                    end: (
-                                        8,
-                                        15,
-                                    ),
-                                },
-                            ),
-                            args: [
-                                Arg {
-                                    name: None,
-                                    value: Infix {
-                                        lhs: Variable(
-                                            Variable {
-                                                start: (
-                                                    8,
-                                                    16,
-                                                ),
-                                                name: "n",
-                                                end: (
-                                                    8,
-                                                    19,
-                                                ),
-                                            },
-                                        ),
-                                        op: Sub,
-                                        rhs: LiteralInteger {
-                                            i: 1,
-                                        },
-                                    },
-                                    unpack: false,
-                                },
-                            ],
-                        },
-                        op: Add,
-                        rhs: Call {
-                            target: Identifier(
-                                Identifier {
-                                    start: (
-                                        8,
-                                        26,
-                                    ),
-                                    name: "fib",
-                                    end: (
-                                        8,
-                                        29,
-                                    ),
-                                },
-                            ),
-                            args: [
-                                Arg {
-                                    name: None,
-                                    value: Infix {
-                                        lhs: Variable(
-                                            Variable {
-                                                start: (
-                                                    8,
-                                                    30,
-                                                ),
-                                                name: "n",
-                                                end: (
-                                                    8,
-                                                    33,
-                                                ),
-                                            },
-                                        ),
-                                        op: Sub,
-                                        rhs: LiteralInteger {
-                                            i: 2,
-                                        },
-                                    },
-                                    unpack: false,
-                                },
-                            ],
+            return_type: None,
+            by_ref: false,
+            body: [
+                If {
+                    condition: Infix {
+                        lhs: Variable(
+                            Variable {
+                                start: (
+                                    4,
+                                    9,
+                                ),
+                                name: "n",
+                                end: (
+                                    4,
+                                    12,
+                                ),
+                            },
+                        ),
+                        op: LessThan,
+                        rhs: LiteralInteger {
+                            i: 2,
                         },
                     },
-                ),
-            },
-        ],
-        return_type: None,
-        by_ref: false,
-    },
+                    then: [
+                        Return {
+                            value: Some(
+                                Variable(
+                                    Variable {
+                                        start: (
+                                            5,
+                                            16,
+                                        ),
+                                        name: "n",
+                                        end: (
+                                            5,
+                                            18,
+                                        ),
+                                    },
+                                ),
+                            ),
+                        },
+                    ],
+                    else_ifs: [],
+                    else: None,
+                },
+                Return {
+                    value: Some(
+                        Infix {
+                            lhs: Call {
+                                target: Identifier(
+                                    Identifier {
+                                        start: (
+                                            8,
+                                            12,
+                                        ),
+                                        name: "fib",
+                                        end: (
+                                            8,
+                                            15,
+                                        ),
+                                    },
+                                ),
+                                args: [
+                                    Arg {
+                                        name: None,
+                                        value: Infix {
+                                            lhs: Variable(
+                                                Variable {
+                                                    start: (
+                                                        8,
+                                                        16,
+                                                    ),
+                                                    name: "n",
+                                                    end: (
+                                                        8,
+                                                        19,
+                                                    ),
+                                                },
+                                            ),
+                                            op: Sub,
+                                            rhs: LiteralInteger {
+                                                i: 1,
+                                            },
+                                        },
+                                        unpack: false,
+                                    },
+                                ],
+                            },
+                            op: Add,
+                            rhs: Call {
+                                target: Identifier(
+                                    Identifier {
+                                        start: (
+                                            8,
+                                            26,
+                                        ),
+                                        name: "fib",
+                                        end: (
+                                            8,
+                                            29,
+                                        ),
+                                    },
+                                ),
+                                args: [
+                                    Arg {
+                                        name: None,
+                                        value: Infix {
+                                            lhs: Variable(
+                                                Variable {
+                                                    start: (
+                                                        8,
+                                                        30,
+                                                    ),
+                                                    name: "n",
+                                                    end: (
+                                                        8,
+                                                        33,
+                                                    ),
+                                                },
+                                            ),
+                                            op: Sub,
+                                            rhs: LiteralInteger {
+                                                i: 2,
+                                            },
+                                        },
+                                        unpack: false,
+                                    },
+                                ],
+                            },
+                        },
+                    ),
+                },
+            ],
+        },
+    ),
 ]

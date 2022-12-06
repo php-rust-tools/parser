@@ -15,60 +15,113 @@
         extends: None,
         implements: [],
         body: [
-            Method {
-                name: Identifier {
+            Method(
+                Method {
                     start: (
                         5,
-                        14,
-                    ),
-                    name: "bar",
-                    end: (
                         5,
-                        17,
                     ),
-                },
-                attributes: [],
-                params: [],
-                body: [
-                    Expression {
-                        expr: Closure {
-                            params: [
-                                Param {
-                                    name: Variable {
+                    end: (
+                        9,
+                        1,
+                    ),
+                    name: Identifier {
+                        start: (
+                            5,
+                            14,
+                        ),
+                        name: "bar",
+                        end: (
+                            5,
+                            17,
+                        ),
+                    },
+                    attributes: [],
+                    parameters: MethodParameterList {
+                        start: (
+                            5,
+                            17,
+                        ),
+                        end: (
+                            6,
+                            5,
+                        ),
+                        members: [],
+                    },
+                    body: Some(
+                        [
+                            Expression {
+                                expr: Closure(
+                                    Closure {
                                         start: (
                                             7,
-                                            31,
+                                            9,
                                         ),
-                                        name: "foo",
                                         end: (
                                             7,
-                                            35,
+                                            39,
                                         ),
+                                        attributes: [],
+                                        parameters: FunctionParameterList {
+                                            start: (
+                                                7,
+                                                25,
+                                            ),
+                                            end: (
+                                                7,
+                                                37,
+                                            ),
+                                            members: [
+                                                FunctionParameter {
+                                                    start: (
+                                                        7,
+                                                        26,
+                                                    ),
+                                                    end: (
+                                                        7,
+                                                        35,
+                                                    ),
+                                                    name: Variable {
+                                                        start: (
+                                                            7,
+                                                            31,
+                                                        ),
+                                                        name: "foo",
+                                                        end: (
+                                                            7,
+                                                            35,
+                                                        ),
+                                                    },
+                                                    attributes: [],
+                                                    type: Some(
+                                                        SelfReference,
+                                                    ),
+                                                    variadic: false,
+                                                    default: None,
+                                                    by_ref: false,
+                                                },
+                                            ],
+                                        },
+                                        return_ty: None,
+                                        uses: [],
+                                        by_ref: false,
+                                        body: [],
+                                        static: true,
                                     },
-                                    attributes: [],
-                                    type: Some(
-                                        SelfReference,
-                                    ),
-                                    variadic: false,
-                                    default: None,
-                                    flags: [],
-                                    by_ref: false,
-                                },
-                            ],
-                            attributes: [],
-                            uses: [],
-                            return_type: None,
-                            body: [],
-                            static: true,
-                            by_ref: false,
-                        },
+                                ),
+                            },
+                        ],
+                    ),
+                    flags: MethodModifierGroup {
+                        flags: [],
                     },
-                ],
-                flags: [],
-                return_type: None,
-                by_ref: false,
-            },
+                    return_type: None,
+                    by_ref: false,
+                },
+            ),
         ],
-        flags: [],
+        modifiers: ClassModifierGroup {
+            flags: [],
+        },
     },
 ]

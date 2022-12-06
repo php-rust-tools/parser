@@ -1,7 +1,9 @@
-use php_parser_rs::prelude::{Lexer, Parser};
 use std::env;
 use std::fs::read_dir;
 use std::path::PathBuf;
+
+use php_parser_rs::lexer::Lexer;
+use php_parser_rs::parser::Parser;
 
 static PARSER: Parser = Parser::new();
 static LEXER: Lexer = Lexer::new();

@@ -1,260 +1,356 @@
 [
-    Function {
-        name: Identifier {
+    Function(
+        Function {
             start: (
                 3,
-                10,
+                1,
             ),
-            name: "foo",
             end: (
-                3,
-                13,
+                7,
+                1,
             ),
-        },
-        attributes: [],
-        params: [
-            Param {
-                name: Variable {
-                    start: (
-                        3,
-                        21,
-                    ),
-                    name: "a",
-                    end: (
-                        3,
-                        24,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    String,
+            name: Identifier {
+                start: (
+                    3,
+                    10,
                 ),
-                variadic: false,
-                default: Some(
-                    LiteralString {
-                        value: "",
-                    },
+                name: "foo",
+                end: (
+                    3,
+                    13,
                 ),
-                flags: [],
-                by_ref: false,
             },
-            Param {
-                name: Variable {
-                    start: (
-                        3,
-                        36,
-                    ),
-                    name: "b",
-                    end: (
-                        3,
-                        39,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    Array,
+            attributes: [],
+            parameters: FunctionParameterList {
+                start: (
+                    3,
+                    13,
                 ),
-                variadic: false,
-                default: Some(
-                    Array {
-                        items: [],
-                    },
+                end: (
+                    3,
+                    44,
                 ),
-                flags: [],
-                by_ref: false,
-            },
-        ],
-        body: [
-            Expression {
-                expr: Call {
-                    target: Identifier(
-                        Identifier {
+                members: [
+                    FunctionParameter {
+                        start: (
+                            3,
+                            14,
+                        ),
+                        end: (
+                            3,
+                            28,
+                        ),
+                        name: Variable {
                             start: (
-                                4,
-                                5,
+                                3,
+                                21,
                             ),
-                            name: "exit",
+                            name: "a",
                             end: (
-                                4,
-                                9,
+                                3,
+                                24,
                             ),
                         },
-                    ),
-                    args: [
-                        Arg {
-                            name: None,
-                            value: LiteralInteger {
-                                i: 1,
+                        attributes: [],
+                        type: Some(
+                            String,
+                        ),
+                        variadic: false,
+                        default: Some(
+                            LiteralString {
+                                value: "",
                             },
-                            unpack: false,
+                        ),
+                        by_ref: false,
+                    },
+                    FunctionParameter {
+                        start: (
+                            3,
+                            30,
+                        ),
+                        end: (
+                            3,
+                            43,
+                        ),
+                        name: Variable {
+                            start: (
+                                3,
+                                36,
+                            ),
+                            name: "b",
+                            end: (
+                                3,
+                                39,
+                            ),
                         },
-                    ],
-                },
+                        attributes: [],
+                        type: Some(
+                            Array,
+                        ),
+                        variadic: false,
+                        default: Some(
+                            Array {
+                                items: [],
+                            },
+                        ),
+                        by_ref: false,
+                    },
+                ],
             },
-        ],
-        return_type: Some(
-            Never,
-        ),
-        by_ref: false,
-    },
-    Function {
-        name: Identifier {
+            return_type: Some(
+                Never,
+            ),
+            by_ref: false,
+            body: [
+                Expression {
+                    expr: Call {
+                        target: Identifier(
+                            Identifier {
+                                start: (
+                                    4,
+                                    5,
+                                ),
+                                name: "exit",
+                                end: (
+                                    4,
+                                    9,
+                                ),
+                            },
+                        ),
+                        args: [
+                            Arg {
+                                name: None,
+                                value: LiteralInteger {
+                                    i: 1,
+                                },
+                                unpack: false,
+                            },
+                        ],
+                    },
+                },
+            ],
+        },
+    ),
+    Function(
+        Function {
             start: (
                 7,
-                10,
+                1,
             ),
-            name: "bar",
             end: (
-                7,
-                13,
+                0,
+                0,
             ),
-        },
-        attributes: [],
-        params: [
-            Param {
-                name: Variable {
-                    start: (
-                        7,
-                        18,
-                    ),
-                    name: "a",
-                    end: (
-                        7,
-                        20,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    Integer,
+            name: Identifier {
+                start: (
+                    7,
+                    10,
                 ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
-            },
-            Param {
-                name: Variable {
-                    start: (
-                        7,
-                        28,
-                    ),
-                    name: "b",
-                    end: (
-                        7,
-                        30,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    Float,
-                ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
-            },
-            Param {
-                name: Variable {
-                    start: (
-                        7,
-                        39,
-                    ),
-                    name: "c",
-                    end: (
-                        7,
-                        41,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    String,
-                ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
-            },
-            Param {
-                name: Variable {
-                    start: (
-                        7,
-                        48,
-                    ),
-                    name: "d",
-                    end: (
-                        7,
-                        50,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    True,
-                ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
-            },
-            Param {
-                name: Variable {
-                    start: (
-                        7,
-                        58,
-                    ),
-                    name: "e",
-                    end: (
-                        7,
-                        60,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    False,
-                ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
-            },
-            Param {
-                name: Variable {
-                    start: (
-                        7,
-                        67,
-                    ),
-                    name: "f",
-                    end: (
-                        7,
-                        69,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    Null,
-                ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
-            },
-        ],
-        body: [
-            Return {
-                value: Some(
-                    Null,
+                name: "bar",
+                end: (
+                    7,
+                    13,
                 ),
             },
-        ],
-        return_type: Some(
-            Union(
-                [
-                    Null,
-                    String,
-                    Integer,
-                    Float,
+            attributes: [],
+            parameters: FunctionParameterList {
+                start: (
+                    7,
+                    13,
+                ),
+                end: (
+                    7,
+                    70,
+                ),
+                members: [
+                    FunctionParameter {
+                        start: (
+                            7,
+                            14,
+                        ),
+                        end: (
+                            7,
+                            20,
+                        ),
+                        name: Variable {
+                            start: (
+                                7,
+                                18,
+                            ),
+                            name: "a",
+                            end: (
+                                7,
+                                20,
+                            ),
+                        },
+                        attributes: [],
+                        type: Some(
+                            Integer,
+                        ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
+                    },
+                    FunctionParameter {
+                        start: (
+                            7,
+                            22,
+                        ),
+                        end: (
+                            7,
+                            30,
+                        ),
+                        name: Variable {
+                            start: (
+                                7,
+                                28,
+                            ),
+                            name: "b",
+                            end: (
+                                7,
+                                30,
+                            ),
+                        },
+                        attributes: [],
+                        type: Some(
+                            Float,
+                        ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
+                    },
+                    FunctionParameter {
+                        start: (
+                            7,
+                            32,
+                        ),
+                        end: (
+                            7,
+                            41,
+                        ),
+                        name: Variable {
+                            start: (
+                                7,
+                                39,
+                            ),
+                            name: "c",
+                            end: (
+                                7,
+                                41,
+                            ),
+                        },
+                        attributes: [],
+                        type: Some(
+                            String,
+                        ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
+                    },
+                    FunctionParameter {
+                        start: (
+                            7,
+                            43,
+                        ),
+                        end: (
+                            7,
+                            50,
+                        ),
+                        name: Variable {
+                            start: (
+                                7,
+                                48,
+                            ),
+                            name: "d",
+                            end: (
+                                7,
+                                50,
+                            ),
+                        },
+                        attributes: [],
+                        type: Some(
+                            True,
+                        ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
+                    },
+                    FunctionParameter {
+                        start: (
+                            7,
+                            52,
+                        ),
+                        end: (
+                            7,
+                            60,
+                        ),
+                        name: Variable {
+                            start: (
+                                7,
+                                58,
+                            ),
+                            name: "e",
+                            end: (
+                                7,
+                                60,
+                            ),
+                        },
+                        attributes: [],
+                        type: Some(
+                            False,
+                        ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
+                    },
+                    FunctionParameter {
+                        start: (
+                            7,
+                            62,
+                        ),
+                        end: (
+                            7,
+                            69,
+                        ),
+                        name: Variable {
+                            start: (
+                                7,
+                                67,
+                            ),
+                            name: "f",
+                            end: (
+                                7,
+                                69,
+                            ),
+                        },
+                        attributes: [],
+                        type: Some(
+                            Null,
+                        ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
+                    },
                 ],
+            },
+            return_type: Some(
+                Union(
+                    [
+                        Null,
+                        String,
+                        Integer,
+                        Float,
+                    ],
+                ),
             ),
-        ),
-        by_ref: false,
-    },
+            by_ref: false,
+            body: [
+                Return {
+                    value: Some(
+                        Null,
+                    ),
+                },
+            ],
+        },
+    ),
 ]

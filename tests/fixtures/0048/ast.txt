@@ -1,42 +1,69 @@
 [
-    Function {
-        name: Identifier {
+    Function(
+        Function {
             start: (
                 1,
-                16,
+                7,
             ),
-            name: "foo",
             end: (
-                1,
-                19,
+                0,
+                0,
             ),
-        },
-        attributes: [],
-        params: [
-            Param {
-                name: Variable {
-                    start: (
-                        1,
-                        27,
-                    ),
-                    name: "b",
-                    end: (
-                        1,
-                        29,
-                    ),
-                },
-                attributes: [],
-                type: Some(
-                    String,
+            name: Identifier {
+                start: (
+                    1,
+                    16,
                 ),
-                variadic: false,
-                default: None,
-                flags: [],
-                by_ref: false,
+                name: "foo",
+                end: (
+                    1,
+                    19,
+                ),
             },
-        ],
-        body: [],
-        return_type: None,
-        by_ref: false,
-    },
+            attributes: [],
+            parameters: FunctionParameterList {
+                start: (
+                    1,
+                    19,
+                ),
+                end: (
+                    1,
+                    31,
+                ),
+                members: [
+                    FunctionParameter {
+                        start: (
+                            1,
+                            20,
+                        ),
+                        end: (
+                            1,
+                            29,
+                        ),
+                        name: Variable {
+                            start: (
+                                1,
+                                27,
+                            ),
+                            name: "b",
+                            end: (
+                                1,
+                                29,
+                            ),
+                        },
+                        attributes: [],
+                        type: Some(
+                            String,
+                        ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
+                    },
+                ],
+            },
+            return_type: None,
+            by_ref: false,
+            body: [],
+        },
+    ),
 ]

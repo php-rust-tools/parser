@@ -13,56 +13,89 @@
         },
         attributes: [],
         body: [
-            Method {
-                name: Identifier {
+            Method(
+                Method {
                     start: (
                         7,
-                        21,
+                        12,
                     ),
-                    name: "bar",
                     end: (
-                        7,
-                        24,
+                        10,
+                        1,
                     ),
-                },
-                attributes: [],
-                params: [],
-                body: [
-                    Expression {
-                        expr: Call {
-                            target: Identifier(
-                                Identifier {
-                                    start: (
-                                        8,
-                                        9,
-                                    ),
-                                    name: "exit",
-                                    end: (
-                                        8,
-                                        13,
-                                    ),
-                                },
-                            ),
-                            args: [
-                                Arg {
-                                    name: None,
-                                    value: LiteralInteger {
-                                        i: 1,
-                                    },
-                                    unpack: false,
-                                },
-                            ],
-                        },
+                    name: Identifier {
+                        start: (
+                            7,
+                            21,
+                        ),
+                        name: "bar",
+                        end: (
+                            7,
+                            24,
+                        ),
                     },
-                ],
-                flags: [
-                    Public,
-                ],
-                return_type: Some(
-                    ParentReference,
-                ),
-                by_ref: false,
-            },
+                    attributes: [],
+                    parameters: MethodParameterList {
+                        start: (
+                            7,
+                            24,
+                        ),
+                        end: (
+                            7,
+                            26,
+                        ),
+                        members: [],
+                    },
+                    body: Some(
+                        [
+                            Expression {
+                                expr: Call {
+                                    target: Identifier(
+                                        Identifier {
+                                            start: (
+                                                8,
+                                                9,
+                                            ),
+                                            name: "exit",
+                                            end: (
+                                                8,
+                                                13,
+                                            ),
+                                        },
+                                    ),
+                                    args: [
+                                        Arg {
+                                            name: None,
+                                            value: LiteralInteger {
+                                                i: 1,
+                                            },
+                                            unpack: false,
+                                        },
+                                    ],
+                                },
+                            },
+                        ],
+                    ),
+                    flags: MethodModifierGroup {
+                        flags: [
+                            Public {
+                                start: (
+                                    7,
+                                    5,
+                                ),
+                                end: (
+                                    7,
+                                    12,
+                                ),
+                            },
+                        ],
+                    },
+                    return_type: Some(
+                        ParentReference,
+                    ),
+                    by_ref: false,
+                },
+            ),
         ],
     },
 ]

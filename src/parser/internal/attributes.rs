@@ -1,8 +1,8 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::attribute::Attribute;
-use crate::parser::ast::attribute::AttributeGroup;
+use crate::parser::ast::attributes::Attribute;
+use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::error::ParseResult;
-use crate::parser::internal::precedence::Precedence;
+use crate::parser::internal::precedences::Precedence;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
@@ -20,10 +20,15 @@ impl Parser {
         state.next();
 
         while state.current.kind != TokenKind::RightBracket {
-            let span = state.current.span;
+            let start = state.current.span;
             let expression = self.expression(state, Precedence::Lowest)?;
+            let end = state.current.span;
 
-            members.push(Attribute { span, expression });
+            members.push(Attribute {
+                start,
+                expression,
+                end,
+            });
 
             if state.current.kind == TokenKind::Comma {
                 state.next();

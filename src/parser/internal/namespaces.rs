@@ -1,5 +1,5 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifier::Identifier;
+use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::Block;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;

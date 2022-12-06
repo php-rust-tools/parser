@@ -1,26 +1,103 @@
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::functions::FunctionParameter;
+use crate::parser::ast::functions::FunctionParameterList;
+use crate::parser::ast::functions::MethodParameter;
+use crate::parser::ast::functions::MethodParameterList;
 use crate::parser::ast::Arg;
 use crate::parser::ast::Expression;
-use crate::parser::ast::MethodFlag;
-use crate::parser::ast::Param;
-use crate::parser::ast::ParamList;
-use crate::parser::ast::PropertyFlag;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
-use crate::parser::internal::precedence::Precedence;
+use crate::parser::internal::precedences::Precedence;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
-use super::ident::is_reserved_ident;
+use super::identifiers::is_reserved_ident;
 
 impl Parser {
-    pub(in crate::parser) fn param_list(&self, state: &mut State) -> Result<ParamList, ParseError> {
-        let mut params = ParamList::new();
+    pub(in crate::parser) fn function_parameter_list(
+        &self,
+        state: &mut State,
+    ) -> Result<FunctionParameterList, ParseError> {
+        let mut members = Vec::new();
 
+        let list_start = state.current.span;
+        self.lparen(state)?;
+
+        state.skip_comments();
+
+        while !state.is_eof() && state.current.kind != TokenKind::RightParen {
+            let start = state.current.span;
+
+            self.gather_attributes(state)?;
+
+            let ty = self.get_optional_type(state)?;
+
+            let mut variadic = false;
+            let mut by_ref = false;
+
+            if state.current.kind == TokenKind::Ampersand {
+                state.next();
+                by_ref = true;
+            }
+
+            if state.current.kind == TokenKind::Ellipsis {
+                state.next();
+
+                variadic = true;
+            }
+
+            // 2. Then expect a variable.
+            let var = self.var(state)?;
+
+            let mut default = None;
+            if state.current.kind == TokenKind::Equals {
+                state.next();
+                default = Some(self.expression(state, Precedence::Lowest)?);
+            }
+
+            let end = state.current.span;
+
+            members.push(FunctionParameter {
+                start,
+                end,
+                name: var,
+                attributes: state.get_attributes(),
+                r#type: ty,
+                variadic,
+                default,
+                by_ref,
+            });
+
+            state.skip_comments();
+
+            if state.current.kind == TokenKind::Comma {
+                state.next();
+            } else {
+                break;
+            }
+        }
+
+        self.rparen(state)?;
+
+        let list_end = state.current.span;
+
+        Ok(FunctionParameterList {
+            start: list_start,
+            end: list_end,
+            members,
+        })
+    }
+
+    /// TODO(azjezz): split this into `method_parameter_list` and `abstract_method_parameter_list`?
+    ///               abstract method parameter list won't have a promoted property, so some of the logic
+    ///               here can be avoided for performance.
+    pub(in crate::parser) fn method_parameter_list(
+        &self,
+        state: &mut State,
+    ) -> Result<MethodParameterList, ParseError> {
         let mut class_name = String::new();
         let construct: i8 = match state.scope()? {
-            Scope::Function(_) | Scope::AnonymousFunction(_) | Scope::ArrowFunction(_) => 0,
             Scope::Method(name, flags) => {
                 if name.to_string() != "__construct" {
                     0
@@ -37,7 +114,7 @@ impl Parser {
                         // can have either abstract or concret ctor,
                         // depens on method flag.
                         Scope::Class(name, _, _) | Scope::Trait(name) => {
-                            if flags.contains(&MethodFlag::Abstract) {
+                            if flags.has_abstract() {
                                 1
                             } else {
                                 class_name = state.named(name);
@@ -49,21 +126,22 @@ impl Parser {
                     }
                 }
             }
-            _ => unreachable!(),
+            scope => unreachable!("shouldn't reach scope `{:?}`", scope),
         };
 
+        let mut members = Vec::new();
+
+        let list_start = state.current.span;
         self.lparen(state)?;
 
         state.skip_comments();
 
         while !state.is_eof() && state.current.kind != TokenKind::RightParen {
+            let start = state.current.span;
+
             self.gather_attributes(state)?;
 
-            let flags: Vec<PropertyFlag> = self
-                .promoted_property_flags(state)?
-                .iter()
-                .map(|f| f.into())
-                .collect();
+            let flags = self.get_promoted_property_modifier_group(self.modifiers(state)?)?;
 
             let ty = self.get_optional_type(state)?;
 
@@ -114,7 +192,7 @@ impl Parser {
                         }
                     }
                     None => {
-                        if flags.contains(&PropertyFlag::Readonly) {
+                        if flags.has_readonly() {
                             return Err(ParseError::MissingTypeForReadonlyProperty(
                                 class_name,
                                 var.to_string(),
@@ -131,7 +209,11 @@ impl Parser {
                 default = Some(self.expression(state, Precedence::Lowest)?);
             }
 
-            params.push(Param {
+            let end = state.current.span;
+
+            members.push(MethodParameter {
+                start,
+                end,
                 name: var,
                 attributes: state.get_attributes(),
                 r#type: ty,
@@ -152,7 +234,13 @@ impl Parser {
 
         self.rparen(state)?;
 
-        Ok(params)
+        let list_end = state.current.span;
+
+        Ok(MethodParameterList {
+            start: list_start,
+            end: list_end,
+            members,
+        })
     }
 
     pub(in crate::parser) fn args_list(&self, state: &mut State) -> ParseResult<Vec<Arg>> {

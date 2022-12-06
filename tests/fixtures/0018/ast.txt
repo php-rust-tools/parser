@@ -1,37 +1,57 @@
 [
-    Function {
-        name: Identifier {
+    Function(
+        Function {
             start: (
                 3,
-                10,
+                1,
             ),
-            name: "a",
             end: (
-                3,
-                11,
+                9,
+                1,
             ),
-        },
-        attributes: [],
-        params: [],
-        body: [
-            Echo {
-                values: [
-                    LiteralString {
-                        value: "looping..\n",
-                    },
-                ],
-            },
-            Return {
-                value: Some(
-                    Null,
+            name: Identifier {
+                start: (
+                    3,
+                    10,
+                ),
+                name: "a",
+                end: (
+                    3,
+                    11,
                 ),
             },
-        ],
-        return_type: Some(
-            Null,
-        ),
-        by_ref: false,
-    },
+            attributes: [],
+            parameters: FunctionParameterList {
+                start: (
+                    3,
+                    11,
+                ),
+                end: (
+                    3,
+                    13,
+                ),
+                members: [],
+            },
+            return_type: Some(
+                Null,
+            ),
+            by_ref: false,
+            body: [
+                Echo {
+                    values: [
+                        LiteralString {
+                            value: "looping..\n",
+                        },
+                    ],
+                },
+                Return {
+                    value: Some(
+                        Null,
+                    ),
+                },
+            ],
+        },
+    ),
     Expression {
         expr: Infix {
             lhs: Variable(

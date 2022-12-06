@@ -2,24 +2,44 @@
     BracedNamespace {
         name: None,
         body: [
-            Function {
-                name: Identifier {
+            Function(
+                Function {
                     start: (
                         4,
-                        14,
+                        5,
                     ),
-                    name: "globalFunc",
                     end: (
-                        4,
-                        24,
+                        5,
+                        1,
                     ),
+                    name: Identifier {
+                        start: (
+                            4,
+                            14,
+                        ),
+                        name: "globalFunc",
+                        end: (
+                            4,
+                            24,
+                        ),
+                    },
+                    attributes: [],
+                    parameters: FunctionParameterList {
+                        start: (
+                            4,
+                            24,
+                        ),
+                        end: (
+                            4,
+                            27,
+                        ),
+                        members: [],
+                    },
+                    return_type: None,
+                    by_ref: false,
+                    body: [],
                 },
-                attributes: [],
-                params: [],
-                body: [],
-                return_type: None,
-                by_ref: false,
-            },
+            ),
         ],
     },
     BracedNamespace {
@@ -53,15 +73,35 @@
                         },
                     ),
                     op: Assign,
-                    rhs: Closure {
-                        params: [],
-                        attributes: [],
-                        uses: [],
-                        return_type: None,
-                        body: [],
-                        static: false,
-                        by_ref: false,
-                    },
+                    rhs: Closure(
+                        Closure {
+                            start: (
+                                8,
+                                10,
+                            ),
+                            end: (
+                                8,
+                                24,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    8,
+                                    19,
+                                ),
+                                end: (
+                                    8,
+                                    22,
+                                ),
+                                members: [],
+                            },
+                            return_ty: None,
+                            uses: [],
+                            by_ref: false,
+                            body: [],
+                            static: false,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -80,35 +120,62 @@
                         },
                     ),
                     op: Assign,
-                    rhs: Closure {
-                        params: [
-                            Param {
-                                name: Variable {
-                                    start: (
-                                        9,
-                                        21,
-                                    ),
-                                    name: "b",
-                                    end: (
-                                        9,
-                                        23,
-                                    ),
-                                },
-                                attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                flags: [],
-                                by_ref: true,
+                    rhs: Closure(
+                        Closure {
+                            start: (
+                                9,
+                                10,
+                            ),
+                            end: (
+                                9,
+                                27,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    9,
+                                    19,
+                                ),
+                                end: (
+                                    9,
+                                    25,
+                                ),
+                                members: [
+                                    FunctionParameter {
+                                        start: (
+                                            9,
+                                            20,
+                                        ),
+                                        end: (
+                                            9,
+                                            23,
+                                        ),
+                                        name: Variable {
+                                            start: (
+                                                9,
+                                                21,
+                                            ),
+                                            name: "b",
+                                            end: (
+                                                9,
+                                                23,
+                                            ),
+                                        },
+                                        attributes: [],
+                                        type: None,
+                                        variadic: false,
+                                        default: None,
+                                        by_ref: true,
+                                    },
+                                ],
                             },
-                        ],
-                        attributes: [],
-                        uses: [],
-                        return_type: None,
-                        body: [],
-                        static: false,
-                        by_ref: false,
-                    },
+                            return_ty: None,
+                            uses: [],
+                            by_ref: false,
+                            body: [],
+                            static: false,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -127,15 +194,35 @@
                         },
                     ),
                     op: Assign,
-                    rhs: Closure {
-                        params: [],
-                        attributes: [],
-                        uses: [],
-                        return_type: None,
-                        body: [],
-                        static: false,
-                        by_ref: true,
-                    },
+                    rhs: Closure(
+                        Closure {
+                            start: (
+                                10,
+                                10,
+                            ),
+                            end: (
+                                10,
+                                25,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    10,
+                                    20,
+                                ),
+                                end: (
+                                    10,
+                                    23,
+                                ),
+                                members: [],
+                            },
+                            return_ty: None,
+                            uses: [],
+                            by_ref: true,
+                            body: [],
+                            static: false,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -154,53 +241,80 @@
                         },
                     ),
                     op: Assign,
-                    rhs: Closure {
-                        params: [
-                            Param {
-                                name: Variable {
-                                    start: (
-                                        11,
-                                        22,
-                                    ),
-                                    name: "b",
-                                    end: (
-                                        11,
-                                        24,
-                                    ),
-                                },
-                                attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                flags: [],
-                                by_ref: true,
-                            },
-                        ],
-                        attributes: [],
-                        uses: [],
-                        return_type: None,
-                        body: [
-                            Return {
-                                value: Some(
-                                    Variable(
-                                        Variable {
+                    rhs: Closure(
+                        Closure {
+                            start: (
+                                11,
+                                10,
+                            ),
+                            end: (
+                                11,
+                                40,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    11,
+                                    20,
+                                ),
+                                end: (
+                                    11,
+                                    26,
+                                ),
+                                members: [
+                                    FunctionParameter {
+                                        start: (
+                                            11,
+                                            21,
+                                        ),
+                                        end: (
+                                            11,
+                                            24,
+                                        ),
+                                        name: Variable {
                                             start: (
                                                 11,
-                                                35,
+                                                22,
                                             ),
                                             name: "b",
                                             end: (
                                                 11,
-                                                37,
+                                                24,
                                             ),
                                         },
-                                    ),
-                                ),
+                                        attributes: [],
+                                        type: None,
+                                        variadic: false,
+                                        default: None,
+                                        by_ref: true,
+                                    },
+                                ],
                             },
-                        ],
-                        static: false,
-                        by_ref: true,
-                    },
+                            return_ty: None,
+                            uses: [],
+                            by_ref: true,
+                            body: [
+                                Return {
+                                    value: Some(
+                                        Variable(
+                                            Variable {
+                                                start: (
+                                                    11,
+                                                    35,
+                                                ),
+                                                name: "b",
+                                                end: (
+                                                    11,
+                                                    37,
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            static: false,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -219,14 +333,34 @@
                         },
                     ),
                     op: Assign,
-                    rhs: ArrowFunction {
-                        params: [],
-                        attributes: [],
-                        return_type: None,
-                        expr: Null,
-                        by_ref: false,
-                        static: false,
-                    },
+                    rhs: ArrowFunction(
+                        ArrowFunction {
+                            start: (
+                                12,
+                                10,
+                            ),
+                            end: (
+                                12,
+                                23,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    12,
+                                    13,
+                                ),
+                                end: (
+                                    12,
+                                    16,
+                                ),
+                                members: [],
+                            },
+                            return_type: None,
+                            by_ref: false,
+                            body: Null,
+                            static: false,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -245,34 +379,61 @@
                         },
                     ),
                     op: Assign,
-                    rhs: ArrowFunction {
-                        params: [
-                            Param {
-                                name: Variable {
-                                    start: (
-                                        13,
-                                        15,
-                                    ),
-                                    name: "b",
-                                    end: (
-                                        13,
-                                        17,
-                                    ),
-                                },
-                                attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                flags: [],
-                                by_ref: true,
+                    rhs: ArrowFunction(
+                        ArrowFunction {
+                            start: (
+                                13,
+                                10,
+                            ),
+                            end: (
+                                13,
+                                26,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    13,
+                                    13,
+                                ),
+                                end: (
+                                    13,
+                                    19,
+                                ),
+                                members: [
+                                    FunctionParameter {
+                                        start: (
+                                            13,
+                                            14,
+                                        ),
+                                        end: (
+                                            13,
+                                            17,
+                                        ),
+                                        name: Variable {
+                                            start: (
+                                                13,
+                                                15,
+                                            ),
+                                            name: "b",
+                                            end: (
+                                                13,
+                                                17,
+                                            ),
+                                        },
+                                        attributes: [],
+                                        type: None,
+                                        variadic: false,
+                                        default: None,
+                                        by_ref: true,
+                                    },
+                                ],
                             },
-                        ],
-                        attributes: [],
-                        return_type: None,
-                        expr: Null,
-                        by_ref: false,
-                        static: false,
-                    },
+                            return_type: None,
+                            by_ref: false,
+                            body: Null,
+                            static: false,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -291,14 +452,34 @@
                         },
                     ),
                     op: Assign,
-                    rhs: ArrowFunction {
-                        params: [],
-                        attributes: [],
-                        return_type: None,
-                        expr: Null,
-                        by_ref: true,
-                        static: false,
-                    },
+                    rhs: ArrowFunction(
+                        ArrowFunction {
+                            start: (
+                                14,
+                                10,
+                            ),
+                            end: (
+                                14,
+                                24,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    14,
+                                    14,
+                                ),
+                                end: (
+                                    14,
+                                    17,
+                                ),
+                                members: [],
+                            },
+                            return_type: None,
+                            by_ref: true,
+                            body: Null,
+                            static: false,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -317,46 +498,73 @@
                         },
                     ),
                     op: Assign,
-                    rhs: ArrowFunction {
-                        params: [
-                            Param {
-                                name: Variable {
+                    rhs: ArrowFunction(
+                        ArrowFunction {
+                            start: (
+                                15,
+                                10,
+                            ),
+                            end: (
+                                15,
+                                25,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    15,
+                                    14,
+                                ),
+                                end: (
+                                    15,
+                                    20,
+                                ),
+                                members: [
+                                    FunctionParameter {
+                                        start: (
+                                            15,
+                                            15,
+                                        ),
+                                        end: (
+                                            15,
+                                            18,
+                                        ),
+                                        name: Variable {
+                                            start: (
+                                                15,
+                                                16,
+                                            ),
+                                            name: "b",
+                                            end: (
+                                                15,
+                                                18,
+                                            ),
+                                        },
+                                        attributes: [],
+                                        type: None,
+                                        variadic: false,
+                                        default: None,
+                                        by_ref: true,
+                                    },
+                                ],
+                            },
+                            return_type: None,
+                            by_ref: true,
+                            body: Variable(
+                                Variable {
                                     start: (
                                         15,
-                                        16,
+                                        23,
                                     ),
                                     name: "b",
                                     end: (
                                         15,
-                                        18,
+                                        25,
                                     ),
                                 },
-                                attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                flags: [],
-                                by_ref: true,
-                            },
-                        ],
-                        attributes: [],
-                        return_type: None,
-                        expr: Variable(
-                            Variable {
-                                start: (
-                                    15,
-                                    23,
-                                ),
-                                name: "b",
-                                end: (
-                                    15,
-                                    25,
-                                ),
-                            },
-                        ),
-                        by_ref: true,
-                        static: false,
-                    },
+                            ),
+                            static: false,
+                        },
+                    ),
                 },
             },
         ],
@@ -392,15 +600,35 @@
                         },
                     ),
                     op: Assign,
-                    rhs: Closure {
-                        params: [],
-                        attributes: [],
-                        uses: [],
-                        return_type: None,
-                        body: [],
-                        static: true,
-                        by_ref: false,
-                    },
+                    rhs: Closure(
+                        Closure {
+                            start: (
+                                19,
+                                10,
+                            ),
+                            end: (
+                                19,
+                                31,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    19,
+                                    26,
+                                ),
+                                end: (
+                                    19,
+                                    29,
+                                ),
+                                members: [],
+                            },
+                            return_ty: None,
+                            uses: [],
+                            by_ref: false,
+                            body: [],
+                            static: true,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -419,35 +647,62 @@
                         },
                     ),
                     op: Assign,
-                    rhs: Closure {
-                        params: [
-                            Param {
-                                name: Variable {
-                                    start: (
-                                        20,
-                                        28,
-                                    ),
-                                    name: "b",
-                                    end: (
-                                        20,
-                                        30,
-                                    ),
-                                },
-                                attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                flags: [],
-                                by_ref: true,
+                    rhs: Closure(
+                        Closure {
+                            start: (
+                                20,
+                                10,
+                            ),
+                            end: (
+                                20,
+                                34,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    20,
+                                    26,
+                                ),
+                                end: (
+                                    20,
+                                    32,
+                                ),
+                                members: [
+                                    FunctionParameter {
+                                        start: (
+                                            20,
+                                            27,
+                                        ),
+                                        end: (
+                                            20,
+                                            30,
+                                        ),
+                                        name: Variable {
+                                            start: (
+                                                20,
+                                                28,
+                                            ),
+                                            name: "b",
+                                            end: (
+                                                20,
+                                                30,
+                                            ),
+                                        },
+                                        attributes: [],
+                                        type: None,
+                                        variadic: false,
+                                        default: None,
+                                        by_ref: true,
+                                    },
+                                ],
                             },
-                        ],
-                        attributes: [],
-                        uses: [],
-                        return_type: None,
-                        body: [],
-                        static: true,
-                        by_ref: false,
-                    },
+                            return_ty: None,
+                            uses: [],
+                            by_ref: false,
+                            body: [],
+                            static: true,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -466,15 +721,35 @@
                         },
                     ),
                     op: Assign,
-                    rhs: Closure {
-                        params: [],
-                        attributes: [],
-                        uses: [],
-                        return_type: None,
-                        body: [],
-                        static: true,
-                        by_ref: true,
-                    },
+                    rhs: Closure(
+                        Closure {
+                            start: (
+                                21,
+                                10,
+                            ),
+                            end: (
+                                21,
+                                32,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    21,
+                                    27,
+                                ),
+                                end: (
+                                    21,
+                                    30,
+                                ),
+                                members: [],
+                            },
+                            return_ty: None,
+                            uses: [],
+                            by_ref: true,
+                            body: [],
+                            static: true,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -493,53 +768,80 @@
                         },
                     ),
                     op: Assign,
-                    rhs: Closure {
-                        params: [
-                            Param {
-                                name: Variable {
-                                    start: (
-                                        22,
-                                        29,
-                                    ),
-                                    name: "b",
-                                    end: (
-                                        22,
-                                        31,
-                                    ),
-                                },
-                                attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                flags: [],
-                                by_ref: true,
-                            },
-                        ],
-                        attributes: [],
-                        uses: [],
-                        return_type: None,
-                        body: [
-                            Return {
-                                value: Some(
-                                    Variable(
-                                        Variable {
+                    rhs: Closure(
+                        Closure {
+                            start: (
+                                22,
+                                10,
+                            ),
+                            end: (
+                                22,
+                                47,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    22,
+                                    27,
+                                ),
+                                end: (
+                                    22,
+                                    33,
+                                ),
+                                members: [
+                                    FunctionParameter {
+                                        start: (
+                                            22,
+                                            28,
+                                        ),
+                                        end: (
+                                            22,
+                                            31,
+                                        ),
+                                        name: Variable {
                                             start: (
                                                 22,
-                                                42,
+                                                29,
                                             ),
                                             name: "b",
                                             end: (
                                                 22,
-                                                44,
+                                                31,
                                             ),
                                         },
-                                    ),
-                                ),
+                                        attributes: [],
+                                        type: None,
+                                        variadic: false,
+                                        default: None,
+                                        by_ref: true,
+                                    },
+                                ],
                             },
-                        ],
-                        static: true,
-                        by_ref: true,
-                    },
+                            return_ty: None,
+                            uses: [],
+                            by_ref: true,
+                            body: [
+                                Return {
+                                    value: Some(
+                                        Variable(
+                                            Variable {
+                                                start: (
+                                                    22,
+                                                    42,
+                                                ),
+                                                name: "b",
+                                                end: (
+                                                    22,
+                                                    44,
+                                                ),
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            static: true,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -558,14 +860,34 @@
                         },
                     ),
                     op: Assign,
-                    rhs: ArrowFunction {
-                        params: [],
-                        attributes: [],
-                        return_type: None,
-                        expr: Null,
-                        by_ref: false,
-                        static: true,
-                    },
+                    rhs: ArrowFunction(
+                        ArrowFunction {
+                            start: (
+                                23,
+                                10,
+                            ),
+                            end: (
+                                23,
+                                30,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    23,
+                                    20,
+                                ),
+                                end: (
+                                    23,
+                                    23,
+                                ),
+                                members: [],
+                            },
+                            return_type: None,
+                            by_ref: false,
+                            body: Null,
+                            static: true,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -584,34 +906,61 @@
                         },
                     ),
                     op: Assign,
-                    rhs: ArrowFunction {
-                        params: [
-                            Param {
-                                name: Variable {
-                                    start: (
-                                        24,
-                                        22,
-                                    ),
-                                    name: "b",
-                                    end: (
-                                        24,
-                                        24,
-                                    ),
-                                },
-                                attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                flags: [],
-                                by_ref: true,
+                    rhs: ArrowFunction(
+                        ArrowFunction {
+                            start: (
+                                24,
+                                10,
+                            ),
+                            end: (
+                                24,
+                                33,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    24,
+                                    20,
+                                ),
+                                end: (
+                                    24,
+                                    26,
+                                ),
+                                members: [
+                                    FunctionParameter {
+                                        start: (
+                                            24,
+                                            21,
+                                        ),
+                                        end: (
+                                            24,
+                                            24,
+                                        ),
+                                        name: Variable {
+                                            start: (
+                                                24,
+                                                22,
+                                            ),
+                                            name: "b",
+                                            end: (
+                                                24,
+                                                24,
+                                            ),
+                                        },
+                                        attributes: [],
+                                        type: None,
+                                        variadic: false,
+                                        default: None,
+                                        by_ref: true,
+                                    },
+                                ],
                             },
-                        ],
-                        attributes: [],
-                        return_type: None,
-                        expr: Null,
-                        by_ref: false,
-                        static: true,
-                    },
+                            return_type: None,
+                            by_ref: false,
+                            body: Null,
+                            static: true,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -630,14 +979,34 @@
                         },
                     ),
                     op: Assign,
-                    rhs: ArrowFunction {
-                        params: [],
-                        attributes: [],
-                        return_type: None,
-                        expr: Null,
-                        by_ref: true,
-                        static: true,
-                    },
+                    rhs: ArrowFunction(
+                        ArrowFunction {
+                            start: (
+                                25,
+                                10,
+                            ),
+                            end: (
+                                25,
+                                31,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    25,
+                                    21,
+                                ),
+                                end: (
+                                    25,
+                                    24,
+                                ),
+                                members: [],
+                            },
+                            return_type: None,
+                            by_ref: true,
+                            body: Null,
+                            static: true,
+                        },
+                    ),
                 },
             },
             Expression {
@@ -656,46 +1025,73 @@
                         },
                     ),
                     op: Assign,
-                    rhs: ArrowFunction {
-                        params: [
-                            Param {
-                                name: Variable {
+                    rhs: ArrowFunction(
+                        ArrowFunction {
+                            start: (
+                                26,
+                                10,
+                            ),
+                            end: (
+                                26,
+                                32,
+                            ),
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    26,
+                                    21,
+                                ),
+                                end: (
+                                    26,
+                                    27,
+                                ),
+                                members: [
+                                    FunctionParameter {
+                                        start: (
+                                            26,
+                                            22,
+                                        ),
+                                        end: (
+                                            26,
+                                            25,
+                                        ),
+                                        name: Variable {
+                                            start: (
+                                                26,
+                                                23,
+                                            ),
+                                            name: "b",
+                                            end: (
+                                                26,
+                                                25,
+                                            ),
+                                        },
+                                        attributes: [],
+                                        type: None,
+                                        variadic: false,
+                                        default: None,
+                                        by_ref: true,
+                                    },
+                                ],
+                            },
+                            return_type: None,
+                            by_ref: true,
+                            body: Variable(
+                                Variable {
                                     start: (
                                         26,
-                                        23,
+                                        30,
                                     ),
                                     name: "b",
                                     end: (
                                         26,
-                                        25,
+                                        32,
                                     ),
                                 },
-                                attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                flags: [],
-                                by_ref: true,
-                            },
-                        ],
-                        attributes: [],
-                        return_type: None,
-                        expr: Variable(
-                            Variable {
-                                start: (
-                                    26,
-                                    30,
-                                ),
-                                name: "b",
-                                end: (
-                                    26,
-                                    32,
-                                ),
-                            },
-                        ),
-                        by_ref: true,
-                        static: true,
-                    },
+                            ),
+                            static: true,
+                        },
+                    ),
                 },
             },
         ],
@@ -715,136 +1111,210 @@
             },
         ),
         body: [
-            Function {
-                name: Identifier {
+            Function(
+                Function {
                     start: (
                         30,
-                        14,
+                        5,
                     ),
-                    name: "a",
                     end: (
-                        30,
-                        15,
+                        31,
+                        5,
                     ),
-                },
-                attributes: [],
-                params: [
-                    Param {
-                        name: Variable {
-                            start: (
-                                30,
-                                17,
-                            ),
-                            name: "b",
-                            end: (
-                                30,
-                                19,
-                            ),
-                        },
-                        attributes: [],
-                        type: None,
-                        variadic: false,
-                        default: None,
-                        flags: [],
-                        by_ref: true,
+                    name: Identifier {
+                        start: (
+                            30,
+                            14,
+                        ),
+                        name: "a",
+                        end: (
+                            30,
+                            15,
+                        ),
                     },
-                ],
-                body: [],
-                return_type: None,
-                by_ref: false,
-            },
-            Function {
-                name: Identifier {
+                    attributes: [],
+                    parameters: FunctionParameterList {
+                        start: (
+                            30,
+                            15,
+                        ),
+                        end: (
+                            30,
+                            21,
+                        ),
+                        members: [
+                            FunctionParameter {
+                                start: (
+                                    30,
+                                    16,
+                                ),
+                                end: (
+                                    30,
+                                    19,
+                                ),
+                                name: Variable {
+                                    start: (
+                                        30,
+                                        17,
+                                    ),
+                                    name: "b",
+                                    end: (
+                                        30,
+                                        19,
+                                    ),
+                                },
+                                attributes: [],
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                by_ref: true,
+                            },
+                        ],
+                    },
+                    return_type: None,
+                    by_ref: false,
+                    body: [],
+                },
+            ),
+            Function(
+                Function {
                     start: (
                         31,
-                        15,
+                        5,
                     ),
-                    name: "b",
                     end: (
-                        31,
-                        16,
+                        32,
+                        5,
                     ),
-                },
-                attributes: [],
-                params: [
-                    Param {
-                        name: Variable {
-                            start: (
-                                31,
-                                17,
-                            ),
-                            name: "b",
-                            end: (
-                                31,
-                                19,
-                            ),
-                        },
-                        attributes: [],
-                        type: None,
-                        variadic: false,
-                        default: None,
-                        flags: [],
-                        by_ref: false,
+                    name: Identifier {
+                        start: (
+                            31,
+                            15,
+                        ),
+                        name: "b",
+                        end: (
+                            31,
+                            16,
+                        ),
                     },
-                ],
-                body: [
-                    Return {
-                        value: Some(
-                            Variable(
-                                Variable {
+                    attributes: [],
+                    parameters: FunctionParameterList {
+                        start: (
+                            31,
+                            16,
+                        ),
+                        end: (
+                            31,
+                            21,
+                        ),
+                        members: [
+                            FunctionParameter {
+                                start: (
+                                    31,
+                                    17,
+                                ),
+                                end: (
+                                    31,
+                                    19,
+                                ),
+                                name: Variable {
                                     start: (
                                         31,
-                                        30,
+                                        17,
                                     ),
                                     name: "b",
                                     end: (
                                         31,
-                                        32,
+                                        19,
                                     ),
                                 },
-                            ),
-                        ),
+                                attributes: [],
+                                type: None,
+                                variadic: false,
+                                default: None,
+                                by_ref: false,
+                            },
+                        ],
                     },
-                ],
-                return_type: None,
-                by_ref: true,
-            },
-            Function {
-                name: Identifier {
+                    return_type: None,
+                    by_ref: true,
+                    body: [
+                        Return {
+                            value: Some(
+                                Variable(
+                                    Variable {
+                                        start: (
+                                            31,
+                                            30,
+                                        ),
+                                        name: "b",
+                                        end: (
+                                            31,
+                                            32,
+                                        ),
+                                    },
+                                ),
+                            ),
+                        },
+                    ],
+                },
+            ),
+            Function(
+                Function {
                     start: (
                         32,
-                        15,
+                        5,
                     ),
-                    name: "c",
                     end: (
-                        32,
-                        16,
+                        33,
+                        1,
                     ),
-                },
-                attributes: [],
-                params: [],
-                body: [
-                    Return {
-                        value: Some(
-                            Variable(
-                                Variable {
-                                    start: (
-                                        32,
-                                        28,
-                                    ),
-                                    name: "b",
-                                    end: (
-                                        32,
-                                        30,
-                                    ),
-                                },
-                            ),
+                    name: Identifier {
+                        start: (
+                            32,
+                            15,
+                        ),
+                        name: "c",
+                        end: (
+                            32,
+                            16,
                         ),
                     },
-                ],
-                return_type: None,
-                by_ref: true,
-            },
+                    attributes: [],
+                    parameters: FunctionParameterList {
+                        start: (
+                            32,
+                            16,
+                        ),
+                        end: (
+                            32,
+                            19,
+                        ),
+                        members: [],
+                    },
+                    return_type: None,
+                    by_ref: true,
+                    body: [
+                        Return {
+                            value: Some(
+                                Variable(
+                                    Variable {
+                                        start: (
+                                            32,
+                                            28,
+                                        ),
+                                        name: "b",
+                                        end: (
+                                            32,
+                                            30,
+                                        ),
+                                    },
+                                ),
+                            ),
+                        },
+                    ],
+                },
+            ),
         ],
     },
 ]
