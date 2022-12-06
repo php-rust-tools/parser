@@ -248,6 +248,7 @@ impl Parser {
         state.skip_comments();
 
         let mut args = Vec::new();
+        let mut has_used_named_arguments = false;
 
         while !state.is_eof() && state.current.kind != TokenKind::RightParen {
             let mut name = None;
@@ -257,10 +258,15 @@ impl Parser {
                 && state.peek.kind == TokenKind::Colon
             {
                 name = Some(self.ident_maybe_reserved(state)?);
+                has_used_named_arguments = true;
                 state.next();
             } else if state.current.kind == TokenKind::Ellipsis {
                 state.next();
                 unpack = true;
+            }
+
+            if name.is_none() && has_used_named_arguments {
+                return Err(ParseError::CannotUsePositionalArgumentAfterNamedArgument(state.current.span));
             }
 
             if unpack && state.current.kind == TokenKind::RightParen {

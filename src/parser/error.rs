@@ -48,6 +48,7 @@ pub enum ParseError {
     IllegalSpreadOperator(Span),
     CannotAssignReferenceToNonReferencableValue(Span),
     CannotMixKeyedAndUnkeyedEntries(Span),
+    CannotUsePositionalArgumentAfterNamedArgument(Span),
 }
 
 impl From<SyntaxError> for ParseError {
@@ -113,6 +114,7 @@ impl Display for ParseError {
             Self::IllegalSpreadOperator(span) => write!(f, "Parse Error: Cannot use spread operator on line {} column {}.", span.0, span.1),
             Self::CannotAssignReferenceToNonReferencableValue(span) => write!(f, "Parse Error: cannot assign reference to non-referencable value on line {} column {}", span.0, span.1),
             Self::CannotMixKeyedAndUnkeyedEntries(span) => write!(f, "Parse Error: cannot mix keyed and un-keyed entries on line {}", span.0),
+            Self::CannotUsePositionalArgumentAfterNamedArgument(span) => write!(f, "Parse Error: cannot use positional argument after named argument on line {}", span.0),
         }
     }
 }
