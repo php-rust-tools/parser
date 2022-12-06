@@ -1,4 +1,3 @@
-use crate::expect_token;
 use crate::expected_scope;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
@@ -34,7 +33,7 @@ impl Parser {
             false
         };
 
-        expect_token!([TokenKind::Function], state, ["`function`"]);
+        self.skip(state, TokenKind::Function)?;
 
         let by_ref = if state.current.kind == TokenKind::Ampersand {
             state.next();
@@ -124,7 +123,7 @@ impl Parser {
             false
         };
 
-        expect_token!([TokenKind::Fn], state, ["`fn`"]);
+        self.skip(state, TokenKind::Fn)?;
 
         let by_ref = if state.current.kind == TokenKind::Ampersand {
             state.next();
@@ -143,7 +142,7 @@ impl Parser {
             return_type = Some(self.get_type(state)?);
         }
 
-        expect_token!([TokenKind::DoubleArrow], state, ["`=>`"]);
+        self.skip(state, TokenKind::DoubleArrow)?;
 
         let body = scoped!(state, Scope::ArrowFunction(is_static), {
             Box::new(self.expression(state, Precedence::Lowest)?)
@@ -166,7 +165,7 @@ impl Parser {
     pub(in crate::parser) fn function(&self, state: &mut State) -> ParseResult<Statement> {
         let start = state.current.span;
 
-        expect_token!([TokenKind::Function], state, ["`function`"]);
+        self.skip(state, TokenKind::Function)?;
 
         let by_ref = if state.current.kind == TokenKind::Ampersand {
             state.next();
@@ -231,7 +230,7 @@ impl Parser {
         modifiers: MethodModifierGroup,
         start: Span,
     ) -> ParseResult<Method> {
-        expect_token!([TokenKind::Function], state, ["`function`"]);
+        self.skip(state, TokenKind::Function)?;
 
         let by_ref = if state.current.kind == TokenKind::Ampersand {
             state.next();

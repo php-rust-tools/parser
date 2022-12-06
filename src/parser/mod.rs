@@ -143,7 +143,7 @@ impl Parser {
                 loop {
                     let name = self.ident(state)?;
 
-                    expect_token!([TokenKind::Equals], state, "`=`");
+                    self.skip(state, TokenKind::Equals)?;
 
                     let value = self.expression(state, Precedence::Lowest)?;
 
@@ -297,7 +297,7 @@ impl Parser {
                     loop {
                         let key = self.ident(state)?;
 
-                        expect_token!([TokenKind::Equals], state, "`=`");
+                        self.skip(state, TokenKind::Equals)?;
 
                         let value = expect_literal!(state);
 
@@ -320,7 +320,7 @@ impl Parser {
                     } else if state.current.kind == TokenKind::Colon {
                         self.colon(state)?;
                         let b = self.block(state, &TokenKind::EndDeclare)?;
-                        expect_token!([TokenKind::EndDeclare], state, "`enddeclare`");
+                        self.skip(state, TokenKind::EndDeclare)?;
                         self.semicolon(state)?;
                         b
                     } else {
@@ -446,7 +446,7 @@ impl Parser {
                     let body = self.block(state, &TokenKind::RightBrace)?;
                     self.right_brace(state)?;
 
-                    expect_token!([TokenKind::While], state, "`while`");
+                    self.skip(state, TokenKind::While)?;
 
                     self.left_parenthesis(state)?;
                     let condition = self.expression(state, Precedence::Lowest)?;
@@ -476,7 +476,7 @@ impl Parser {
                     if end_token == TokenKind::RightBrace {
                         self.right_brace(state)?;
                     } else {
-                        expect_token!([TokenKind::EndWhile], state, "`endwhile`");
+                        self.skip(state, TokenKind::EndWhile)?;
                         self.semicolon(state)?;
                     }
 
@@ -548,7 +548,7 @@ impl Parser {
                     let then = self.block(state, &end_token)?;
 
                     if end_token == TokenKind::EndFor {
-                        expect_token!([TokenKind::EndFor], state, "`endfor`");
+                        self.skip(state, TokenKind::EndFor)?;
                         self.semicolon(state)?;
                     } else {
                         self.right_brace(state)?;
@@ -568,7 +568,7 @@ impl Parser {
 
                     let expr = self.expression(state, Precedence::Lowest)?;
 
-                    expect_token!([TokenKind::As], state, ["`as`"]);
+                    self.skip(state, TokenKind::As)?;
 
                     let mut by_ref = state.current.kind == TokenKind::Ampersand;
                     if by_ref {
@@ -604,7 +604,7 @@ impl Parser {
                     let body = self.block(state, &end_token)?;
 
                     if end_token == TokenKind::EndForeach {
-                        expect_token!([TokenKind::EndForeach], state, "`endforeach`");
+                        self.skip(state, TokenKind::EndForeach)?;
                         self.semicolon(state)?;
                     } else {
                         self.right_brace(state)?;
@@ -643,11 +643,8 @@ impl Parser {
 
                                 let condition = self.expression(state, Precedence::Lowest)?;
 
-                                expect_token!(
-                                    [TokenKind::Colon, TokenKind::SemiColon],
-                                    state,
-                                    ["`:`", "`;`"]
-                                );
+                                self.skip_any_of(state, &[TokenKind::Colon, TokenKind::SemiColon])?;
+
                                 let mut body = Block::new();
 
                                 while state.current.kind != TokenKind::Case
@@ -666,11 +663,7 @@ impl Parser {
                             TokenKind::Default => {
                                 state.next();
 
-                                expect_token!(
-                                    [TokenKind::Colon, TokenKind::SemiColon],
-                                    state,
-                                    ["`:`", "`;`"]
-                                );
+                                self.skip_any_of(state, &[TokenKind::Colon, TokenKind::SemiColon])?;
 
                                 let mut body = Block::new();
 
@@ -693,7 +686,7 @@ impl Parser {
                     }
 
                     if end_token == TokenKind::EndSwitch {
-                        expect_token!([TokenKind::EndSwitch], state, ["`endswitch`"]);
+                        self.skip(state, TokenKind::EndSwitch)?;
                         self.semicolon(state)?;
                     } else {
                         self.right_brace(state)?;
@@ -760,7 +753,8 @@ impl Parser {
                                 r#else = Some(body);
                             }
 
-                            expect_token!([TokenKind::EndIf], state, ["`endif`"]);
+                            self.skip(state, TokenKind::EndIf)?;
+
                             self.semicolon(state)?;
 
                             Statement::If {
@@ -817,7 +811,7 @@ impl Parser {
                                 });
                             }
 
-                            expect_token!([TokenKind::Else], state, ["`else`"]);
+                            self.skip(state, TokenKind::Else)?;
 
                             self.left_brace(state)?;
 
@@ -1182,7 +1176,7 @@ impl Parser {
                                 state.next();
                             }
 
-                            expect_token!([TokenKind::DoubleArrow], state, "`=>`");
+                            self.double_arrow(state)?;
 
                             let body = self.expression(state, Precedence::Lowest)?;
 
@@ -1200,7 +1194,7 @@ impl Parser {
                             }
 
                             if !conditions.is_empty() {
-                                expect_token!([TokenKind::DoubleArrow], state, "`=>`");
+                                self.double_arrow(state)?;
                             } else {
                                 break;
                             }
@@ -1559,7 +1553,7 @@ impl Parser {
                 } else {
                     let index = self.expression(state, Precedence::Lowest)?;
 
-                    expect_token!([TokenKind::RightBracket], state, ["`]`"]);
+                    self.right_bracket(state)?;
 
                     Expression::ArrayIndex {
                         array: Box::new(lhs),
@@ -1777,9 +1771,13 @@ impl Parser {
                 // FIXME: This feels hacky. We should probably produce different tokens from the lexer
                 //        but since I already had the logic in place for parsing heredocs, this was
                 //        the fastest way to get nowdocs working too.
-                let mut s =
-                    expect_token!([TokenKind::StringPart(s) => s], state, "constant string");
-                let (indentation_type, indentation_amount) = expect_token!([TokenKind::EndDocString(_, indentation_type, indentation_amount) => (indentation_type, indentation_amount)], state, "label");
+                let mut s = expect_token!([
+                    TokenKind::StringPart(s) => s
+                ], state, "constant string");
+
+                let (indentation_type, indentation_amount) = expect_token!([
+                    TokenKind::EndDocString(_, indentation_type, indentation_amount) => (indentation_type, indentation_amount)
+                ], state, "label");
 
                 // FIXME: Hacky code, but it's late and I want to get this done.
                 if let Some(indentation_type) = indentation_type {
@@ -1866,7 +1864,7 @@ impl Parser {
                 // "{$expr}"
                 state.next();
                 let e = self.expression(state, Precedence::Lowest)?;
-                expect_token!([TokenKind::RightBrace], state, "`}`");
+                self.right_brace(state)?;
                 Some(StringPart::Expr(Box::new(e)))
             }
             TokenKind::Variable(_) => {
@@ -1912,7 +1910,8 @@ impl Parser {
                             }
                         };
 
-                        expect_token!([TokenKind::RightBracket], state, "`]`");
+                        self.right_bracket(state)?;
+
                         Expression::ArrayIndex {
                             array: Box::new(var),
                             index: Some(Box::new(index)),

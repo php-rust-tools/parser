@@ -1,4 +1,3 @@
-use crate::expect_token;
 use crate::expected_token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::Identifier;
@@ -236,7 +235,8 @@ impl Parser {
 
         let mut types = vec![other];
 
-        expect_token!([TokenKind::Pipe], state, ["|"]);
+        self.skip(state, TokenKind::Pipe)?;
+
         loop {
             let ty = if state.current.kind == TokenKind::LeftParen {
                 if within_dnf {
@@ -305,7 +305,8 @@ impl Parser {
 
         let mut types = vec![other];
 
-        expect_token!([TokenKind::Ampersand], state, ["&"]);
+        self.skip(state, TokenKind::Ampersand)?;
+
         loop {
             let ty = if state.current.kind == TokenKind::LeftParen {
                 if within_dnf {

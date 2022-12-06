@@ -12,7 +12,7 @@ impl Parser {
     pub(in crate::parser) fn ident(&self, state: &mut State) -> ParseResult<Identifier> {
         let name = peek_token!([
             TokenKind::Identifier(identifier) => {
-                identifier
+                identifier.clone()
             },
         ], state, "an identifier");
 
@@ -26,11 +26,8 @@ impl Parser {
     /// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
     pub(in crate::parser) fn name(&self, state: &mut State) -> ParseResult<Identifier> {
         let name = peek_token!([
-            TokenKind::Identifier(identifier) => {
-                identifier
-            },
-            TokenKind::QualifiedIdentifier(qualified) => {
-                qualified
+            TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => {
+                name.clone()
             },
         ], state, "an identifier");
 
@@ -43,29 +40,29 @@ impl Parser {
 
     /// Expect an optional unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
     pub(in crate::parser) fn optional_name(&self, state: &mut State) -> Option<Identifier> {
-        match state.current.kind.clone() {
+        let ident = match &state.current.kind {
             TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => {
-                let start = state.current.span;
-                state.next();
-                let end = state.current.span;
-
-                Some(Identifier { start, name, end })
+                Some(Identifier {
+                    start: state.current.span,
+                    name: name.clone(),
+                    end: state.peek.span,
+                })
             }
             _ => None,
+        };
+
+        if ident.is_some() {
+            state.next();
         }
+
+        ident
     }
 
     /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
     pub(in crate::parser) fn full_name(&self, state: &mut State) -> ParseResult<Identifier> {
         let name = peek_token!([
-            TokenKind::Identifier(identifier) => {
-                identifier
-            },
-            TokenKind::QualifiedIdentifier(qualified) => {
-                qualified
-            },
-            TokenKind::FullyQualifiedIdentifier(fully_qualified) => {
-                fully_qualified
+            TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
+                name.clone()
             },
         ], state, "an identifier");
 
@@ -78,7 +75,7 @@ impl Parser {
 
     pub(in crate::parser) fn var(&self, state: &mut State) -> ParseResult<Variable> {
         let name = peek_token!([
-            TokenKind::Variable(v) => v,
+            TokenKind::Variable(v) => v.clone(),
         ], state, "a variable");
 
         let start = state.current.span;

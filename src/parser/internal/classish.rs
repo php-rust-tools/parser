@@ -18,7 +18,7 @@ impl Parser {
     pub(in crate::parser) fn class_definition(&self, state: &mut State) -> ParseResult<Statement> {
         let modifiers = self.get_class_modifier_group(self.modifiers(state)?)?;
 
-        expect_token!([TokenKind::Class], state, ["`class`"]);
+        self.skip(state, TokenKind::Class)?;
 
         let name = self.ident(state)?;
 
@@ -80,7 +80,8 @@ impl Parser {
         &self,
         state: &mut State,
     ) -> ParseResult<Statement> {
-        expect_token!([TokenKind::Interface], state, ["`interface`"]);
+        self.skip(state, TokenKind::Interface)?;
+
         let name = self.ident(state)?;
 
         scoped!(state, Scope::Interface(name.clone()), {
@@ -121,7 +122,7 @@ impl Parser {
     }
 
     pub(in crate::parser) fn trait_definition(&self, state: &mut State) -> ParseResult<Statement> {
-        expect_token!([TokenKind::Trait], state, ["`trait`"]);
+        self.skip(state, TokenKind::Trait)?;
 
         let name = self.ident(state)?;
 
@@ -155,11 +156,11 @@ impl Parser {
         &self,
         state: &mut State,
     ) -> ParseResult<Expression> {
-        expect_token!([TokenKind::New], state, ["`new`"]);
+        self.skip(state, TokenKind::New)?;
 
         self.gather_attributes(state)?;
 
-        expect_token!([TokenKind::Class], state, ["`class`"]);
+        self.skip(state, TokenKind::Class)?;
 
         let mut args = vec![];
 
@@ -218,7 +219,7 @@ impl Parser {
     pub(in crate::parser) fn enum_definition(&self, state: &mut State) -> ParseResult<Statement> {
         let start = state.current.span;
 
-        expect_token!([TokenKind::Enum], state, ["`enum`"]);
+        self.skip(state, TokenKind::Enum)?;
 
         let name = self.ident(state)?;
 

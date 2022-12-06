@@ -54,6 +54,12 @@ impl<const N: usize> PartialEq<&[u8; N]> for ByteString {
     }
 }
 
+impl<const N: usize> PartialEq<&[u8; N]> for &ByteString {
+    fn eq(&self, other: &&[u8; N]) -> bool {
+        &self.0 == other
+    }
+}
+
 impl From<Vec<u8>> for ByteString {
     fn from(bytes: Vec<u8>) -> Self {
         ByteString::new(bytes)
