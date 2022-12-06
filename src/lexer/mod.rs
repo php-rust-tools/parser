@@ -5,15 +5,12 @@ pub mod token;
 mod macros;
 mod state;
 
-use std::num::IntErrorKind;
-
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::error::SyntaxError;
 use crate::lexer::error::SyntaxResult;
 use crate::lexer::state::StackFrame;
 use crate::lexer::state::State;
 use crate::lexer::token::OpenTagKind;
-use crate::lexer::token::Span;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 
@@ -1301,18 +1298,24 @@ impl Lexer {
     }
 
     fn tokenize_number(&self, state: &mut State) -> SyntaxResult<TokenKind> {
-        let mut buffer = String::new();
+        let mut buffer = Vec::new();
 
         let (base, kind) = match state.peek_buf() {
-            [b'0', b'B' | b'b', ..] => {
+            [a @ b'0', b @ b'B' | b @ b'b', ..] => {
+                buffer.push(*a);
+                buffer.push(*b);
                 state.skip(2);
                 (2, NumberKind::Int)
             }
-            [b'0', b'O' | b'o', ..] => {
+            [a @ b'0', b @ b'O' | b @ b'o', ..] => {
+                buffer.push(*a);
+                buffer.push(*b);
                 state.skip(2);
                 (8, NumberKind::Int)
             }
-            [b'0', b'X' | b'x', ..] => {
+            [a @ b'0', b @ b'X' | b @ b'x', ..] => {
+                buffer.push(*a);
+                buffer.push(*b);
                 state.skip(2);
                 (16, NumberKind::Int)
             }
@@ -1324,7 +1327,7 @@ impl Lexer {
         if kind != NumberKind::Float {
             self.read_digits(state, &mut buffer, base);
             if kind == NumberKind::Int {
-                return parse_int(&buffer, base as u32, state.span);
+                return parse_int(&buffer);
             }
         }
 
@@ -1341,29 +1344,29 @@ impl Lexer {
             } else {
                 10
             };
-            return parse_int(&buffer, base as u32, state.span);
+            return parse_int(&buffer);
         }
 
         if state.current == Some(b'.') {
-            buffer.push('.');
+            buffer.push(b'.');
             state.next();
             self.read_digits(state, &mut buffer, 10);
         }
 
         if let Some(b'e' | b'E') = state.current {
-            buffer.push('e');
+            buffer.push(b'e');
             state.next();
             if let Some(b @ (b'-' | b'+')) = state.current {
-                buffer.push(b as char);
+                buffer.push(b);
                 state.next();
             }
             self.read_digits(state, &mut buffer, 10);
         }
 
-        Ok(TokenKind::LiteralFloat(buffer.parse().unwrap()))
+        Ok(TokenKind::LiteralFloat(buffer.into()))
     }
 
-    fn read_digits(&self, state: &mut State, buffer: &mut String, base: usize) {
+    fn read_digits(&self, state: &mut State, buffer: &mut Vec<u8>, base: usize) {
         if base == 16 {
             self.read_digits_fn(state, buffer, u8::is_ascii_hexdigit);
         } else {
@@ -1375,13 +1378,13 @@ impl Lexer {
     fn read_digits_fn<F: Fn(&u8) -> bool>(
         &self,
         state: &mut State,
-        buffer: &mut String,
+        buffer: &mut Vec<u8>,
         is_digit: F,
     ) {
         if let Some(b) = state.current {
             if is_digit(&b) {
                 state.next();
-                buffer.push(b as char);
+                buffer.push(b);
             } else {
                 return;
             }
@@ -1390,12 +1393,12 @@ impl Lexer {
             match *state.peek_buf() {
                 [b, ..] if is_digit(&b) => {
                     state.next();
-                    buffer.push(b as char);
+                    buffer.push(b);
                 }
                 [b'_', b, ..] if is_digit(&b) => {
                     state.next();
                     state.next();
-                    buffer.push(b as char);
+                    buffer.push(b);
                 }
                 _ => {
                     break;
@@ -1407,21 +1410,8 @@ impl Lexer {
 
 // Parses an integer literal in the given base and converts errors to SyntaxError.
 // It returns a float token instead on overflow.
-fn parse_int(buffer: &str, base: u32, span: Span) -> SyntaxResult<TokenKind> {
-    match i64::from_str_radix(buffer, base) {
-        Ok(i) => Ok(TokenKind::LiteralInteger(i)),
-        Err(err) if err.kind() == &IntErrorKind::InvalidDigit => {
-            // The InvalidDigit error is only possible for legacy octal literals.
-            Err(SyntaxError::InvalidOctalLiteral(span))
-        }
-        Err(err) if err.kind() == &IntErrorKind::PosOverflow => {
-            // Parse as i128 so we can handle other bases.
-            // This means there's an upper limit on how large the literal can be.
-            let i = i128::from_str_radix(buffer, base).unwrap();
-            Ok(TokenKind::LiteralFloat(i as f64))
-        }
-        _ => Err(SyntaxError::UnexpectedError(span)),
-    }
+fn parse_int(buffer: &[u8]) -> SyntaxResult<TokenKind> {
+    Ok(TokenKind::LiteralInteger(buffer.into()))
 }
 
 fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {

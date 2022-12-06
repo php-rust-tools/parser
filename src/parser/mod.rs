@@ -1095,12 +1095,12 @@ impl Parser {
                 }
                 TokenKind::Variable(_) => Expression::Variable(self.var(state)?),
                 TokenKind::LiteralInteger(i) => {
-                    let e = Expression::LiteralInteger { i: *i };
+                    let e = Expression::LiteralInteger { i: i.clone() };
                     state.next();
                     e
                 }
                 TokenKind::LiteralFloat(f) => {
-                    let f = Expression::LiteralFloat { f: *f };
+                    let f = Expression::LiteralFloat { f: f.clone() };
                     state.next();
                     f
                 }
@@ -1112,15 +1112,15 @@ impl Parser {
                 TokenKind::Static => {
                     state.next();
                     Expression::Static
-                },
+                }
                 TokenKind::Self_ => {
                     state.next();
                     Expression::Self_
-                },
+                }
                 TokenKind::Parent => {
                     state.next();
                     Expression::Parent
-                },
+                }
                 TokenKind::LiteralString(s) => {
                     let e = Expression::LiteralString { value: s.clone() };
                     state.next();
@@ -1884,17 +1884,21 @@ impl Parser {
                         // Full expression syntax is not allowed here,
                         // so we can't call self.expression.
                         let index = match &state.current.kind {
-                            &TokenKind::LiteralInteger(i) => {
+                            TokenKind::LiteralInteger(i) => {
+                                let e = Expression::LiteralInteger { i: i.clone() };
                                 state.next();
-                                Expression::LiteralInteger { i }
+                                e
                             }
                             TokenKind::Minus => {
                                 state.next();
-                                if let TokenKind::LiteralInteger(i) = state.current.kind {
+                                if let TokenKind::LiteralInteger(i) = &state.current.kind {
+                                    let e = Expression::Negate {
+                                        value: Box::new(Expression::LiteralInteger {
+                                            i: i.clone(),
+                                        }),
+                                    };
                                     state.next();
-                                    Expression::Negate {
-                                        value: Box::new(Expression::LiteralInteger { i }),
-                                    }
+                                    e
                                 } else {
                                     return expected_token_err!("an integer", state);
                                 }

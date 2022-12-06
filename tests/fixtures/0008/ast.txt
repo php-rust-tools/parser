@@ -17,11 +17,11 @@
             op: Assign,
             rhs: Infix {
                 lhs: LiteralInteger {
-                    i: 2,
+                    i: "2",
                 },
                 op: Pow,
                 rhs: LiteralInteger {
-                    i: 2,
+                    i: "2",
                 },
             },
         },
@@ -44,15 +44,15 @@
             op: Assign,
             rhs: Ternary {
                 condition: LiteralInteger {
-                    i: 1,
+                    i: "1",
                 },
                 then: Some(
                     LiteralInteger {
-                        i: 2,
+                        i: "2",
                     },
                 ),
                 else: LiteralInteger {
-                    i: 3,
+                    i: "3",
                 },
             },
         },
@@ -75,25 +75,25 @@
             op: Assign,
             rhs: Ternary {
                 condition: LiteralInteger {
-                    i: 1,
+                    i: "1",
                 },
                 then: Some(
                     Ternary {
                         condition: LiteralInteger {
-                            i: 2,
+                            i: "2",
                         },
                         then: Some(
                             LiteralInteger {
-                                i: 3,
+                                i: "3",
                             },
                         ),
                         else: LiteralInteger {
-                            i: 4,
+                            i: "4",
                         },
                     },
                 ),
                 else: LiteralInteger {
-                    i: 5,
+                    i: "5",
                 },
             },
         },
@@ -116,16 +116,16 @@
             op: Assign,
             rhs: Ternary {
                 condition: LiteralInteger {
-                    i: 1,
+                    i: "1",
                 },
                 then: None,
                 else: Ternary {
                     condition: LiteralInteger {
-                        i: 2,
+                        i: "2",
                     },
                     then: None,
                     else: LiteralInteger {
-                        i: 3,
+                        i: "3",
                     },
                 },
             },
@@ -149,10 +149,10 @@
             op: Assign,
             rhs: Coalesce {
                 lhs: LiteralInteger {
-                    i: 1,
+                    i: "1",
                 },
                 rhs: LiteralInteger {
-                    i: 2,
+                    i: "2",
                 },
             },
         },
@@ -175,14 +175,14 @@
             op: Assign,
             rhs: Coalesce {
                 lhs: LiteralInteger {
-                    i: 1,
+                    i: "1",
                 },
                 rhs: Coalesce {
                     lhs: LiteralInteger {
-                        i: 2,
+                        i: "2",
                     },
                     rhs: LiteralInteger {
-                        i: 3,
+                        i: "3",
                     },
                 },
             },
