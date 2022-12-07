@@ -12,7 +12,10 @@ use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::internal::data_type;
+use crate::parser::internal::identifiers;
 use crate::parser::internal::precedences::Precedence;
+use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::parser::Parser;
@@ -33,7 +36,7 @@ impl Parser {
             false
         };
 
-        self.skip(state, TokenKind::Function)?;
+        utils::skip(state, TokenKind::Function)?;
 
         let by_ref = if state.current.kind == TokenKind::Ampersand {
             state.next();
@@ -49,7 +52,7 @@ impl Parser {
         if state.current.kind == TokenKind::Use {
             state.next();
 
-            self.left_parenthesis(state)?;
+            utils::skip_left_parenthesis(state)?;
 
             while state.current.kind != TokenKind::RightParen {
                 let mut by_ref = false;
@@ -80,21 +83,21 @@ impl Parser {
                 }
             }
 
-            self.right_parenthesis(state)?;
+            utils::skip_right_parenthesis(state)?;
         }
 
         let mut return_ty = None;
         if state.current.kind == TokenKind::Colon {
-            self.colon(state)?;
+            utils::colon(state)?;
 
-            return_ty = Some(self.get_type(state)?);
+            return_ty = Some(data_type::data_type(state)?);
         }
 
         let (body, end) = scoped!(state, Scope::AnonymousFunction(is_static), {
-            self.left_brace(state)?;
+            utils::skip_left_brace(state)?;
 
-            let body = self.block(state, &TokenKind::RightBrace)?;
-            let end = self.right_brace(state)?;
+            let body = self.body(state, &TokenKind::RightBrace)?;
+            let end = utils::skip_right_brace(state)?;
 
             (body, end)
         });
@@ -123,7 +126,7 @@ impl Parser {
             false
         };
 
-        self.skip(state, TokenKind::Fn)?;
+        utils::skip(state, TokenKind::Fn)?;
 
         let by_ref = if state.current.kind == TokenKind::Ampersand {
             state.next();
@@ -137,12 +140,12 @@ impl Parser {
 
         let mut return_type = None;
         if state.current.kind == TokenKind::Colon {
-            self.colon(state)?;
+            utils::colon(state)?;
 
-            return_type = Some(self.get_type(state)?);
+            return_type = Some(data_type::data_type(state)?);
         }
 
-        self.skip(state, TokenKind::DoubleArrow)?;
+        utils::skip(state, TokenKind::DoubleArrow)?;
 
         let body = scoped!(state, Scope::ArrowFunction(is_static), {
             Box::new(self.expression(state, Precedence::Lowest)?)
@@ -165,7 +168,7 @@ impl Parser {
     pub(in crate::parser) fn function(&self, state: &mut State) -> ParseResult<Statement> {
         let start = state.current.span;
 
-        self.skip(state, TokenKind::Function)?;
+        utils::skip(state, TokenKind::Function)?;
 
         let by_ref = if state.current.kind == TokenKind::Ampersand {
             state.next();
@@ -186,7 +189,7 @@ impl Parser {
                 end,
             }
         } else {
-            self.ident(state)?
+            identifiers::ident(state)?
         };
 
         // get attributes before processing parameters, otherwise
@@ -198,16 +201,16 @@ impl Parser {
         let mut return_type = None;
 
         if state.current.kind == TokenKind::Colon {
-            self.colon(state)?;
+            utils::colon(state)?;
 
-            return_type = Some(self.get_type(state)?);
+            return_type = Some(data_type::data_type(state)?);
         }
 
         let (body, end) = scoped!(state, Scope::Function(name.clone()), {
-            self.left_brace(state)?;
+            utils::skip_left_brace(state)?;
 
-            let body = self.block(state, &TokenKind::RightBrace)?;
-            let end = self.right_brace(state)?;
+            let body = self.body(state, &TokenKind::RightBrace)?;
+            let end = utils::skip_right_brace(state)?;
 
             (body, end)
         });
@@ -230,7 +233,7 @@ impl Parser {
         modifiers: MethodModifierGroup,
         start: Span,
     ) -> ParseResult<Method> {
-        self.skip(state, TokenKind::Function)?;
+        utils::skip(state, TokenKind::Function)?;
 
         let by_ref = if state.current.kind == TokenKind::Ampersand {
             state.next();
@@ -239,7 +242,7 @@ impl Parser {
             false
         };
 
-        let name = self.ident_maybe_reserved(state)?;
+        let name = identifiers::ident_maybe_reserved(state)?;
 
         let has_body = expected_scope!([
             Scope::Class(_, class_modifiers, _) => {
@@ -277,21 +280,21 @@ impl Parser {
                 let mut return_type = None;
 
                 if state.current.kind == TokenKind::Colon {
-                    self.colon(state)?;
+                    utils::colon(state)?;
 
-                    return_type = Some(self.get_type(state)?);
+                    return_type = Some(data_type::data_type(state)?);
                 }
 
                 if !has_body {
-                    let end = self.semicolon(state)?;
+                    let end = utils::skip_semicolon(state)?;
 
                     (parameters, None, return_type, end)
                 } else {
-                    self.left_brace(state)?;
+                    utils::skip_left_brace(state)?;
 
-                    let body = self.block(state, &TokenKind::RightBrace)?;
+                    let body = self.body(state, &TokenKind::RightBrace)?;
 
-                    let end = self.right_brace(state)?;
+                    let end = utils::skip_right_brace(state)?;
 
                     (parameters, Some(body), return_type, end)
                 }

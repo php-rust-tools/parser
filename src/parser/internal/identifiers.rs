@@ -3,104 +3,96 @@ use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::variables::Variable;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
-use crate::parser::Parser;
 
 use crate::peek_token;
 
-impl Parser {
-    /// Expect an unqualified identifier such as Foo or Bar.
-    pub(in crate::parser) fn ident(&self, state: &mut State) -> ParseResult<Identifier> {
-        let name = peek_token!([
+/// Expect an unqualified identifier such as Foo or Bar.
+pub fn ident(state: &mut State) -> ParseResult<Identifier> {
+    let name = peek_token!([
             TokenKind::Identifier(identifier) => {
                 identifier.clone()
             },
         ], state, "an identifier");
 
-        let start = state.current.span;
+    let start = state.current.span;
+    state.next();
+    let end = state.current.span;
+
+    Ok(Identifier { start, name, end })
+}
+
+/// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
+pub fn name(state: &mut State) -> ParseResult<Identifier> {
+    let name = peek_token!([
+        TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => {
+            name.clone()
+        },
+    ], state, "an identifier");
+
+    let start = state.current.span;
+    state.next();
+    let end = state.current.span;
+
+    Ok(Identifier { start, name, end })
+}
+
+/// Expect an optional unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
+pub fn optional_name(state: &mut State) -> Option<Identifier> {
+    let ident = match &state.current.kind {
+        TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => Some(Identifier {
+            start: state.current.span,
+            name: name.clone(),
+            end: state.peek.span,
+        }),
+        _ => None,
+    };
+
+    if ident.is_some() {
         state.next();
-        let end = state.current.span;
-
-        Ok(Identifier { start, name, end })
     }
 
-    /// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
-    pub(in crate::parser) fn name(&self, state: &mut State) -> ParseResult<Identifier> {
-        let name = peek_token!([
-            TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => {
-                name.clone()
-            },
-        ], state, "an identifier");
+    ident
+}
 
-        let start = state.current.span;
-        state.next();
-        let end = state.current.span;
-
-        Ok(Identifier { start, name, end })
-    }
-
-    /// Expect an optional unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
-    pub(in crate::parser) fn optional_name(&self, state: &mut State) -> Option<Identifier> {
-        let ident = match &state.current.kind {
-            TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => {
-                Some(Identifier {
-                    start: state.current.span,
-                    name: name.clone(),
-                    end: state.peek.span,
-                })
-            }
-            _ => None,
-        };
-
-        if ident.is_some() {
-            state.next();
-        }
-
-        ident
-    }
-
-    /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
-    pub(in crate::parser) fn full_name(&self, state: &mut State) -> ParseResult<Identifier> {
-        let name = peek_token!([
+/// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
+pub fn full_name(state: &mut State) -> ParseResult<Identifier> {
+    let name = peek_token!([
             TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
                 name.clone()
             },
         ], state, "an identifier");
 
-        let start = state.current.span;
-        state.next();
-        let end = state.current.span;
+    let start = state.current.span;
+    state.next();
+    let end = state.current.span;
 
-        Ok(Identifier { start, name, end })
-    }
+    Ok(Identifier { start, name, end })
+}
 
-    pub(in crate::parser) fn var(&self, state: &mut State) -> ParseResult<Variable> {
-        let name = peek_token!([
+pub fn var(state: &mut State) -> ParseResult<Variable> {
+    let name = peek_token!([
             TokenKind::Variable(v) => v.clone(),
         ], state, "a variable");
 
-        let start = state.current.span;
-        state.next();
-        let end = state.current.span;
+    let start = state.current.span;
+    state.next();
+    let end = state.current.span;
 
-        Ok(Variable { start, name, end })
-    }
+    Ok(Variable { start, name, end })
+}
 
-    pub(in crate::parser) fn ident_maybe_reserved(
-        &self,
-        state: &mut State,
-    ) -> ParseResult<Identifier> {
-        match state.current.kind {
-            _ if is_reserved_ident(&state.current.kind) => {
-                let name = state.current.kind.to_string().into();
+pub fn ident_maybe_reserved(state: &mut State) -> ParseResult<Identifier> {
+    match state.current.kind {
+        _ if is_reserved_ident(&state.current.kind) => {
+            let name = state.current.kind.to_string().into();
 
-                let start = state.current.span;
-                state.next();
-                let end = state.current.span;
+            let start = state.current.span;
+            state.next();
+            let end = state.current.span;
 
-                Ok(Identifier { start, name, end })
-            }
-            _ => self.ident(state),
+            Ok(Identifier { start, name, end })
         }
+        _ => ident(state),
     }
 }
 

@@ -6,7 +6,9 @@ use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::internal::identifiers;
 use crate::parser::internal::precedences::Precedence;
+use crate::parser::internal::utils;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
@@ -15,11 +17,11 @@ impl Parser {
         let start = state.current.span;
 
         state.next();
-        self.left_brace(state)?;
+        utils::skip_left_brace(state)?;
 
-        let body = self.block(state, &TokenKind::RightBrace)?;
+        let body = self.body(state, &TokenKind::RightBrace)?;
 
-        self.right_brace(state)?;
+        utils::skip_right_brace(state)?;
 
         let mut catches = Vec::new();
         loop {
@@ -30,7 +32,7 @@ impl Parser {
             let catch_start = state.current.span;
 
             state.next();
-            self.left_parenthesis(state)?;
+            utils::skip_left_parenthesis(state)?;
 
             let types = self.get_try_block_catch_type(state)?;
             let var = if state.current.kind == TokenKind::RightParen {
@@ -40,12 +42,12 @@ impl Parser {
                 Some(self.expression(state, Precedence::Lowest)?)
             };
 
-            self.right_parenthesis(state)?;
-            self.left_brace(state)?;
+            utils::skip_right_parenthesis(state)?;
+            utils::skip_left_brace(state)?;
 
-            let catch_body = self.block(state, &TokenKind::RightBrace)?;
+            let catch_body = self.body(state, &TokenKind::RightBrace)?;
 
-            self.right_brace(state)?;
+            utils::skip_right_brace(state)?;
 
             let catch_end = state.current.span;
 
@@ -62,11 +64,11 @@ impl Parser {
         if state.current.kind == TokenKind::Finally {
             let finally_start = state.current.span;
             state.next();
-            self.left_brace(state)?;
+            utils::skip_left_brace(state)?;
 
-            let finally_body = self.block(state, &TokenKind::RightBrace)?;
+            let finally_body = self.body(state, &TokenKind::RightBrace)?;
 
-            self.right_brace(state)?;
+            utils::skip_right_brace(state)?;
             let finally_end = state.current.span;
 
             finally = Some(FinallyBlock {
@@ -92,7 +94,7 @@ impl Parser {
     }
 
     fn get_try_block_catch_type(&self, state: &mut State) -> ParseResult<CatchType> {
-        let id = self.full_name(state)?;
+        let id = identifiers::full_name(state)?;
 
         if state.current.kind == TokenKind::Pipe {
             state.next();
@@ -100,7 +102,7 @@ impl Parser {
             let mut types = vec![id];
 
             while !state.is_eof() {
-                let id = self.full_name(state)?;
+                let id = identifiers::full_name(state)?;
                 types.push(id);
 
                 if state.current.kind != TokenKind::Pipe {

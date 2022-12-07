@@ -5,13 +5,14 @@ use crate::parser::ast::ListItem;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::precedences::Precedence;
+use crate::parser::internal::utils;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
 impl Parser {
     pub(in crate::parser) fn list_expression(&self, state: &mut State) -> ParseResult<Expression> {
-        self.skip(state, TokenKind::List)?;
-        self.left_parenthesis(state)?;
+        utils::skip(state, TokenKind::List)?;
+        utils::skip_left_parenthesis(state)?;
 
         let mut items = Vec::new();
         let mut has_atleast_one_key = false;
@@ -80,13 +81,13 @@ impl Parser {
             }
         }
 
-        self.right_parenthesis(state)?;
+        utils::skip_right_parenthesis(state)?;
 
         Ok(Expression::List { items })
     }
 
     pub(in crate::parser) fn array_expression(&self, state: &mut State) -> ParseResult<Expression> {
-        self.skip(state, TokenKind::LeftBracket)?;
+        utils::skip(state, TokenKind::LeftBracket)?;
 
         let mut items = Vec::new();
         state.skip_comments();
@@ -161,7 +162,7 @@ impl Parser {
 
         state.skip_comments();
 
-        self.right_bracket(state)?;
+        utils::skip_right_bracket(state)?;
 
         Ok(Expression::Array { items })
     }

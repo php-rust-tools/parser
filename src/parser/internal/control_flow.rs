@@ -6,24 +6,25 @@ use crate::parser::ast::ElseIf;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::precedences::Precedence;
+use crate::parser::internal::utils;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
 impl Parser {
     pub(in crate::parser) fn switch_statement(&self, state: &mut State) -> ParseResult<Statement> {
-        self.skip(state, TokenKind::Switch)?;
+        utils::skip(state, TokenKind::Switch)?;
 
-        self.left_parenthesis(state)?;
+        utils::skip_left_parenthesis(state)?;
 
         let condition = self.expression(state, Precedence::Lowest)?;
 
-        self.right_parenthesis(state)?;
+        utils::skip_right_parenthesis(state)?;
 
         let end_token = if state.current.kind == TokenKind::Colon {
-            self.colon(state)?;
+            utils::colon(state)?;
             TokenKind::EndSwitch
         } else {
-            self.left_brace(state)?;
+            utils::skip_left_brace(state)?;
             TokenKind::RightBrace
         };
 
@@ -35,7 +36,7 @@ impl Parser {
 
                     let condition = self.expression(state, Precedence::Lowest)?;
 
-                    self.skip_any_of(state, &[TokenKind::Colon, TokenKind::SemiColon])?;
+                    utils::skip_any_of(state, &[TokenKind::Colon, TokenKind::SemiColon])?;
 
                     let mut body = Block::new();
 
@@ -55,7 +56,7 @@ impl Parser {
                 TokenKind::Default => {
                     state.next();
 
-                    self.skip_any_of(state, &[TokenKind::Colon, TokenKind::SemiColon])?;
+                    utils::skip_any_of(state, &[TokenKind::Colon, TokenKind::SemiColon])?;
 
                     let mut body = Block::new();
 
@@ -78,28 +79,28 @@ impl Parser {
         }
 
         if end_token == TokenKind::EndSwitch {
-            self.skip(state, TokenKind::EndSwitch)?;
-            self.semicolon(state)?;
+            utils::skip(state, TokenKind::EndSwitch)?;
+            utils::skip_semicolon(state)?;
         } else {
-            self.right_brace(state)?;
+            utils::skip_right_brace(state)?;
         }
 
         Ok(Statement::Switch { condition, cases })
     }
 
     pub(in crate::parser) fn if_statement(&self, state: &mut State) -> ParseResult<Statement> {
-        self.skip(state, TokenKind::If)?;
+        utils::skip(state, TokenKind::If)?;
 
-        self.left_parenthesis(state)?;
+        utils::skip_left_parenthesis(state)?;
 
         let condition = self.expression(state, Precedence::Lowest)?;
 
-        self.right_parenthesis(state)?;
+        utils::skip_right_parenthesis(state)?;
 
         // FIXME: Tidy up duplication and make the intent a bit clearer.
         match state.current.kind {
             TokenKind::Colon => {
-                self.colon(state)?;
+                utils::colon(state)?;
 
                 let mut then = vec![];
                 while !matches!(
@@ -122,11 +123,11 @@ impl Parser {
 
                     state.next();
 
-                    self.left_parenthesis(state)?;
+                    utils::skip_left_parenthesis(state)?;
                     let condition = self.expression(state, Precedence::Lowest)?;
-                    self.right_parenthesis(state)?;
+                    utils::skip_right_parenthesis(state)?;
 
-                    self.colon(state)?;
+                    utils::colon(state)?;
 
                     let mut body = vec![];
                     while !matches!(
@@ -147,16 +148,16 @@ impl Parser {
                 let mut r#else = None;
                 if state.current.kind == TokenKind::Else {
                     state.next();
-                    self.colon(state)?;
+                    utils::colon(state)?;
 
-                    let body = self.block(state, &TokenKind::EndIf)?;
+                    let body = self.body(state, &TokenKind::EndIf)?;
 
                     r#else = Some(body);
                 }
 
-                self.skip(state, TokenKind::EndIf)?;
+                utils::skip(state, TokenKind::EndIf)?;
 
-                self.semicolon(state)?;
+                utils::skip_semicolon(state)?;
 
                 Ok(Statement::If {
                     condition,
@@ -167,9 +168,9 @@ impl Parser {
             }
             _ => {
                 let then = if state.current.kind == TokenKind::LeftBrace {
-                    self.left_brace(state)?;
-                    let then = self.block(state, &TokenKind::RightBrace)?;
-                    self.right_brace(state)?;
+                    utils::skip_left_brace(state)?;
+                    let then = self.body(state, &TokenKind::RightBrace)?;
+                    utils::skip_right_brace(state)?;
                     then
                 } else {
                     vec![self.statement(state)?]
@@ -180,17 +181,17 @@ impl Parser {
                     if state.current.kind == TokenKind::ElseIf {
                         state.next();
 
-                        self.left_parenthesis(state)?;
+                        utils::skip_left_parenthesis(state)?;
 
                         let condition = self.expression(state, Precedence::Lowest)?;
 
-                        self.right_parenthesis(state)?;
+                        utils::skip_right_parenthesis(state)?;
 
-                        self.left_brace(state)?;
+                        utils::skip_left_brace(state)?;
 
-                        let body = self.block(state, &TokenKind::RightBrace)?;
+                        let body = self.body(state, &TokenKind::RightBrace)?;
 
-                        self.right_brace(state)?;
+                        utils::skip_right_brace(state)?;
 
                         else_ifs.push(ElseIf { condition, body });
                     } else {
@@ -207,15 +208,15 @@ impl Parser {
                     });
                 }
 
-                self.skip(state, TokenKind::Else)?;
+                utils::skip(state, TokenKind::Else)?;
 
                 let r#else;
                 if state.current.kind == TokenKind::LeftBrace {
-                    self.left_brace(state)?;
+                    utils::skip_left_brace(state)?;
 
-                    r#else = self.block(state, &TokenKind::RightBrace)?;
+                    r#else = self.body(state, &TokenKind::RightBrace)?;
 
-                    self.right_brace(state)?;
+                    utils::skip_right_brace(state)?;
                 } else {
                     r#else = vec![self.statement(state)?];
                 }

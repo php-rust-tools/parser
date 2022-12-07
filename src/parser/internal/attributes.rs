@@ -3,6 +3,7 @@ use crate::parser::ast::attributes::Attribute;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::precedences::Precedence;
+use crate::parser::internal::utils;
 use crate::parser::state::State;
 use crate::parser::Parser;
 
@@ -37,7 +38,7 @@ impl Parser {
             }
         }
 
-        let end = self.right_bracket(state)?;
+        let end = utils::skip_right_bracket(state)?;
 
         state.attribute(AttributeGroup {
             start,

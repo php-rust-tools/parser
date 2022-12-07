@@ -4,6 +4,8 @@ use crate::parser::ast::Block;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::internal::identifiers;
+use crate::parser::internal::utils;
 use crate::parser::state::NamespaceType;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
@@ -14,7 +16,7 @@ impl Parser {
     pub(in crate::parser) fn namespace(&self, state: &mut State) -> ParseResult<Statement> {
         state.next();
 
-        let name = self.optional_name(state);
+        let name = identifiers::optional_name(state);
 
         if let Some(name) = &name {
             if state.current.kind != TokenKind::LeftBrace {
@@ -60,7 +62,7 @@ impl Parser {
         state: &mut State,
         name: Option<Identifier>,
     ) -> ParseResult<Statement> {
-        self.left_brace(state)?;
+        utils::skip_left_brace(state)?;
 
         let body = scoped!(state, Scope::BracedNamespace(name.clone()), {
             let mut body = Block::new();
@@ -71,7 +73,7 @@ impl Parser {
             body
         });
 
-        self.right_brace(state)?;
+        utils::skip_right_brace(state)?;
 
         Ok(Statement::BracedNamespace { name, body })
     }

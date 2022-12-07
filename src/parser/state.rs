@@ -5,10 +5,8 @@ use std::vec::IntoIter;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::attributes::AttributeGroup;
-
-use crate::parser::ast::modifiers::ClassModifierGroup;
-
 use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;

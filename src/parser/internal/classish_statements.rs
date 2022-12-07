@@ -1,3 +1,4 @@
+use crate::expect_token;
 use crate::expected_scope;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
@@ -13,12 +14,14 @@ use crate::parser::ast::Statement;
 use crate::parser::ast::TraitAdaptation;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::internal::data_type;
+use crate::parser::internal::identifiers;
+use crate::parser::internal::modifiers;
 use crate::parser::internal::precedences::Precedence;
+use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::parser::Parser;
-
-use crate::expect_token;
 use crate::peek_token;
 
 impl Parser {
@@ -28,19 +31,19 @@ impl Parser {
     ) -> ParseResult<Statement> {
         let has_attributes = self.gather_attributes(state)?;
         let start = state.current.span;
-        let modifiers = self.modifiers(state)?;
+        let modifiers = modifiers::collect(state)?;
 
         // if we have attributes, don't check const, we need a method.
         if has_attributes || state.current.kind == TokenKind::Function {
             Ok(Statement::Method(self.method(
                 state,
-                self.get_interface_method_modifier_group(modifiers)?,
+                modifiers::interface_method_group(modifiers)?,
                 start,
             )?))
         } else {
             Ok(Statement::ClassishConstant(self.constant(
                 state,
-                self.get_interface_constant_modifier_group(modifiers)?,
+                modifiers::interface_constant_group(modifiers)?,
                 start,
             )?))
         }
@@ -60,7 +63,7 @@ impl Parser {
             let start = state.current.span;
             state.next();
 
-            let name = self.ident(state)?;
+            let name = identifiers::ident(state)?;
 
             if state.current.kind == TokenKind::Equals {
                 return Err(ParseError::CaseValueForUnitEnum(
@@ -70,25 +73,25 @@ impl Parser {
                 ));
             }
 
-            let end = self.semicolon(state)?;
+            let end = utils::skip_semicolon(state)?;
 
             return Ok(UnitEnumMember::Case(UnitEnumCase { start, end, name }));
         }
 
         let start = state.current.span;
-        let modifiers = self.modifiers(state)?;
+        let modifiers = modifiers::collect(state)?;
 
         // if we have attributes, don't check const, we need a method.
         if has_attributes || state.current.kind == TokenKind::Function {
             Ok(UnitEnumMember::Method(self.method(
                 state,
-                self.get_enum_method_modifier_group(modifiers)?,
+                modifiers::enum_method_group(modifiers)?,
                 start,
             )?))
         } else {
             Ok(UnitEnumMember::Constant(self.constant(
                 state,
-                self.get_constant_modifier_group(modifiers)?,
+                modifiers::constant_group(modifiers)?,
                 start,
             )?))
         }
@@ -108,7 +111,7 @@ impl Parser {
             let start = state.current.span;
             state.next();
 
-            let name = self.ident(state)?;
+            let name = identifiers::ident(state)?;
 
             if state.current.kind == TokenKind::SemiColon {
                 return Err(ParseError::MissingCaseValueForBackedEnum(
@@ -118,11 +121,11 @@ impl Parser {
                 ));
             }
 
-            self.skip(state, TokenKind::Equals)?;
+            utils::skip(state, TokenKind::Equals)?;
 
             let value = self.expression(state, Precedence::Lowest)?;
 
-            let end = self.semicolon(state)?;
+            let end = utils::skip_semicolon(state)?;
 
             return Ok(BackedEnumMember::Case(BackedEnumCase {
                 start,
@@ -133,19 +136,19 @@ impl Parser {
         }
 
         let start = state.current.span;
-        let modifiers = self.modifiers(state)?;
+        let modifiers = modifiers::collect(state)?;
 
         // if we have attributes, don't check const, we need a method.
         if has_attributes || state.current.kind == TokenKind::Function {
             Ok(BackedEnumMember::Method(self.method(
                 state,
-                self.get_enum_method_modifier_group(modifiers)?,
+                modifiers::enum_method_group(modifiers)?,
                 start,
             )?))
         } else {
             Ok(BackedEnumMember::Constant(self.constant(
                 state,
-                self.get_constant_modifier_group(modifiers)?,
+                modifiers::constant_group(modifiers)?,
                 start,
             )?))
         }
@@ -158,7 +161,7 @@ impl Parser {
         let has_attributes = self.gather_attributes(state)?;
 
         let start = state.current.span;
-        let modifiers = self.modifiers(state)?;
+        let modifiers = modifiers::collect(state)?;
 
         if !has_attributes {
             if state.current.kind == TokenKind::Use {
@@ -168,7 +171,7 @@ impl Parser {
             if state.current.kind == TokenKind::Const {
                 return Ok(Statement::ClassishConstant(self.constant(
                     state,
-                    self.get_constant_modifier_group(modifiers)?,
+                    modifiers::constant_group(modifiers)?,
                     start,
                 )?));
             }
@@ -177,17 +180,17 @@ impl Parser {
         if state.current.kind == TokenKind::Function {
             return Ok(Statement::Method(self.method(
                 state,
-                self.get_method_modifier_group(modifiers)?,
+                modifiers::method_group(modifiers)?,
                 start,
             )?));
         }
 
         // e.g: public static
-        let modifiers = self.get_property_modifier_group(modifiers)?;
+        let modifiers = modifiers::property_group(modifiers)?;
         // e.g: string
-        let ty = self.get_optional_type(state)?;
+        let ty = data_type::optional_data_type(state)?;
         // e.g: $name
-        let var = self.var(state)?;
+        let var = identifiers::var(state)?;
 
         let mut value = None;
         // e.g: = "foo";
@@ -241,7 +244,7 @@ impl Parser {
             }
         }
 
-        self.semicolon(state)?;
+        utils::skip_semicolon(state)?;
 
         Ok(Statement::Property {
             var,
@@ -260,18 +263,18 @@ impl Parser {
         while state.current.kind != TokenKind::SemiColon
             && state.current.kind != TokenKind::LeftBrace
         {
-            let t = self.full_name(state)?;
+            let t = identifiers::full_name(state)?;
             traits.push(t);
 
             if state.current.kind == TokenKind::Comma {
                 if state.peek.kind == TokenKind::SemiColon {
                     // will fail with unexpected token `,`
                     // as `use` doesn't allow for trailing commas.
-                    self.semicolon(state)?;
+                    utils::skip_semicolon(state)?;
                 } else if state.peek.kind == TokenKind::LeftBrace {
                     // will fail with unexpected token `{`
                     // as `use` doesn't allow for trailing commas.
-                    self.left_brace(state)?;
+                    utils::skip_left_brace(state)?;
                 } else {
                     state.next();
                 }
@@ -282,17 +285,17 @@ impl Parser {
 
         let mut adaptations = Vec::new();
         if state.current.kind == TokenKind::LeftBrace {
-            self.left_brace(state)?;
+            utils::skip_left_brace(state)?;
 
             while state.current.kind != TokenKind::RightBrace {
                 let (r#trait, method): (Option<Identifier>, Identifier) = match state.peek.kind {
                     TokenKind::DoubleColon => {
-                        let r#trait = self.full_name(state)?;
+                        let r#trait = identifiers::full_name(state)?;
                         state.next();
-                        let method = self.ident(state)?;
+                        let method = identifiers::ident(state)?;
                         (Some(r#trait), method)
                     }
-                    _ => (None, self.ident(state)?),
+                    _ => (None, identifiers::ident(state)?),
                 };
 
                 expect_token!([
@@ -322,7 +325,7 @@ impl Parser {
                                         visibility,
                                     });
                                 } else {
-                                    let alias: Identifier = self.name(state)?;
+                                    let alias: Identifier = identifiers::name(state)?;
                                     adaptations.push(TraitAdaptation::Alias {
                                         r#trait,
                                         method,
@@ -332,7 +335,7 @@ impl Parser {
                                 }
                             }
                             _ => {
-                                let alias: Identifier = self.name(state)?;
+                                let alias: Identifier = identifiers::name(state)?;
                                 adaptations.push(TraitAdaptation::Alias {
                                     r#trait,
                                     method,
@@ -344,25 +347,25 @@ impl Parser {
                     },
                     TokenKind::Insteadof => {
                         let mut insteadof = Vec::new();
-                        insteadof.push(self.full_name(state)?);
+                        insteadof.push(identifiers::full_name(state)?);
 
                         if state.current.kind == TokenKind::Comma {
                             if state.peek.kind == TokenKind::SemiColon {
                                 // will fail with unexpected token `,`
                                 // as `insteadof` doesn't allow for trailing commas.
-                                self.semicolon(state)?;
+                                utils::skip_semicolon(state)?;
                             }
 
                             state.next();
 
                             while state.current.kind != TokenKind::SemiColon {
-                                insteadof.push(self.full_name(state)?);
+                                insteadof.push(identifiers::full_name(state)?);
 
                                 if state.current.kind == TokenKind::Comma {
                                     if state.peek.kind == TokenKind::SemiColon {
                                         // will fail with unexpected token `,`
                                         // as `insteadof` doesn't allow for trailing commas.
-                                        self.semicolon(state)?;
+                                        utils::skip_semicolon(state)?;
                                     } else {
                                         state.next();
                                     }
@@ -380,12 +383,12 @@ impl Parser {
                     }
                 ], state, ["`as`", "`insteadof`"]);
 
-                self.semicolon(state)?;
+                utils::skip_semicolon(state)?;
             }
 
-            self.right_brace(state)?;
+            utils::skip_right_brace(state)?;
         } else {
-            self.semicolon(state)?;
+            utils::skip_semicolon(state)?;
         }
 
         Ok(Statement::TraitUse {
@@ -402,13 +405,13 @@ impl Parser {
     ) -> ParseResult<ClassishConstant> {
         state.next();
 
-        let name = self.ident(state)?;
+        let name = identifiers::ident(state)?;
 
-        self.skip(state, TokenKind::Equals)?;
+        utils::skip(state, TokenKind::Equals)?;
 
         let value = self.expression(state, Precedence::Lowest)?;
 
-        let end = self.semicolon(state)?;
+        let end = utils::skip_semicolon(state)?;
 
         Ok(ClassishConstant {
             start,
