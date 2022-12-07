@@ -9,17 +9,22 @@ use std::str::from_utf8;
 /// The Trunk lexer and parser work mainly with byte strings because
 /// valid PHP code is not required to be valid UTF-8.
 #[derive(PartialEq, Eq, PartialOrd, Clone, Serialize, Deserialize)]
-pub struct ByteString(pub(crate) Vec<u8>);
+pub struct ByteString {
+    pub bytes: Vec<u8>,
+    pub length: usize,
+}
 
 impl ByteString {
     pub fn new(bytes: Vec<u8>) -> Self {
-        ByteString(bytes)
+        let length = bytes.len();
+
+        ByteString { bytes, length }
     }
 }
 
 impl std::fmt::Display for ByteString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for &b in &self.0 {
+        for &b in &self.bytes {
             match b {
                 0 => write!(f, "\\0")?,
                 b'\n' | b'\r' | b'\t' => write!(f, "{}", b.escape_ascii())?,
@@ -35,7 +40,7 @@ impl std::fmt::Display for ByteString {
 impl std::fmt::Debug for ByteString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "\"")?;
-        for &b in &self.0 {
+        for &b in &self.bytes {
             match b {
                 0 => write!(f, "\\0")?,
                 b'\n' | b'\r' | b'\t' => write!(f, "{}", b.escape_ascii())?,
@@ -50,13 +55,13 @@ impl std::fmt::Debug for ByteString {
 
 impl<const N: usize> PartialEq<&[u8; N]> for ByteString {
     fn eq(&self, other: &&[u8; N]) -> bool {
-        &self.0 == other
+        &self.bytes == other
     }
 }
 
 impl<const N: usize> PartialEq<&[u8; N]> for &ByteString {
     fn eq(&self, other: &&[u8; N]) -> bool {
-        &self.0 == other
+        &self.bytes == other
     }
 }
 
@@ -92,7 +97,7 @@ impl From<String> for ByteString {
 
 impl From<ByteString> for String {
     fn from(bytes: ByteString) -> Self {
-        String::from(from_utf8(&bytes.0).unwrap())
+        String::from(from_utf8(&bytes.bytes).unwrap())
     }
 }
 
@@ -100,13 +105,13 @@ impl Deref for ByteString {
     type Target = Vec<u8>;
 
     fn deref(&self) -> &Vec<u8> {
-        &self.0
+        &self.bytes
     }
 }
 
 impl DerefMut for ByteString {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
+        &mut self.bytes
     }
 }
 

@@ -37,11 +37,11 @@ fn test_fixtures() {
             continue;
         }
 
-        let code = std::fs::read_to_string(&code_file).unwrap();
+        let code = std::fs::read(&code_file).unwrap();
 
         if lex_err_file.exists() {
             let expected_error = std::fs::read_to_string(&lex_err_file).unwrap();
-            let error = LEXER.tokenize(code.as_bytes()).err().unwrap();
+            let error = LEXER.tokenize(&code).err().unwrap();
 
             assert_str_eq!(
                 expected_error.trim(),
@@ -60,7 +60,7 @@ fn test_fixtures() {
         );
 
         let expected_tokens = std::fs::read_to_string(&tokens_file).unwrap();
-        let tokens = LEXER.tokenize(code.as_bytes()).unwrap();
+        let tokens = LEXER.tokenize(&code).unwrap();
 
         assert_str_eq!(
             expected_tokens.trim(),

@@ -46,8 +46,8 @@ fn main() {
             std::fs::remove_file(&parser_error_filename).unwrap();
         }
 
-        let code = std::fs::read_to_string(&code_filename).unwrap();
-        let tokens = LEXER.tokenize(code.as_bytes());
+        let code = std::fs::read(&code_filename).unwrap();
+        let tokens = LEXER.tokenize(&code);
 
         match tokens {
             Ok(tokens) => {
