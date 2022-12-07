@@ -29,13 +29,13 @@ jobs:
           override: true
           components: rustfmt, clippy
 
-      - name: cache
-        uses: Swatinem/rust-cache@v2.0.0
-
       - name: install just and hyperfine
         run: |
           cargo install just
           cargo install hyperfine
+
+      - name: cache
+        uses: Swatinem/rust-cache@v2.0.0
 
       - name: check
         if: matrix.rust == 'stable'

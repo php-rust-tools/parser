@@ -8,14 +8,10 @@ on:
 jobs:
   third-party-tests:
     name: third-party
-    runs-on: ${{ matrix.os }}
+    runs-on: 'ubuntu-latest'
     strategy:
       fail-fast: false
       matrix:
-        rust:
-          - 'stable'
-        os:
-          - 'ubuntu-latest'
         target:
           - 'psl'
           - 'php-parser'
@@ -29,16 +25,16 @@ jobs:
       - name: install rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: ${{ matrix.rust }}
+          toolchain: 'stable'
           override: true
           components: rustfmt, clippy
-
-      - name: cache
-        uses: Swatinem/rust-cache@v2.0.0
 
       - name: install just
         run: |
           cargo install just
+
+      - name: cache
+        uses: Swatinem/rust-cache@v2.0.0
 
       - name: test ${{ matrix.target }}
         run: just test-${{ matrix.target }}
