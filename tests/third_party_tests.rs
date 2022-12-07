@@ -62,11 +62,7 @@ fn third_party_4_nikic_php_parser() {
         "nikic/PHP-Parser",
         "https://github.com/nikic/PHP-Parser",
         "4.x",
-        &[
-            "lib/PhpParser",
-            "grammar",
-            "test"
-        ],
+        &["lib/PhpParser", "grammar", "test"],
         &[],
     );
 }

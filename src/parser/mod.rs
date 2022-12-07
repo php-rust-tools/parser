@@ -479,9 +479,9 @@ impl Parser {
                             self.left_brace(state)?;
                             TokenKind::RightBrace
                         };
-    
+
                         let body = self.block(state, &end_token)?;
-    
+
                         if end_token == TokenKind::RightBrace {
                             self.right_brace(state)?;
                         } else {
@@ -791,9 +791,7 @@ impl Parser {
                                 self.right_brace(state)?;
                                 then
                             } else {
-                                vec![
-                                    self.statement(state)?
-                                ]
+                                vec![self.statement(state)?]
                             };
 
                             let mut else_ifs: Vec<ElseIf> = Vec::new();
@@ -838,9 +836,7 @@ impl Parser {
 
                                 self.right_brace(state)?;
                             } else {
-                                r#else = vec![
-                                    self.statement(state)?
-                                ];
+                                r#else = vec![self.statement(state)?];
                             }
 
                             Statement::If {
