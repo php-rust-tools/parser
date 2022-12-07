@@ -34,7 +34,7 @@ impl Parser {
             state.next();
             utils::skip_left_parenthesis(state)?;
 
-            let types = self.get_try_block_catch_type(state)?;
+            let types = catch_type(state)?;
             let var = if state.current.kind == TokenKind::RightParen {
                 None
             } else {
@@ -92,29 +92,30 @@ impl Parser {
             finally,
         }))
     }
+}
 
-    fn get_try_block_catch_type(&self, state: &mut State) -> ParseResult<CatchType> {
-        let id = identifiers::full_name(state)?;
+#[inline(always)]
+fn catch_type(state: &mut State) -> ParseResult<CatchType> {
+    let id = identifiers::full_name(state)?;
 
-        if state.current.kind == TokenKind::Pipe {
-            state.next();
+    if state.current.kind == TokenKind::Pipe {
+        state.next();
 
-            let mut types = vec![id];
+        let mut types = vec![id];
 
-            while !state.is_eof() {
-                let id = identifiers::full_name(state)?;
-                types.push(id);
+        while !state.is_eof() {
+            let id = identifiers::full_name(state)?;
+            types.push(id);
 
-                if state.current.kind != TokenKind::Pipe {
-                    break;
-                }
-
-                state.next();
+            if state.current.kind != TokenKind::Pipe {
+                break;
             }
 
-            return Ok(CatchType::Union(types));
+            state.next();
         }
 
-        Ok(CatchType::Identifier(id))
+        return Ok(CatchType::Union(types));
     }
+
+    Ok(CatchType::Identifier(id))
 }

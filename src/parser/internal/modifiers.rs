@@ -14,6 +14,7 @@ use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 
+#[inline(always)]
 pub fn class_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<ClassModifierGroup> {
     let mut has_final = false;
     let mut has_abstract = false;
@@ -57,6 +58,7 @@ pub fn class_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<ClassModi
     Ok(ClassModifierGroup { modifiers })
 }
 
+#[inline(always)]
 pub fn method_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<MethodModifierGroup> {
     let mut has_final = false;
     let mut has_abstract = false;
@@ -146,6 +148,7 @@ pub fn enum_method_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<Met
     Ok(MethodModifierGroup { modifiers })
 }
 
+#[inline(always)]
 pub fn interface_method_group(
     input: Vec<(Span, TokenKind, Span)>,
 ) -> ParseResult<MethodModifierGroup> {
@@ -170,6 +173,7 @@ pub fn interface_method_group(
     Ok(MethodModifierGroup { modifiers })
 }
 
+#[inline(always)]
 pub fn property_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<PropertyModifierGroup> {
     let modifiers = input
         .iter()
@@ -205,6 +209,7 @@ pub fn property_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<Proper
     Ok(PropertyModifierGroup { modifiers })
 }
 
+#[inline(always)]
 pub fn promoted_property_group(
     input: Vec<(Span, TokenKind, Span)>,
 ) -> ParseResult<PromotedPropertyModifierGroup> {
@@ -284,6 +289,7 @@ pub fn constant_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<Consta
     Ok(ConstantModifierGroup { modifiers })
 }
 
+#[inline(always)]
 pub fn interface_constant_group(
     input: Vec<(Span, TokenKind, Span)>,
 ) -> ParseResult<ConstantModifierGroup> {

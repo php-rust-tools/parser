@@ -15,24 +15,7 @@ pub fn data_type(state: &mut State) -> ParseResult<Type> {
 
     // (A|B|..)&C.. or (A&B&..)|C..
     if state.current.kind == TokenKind::LeftParen {
-        state.next();
-        let ty = simple_data_type(state)?;
-        return peek_token!([
-                TokenKind::Pipe => {
-                    let union = union(state, ty, true)?;
-
-                    utils::skip_right_parenthesis(state)?;
-
-                    instersection(state, union, false)
-                },
-                TokenKind::Ampersand => {
-                    let intersection = instersection(state, ty, true)?;
-
-                    utils::skip_right_parenthesis(state)?;
-
-                    union(state, intersection, false)
-                },
-            ], state, ["`|`", "`&`"]);
+        return dnf(state);
     }
 
     let ty = simple_data_type(state)?;
@@ -57,24 +40,7 @@ pub fn optional_data_type(state: &mut State) -> ParseResult<Option<Type>> {
 
     // (A|B|..)&C.. or (A&B&..)|C..
     if state.current.kind == TokenKind::LeftParen {
-        state.next();
-        let ty = simple_data_type(state)?;
-        return peek_token!([
-                TokenKind::Pipe => {
-                    let union = union(state, ty, true)?;
-
-                    utils::skip_right_parenthesis(state)?;
-
-                    instersection(state, union, false).map(Some)
-                },
-                TokenKind::Ampersand => {
-                    let intersection = instersection(state, ty, true)?;
-
-                    utils::skip_right_parenthesis(state)?;
-
-                    union(state, intersection, false).map(Some)
-                },
-            ], state, ["`|`", "`&`"]);
+        return dnf(state).map(Some);
     }
 
     let ty = optional_simple_data_type(state)?;
@@ -82,19 +48,41 @@ pub fn optional_data_type(state: &mut State) -> ParseResult<Option<Type>> {
     match ty {
         Some(ty) => {
             if state.current.kind == TokenKind::Pipe {
-                return Ok(Some(union(state, ty, false)?));
+                return union(state, ty, false).map(Some);
             }
 
             if state.current.kind == TokenKind::Ampersand
                 && !matches!(state.peek.kind, TokenKind::Variable(_))
             {
-                return Ok(Some(instersection(state, ty, false)?));
+                return instersection(state, ty, false).map(Some);
             }
 
             Ok(Some(ty))
         }
         None => Ok(None),
     }
+}
+
+fn dnf(state: &mut State) -> ParseResult<Type> {
+    // (A|B|..)&C.. or (A&B&..)|C..
+    state.next();
+    let ty = simple_data_type(state)?;
+    peek_token!([
+        TokenKind::Pipe => {
+            let union = union(state, ty, true)?;
+
+            utils::skip_right_parenthesis(state)?;
+
+            instersection(state, union, false)
+        },
+        TokenKind::Ampersand => {
+            let intersection = instersection(state, ty, true)?;
+
+            utils::skip_right_parenthesis(state)?;
+
+            union(state, intersection, false)
+        },
+    ], state, ["`|`", "`&`"])
 }
 
 fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
