@@ -25,7 +25,7 @@ fn main() -> ParseResult<()> {
     let parser = Parser::new();
 
     let tokens = lexer.tokenize(&contents)?;
-    dbg!(&tokens);
+    // dbg!(&tokens);
 
     let ast = parser.parse(tokens)?;
 

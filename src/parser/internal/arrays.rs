@@ -107,57 +107,16 @@ impl Parser {
                 continue;
             }
 
-            let mut key = None;
-            let unpack = if state.current.kind == TokenKind::Ellipsis {
-                state.next();
-                true
-            } else {
-                false
-            };
-
-            let (mut by_ref, amper_span) = if state.current.kind == TokenKind::Ampersand {
-                let span = state.current.span;
-                state.next();
-                (true, span)
-            } else {
-                (false, (0, 0))
-            };
-
-            let mut value = self.expression(state, Precedence::Lowest)?;
-            if state.current.kind == TokenKind::DoubleArrow {
-                state.next();
-
-                if by_ref {
-                    return Err(ParseError::UnexpectedToken(
-                        TokenKind::Ampersand.to_string(),
-                        amper_span,
-                    ));
-                }
-
-                key = Some(value);
-                by_ref = if state.current.kind == TokenKind::Ampersand {
-                    state.next();
-                    true
-                } else {
-                    false
-                };
-                value = self.expression(state, Precedence::Lowest)?;
-            }
-
-            items.push(ArrayItem {
-                key,
-                value,
-                unpack,
-                by_ref,
-            });
+            items.push(self.array_pair(state)?);
 
             state.skip_comments();
-            if state.current.kind == TokenKind::Comma {
-                state.next();
-                state.skip_comments();
-            } else {
+
+            if state.current.kind != TokenKind::Comma {
                 break;
             }
+
+            state.next();
+            state.skip_comments();
         }
 
         state.skip_comments();
@@ -165,5 +124,51 @@ impl Parser {
         utils::skip_right_bracket(state)?;
 
         Ok(Expression::Array { items })
+    }
+
+    pub(in crate::parser) fn array_pair(&self, state: &mut State) -> ParseResult<ArrayItem> {
+        let mut key = None;
+        let unpack = if state.current.kind == TokenKind::Ellipsis {
+            state.next();
+            true
+        } else {
+            false
+        };
+
+        let (mut by_ref, amper_span) = if state.current.kind == TokenKind::Ampersand {
+            let span = state.current.span;
+            state.next();
+            (true, span)
+        } else {
+            (false, (0, 0))
+        };
+
+        let mut value = self.expression(state, Precedence::Lowest)?;
+        if state.current.kind == TokenKind::DoubleArrow {
+            state.next();
+
+            if by_ref {
+                return Err(ParseError::UnexpectedToken(
+                    TokenKind::Ampersand.to_string(),
+                    amper_span,
+                ));
+            }
+
+            key = Some(value);
+            by_ref = if state.current.kind == TokenKind::Ampersand {
+                state.next();
+                true
+            } else {
+                false
+            };
+            value = self.expression(state, Precedence::Lowest)?;
+        }
+        
+        Ok(ArrayItem {
+            key,
+            value,
+            unpack,
+            by_ref,
+        })
     }
 }
