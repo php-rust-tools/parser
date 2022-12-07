@@ -468,22 +468,29 @@ impl Parser {
 
                     self.right_parenthesis(state)?;
 
-                    let end_token = if state.current.kind == TokenKind::Colon {
-                        self.colon(state)?;
-                        TokenKind::EndWhile
-                    } else {
-                        self.left_brace(state)?;
-                        TokenKind::RightBrace
-                    };
-
-                    let body = self.block(state, &end_token)?;
-
-                    if end_token == TokenKind::RightBrace {
-                        self.right_brace(state)?;
-                    } else {
-                        self.skip(state, TokenKind::EndWhile)?;
+                    let body = if state.current.kind == TokenKind::SemiColon {
                         self.semicolon(state)?;
-                    }
+                        vec![]
+                    } else {
+                        let end_token = if state.current.kind == TokenKind::Colon {
+                            self.colon(state)?;
+                            TokenKind::EndWhile
+                        } else {
+                            self.left_brace(state)?;
+                            TokenKind::RightBrace
+                        };
+    
+                        let body = self.block(state, &end_token)?;
+    
+                        if end_token == TokenKind::RightBrace {
+                            self.right_brace(state)?;
+                        } else {
+                            self.skip(state, TokenKind::EndWhile)?;
+                            self.semicolon(state)?;
+                        }
+
+                        body
+                    };
 
                     Statement::While { condition, body }
                 }
