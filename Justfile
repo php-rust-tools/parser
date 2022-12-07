@@ -20,13 +20,13 @@ fix:
     cargo clippy --fix --allow-dirty --allow-staged
 
 # dump AST for the given file.
-dump file: build
+dump file:
     cargo run --bin php-parser-rs -- {{file}}
 
 # run all integration tests, except third-party.
-test filter='': build
+test filter='':
     cargo test --all {{filter}} -- --skip third_party
 
 # run integration tests for third-party libraries.
-test-third-party: build
-    cargo test third_party
+test-third-party:
+    cargo test third_party -- --nocapture

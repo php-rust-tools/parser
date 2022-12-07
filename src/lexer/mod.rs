@@ -1337,11 +1337,6 @@ impl Lexer {
                 | [b'e' | b'E', b'0'..=b'9', ..]
         );
         if !is_float {
-            let base = if kind == NumberKind::OctalOrFloat {
-                8
-            } else {
-                10
-            };
             return parse_int(&buffer);
         }
 
