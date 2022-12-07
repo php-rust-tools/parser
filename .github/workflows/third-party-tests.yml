@@ -16,6 +16,11 @@ jobs:
           - 'stable'
         os:
           - 'ubuntu-latest'
+        target:
+          - 'psl'
+          - 'php-parser'
+          - 'symfony'
+          - 'laravel'
 
     steps:
       - name: checkout
@@ -35,15 +40,5 @@ jobs:
         run: |
           cargo install just
 
-      - name: test azjezz/psl
-        run: just test-psl
-
-      - name: test nikic/php-parser
-        run: just test-php-parser
-
-      - name: test symfony/symfony
-        run: just test-symfony
-
-      - name: test laravel/framework
-        run: just test-laravel
-
+      - name: test ${{ matrix.target }}
+        run: just test-${{ matrix.target }}
