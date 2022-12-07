@@ -1,0 +1,41 @@
+[
+    If {
+        condition: Variable(
+            Variable {
+                start: (
+                    3,
+                    5,
+                ),
+                name: "foo",
+                end: (
+                    3,
+                    9,
+                ),
+            },
+        ),
+        then: [],
+        else_ifs: [],
+        else: Some(
+            [
+                If {
+                    condition: Variable(
+                        Variable {
+                            start: (
+                                5,
+                                12,
+                            ),
+                            name: "bar",
+                            end: (
+                                5,
+                                16,
+                            ),
+                        },
+                    ),
+                    then: [],
+                    else_ifs: [],
+                    else: None,
+                },
+            ],
+        ),
+    },
+]

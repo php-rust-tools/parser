@@ -825,11 +825,18 @@ impl Parser {
 
                             self.skip(state, TokenKind::Else)?;
 
-                            self.left_brace(state)?;
+                            let r#else;
+                            if state.current.kind == TokenKind::LeftBrace {
+                                self.left_brace(state)?;
 
-                            let r#else = self.block(state, &TokenKind::RightBrace)?;
+                                r#else = self.block(state, &TokenKind::RightBrace)?;
 
-                            self.right_brace(state)?;
+                                self.right_brace(state)?;
+                            } else {
+                                r#else = vec![
+                                    self.statement(state)?
+                                ];
+                            }
 
                             Statement::If {
                                 condition,
