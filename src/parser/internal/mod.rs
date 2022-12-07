@@ -1,9 +1,12 @@
+pub mod arrays;
 pub mod attributes;
 pub mod blocks;
 pub mod classish;
 pub mod classish_statements;
+pub mod control_flow;
 pub mod functions;
 pub mod identifiers;
+pub mod loops;
 pub mod modifiers;
 pub mod namespaces;
 pub mod parameters;
