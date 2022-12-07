@@ -29,21 +29,20 @@ jobs:
           override: true
           components: rustfmt, clippy
 
-      - name: install just and hyperfine
-        run: |
-          cargo install just
-          cargo install hyperfine
-
       - name: cache
         uses: Swatinem/rust-cache@v2.0.0
 
       - name: check
         if: matrix.rust == 'stable'
-        run: just lint
+        run: |
+          cargo fmt --all -- --check
+          cargo clippy
 
       - name: test
-        run: just test
+        run: cargo test --all -- --skip third_party
 
       - name: bench
         if: matrix.rust == 'stable'
-        run: hyperfine --prepare "cargo build -r" --runs 10 --warmup 2 -i "cargo test --all -r"
+        run: |
+          cargo install hyperfine
+          hyperfine --prepare "cargo build -r" --runs 10 --warmup 2 -i "cargo test --all -r"

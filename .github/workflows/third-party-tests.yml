@@ -13,8 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         target:
-          - 'psl'
-          - 'php-parser'
+          - 'php_standard_library'
+          - 'php_parser'
           - 'symfony'
           - 'laravel'
 
@@ -29,12 +29,8 @@ jobs:
           override: true
           components: rustfmt, clippy
 
-      - name: install just
-        run: |
-          cargo install just
-
       - name: cache
         uses: Swatinem/rust-cache@v2.0.0
 
       - name: test ${{ matrix.target }}
-        run: just test-${{ matrix.target }}
+        run: cargo test ${{ matrix.target }} -- --nocapture
