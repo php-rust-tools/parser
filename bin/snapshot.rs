@@ -3,9 +3,8 @@ use std::fs::read_dir;
 use std::path::PathBuf;
 
 use php_parser_rs::lexer::Lexer;
-use php_parser_rs::parser::Parser;
+use php_parser_rs::parse;
 
-static PARSER: Parser = Parser::new();
 static LEXER: Lexer = Lexer::new();
 
 fn main() {
@@ -57,7 +56,7 @@ fn main() {
                     entry.to_string_lossy()
                 );
 
-                let ast = PARSER.parse(tokens);
+                let ast = parse(tokens);
                 match ast {
                     Ok(ast) => {
                         std::fs::write(ast_filename, format!("{:#?}\n", ast)).unwrap();

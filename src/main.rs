@@ -1,6 +1,5 @@
 use php_parser_rs::lexer::Lexer;
 use php_parser_rs::parser::error::ParseResult;
-use php_parser_rs::parser::Parser;
 
 fn main() -> ParseResult<()> {
     let file = match std::env::args().nth(1) {
@@ -22,12 +21,11 @@ fn main() -> ParseResult<()> {
     };
 
     let lexer = Lexer::new();
-    let parser = Parser::new();
 
     let tokens = lexer.tokenize(&contents)?;
     // dbg!(&tokens);
 
-    let ast = parser.parse(tokens)?;
+    let ast = php_parser_rs::parse(tokens)?;
 
     dbg!(ast);
 

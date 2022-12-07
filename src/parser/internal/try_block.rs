@@ -1,4 +1,5 @@
 use crate::lexer::token::TokenKind;
+use crate::parser;
 use crate::parser::ast::try_block::CatchBlock;
 use crate::parser::ast::try_block::CatchType;
 use crate::parser::ast::try_block::FinallyBlock;
@@ -6,92 +7,90 @@ use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::internal::blocks;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::precedences::Precedence;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
-use crate::parser::Parser;
 
-impl Parser {
-    pub(in crate::parser) fn try_block(&self, state: &mut State) -> ParseResult<Statement> {
-        let start = state.current.span;
+pub fn try_block(state: &mut State) -> ParseResult<Statement> {
+    let start = state.current.span;
+
+    state.next();
+    utils::skip_left_brace(state)?;
+
+    let body = blocks::body(state, &TokenKind::RightBrace)?;
+
+    utils::skip_right_brace(state)?;
+
+    let mut catches = Vec::new();
+    loop {
+        if state.current.kind != TokenKind::Catch {
+            break;
+        }
+
+        let catch_start = state.current.span;
 
         state.next();
+        utils::skip_left_parenthesis(state)?;
+
+        let types = catch_type(state)?;
+        let var = if state.current.kind == TokenKind::RightParen {
+            None
+        } else {
+            // TODO(azjezz): this is a variable, no an expression?
+            Some(parser::expression(state, Precedence::Lowest)?)
+        };
+
+        utils::skip_right_parenthesis(state)?;
         utils::skip_left_brace(state)?;
 
-        let body = self.body(state, &TokenKind::RightBrace)?;
+        let catch_body = blocks::body(state, &TokenKind::RightBrace)?;
 
         utils::skip_right_brace(state)?;
 
-        let mut catches = Vec::new();
-        loop {
-            if state.current.kind != TokenKind::Catch {
-                break;
-            }
+        let catch_end = state.current.span;
 
-            let catch_start = state.current.span;
-
-            state.next();
-            utils::skip_left_parenthesis(state)?;
-
-            let types = catch_type(state)?;
-            let var = if state.current.kind == TokenKind::RightParen {
-                None
-            } else {
-                // TODO(azjezz): this is a variable, no an expression?
-                Some(self.expression(state, Precedence::Lowest)?)
-            };
-
-            utils::skip_right_parenthesis(state)?;
-            utils::skip_left_brace(state)?;
-
-            let catch_body = self.body(state, &TokenKind::RightBrace)?;
-
-            utils::skip_right_brace(state)?;
-
-            let catch_end = state.current.span;
-
-            catches.push(CatchBlock {
-                start: catch_start,
-                end: catch_end,
-                types,
-                var,
-                body: catch_body,
-            })
-        }
-
-        let mut finally = None;
-        if state.current.kind == TokenKind::Finally {
-            let finally_start = state.current.span;
-            state.next();
-            utils::skip_left_brace(state)?;
-
-            let finally_body = self.body(state, &TokenKind::RightBrace)?;
-
-            utils::skip_right_brace(state)?;
-            let finally_end = state.current.span;
-
-            finally = Some(FinallyBlock {
-                start: finally_start,
-                end: finally_end,
-                body: finally_body,
-            });
-        }
-
-        if catches.is_empty() && finally.is_none() {
-            return Err(ParseError::TryWithoutCatchOrFinally(start));
-        }
-
-        let end = state.current.span;
-
-        Ok(Statement::Try(TryBlock {
-            start,
-            end,
-            body,
-            catches,
-            finally,
-        }))
+        catches.push(CatchBlock {
+            start: catch_start,
+            end: catch_end,
+            types,
+            var,
+            body: catch_body,
+        })
     }
+
+    let mut finally = None;
+    if state.current.kind == TokenKind::Finally {
+        let finally_start = state.current.span;
+        state.next();
+        utils::skip_left_brace(state)?;
+
+        let finally_body = blocks::body(state, &TokenKind::RightBrace)?;
+
+        utils::skip_right_brace(state)?;
+        let finally_end = state.current.span;
+
+        finally = Some(FinallyBlock {
+            start: finally_start,
+            end: finally_end,
+            body: finally_body,
+        });
+    }
+
+    if catches.is_empty() && finally.is_none() {
+        return Err(ParseError::TryWithoutCatchOrFinally(start));
+    }
+
+    let end = state.current.span;
+
+    Ok(Statement::Try(TryBlock {
+        start,
+        end,
+        body,
+        catches,
+        finally,
+    }))
 }
 
 #[inline(always)]

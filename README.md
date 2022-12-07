@@ -26,12 +26,11 @@ cargo add php-parser-rs
 ### Example
 
 ```rust
-use php_parser_rs::parser::Parser;
+use php_parser_rs::parse;
 use php_parser_rs::lexer::Lexer;
 
 fn main() -> ParseResult<()> {
     let lexer = Lexer::new();
-    let parser = Parser::new();
 
     let code = "
 <?php
@@ -44,7 +43,7 @@ hello();
 ";
 
     let tokens = lexer.tokenize(code.as_bytes())?;
-    let ast = parser.parse(tokens)?;
+    let ast = parse(tokens)?;
 
     dbg!(ast);
 

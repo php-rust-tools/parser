@@ -4,7 +4,6 @@ use std::path::PathBuf;
 use std::process::Command;
 
 use php_parser_rs::lexer::Lexer;
-use php_parser_rs::parser::Parser;
 
 #[test]
 fn third_party_1_php_standard_library() {
@@ -148,8 +147,7 @@ fn test_file(name: &str, filename: PathBuf) {
     Lexer::new()
         .tokenize(&code)
         .map(|tokens| {
-            Parser::new()
-                .parse(tokens)
+            php_parser_rs::parse(tokens)
                 .map(|_| {
                     println!("✅ successfully parsed file: `\"{}\"`.", name);
                 })

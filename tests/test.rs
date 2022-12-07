@@ -5,10 +5,8 @@ use std::path::PathBuf;
 use pretty_assertions::assert_str_eq;
 
 use php_parser_rs::lexer::Lexer;
-use php_parser_rs::parser::Parser;
 
 static LEXER: Lexer = Lexer::new();
-static PARSER: Parser = Parser::new();
 
 #[test]
 fn test_fixtures() {
@@ -71,7 +69,7 @@ fn test_fixtures() {
 
         if ast_file.exists() {
             let expected_ast = std::fs::read_to_string(&ast_file).unwrap();
-            let ast = PARSER.parse(tokens).unwrap();
+            let ast = php_parser_rs::parse(tokens).unwrap();
             assert_str_eq!(
                 expected_ast.trim(),
                 format!("{:#?}", ast),
@@ -89,7 +87,7 @@ fn test_fixtures() {
         );
 
         let expected_error = std::fs::read_to_string(&parse_err_file).unwrap();
-        let error = PARSER.parse(tokens).err().unwrap();
+        let error = php_parser_rs::parse(tokens).err().unwrap();
 
         assert_str_eq!(
             expected_error.trim(),

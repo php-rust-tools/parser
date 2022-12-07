@@ -70,7 +70,7 @@ pub fn skip_double_colon(state: &mut State) -> ParseResult<Span> {
     skip(state, TokenKind::DoubleColon)
 }
 
-pub fn colon(state: &mut State) -> ParseResult<Span> {
+pub fn skip_colon(state: &mut State) -> ParseResult<Span> {
     let span = skip(state, TokenKind::Colon)?;
     // A closing PHP tag is valid after a colon, since
     // that typically indicates the start of a block (control structures).
@@ -81,8 +81,6 @@ pub fn colon(state: &mut State) -> ParseResult<Span> {
 }
 
 pub fn skip(state: &mut State, kind: TokenKind) -> ParseResult<Span> {
-    state.skip_comments();
-
     if state.current.kind == kind {
         let end = state.current.span;
 

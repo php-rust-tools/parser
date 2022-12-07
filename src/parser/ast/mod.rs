@@ -11,6 +11,7 @@ pub mod variables;
 use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
+use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::classish::ClassishConstant;
@@ -316,7 +317,7 @@ pub enum Statement {
         declares: Vec<DeclareItem>,
         body: Block,
     },
-    Noop,
+    Noop(Span),
 }
 
 #[derive(Debug, Clone, PartialEq)]
