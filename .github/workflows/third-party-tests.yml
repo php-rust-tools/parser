@@ -35,6 +35,15 @@ jobs:
         run: |
           cargo install just
 
-      - name: test third-party
-        run: just test-third-party
+      - name: test azjezz/psl
+        run: just test-psl
+
+      - name: test nikic/php-parser
+        run: just test-php-parser
+
+      - name: test symfony/symfony
+        run: just test-symfony
+
+      - name: test laravel/framework
+        run: just test-laravel
 

@@ -27,6 +27,18 @@ dump file:
 test filter='':
     cargo test --all {{filter}} -- --skip third_party
 
-# run integration tests for third-party libraries.
-test-third-party:
-    cargo test third_party -- --nocapture
+# run integration tests for `azjezz/psl` library.
+test-psl:
+    cargo test php_standard_library -- --nocapture
+
+# run integration tests for `nikic/php-parser` library.
+test-php-parser:
+    cargo test nikic_php_parser -- --nocapture
+
+# run integration tests for `symfony/symfony` framework.
+test-symfony:
+    cargo test symfony_framework -- --nocapture
+
+# run integration tests for `laravel/framework` framework.
+test-laravel:
+    cargo test laravel_framework -- --nocapture
