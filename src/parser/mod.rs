@@ -778,18 +778,16 @@ impl Parser {
                             }
                         }
                         _ => {
-                            let body_end_token = if state.current.kind == TokenKind::LeftBrace {
+                            let then = if state.current.kind == TokenKind::LeftBrace {
                                 self.left_brace(state)?;
-                                TokenKind::RightBrace
-                            } else {
-                                TokenKind::SemiColon
-                            };
-
-                            let then = self.block(state, &body_end_token)?;
-
-                            if body_end_token == TokenKind::RightBrace {
+                                let then = self.block(state, &TokenKind::RightBrace)?;
                                 self.right_brace(state)?;
-                            }
+                                then
+                            } else {
+                                vec![
+                                    self.statement(state)?
+                                ]
+                            };
 
                             let mut else_ifs: Vec<ElseIf> = Vec::new();
                             loop {

@@ -1,0 +1,68 @@
+[
+    Expression {
+        expr: Closure(
+            Closure {
+                start: (
+                    3,
+                    1,
+                ),
+                end: (
+                    5,
+                    1,
+                ),
+                attributes: [],
+                parameters: FunctionParameterList {
+                    start: (
+                        3,
+                        10,
+                    ),
+                    end: (
+                        3,
+                        13,
+                    ),
+                    members: [],
+                },
+                return_ty: None,
+                uses: [],
+                by_ref: false,
+                body: [
+                    If {
+                        condition: Variable(
+                            Variable {
+                                start: (
+                                    4,
+                                    9,
+                                ),
+                                name: "foo",
+                                end: (
+                                    4,
+                                    13,
+                                ),
+                            },
+                        ),
+                        then: [
+                            Expression {
+                                expr: Variable(
+                                    Variable {
+                                        start: (
+                                            4,
+                                            15,
+                                        ),
+                                        name: "bar",
+                                        end: (
+                                            4,
+                                            19,
+                                        ),
+                                    },
+                                ),
+                            },
+                        ],
+                        else_ifs: [],
+                        else: None,
+                    },
+                ],
+                static: false,
+            },
+        ),
+    },
+]
