@@ -1,5 +1,11 @@
 use crate::lexer::token::TokenKind;
 
+pub enum Associativity {
+    Non,
+    Left,
+    Right,
+}
+
 #[allow(dead_code)]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Precedence {
@@ -108,10 +114,4 @@ impl Precedence {
             _ => return None,
         })
     }
-}
-
-pub enum Associativity {
-    Non,
-    Left,
-    Right,
 }
