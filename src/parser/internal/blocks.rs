@@ -19,7 +19,7 @@ impl Parser {
                 state.next();
                 continue;
             }
-            
+
             block.push(self.statement(state)?);
             state.skip_comments();
         }

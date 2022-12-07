@@ -762,7 +762,7 @@ impl Parser {
                                 self.colon(state)?;
 
                                 let body = self.block(state, &TokenKind::EndIf)?;
-                                
+
                                 r#else = Some(body);
                             }
 
