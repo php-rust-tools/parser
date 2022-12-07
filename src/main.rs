@@ -12,7 +12,7 @@ fn main() -> ParseResult<()> {
         }
     };
 
-    let contents = match std::fs::read_to_string(&file) {
+    let contents = match std::fs::read(&file) {
         Ok(contents) => contents,
         Err(error) => {
             println!("Failed to read file: {}", error);
@@ -24,7 +24,7 @@ fn main() -> ParseResult<()> {
     let lexer = Lexer::new();
     let parser = Parser::new();
 
-    let tokens = lexer.tokenize(contents.as_bytes())?;
+    let tokens = lexer.tokenize(&contents)?;
     dbg!(&tokens);
 
     let ast = parser.parse(tokens)?;
