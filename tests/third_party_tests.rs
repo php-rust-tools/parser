@@ -56,6 +56,21 @@ fn third_party_3_symfony_framework() {
     );
 }
 
+#[test]
+fn third_party_4_nikic_php_parser() {
+    test_repository(
+        "nikic/PHP-Parser",
+        "https://github.com/nikic/PHP-Parser",
+        "4.x",
+        &[
+            "lib/PhpParser",
+            "grammar",
+            "test"
+        ],
+        &[],
+    );
+}
+
 fn test_repository(
     name: &str,
     repository: &str,
