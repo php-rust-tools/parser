@@ -177,6 +177,11 @@ impl Parser {
 
         state.clear_comments();
 
+        // A closing PHP tag is valid after the end of any top-level statement.
+        if state.current.kind == TokenKind::CloseTag {
+            state.next();
+        }
+
         Ok(statement)
     }
 
@@ -706,13 +711,18 @@ impl Parser {
                     // FIXME: Tidy up duplication and make the intent a bit clearer.
                     match state.current.kind {
                         TokenKind::Colon => {
-                            state.next();
+                            self.colon(state)?;
 
                             let mut then = vec![];
                             while !matches!(
                                 state.current.kind,
                                 TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
                             ) {
+                                if let TokenKind::OpenTag(_) = state.current.kind {
+                                    state.next();
+                                    continue;
+                                }
+
                                 then.push(self.statement(state)?);
                             }
 
@@ -735,6 +745,11 @@ impl Parser {
                                     state.current.kind,
                                     TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
                                 ) {
+                                    if let TokenKind::OpenTag(_) = state.current.kind {
+                                        state.next();
+                                        continue;
+                                    }
+
                                     body.push(self.statement(state)?);
                                 }
 
@@ -746,10 +761,8 @@ impl Parser {
                                 state.next();
                                 self.colon(state)?;
 
-                                let mut body = vec![];
-                                while state.current.kind != TokenKind::EndIf {
-                                    body.push(self.statement(state)?);
-                                }
+                                let body = self.block(state, &TokenKind::EndIf)?;
+
                                 r#else = Some(body);
                             }
 
@@ -766,8 +779,7 @@ impl Parser {
                         }
                         _ => {
                             let body_end_token = if state.current.kind == TokenKind::LeftBrace {
-                                state.next();
-
+                                self.left_brace(state)?;
                                 TokenKind::RightBrace
                             } else {
                                 TokenKind::SemiColon
@@ -911,6 +923,11 @@ impl Parser {
         };
 
         state.skip_comments();
+
+        // A closing PHP tag is valid after the end of any top-level statement.
+        if state.current.kind == TokenKind::CloseTag {
+            state.next();
+        }
 
         Ok(statement)
     }

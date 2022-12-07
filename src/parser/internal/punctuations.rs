@@ -26,13 +26,21 @@ impl Parser {
                 found,
                 state.current.span,
             ));
+        } else {
+            state.next();
         }
 
         Ok(end)
     }
 
     pub(in crate::parser) fn left_brace(&self, state: &mut State) -> ParseResult<Span> {
-        self.skip(state, TokenKind::LeftBrace)
+        let span = self.skip(state, TokenKind::LeftBrace)?;
+        // A closing PHP tag is valid after a left brace, since
+        // that typically indicates the start of a block (control structures).
+        if state.current.kind == TokenKind::CloseTag {
+            state.next();
+        }
+        Ok(span)
     }
 
     pub(in crate::parser) fn right_brace(&self, state: &mut State) -> ParseResult<Span> {
@@ -56,6 +64,12 @@ impl Parser {
     }
 
     pub(in crate::parser) fn colon(&self, state: &mut State) -> ParseResult<Span> {
-        self.skip(state, TokenKind::Colon)
+        let span = self.skip(state, TokenKind::Colon)?;
+        // A closing PHP tag is valid after a colon, since
+        // that typically indicates the start of a block (control structures).
+        if state.current.kind == TokenKind::CloseTag {
+            state.next();
+        }
+        Ok(span)
     }
 }

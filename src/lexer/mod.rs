@@ -37,9 +37,7 @@ impl Lexer {
                 // The "Initial" state is used to parse inline HTML. It is essentially a catch-all
                 // state that will build up a single token buffer until it encounters an open tag
                 // of some description.
-                StackFrame::Initial => {
-                    tokens.append(&mut self.initial(&mut state)?);
-                }
+                StackFrame::Initial => self.initial(&mut state, &mut tokens)?,
                 // The scripting state is entered when an open tag is encountered in the source code.
                 // This tells the lexer to start analysing characters at PHP tokens instead of inline HTML.
                 StackFrame::Scripting => {
@@ -107,17 +105,15 @@ impl Lexer {
         }
     }
 
-    fn initial(&self, state: &mut State) -> SyntaxResult<Vec<Token>> {
+    fn initial(&self, state: &mut State, tokens: &mut Vec<Token>) -> SyntaxResult<()> {
         let inline_span = state.span;
         let mut buffer = Vec::new();
         while let Some(char) = state.current {
             if state.try_read(b"<?php") {
                 let tag_span = state.span;
+
                 state.skip(5);
-
                 state.replace(StackFrame::Scripting);
-
-                let mut tokens = vec![];
 
                 if !buffer.is_empty() {
                     tokens.push(Token {
@@ -131,17 +127,19 @@ impl Lexer {
                     span: tag_span,
                 });
 
-                return Ok(tokens);
+                return Ok(());
             }
 
             state.next();
             buffer.push(char);
         }
 
-        Ok(vec![Token {
+        tokens.push(Token {
             kind: TokenKind::InlineHtml(buffer.into()),
             span: inline_span,
-        }])
+        });
+
+        Ok(())
     }
 
     fn scripting(&self, state: &mut State) -> SyntaxResult<Token> {
