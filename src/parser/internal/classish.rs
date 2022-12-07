@@ -1,5 +1,5 @@
+use crate::expect_token;
 use crate::lexer::token::TokenKind;
-
 use crate::parser::ast::enums::BackedEnum;
 use crate::parser::ast::enums::BackedEnumType;
 use crate::parser::ast::enums::UnitEnum;
@@ -7,42 +7,43 @@ use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
+use crate::parser::internal::identifiers;
+use crate::parser::internal::modifiers;
+use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::parser::Parser;
-
-use crate::expect_token;
 use crate::scoped;
 
 impl Parser {
     pub(in crate::parser) fn class_definition(&self, state: &mut State) -> ParseResult<Statement> {
-        let modifiers = self.get_class_modifier_group(self.modifiers(state)?)?;
+        let modifiers = modifiers::class_group(modifiers::collect(state)?)?;
 
-        self.skip(state, TokenKind::Class)?;
+        utils::skip(state, TokenKind::Class)?;
 
-        let name = self.ident(state)?;
+        let name = identifiers::ident(state)?;
 
         let mut has_parent = false;
         let mut extends: Option<Identifier> = None;
 
         if state.current.kind == TokenKind::Extends {
             state.next();
-            extends = Some(self.full_name(state)?);
+            extends = Some(identifiers::full_name(state)?);
             has_parent = true;
         }
 
         let implements = if state.current.kind == TokenKind::Implements {
             state.next();
 
-            self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
-                parser.full_name(state)
+            self.at_least_one_comma_separated::<Identifier>(state, &|_, state| {
+                identifiers::full_name(state)
             })?
         } else {
             Vec::new()
         };
 
         let attributes = state.get_attributes();
-        self.left_brace(state)?;
+        utils::skip_left_brace(state)?;
 
         let body = scoped!(
             state,
@@ -64,7 +65,7 @@ impl Parser {
             }
         );
 
-        self.right_brace(state)?;
+        utils::skip_right_brace(state)?;
 
         Ok(Statement::Class {
             name,
@@ -80,22 +81,22 @@ impl Parser {
         &self,
         state: &mut State,
     ) -> ParseResult<Statement> {
-        self.skip(state, TokenKind::Interface)?;
+        utils::skip(state, TokenKind::Interface)?;
 
-        let name = self.ident(state)?;
+        let name = identifiers::ident(state)?;
 
         scoped!(state, Scope::Interface(name.clone()), {
             let extends = if state.current.kind == TokenKind::Extends {
                 state.next();
 
-                self.at_least_one_comma_separated::<Identifier>(state, &|parser, state| {
-                    parser.full_name(state)
+                self.at_least_one_comma_separated::<Identifier>(state, &|_, state| {
+                    identifiers::full_name(state)
                 })?
             } else {
                 Vec::new()
             };
 
-            self.left_brace(state)?;
+            utils::skip_left_brace(state)?;
 
             let attributes = state.get_attributes();
 
@@ -110,7 +111,7 @@ impl Parser {
 
                 body.push(self.interface_statement(state)?);
             }
-            self.right_brace(state)?;
+            utils::skip_right_brace(state)?;
 
             Ok(Statement::Interface {
                 name,
@@ -122,12 +123,12 @@ impl Parser {
     }
 
     pub(in crate::parser) fn trait_definition(&self, state: &mut State) -> ParseResult<Statement> {
-        self.skip(state, TokenKind::Trait)?;
+        utils::skip(state, TokenKind::Trait)?;
 
-        let name = self.ident(state)?;
+        let name = identifiers::ident(state)?;
 
         scoped!(state, Scope::Trait(name.clone()), {
-            self.left_brace(state)?;
+            utils::skip_left_brace(state)?;
 
             let attributes = state.get_attributes();
 
@@ -142,7 +143,7 @@ impl Parser {
 
                 body.push(self.class_like_statement(state)?);
             }
-            self.right_brace(state)?;
+            utils::skip_right_brace(state)?;
 
             Ok(Statement::Trait {
                 name,
@@ -156,11 +157,11 @@ impl Parser {
         &self,
         state: &mut State,
     ) -> ParseResult<Expression> {
-        self.skip(state, TokenKind::New)?;
+        utils::skip(state, TokenKind::New)?;
 
         self.gather_attributes(state)?;
 
-        self.skip(state, TokenKind::Class)?;
+        utils::skip(state, TokenKind::Class)?;
 
         let mut args = vec![];
 
@@ -173,7 +174,7 @@ impl Parser {
 
         if state.current.kind == TokenKind::Extends {
             state.next();
-            extends = Some(self.full_name(state)?);
+            extends = Some(identifiers::full_name(state)?);
             has_parent = true;
         }
 
@@ -183,7 +184,7 @@ impl Parser {
                 state.next();
 
                 while state.current.kind != TokenKind::LeftBrace {
-                    implements.push(self.full_name(state)?);
+                    implements.push(identifiers::full_name(state)?);
 
                     if state.current.kind == TokenKind::Comma {
                         state.next();
@@ -193,7 +194,7 @@ impl Parser {
                 }
             }
 
-            self.left_brace(state)?;
+            utils::skip_left_brace(state)?;
 
             let attributes = state.get_attributes();
 
@@ -202,7 +203,7 @@ impl Parser {
                 body.push(self.class_like_statement(state)?);
             }
 
-            self.right_brace(state)?;
+            utils::skip_right_brace(state)?;
 
             Ok(Expression::New {
                 target: Box::new(Expression::AnonymousClass {
@@ -219,12 +220,12 @@ impl Parser {
     pub(in crate::parser) fn enum_definition(&self, state: &mut State) -> ParseResult<Statement> {
         let start = state.current.span;
 
-        self.skip(state, TokenKind::Enum)?;
+        utils::skip(state, TokenKind::Enum)?;
 
-        let name = self.ident(state)?;
+        let name = identifiers::ident(state)?;
 
         let backed_type: Option<BackedEnumType> = if state.current.kind == TokenKind::Colon {
-            self.colon(state)?;
+            utils::colon(state)?;
 
             expect_token!([
                 TokenKind::Identifier(s) if s == b"string" || s == b"int" => {
@@ -244,7 +245,7 @@ impl Parser {
             state.next();
 
             while state.current.kind != TokenKind::LeftBrace {
-                implements.push(self.full_name(state)?);
+                implements.push(identifiers::full_name(state)?);
 
                 if state.current.kind == TokenKind::Comma {
                     state.next();
@@ -257,7 +258,7 @@ impl Parser {
         let attributes = state.get_attributes();
         if let Some(backed_type) = backed_type {
             let (members, end) = scoped!(state, Scope::Enum(name.clone(), true), {
-                self.left_brace(state)?;
+                utils::skip_left_brace(state)?;
 
                 // TODO(azjezz): we know members might have corrupted start span, we could updated it here?
                 // as we know the correct start span is `state.current.span`.
@@ -267,7 +268,7 @@ impl Parser {
                     members.push(self.backed_enum_member(state)?);
                 }
 
-                let end = self.right_brace(state)?;
+                let end = utils::skip_right_brace(state)?;
 
                 (members, end)
             });
@@ -283,7 +284,7 @@ impl Parser {
             }))
         } else {
             let (members, end) = scoped!(state, Scope::Enum(name.clone(), false), {
-                self.left_brace(state)?;
+                utils::skip_left_brace(state)?;
 
                 let mut members = Vec::new();
                 while state.current.kind != TokenKind::RightBrace {
@@ -291,7 +292,7 @@ impl Parser {
                     members.push(self.unit_enum_member(state)?);
                 }
 
-                (members, self.right_brace(state)?)
+                (members, utils::skip_right_brace(state)?)
             });
 
             Ok(Statement::UnitEnum(UnitEnum {

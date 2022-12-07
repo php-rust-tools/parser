@@ -1,3 +1,4 @@
+use super::identifiers;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::functions::FunctionParameter;
 use crate::parser::ast::functions::FunctionParameterList;
@@ -7,12 +8,13 @@ use crate::parser::ast::Arg;
 use crate::parser::ast::Expression;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::internal::data_type;
+use crate::parser::internal::modifiers;
 use crate::parser::internal::precedences::Precedence;
+use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::parser::Parser;
-
-use super::identifiers::is_reserved_ident;
 
 impl Parser {
     pub(in crate::parser) fn function_parameter_list(
@@ -22,7 +24,7 @@ impl Parser {
         let mut members = Vec::new();
 
         let list_start = state.current.span;
-        self.left_parenthesis(state)?;
+        utils::skip_left_parenthesis(state)?;
 
         state.skip_comments();
 
@@ -31,7 +33,7 @@ impl Parser {
 
             self.gather_attributes(state)?;
 
-            let ty = self.get_optional_type(state)?;
+            let ty = data_type::optional_data_type(state)?;
 
             let mut variadic = false;
             let mut by_ref = false;
@@ -48,7 +50,7 @@ impl Parser {
             }
 
             // 2. Then expect a variable.
-            let var = self.var(state)?;
+            let var = identifiers::var(state)?;
 
             let mut default = None;
             if state.current.kind == TokenKind::Equals {
@@ -78,7 +80,7 @@ impl Parser {
             }
         }
 
-        self.right_parenthesis(state)?;
+        utils::skip_right_parenthesis(state)?;
 
         let list_end = state.current.span;
 
@@ -132,7 +134,7 @@ impl Parser {
         let mut members = Vec::new();
 
         let list_start = state.current.span;
-        self.left_parenthesis(state)?;
+        utils::skip_left_parenthesis(state)?;
 
         state.skip_comments();
 
@@ -141,9 +143,9 @@ impl Parser {
 
             self.gather_attributes(state)?;
 
-            let modifiers = self.get_promoted_property_modifier_group(self.modifiers(state)?)?;
+            let modifiers = modifiers::promoted_property_group(modifiers::collect(state)?)?;
 
-            let ty = self.get_optional_type(state)?;
+            let ty = data_type::optional_data_type(state)?;
 
             let mut variadic = false;
             let mut by_ref = false;
@@ -163,7 +165,7 @@ impl Parser {
             }
 
             // 2. Then expect a variable.
-            let var = self.var(state)?;
+            let var = identifiers::var(state)?;
 
             if !modifiers.is_empty() {
                 match construct {
@@ -232,7 +234,7 @@ impl Parser {
             }
         }
 
-        self.right_parenthesis(state)?;
+        utils::skip_right_parenthesis(state)?;
 
         let list_end = state.current.span;
 
@@ -244,7 +246,7 @@ impl Parser {
     }
 
     pub(in crate::parser) fn args_list(&self, state: &mut State) -> ParseResult<Vec<Arg>> {
-        self.left_parenthesis(state)?;
+        utils::skip_left_parenthesis(state)?;
         state.skip_comments();
 
         let mut args = Vec::new();
@@ -254,10 +256,10 @@ impl Parser {
             let mut name = None;
             let mut unpack = false;
             if (matches!(state.current.kind, TokenKind::Identifier(_))
-                || is_reserved_ident(&state.current.kind))
+                || identifiers::is_reserved_ident(&state.current.kind))
                 && state.peek.kind == TokenKind::Colon
             {
-                name = Some(self.ident_maybe_reserved(state)?);
+                name = Some(identifiers::ident_maybe_reserved(state)?);
                 has_used_named_arguments = true;
                 state.next();
             } else if state.current.kind == TokenKind::Ellipsis {
@@ -296,7 +298,7 @@ impl Parser {
             }
         }
 
-        self.right_parenthesis(state)?;
+        utils::skip_right_parenthesis(state)?;
 
         Ok(args)
     }

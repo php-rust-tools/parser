@@ -15,8 +15,10 @@ use crate::parser::ast::{
 };
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::internal::identifiers;
 use crate::parser::internal::identifiers::is_reserved_ident;
 use crate::parser::internal::precedences::{Associativity, Precedence};
+use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub mod ast;
@@ -83,17 +85,17 @@ impl Parser {
                 };
 
                 if state.peek.kind == TokenKind::LeftBrace {
-                    let prefix = self.full_name(state)?;
+                    let prefix = identifiers::full_name(state)?;
                     state.next();
 
                     let mut uses = Vec::new();
                     while state.current.kind != TokenKind::RightBrace {
-                        let name = self.full_name(state)?;
+                        let name = identifiers::full_name(state)?;
                         let mut alias = None;
 
                         if state.current.kind == TokenKind::As {
                             state.next();
-                            alias = Some(self.ident(state)?);
+                            alias = Some(identifiers::ident(state)?);
                         }
 
                         uses.push(Use { name, alias });
@@ -104,19 +106,19 @@ impl Parser {
                         }
                     }
 
-                    self.right_brace(state)?;
-                    self.semicolon(state)?;
+                    utils::skip_right_brace(state)?;
+                    utils::skip_semicolon(state)?;
 
                     Statement::GroupUse { prefix, kind, uses }
                 } else {
                     let mut uses = Vec::new();
                     while !state.is_eof() {
-                        let name = self.full_name(state)?;
+                        let name = identifiers::full_name(state)?;
                         let mut alias = None;
 
                         if state.current.kind == TokenKind::As {
                             state.next();
-                            alias = Some(self.ident(state)?);
+                            alias = Some(identifiers::ident(state)?);
                         }
 
                         uses.push(Use { name, alias });
@@ -126,7 +128,7 @@ impl Parser {
                             continue;
                         }
 
-                        self.semicolon(state)?;
+                        utils::skip_semicolon(state)?;
                         break;
                     }
 
@@ -139,9 +141,9 @@ impl Parser {
                 let mut constants = vec![];
 
                 loop {
-                    let name = self.ident(state)?;
+                    let name = identifiers::ident(state)?;
 
-                    self.skip(state, TokenKind::Equals)?;
+                    utils::skip(state, TokenKind::Equals)?;
 
                     let value = self.expression(state, Precedence::Lowest)?;
 
@@ -154,7 +156,7 @@ impl Parser {
                     }
                 }
 
-                self.semicolon(state)?;
+                utils::skip_semicolon(state)?;
 
                 Statement::Constant { constants }
             }
@@ -216,7 +218,7 @@ impl Parser {
                             ) {
                                 let expr = self.expression(state, Precedence::Lowest)?;
 
-                                self.semicolon(state)?;
+                                utils::skip_semicolon(state)?;
 
                                 return Ok(Statement::Expression { expr });
                             }
@@ -264,7 +266,7 @@ impl Parser {
                             ) {
                                 let expr = self.expression(state, Precedence::Lowest)?;
 
-                                self.semicolon(state)?;
+                                utils::skip_semicolon(state)?;
 
                                 return Ok(Statement::Expression { expr });
                             }
@@ -278,28 +280,28 @@ impl Parser {
                 TokenKind::Goto => {
                     state.next();
 
-                    let label = self.ident(state)?;
+                    let label = identifiers::ident(state)?;
 
-                    self.semicolon(state)?;
+                    utils::skip_semicolon(state)?;
 
                     Statement::Goto { label }
                 }
                 TokenKind::Identifier(_) if state.peek.kind == TokenKind::Colon => {
-                    let label = self.ident(state)?;
+                    let label = identifiers::ident(state)?;
 
-                    self.colon(state)?;
+                    utils::colon(state)?;
 
                     Statement::Label { label }
                 }
                 TokenKind::Declare => {
                     state.next();
-                    self.left_parenthesis(state)?;
+                    utils::skip_left_parenthesis(state)?;
 
                     let mut declares = Vec::new();
                     loop {
-                        let key = self.ident(state)?;
+                        let key = identifiers::ident(state)?;
 
-                        self.skip(state, TokenKind::Equals)?;
+                        utils::skip(state, TokenKind::Equals)?;
 
                         let value = expect_literal!(state);
 
@@ -312,21 +314,21 @@ impl Parser {
                         }
                     }
 
-                    self.right_parenthesis(state)?;
+                    utils::skip_right_parenthesis(state)?;
 
                     let body = if state.current.kind == TokenKind::LeftBrace {
                         state.next();
-                        let b = self.block(state, &TokenKind::RightBrace)?;
-                        self.right_brace(state)?;
+                        let b = self.body(state, &TokenKind::RightBrace)?;
+                        utils::skip_right_brace(state)?;
                         b
                     } else if state.current.kind == TokenKind::Colon {
-                        self.colon(state)?;
-                        let b = self.block(state, &TokenKind::EndDeclare)?;
-                        self.skip(state, TokenKind::EndDeclare)?;
-                        self.semicolon(state)?;
+                        utils::colon(state)?;
+                        let b = self.body(state, &TokenKind::EndDeclare)?;
+                        utils::skip(state, TokenKind::EndDeclare)?;
+                        utils::skip_semicolon(state)?;
                         b
                     } else {
-                        self.semicolon(state)?;
+                        utils::skip_semicolon(state)?;
                         vec![]
                     };
 
@@ -338,7 +340,7 @@ impl Parser {
                     let mut vars = vec![];
                     // `loop` instead of `while` as we don't allow for extra commas.
                     loop {
-                        vars.push(self.var(state)?);
+                        vars.push(identifiers::var(state)?);
 
                         if state.current.kind == TokenKind::Comma {
                             state.next();
@@ -347,7 +349,7 @@ impl Parser {
                         }
                     }
 
-                    self.semicolon(state)?;
+                    utils::skip_semicolon(state)?;
                     Statement::Global { vars }
                 }
                 TokenKind::Static if matches!(state.peek.kind, TokenKind::Variable(_)) => {
@@ -357,7 +359,7 @@ impl Parser {
 
                     // `loop` instead of `while` as we don't allow for extra commas.
                     loop {
-                        let var = self.var(state)?;
+                        let var = identifiers::var(state)?;
                         let mut default = None;
 
                         if state.current.kind == TokenKind::Equals {
@@ -376,7 +378,7 @@ impl Parser {
                         }
                     }
 
-                    self.semicolon(state)?;
+                    utils::skip_semicolon(state)?;
 
                     Statement::Static { vars }
                 }
@@ -463,7 +465,7 @@ impl Parser {
                         }
                     }
 
-                    self.semicolon(state)?;
+                    utils::skip_semicolon(state)?;
                     Statement::Echo { values }
                 }
                 TokenKind::Return => {
@@ -475,13 +477,13 @@ impl Parser {
                     } = state.current
                     {
                         let ret = Statement::Return { value: None };
-                        self.semicolon(state)?;
+                        utils::skip_semicolon(state)?;
                         ret
                     } else {
                         let ret = Statement::Return {
                             value: self.expression(state, Precedence::Lowest).ok(),
                         };
-                        self.semicolon(state)?;
+                        utils::skip_semicolon(state)?;
                         ret
                     }
                 }
@@ -491,11 +493,11 @@ impl Parser {
                     Statement::Noop
                 }
                 TokenKind::Try => self.try_block(state)?,
-                TokenKind::LeftBrace => self.free_standing_block(state)?,
+                TokenKind::LeftBrace => self.block_statement(state)?,
                 _ => {
                     let expr = self.expression(state, Precedence::Lowest)?;
 
-                    self.semicolon(state)?;
+                    utils::skip_semicolon(state)?;
 
                     Statement::Expression { expr }
                 }
@@ -614,7 +616,7 @@ impl Parser {
                         target: Box::new(target),
                     }
                 }
-                TokenKind::Variable(_) => Expression::Variable(self.var(state)?),
+                TokenKind::Variable(_) => Expression::Variable(identifiers::var(state)?),
                 TokenKind::LiteralInteger(i) => {
                     let e = Expression::LiteralInteger { i: i.clone() };
                     state.next();
@@ -628,7 +630,7 @@ impl Parser {
                 TokenKind::Identifier(_)
                 | TokenKind::QualifiedIdentifier(_)
                 | TokenKind::FullyQualifiedIdentifier(_) => {
-                    Expression::Identifier(self.full_name(state)?)
+                    Expression::Identifier(identifiers::full_name(state)?)
                 }
                 TokenKind::Static => {
                     state.next();
@@ -673,18 +675,18 @@ impl Parser {
 
                     let e = self.expression(state, Precedence::Lowest)?;
 
-                    self.right_parenthesis(state)?;
+                    utils::skip_right_parenthesis(state)?;
 
                     e
                 }
                 TokenKind::Match => {
                     state.next();
-                    self.left_parenthesis(state)?;
+                    utils::skip_left_parenthesis(state)?;
 
                     let condition = Box::new(self.expression(state, Precedence::Lowest)?);
 
-                    self.right_parenthesis(state)?;
-                    self.left_brace(state)?;
+                    utils::skip_right_parenthesis(state)?;
+                    utils::skip_left_brace(state)?;
 
                     let mut default = None;
                     let mut arms = Vec::new();
@@ -705,7 +707,7 @@ impl Parser {
                                 state.next();
                             }
 
-                            self.double_arrow(state)?;
+                            utils::skip_double_arrow(state)?;
 
                             let body = self.expression(state, Precedence::Lowest)?;
 
@@ -723,7 +725,7 @@ impl Parser {
                             }
 
                             if !conditions.is_empty() {
-                                self.double_arrow(state)?;
+                                utils::skip_double_arrow(state)?;
                             } else {
                                 break;
                             }
@@ -740,7 +742,7 @@ impl Parser {
                         }
                     }
 
-                    self.right_brace(state)?;
+                    utils::skip_right_brace(state)?;
 
                     Expression::Match {
                         condition,
@@ -753,7 +755,7 @@ impl Parser {
 
                     state.next();
 
-                    self.left_parenthesis(state)?;
+                    utils::skip_left_parenthesis(state)?;
 
                     while state.current.kind != TokenKind::RightParen {
                         let mut key = None;
@@ -814,7 +816,7 @@ impl Parser {
                         state.skip_comments();
                     }
 
-                    self.right_parenthesis(state)?;
+                    utils::skip_right_parenthesis(state)?;
 
                     Expression::Array { items }
                 }
@@ -923,7 +925,7 @@ impl Parser {
                 match kind {
                     TokenKind::Question => {
                         let then = self.expression(state, Precedence::Lowest)?;
-                        self.colon(state)?;
+                        utils::colon(state)?;
                         let otherwise = self.expression(state, rpred)?;
                         left = Expression::Ternary {
                             condition: Box::new(left),
@@ -1002,7 +1004,7 @@ impl Parser {
                 } else {
                     let index = self.expression(state, Precedence::Lowest)?;
 
-                    self.right_bracket(state)?;
+                    utils::skip_right_bracket(state)?;
 
                     Expression::ArrayIndex {
                         array: Box::new(lhs),
@@ -1017,15 +1019,15 @@ impl Parser {
 
                 let property = match state.current.kind.clone() {
                     TokenKind::Dollar => self.dynamic_variable(state)?,
-                    TokenKind::Variable(_) => Expression::Variable(self.var(state)?),
-                    TokenKind::Identifier(_) => Expression::Identifier(self.ident(state)?),
+                    TokenKind::Variable(_) => Expression::Variable(identifiers::var(state)?),
+                    TokenKind::Identifier(_) => Expression::Identifier(identifiers::ident(state)?),
                     TokenKind::LeftBrace => {
                         must_be_method_call = true;
                         state.next();
 
                         let name = self.expression(state, Precedence::Lowest)?;
 
-                        self.right_brace(state)?;
+                        utils::skip_right_brace(state)?;
 
                         Expression::DynamicVariable {
                             name: Box::new(name),
@@ -1043,7 +1045,7 @@ impl Parser {
                         })
                     }
                     _ if is_reserved_ident(&state.current.kind) => {
-                        Expression::Identifier(self.ident_maybe_reserved(state)?)
+                        Expression::Identifier(identifiers::ident_maybe_reserved(state)?)
                     }
                     _ => {
                         return expected_token_err!(["`{`", "`$`", "an identifier"], state);
@@ -1088,14 +1090,14 @@ impl Parser {
 
                 let property = match state.current.kind {
                     TokenKind::LeftBrace => {
-                        self.left_brace(state)?;
+                        utils::skip_left_brace(state)?;
                         let expr = self.expression(state, Precedence::Lowest)?;
-                        self.right_brace(state)?;
+                        utils::skip_right_brace(state)?;
                         expr
                     }
-                    TokenKind::Variable(_) => Expression::Variable(self.var(state)?),
+                    TokenKind::Variable(_) => Expression::Variable(identifiers::var(state)?),
                     TokenKind::Dollar => self.dynamic_variable(state)?,
-                    _ => Expression::Identifier(self.ident_maybe_reserved(state)?),
+                    _ => Expression::Identifier(identifiers::ident_maybe_reserved(state)?),
                 };
 
                 if state.current.kind == TokenKind::LeftParen {
@@ -1293,8 +1295,8 @@ impl Parser {
                         let var = Expression::Variable(Variable { start, name, end });
 
                         let e = self.expression(state, Precedence::Lowest)?;
-                        self.right_bracket(state)?;
-                        self.right_brace(state)?;
+                        utils::skip_right_bracket(state)?;
+                        utils::skip_right_brace(state)?;
 
                         // TODO: we should use a different node for this.
                         Expression::ArrayIndex {
@@ -1305,7 +1307,7 @@ impl Parser {
                     _ => {
                         // Arbitrary expressions are allowed, but are treated as variable variables.
                         let e = self.expression(state, Precedence::Lowest)?;
-                        self.right_brace(state)?;
+                        utils::skip_right_brace(state)?;
 
                         Expression::DynamicVariable { name: Box::new(e) }
                     }
@@ -1316,12 +1318,12 @@ impl Parser {
                 // "{$expr}"
                 state.next();
                 let e = self.expression(state, Precedence::Lowest)?;
-                self.right_brace(state)?;
+                utils::skip_right_brace(state)?;
                 Some(StringPart::Expr(Box::new(e)))
             }
             TokenKind::Variable(_) => {
                 // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
-                let var = Expression::Variable(self.var(state)?);
+                let var = Expression::Variable(identifiers::var(state)?);
                 let e = match state.current.kind {
                     TokenKind::LeftBracket => {
                         state.next();
@@ -1355,7 +1357,7 @@ impl Parser {
                                 e
                             }
                             TokenKind::Variable(_) => {
-                                let v = self.var(state)?;
+                                let v = identifiers::var(state)?;
                                 Expression::Variable(v)
                             }
                             _ => {
@@ -1366,7 +1368,7 @@ impl Parser {
                             }
                         };
 
-                        self.right_bracket(state)?;
+                        utils::skip_right_bracket(state)?;
 
                         Expression::ArrayIndex {
                             array: Box::new(var),
@@ -1378,7 +1380,7 @@ impl Parser {
                         Expression::PropertyFetch {
                             target: Box::new(var),
                             property: Box::new(Expression::Identifier(
-                                self.ident_maybe_reserved(state)?,
+                                identifiers::ident_maybe_reserved(state)?,
                             )),
                         }
                     }
@@ -1387,7 +1389,7 @@ impl Parser {
                         Expression::NullsafePropertyFetch {
                             target: Box::new(var),
                             property: Box::new(Expression::Identifier(
-                                self.ident_maybe_reserved(state)?,
+                                identifiers::ident_maybe_reserved(state)?,
                             )),
                         }
                     }
