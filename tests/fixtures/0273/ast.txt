@@ -1,0 +1,113 @@
+[
+    Class {
+        name: Identifier {
+            start: (
+                3,
+                7,
+            ),
+            name: "a",
+            end: (
+                3,
+                9,
+            ),
+        },
+        attributes: [],
+        extends: None,
+        implements: [],
+        body: [
+            Method(
+                Method {
+                    start: (
+                        4,
+                        5,
+                    ),
+                    end: (
+                        6,
+                        5,
+                    ),
+                    name: Identifier {
+                        start: (
+                            4,
+                            21,
+                        ),
+                        name: "foo",
+                        end: (
+                            4,
+                            24,
+                        ),
+                    },
+                    attributes: [],
+                    parameters: MethodParameterList {
+                        start: (
+                            4,
+                            24,
+                        ),
+                        end: (
+                            4,
+                            27,
+                        ),
+                        members: [],
+                    },
+                    body: Some(
+                        [
+                            Expression {
+                                expr: Infix {
+                                    lhs: Variable(
+                                        Variable {
+                                            start: (
+                                                5,
+                                                9,
+                                            ),
+                                            name: "a",
+                                            end: (
+                                                5,
+                                                12,
+                                            ),
+                                        },
+                                    ),
+                                    op: Assign,
+                                    rhs: StaticMethodCall {
+                                        target: Static,
+                                        method: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    5,
+                                                    22,
+                                                ),
+                                                name: "bar",
+                                                end: (
+                                                    5,
+                                                    25,
+                                                ),
+                                            },
+                                        ),
+                                        args: [],
+                                    },
+                                },
+                            },
+                        ],
+                    ),
+                    modifiers: MethodModifierGroup {
+                        modifiers: [
+                            Public {
+                                start: (
+                                    4,
+                                    5,
+                                ),
+                                end: (
+                                    4,
+                                    12,
+                                ),
+                            },
+                        ],
+                    },
+                    return_type: None,
+                    by_ref: false,
+                },
+            ),
+        ],
+        modifiers: ClassModifierGroup {
+            modifiers: [],
+        },
+    },
+]

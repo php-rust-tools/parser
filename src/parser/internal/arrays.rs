@@ -163,7 +163,7 @@ impl Parser {
             };
             value = self.expression(state, Precedence::Lowest)?;
         }
-        
+
         Ok(ArrayItem {
             key,
             value,

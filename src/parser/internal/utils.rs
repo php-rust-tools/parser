@@ -54,12 +54,20 @@ pub fn skip_right_parenthesis(state: &mut State) -> ParseResult<Span> {
     skip(state, TokenKind::RightParen)
 }
 
+pub fn skip_left_bracket(state: &mut State) -> ParseResult<Span> {
+    skip(state, TokenKind::LeftBracket)
+}
+
 pub fn skip_right_bracket(state: &mut State) -> ParseResult<Span> {
     skip(state, TokenKind::RightBracket)
 }
 
 pub fn skip_double_arrow(state: &mut State) -> ParseResult<Span> {
     skip(state, TokenKind::DoubleArrow)
+}
+
+pub fn skip_double_colon(state: &mut State) -> ParseResult<Span> {
+    skip(state, TokenKind::DoubleColon)
 }
 
 pub fn colon(state: &mut State) -> ParseResult<Span> {

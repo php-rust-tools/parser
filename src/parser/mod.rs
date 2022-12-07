@@ -632,17 +632,41 @@ impl Parser {
                 | TokenKind::FullyQualifiedIdentifier(_) => {
                     Expression::Identifier(identifiers::full_name(state)?)
                 }
-                TokenKind::Static => {
-                    state.next();
-                    Expression::Static
-                }
                 TokenKind::Self_ => {
+                    if !state.has_class_scope {
+                        return Err(ParseError::CannotFindTypeInCurrentScope(
+                            state.current.kind.to_string(),
+                            state.current.span,
+                        ));
+                    }
+
                     state.next();
-                    Expression::Self_
+
+                    self.postfix(state, Expression::Self_, &TokenKind::DoubleColon)?
+                }
+                TokenKind::Static => {
+                    if !state.has_class_scope {
+                        return Err(ParseError::CannotFindTypeInCurrentScope(
+                            state.current.kind.to_string(),
+                            state.current.span,
+                        ));
+                    }
+
+                    state.next();
+
+                    self.postfix(state, Expression::Static, &TokenKind::DoubleColon)?
                 }
                 TokenKind::Parent => {
+                    if !state.has_class_parent_scope {
+                        return Err(ParseError::CannotFindTypeInCurrentScope(
+                            state.current.kind.to_string(),
+                            state.current.span,
+                        ));
+                    }
+
                     state.next();
-                    Expression::Parent
+
+                    self.postfix(state, Expression::Parent, &TokenKind::DoubleColon)?
                 }
                 TokenKind::LiteralString(s) => {
                     let e = Expression::LiteralString { value: s.clone() };
@@ -992,7 +1016,7 @@ impl Parser {
                 }
             }
             TokenKind::LeftBracket => {
-                state.next();
+                utils::skip_left_bracket(state)?;
 
                 if state.current.kind == TokenKind::RightBracket {
                     state.next();
@@ -1013,7 +1037,7 @@ impl Parser {
                 }
             }
             TokenKind::DoubleColon => {
-                state.next();
+                utils::skip_double_colon(state)?;
 
                 let mut must_be_method_call = false;
 
