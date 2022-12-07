@@ -15,6 +15,11 @@ impl Parser {
         let mut block = Block::new();
 
         while !state.is_eof() && &state.current.kind != until {
+            if let TokenKind::OpenTag(_) = state.current.kind {
+                state.next();
+                continue;
+            }
+            
             block.push(self.statement(state)?);
             state.skip_comments();
         }
