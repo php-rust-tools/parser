@@ -103,6 +103,9 @@ pub fn is_reserved_ident(kind: &TokenKind) -> bool {
             | TokenKind::Parent
             | TokenKind::Self_
             | TokenKind::Abstract
+            | TokenKind::True
+            | TokenKind::False
+            | TokenKind::Null
             | TokenKind::Final
             | TokenKind::For
             | TokenKind::Private
