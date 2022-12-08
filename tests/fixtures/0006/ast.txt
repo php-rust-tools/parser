@@ -1,6 +1,10 @@
 [
     Expression {
         expr: Include {
+            span: (
+                3,
+                1,
+            ),
             kind: Include,
             path: LiteralString {
                 value: "foo.php",
@@ -9,6 +13,10 @@
     },
     Expression {
         expr: Include {
+            span: (
+                5,
+                1,
+            ),
             kind: IncludeOnce,
             path: LiteralString {
                 value: "bar.php",
@@ -17,6 +25,10 @@
     },
     Expression {
         expr: Include {
+            span: (
+                7,
+                1,
+            ),
             kind: Require,
             path: LiteralString {
                 value: "baz.php",
@@ -25,6 +37,10 @@
     },
     Expression {
         expr: Include {
+            span: (
+                9,
+                1,
+            ),
             kind: RequireOnce,
             path: LiteralString {
                 value: "qux.php",

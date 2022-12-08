@@ -41,16 +41,6 @@ pub enum Precedence {
 }
 
 impl Precedence {
-    pub fn prefix(kind: &TokenKind) -> Self {
-        use TokenKind::*;
-
-        match kind {
-            Bang => Self::Bang,
-            Clone | New => Self::CloneOrNew,
-            _ => Self::Prefix,
-        }
-    }
-
     pub fn infix(kind: &TokenKind) -> Self {
         use TokenKind::*;
 

@@ -391,6 +391,7 @@ pub enum Expression {
     Empty,
     VariadicPlaceholder,
     ErrorSuppress {
+        span: Span,
         expr: Box<Self>,
     },
     Increment {
@@ -415,6 +416,7 @@ pub enum Expression {
         rhs: Box<Self>,
     },
     Include {
+        span: Span,
         kind: IncludeKind,
         path: Box<Expression>,
     },
@@ -496,9 +498,11 @@ pub enum Expression {
     },
     Null,
     BooleanNot {
+        span: Span,
         value: Box<Self>,
     },
     MagicConst {
+        span: Span,
         constant: MagicConst,
     },
     Ternary {
@@ -529,24 +533,31 @@ pub enum Expression {
         value: Box<Self>,
     },
     Negate {
+        span: Span,
         value: Box<Self>,
     },
     UnaryPlus {
+        span: Span,
         value: Box<Self>,
     },
     BitwiseNot {
+        span: Span,
         value: Box<Self>,
     },
     PreDecrement {
+        span: Span,
         value: Box<Self>,
     },
     PreIncrement {
+        span: Span,
         value: Box<Self>,
     },
     Print {
+        span: Span,
         value: Box<Self>,
     },
     Cast {
+        span: Span,
         kind: CastKind,
         value: Box<Self>,
     },
@@ -578,7 +589,14 @@ pub struct MatchArm {
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum MagicConst {
-    Dir,
+    Directory,
+    File,
+    Line,
+    Class,
+    Function,
+    Method,
+    Namespace,
+    Trait,
 }
 
 #[derive(Debug, PartialEq, Clone)]

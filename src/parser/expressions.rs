@@ -188,7 +188,7 @@ fn create(state: &mut State) -> ParseResult<Expression> {
 }
 
 macro_rules! expressions {
-    ($(#[before($else:ident), current($( $current:pat_param )|+) $(, peek($( $peek:pat_param )|+))?] $expr:ident($out:expr))+) => {
+    ($(#[before($else:ident), current($(|)? $( $current:pat_param )|+) $(, peek($(|)? $( $peek:pat_param )|+))?] $expr:ident($out:expr))+) => {
         $(
             #[inline(never)]
             fn $expr(state: &mut State) -> ParseResult<Expression> {
@@ -481,107 +481,286 @@ expressions! {
         arrays::legacy_array_expression(state)
     })
 
-    #[before(fallback), current(TokenKind::LeftBracket)]
+    #[before(new), current(TokenKind::LeftBracket)]
     left_bracket(|state: &mut State| {
         arrays::array_expression(state)
     })
+
+    #[before(directory_magic_constant), current(TokenKind::New)]
+    new(|state: &mut State| {
+        state.next();
+        let target = match state.current.kind {
+            TokenKind::Self_ => {
+                if !state.has_class_scope {
+                    return Err(ParseError::CannotFindTypeInCurrentScope(
+                        state.current.kind.to_string(),
+                        state.current.span,
+                    ));
+                }
+
+                state.next();
+
+                Expression::Self_
+            }
+            TokenKind::Static => {
+                if !state.has_class_scope {
+                    return Err(ParseError::CannotFindTypeInCurrentScope(
+                        state.current.kind.to_string(),
+                        state.current.span,
+                    ));
+                }
+
+                state.next();
+
+                Expression::Static
+            }
+            TokenKind::Parent => {
+                if !state.has_class_scope {
+                    return Err(ParseError::CannotFindTypeInCurrentScope(
+                        state.current.kind.to_string(),
+                        state.current.span,
+                    ));
+                }
+
+                state.next();
+
+                Expression::Parent
+            }
+            _ => clone_or_new_precedence(state)?,
+        };
+
+        let mut args = vec![];
+        if state.current.kind == TokenKind::LeftParen {
+            args = parameters::args_list(state)?;
+        }
+
+        Ok(Expression::New{target:Box::new(target),args,})
+    })
+
+    #[before(file_magic_constant), current(TokenKind::DirConstant)]
+    directory_magic_constant(|state: &mut State| {
+        let span = state.current.span;
+        state.next();
+
+        Ok(Expression::MagicConst {
+            span,
+            constant: MagicConst::Directory
+        })
+    })
+
+    #[before(line_magic_constant), current(TokenKind::FileConstant)]
+    file_magic_constant(|state: &mut State| {
+        let span = state.current.span;
+        state.next();
+
+        Ok(Expression::MagicConst {
+            span,
+            constant: MagicConst::File
+        })
+    })
+
+    #[before(function_magic_constant), current(TokenKind::LineConstant)]
+    line_magic_constant(|state: &mut State| {
+        let span = state.current.span;
+        state.next();
+
+        Ok(Expression::MagicConst {
+            span,
+            constant: MagicConst::Line
+        })
+    })
+
+    #[before(class_magic_constant), current(TokenKind::FunctionConstant)]
+    function_magic_constant(|state: &mut State| {
+        let span = state.current.span;
+        state.next();
+
+        Ok(Expression::MagicConst {
+            span,
+            constant: MagicConst::Function,
+        })
+    })
+
+    #[before(method_magic_constant), current(TokenKind::ClassConstant)]
+    class_magic_constant(|state: &mut State| {
+        let span = state.current.span;
+        state.next();
+
+        Ok(Expression::MagicConst {
+            span,
+            constant: MagicConst::Class,
+        })
+    })
+
+    #[before(namespace_magic_constant), current(TokenKind::MethodConstant)]
+    method_magic_constant(|state: &mut State| {
+        let span = state.current.span;
+        state.next();
+
+        Ok(Expression::MagicConst {
+            span,
+            constant: MagicConst::Method,
+        })
+    })
+
+    #[before(trait_magic_constant), current(TokenKind::NamespaceConstant)]
+    namespace_magic_constant(|state: &mut State| {
+        let span = state.current.span;
+        state.next();
+
+        Ok(Expression::MagicConst {
+            span,
+            constant: MagicConst::Namespace,
+        })
+    })
+
+    #[before(include), current(TokenKind::TraitConstant)]
+    trait_magic_constant(|state: &mut State| {
+        let span = state.current.span;
+        state.next();
+
+        Ok(Expression::MagicConst {
+            span,
+            constant: MagicConst::Trait
+        })
+    })
+
+    #[before(cast_prefix), current(TokenKind::Include | TokenKind::IncludeOnce | TokenKind::Require | TokenKind::RequireOnce)]
+    include(|state: &mut State| {
+        let kind: IncludeKind = (&state.current.kind).into();
+        let span = state.current.span;
+
+        state.next();
+
+        let path = lowest_precedence(state)?;
+
+        Ok(Expression::Include {
+            span,
+            kind,
+            path:Box::new(path)
+        })
+    })
+
+    #[before(numeric_prefix), current(
+        | TokenKind::StringCast     | TokenKind::BinaryCast     | TokenKind::ObjectCast
+        | TokenKind::BoolCast       | TokenKind::BooleanCast    | TokenKind::IntCast
+        | TokenKind::IntegerCast    | TokenKind::FloatCast      | TokenKind::DoubleCast
+        | TokenKind::RealCast       | TokenKind::UnsetCast      | TokenKind::ArrayCast
+    )]
+    cast_prefix(|state: &mut State| {
+        let span = state.current.span;
+        let kind = state.current.kind.clone().into();
+
+        state.next();
+
+        let rhs = for_precedence(state, Precedence::Prefix)?;
+
+        Ok(Expression::Cast {
+            span,
+            kind,
+            value: Box::new(rhs),
+        })
+    })
+
+    #[before(bang_prefix), current(TokenKind::Decrement | TokenKind::Increment | TokenKind::Minus | TokenKind::Plus)]
+    numeric_prefix(|state: &mut State| {
+        let span = state.current.span;
+        let op = state.current.kind.clone();
+
+        state.next();
+
+        let rhs = for_precedence(state, Precedence::Prefix)?;
+
+        let expr = match op {
+            TokenKind::Minus => Expression::Negate {
+                span,
+                value: Box::new(rhs),
+            },
+            TokenKind::Plus => Expression::UnaryPlus {
+                span,
+                value: Box::new(rhs),
+            },
+            TokenKind::Decrement => Expression::PreDecrement {
+                span,
+                value: Box::new(rhs),
+            },
+            TokenKind::Increment => Expression::PreIncrement {
+                span,
+                value: Box::new(rhs),
+            },
+            _ => unreachable!(),
+        };
+
+        Ok(expr)
+    })
+
+    #[before(at_prefix), current(TokenKind::Bang)]
+    bang_prefix(|state: &mut State| {
+        let span = state.current.span;
+
+        state.next();
+
+        let rhs = for_precedence(state, Precedence::Bang)?;
+
+        Ok(Expression::BooleanNot {
+            span,
+            value: Box::new(rhs)
+        })
+    })
+
+    #[before(print_prefix), current(TokenKind::At)]
+    at_prefix(|state: &mut State| {
+        let span = state.current.span;
+
+        state.next();
+
+        let rhs = for_precedence(state, Precedence::Prefix)?;
+
+        Ok(Expression::ErrorSuppress {
+            span,
+            expr: Box::new(rhs)
+        })
+    })
+
+    #[before(bitwise_prefix), current(TokenKind::Print)]
+    print_prefix(|state: &mut State| {
+        let span = state.current.span;
+
+        state.next();
+
+        let rhs = for_precedence(state, Precedence::Prefix)?;
+
+        Ok(Expression::Print {
+            span,
+            value: Box::new(rhs)
+        })
+    })
+
+    #[before(dynamic_variable), current(TokenKind::BitwiseNot)]
+    bitwise_prefix(|state: &mut State| {
+        let span = state.current.span;
+
+        state.next();
+
+        let rhs = for_precedence(state, Precedence::Prefix)?;
+
+        Ok(Expression::BitwiseNot {
+            span,
+            value: Box::new(rhs)
+        })
+    })
+
+    #[before(unexpected_token), current(TokenKind::Dollar)]
+    dynamic_variable(|state: &mut State| {
+        variables::dynamic_variable(state)
+    })
 }
 
-fn fallback(state: &mut State) -> ParseResult<Expression> {
-    let expr = match &state.current.kind {
-        TokenKind::New => {
-            utils::skip(state, TokenKind::New)?;
-
-            let target = match state.current.kind {
-                TokenKind::Self_ => {
-                    if !state.has_class_scope {
-                        return Err(ParseError::CannotFindTypeInCurrentScope(
-                            state.current.kind.to_string(),
-                            state.current.span,
-                        ));
-                    }
-
-                    state.next();
-
-                    Expression::Self_
-                }
-                TokenKind::Static => {
-                    if !state.has_class_scope {
-                        return Err(ParseError::CannotFindTypeInCurrentScope(
-                            state.current.kind.to_string(),
-                            state.current.span,
-                        ));
-                    }
-
-                    state.next();
-
-                    Expression::Static
-                }
-                TokenKind::Parent => {
-                    if !state.has_class_scope {
-                        return Err(ParseError::CannotFindTypeInCurrentScope(
-                            state.current.kind.to_string(),
-                            state.current.span,
-                        ));
-                    }
-
-                    state.next();
-
-                    Expression::Parent
-                }
-                _ => clone_or_new_precedence(state)?,
-            };
-
-            let mut args = vec![];
-            if state.current.kind == TokenKind::LeftParen {
-                args = parameters::args_list(state)?;
-            }
-
-            Expression::New {
-                target: Box::new(target),
-                args,
-            }
-        }
-        TokenKind::DirConstant => {
-            state.next();
-            Expression::MagicConst {
-                constant: MagicConst::Dir,
-            }
-        }
-        TokenKind::Include
-        | TokenKind::IncludeOnce
-        | TokenKind::Require
-        | TokenKind::RequireOnce => {
-            let kind: IncludeKind = (&state.current.kind).into();
-            state.next();
-
-            let path = lowest_precedence(state)?;
-
-            Expression::Include {
-                kind,
-                path: Box::new(path),
-            }
-        }
-        _ if is_prefix(&state.current.kind) => {
-            let op = state.current.kind.clone();
-
-            state.next();
-
-            let rpred = Precedence::prefix(&op);
-            let rhs = for_precedence(state, rpred)?;
-
-            prefix(&op, rhs)
-        }
-        TokenKind::Dollar => variables::dynamic_variable(state)?,
-        _ => {
-            return Err(ParseError::UnexpectedToken(
-                state.current.kind.to_string(),
-                state.current.span,
-            ))
-        }
-    };
-
-    Ok(expr)
+fn unexpected_token(state: &mut State) -> ParseResult<Expression> {
+    Err(ParseError::UnexpectedToken(
+        state.current.kind.to_string(),
+        state.current.span,
+    ))
 }
 
 fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Expression, ParseError> {
@@ -949,9 +1128,11 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                             e
                         }
                         TokenKind::Minus => {
+                            let span = state.current.span;
                             state.next();
                             if let TokenKind::LiteralInteger(i) = &state.current.kind {
                                 let e = Expression::Negate {
+                                    span,
                                     value: Box::new(Expression::LiteralInteger { i: i.clone() }),
                                 };
                                 state.next();
@@ -1012,79 +1193,6 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
             return expected_token_err!(["`${`", "`{$", "`\"`", "a variable"], state);
         }
     })
-}
-
-#[inline(always)]
-fn is_prefix(op: &TokenKind) -> bool {
-    matches!(
-        op,
-        TokenKind::Bang
-            | TokenKind::Print
-            | TokenKind::BitwiseNot
-            | TokenKind::Decrement
-            | TokenKind::Increment
-            | TokenKind::Minus
-            | TokenKind::Plus
-            | TokenKind::StringCast
-            | TokenKind::BinaryCast
-            | TokenKind::ObjectCast
-            | TokenKind::BoolCast
-            | TokenKind::BooleanCast
-            | TokenKind::IntCast
-            | TokenKind::IntegerCast
-            | TokenKind::FloatCast
-            | TokenKind::DoubleCast
-            | TokenKind::RealCast
-            | TokenKind::UnsetCast
-            | TokenKind::ArrayCast
-            | TokenKind::At
-    )
-}
-
-#[inline(always)]
-fn prefix(op: &TokenKind, rhs: Expression) -> Expression {
-    match op {
-        TokenKind::Print => Expression::Print {
-            value: Box::new(rhs),
-        },
-        TokenKind::Bang => Expression::BooleanNot {
-            value: Box::new(rhs),
-        },
-        TokenKind::Minus => Expression::Negate {
-            value: Box::new(rhs),
-        },
-        TokenKind::Plus => Expression::UnaryPlus {
-            value: Box::new(rhs),
-        },
-        TokenKind::BitwiseNot => Expression::BitwiseNot {
-            value: Box::new(rhs),
-        },
-        TokenKind::Decrement => Expression::PreDecrement {
-            value: Box::new(rhs),
-        },
-        TokenKind::Increment => Expression::PreIncrement {
-            value: Box::new(rhs),
-        },
-        TokenKind::StringCast
-        | TokenKind::BinaryCast
-        | TokenKind::ObjectCast
-        | TokenKind::BoolCast
-        | TokenKind::BooleanCast
-        | TokenKind::IntCast
-        | TokenKind::IntegerCast
-        | TokenKind::FloatCast
-        | TokenKind::DoubleCast
-        | TokenKind::RealCast
-        | TokenKind::UnsetCast
-        | TokenKind::ArrayCast => Expression::Cast {
-            kind: op.into(),
-            value: Box::new(rhs),
-        },
-        TokenKind::At => Expression::ErrorSuppress {
-            expr: Box::new(rhs),
-        },
-        _ => unreachable!(),
-    }
 }
 
 fn is_infix(t: &TokenKind) -> bool {

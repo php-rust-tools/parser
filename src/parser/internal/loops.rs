@@ -1,11 +1,11 @@
 use crate::lexer::token::TokenKind;
+use crate::parser;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::blocks;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
-use crate::parser;
 
 pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Foreach)?;
@@ -175,21 +175,19 @@ pub fn while_loop(state: &mut State) -> ParseResult<Statement> {
     let body = if state.current.kind == TokenKind::SemiColon {
         utils::skip_semicolon(state)?;
         vec![]
+    } else if state.current.kind == TokenKind::Colon {
+        utils::skip_colon(state)?;
+        let then = blocks::body(state, &TokenKind::EndWhile)?;
+        utils::skip(state, TokenKind::EndWhile)?;
+        utils::skip_semicolon(state)?;
+        then
+    } else if state.current.kind == TokenKind::LeftBrace {
+        utils::skip_left_brace(state)?;
+        let then = blocks::body(state, &TokenKind::RightBrace)?;
+        utils::skip_right_brace(state)?;
+        then
     } else {
-        if state.current.kind == TokenKind::Colon {
-            utils::skip_colon(state)?;
-            let then = blocks::body(state, &TokenKind::EndWhile)?;
-            utils::skip(state, TokenKind::EndWhile)?;
-            utils::skip_semicolon(state)?;
-            then
-        } else if state.current.kind == TokenKind::LeftBrace {
-            utils::skip_left_brace(state)?;
-            let then = blocks::body(state, &TokenKind::RightBrace)?;
-            utils::skip_right_brace(state)?;
-            then
-        } else {
-            vec![parser::statement(state)?]
-        }
+        vec![parser::statement(state)?]
     };
 
     Ok(Statement::While { condition, body })
