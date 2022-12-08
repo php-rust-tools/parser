@@ -22,7 +22,7 @@ pub fn skip_semicolon(state: &mut State) -> ParseResult<Span> {
         return Err(ParseError::ExpectedToken(
             vec!["`;`".to_string()],
             found,
-            state.current.span,
+            end,
         ));
     } else {
         state.next();
