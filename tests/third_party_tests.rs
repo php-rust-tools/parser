@@ -45,20 +45,6 @@ fn third_party_3_symfony_framework() {
             "src/Symfony/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php",
             // file contains syntax error used for testing.
             "src/Symfony/Component/Config/Tests/Fixtures/ParseError.php",
-            // FIXME: Remove this one once I've found the energy to sort out heredocs / nowdocs.
-            "src/Symfony/Component/DependencyInjection/LazyProxy/PhpDumper/LazyServiceDumper.php",
-            "src/Symfony/Component/Cache/Tests/Traits/RedisProxiesTest.php",
-            "src/Symfony/Component/Mailer/Tests/Transport/NativeTransportFactoryTest.php",
-            "src/Symfony/Component/VarDumper/Tests/Caster/FFICasterTest.php",
-            "src/Symfony/Component/VarExporter/ProxyHelper.php",
-            "src/Symfony/Component/VarExporter/Tests/ProxyHelperTest.php",
-            // FIXME: Remove these once we can support arbitrary opening and closing tags.
-            "src/Symfony/Component/ErrorHandler/Resources/views/exception.html.php",
-            "src/Symfony/Component/ErrorHandler/Resources/views/exception_full.html.php",
-            "src/Symfony/Component/ErrorHandler/Resources/views/logs.html.php",
-            "src/Symfony/Component/ErrorHandler/Resources/views/trace.html.php",
-            "src/Symfony/Component/ErrorHandler/Resources/views/traces.html.php",
-            "src/Symfony/Component/ErrorHandler/Resources/views/traces_text.html.php",
         ],
     );
 }
@@ -70,6 +56,43 @@ fn third_party_4_nikic_php_parser() {
         "https://github.com/nikic/PHP-Parser",
         "4.x",
         &["lib/PhpParser", "grammar", "test"],
+        &[],
+    );
+}
+
+#[test]
+fn third_party_5_yii_framework() {
+    test_repository(
+        "yii-framework",
+        "https://github.com/yiisoft/yii2",
+        "master",
+        &["framework", "tests"],
+        &[],
+    );
+}
+
+#[test]
+fn third_party_6_spiral_framework() {
+    test_repository(
+        "spiral-framework",
+        "https://github.com/spiral/framework",
+        "master",
+        &["src", "tests"],
+        &[
+            // file contains syntax error used for testing.
+            "/src/Core/tests/Fixtures/CorruptedClass.php",
+            "/src/Tokenizer/tests/Classes/BrokenClass.php",
+        ],
+    );
+}
+
+#[test]
+fn third_party_7_mezzio_framework() {
+    test_repository(
+        "mezzio-framework",
+        "https://github.com/mezzio/mezzio",
+        "3.15.x",
+        &["src", "test"],
         &[],
     );
 }
