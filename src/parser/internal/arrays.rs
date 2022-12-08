@@ -1,11 +1,10 @@
 use crate::lexer::token::TokenKind;
-use crate::parser;
 use crate::parser::ast::ArrayItem;
 use crate::parser::ast::Expression;
 use crate::parser::ast::ListItem;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
-use crate::parser::internal::precedences::Precedence;
+use crate::parser::expressions;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
 
@@ -38,7 +37,7 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
             ));
         }
 
-        let mut value = parser::expression(state, Precedence::Lowest)?;
+        let mut value = expressions::lowest_precedence(state)?;
 
         if state.current.kind == TokenKind::DoubleArrow {
             if !has_atleast_one_key && !items.is_empty() {
@@ -62,7 +61,7 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
             }
 
             has_atleast_one_key = true;
-            value = parser::expression(state, Precedence::Lowest)?;
+            value = expressions::lowest_precedence(state)?;
         } else if has_atleast_one_key {
             return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(
                 state.current.span,
@@ -148,7 +147,7 @@ pub fn legacy_array_expression(state: &mut State) -> ParseResult<Expression> {
             (false, (0, 0))
         };
 
-        let mut value = parser::expression(state, Precedence::Lowest)?;
+        let mut value = expressions::lowest_precedence(state)?;
 
         // TODO: return error for `[...$a => $b]`.
         if state.current.kind == TokenKind::DoubleArrow {
@@ -170,7 +169,7 @@ pub fn legacy_array_expression(state: &mut State) -> ParseResult<Expression> {
                 false
             };
 
-            value = parser::expression(state, Precedence::Lowest)?;
+            value = expressions::lowest_precedence(state)?;
         }
 
         items.push(ArrayItem {
@@ -211,7 +210,7 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
         (false, (0, 0))
     };
 
-    let mut value = parser::expression(state, Precedence::Lowest)?;
+    let mut value = expressions::lowest_precedence(state)?;
     if state.current.kind == TokenKind::DoubleArrow {
         state.next();
 
@@ -229,7 +228,7 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
         } else {
             false
         };
-        value = parser::expression(state, Precedence::Lowest)?;
+        value = expressions::lowest_precedence(state)?;
     }
 
     Ok(ArrayItem {

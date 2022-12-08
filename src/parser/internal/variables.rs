@@ -1,9 +1,8 @@
 use crate::lexer::token::TokenKind;
-use crate::parser;
 use crate::parser::ast::Expression;
 use crate::parser::error::ParseResult;
+use crate::parser::expressions;
 use crate::parser::internal::identifiers;
-use crate::parser::internal::precedences::Precedence;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
 use crate::peek_token;
@@ -16,7 +15,7 @@ pub fn dynamic_variable(state: &mut State) -> ParseResult<Expression> {
             state.next();
 
             // TODO(azjezz): this is not an expression! it's a constant expression
-            let name = parser::expression(state, Precedence::Lowest)?;
+            let name = expressions::lowest_precedence(state)?;
 
             utils::skip_right_brace(state)?;
 

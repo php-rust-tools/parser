@@ -10,8 +10,8 @@ use crate::parser::ast::MatchArm;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::expressions;
 use crate::parser::internal::blocks;
-use crate::parser::internal::precedences::Precedence;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
 
@@ -20,7 +20,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
 
     utils::skip_left_parenthesis(state)?;
 
-    let condition = Box::new(parser::expression(state, Precedence::Lowest)?);
+    let condition = Box::new(expressions::lowest_precedence(state)?);
 
     utils::skip_right_parenthesis(state)?;
     utils::skip_left_brace(state)?;
@@ -46,13 +46,13 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
 
             utils::skip_double_arrow(state)?;
 
-            let body = parser::expression(state, Precedence::Lowest)?;
+            let body = expressions::lowest_precedence(state)?;
 
             default = Some(Box::new(DefaultMatchArm { body }));
         } else {
             let mut conditions = Vec::new();
             while state.current.kind != TokenKind::DoubleArrow {
-                conditions.push(parser::expression(state, Precedence::Lowest)?);
+                conditions.push(expressions::lowest_precedence(state)?);
 
                 if state.current.kind == TokenKind::Comma {
                     state.next();
@@ -67,7 +67,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
                 break;
             }
 
-            let body = parser::expression(state, Precedence::Lowest)?;
+            let body = expressions::lowest_precedence(state)?;
 
             arms.push(MatchArm { conditions, body });
         }
@@ -93,7 +93,7 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_left_parenthesis(state)?;
 
-    let condition = parser::expression(state, Precedence::Lowest)?;
+    let condition = expressions::lowest_precedence(state)?;
 
     utils::skip_right_parenthesis(state)?;
 
@@ -111,7 +111,7 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Case => {
                 state.next();
 
-                let condition = parser::expression(state, Precedence::Lowest)?;
+                let condition = expressions::lowest_precedence(state)?;
 
                 utils::skip_any_of(state, &[TokenKind::Colon, TokenKind::SemiColon])?;
 
@@ -170,7 +170,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_left_parenthesis(state)?;
 
-    let condition = parser::expression(state, Precedence::Lowest)?;
+    let condition = expressions::lowest_precedence(state)?;
 
     utils::skip_right_parenthesis(state)?;
 
@@ -201,7 +201,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
                 state.next();
 
                 utils::skip_left_parenthesis(state)?;
-                let condition = parser::expression(state, Precedence::Lowest)?;
+                let condition = expressions::lowest_precedence(state)?;
                 utils::skip_right_parenthesis(state)?;
 
                 utils::skip_colon(state)?;
@@ -260,7 +260,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
 
                     utils::skip_left_parenthesis(state)?;
 
-                    let condition = parser::expression(state, Precedence::Lowest)?;
+                    let condition = expressions::lowest_precedence(state)?;
 
                     utils::skip_right_parenthesis(state)?;
 

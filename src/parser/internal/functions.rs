@@ -1,7 +1,6 @@
 use crate::expected_scope;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser;
 use crate::parser::ast::functions::ArrowFunction;
 use crate::parser::ast::functions::Closure;
 use crate::parser::ast::functions::ClosureUse;
@@ -13,11 +12,11 @@ use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::expressions;
 use crate::parser::internal::blocks;
 use crate::parser::internal::data_type;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::parameters;
-use crate::parser::internal::precedences::Precedence;
 use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
@@ -62,7 +61,7 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
 
             // TODO(azjezz): this shouldn't call expr, we should have a function
             // just for variables, so we don't have to go through the whole `match` in `expression(...)`
-            let var = match parser::expression(state, Precedence::Lowest)? {
+            let var = match expressions::lowest_precedence(state)? {
                 s @ Expression::Variable { .. } => ClosureUse { var: s, by_ref },
                 _ => {
                     return Err(ParseError::UnexpectedToken(
@@ -146,7 +145,7 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
     utils::skip(state, TokenKind::DoubleArrow)?;
 
     let body = scoped!(state, Scope::ArrowFunction(is_static), {
-        Box::new(parser::expression(state, Precedence::Lowest)?)
+        Box::new(expressions::lowest_precedence(state)?)
     });
 
     let end = state.current.span;

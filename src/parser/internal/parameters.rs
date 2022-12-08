@@ -1,6 +1,5 @@
 use super::identifiers;
 use crate::lexer::token::TokenKind;
-use crate::parser;
 use crate::parser::ast::functions::FunctionParameter;
 use crate::parser::ast::functions::FunctionParameterList;
 use crate::parser::ast::functions::MethodParameter;
@@ -9,10 +8,10 @@ use crate::parser::ast::Arg;
 use crate::parser::ast::Expression;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::expressions;
 use crate::parser::internal::attributes;
 use crate::parser::internal::data_type;
 use crate::parser::internal::modifiers;
-use crate::parser::internal::precedences::Precedence;
 use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
@@ -52,7 +51,7 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
         let mut default = None;
         if state.current.kind == TokenKind::Equals {
             state.next();
-            default = Some(parser::expression(state, Precedence::Lowest)?);
+            default = Some(expressions::lowest_precedence(state)?);
         }
 
         let end = state.current.span;
@@ -202,7 +201,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
         let mut default = None;
         if state.current.kind == TokenKind::Equals {
             state.next();
-            default = Some(parser::expression(state, Precedence::Lowest)?);
+            default = Some(expressions::lowest_precedence(state)?);
         }
 
         let end = state.current.span;
@@ -277,7 +276,7 @@ pub fn args_list(state: &mut State) -> ParseResult<Vec<Arg>> {
             break;
         }
 
-        let value = parser::expression(state, Precedence::Lowest)?;
+        let value = expressions::lowest_precedence(state)?;
 
         args.push(Arg {
             name,

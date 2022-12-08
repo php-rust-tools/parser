@@ -424,14 +424,28 @@ impl Lexer {
                         state.source.next();
                         DocStringKind::Nowdoc
                     }
-                    _ => DocStringKind::Heredoc,
+                    [b'"'] => {
+                        state.source.next();
+                        DocStringKind::Heredoc
+                    }
+                    [_, ..] => DocStringKind::Heredoc,
+                    [] => {
+                        return Err(SyntaxError::UnexpectedEndOfFile(state.source.span()));
+                    }
                 };
 
                 // FIXME: Add support for nowdocs too by checking if a `'`
                 //        character is present before and after the identifier.
                 let label: ByteString = match self.peek_identifier(state) {
                     Some(_) => self.consume_identifier(state).into(),
-                    None => unreachable!(),
+                    None => match state.source.current() {
+                        Some(c) => {
+                            return Err(SyntaxError::UnexpectedCharacter(*c, state.source.span()))
+                        }
+                        None => {
+                            return Err(SyntaxError::UnexpectedEndOfFile(state.source.span()));
+                        }
+                    },
                 };
 
                 if doc_string_kind == DocStringKind::Nowdoc {
@@ -445,6 +459,8 @@ impl Lexer {
                             ));
                         }
                     };
+                } else if let Some(b'"') = state.source.current() {
+                    state.source.next();
                 }
 
                 if !matches!(state.source.current(), Some(b'\n')) {

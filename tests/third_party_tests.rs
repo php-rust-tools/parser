@@ -2,8 +2,14 @@ use std::env;
 use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
+use std::thread;
 
 use php_parser_rs::lexer::Lexer;
+
+enum TestResult {
+    Success,
+    Error(String),
+}
 
 #[test]
 fn third_party_1_php_standard_library() {
@@ -33,9 +39,11 @@ fn third_party_3_symfony_framework() {
         "symfony-framework",
         "https://github.com/symfony/symfony",
         "6.3",
-        &["src/Symfony"],
+        &["src/Symfony/"],
         &[
+            // stub
             "src/Symfony/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php",
+            // file contains syntax error used for testing.
             "src/Symfony/Component/Config/Tests/Fixtures/ParseError.php",
             // FIXME: Remove this one once I've found the energy to sort out heredocs / nowdocs.
             "src/Symfony/Component/DependencyInjection/LazyProxy/PhpDumper/LazyServiceDumper.php",
@@ -98,12 +106,86 @@ fn test_repository(
         }
     }
 
+    let mut entries = vec![];
     for dir in directories {
-        test_directory(out_path.clone(), out_path.join(dir), ignore);
+        entries.append(&mut read_directory(
+            out_path.clone(),
+            out_path.join(dir),
+            ignore,
+        ));
+    }
+
+    let mut threads = vec![];
+    for (index, chunk) in entries.chunks(entries.len() / 4).enumerate() {
+        let chunk = chunk.to_vec();
+        let thread = thread::Builder::new()
+            .stack_size(16 * 1024 * 1024)
+            .name(format!("{name}:{index}"))
+            .spawn(move || {
+                let thread = thread::current();
+                let thread_name = thread.name().unwrap();
+
+                let mut results = vec![];
+                for (name, filename) in chunk {
+                    let code = std::fs::read(&filename).unwrap();
+
+                    match Lexer::new().tokenize(&code) {
+                        Ok(tokens) => match php_parser_rs::parse(tokens) {
+                            Ok(ast) => {
+                                println!("✅ [{thread_name}][{name}]: {} statement(s).", ast.len());
+
+                                results.push(TestResult::Success);
+                            }
+                            Err(error) => {
+                                results.push(TestResult::Error(format!(
+                                    "❌ [{thread_name}][{name}]: {error:?}"
+                                )));
+                            }
+                        },
+                        Err(error) => {
+                            results.push(TestResult::Error(format!(
+                                "❌ [{thread_name}][{name}]: {error:?}"
+                            )));
+                        }
+                    }
+                }
+
+                results
+            });
+
+        threads.push(thread);
+    }
+
+    let mut results = vec![];
+    for thread in threads {
+        let mut result = thread
+            .unwrap_or_else(|e| panic!("failed to spawn thread: {:#?}", e))
+            .join()
+            .unwrap_or_else(|e| panic!("failed to join thread: {:#?}", e));
+
+        results.append(&mut result);
+    }
+
+    let mut fail = false;
+    results
+        .iter()
+        .map(|result| match result {
+            TestResult::Error(message) => {
+                fail = true;
+
+                println!("{}", message);
+            }
+            TestResult::Success => {}
+        })
+        .for_each(drop);
+
+    if fail {
+        panic!();
     }
 }
 
-fn test_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) {
+fn read_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) -> Vec<(String, PathBuf)> {
+    let mut results = vec![];
     let mut entries = fs::read_dir(&directory)
         .unwrap()
         .flatten()
@@ -114,7 +196,7 @@ fn test_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) {
 
     for entry in entries {
         if entry.is_dir() {
-            test_directory(root.clone(), entry, ignore);
+            results.append(&mut read_directory(root.clone(), entry, ignore));
 
             continue;
         }
@@ -136,26 +218,9 @@ fn test_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) {
                 .strip_prefix(root.to_str().unwrap())
                 .unwrap();
 
-            test_file(name, entry);
+            results.push((name.to_string(), entry));
         }
     }
-}
 
-fn test_file(name: &str, filename: PathBuf) {
-    let code = std::fs::read(&filename).unwrap();
-
-    Lexer::new()
-        .tokenize(&code)
-        .map(|tokens| {
-            php_parser_rs::parse(tokens)
-                .map(|_| {
-                    println!("✅ successfully parsed file: `\"{}\"`.", name);
-                })
-                .unwrap_or_else(|error| {
-                    panic!("❌ failed to parse file: `\"{name}\"`, error: {error:?}")
-                })
-        })
-        .unwrap_or_else(|error| {
-            panic!("❌ failed to tokenize file: `\"{name}\"`, error: {error:?}")
-        });
+    results
 }
