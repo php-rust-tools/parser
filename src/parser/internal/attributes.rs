@@ -1,9 +1,8 @@
 use crate::lexer::token::TokenKind;
-use crate::parser;
 use crate::parser::ast::attributes::Attribute;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::error::ParseResult;
-use crate::parser::internal::precedences::Precedence;
+use crate::parser::expressions;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
 
@@ -21,7 +20,7 @@ pub fn gather_attributes(state: &mut State) -> ParseResult<bool> {
 
     while state.current.kind != TokenKind::RightBracket {
         let start = state.current.span;
-        let expression = parser::expression(state, Precedence::Lowest)?;
+        let expression = expressions::lowest_precedence(state)?;
         let end = state.current.span;
 
         members.push(Attribute {

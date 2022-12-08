@@ -1,5 +1,4 @@
 use crate::lexer::token::TokenKind;
-use crate::parser;
 use crate::parser::ast::try_block::CatchBlock;
 use crate::parser::ast::try_block::CatchType;
 use crate::parser::ast::try_block::FinallyBlock;
@@ -7,9 +6,9 @@ use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::expressions;
 use crate::parser::internal::blocks;
 use crate::parser::internal::identifiers;
-use crate::parser::internal::precedences::Precedence;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
 
@@ -39,7 +38,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
             None
         } else {
             // TODO(azjezz): this is a variable, no an expression?
-            Some(parser::expression(state, Precedence::Lowest)?)
+            Some(expressions::lowest_precedence(state)?)
         };
 
         utils::skip_right_parenthesis(state)?;

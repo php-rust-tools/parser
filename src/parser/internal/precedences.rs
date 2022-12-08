@@ -7,7 +7,7 @@ pub enum Associativity {
 }
 
 #[allow(dead_code)]
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub enum Precedence {
     Lowest,
     IncDec,

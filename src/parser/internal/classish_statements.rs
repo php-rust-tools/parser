@@ -2,7 +2,6 @@ use crate::expect_token;
 use crate::expected_scope;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser;
 use crate::parser::ast::classish::ClassishConstant;
 use crate::parser::ast::enums::BackedEnumCase;
 use crate::parser::ast::enums::BackedEnumMember;
@@ -15,12 +14,12 @@ use crate::parser::ast::Statement;
 use crate::parser::ast::TraitAdaptation;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::expressions;
 use crate::parser::internal::attributes;
 use crate::parser::internal::data_type;
 use crate::parser::internal::functions;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::modifiers;
-use crate::parser::internal::precedences::Precedence;
 use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
@@ -115,7 +114,7 @@ pub fn backed_enum_member(state: &mut State) -> ParseResult<BackedEnumMember> {
 
         utils::skip(state, TokenKind::Equals)?;
 
-        let value = parser::expression(state, Precedence::Lowest)?;
+        let value = expressions::lowest_precedence(state)?;
 
         let end = utils::skip_semicolon(state)?;
 
@@ -152,18 +151,16 @@ pub fn class_like_statement(state: &mut State) -> ParseResult<Statement> {
     let start = state.current.span;
     let modifiers = modifiers::collect(state)?;
 
-    if !has_attributes {
-        if state.current.kind == TokenKind::Use {
-            return parse_classish_uses(state);
-        }
+    if !has_attributes && state.current.kind == TokenKind::Use {
+        return parse_classish_uses(state);
+    }
 
-        if state.current.kind == TokenKind::Const {
-            return Ok(Statement::ClassishConstant(constant(
-                state,
-                modifiers::constant_group(modifiers)?,
-                start,
-            )?));
-        }
+    if state.current.kind == TokenKind::Const {
+        return Ok(Statement::ClassishConstant(constant(
+            state,
+            modifiers::constant_group(modifiers)?,
+            start,
+        )?));
     }
 
     if state.current.kind == TokenKind::Function {
@@ -185,7 +182,7 @@ pub fn class_like_statement(state: &mut State) -> ParseResult<Statement> {
     // e.g: = "foo";
     if state.current.kind == TokenKind::Equals {
         state.next();
-        value = Some(parser::expression(state, Precedence::Lowest)?);
+        value = Some(expressions::lowest_precedence(state)?);
     }
 
     let class_name: String = expected_scope!([
@@ -395,7 +392,7 @@ fn constant(
 
     utils::skip(state, TokenKind::Equals)?;
 
-    let value = parser::expression(state, Precedence::Lowest)?;
+    let value = expressions::lowest_precedence(state)?;
 
     let end = utils::skip_semicolon(state)?;
 
