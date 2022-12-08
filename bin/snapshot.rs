@@ -21,7 +21,6 @@ fn main() {
     for entry in entries {
         let code_filename = entry.join("code.php");
         let ast_filename = entry.join("ast.txt");
-        let tokens_filename = entry.join("tokens.txt");
         let lexer_error_filename = entry.join("lexer-error.txt");
         let parser_error_filename = entry.join("parser-error.txt");
 
@@ -31,10 +30,6 @@ fn main() {
 
         if ast_filename.exists() {
             std::fs::remove_file(&ast_filename).unwrap();
-        }
-
-        if tokens_filename.exists() {
-            std::fs::remove_file(&tokens_filename).unwrap();
         }
 
         if lexer_error_filename.exists() {
@@ -50,12 +45,6 @@ fn main() {
 
         match tokens {
             Ok(tokens) => {
-                std::fs::write(tokens_filename, format!("{:#?}\n", tokens)).unwrap();
-                println!(
-                    "✅ generated `tokens.txt` for `{}`",
-                    entry.to_string_lossy()
-                );
-
                 let ast = parse(tokens);
                 match ast {
                     Ok(ast) => {

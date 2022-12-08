@@ -27,7 +27,6 @@ fn test_fixtures() {
 
         let code_file = entry.join("code.php");
         let ast_file = entry.join("ast.txt");
-        let tokens_file = entry.join("tokens.txt");
         let lex_err_file = entry.join("lexer-error.txt");
         let parse_err_file = entry.join("parser-error.txt");
 
@@ -51,21 +50,7 @@ fn test_fixtures() {
             continue;
         }
 
-        assert!(
-            tokens_file.exists(),
-            "unable to find `tokens.txt` for `{}`.",
-            fixture
-        );
-
-        let expected_tokens = std::fs::read_to_string(&tokens_file).unwrap();
         let tokens = LEXER.tokenize(&code).unwrap();
-
-        assert_str_eq!(
-            expected_tokens.trim(),
-            format!("{:#?}", tokens),
-            "tokens mismatch for fixture `{}`",
-            fixture
-        );
 
         if ast_file.exists() {
             let expected_ast = std::fs::read_to_string(&ast_file).unwrap();
