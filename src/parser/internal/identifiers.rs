@@ -132,6 +132,7 @@ pub fn is_soft_reserved_ident(kind: &TokenKind) -> bool {
         | TokenKind::True
         | TokenKind::False
         | TokenKind::Null
+        | TokenKind::Super
         | TokenKind::Enum
         | TokenKind::From
         | TokenKind::Readonly)
@@ -177,6 +178,7 @@ pub fn is_reserved_ident(kind: &TokenKind) -> bool {
             | TokenKind::Declare
             | TokenKind::EndDeclare
             | TokenKind::As
+            | TokenKind::Super
             | TokenKind::Try
             | TokenKind::Catch
             | TokenKind::Finally

@@ -2,6 +2,7 @@ use std::collections::VecDeque;
 use std::fmt::Display;
 use std::vec::IntoIter;
 
+use crate::lexer::token::Span;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::attributes::AttributeGroup;
@@ -45,6 +46,7 @@ pub struct State {
     pub namespace_type: Option<NamespaceType>,
     pub has_class_scope: bool,
     pub has_class_parent_scope: bool,
+    pub ignored_shift_at: Option<Span>,
 }
 
 impl State {
@@ -61,6 +63,7 @@ impl State {
             has_class_scope: false,
             has_class_parent_scope: false,
             attributes: vec![],
+            ignored_shift_at: None,
         }
     }
 

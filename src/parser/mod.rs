@@ -124,14 +124,20 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
     let statement = if has_attributes {
         match &state.current.kind {
             TokenKind::Abstract => classish::class_definition(state)?,
-            TokenKind::Readonly if state.peek.kind != TokenKind::LeftParen => {
+            TokenKind::Readonly
+                if state.peek.kind != TokenKind::LeftParen
+                    && state.peek.kind != TokenKind::Generic =>
+            {
                 classish::class_definition(state)?
             }
             TokenKind::Final => classish::class_definition(state)?,
             TokenKind::Class => classish::class_definition(state)?,
             TokenKind::Interface => classish::interface_definition(state)?,
             TokenKind::Trait => classish::trait_definition(state)?,
-            TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => {
+            TokenKind::Enum
+                if state.peek.kind != TokenKind::LeftParen
+                    && state.peek.kind != TokenKind::Generic =>
+            {
                 classish::enum_definition(state)?
             }
             TokenKind::Function
@@ -174,14 +180,20 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
     } else {
         match &state.current.kind {
             TokenKind::Abstract => classish::class_definition(state)?,
-            TokenKind::Readonly if state.peek.kind != TokenKind::LeftParen => {
+            TokenKind::Readonly
+                if state.peek.kind != TokenKind::LeftParen
+                    && state.peek.kind != TokenKind::Generic =>
+            {
                 classish::class_definition(state)?
             }
             TokenKind::Final => classish::class_definition(state)?,
             TokenKind::Class => classish::class_definition(state)?,
             TokenKind::Interface => classish::interface_definition(state)?,
             TokenKind::Trait => classish::trait_definition(state)?,
-            TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => {
+            TokenKind::Enum
+                if state.peek.kind != TokenKind::LeftParen
+                    && state.peek.kind != TokenKind::Generic =>
+            {
                 classish::enum_definition(state)?
             }
             TokenKind::Function

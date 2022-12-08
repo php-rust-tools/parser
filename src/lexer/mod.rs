@@ -168,6 +168,10 @@ impl Lexer {
                 state.source.skip(3);
                 TokenKind::Ellipsis
             }
+            [b':', b':', b'<'] => {
+                state.source.skip(3);
+                TokenKind::Generic
+            }
             [b'`', ..] => {
                 state.source.next();
                 state.replace(StackFrame::ShellExec);
@@ -1609,6 +1613,7 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
         b"abstract" => TokenKind::Abstract,
         b"array" => TokenKind::Array,
         b"as" => TokenKind::As,
+        b"super" => TokenKind::Super,
         b"break" => TokenKind::Break,
         b"case" => TokenKind::Case,
         b"catch" => TokenKind::Catch,

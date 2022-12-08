@@ -3,8 +3,10 @@ pub mod classish;
 pub mod comments;
 pub mod enums;
 pub mod functions;
+pub mod generics;
 pub mod identifiers;
 pub mod modifiers;
+pub mod templates;
 pub mod try_block;
 pub mod variables;
 
@@ -22,10 +24,13 @@ use crate::parser::ast::functions::ArrowFunction;
 use crate::parser::ast::functions::Closure;
 use crate::parser::ast::functions::Function;
 use crate::parser::ast::functions::Method;
+use crate::parser::ast::generics::Generic;
+use crate::parser::ast::generics::GenericGroup;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::modifiers::PropertyModifierGroup;
 use crate::parser::ast::modifiers::VisibilityModifier;
+use crate::parser::ast::templates::TemplateGroup;
 use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::variables::Variable;
 
@@ -34,7 +39,7 @@ pub type Program = Block;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum Type {
-    Identifier(Identifier),
+    Identifier(Identifier, Vec<Generic>),
     // TODO: add `start` and `end` for all types.
     Nullable(Box<Type>),
     Union(Vec<Type>),
@@ -95,7 +100,22 @@ impl Type {
 impl Display for Type {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            Type::Identifier(inner) => write!(f, "{}", inner),
+            Type::Identifier(inner, generics) => {
+                if generics.is_empty() {
+                    write!(f, "{}", inner)
+                } else {
+                    write!(
+                        f,
+                        "{}<{}>",
+                        inner,
+                        generics
+                            .iter()
+                            .map(|t| t.r#type.to_string())
+                            .collect::<Vec<String>>()
+                            .join(", ")
+                    )
+                }
+            }
             Type::Nullable(inner) => write!(f, "{}", inner),
             Type::Union(inner) => write!(
                 f,
@@ -239,6 +259,7 @@ pub enum Statement {
     Function(Function),
     Class {
         name: Identifier,
+        templates: Option<TemplateGroup>,
         attributes: Vec<AttributeGroup>,
         extends: Option<Identifier>,
         implements: Vec<Identifier>,
@@ -256,6 +277,7 @@ pub enum Statement {
     },
     Interface {
         name: Identifier,
+        templates: Option<TemplateGroup>,
         attributes: Vec<AttributeGroup>,
         extends: Vec<Identifier>,
         body: Block,
@@ -422,6 +444,7 @@ pub enum Expression {
     },
     Call {
         target: Box<Self>,
+        generics: Option<GenericGroup>,
         args: Vec<Arg>,
     },
     Identifier(Identifier),
@@ -435,6 +458,7 @@ pub enum Expression {
     ArrowFunction(ArrowFunction),
     New {
         target: Box<Self>,
+        generics: Option<GenericGroup>,
         args: Vec<Arg>,
     },
     LiteralString {
@@ -463,6 +487,7 @@ pub enum Expression {
     NullsafeMethodCall {
         target: Box<Self>,
         method: Box<Self>,
+        generics: Option<GenericGroup>,
         args: Vec<Arg>,
     },
     StaticPropertyFetch {
@@ -476,11 +501,13 @@ pub enum Expression {
     MethodCall {
         target: Box<Self>,
         method: Box<Self>,
+        generics: Option<GenericGroup>,
         args: Vec<Arg>,
     },
     StaticMethodCall {
         target: Box<Self>,
         method: Box<Self>,
+        generics: Option<GenericGroup>,
         args: Vec<Arg>,
     },
     AnonymousClass {

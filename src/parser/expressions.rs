@@ -16,6 +16,7 @@ use crate::parser::internal::attributes;
 use crate::parser::internal::classish;
 use crate::parser::internal::control_flow;
 use crate::parser::internal::functions;
+use crate::parser::internal::generics;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::parameters;
 use crate::parser::internal::precedences::Associativity;
@@ -252,13 +253,15 @@ expressions! {
     #[before(list), current(
         | TokenKind::True       | TokenKind::False | TokenKind::Null
         | TokenKind::Readonly   | TokenKind::Self_ | TokenKind::Parent
-        | TokenKind::Enum       | TokenKind::From
-    ), peek(TokenKind::LeftParen)]
+        | TokenKind::Super      | TokenKind::Enum  | TokenKind::From
+    ), peek(TokenKind::LeftParen | TokenKind::Generic)]
     reserved_identifier_function_call(|state: &mut State| {
         let ident = identifiers::ident_maybe_soft_reserved(state)?;
         let lhs = Expression::Identifier(ident);
 
-        postfix(state, lhs, &TokenKind::LeftParen)
+        let op = state.current.kind.clone();
+
+        postfix(state, lhs, &op)
     })
 
     #[before(anonymous_class), current(TokenKind::List)]
@@ -543,12 +546,23 @@ expressions! {
             _ => clone_or_new_precedence(state)?,
         };
 
+        // ::<
+        let generics = if state.current.kind == TokenKind::Generic {
+            Some(generics::parse(state)?)
+        } else {
+            None
+        };
+
         let mut args = vec![];
         if state.current.kind == TokenKind::LeftParen {
             args = parameters::args_list(state)?;
         }
 
-        Ok(Expression::New{target:Box::new(target),args,})
+        Ok(Expression::New {
+            target: Box::new(target),
+            generics,
+            args,
+        })
     })
 
     #[before(file_magic_constant), current(TokenKind::DirConstant)]
@@ -789,11 +803,22 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                 rhs: Box::new(rhs),
             }
         }
+        TokenKind::Generic => {
+            let generics = Some(generics::parse(state)?);
+            let args = parameters::args_list(state)?;
+
+            Expression::Call {
+                target: Box::new(lhs),
+                generics,
+                args,
+            }
+        }
         TokenKind::LeftParen => {
             let args = parameters::args_list(state)?;
 
             Expression::Call {
                 target: Box::new(lhs),
+                generics: None,
                 args,
             }
         }
@@ -873,12 +898,22 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                 // 2. If the current token is a left paren, or if we know the property expression
                 //    is only valid a method call context, we can assume we're parsing a static
                 //    method call.
-                _ if state.current.kind == TokenKind::LeftParen || must_be_method_call => {
+                _ if state.current.kind == TokenKind::LeftParen
+                    || state.current.kind == TokenKind::Generic
+                    || must_be_method_call =>
+                {
+                    let generics = if state.current.kind == TokenKind::Generic {
+                        Some(generics::parse(state)?)
+                    } else {
+                        None
+                    };
+
                     let args = parameters::args_list(state)?;
 
                     Expression::StaticMethodCall {
                         target: lhs,
                         method: Box::new(property),
+                        generics,
                         args,
                     }
                 }
@@ -905,19 +940,29 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                 _ => Expression::Identifier(identifiers::ident_maybe_reserved(state)?),
             };
 
-            if state.current.kind == TokenKind::LeftParen {
+            if state.current.kind == TokenKind::Generic
+                || state.current.kind == TokenKind::LeftParen
+            {
+                let generics = if state.current.kind == TokenKind::Generic {
+                    Some(generics::parse(state)?)
+                } else {
+                    None
+                };
+
                 let args = parameters::args_list(state)?;
 
                 if op == &TokenKind::NullsafeArrow {
                     Expression::NullsafeMethodCall {
                         target: Box::new(lhs),
                         method: Box::new(property),
+                        generics,
                         args,
                     }
                 } else {
                     Expression::MethodCall {
                         target: Box::new(lhs),
                         method: Box::new(property),
+                        generics,
                         args,
                     }
                 }
@@ -1351,6 +1396,7 @@ fn is_postfix(t: &TokenKind) -> bool {
         t,
         TokenKind::Increment
             | TokenKind::Decrement
+            | TokenKind::Generic
             | TokenKind::LeftParen
             | TokenKind::LeftBracket
             | TokenKind::Arrow

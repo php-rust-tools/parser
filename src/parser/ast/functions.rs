@@ -3,6 +3,7 @@ use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::ast::modifiers::PromotedPropertyModifierGroup;
+use crate::parser::ast::templates::TemplateGroup;
 use crate::parser::ast::variables::Variable;
 use crate::parser::ast::Block;
 use crate::parser::ast::Expression;
@@ -32,6 +33,7 @@ pub struct Function {
     pub start: Span,
     pub end: Span,
     pub name: Identifier,
+    pub templates: Option<TemplateGroup>,
     pub attributes: Vec<AttributeGroup>,
     pub parameters: FunctionParameterList,
     pub return_type: Option<Type>,
@@ -49,6 +51,7 @@ pub struct ClosureUse {
 pub struct Closure {
     pub start: Span,
     pub end: Span,
+    pub templates: Option<TemplateGroup>,
     pub attributes: Vec<AttributeGroup>,
     pub parameters: FunctionParameterList,
     pub return_ty: Option<Type>,
@@ -62,6 +65,7 @@ pub struct Closure {
 pub struct ArrowFunction {
     pub start: Span,
     pub end: Span,
+    pub templates: Option<TemplateGroup>,
     pub attributes: Vec<AttributeGroup>,
     pub parameters: FunctionParameterList,
     pub return_type: Option<Type>,
@@ -95,6 +99,7 @@ pub struct Method {
     pub start: Span,
     pub end: Span,
     pub name: Identifier,
+    pub templates: Option<TemplateGroup>,
     pub attributes: Vec<AttributeGroup>,
     pub parameters: MethodParameterList,
     pub body: Option<Block>,

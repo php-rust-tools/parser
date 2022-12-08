@@ -16,6 +16,7 @@ use crate::parser::internal::blocks;
 use crate::parser::internal::data_type;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::parameters;
+use crate::parser::internal::templates;
 use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
@@ -39,6 +40,12 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
         true
     } else {
         false
+    };
+
+    let templates = if state.current.kind == TokenKind::LessThan {
+        Some(templates::parse(state)?)
+    } else {
+        None
     };
 
     let attributes = state.get_attributes();
@@ -102,6 +109,7 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
         start,
         end,
         attributes,
+        templates,
         parameters,
         uses,
         return_ty,
@@ -131,6 +139,12 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
         false
     };
 
+    let templates = if state.current.kind == TokenKind::LessThan {
+        Some(templates::parse(state)?)
+    } else {
+        None
+    };
+
     let attributes = state.get_attributes();
     let parameters = parameters::function_parameter_list(state)?;
 
@@ -152,6 +166,7 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
     Ok(Expression::ArrowFunction(ArrowFunction {
         start,
         end,
+        templates,
         attributes,
         parameters,
         return_type,
@@ -174,6 +189,12 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
     };
 
     let name = identifiers::ident_maybe_soft_reserved(state)?;
+
+    let templates = if state.current.kind == TokenKind::LessThan {
+        Some(templates::parse(state)?)
+    } else {
+        None
+    };
 
     // get attributes before processing parameters, otherwise
     // parameters will steal attributes of this function.
@@ -202,6 +223,7 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
         start,
         end,
         name,
+        templates,
         attributes,
         parameters,
         return_type,
@@ -225,6 +247,12 @@ pub fn method(
     };
 
     let name = identifiers::ident_maybe_reserved(state)?;
+
+    let templates = if state.current.kind == TokenKind::LessThan {
+        Some(templates::parse(state)?)
+    } else {
+        None
+    };
 
     let has_body = expected_scope!([
             Scope::Class(_, class_modifiers, _) => {
@@ -285,8 +313,9 @@ pub fn method(
     Ok(Method {
         start,
         end,
-        attributes,
         name,
+        attributes,
+        templates,
         parameters,
         body,
         return_type,

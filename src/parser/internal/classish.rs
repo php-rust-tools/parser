@@ -12,6 +12,7 @@ use crate::parser::internal::classish_statements;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::modifiers;
 use crate::parser::internal::parameters;
+use crate::parser::internal::templates;
 use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
@@ -23,6 +24,12 @@ pub fn class_definition(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Class)?;
 
     let name = identifiers::ident(state)?;
+
+    let templates = if state.current.kind == TokenKind::LessThan {
+        Some(templates::parse(state)?)
+    } else {
+        None
+    };
 
     let mut has_parent = false;
     let mut extends: Option<Identifier> = None;
@@ -68,6 +75,7 @@ pub fn class_definition(state: &mut State) -> ParseResult<Statement> {
 
     Ok(Statement::Class {
         name,
+        templates,
         attributes,
         extends,
         implements,
@@ -80,6 +88,12 @@ pub fn interface_definition(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Interface)?;
 
     let name = identifiers::ident(state)?;
+
+    let templates = if state.current.kind == TokenKind::LessThan {
+        Some(templates::parse(state)?)
+    } else {
+        None
+    };
 
     scoped!(state, Scope::Interface(name.clone()), {
         let extends = if state.current.kind == TokenKind::Extends {
@@ -111,6 +125,7 @@ pub fn interface_definition(state: &mut State) -> ParseResult<Statement> {
 
         Ok(Statement::Interface {
             name,
+            templates,
             attributes,
             extends,
             body,
@@ -205,6 +220,8 @@ pub fn anonymous_class_definition(state: &mut State) -> ParseResult<Expression> 
                 implements,
                 body,
             }),
+            // generics are not supported on anonymous clases.
+            generics: None,
             args,
         })
     })

@@ -1,5 +1,6 @@
 use crate::expected_token;
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::generics::Generic;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::Type;
 use crate::parser::error::ParseError;
@@ -9,6 +10,36 @@ use crate::parser::state::State;
 use crate::peek_token;
 
 pub fn data_type(state: &mut State) -> ParseResult<Type> {
+    let ty = data_type_internal(state)?;
+    if let Some(span) = state.ignored_shift_at {
+        return Err(ParseError::ExpectedToken(
+            vec!["`>`".to_string()],
+            Some(">>".to_string()),
+            span,
+        ));
+    }
+
+    Ok(ty)
+}
+
+pub fn optional_data_type(state: &mut State) -> ParseResult<Option<Type>> {
+    match optional_data_type_internal(state)? {
+        Some(ty) => {
+            if let Some(span) = state.ignored_shift_at {
+                return Err(ParseError::ExpectedToken(
+                    vec!["`>`".to_string()],
+                    Some(">>".to_string()),
+                    span,
+                ));
+            }
+
+            Ok(Some(ty))
+        }
+        None => Ok(None),
+    }
+}
+
+fn data_type_internal(state: &mut State) -> ParseResult<Type> {
     if state.current.kind == TokenKind::Question {
         return nullable(state);
     }
@@ -36,7 +67,7 @@ pub fn data_type(state: &mut State) -> ParseResult<Type> {
     Ok(ty)
 }
 
-pub fn optional_data_type(state: &mut State) -> ParseResult<Option<Type>> {
+fn optional_data_type_internal(state: &mut State) -> ParseResult<Option<Type>> {
     if state.current.kind == TokenKind::Question {
         return nullable(state).map(Some);
     }
@@ -176,11 +207,44 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
                 b"false" => Ok(Some(Type::False)),
                 b"array" => Ok(Some(Type::Array)),
                 b"callable" => Ok(Some(Type::Callable)),
-                _ => Ok(Some(Type::Identifier(Identifier {
-                    start,
-                    name: id,
-                    end,
-                }))),
+                _ => {
+                    let generics = if state.current.kind == TokenKind::LessThan {
+                        state.next();
+                        let mut generics = vec![];
+                        while state.current.kind != TokenKind::GreaterThan {
+                            let r#type = data_type_internal(state)?;
+                            generics.push(Generic { r#type });
+
+                            if state.current.kind == TokenKind::Comma {
+                                state.next();
+                            } else {
+                                break;
+                            }
+                        }
+
+                        if state.ignored_shift_at.is_some() {
+                            utils::skip(state, TokenKind::RightShift)?;
+                            state.ignored_shift_at = None;
+                        } else if state.current.kind == TokenKind::RightShift {
+                            state.ignored_shift_at = Some(state.current.span);
+                        } else {
+                            utils::skip(state, TokenKind::GreaterThan)?;
+                        }
+
+                        generics
+                    } else {
+                        vec![]
+                    };
+
+                    Ok(Some(Type::Identifier(
+                        Identifier {
+                            start,
+                            name: id,
+                            end,
+                        },
+                        generics,
+                    )))
+                }
             }
         }
         TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
@@ -188,7 +252,38 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
             state.next();
             let end = state.current.span;
 
-            Ok(Some(Type::Identifier(Identifier { start, name, end })))
+            let generics = if state.current.kind == TokenKind::LessThan {
+                state.next();
+                let mut generics = vec![];
+                while state.current.kind != TokenKind::GreaterThan {
+                    let r#type = data_type_internal(state)?;
+                    generics.push(Generic { r#type });
+
+                    if state.current.kind == TokenKind::Comma {
+                        state.next();
+                    } else {
+                        break;
+                    }
+                }
+
+                if state.ignored_shift_at.is_some() {
+                    utils::skip(state, TokenKind::RightShift)?;
+                    state.ignored_shift_at = None;
+                } else if state.current.kind == TokenKind::RightShift {
+                    state.ignored_shift_at = Some(state.current.span);
+                } else {
+                    utils::skip(state, TokenKind::GreaterThan)?;
+                }
+
+                generics
+            } else {
+                vec![]
+            };
+
+            Ok(Some(Type::Identifier(
+                Identifier { start, name, end },
+                generics,
+            )))
         }
         _ => Ok(None),
     }

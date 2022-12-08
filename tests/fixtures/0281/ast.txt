@@ -1,0 +1,349 @@
+[
+    Function(
+        Function {
+            start: (
+                4,
+                1,
+            ),
+            end: (
+                8,
+                1,
+            ),
+            name: Identifier {
+                start: (
+                    4,
+                    10,
+                ),
+                name: "super",
+                end: (
+                    4,
+                    15,
+                ),
+            },
+            templates: Some(
+                TemplateGroup {
+                    start: (
+                        4,
+                        15,
+                    ),
+                    end: (
+                        4,
+                        25,
+                    ),
+                    members: [
+                        Template {
+                            name: Identifier {
+                                start: (
+                                    4,
+                                    16,
+                                ),
+                                name: "T",
+                                end: (
+                                    4,
+                                    18,
+                                ),
+                            },
+                            variance: Invaraint,
+                            constraint: SuperType(
+                                (
+                                    4,
+                                    18,
+                                ),
+                                Identifier(
+                                    Identifier {
+                                        start: (
+                                            4,
+                                            24,
+                                        ),
+                                        name: "M",
+                                        end: (
+                                            4,
+                                            25,
+                                        ),
+                                    },
+                                    [],
+                                ),
+                            ),
+                        },
+                    ],
+                },
+            ),
+            attributes: [
+                AttributeGroup {
+                    start: (
+                        3,
+                        1,
+                    ),
+                    end: (
+                        3,
+                        61,
+                    ),
+                    members: [
+                        Attribute {
+                            start: (
+                                3,
+                                3,
+                            ),
+                            end: (
+                                3,
+                                61,
+                            ),
+                            expression: Call {
+                                target: Identifier(
+                                    Identifier {
+                                        start: (
+                                            3,
+                                            3,
+                                        ),
+                                        name: "Super",
+                                        end: (
+                                            3,
+                                            8,
+                                        ),
+                                    },
+                                ),
+                                generics: Some(
+                                    GenericGroup {
+                                        start: (
+                                            3,
+                                            8,
+                                        ),
+                                        end: (
+                                            3,
+                                            14,
+                                        ),
+                                        members: [
+                                            Generic {
+                                                type: Identifier(
+                                                    Identifier {
+                                                        start: (
+                                                            3,
+                                                            11,
+                                                        ),
+                                                        name: "Foo",
+                                                        end: (
+                                                            3,
+                                                            14,
+                                                        ),
+                                                    },
+                                                    [],
+                                                ),
+                                            },
+                                        ],
+                                    },
+                                ),
+                                args: [
+                                    Arg {
+                                        name: Some(
+                                            Identifier {
+                                                start: (
+                                                    3,
+                                                    16,
+                                                ),
+                                                name: "bar",
+                                                end: (
+                                                    3,
+                                                    19,
+                                                ),
+                                            },
+                                        ),
+                                        value: New {
+                                            target: Identifier(
+                                                Identifier {
+                                                    start: (
+                                                        3,
+                                                        25,
+                                                    ),
+                                                    name: "Super",
+                                                    end: (
+                                                        3,
+                                                        30,
+                                                    ),
+                                                },
+                                            ),
+                                            generics: None,
+                                            args: [],
+                                        },
+                                        unpack: false,
+                                    },
+                                    Arg {
+                                        name: Some(
+                                            Identifier {
+                                                start: (
+                                                    3,
+                                                    34,
+                                                ),
+                                                name: "baz",
+                                                end: (
+                                                    3,
+                                                    37,
+                                                ),
+                                            },
+                                        ),
+                                        value: New {
+                                            target: Identifier(
+                                                Identifier {
+                                                    start: (
+                                                        3,
+                                                        43,
+                                                    ),
+                                                    name: "Super",
+                                                    end: (
+                                                        3,
+                                                        48,
+                                                    ),
+                                                },
+                                            ),
+                                            generics: Some(
+                                                GenericGroup {
+                                                    start: (
+                                                        3,
+                                                        48,
+                                                    ),
+                                                    end: (
+                                                        3,
+                                                        57,
+                                                    ),
+                                                    members: [
+                                                        Generic {
+                                                            type: String,
+                                                        },
+                                                    ],
+                                                },
+                                            ),
+                                            args: [],
+                                        },
+                                        unpack: false,
+                                    },
+                                ],
+                            },
+                        },
+                    ],
+                },
+            ],
+            parameters: FunctionParameterList {
+                start: (
+                    4,
+                    26,
+                ),
+                end: (
+                    6,
+                    2,
+                ),
+                members: [
+                    FunctionParameter {
+                        start: (
+                            5,
+                            5,
+                        ),
+                        end: (
+                            6,
+                            1,
+                        ),
+                        name: Variable {
+                            start: (
+                                5,
+                                12,
+                            ),
+                            name: "s",
+                            end: (
+                                6,
+                                1,
+                            ),
+                        },
+                        attributes: [],
+                        type: Some(
+                            Identifier(
+                                Identifier {
+                                    start: (
+                                        5,
+                                        5,
+                                    ),
+                                    name: "Bar",
+                                    end: (
+                                        5,
+                                        8,
+                                    ),
+                                },
+                                [
+                                    Generic {
+                                        type: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    5,
+                                                    9,
+                                                ),
+                                                name: "T",
+                                                end: (
+                                                    5,
+                                                    10,
+                                                ),
+                                            },
+                                            [],
+                                        ),
+                                    },
+                                ],
+                            ),
+                        ),
+                        variadic: false,
+                        default: None,
+                        by_ref: false,
+                    },
+                ],
+            },
+            return_type: Some(
+                Identifier(
+                    Identifier {
+                        start: (
+                            6,
+                            4,
+                        ),
+                        name: "T",
+                        end: (
+                            6,
+                            6,
+                        ),
+                    },
+                    [],
+                ),
+            ),
+            by_ref: false,
+            body: [],
+        },
+    ),
+    Expression {
+        expr: Call {
+            target: Identifier(
+                Identifier {
+                    start: (
+                        10,
+                        1,
+                    ),
+                    name: "super",
+                    end: (
+                        10,
+                        6,
+                    ),
+                },
+            ),
+            generics: Some(
+                GenericGroup {
+                    start: (
+                        10,
+                        6,
+                    ),
+                    end: (
+                        10,
+                        15,
+                    ),
+                    members: [
+                        Generic {
+                            type: String,
+                        },
+                    ],
+                },
+            ),
+            args: [],
+        },
+    },
+]

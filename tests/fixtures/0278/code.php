@@ -17,3 +17,12 @@ self();
 parent();
 enum();
 from();
+
+true::<string>();
+false::<string>();
+null::<string>();
+readonly::<string>();
+self::<string>();
+parent::<string>();
+enum::<string>();
+from::<string>();

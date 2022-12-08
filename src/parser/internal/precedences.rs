@@ -78,7 +78,7 @@ impl Precedence {
         match kind {
             Coalesce => Self::NullCoalesce,
             Increment | Decrement => Self::IncDec,
-            LeftParen | LeftBracket => Self::CallDim,
+            LeftParen | Generic | LeftBracket => Self::CallDim,
             Arrow | NullsafeArrow | DoubleColon => Self::ObjectAccess,
             _ => unimplemented!("postfix precedence for op {:?}", kind),
         }
