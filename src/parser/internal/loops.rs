@@ -5,6 +5,7 @@ use crate::parser::expressions;
 use crate::parser::internal::blocks;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
+use crate::parser;
 
 pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Foreach)?;
@@ -38,22 +39,20 @@ pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_right_parenthesis(state)?;
 
-    let end_token = if state.current.kind == TokenKind::Colon {
+    let body = if state.current.kind == TokenKind::Colon {
         utils::skip_colon(state)?;
-        TokenKind::EndForeach
-    } else {
-        utils::skip_left_brace(state)?;
-        TokenKind::RightBrace
-    };
-
-    let body = blocks::body(state, &end_token)?;
-
-    if end_token == TokenKind::EndForeach {
+        let then = blocks::body(state, &TokenKind::EndForeach)?;
         utils::skip(state, TokenKind::EndForeach)?;
         utils::skip_semicolon(state)?;
-    } else {
+        then
+    } else if state.current.kind == TokenKind::LeftBrace {
+        utils::skip_left_brace(state)?;
+        let then = blocks::body(state, &TokenKind::RightBrace)?;
         utils::skip_right_brace(state)?;
-    }
+        then
+    } else {
+        vec![parser::statement(state)?]
+    };
 
     Ok(Statement::Foreach {
         expr,
@@ -119,21 +118,19 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_right_parenthesis(state)?;
 
-    let end_token = if state.current.kind == TokenKind::Colon {
+    let then = if state.current.kind == TokenKind::Colon {
         utils::skip_colon(state)?;
-        TokenKind::EndFor
-    } else {
-        utils::skip_left_brace(state)?;
-        TokenKind::RightBrace
-    };
-
-    let then = blocks::body(state, &end_token)?;
-
-    if end_token == TokenKind::EndFor {
+        let then = blocks::body(state, &TokenKind::EndFor)?;
         utils::skip(state, TokenKind::EndFor)?;
         utils::skip_semicolon(state)?;
-    } else {
+        then
+    } else if state.current.kind == TokenKind::LeftBrace {
+        utils::skip_left_brace(state)?;
+        let then = blocks::body(state, &TokenKind::RightBrace)?;
         utils::skip_right_brace(state)?;
+        then
+    } else {
+        vec![parser::statement(state)?]
     };
 
     Ok(Statement::For {
@@ -147,9 +144,14 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
 pub fn do_loop(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Do)?;
 
-    utils::skip_left_brace(state)?;
-    let body = blocks::body(state, &TokenKind::RightBrace)?;
-    utils::skip_right_brace(state)?;
+    let body = if state.current.kind == TokenKind::LeftBrace {
+        utils::skip_left_brace(state)?;
+        let body = blocks::body(state, &TokenKind::RightBrace)?;
+        utils::skip_right_brace(state)?;
+        body
+    } else {
+        vec![parser::statement(state)?]
+    };
 
     utils::skip(state, TokenKind::While)?;
 
@@ -174,24 +176,20 @@ pub fn while_loop(state: &mut State) -> ParseResult<Statement> {
         utils::skip_semicolon(state)?;
         vec![]
     } else {
-        let end_token = if state.current.kind == TokenKind::Colon {
+        if state.current.kind == TokenKind::Colon {
             utils::skip_colon(state)?;
-            TokenKind::EndWhile
-        } else {
-            utils::skip_left_brace(state)?;
-            TokenKind::RightBrace
-        };
-
-        let body = blocks::body(state, &end_token)?;
-
-        if end_token == TokenKind::RightBrace {
-            utils::skip_right_brace(state)?;
-        } else {
+            let then = blocks::body(state, &TokenKind::EndWhile)?;
             utils::skip(state, TokenKind::EndWhile)?;
             utils::skip_semicolon(state)?;
+            then
+        } else if state.current.kind == TokenKind::LeftBrace {
+            utils::skip_left_brace(state)?;
+            let then = blocks::body(state, &TokenKind::RightBrace)?;
+            utils::skip_right_brace(state)?;
+            then
+        } else {
+            vec![parser::statement(state)?]
         }
-
-        body
     };
 
     Ok(Statement::While { condition, body })

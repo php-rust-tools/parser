@@ -243,9 +243,11 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     utils::skip(state, TokenKind::EndDeclare)?;
                     utils::skip_semicolon(state)?;
                     b
-                } else {
+                } else if state.current.kind == TokenKind::SemiColon {
                     utils::skip_semicolon(state)?;
                     vec![]
+                } else {
+                    vec![statement(state)?]
                 };
 
                 Statement::Declare { declares, body }

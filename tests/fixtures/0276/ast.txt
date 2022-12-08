@@ -1,0 +1,257 @@
+[
+    If {
+        condition: Variable(
+            Variable {
+                start: (
+                    3,
+                    5,
+                ),
+                name: "a",
+                end: (
+                    3,
+                    7,
+                ),
+            },
+        ),
+        then: [
+            Expression {
+                expr: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            9,
+                        ),
+                        name: "A",
+                        end: (
+                            3,
+                            11,
+                        ),
+                    },
+                ),
+            },
+        ],
+        else_ifs: [
+            ElseIf {
+                condition: Variable(
+                    Variable {
+                        start: (
+                            4,
+                            9,
+                        ),
+                        name: "b",
+                        end: (
+                            4,
+                            11,
+                        ),
+                    },
+                ),
+                body: [
+                    Expression {
+                        expr: Variable(
+                            Variable {
+                                start: (
+                                    4,
+                                    13,
+                                ),
+                                name: "B",
+                                end: (
+                                    4,
+                                    15,
+                                ),
+                            },
+                        ),
+                    },
+                ],
+            },
+        ],
+        else: Some(
+            [
+                Expression {
+                    expr: Variable(
+                        Variable {
+                            start: (
+                                5,
+                                6,
+                            ),
+                            name: "C",
+                            end: (
+                                5,
+                                8,
+                            ),
+                        },
+                    ),
+                },
+            ],
+        ),
+    },
+    For {
+        init: [],
+        condition: [],
+        loop: [],
+        then: [
+            Expression {
+                expr: Variable(
+                    Variable {
+                        start: (
+                            7,
+                            10,
+                        ),
+                        name: "foo",
+                        end: (
+                            7,
+                            14,
+                        ),
+                    },
+                ),
+            },
+        ],
+    },
+    Foreach {
+        expr: Variable(
+            Variable {
+                start: (
+                    9,
+                    10,
+                ),
+                name: "a",
+                end: (
+                    9,
+                    13,
+                ),
+            },
+        ),
+        by_ref: false,
+        key_var: None,
+        value_var: Variable(
+            Variable {
+                start: (
+                    9,
+                    16,
+                ),
+                name: "b",
+                end: (
+                    9,
+                    18,
+                ),
+            },
+        ),
+        body: [
+            Expression {
+                expr: Variable(
+                    Variable {
+                        start: (
+                            9,
+                            20,
+                        ),
+                        name: "AB",
+                        end: (
+                            9,
+                            23,
+                        ),
+                    },
+                ),
+            },
+        ],
+    },
+    While {
+        condition: Variable(
+            Variable {
+                start: (
+                    11,
+                    8,
+                ),
+                name: "a",
+                end: (
+                    11,
+                    10,
+                ),
+            },
+        ),
+        body: [
+            Expression {
+                expr: Variable(
+                    Variable {
+                        start: (
+                            11,
+                            12,
+                        ),
+                        name: "A",
+                        end: (
+                            11,
+                            14,
+                        ),
+                    },
+                ),
+            },
+        ],
+    },
+    DoWhile {
+        condition: Variable(
+            Variable {
+                start: (
+                    13,
+                    15,
+                ),
+                name: "a",
+                end: (
+                    13,
+                    17,
+                ),
+            },
+        ),
+        body: [
+            Expression {
+                expr: Variable(
+                    Variable {
+                        start: (
+                            13,
+                            4,
+                        ),
+                        name: "A",
+                        end: (
+                            13,
+                            6,
+                        ),
+                    },
+                ),
+            },
+        ],
+    },
+    Declare {
+        declares: [
+            DeclareItem {
+                key: Identifier {
+                    start: (
+                        15,
+                        10,
+                    ),
+                    name: "a",
+                    end: (
+                        15,
+                        11,
+                    ),
+                },
+                value: LiteralString {
+                    value: "b",
+                },
+            },
+        ],
+        body: [
+            Expression {
+                expr: Variable(
+                    Variable {
+                        start: (
+                            15,
+                            17,
+                        ),
+                        name: "C",
+                        end: (
+                            15,
+                            19,
+                        ),
+                    },
+                ),
+            },
+        ],
+    },
+]

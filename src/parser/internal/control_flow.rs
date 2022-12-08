@@ -264,11 +264,14 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
 
                     utils::skip_right_parenthesis(state)?;
 
-                    utils::skip_left_brace(state)?;
-
-                    let body = blocks::body(state, &TokenKind::RightBrace)?;
-
-                    utils::skip_right_brace(state)?;
+                    let body = if state.current.kind == TokenKind::LeftBrace {
+                        utils::skip_left_brace(state)?;
+                        let then = blocks::body(state, &TokenKind::RightBrace)?;
+                        utils::skip_right_brace(state)?;
+                        then
+                    } else {
+                        vec![parser::statement(state)?]
+                    };
 
                     else_ifs.push(ElseIf { condition, body });
                 } else {
