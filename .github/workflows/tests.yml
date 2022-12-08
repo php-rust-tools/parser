@@ -30,19 +30,44 @@ jobs:
           components: rustfmt, clippy
 
       - name: cache
-        uses: Swatinem/rust-cache@v2.0.0
+        id: cache
+        uses: actions/cache@v3
+        with:
+            path: |
+              ~/.cargo/bin/
+              ~/.cargo/registry/index/
+              ~/.cargo/registry/cache/
+              ~/.cargo/git/db/
+              target/
+            key: rust-${{ inputs.rust }}-os-${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: install hyperfine
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: cargo install hyperfine
 
       - name: check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+
+      - name: fmt
         if: matrix.rust == 'stable'
-        run: |
-          cargo fmt --all -- --check
-          cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all --check
+
+      - name: clippy
+        if: matrix.rust == 'stable'
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
 
       - name: test
-        run: cargo test --all -- --skip third_party
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all -- --skip third_party
 
       - name: bench
-        if: matrix.rust == 'stable'
-        run: |
-          cargo install hyperfine
-          hyperfine --prepare "cargo build -r" --runs 10 --warmup 2 -i "cargo test --all -r"
+        run: hyperfine --prepare "cargo build -r" --runs 10 --warmup 2 -i "cargo test --all -r"

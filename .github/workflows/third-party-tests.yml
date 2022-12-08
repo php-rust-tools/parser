@@ -28,12 +28,20 @@ jobs:
       - name: install rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: 'stable'
+          toolchain: ${{ matrix.rust }}
           override: true
           components: rustfmt, clippy
 
       - name: cache
-        uses: Swatinem/rust-cache@v2.0.0
+        uses: actions/cache@v3
+        with:
+            path: |
+              ~/.cargo/bin/
+              ~/.cargo/registry/index/
+              ~/.cargo/registry/cache/
+              ~/.cargo/git/db/
+              target/
+            key: third-party-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: test ${{ matrix.target }}
         run: cargo test ${{ matrix.target }} -- --nocapture
