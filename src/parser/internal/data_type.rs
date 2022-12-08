@@ -25,7 +25,10 @@ pub fn data_type(state: &mut State) -> ParseResult<Type> {
     }
 
     if state.current.kind == TokenKind::Ampersand
-        && !matches!(state.peek.kind, TokenKind::Variable(_))
+        && !matches!(
+            state.peek.kind,
+            TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
+        )
     {
         return instersection(state, ty, false);
     }
@@ -52,7 +55,10 @@ pub fn optional_data_type(state: &mut State) -> ParseResult<Option<Type>> {
             }
 
             if state.current.kind == TokenKind::Ampersand
-                && !matches!(state.peek.kind, TokenKind::Variable(_))
+                && !matches!(
+                    state.peek.kind,
+                    TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
+                )
             {
                 return instersection(state, ty, false).map(Some);
             }
@@ -328,7 +334,10 @@ fn instersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResul
         types.push(ty);
 
         if state.current.kind == TokenKind::Ampersand
-            && !matches!(state.peek.kind, TokenKind::Variable(_))
+            && !matches!(
+                state.peek.kind,
+                TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
+            )
         {
             state.next();
         } else {

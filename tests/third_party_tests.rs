@@ -80,8 +80,8 @@ fn third_party_6_spiral_framework() {
         &["src", "tests"],
         &[
             // file contains syntax error used for testing.
-            "/src/Core/tests/Fixtures/CorruptedClass.php",
-            "/src/Tokenizer/tests/Classes/BrokenClass.php",
+            "src/Core/tests/Fixtures/CorruptedClass.php",
+            "src/Tokenizer/tests/Classes/BrokenClass.php",
         ],
     );
 }

@@ -41,7 +41,6 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
 
         if state.current.kind == TokenKind::Ellipsis {
             state.next();
-
             variadic = true;
         }
 
