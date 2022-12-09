@@ -135,6 +135,17 @@ fn third_party_10_wordpress() {
     );
 }
 
+#[test]
+fn third_party_11_chubbyphp_framework() {
+    test_repository(
+        "chubbyphp-framework",
+        "https://github.com/chubbyphp/chubbyphp-framework",
+        "5.0.x",
+        &["src", "tests"],
+        &[],
+    );
+}
+
 fn test_repository(
     name: &str,
     repository: &str,
