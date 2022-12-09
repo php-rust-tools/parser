@@ -1,81 +1,88 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 4,
-                7,
+                1,
             ),
-            name: "Bar",
             end: (
                 4,
-                11,
+                12,
             ),
-        },
-        attributes: [
-            AttributeGroup {
+            name: Identifier {
                 start: (
-                    3,
-                    1,
+                    4,
+                    7,
                 ),
+                name: "Bar",
                 end: (
-                    3,
-                    20,
+                    4,
+                    11,
                 ),
-                members: [
-                    Attribute {
-                        start: (
-                            3,
-                            3,
-                        ),
-                        end: (
-                            3,
-                            20,
-                        ),
-                        expression: Call {
-                            target: Identifier(
-                                Identifier {
-                                    start: (
-                                        3,
-                                        3,
-                                    ),
-                                    name: "Foo",
-                                    end: (
-                                        3,
-                                        6,
-                                    ),
-                                },
-                            ),
-                            args: [
-                                Arg {
-                                    name: Some(
-                                        Identifier {
-                                            start: (
-                                                3,
-                                                7,
-                                            ),
-                                            name: "public",
-                                            end: (
-                                                3,
-                                                13,
-                                            ),
-                                        },
-                                    ),
-                                    value: Bool {
-                                        value: true,
-                                    },
-                                    unpack: false,
-                                },
-                            ],
-                        },
-                    },
-                ],
             },
-        ],
-        extends: None,
-        implements: [],
-        body: [],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+            extends: None,
+            implements: None,
+            attributes: [
+                AttributeGroup {
+                    start: (
+                        3,
+                        1,
+                    ),
+                    end: (
+                        3,
+                        20,
+                    ),
+                    members: [
+                        Attribute {
+                            start: (
+                                3,
+                                3,
+                            ),
+                            end: (
+                                3,
+                                20,
+                            ),
+                            expression: Call {
+                                target: Identifier(
+                                    Identifier {
+                                        start: (
+                                            3,
+                                            3,
+                                        ),
+                                        name: "Foo",
+                                        end: (
+                                            3,
+                                            6,
+                                        ),
+                                    },
+                                ),
+                                args: [
+                                    Arg {
+                                        name: Some(
+                                            Identifier {
+                                                start: (
+                                                    3,
+                                                    7,
+                                                ),
+                                                name: "public",
+                                                end: (
+                                                    3,
+                                                    13,
+                                                ),
+                                            },
+                                        ),
+                                        value: Bool {
+                                            value: true,
+                                        },
+                                        unpack: false,
+                                    },
+                                ],
+                            },
+                        },
+                    ],
+                },
+            ],
+            members: [],
         },
-    },
+    ),
 ]

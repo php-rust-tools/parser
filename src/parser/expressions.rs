@@ -13,7 +13,7 @@ use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::arrays;
 use crate::parser::internal::attributes;
-use crate::parser::internal::classish;
+use crate::parser::internal::classes;
 use crate::parser::internal::control_flow;
 use crate::parser::internal::functions;
 use crate::parser::internal::identifiers;
@@ -268,7 +268,7 @@ expressions! {
 
     #[before(throw), current(TokenKind::New), peek(TokenKind::Class | TokenKind::Attribute)]
     anonymous_class(|state: &mut State| {
-        classish::anonymous_class_definition(state)
+        classes::parse_anonymous(state)
     })
 
     #[before(r#yield), current(TokenKind::Throw)]
@@ -503,7 +503,10 @@ expressions! {
 
     #[before(directory_magic_constant), current(TokenKind::New)]
     new(|state: &mut State| {
+        let span = state.current.span;
+
         state.next();
+
         let target = match state.current.kind {
             TokenKind::Self_ => {
                 if !state.has_class_scope {
@@ -549,7 +552,11 @@ expressions! {
             args = parameters::args_list(state)?;
         }
 
-        Ok(Expression::New{target:Box::new(target),args,})
+        Ok(Expression::New {
+            target: Box::new(target),
+            span,
+            args,
+        })
     })
 
     #[before(file_magic_constant), current(TokenKind::DirConstant)]

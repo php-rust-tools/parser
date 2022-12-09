@@ -2,6 +2,7 @@ use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::interfaces::Interface;
+use crate::parser::ast::interfaces::InterfaceExtends;
 use crate::parser::ast::interfaces::InterfaceMember;
 use crate::parser::ast::modifiers::ConstantModifier;
 use crate::parser::ast::modifiers::ConstantModifierGroup;
@@ -11,7 +12,7 @@ use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::attributes;
-use crate::parser::internal::classish_statements::constant;
+use crate::parser::internal::constants;
 use crate::parser::internal::functions::method;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::modifiers;
@@ -26,13 +27,17 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let name = identifiers::ident(state)?;
 
     let extends = if state.current.kind == TokenKind::Extends {
+        let span = state.current.span;
+
         state.next();
 
-        utils::at_least_one_comma_separated::<Identifier>(state, &|state| {
+        let parents = utils::at_least_one_comma_separated::<Identifier>(state, &|state| {
             identifiers::full_name(state)
-        })?
+        })?;
+
+        Some(InterfaceExtends { span, parents })
     } else {
-        Vec::new()
+        None
     };
 
     let attributes = state.get_attributes();
@@ -65,7 +70,7 @@ fn member(state: &mut State) -> ParseResult<InterfaceMember> {
     let modifiers = modifiers::collect(state)?;
 
     if state.current.kind == TokenKind::Const {
-        constant(state, constant_modifiers(modifiers)?).map(InterfaceMember::Constant)
+        constants::classish(state, constant_modifiers(modifiers)?).map(InterfaceMember::Constant)
     } else {
         method(state, method_modifiers(modifiers)?).map(InterfaceMember::Method)
     }

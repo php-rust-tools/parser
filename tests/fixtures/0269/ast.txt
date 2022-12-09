@@ -39,6 +39,7 @@
                 7,
                 1,
             ),
+            attributes: [],
             name: Identifier {
                 start: (
                     5,
@@ -50,8 +51,7 @@
                     16,
                 ),
             },
-            attributes: [],
-            extends: [],
+            extends: None,
             members: [
                 Method(
                     Method {
@@ -142,186 +142,190 @@
             ],
         },
     ),
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 9,
-                13,
+                7,
             ),
-            name: "\xf0\x9f\x92\xbb",
             end: (
-                9,
-                18,
+                13,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [
-            Identifier {
+            name: Identifier {
                 start: (
                     9,
-                    29,
+                    13,
                 ),
-                name: "\xf0\x9f\x94\x8a",
+                name: "\xf0\x9f\x92\xbb",
                 end: (
                     9,
-                    34,
+                    18,
                 ),
             },
-        ],
-        body: [
-            Method(
-                Method {
-                    start: (
-                        10,
-                        10,
+            extends: None,
+            implements: Some(
+                ClassImplements {
+                    span: (
+                        9,
+                        18,
                     ),
-                    end: (
-                        12,
-                        3,
-                    ),
-                    name: Identifier {
+                    interfaces: [
+                        Identifier {
+                            start: (
+                                9,
+                                29,
+                            ),
+                            name: "\xf0\x9f\x94\x8a",
+                            end: (
+                                9,
+                                34,
+                            ),
+                        },
+                    ],
+                },
+            ),
+            attributes: [],
+            members: [
+                Method(
+                    Method {
                         start: (
                             10,
-                            19,
-                        ),
-                        name: "\xf0\x9f\x93\x9d",
-                        end: (
                             10,
-                            23,
-                        ),
-                    },
-                    attributes: [],
-                    parameters: MethodParameterList {
-                        start: (
-                            10,
-                            23,
                         ),
                         end: (
-                            10,
-                            37,
+                            12,
+                            3,
                         ),
-                        members: [
-                            MethodParameter {
-                                start: (
-                                    10,
-                                    24,
-                                ),
-                                end: (
-                                    10,
-                                    36,
-                                ),
-                                name: Variable {
+                        name: Identifier {
+                            start: (
+                                10,
+                                19,
+                            ),
+                            name: "\xf0\x9f\x93\x9d",
+                            end: (
+                                10,
+                                23,
+                            ),
+                        },
+                        attributes: [],
+                        parameters: MethodParameterList {
+                            start: (
+                                10,
+                                23,
+                            ),
+                            end: (
+                                10,
+                                37,
+                            ),
+                            members: [
+                                MethodParameter {
                                     start: (
                                         10,
-                                        31,
+                                        24,
                                     ),
-                                    name: "\xf0\x9f\x93\x83",
                                     end: (
                                         10,
                                         36,
                                     ),
-                                },
-                                attributes: [],
-                                type: Some(
-                                    String,
-                                ),
-                                variadic: false,
-                                default: None,
-                                modifiers: PromotedPropertyModifierGroup {
-                                    modifiers: [],
-                                },
-                                by_ref: false,
-                            },
-                        ],
-                    },
-                    body: Some(
-                        [
-                            Expression {
-                                expr: Print {
-                                    span: (
-                                        11,
-                                        5,
-                                    ),
-                                    value: Parenthesized {
+                                    name: Variable {
                                         start: (
-                                            11,
                                             10,
+                                            31,
                                         ),
-                                        expr: Infix {
-                                            lhs: Variable(
-                                                Variable {
-                                                    start: (
-                                                        11,
-                                                        11,
-                                                    ),
-                                                    name: "\xf0\x9f\x93\x83",
-                                                    end: (
-                                                        11,
-                                                        17,
-                                                    ),
-                                                },
-                                            ),
-                                            op: Concat,
-                                            rhs: Identifier(
-                                                Identifier {
-                                                    start: (
-                                                        11,
-                                                        19,
-                                                    ),
-                                                    name: "\xe2\x86\xaa",
-                                                    end: (
-                                                        11,
-                                                        22,
-                                                    ),
-                                                },
-                                            ),
-                                        },
+                                        name: "\xf0\x9f\x93\x83",
                                         end: (
-                                            11,
-                                            22,
+                                            10,
+                                            36,
                                         ),
                                     },
+                                    attributes: [],
+                                    type: Some(
+                                        String,
+                                    ),
+                                    variadic: false,
+                                    default: None,
+                                    modifiers: PromotedPropertyModifierGroup {
+                                        modifiers: [],
+                                    },
+                                    by_ref: false,
                                 },
-                            },
-                        ],
-                    ),
-                    modifiers: MethodModifierGroup {
-                        modifiers: [
-                            Public {
-                                start: (
-                                    10,
-                                    3,
-                                ),
-                                end: (
-                                    10,
-                                    10,
-                                ),
-                            },
-                        ],
+                            ],
+                        },
+                        body: Some(
+                            [
+                                Expression {
+                                    expr: Print {
+                                        span: (
+                                            11,
+                                            5,
+                                        ),
+                                        value: Parenthesized {
+                                            start: (
+                                                11,
+                                                10,
+                                            ),
+                                            expr: Infix {
+                                                lhs: Variable(
+                                                    Variable {
+                                                        start: (
+                                                            11,
+                                                            11,
+                                                        ),
+                                                        name: "\xf0\x9f\x93\x83",
+                                                        end: (
+                                                            11,
+                                                            17,
+                                                        ),
+                                                    },
+                                                ),
+                                                op: Concat,
+                                                rhs: Identifier(
+                                                    Identifier {
+                                                        start: (
+                                                            11,
+                                                            19,
+                                                        ),
+                                                        name: "\xe2\x86\xaa",
+                                                        end: (
+                                                            11,
+                                                            22,
+                                                        ),
+                                                    },
+                                                ),
+                                            },
+                                            end: (
+                                                11,
+                                                22,
+                                            ),
+                                        },
+                                    },
+                                },
+                            ],
+                        ),
+                        modifiers: MethodModifierGroup {
+                            modifiers: [
+                                Public {
+                                    start: (
+                                        10,
+                                        3,
+                                    ),
+                                    end: (
+                                        10,
+                                        10,
+                                    ),
+                                },
+                            ],
+                        },
+                        return_type: Some(
+                            Void,
+                        ),
+                        by_ref: false,
                     },
-                    return_type: Some(
-                        Void,
-                    ),
-                    by_ref: false,
-                },
-            ),
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [
-                Final {
-                    start: (
-                        9,
-                        1,
-                    ),
-                    end: (
-                        9,
-                        7,
-                    ),
-                },
+                ),
             ],
         },
-    },
+    ),
     Function(
         Function {
             start: (
@@ -389,6 +393,10 @@
                                         19,
                                     ),
                                 },
+                            ),
+                            span: (
+                                16,
+                                11,
                             ),
                             args: [],
                         },

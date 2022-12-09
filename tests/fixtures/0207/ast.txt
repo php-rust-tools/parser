@@ -1,112 +1,121 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 3,
-                7,
+                1,
             ),
-            name: "foo",
             end: (
-                3,
-                11,
+                7,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            TraitUse {
-                traits: [
-                    Identifier {
-                        start: (
-                            4,
-                            9,
-                        ),
-                        name: "a",
-                        end: (
-                            4,
-                            10,
-                        ),
-                    },
-                    Identifier {
-                        start: (
-                            4,
-                            12,
-                        ),
-                        name: "b",
-                        end: (
-                            4,
-                            13,
-                        ),
-                    },
-                    Identifier {
-                        start: (
-                            4,
-                            15,
-                        ),
-                        name: "c",
-                        end: (
-                            4,
-                            17,
-                        ),
-                    },
-                ],
-                adaptations: [
-                    Precedence {
-                        trait: Some(
+            name: Identifier {
+                start: (
+                    3,
+                    7,
+                ),
+                name: "foo",
+                end: (
+                    3,
+                    11,
+                ),
+            },
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                TraitUsage(
+                    TraitUsage {
+                        traits: [
                             Identifier {
                                 start: (
-                                    5,
+                                    4,
                                     9,
                                 ),
                                 name: "a",
                                 end: (
-                                    5,
+                                    4,
                                     10,
                                 ),
                             },
-                        ),
-                        method: Identifier {
-                            start: (
-                                5,
-                                12,
-                            ),
-                            name: "s",
-                            end: (
-                                5,
-                                14,
-                            ),
-                        },
-                        insteadof: [
                             Identifier {
                                 start: (
-                                    5,
-                                    24,
+                                    4,
+                                    12,
                                 ),
                                 name: "b",
                                 end: (
-                                    5,
-                                    25,
+                                    4,
+                                    13,
                                 ),
                             },
                             Identifier {
                                 start: (
-                                    5,
-                                    27,
+                                    4,
+                                    15,
                                 ),
                                 name: "c",
                                 end: (
-                                    5,
-                                    28,
+                                    4,
+                                    17,
                                 ),
                             },
                         ],
+                        adaptations: [
+                            Precedence {
+                                trait: Some(
+                                    Identifier {
+                                        start: (
+                                            5,
+                                            9,
+                                        ),
+                                        name: "a",
+                                        end: (
+                                            5,
+                                            10,
+                                        ),
+                                    },
+                                ),
+                                method: Identifier {
+                                    start: (
+                                        5,
+                                        12,
+                                    ),
+                                    name: "s",
+                                    end: (
+                                        5,
+                                        14,
+                                    ),
+                                },
+                                insteadof: [
+                                    Identifier {
+                                        start: (
+                                            5,
+                                            24,
+                                        ),
+                                        name: "b",
+                                        end: (
+                                            5,
+                                            25,
+                                        ),
+                                    },
+                                    Identifier {
+                                        start: (
+                                            5,
+                                            27,
+                                        ),
+                                        name: "c",
+                                        end: (
+                                            5,
+                                            28,
+                                        ),
+                                    },
+                                ],
+                            },
+                        ],
                     },
-                ],
-            },
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+                ),
+            ],
         },
-    },
+    ),
 ]

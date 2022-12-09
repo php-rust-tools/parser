@@ -11,7 +11,7 @@ use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::attributes;
-use crate::parser::internal::classish_statements;
+use crate::parser::internal::constants;
 use crate::parser::internal::functions;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::modifiers;
@@ -127,7 +127,7 @@ fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMemb
     let modifiers = modifiers::collect(state)?;
 
     if state.current.kind == TokenKind::Const {
-        return classish_statements::constant(state, modifiers::constant_group(modifiers)?)
+        return constants::classish(state, modifiers::constant_group(modifiers)?)
             .map(UnitEnumMember::Constant);
     }
 
@@ -168,7 +168,7 @@ fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnum
     let modifiers = modifiers::collect(state)?;
 
     if state.current.kind == TokenKind::Const {
-        return classish_statements::constant(state, modifiers::constant_group(modifiers)?)
+        return constants::classish(state, modifiers::constant_group(modifiers)?)
             .map(BackedEnumMember::Constant);
     }
 

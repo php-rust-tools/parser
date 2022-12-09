@@ -81,6 +81,8 @@ pub fn skip_colon(state: &mut State) -> ParseResult<Span> {
 }
 
 pub fn skip(state: &mut State, kind: TokenKind) -> ParseResult<Span> {
+    state.skip_comments();
+
     if state.current.kind == kind {
         let end = state.current.span;
 
@@ -135,6 +137,9 @@ pub fn at_least_one_comma_separated<T>(
     let mut result: Vec<T> = vec![];
     loop {
         result.push(func(state)?);
+
+        state.skip_comments();
+
         if state.current.kind != TokenKind::Comma {
             break;
         }

@@ -1,101 +1,111 @@
 [
-    Trait {
-        name: Identifier {
+    Trait(
+        Trait {
             start: (
                 3,
-                7,
+                1,
             ),
-            name: "foo",
             end: (
-                3,
-                11,
+                10,
+                1,
             ),
-        },
-        attributes: [],
-        body: [
-            Method(
-                Method {
-                    start: (
-                        7,
-                        12,
-                    ),
-                    end: (
-                        9,
-                        5,
-                    ),
-                    name: Identifier {
+            name: Identifier {
+                start: (
+                    3,
+                    7,
+                ),
+                name: "foo",
+                end: (
+                    3,
+                    11,
+                ),
+            },
+            attributes: [],
+            members: [
+                Method(
+                    Method {
                         start: (
                             7,
-                            21,
-                        ),
-                        name: "bar",
-                        end: (
-                            7,
-                            24,
-                        ),
-                    },
-                    attributes: [],
-                    parameters: MethodParameterList {
-                        start: (
-                            7,
-                            24,
+                            12,
                         ),
                         end: (
-                            7,
-                            26,
+                            9,
+                            5,
                         ),
-                        members: [],
-                    },
-                    body: Some(
-                        [
-                            Expression {
-                                expr: Call {
-                                    target: Identifier(
-                                        Identifier {
-                                            start: (
-                                                8,
-                                                9,
-                                            ),
-                                            name: "exit",
-                                            end: (
-                                                8,
-                                                13,
-                                            ),
-                                        },
-                                    ),
-                                    args: [
-                                        Arg {
-                                            name: None,
-                                            value: LiteralInteger {
-                                                i: "1",
+                        name: Identifier {
+                            start: (
+                                7,
+                                21,
+                            ),
+                            name: "bar",
+                            end: (
+                                7,
+                                24,
+                            ),
+                        },
+                        attributes: [],
+                        parameters: MethodParameterList {
+                            start: (
+                                7,
+                                24,
+                            ),
+                            end: (
+                                7,
+                                26,
+                            ),
+                            members: [],
+                        },
+                        body: Some(
+                            [
+                                Expression {
+                                    expr: Call {
+                                        target: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    8,
+                                                    9,
+                                                ),
+                                                name: "exit",
+                                                end: (
+                                                    8,
+                                                    13,
+                                                ),
                                             },
-                                            unpack: false,
-                                        },
-                                    ],
+                                        ),
+                                        args: [
+                                            Arg {
+                                                name: None,
+                                                value: LiteralInteger {
+                                                    i: "1",
+                                                },
+                                                unpack: false,
+                                            },
+                                        ],
+                                    },
                                 },
-                            },
-                        ],
-                    ),
-                    modifiers: MethodModifierGroup {
-                        modifiers: [
-                            Public {
-                                start: (
-                                    7,
-                                    5,
-                                ),
-                                end: (
-                                    7,
-                                    12,
-                                ),
-                            },
-                        ],
+                            ],
+                        ),
+                        modifiers: MethodModifierGroup {
+                            modifiers: [
+                                Public {
+                                    start: (
+                                        7,
+                                        5,
+                                    ),
+                                    end: (
+                                        7,
+                                        12,
+                                    ),
+                                },
+                            ],
+                        },
+                        return_type: Some(
+                            ParentReference,
+                        ),
+                        by_ref: false,
                     },
-                    return_type: Some(
-                        ParentReference,
-                    ),
-                    by_ref: false,
-                },
-            ),
-        ],
-    },
+                ),
+            ],
+        },
+    ),
 ]

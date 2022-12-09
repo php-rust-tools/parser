@@ -1,4 +1,5 @@
 pub mod attributes;
+pub mod classes;
 pub mod comments;
 pub mod constant;
 pub mod enums;
@@ -6,6 +7,8 @@ pub mod functions;
 pub mod identifiers;
 pub mod interfaces;
 pub mod modifiers;
+pub mod properties;
+pub mod traits;
 pub mod try_block;
 pub mod variables;
 
@@ -14,21 +17,18 @@ use std::fmt::Display;
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::attributes::AttributeGroup;
+use crate::parser::ast::classes::AnonymousClass;
+use crate::parser::ast::classes::Class;
 use crate::parser::ast::comments::Comment;
-use crate::parser::ast::constant::ClassishConstant;
 use crate::parser::ast::constant::Constant;
 use crate::parser::ast::enums::BackedEnum;
 use crate::parser::ast::enums::UnitEnum;
 use crate::parser::ast::functions::ArrowFunction;
 use crate::parser::ast::functions::Closure;
 use crate::parser::ast::functions::Function;
-use crate::parser::ast::functions::Method;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::interfaces::Interface;
-use crate::parser::ast::modifiers::ClassModifierGroup;
-use crate::parser::ast::modifiers::PropertyModifierGroup;
-use crate::parser::ast::modifiers::VisibilityModifier;
+use crate::parser::ast::traits::Trait;
 use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::variables::Variable;
 
@@ -172,26 +172,6 @@ impl From<&TokenKind> for IncludeKind {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum TraitAdaptation {
-    Alias {
-        r#trait: Option<Identifier>,
-        method: Identifier,
-        alias: Identifier,
-        visibility: Option<VisibilityModifier>,
-    },
-    Visibility {
-        r#trait: Option<Identifier>,
-        method: Identifier,
-        visibility: VisibilityModifier,
-    },
-    Precedence {
-        r#trait: Option<Identifier>,
-        method: Identifier,
-        insteadof: Vec<Identifier>,
-    },
-}
-
 #[derive(Debug, PartialEq, Clone)]
 pub enum Statement {
     InlineHtml(ByteString),
@@ -228,35 +208,11 @@ pub enum Statement {
         value_var: Expression,
         body: Block,
     },
-    Property {
-        var: Variable,
-        attributes: Vec<AttributeGroup>,
-        value: Option<Expression>,
-        r#type: Option<Type>,
-        modifiers: PropertyModifierGroup,
-    },
     Constant(Constant),
-    ClassishConstant(ClassishConstant),
     Function(Function),
-    Class {
-        name: Identifier,
-        attributes: Vec<AttributeGroup>,
-        extends: Option<Identifier>,
-        implements: Vec<Identifier>,
-        body: Block,
-        modifiers: ClassModifierGroup,
-    },
-    Trait {
-        name: Identifier,
-        attributes: Vec<AttributeGroup>,
-        body: Block,
-    },
-    TraitUse {
-        traits: Vec<Identifier>,
-        adaptations: Vec<TraitAdaptation>,
-    },
+    Class(Class),
+    Trait(Trait),
     Interface(Interface),
-    Method(Method),
     If {
         condition: Expression,
         then: Block,
@@ -430,6 +386,7 @@ pub enum Expression {
     ArrowFunction(ArrowFunction),
     New {
         target: Box<Self>,
+        span: Span,
         args: Vec<Arg>,
     },
     LiteralString {
@@ -478,12 +435,7 @@ pub enum Expression {
         method: Box<Self>,
         args: Vec<Arg>,
     },
-    AnonymousClass {
-        attributes: Vec<AttributeGroup>,
-        extends: Option<Identifier>,
-        implements: Vec<Identifier>,
-        body: Block,
-    },
+    AnonymousClass(AnonymousClass),
     Bool {
         value: bool,
     },

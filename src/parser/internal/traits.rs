@@ -1,120 +1,26 @@
 use crate::expect_token;
-use crate::expected_scope;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::constant::ClassishConstant;
-use crate::parser::ast::constant::ConstantEntry;
 use crate::parser::ast::identifiers::Identifier;
-use crate::parser::ast::modifiers::ConstantModifierGroup;
 use crate::parser::ast::modifiers::VisibilityModifier;
+use crate::parser::ast::traits::Trait;
+use crate::parser::ast::traits::TraitMember;
+use crate::parser::ast::traits::TraitUsage;
+use crate::parser::ast::traits::TraitUsageAdaptation;
 use crate::parser::ast::Statement;
-use crate::parser::ast::TraitAdaptation;
-use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
-use crate::parser::expressions;
 use crate::parser::internal::attributes;
-use crate::parser::internal::data_type;
+use crate::parser::internal::constants;
 use crate::parser::internal::functions;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::modifiers;
+use crate::parser::internal::properties;
 use crate::parser::internal::utils;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::peek_token;
+use crate::scoped;
 
-pub fn class_like_statement(state: &mut State) -> ParseResult<Statement> {
-    let has_attributes = attributes::gather_attributes(state)?;
-
-    let modifiers = modifiers::collect(state)?;
-
-    if !has_attributes && state.current.kind == TokenKind::Use {
-        return parse_classish_uses(state);
-    }
-
-    if state.current.kind == TokenKind::Const {
-        return Ok(Statement::ClassishConstant(constant(
-            state,
-            modifiers::constant_group(modifiers)?,
-        )?));
-    }
-
-    if state.current.kind == TokenKind::Function {
-        return Ok(Statement::Method(functions::method(
-            state,
-            modifiers::method_group(modifiers)?,
-        )?));
-    }
-
-    // e.g: public static
-    let modifiers = modifiers::property_group(modifiers)?;
-    // e.g: string
-    let ty = data_type::optional_data_type(state)?;
-    // e.g: $name
-    let var = identifiers::var(state)?;
-
-    let mut value = None;
-    // e.g: = "foo";
-    if state.current.kind == TokenKind::Equals {
-        state.next();
-        value = Some(expressions::lowest_precedence(state)?);
-    }
-
-    let class_name: String = expected_scope!([
-            Scope::Trait(name) | Scope::Class(name, _, _) => state.named(&name),
-            Scope::AnonymousClass(_) => state.named("class@anonymous"),
-        ], state);
-
-    if modifiers.has_readonly() {
-        if modifiers.has_static() {
-            return Err(ParseError::StaticPropertyUsingReadonlyModifier(
-                class_name,
-                var.to_string(),
-                state.current.span,
-            ));
-        }
-
-        if value.is_some() {
-            return Err(ParseError::ReadonlyPropertyHasDefaultValue(
-                class_name,
-                var.to_string(),
-                state.current.span,
-            ));
-        }
-    }
-
-    match &ty {
-        Some(ty) => {
-            if ty.includes_callable() || ty.is_bottom() {
-                return Err(ParseError::ForbiddenTypeUsedInProperty(
-                    class_name,
-                    var.to_string(),
-                    ty.clone(),
-                    state.current.span,
-                ));
-            }
-        }
-        None => {
-            if modifiers.has_readonly() {
-                return Err(ParseError::MissingTypeForReadonlyProperty(
-                    class_name,
-                    var.to_string(),
-                    state.current.span,
-                ));
-            }
-        }
-    }
-
-    utils::skip_semicolon(state)?;
-
-    Ok(Statement::Property {
-        var,
-        value,
-        r#type: ty,
-        modifiers,
-        attributes: state.get_attributes(),
-    })
-}
-
-fn parse_classish_uses(state: &mut State) -> ParseResult<Statement> {
+pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
     state.next();
 
     let mut traits = Vec::new();
@@ -176,14 +82,14 @@ fn parse_classish_uses(state: &mut State) -> ParseResult<Statement> {
                                 state.next();
 
                                 if state.current.kind == TokenKind::SemiColon {
-                                    adaptations.push(TraitAdaptation::Visibility {
+                                    adaptations.push(TraitUsageAdaptation::Visibility {
                                         r#trait,
                                         method,
                                         visibility,
                                     });
                                 } else {
                                     let alias: Identifier = identifiers::name(state)?;
-                                    adaptations.push(TraitAdaptation::Alias {
+                                    adaptations.push(TraitUsageAdaptation::Alias {
                                         r#trait,
                                         method,
                                         alias,
@@ -193,7 +99,7 @@ fn parse_classish_uses(state: &mut State) -> ParseResult<Statement> {
                             }
                             _ => {
                                 let alias: Identifier = identifiers::name(state)?;
-                                adaptations.push(TraitAdaptation::Alias {
+                                adaptations.push(TraitUsageAdaptation::Alias {
                                     r#trait,
                                     method,
                                     alias,
@@ -232,7 +138,7 @@ fn parse_classish_uses(state: &mut State) -> ParseResult<Statement> {
                             }
                         }
 
-                        adaptations.push(TraitAdaptation::Precedence {
+                        adaptations.push(TraitUsageAdaptation::Precedence {
                             r#trait,
                             method,
                             insteadof,
@@ -248,47 +154,68 @@ fn parse_classish_uses(state: &mut State) -> ParseResult<Statement> {
         utils::skip_semicolon(state)?;
     }
 
-    Ok(Statement::TraitUse {
+    Ok(TraitUsage {
         traits,
         adaptations,
     })
 }
 
-pub fn constant(
-    state: &mut State,
-    modifiers: ConstantModifierGroup,
-) -> ParseResult<ClassishConstant> {
-    let start = state.current.span;
-
-    state.next();
-
+pub fn parse(state: &mut State) -> ParseResult<Statement> {
+    let start = utils::skip(state, TokenKind::Trait)?;
+    let name = identifiers::ident(state)?;
+    let class = name.name.to_string();
     let attributes = state.get_attributes();
 
-    let mut entries = vec![];
+    let (members, end) = scoped!(state, Scope::Trait(name.clone()), {
+        utils::skip_left_brace(state)?;
 
-    loop {
-        let name = identifiers::ident(state)?;
+        let mut members = Vec::new();
+        while state.current.kind != TokenKind::RightBrace && !state.is_eof() {
+            state.gather_comments();
 
-        utils::skip(state, TokenKind::Equals)?;
+            if state.current.kind == TokenKind::RightBrace {
+                state.clear_comments();
+                break;
+            }
 
-        let value = expressions::lowest_precedence(state)?;
-
-        entries.push(ConstantEntry { name, value });
-
-        if state.current.kind == TokenKind::Comma {
-            state.next();
-        } else {
-            break;
+            members.push(member(state, class.clone())?);
         }
-    }
 
-    let end = utils::skip_semicolon(state)?;
+        (members, utils::skip_right_brace(state)?)
+    });
 
-    Ok(ClassishConstant {
+    Ok(Statement::Trait(Trait {
         start,
         end,
+        name,
         attributes,
-        modifiers,
-        entries,
-    })
+        members,
+    }))
+}
+
+fn member(state: &mut State, class: String) -> ParseResult<TraitMember> {
+    let has_attributes = attributes::gather_attributes(state)?;
+
+    if !has_attributes && state.current.kind == TokenKind::Use {
+        return usage(state).map(TraitMember::TraitUsage);
+    }
+
+    if state.current.kind == TokenKind::Var {
+        return properties::parse_var(state, class).map(TraitMember::VariableProperty);
+    }
+
+    let modifiers = modifiers::collect(state)?;
+
+    if state.current.kind == TokenKind::Const {
+        return constants::classish(state, modifiers::constant_group(modifiers)?)
+            .map(TraitMember::Constant);
+    }
+
+    if state.current.kind == TokenKind::Function {
+        return functions::method(state, modifiers::method_group(modifiers)?)
+            .map(TraitMember::Method);
+    }
+
+    properties::parse(state, class, modifiers::property_group(modifiers)?)
+        .map(TraitMember::Property)
 }

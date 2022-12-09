@@ -1,50 +1,59 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 3,
-                7,
+                1,
             ),
-            name: "foo",
             end: (
-                3,
-                11,
+                5,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            TraitUse {
-                traits: [
-                    Identifier {
-                        start: (
-                            4,
-                            9,
-                        ),
-                        name: "a",
-                        end: (
-                            4,
-                            10,
-                        ),
-                    },
-                    Identifier {
-                        start: (
-                            4,
-                            12,
-                        ),
-                        name: "b",
-                        end: (
-                            4,
-                            14,
-                        ),
-                    },
-                ],
-                adaptations: [],
+            name: Identifier {
+                start: (
+                    3,
+                    7,
+                ),
+                name: "foo",
+                end: (
+                    3,
+                    11,
+                ),
             },
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                TraitUsage(
+                    TraitUsage {
+                        traits: [
+                            Identifier {
+                                start: (
+                                    4,
+                                    9,
+                                ),
+                                name: "a",
+                                end: (
+                                    4,
+                                    10,
+                                ),
+                            },
+                            Identifier {
+                                start: (
+                                    4,
+                                    12,
+                                ),
+                                name: "b",
+                                end: (
+                                    4,
+                                    14,
+                                ),
+                            },
+                        ],
+                        adaptations: [],
+                    },
+                ),
+            ],
         },
-    },
+    ),
 ]

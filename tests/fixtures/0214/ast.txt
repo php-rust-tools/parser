@@ -9,6 +9,7 @@
                 3,
                 14,
             ),
+            attributes: [],
             name: Identifier {
                 start: (
                     3,
@@ -20,8 +21,7 @@
                     13,
                 ),
             },
-            attributes: [],
-            extends: [],
+            extends: None,
             members: [],
         },
     ),
@@ -35,6 +35,7 @@
                 7,
                 1,
             ),
+            attributes: [],
             name: Identifier {
                 start: (
                     5,
@@ -46,20 +47,27 @@
                     15,
                 ),
             },
-            attributes: [],
-            extends: [
-                Identifier {
-                    start: (
+            extends: Some(
+                InterfaceExtends {
+                    span: (
                         5,
-                        23,
+                        15,
                     ),
-                    name: "s",
-                    end: (
-                        5,
-                        25,
-                    ),
+                    parents: [
+                        Identifier {
+                            start: (
+                                5,
+                                23,
+                            ),
+                            name: "s",
+                            end: (
+                                5,
+                                25,
+                            ),
+                        },
+                    ],
                 },
-            ],
+            ),
             members: [
                 Method(
                     Method {
