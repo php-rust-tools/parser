@@ -146,6 +146,28 @@ fn third_party_11_chubbyphp_framework() {
     );
 }
 
+#[test]
+fn third_party_12_silverstripe_framework_core() {
+    test_repository(
+        "silverstripe-framework",
+        "https://github.com/silverstripe/silverstripe-framework",
+        "4",
+        &["src", "tests"],
+        &[],
+    );
+}
+
+#[test]
+fn third_party_12_silverstripe_framework_cms() {
+    test_repository(
+        "silverstripe-cms",
+        "https://github.com/silverstripe/silverstripe-cms",
+        "4",
+        &["code", "tests"],
+        &[],
+    );
+}
+
 fn test_repository(
     name: &str,
     repository: &str,
