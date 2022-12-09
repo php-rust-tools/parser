@@ -48,6 +48,8 @@ fn third_party_3_symfony_framework() {
             "src/Symfony/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php",
             // file contains syntax error used for testing.
             "src/Symfony/Component/Config/Tests/Fixtures/ParseError.php",
+            // file contains unintentional error upstream, waiting for fix.
+            "src/Symfony/Component/VarExporter/LazyProxyTrait.php"
         ],
     );
 }
