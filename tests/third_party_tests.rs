@@ -140,7 +140,7 @@ fn third_party_11_chubbyphp_framework() {
     test_repository(
         "chubbyphp-framework",
         "https://github.com/chubbyphp/chubbyphp-framework",
-        "5.0.x",
+        "master",
         &["src", "tests"],
         &[],
     );
