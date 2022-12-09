@@ -100,6 +100,9 @@ fn top_level_statement(state: &mut State) -> ParseResult<Statement> {
 fn statement(state: &mut State) -> ParseResult<Statement> {
     let has_attributes = attributes::gather_attributes(state)?;
 
+    // FIXME: There's a better place to put this but night-time brain doesn't know where.
+    utils::skip_open_tag(state)?;
+
     let statement = if has_attributes {
         match &state.current.kind {
             TokenKind::Abstract => classes::parse(state)?,
