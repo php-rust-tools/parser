@@ -7,11 +7,11 @@ pub mod functions;
 pub mod identifiers;
 pub mod interfaces;
 pub mod modifiers;
+pub mod operators;
 pub mod properties;
 pub mod traits;
 pub mod try_block;
 pub mod variables;
-pub mod operators;
 
 use std::fmt::Display;
 
@@ -588,9 +588,7 @@ pub struct ListItem {
 }
 
 #[derive(Debug, Eq, PartialEq, Clone)]
-pub enum InfixOp {
-    
-}
+pub enum InfixOp {}
 
 impl From<TokenKind> for InfixOp {
     fn from(k: TokenKind) -> Self {

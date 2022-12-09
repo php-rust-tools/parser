@@ -131,7 +131,7 @@ pub enum AssignmentOperation {
         left: Box<Expression>,
         span: Span,
         right: Box<Expression>,
-    }
+    },
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -164,7 +164,7 @@ pub enum BitwiseOperation {
     Not {
         span: Span,
         right: Box<Expression>,
-    }
+    },
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -218,7 +218,7 @@ pub enum ComparisonOperation {
         left: Box<Expression>,
         span: Span,
         right: Box<Expression>,
-    }
+    },
 }
 
 #[derive(Debug, Clone, PartialEq)]
