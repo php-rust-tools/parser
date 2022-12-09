@@ -371,12 +371,6 @@ pub enum Expression {
         span: Span,
         expr: Box<Self>,
     },
-    Increment {
-        value: Box<Self>,
-    },
-    Decrement {
-        value: Box<Self>,
-    },
     LiteralInteger {
         i: ByteString,
     },
@@ -497,14 +491,6 @@ pub enum Expression {
         value: Box<Self>,
     },
     BitwiseNot {
-        span: Span,
-        value: Box<Self>,
-    },
-    PreDecrement {
-        span: Span,
-        value: Box<Self>,
-    },
-    PreIncrement {
         span: Span,
         value: Box<Self>,
     },
