@@ -31,7 +31,7 @@ fn third_party_2_laravel_framework() {
         &["src", "tests"],
         &[
             // file contains syntax error for testing.
-            "tests/Foundation/fixtures/bad-syntax-strategy.php"
+            "tests/Foundation/fixtures/bad-syntax-strategy.php",
         ],
     );
 }
@@ -49,7 +49,7 @@ fn third_party_3_symfony_framework() {
             // file contains syntax error used for testing.
             "src/Symfony/Component/Config/Tests/Fixtures/ParseError.php",
             // file contains unintentional error upstream, waiting for fix.
-            "src/Symfony/Component/VarExporter/LazyProxyTrait.php"
+            "src/Symfony/Component/VarExporter/LazyProxyTrait.php",
         ],
     );
 }
@@ -120,7 +120,7 @@ fn third_party_9_composer() {
         "https://github.com/composer/composer",
         "main",
         &["src", "tests"],
-        &[]
+        &[],
     );
 }
 
@@ -131,7 +131,7 @@ fn third_party_10_wordpress() {
         "https://github.com/WordPress/WordPress",
         "master",
         &["wp-admin", "wp-content", "wp-includes"],
-        &[]
+        &[],
     );
 }
 
