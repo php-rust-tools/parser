@@ -5,6 +5,9 @@ use crate::lexer::error::SyntaxError;
 use crate::lexer::error::SyntaxResult;
 use crate::lexer::source::Source;
 
+use super::token::DocStringIndentationAmount;
+use super::token::DocStringIndentationKind;
+
 #[derive(Debug, PartialEq, Eq, PartialOrd, Clone, Copy)]
 pub enum DocStringKind {
     Heredoc,
@@ -18,7 +21,12 @@ pub enum StackFrame {
     Halted,
     DoubleQuote,
     ShellExec,
-    DocString(DocStringKind, ByteString),
+    DocString(
+        DocStringKind,
+        ByteString,
+        DocStringIndentationKind,
+        DocStringIndentationAmount,
+    ),
     LookingForVarname,
     LookingForProperty,
     VarOffset,

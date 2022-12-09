@@ -1,11 +1,11 @@
 use crate::lexer::token::TokenKind;
+use crate::parser;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::blocks;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
-use crate::parser;
 
 pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Foreach)?;
