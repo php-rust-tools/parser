@@ -6,7 +6,6 @@ use crate::parser::ast::functions::Closure;
 use crate::parser::ast::functions::ClosureUse;
 use crate::parser::ast::functions::Function;
 use crate::parser::ast::functions::Method;
-use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
@@ -174,20 +173,7 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
         false
     };
 
-    let name = if state.current.kind == TokenKind::Null {
-        let start = state.current.span;
-        let end = (start.0, start.1 + 4);
-
-        state.next();
-
-        Identifier {
-            start,
-            name: "null".into(),
-            end,
-        }
-    } else {
-        identifiers::ident(state)?
-    };
+    let name = identifiers::ident_maybe_soft_reserved(state)?;
 
     // get attributes before processing parameters, otherwise
     // parameters will steal attributes of this function.

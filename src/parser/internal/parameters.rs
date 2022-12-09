@@ -247,8 +247,7 @@ pub fn args_list(state: &mut State) -> ParseResult<Vec<Arg>> {
     while !state.is_eof() && state.current.kind != TokenKind::RightParen {
         let mut name = None;
         let mut unpack = false;
-        if (matches!(state.current.kind, TokenKind::Identifier(_))
-            || identifiers::is_reserved_ident(&state.current.kind))
+        if identifiers::is_ident_maybe_reserved(&state.current.kind)
             && state.peek.kind == TokenKind::Colon
         {
             name = Some(identifiers::ident_maybe_reserved(state)?);

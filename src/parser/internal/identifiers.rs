@@ -9,10 +9,10 @@ use crate::peek_token;
 /// Expect an unqualified identifier such as Foo or Bar.
 pub fn ident(state: &mut State) -> ParseResult<Identifier> {
     let name = peek_token!([
-            TokenKind::Identifier(identifier) => {
-                identifier.clone()
-            },
-        ], state, "an identifier");
+        TokenKind::Identifier(identifier) => {
+            identifier.clone()
+        },
+    ], state, "an identifier");
 
     let start = state.current.span;
     state.next();
@@ -96,16 +96,56 @@ pub fn ident_maybe_reserved(state: &mut State) -> ParseResult<Identifier> {
     }
 }
 
+pub fn ident_maybe_soft_reserved(state: &mut State) -> ParseResult<Identifier> {
+    match state.current.kind {
+        _ if is_soft_reserved_ident(&state.current.kind) => {
+            let name = state.current.kind.to_string().into();
+
+            let start = state.current.span;
+            state.next();
+            let end = state.current.span;
+
+            Ok(Identifier { start, name, end })
+        }
+        _ => ident(state),
+    }
+}
+
+pub fn is_ident_maybe_soft_reserved(kind: &TokenKind) -> bool {
+    if let TokenKind::Identifier(_) = kind {
+        return true;
+    }
+
+    is_soft_reserved_ident(kind)
+}
+
+pub fn is_ident_maybe_reserved(kind: &TokenKind) -> bool {
+    if let TokenKind::Identifier(_) = kind {
+        return true;
+    }
+
+    is_reserved_ident(kind)
+}
+
+pub fn is_soft_reserved_ident(kind: &TokenKind) -> bool {
+    matches!(kind, |TokenKind::Parent| TokenKind::Self_
+        | TokenKind::True
+        | TokenKind::False
+        | TokenKind::Null
+        | TokenKind::Enum
+        | TokenKind::From
+        | TokenKind::Readonly)
+}
+
 pub fn is_reserved_ident(kind: &TokenKind) -> bool {
+    if is_soft_reserved_ident(kind) {
+        return true;
+    }
+
     matches!(
         kind,
         TokenKind::Static
-            | TokenKind::Parent
-            | TokenKind::Self_
             | TokenKind::Abstract
-            | TokenKind::True
-            | TokenKind::False
-            | TokenKind::Null
             | TokenKind::Final
             | TokenKind::For
             | TokenKind::Private
@@ -180,7 +220,5 @@ pub fn is_reserved_ident(kind: &TokenKind) -> bool {
             | TokenKind::HaltCompiler
             | TokenKind::Fn
             | TokenKind::Match
-            | TokenKind::Enum
-            | TokenKind::From
     )
 }
