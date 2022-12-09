@@ -1,5 +1,7 @@
 use crate::expect_token;
 use crate::expected_token_err;
+use crate::lexer::error::SyntaxError;
+use crate::lexer::token::DocStringIndentationKind;
 use crate::lexer::token::TokenKind;
 use crate::lexer::DocStringKind;
 use crate::parser::ast;
@@ -971,6 +973,7 @@ fn shell_exec(state: &mut State) -> ParseResult<Expression> {
 
 #[inline(always)]
 fn doc_string(state: &mut State, kind: DocStringKind) -> ParseResult<Expression> {
+    let span = state.current.span;
     state.next();
 
     Ok(match kind {
@@ -992,19 +995,65 @@ fn doc_string(state: &mut State, kind: DocStringKind) -> ParseResult<Expression>
 
             state.next();
 
-            // FIXME: Can we move this logic above into the loop, by peeking ahead in
-            //        the token stream for the EndHeredoc? Might be more performant.
-            if let Some(indentation_type) = indentation_type {
-                let search_char: u8 = indentation_type.into();
+            let mut new_line = true;
+            if indentation_type != DocStringIndentationKind::None {
+                let indentation_char: u8 = indentation_type.into();
 
                 for part in parts.iter_mut() {
+                    // We only need to strip and validate indentation
+                    // for individual lines, so we can skip checks if
+                    // we know we're not on a new line.
+                    if !new_line {
+                        continue;
+                    }
+
                     match part {
                         StringPart::Const(bytes) => {
-                            for _ in 0..indentation_amount {
-                                if bytes.starts_with(&[search_char]) {
-                                    bytes.remove(0);
-                                }
+                            // 1. If this line doesn't start with any whitespace,
+                            //    we can return an error early because we know
+                            //    the label was indented.
+                            if !bytes.starts_with(&[b' ']) && !bytes.starts_with(&[b'\t']) {
+                                return Err(ParseError::SyntaxError(
+                                    SyntaxError::InvalidDocBodyIndentationLevel(
+                                        indentation_amount,
+                                        span,
+                                    ),
+                                ));
                             }
+
+                            // 2. If this line doesn't start with the correct
+                            //    type of whitespace, we can also return an error.
+                            if !bytes.starts_with(&[indentation_char]) {
+                                return Err(ParseError::SyntaxError(
+                                    SyntaxError::InvalidDocIndentation(span),
+                                ));
+                            }
+
+                            // 3. We now know that the whitespace at the start of
+                            //    this line is correct, so we need to check that the
+                            //    amount of whitespace is correct too. In this case,
+                            //    the amount of whitespace just needs to be at least
+                            //    the same, so we can create a vector containing the
+                            //    minimum and check using `starts_with()`.
+                            let expected_whitespace_buffer =
+                                vec![indentation_char; indentation_amount];
+                            if !bytes.starts_with(&expected_whitespace_buffer) {
+                                return Err(ParseError::SyntaxError(
+                                    SyntaxError::InvalidDocBodyIndentationLevel(
+                                        indentation_amount,
+                                        span,
+                                    ),
+                                ));
+                            }
+
+                            // 4. All of the above checks have passed, so we know
+                            //    there are no more possible errors. Let's now
+                            //    strip the leading whitespace accordingly.
+                            *bytes = bytes
+                                .strip_prefix(&expected_whitespace_buffer[..])
+                                .unwrap()
+                                .into();
+                            new_line = bytes.ends_with(&[b'\n']);
                         }
                         _ => continue,
                     }
@@ -1014,31 +1063,71 @@ fn doc_string(state: &mut State, kind: DocStringKind) -> ParseResult<Expression>
             Expression::Heredoc { parts }
         }
         DocStringKind::Nowdoc => {
-            // FIXME: This feels hacky. We should probably produce different tokens from the lexer
-            //        but since I already had the logic in place for parsing heredocs, this was
-            //        the fastest way to get nowdocs working too.
-            let mut s = expect_token!([
-                    TokenKind::StringPart(s) => s
-                ], state, "constant string");
+            let mut string_part = expect_token!([
+                TokenKind::StringPart(s) => s,
+            ], state, "constant string");
 
-            let (indentation_type, indentation_amount) = expect_token!([
-                    TokenKind::EndDocString(_, indentation_type, indentation_amount) => (indentation_type, indentation_amount)
-                ], state, "label");
+            let (indentation_type, indentation_amount) = match state.current.kind {
+                TokenKind::EndDocString(_, indentation_type, indentation_amount) => {
+                    (indentation_type, indentation_amount)
+                }
+                _ => unreachable!(),
+            };
 
-            // FIXME: Hacky code, but it's late and I want to get this done.
-            if let Some(indentation_type) = indentation_type {
-                let search_char: u8 = indentation_type.into();
-                let mut lines = s
+            state.next();
+
+            if indentation_type != DocStringIndentationKind::None {
+                let indentation_char: u8 = indentation_type.into();
+
+                let mut lines = string_part
                     .split(|b| *b == b'\n')
                     .map(|s| s.to_vec())
                     .collect::<Vec<Vec<u8>>>();
+
                 for line in lines.iter_mut() {
-                    for _ in 0..indentation_amount {
-                        if line.starts_with(&[search_char]) {
-                            line.remove(0);
-                        }
+                    if line.is_empty() {
+                        continue;
                     }
+
+                    // 1. If this line doesn't start with any whitespace,
+                    //    we can return an error early because we know
+                    //    the label was indented.
+                    if !line.starts_with(&[b' ']) && !line.starts_with(&[b'\t']) {
+                        return Err(ParseError::SyntaxError(
+                            SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span),
+                        ));
+                    }
+
+                    // 2. If this line doesn't start with the correct
+                    //    type of whitespace, we can also return an error.
+                    if !line.starts_with(&[indentation_char]) {
+                        return Err(ParseError::SyntaxError(SyntaxError::InvalidDocIndentation(
+                            span,
+                        )));
+                    }
+
+                    // 3. We now know that the whitespace at the start of
+                    //    this line is correct, so we need to check that the
+                    //    amount of whitespace is correct too. In this case,
+                    //    the amount of whitespace just needs to be at least
+                    //    the same, so we can create a vector containing the
+                    //    minimum and check using `starts_with()`.
+                    let expected_whitespace_buffer = vec![indentation_char; indentation_amount];
+                    if !line.starts_with(&expected_whitespace_buffer) {
+                        return Err(ParseError::SyntaxError(
+                            SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span),
+                        ));
+                    }
+
+                    // 4. All of the above checks have passed, so we know
+                    //    there are no more possible errors. Let's now
+                    //    strip the leading whitespace accordingly.
+                    *line = line
+                        .strip_prefix(&expected_whitespace_buffer[..])
+                        .unwrap()
+                        .into();
                 }
+
                 let mut bytes = Vec::new();
                 for (i, line) in lines.iter().enumerate() {
                     bytes.extend(line);
@@ -1046,10 +1135,10 @@ fn doc_string(state: &mut State, kind: DocStringKind) -> ParseResult<Expression>
                         bytes.push(b'\n');
                     }
                 }
-                s = bytes.into();
+                string_part = bytes.into();
             }
 
-            Expression::Nowdoc { value: s }
+            Expression::Nowdoc { value: string_part }
         }
     })
 }

@@ -11,10 +11,14 @@ pub enum OpenTagKind {
     Full,
 }
 
+pub type DocStringIndentationAmount = usize;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum DocStringIndentationKind {
     Space,
     Tab,
+    None,
+    Both,
 }
 
 impl From<u8> for DocStringIndentationKind {
@@ -32,6 +36,7 @@ impl From<DocStringIndentationKind> for u8 {
         match kind {
             DocStringIndentationKind::Space => b' ',
             DocStringIndentationKind::Tab => b'\t',
+            _ => unreachable!(),
         }
     }
 }
@@ -43,7 +48,7 @@ pub enum TokenKind {
     Parent,
     Backtick,
     StartDocString(ByteString, DocStringKind),
-    EndDocString(ByteString, Option<DocStringIndentationKind>, usize),
+    EndDocString(ByteString, DocStringIndentationKind, usize),
     From,
     Print,
     Dollar,
