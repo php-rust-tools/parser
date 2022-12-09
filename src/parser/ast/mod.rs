@@ -11,6 +11,7 @@ pub mod properties;
 pub mod traits;
 pub mod try_block;
 pub mod variables;
+pub mod operators;
 
 use std::fmt::Display;
 
@@ -31,6 +32,12 @@ use crate::parser::ast::interfaces::Interface;
 use crate::parser::ast::traits::Trait;
 use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::variables::Variable;
+
+use self::operators::ArithmeticOperation;
+use self::operators::AssignmentOperation;
+use self::operators::BitwiseOperation;
+use self::operators::ComparisonOperation;
+use self::operators::LogicalOperation;
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
@@ -331,6 +338,25 @@ pub struct Use {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
+    ArithmeticOperation(ArithmeticOperation),
+    AssignmentOperation(AssignmentOperation),
+    BitwiseOperation(BitwiseOperation),
+    ComparisonOperation(ComparisonOperation),
+    LogicalOperation(LogicalOperation),
+    Concat {
+        left: Box<Expression>,
+        span: Span,
+        right: Box<Expression>,
+    },
+    Instanceof {
+        left: Box<Expression>,
+        span: Span,
+        right: Box<Expression>,
+    },
+    Reference {
+        span: Span,
+        right: Box<Expression>,
+    },
     Parenthesized {
         start: Span,
         expr: Box<Expression>,
@@ -360,11 +386,6 @@ pub enum Expression {
     Variable(Variable),
     DynamicVariable {
         name: Box<Self>,
-    },
-    Infix {
-        lhs: Box<Self>,
-        op: InfixOp,
-        rhs: Box<Self>,
     },
     Include {
         span: Span,
@@ -568,94 +589,12 @@ pub struct ListItem {
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum InfixOp {
-    Add,
-    Sub,
-    Div,
-    Mul,
-    Mod,
-    Concat,
-    ConcatAssign,
-    LessThan,
-    GreaterThan,
-    LessThanEquals,
-    GreaterThanEquals,
-    Equals,
-    Identical,
-    NotEquals,
-    NotIdentical,
-    And,
-    Or,
-    Assign,
-    AssignRef,
-    AddAssign,
-    Pow,
-    Instanceof,
-    CoalesceAssign,
-    MulAssign,
-    SubAssign,
-    DivAssign,
-    LeftShift,
-    RightShift,
-    BitwiseAnd,
-    BitwiseOr,
-    BitwiseXor,
-    LogicalAnd,
-    LogicalOr,
-    LogicalXor,
-    Spaceship,
-    PowAssign,
-    ModAssign,
-    BitwiseAndAssign,
-    BitwiseOrAssign,
-    BitwiseXorAssign,
-    LeftShiftAssign,
-    RightShiftAssign,
+    
 }
 
 impl From<TokenKind> for InfixOp {
     fn from(k: TokenKind) -> Self {
         match k {
-            TokenKind::Percent => Self::Mod,
-            TokenKind::Plus => Self::Add,
-            TokenKind::Minus => Self::Sub,
-            TokenKind::Asterisk => Self::Mul,
-            TokenKind::Slash => Self::Div,
-            TokenKind::LessThan => Self::LessThan,
-            TokenKind::GreaterThan => Self::GreaterThan,
-            TokenKind::LessThanEquals => Self::LessThanEquals,
-            TokenKind::GreaterThanEquals => Self::GreaterThanEquals,
-            TokenKind::Dot => Self::Concat,
-            TokenKind::DotEquals => Self::ConcatAssign,
-            TokenKind::DoubleEquals => Self::Equals,
-            TokenKind::TripleEquals => Self::Identical,
-            TokenKind::BangEquals | TokenKind::AngledLeftRight => Self::NotEquals,
-            TokenKind::BangDoubleEquals => Self::NotIdentical,
-            TokenKind::BooleanAnd => Self::And,
-            TokenKind::BooleanOr => Self::Or,
-            TokenKind::Equals => Self::Assign,
-            TokenKind::PlusEquals => Self::AddAssign,
-            TokenKind::Pow => Self::Pow,
-            TokenKind::Instanceof => Self::Instanceof,
-            TokenKind::CoalesceEqual => Self::CoalesceAssign,
-            TokenKind::AsteriskEqual => Self::MulAssign,
-            TokenKind::MinusEquals => Self::SubAssign,
-            TokenKind::SlashEquals => Self::DivAssign,
-            TokenKind::LeftShift => Self::LeftShift,
-            TokenKind::RightShift => Self::RightShift,
-            TokenKind::Ampersand => Self::BitwiseAnd,
-            TokenKind::Pipe => Self::BitwiseOr,
-            TokenKind::Caret => Self::BitwiseXor,
-            TokenKind::Spaceship => Self::Spaceship,
-            TokenKind::LogicalAnd => Self::LogicalAnd,
-            TokenKind::LogicalOr => Self::LogicalOr,
-            TokenKind::LogicalXor => Self::LogicalXor,
-            TokenKind::PowEquals => Self::PowAssign,
-            TokenKind::PercentEquals => Self::ModAssign,
-            TokenKind::AmpersandEquals => Self::BitwiseAndAssign,
-            TokenKind::PipeEquals => Self::BitwiseOrAssign,
-            TokenKind::CaretEquals => Self::BitwiseXorAssign,
-            TokenKind::LeftShiftEquals => Self::LeftShiftAssign,
-            TokenKind::RightShiftEquals => Self::RightShiftAssign,
             _ => unreachable!(),
         }
     }

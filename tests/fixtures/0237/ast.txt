@@ -6,16 +6,19 @@
                 1,
             ),
             kind: Require,
-            path: Infix {
-                lhs: MagicConst {
+            path: Concat {
+                left: MagicConst {
                     span: (
                         3,
                         9,
                     ),
                     constant: Directory,
                 },
-                op: Concat,
-                rhs: LiteralString {
+                span: (
+                    3,
+                    17,
+                ),
+                right: LiteralString {
                     value: "/foo.php",
                 },
             },

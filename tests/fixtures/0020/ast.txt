@@ -1,417 +1,542 @@
 [
     Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: Mod,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: LeftShift,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: RightShift,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: BitwiseAnd,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: BitwiseOr,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: BitwiseXor,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: NotEquals,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: Spaceship,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: LogicalAnd,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: LogicalOr,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: LiteralInteger {
-                i: "6",
-            },
-            op: LogicalXor,
-            rhs: LiteralInteger {
-                i: "2",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        14,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        14,
-                        4,
-                    ),
+        expr: ArithmeticOperation(
+            Modulo {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: Assign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    3,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        15,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        15,
-                        4,
-                    ),
+        expr: BitwiseOperation(
+            LeftShift {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: AddAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    4,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        16,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        16,
-                        4,
-                    ),
+        expr: BitwiseOperation(
+            RightShift {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: SubAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    5,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        17,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        17,
-                        4,
-                    ),
+        expr: BitwiseOperation(
+            And {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: MulAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    6,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        18,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        18,
-                        4,
-                    ),
+        expr: BitwiseOperation(
+            Or {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: PowAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    7,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        19,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        19,
-                        4,
-                    ),
+        expr: BitwiseOperation(
+            Xor {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: DivAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    8,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        20,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        20,
-                        4,
-                    ),
+        expr: ComparisonOperation(
+            AngledNotEqual {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: ConcatAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    9,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        21,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        21,
-                        4,
-                    ),
+        expr: ComparisonOperation(
+            Spaceship {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: ModAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    10,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        22,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        22,
-                        4,
-                    ),
+        expr: LogicalOperation(
+            LogicalAnd {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: BitwiseAndAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    11,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        23,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        23,
-                        4,
-                    ),
+        expr: LogicalOperation(
+            LogicalOr {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: BitwiseOrAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    12,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        24,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        24,
-                        4,
-                    ),
+        expr: LogicalOperation(
+            LogicalXor {
+                left: LiteralInteger {
+                    i: "6",
                 },
-            ),
-            op: BitwiseXorAssign,
-            rhs: LiteralInteger {
-                i: "1",
+                span: (
+                    13,
+                    3,
+                ),
+                right: LiteralInteger {
+                    i: "2",
+                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        25,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        25,
-                        4,
-                    ),
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            14,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            14,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    14,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
                 },
-            ),
-            op: LeftShiftAssign,
-            rhs: LiteralInteger {
-                i: "1",
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        26,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        26,
-                        4,
-                    ),
+        expr: AssignmentOperation(
+            Addition {
+                left: Variable(
+                    Variable {
+                        start: (
+                            15,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            15,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    15,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
                 },
-            ),
-            op: RightShiftAssign,
-            rhs: LiteralInteger {
-                i: "1",
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        27,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        27,
-                        4,
-                    ),
+        expr: AssignmentOperation(
+            Subtraction {
+                left: Variable(
+                    Variable {
+                        start: (
+                            16,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            16,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    16,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
                 },
-            ),
-            op: CoalesceAssign,
-            rhs: LiteralInteger {
-                i: "1",
             },
-        },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Multiplication {
+                left: Variable(
+                    Variable {
+                        start: (
+                            17,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            17,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    17,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Exponentiation {
+                left: Variable(
+                    Variable {
+                        start: (
+                            18,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            18,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    18,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Division {
+                left: Variable(
+                    Variable {
+                        start: (
+                            19,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            19,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    19,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Concat {
+                left: Variable(
+                    Variable {
+                        start: (
+                            20,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            20,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    20,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Modulo {
+                left: Variable(
+                    Variable {
+                        start: (
+                            21,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            21,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    21,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            BitwiseAnd {
+                left: Variable(
+                    Variable {
+                        start: (
+                            22,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            22,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    22,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            BitwiseOr {
+                left: Variable(
+                    Variable {
+                        start: (
+                            23,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            23,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    23,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            BitwiseXor {
+                left: Variable(
+                    Variable {
+                        start: (
+                            24,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            24,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    24,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            LeftShift {
+                left: Variable(
+                    Variable {
+                        start: (
+                            25,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            25,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    25,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            RightShift {
+                left: Variable(
+                    Variable {
+                        start: (
+                            26,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            26,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    26,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Coalesce {
+                left: Variable(
+                    Variable {
+                        start: (
+                            27,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            27,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    27,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "1",
+                },
+            },
+        ),
     },
 ]

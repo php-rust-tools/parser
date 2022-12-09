@@ -1,168 +1,201 @@
 [
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        3,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        3,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: New {
-                target: Identifier(
-                    Identifier {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
                         start: (
                             3,
-                            10,
+                            1,
                         ),
-                        name: "Foo",
+                        name: "a",
                         end: (
                             3,
-                            13,
+                            4,
                         ),
                     },
                 ),
                 span: (
                     3,
-                    6,
-                ),
-                args: [],
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        4,
-                        1,
-                    ),
-                    name: "b",
-                    end: (
-                        4,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: UnaryPlus {
-                span: (
                     4,
-                    6,
                 ),
-                value: LiteralInteger {
-                    i: "1",
+                right: New {
+                    target: Identifier(
+                        Identifier {
+                            start: (
+                                3,
+                                10,
+                            ),
+                            name: "Foo",
+                            end: (
+                                3,
+                                13,
+                            ),
+                        },
+                    ),
+                    span: (
+                        3,
+                        6,
+                    ),
+                    args: [],
                 },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        5,
-                        1,
-                    ),
-                    name: "c",
-                    end: (
-                        5,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: BitwiseNot {
-                span: (
-                    5,
-                    6,
-                ),
-                value: LiteralInteger {
-                    i: "2",
-                },
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        6,
-                        1,
-                    ),
-                    name: "d",
-                    end: (
-                        6,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: PreDecrement {
-                span: (
-                    6,
-                    6,
-                ),
-                value: Variable(
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
                     Variable {
                         start: (
-                            6,
-                            8,
+                            4,
+                            1,
                         ),
                         name: "b",
                         end: (
-                            6,
-                            10,
+                            4,
+                            4,
                         ),
                     },
                 ),
+                span: (
+                    4,
+                    4,
+                ),
+                right: ArithmeticOperation(
+                    Identity {
+                        span: (
+                            4,
+                            6,
+                        ),
+                        right: LiteralInteger {
+                            i: "1",
+                        },
+                    },
+                ),
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        7,
-                        1,
-                    ),
-                    name: "e",
-                    end: (
-                        7,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: PreIncrement {
-                span: (
-                    7,
-                    6,
-                ),
-                value: Variable(
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
                     Variable {
                         start: (
-                            7,
-                            8,
+                            5,
+                            1,
+                        ),
+                        name: "c",
+                        end: (
+                            5,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    5,
+                    4,
+                ),
+                right: BitwiseOperation(
+                    Not {
+                        span: (
+                            5,
+                            6,
+                        ),
+                        right: LiteralInteger {
+                            i: "2",
+                        },
+                    },
+                ),
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            6,
+                            1,
                         ),
                         name: "d",
                         end: (
-                            7,
-                            10,
+                            6,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    6,
+                    4,
+                ),
+                right: ArithmeticOperation(
+                    PreDecrement {
+                        span: (
+                            6,
+                            6,
+                        ),
+                        right: Variable(
+                            Variable {
+                                start: (
+                                    6,
+                                    8,
+                                ),
+                                name: "b",
+                                end: (
+                                    6,
+                                    10,
+                                ),
+                            },
                         ),
                     },
                 ),
             },
-        },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            7,
+                            1,
+                        ),
+                        name: "e",
+                        end: (
+                            7,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    7,
+                    4,
+                ),
+                right: ArithmeticOperation(
+                    PreIncrement {
+                        span: (
+                            7,
+                            6,
+                        ),
+                        right: Variable(
+                            Variable {
+                                start: (
+                                    7,
+                                    8,
+                                ),
+                                name: "d",
+                                end: (
+                                    7,
+                                    10,
+                                ),
+                            },
+                        ),
+                    },
+                ),
+            },
+        ),
     },
 ]

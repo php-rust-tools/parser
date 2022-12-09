@@ -24,6 +24,12 @@ use crate::parser::internal::utils;
 use crate::parser::internal::variables;
 use crate::parser::state::State;
 
+use super::ast::operators::ArithmeticOperation;
+use super::ast::operators::AssignmentOperation;
+use super::ast::operators::BitwiseOperation;
+use super::ast::operators::ComparisonOperation;
+use super::ast::operators::LogicalOperation;
+
 pub fn lowest_precedence(state: &mut State) -> ParseResult<Expression> {
     for_precedence(state, Precedence::Lowest)
 }
@@ -106,12 +112,14 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                     // FIXME: Hacky, should probably be refactored.
                     left = match kind {
                         TokenKind::Equals if state.current.kind == TokenKind::Ampersand => {
+                            let amper_span = state.current.span;
                             state.next();
-                            Expression::Infix {
-                                lhs: Box::new(left),
-                                op: ast::InfixOp::AssignRef,
-                                rhs: Box::new(for_precedence(state, rpred)?),
-                            }
+
+                            // FIXME: You should only be allowed to assign a referencable variable,
+                            //        here, not any old expression.
+                            let right = Box::new(for_precedence(state, rpred)?);
+
+                            Expression::AssignmentOperation(AssignmentOperation::Assign { left: Box::new(left), span, right: Box::new(Expression::Reference { span: amper_span, right }) })
                         }
                         TokenKind::Instanceof if state.current.kind == TokenKind::Self_ => {
                             if !state.has_class_scope {
@@ -123,10 +131,10 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
                             state.next();
 
-                            Expression::Infix {
-                                lhs: Box::new(left),
-                                op: ast::InfixOp::Instanceof,
-                                rhs: Box::new(Expression::Self_),
+                            Expression::Instanceof {
+                                left: Box::new(left),
+                                span,
+                                right: Box::new(Expression::Self_),
                             }
                         }
                         TokenKind::Instanceof if state.current.kind == TokenKind::Parent => {
@@ -139,10 +147,10 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
                             state.next();
 
-                            Expression::Infix {
-                                lhs: Box::new(left),
-                                op: ast::InfixOp::Instanceof,
-                                rhs: Box::new(Expression::Parent),
+                            Expression::Instanceof {
+                                left: Box::new(left),
+                                span,
+                                right: Box::new(Expression::Self_),
                             }
                         }
                         TokenKind::Instanceof if state.current.kind == TokenKind::Static => {
@@ -155,16 +163,61 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
                             state.next();
 
-                            Expression::Infix {
-                                lhs: Box::new(left),
-                                op: ast::InfixOp::Instanceof,
-                                rhs: Box::new(Expression::Static),
+                            Expression::Instanceof {
+                                left: Box::new(left),
+                                span,
+                                right: Box::new(Expression::Self_),
                             }
                         }
-                        _ => Expression::Infix {
-                            lhs: Box::new(left),
-                            op: kind.into(),
-                            rhs: Box::new(for_precedence(state, rpred)?),
+                        _ => {
+                            let left = Box::new(left);
+                            let right = Box::new(for_precedence(state, rpred)?);
+
+                            match kind {
+                                TokenKind::Plus => Expression::ArithmeticOperation(ArithmeticOperation::Addition { left, span, right }),
+                                TokenKind::Minus => Expression::ArithmeticOperation(ArithmeticOperation::Subtraction { left, span, right }),
+                                TokenKind::Asterisk => Expression::ArithmeticOperation(ArithmeticOperation::Multiplication { left, span, right }),
+                                TokenKind::Slash => Expression::ArithmeticOperation(ArithmeticOperation::Division { left, span, right }),
+                                TokenKind::Percent => Expression::ArithmeticOperation(ArithmeticOperation::Modulo { left, span, right }),
+                                TokenKind::Pow => Expression::ArithmeticOperation(ArithmeticOperation::Exponentiation { left, span, right }),
+                                TokenKind::Equals => Expression::AssignmentOperation(AssignmentOperation::Assign { left, span, right }),
+                                TokenKind::PlusEquals => Expression::AssignmentOperation(AssignmentOperation::Addition { left, span, right }),
+                                TokenKind::MinusEquals => Expression::AssignmentOperation(AssignmentOperation::Subtraction { left, span, right }),
+                                TokenKind::AsteriskEqual => Expression::AssignmentOperation(AssignmentOperation::Multiplication { left, span, right }),
+                                TokenKind::SlashEquals => Expression::AssignmentOperation(AssignmentOperation::Division { left, span, right }),
+                                TokenKind::PercentEquals => Expression::AssignmentOperation(AssignmentOperation::Modulo { left, span, right }),
+                                TokenKind::PowEquals => Expression::AssignmentOperation(AssignmentOperation::Exponentiation { left, span, right }),
+                                TokenKind::AmpersandEquals => Expression::AssignmentOperation(AssignmentOperation::BitwiseAnd { left, span, right }),
+                                TokenKind::PipeEquals => Expression::AssignmentOperation(AssignmentOperation::BitwiseOr { left, span, right }),
+                                TokenKind::CaretEquals => Expression::AssignmentOperation(AssignmentOperation::BitwiseXor { left, span, right }),
+                                TokenKind::LeftShiftEquals => Expression::AssignmentOperation(AssignmentOperation::LeftShift { left, span, right }),
+                                TokenKind::RightShiftEquals => Expression::AssignmentOperation(AssignmentOperation::RightShift { left, span, right }),
+                                TokenKind::CoalesceEqual => Expression::AssignmentOperation(AssignmentOperation::Coalesce { left, span, right }),
+                                TokenKind::DotEquals => Expression::AssignmentOperation(AssignmentOperation::Concat { left, span, right }),
+                                TokenKind::Ampersand => Expression::BitwiseOperation(BitwiseOperation::And { left, span, right }),
+                                TokenKind::Pipe => Expression::BitwiseOperation(BitwiseOperation::Or { left, span, right }),
+                                TokenKind::Caret => Expression::BitwiseOperation(BitwiseOperation::Xor { left, span, right }),
+                                TokenKind::LeftShift => Expression::BitwiseOperation(BitwiseOperation::LeftShift { left, span, right }),
+                                TokenKind::RightShift => Expression::BitwiseOperation(BitwiseOperation::RightShift { left, span, right }),
+                                TokenKind::DoubleEquals => Expression::ComparisonOperation(ComparisonOperation::Equal { left, span, right }),
+                                TokenKind::TripleEquals => Expression::ComparisonOperation(ComparisonOperation::Identical { left, span, right }),
+                                TokenKind::BangEquals => Expression::ComparisonOperation(ComparisonOperation::NotEqual { left, span, right }),
+                                TokenKind::AngledLeftRight => Expression::ComparisonOperation(ComparisonOperation::AngledNotEqual { left, span, right }),
+                                TokenKind::BangDoubleEquals => Expression::ComparisonOperation(ComparisonOperation::NotIdentical { left, span, right }),
+                                TokenKind::LessThan => Expression::ComparisonOperation(ComparisonOperation::LessThan { left, span, right }),
+                                TokenKind::GreaterThan => Expression::ComparisonOperation(ComparisonOperation::GreaterThan { left, span, right }),
+                                TokenKind::LessThanEquals => Expression::ComparisonOperation(ComparisonOperation::LessThanOrEqual { left, span, right }),
+                                TokenKind::GreaterThanEquals => Expression::ComparisonOperation(ComparisonOperation::GreaterThanOrEqual { left, span, right }),
+                                TokenKind::Spaceship => Expression::ComparisonOperation(ComparisonOperation::Spaceship { left, span, right }),
+                                TokenKind::BooleanAnd => Expression::LogicalOperation(LogicalOperation::And { left, span, right }),
+                                TokenKind::BooleanOr => Expression::LogicalOperation(LogicalOperation::Or { left, span, right }),
+                                TokenKind::LogicalAnd => Expression::LogicalOperation(LogicalOperation::LogicalAnd { left, span, right }),
+                                TokenKind::LogicalOr => Expression::LogicalOperation(LogicalOperation::LogicalOr { left, span, right }),
+                                TokenKind::LogicalXor => Expression::LogicalOperation(LogicalOperation::LogicalXor { left, span, right }),
+                                TokenKind::Dot => Expression::Concat { left, span, right },
+                                TokenKind::Instanceof => Expression::Instanceof { left, span, right },
+                                _ => todo!(),
+                            }
                         },
                     };
                 }
@@ -691,25 +744,12 @@ expressions! {
 
         state.next();
 
-        let rhs = for_precedence(state, Precedence::Prefix)?;
-
+        let right = Box::new(for_precedence(state, Precedence::Prefix)?);
         let expr = match op {
-            TokenKind::Minus => Expression::Negate {
-                span,
-                value: Box::new(rhs),
-            },
-            TokenKind::Plus => Expression::UnaryPlus {
-                span,
-                value: Box::new(rhs),
-            },
-            TokenKind::Decrement => Expression::PreDecrement {
-                span,
-                value: Box::new(rhs),
-            },
-            TokenKind::Increment => Expression::PreIncrement {
-                span,
-                value: Box::new(rhs),
-            },
+            TokenKind::Minus => Expression::ArithmeticOperation(ArithmeticOperation::Negation { span, right }),
+            TokenKind::Plus => Expression::ArithmeticOperation(ArithmeticOperation::Identity { span, right }),
+            TokenKind::Decrement => Expression::ArithmeticOperation(ArithmeticOperation::PreDecrement { span, right }),
+            TokenKind::Increment => Expression::ArithmeticOperation(ArithmeticOperation::PreIncrement { span, right }),
             _ => unreachable!(),
         };
 
@@ -724,10 +764,10 @@ expressions! {
 
         let rhs = for_precedence(state, Precedence::Bang)?;
 
-        Ok(Expression::BooleanNot {
+        Ok(Expression::LogicalOperation(LogicalOperation::Not {
             span,
-            value: Box::new(rhs)
-        })
+            right: Box::new(rhs)
+        }))
     })
 
     #[before(print_prefix), current(TokenKind::At)]
@@ -764,12 +804,9 @@ expressions! {
 
         state.next();
 
-        let rhs = for_precedence(state, Precedence::Prefix)?;
+        let right = Box::new(for_precedence(state, Precedence::Prefix)?);
 
-        Ok(Expression::BitwiseNot {
-            span,
-            value: Box::new(rhs)
-        })
+        Ok(Expression::BitwiseOperation(BitwiseOperation::Not { span, right }))
     })
 
     #[before(unexpected_token), current(TokenKind::Dollar)]
@@ -942,17 +979,16 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             }
         }
         TokenKind::Increment => {
-            state.next();
-            Expression::Increment {
-                value: Box::new(lhs),
-            }
-        }
-        TokenKind::Decrement => {
+            let span = state.current.span;
             state.next();
 
-            Expression::Decrement {
-                value: Box::new(lhs),
-            }
+            Expression::ArithmeticOperation(ArithmeticOperation::PostIncrement { left: Box::new(lhs), span })
+        }
+        TokenKind::Decrement => {
+            let span = state.current.span;
+            state.next();
+
+            Expression::ArithmeticOperation(ArithmeticOperation::PostDecrement { left: Box::new(lhs), span })
         }
         _ => todo!("postfix: {:?}", op),
     })

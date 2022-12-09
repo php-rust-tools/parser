@@ -1,80 +1,101 @@
 [
     For {
         init: [
-            Infix {
-                lhs: Variable(
-                    Variable {
-                        start: (
-                            3,
-                            6,
-                        ),
-                        name: "i",
-                        end: (
-                            3,
-                            9,
-                        ),
+            AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        Variable {
+                            start: (
+                                3,
+                                6,
+                            ),
+                            name: "i",
+                            end: (
+                                3,
+                                9,
+                            ),
+                        },
+                    ),
+                    span: (
+                        3,
+                        9,
+                    ),
+                    right: LiteralInteger {
+                        i: "0",
                     },
-                ),
-                op: Assign,
-                rhs: LiteralInteger {
-                    i: "0",
                 },
-            },
-            Infix {
-                lhs: Variable(
-                    Variable {
-                        start: (
-                            3,
-                            14,
-                        ),
-                        name: "i",
-                        end: (
-                            3,
-                            17,
-                        ),
+            ),
+            AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        Variable {
+                            start: (
+                                3,
+                                14,
+                            ),
+                            name: "i",
+                            end: (
+                                3,
+                                17,
+                            ),
+                        },
+                    ),
+                    span: (
+                        3,
+                        17,
+                    ),
+                    right: LiteralInteger {
+                        i: "1",
                     },
-                ),
-                op: Assign,
-                rhs: LiteralInteger {
-                    i: "1",
                 },
-            },
+            ),
         ],
         condition: [
-            Infix {
-                lhs: Variable(
-                    Variable {
-                        start: (
-                            3,
-                            22,
-                        ),
-                        name: "j",
-                        end: (
-                            3,
-                            25,
-                        ),
+            ComparisonOperation(
+                LessThan {
+                    left: Variable(
+                        Variable {
+                            start: (
+                                3,
+                                22,
+                            ),
+                            name: "j",
+                            end: (
+                                3,
+                                25,
+                            ),
+                        },
+                    ),
+                    span: (
+                        3,
+                        25,
+                    ),
+                    right: LiteralInteger {
+                        i: "2",
                     },
-                ),
-                op: LessThan,
-                rhs: LiteralInteger {
-                    i: "2",
                 },
-            },
-            Decrement {
-                value: Variable(
-                    Variable {
-                        start: (
-                            3,
-                            30,
-                        ),
-                        name: "j",
-                        end: (
-                            3,
-                            32,
-                        ),
-                    },
-                ),
-            },
+            ),
+            ArithmeticOperation(
+                PostDecrement {
+                    left: Variable(
+                        Variable {
+                            start: (
+                                3,
+                                30,
+                            ),
+                            name: "j",
+                            end: (
+                                3,
+                                32,
+                            ),
+                        },
+                    ),
+                    span: (
+                        3,
+                        32,
+                    ),
+                },
+            ),
         ],
         loop: [],
         then: [],

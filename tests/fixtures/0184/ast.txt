@@ -1,96 +1,101 @@
 [
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        3,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        3,
-                        4,
-                    ),
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            3,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    3,
+                    4,
+                ),
+                right: Array {
+                    items: [
+                        ArrayItem {
+                            key: None,
+                            value: Variable(
+                                Variable {
+                                    start: (
+                                        3,
+                                        7,
+                                    ),
+                                    name: "a",
+                                    end: (
+                                        3,
+                                        9,
+                                    ),
+                                },
+                            ),
+                            unpack: false,
+                            by_ref: false,
+                        },
+                        ArrayItem {
+                            key: None,
+                            value: Variable(
+                                Variable {
+                                    start: (
+                                        3,
+                                        11,
+                                    ),
+                                    name: "b",
+                                    end: (
+                                        3,
+                                        13,
+                                    ),
+                                },
+                            ),
+                            unpack: false,
+                            by_ref: false,
+                        },
+                        ArrayItem {
+                            key: None,
+                            value: Variable(
+                                Variable {
+                                    start: (
+                                        3,
+                                        15,
+                                    ),
+                                    name: "c",
+                                    end: (
+                                        3,
+                                        17,
+                                    ),
+                                },
+                            ),
+                            unpack: false,
+                            by_ref: false,
+                        },
+                        ArrayItem {
+                            key: None,
+                            value: Variable(
+                                Variable {
+                                    start: (
+                                        3,
+                                        19,
+                                    ),
+                                    name: "d",
+                                    end: (
+                                        3,
+                                        21,
+                                    ),
+                                },
+                            ),
+                            unpack: false,
+                            by_ref: false,
+                        },
+                    ],
                 },
-            ),
-            op: Assign,
-            rhs: Array {
-                items: [
-                    ArrayItem {
-                        key: None,
-                        value: Variable(
-                            Variable {
-                                start: (
-                                    3,
-                                    7,
-                                ),
-                                name: "a",
-                                end: (
-                                    3,
-                                    9,
-                                ),
-                            },
-                        ),
-                        unpack: false,
-                        by_ref: false,
-                    },
-                    ArrayItem {
-                        key: None,
-                        value: Variable(
-                            Variable {
-                                start: (
-                                    3,
-                                    11,
-                                ),
-                                name: "b",
-                                end: (
-                                    3,
-                                    13,
-                                ),
-                            },
-                        ),
-                        unpack: false,
-                        by_ref: false,
-                    },
-                    ArrayItem {
-                        key: None,
-                        value: Variable(
-                            Variable {
-                                start: (
-                                    3,
-                                    15,
-                                ),
-                                name: "c",
-                                end: (
-                                    3,
-                                    17,
-                                ),
-                            },
-                        ),
-                        unpack: false,
-                        by_ref: false,
-                    },
-                    ArrayItem {
-                        key: None,
-                        value: Variable(
-                            Variable {
-                                start: (
-                                    3,
-                                    19,
-                                ),
-                                name: "d",
-                                end: (
-                                    3,
-                                    21,
-                                ),
-                            },
-                        ),
-                        unpack: false,
-                        by_ref: false,
-                    },
-                ],
             },
-        },
+        ),
     },
 ]

@@ -63,25 +63,30 @@
             by_ref: false,
             body: [
                 If {
-                    condition: Infix {
-                        lhs: Variable(
-                            Variable {
-                                start: (
-                                    4,
-                                    9,
-                                ),
-                                name: "n",
-                                end: (
-                                    4,
-                                    12,
-                                ),
+                    condition: ComparisonOperation(
+                        LessThan {
+                            left: Variable(
+                                Variable {
+                                    start: (
+                                        4,
+                                        9,
+                                    ),
+                                    name: "n",
+                                    end: (
+                                        4,
+                                        12,
+                                    ),
+                                },
+                            ),
+                            span: (
+                                4,
+                                12,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
                             },
-                        ),
-                        op: LessThan,
-                        rhs: LiteralInteger {
-                            i: "2",
                         },
-                    },
+                    ),
                     then: [
                         Return {
                             value: Some(
@@ -106,89 +111,104 @@
                 },
                 Return {
                     value: Some(
-                        Infix {
-                            lhs: Call {
-                                target: Identifier(
-                                    Identifier {
-                                        start: (
-                                            8,
-                                            12,
-                                        ),
-                                        name: "fib",
-                                        end: (
-                                            8,
-                                            15,
-                                        ),
-                                    },
-                                ),
-                                args: [
-                                    Arg {
-                                        name: None,
-                                        value: Infix {
-                                            lhs: Variable(
-                                                Variable {
-                                                    start: (
-                                                        8,
-                                                        16,
+                        ArithmeticOperation(
+                            Addition {
+                                left: Call {
+                                    target: Identifier(
+                                        Identifier {
+                                            start: (
+                                                8,
+                                                12,
+                                            ),
+                                            name: "fib",
+                                            end: (
+                                                8,
+                                                15,
+                                            ),
+                                        },
+                                    ),
+                                    args: [
+                                        Arg {
+                                            name: None,
+                                            value: ArithmeticOperation(
+                                                Subtraction {
+                                                    left: Variable(
+                                                        Variable {
+                                                            start: (
+                                                                8,
+                                                                16,
+                                                            ),
+                                                            name: "n",
+                                                            end: (
+                                                                8,
+                                                                19,
+                                                            ),
+                                                        },
                                                     ),
-                                                    name: "n",
-                                                    end: (
+                                                    span: (
                                                         8,
                                                         19,
                                                     ),
+                                                    right: LiteralInteger {
+                                                        i: "1",
+                                                    },
                                                 },
                                             ),
-                                            op: Sub,
-                                            rhs: LiteralInteger {
-                                                i: "1",
-                                            },
+                                            unpack: false,
                                         },
-                                        unpack: false,
-                                    },
-                                ],
-                            },
-                            op: Add,
-                            rhs: Call {
-                                target: Identifier(
-                                    Identifier {
-                                        start: (
-                                            8,
-                                            26,
-                                        ),
-                                        name: "fib",
-                                        end: (
-                                            8,
-                                            29,
-                                        ),
-                                    },
+                                    ],
+                                },
+                                span: (
+                                    8,
+                                    24,
                                 ),
-                                args: [
-                                    Arg {
-                                        name: None,
-                                        value: Infix {
-                                            lhs: Variable(
-                                                Variable {
-                                                    start: (
-                                                        8,
-                                                        30,
+                                right: Call {
+                                    target: Identifier(
+                                        Identifier {
+                                            start: (
+                                                8,
+                                                26,
+                                            ),
+                                            name: "fib",
+                                            end: (
+                                                8,
+                                                29,
+                                            ),
+                                        },
+                                    ),
+                                    args: [
+                                        Arg {
+                                            name: None,
+                                            value: ArithmeticOperation(
+                                                Subtraction {
+                                                    left: Variable(
+                                                        Variable {
+                                                            start: (
+                                                                8,
+                                                                30,
+                                                            ),
+                                                            name: "n",
+                                                            end: (
+                                                                8,
+                                                                33,
+                                                            ),
+                                                        },
                                                     ),
-                                                    name: "n",
-                                                    end: (
+                                                    span: (
                                                         8,
                                                         33,
                                                     ),
+                                                    right: LiteralInteger {
+                                                        i: "2",
+                                                    },
                                                 },
                                             ),
-                                            op: Sub,
-                                            rhs: LiteralInteger {
-                                                i: "2",
-                                            },
+                                            unpack: false,
                                         },
-                                        unpack: false,
-                                    },
-                                ],
+                                    ],
+                                },
                             },
-                        },
+                        ),
                     ),
                 },
             ],

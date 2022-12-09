@@ -1,17 +1,23 @@
 [
     Expression {
-        expr: Infix {
-            lhs: Infix {
-                lhs: LiteralString {
+        expr: Concat {
+            left: Concat {
+                left: LiteralString {
                     value: "foo",
                 },
-                op: Concat,
-                rhs: LiteralString {
+                span: (
+                    1,
+                    13,
+                ),
+                right: LiteralString {
                     value: "bar",
                 },
             },
-            op: Concat,
-            rhs: LiteralString {
+            span: (
+                1,
+                21,
+            ),
+            right: LiteralString {
                 value: "baz",
             },
         },

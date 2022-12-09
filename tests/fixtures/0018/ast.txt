@@ -53,44 +53,49 @@
         },
     ),
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        9,
-                        1,
-                    ),
-                    name: "bar",
-                    end: (
-                        9,
-                        6,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: Call {
-                target: Identifier(
-                    Identifier {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
                         start: (
                             9,
-                            8,
+                            1,
                         ),
-                        name: "a",
+                        name: "bar",
                         end: (
                             9,
-                            9,
+                            6,
                         ),
                     },
                 ),
-                args: [
-                    Arg {
-                        name: None,
-                        value: VariadicPlaceholder,
-                        unpack: false,
-                    },
-                ],
+                span: (
+                    9,
+                    6,
+                ),
+                right: Call {
+                    target: Identifier(
+                        Identifier {
+                            start: (
+                                9,
+                                8,
+                            ),
+                            name: "a",
+                            end: (
+                                9,
+                                9,
+                            ),
+                        },
+                    ),
+                    args: [
+                        Arg {
+                            name: None,
+                            value: VariadicPlaceholder,
+                            unpack: false,
+                        },
+                    ],
+                },
             },
-        },
+        ),
     },
     Label {
         label: Identifier {

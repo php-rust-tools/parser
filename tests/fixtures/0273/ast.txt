@@ -60,39 +60,44 @@
                         body: Some(
                             [
                                 Expression {
-                                    expr: Infix {
-                                        lhs: Variable(
-                                            Variable {
-                                                start: (
-                                                    5,
-                                                    9,
-                                                ),
-                                                name: "a",
-                                                end: (
-                                                    5,
-                                                    12,
-                                                ),
-                                            },
-                                        ),
-                                        op: Assign,
-                                        rhs: StaticMethodCall {
-                                            target: Static,
-                                            method: Identifier(
-                                                Identifier {
+                                    expr: AssignmentOperation(
+                                        Assign {
+                                            left: Variable(
+                                                Variable {
                                                     start: (
                                                         5,
-                                                        22,
+                                                        9,
                                                     ),
-                                                    name: "bar",
+                                                    name: "a",
                                                     end: (
                                                         5,
-                                                        25,
+                                                        12,
                                                     ),
                                                 },
                                             ),
-                                            args: [],
+                                            span: (
+                                                5,
+                                                12,
+                                            ),
+                                            right: StaticMethodCall {
+                                                target: Static,
+                                                method: Identifier(
+                                                    Identifier {
+                                                        start: (
+                                                            5,
+                                                            22,
+                                                        ),
+                                                        name: "bar",
+                                                        end: (
+                                                            5,
+                                                            25,
+                                                        ),
+                                                    },
+                                                ),
+                                                args: [],
+                                            },
                                         },
-                                    },
+                                    ),
                                 },
                             ],
                         ),
