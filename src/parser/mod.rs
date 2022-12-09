@@ -3,14 +3,13 @@ use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::comments::Comment;
 use crate::parser::ast::comments::CommentFormat;
-use crate::parser::ast::constant::Constant;
-use crate::parser::ast::constant::ConstantEntry;
 use crate::parser::ast::{DeclareItem, Expression, Program, Statement, StaticVar};
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::attributes;
 use crate::parser::internal::blocks;
-use crate::parser::internal::classish;
+use crate::parser::internal::classes;
+use crate::parser::internal::constants;
 use crate::parser::internal::control_flow;
 use crate::parser::internal::enums;
 use crate::parser::internal::functions;
@@ -19,6 +18,7 @@ use crate::parser::internal::identifiers;
 use crate::parser::internal::interfaces;
 use crate::parser::internal::loops;
 use crate::parser::internal::namespaces;
+use crate::parser::internal::traits;
 use crate::parser::internal::try_block;
 use crate::parser::internal::uses;
 use crate::parser::internal::utils;
@@ -71,36 +71,7 @@ fn top_level_statement(state: &mut State) -> ParseResult<Statement> {
     let statement = match &state.current.kind {
         TokenKind::Namespace => namespaces::namespace(state)?,
         TokenKind::Use => uses::use_statement(state)?,
-        TokenKind::Const => {
-            let start = state.current.span;
-            state.next();
-
-            let mut entries = vec![];
-
-            loop {
-                let name = identifiers::ident(state)?;
-
-                utils::skip(state, TokenKind::Equals)?;
-
-                let value = expressions::lowest_precedence(state)?;
-
-                entries.push(ConstantEntry { name, value });
-
-                if state.current.kind == TokenKind::Comma {
-                    state.next();
-                } else {
-                    break;
-                }
-            }
-
-            let end = utils::skip_semicolon(state)?;
-
-            Statement::Constant(Constant {
-                start,
-                end,
-                entries,
-            })
-        }
+        TokenKind::Const => Statement::Constant(constants::parse(state)?),
         TokenKind::HaltCompiler => {
             state.next();
 
@@ -131,14 +102,14 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
 
     let statement = if has_attributes {
         match &state.current.kind {
-            TokenKind::Abstract => classish::class_definition(state)?,
+            TokenKind::Abstract => classes::parse(state)?,
             TokenKind::Readonly if state.peek.kind != TokenKind::LeftParen => {
-                classish::class_definition(state)?
+                classes::parse(state)?
             }
-            TokenKind::Final => classish::class_definition(state)?,
-            TokenKind::Class => classish::class_definition(state)?,
+            TokenKind::Final => classes::parse(state)?,
+            TokenKind::Class => classes::parse(state)?,
             TokenKind::Interface => interfaces::parse(state)?,
-            TokenKind::Trait => classish::trait_definition(state)?,
+            TokenKind::Trait => traits::parse(state)?,
             TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => enums::parse(state)?,
             TokenKind::Function
                 if identifiers::is_ident_maybe_soft_reserved(&state.peek.kind)
@@ -179,14 +150,14 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
         }
     } else {
         match &state.current.kind {
-            TokenKind::Abstract => classish::class_definition(state)?,
+            TokenKind::Abstract => classes::parse(state)?,
             TokenKind::Readonly if state.peek.kind != TokenKind::LeftParen => {
-                classish::class_definition(state)?
+                classes::parse(state)?
             }
-            TokenKind::Final => classish::class_definition(state)?,
-            TokenKind::Class => classish::class_definition(state)?,
+            TokenKind::Final => classes::parse(state)?,
+            TokenKind::Class => classes::parse(state)?,
             TokenKind::Interface => interfaces::parse(state)?,
-            TokenKind::Trait => classish::trait_definition(state)?,
+            TokenKind::Trait => traits::parse(state)?,
             TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => enums::parse(state)?,
             TokenKind::Function
                 if identifiers::is_ident_maybe_soft_reserved(&state.peek.kind)

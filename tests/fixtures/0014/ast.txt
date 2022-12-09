@@ -1,305 +1,341 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 3,
-                7,
+                1,
             ),
-            name: "Foo2",
             end: (
-                3,
-                12,
+                7,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            TraitUse {
-                traits: [
-                    Identifier {
-                        start: (
-                            4,
-                            9,
-                        ),
-                        name: "B",
-                        end: (
-                            4,
-                            11,
-                        ),
-                    },
-                ],
-                adaptations: [
-                    Alias {
-                        trait: None,
-                        method: Identifier {
-                            start: (
-                                5,
-                                9,
-                            ),
-                            name: "foo",
-                            end: (
-                                5,
-                                13,
-                            ),
-                        },
-                        alias: Identifier {
-                            start: (
-                                5,
-                                26,
-                            ),
-                            name: "bar",
-                            end: (
-                                5,
-                                29,
-                            ),
-                        },
-                        visibility: Some(
-                            Protected {
-                                start: (
-                                    5,
-                                    16,
-                                ),
-                                end: (
-                                    5,
-                                    26,
-                                ),
-                            },
-                        ),
-                    },
-                ],
+            name: Identifier {
+                start: (
+                    3,
+                    7,
+                ),
+                name: "Foo2",
+                end: (
+                    3,
+                    12,
+                ),
             },
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
-        },
-    },
-    Class {
-        name: Identifier {
-            start: (
-                9,
-                7,
-            ),
-            name: "Bar2",
-            end: (
-                9,
-                12,
-            ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            TraitUse {
-                traits: [
-                    Identifier {
-                        start: (
-                            10,
-                            9,
-                        ),
-                        name: "B",
-                        end: (
-                            10,
-                            10,
-                        ),
-                    },
-                    Identifier {
-                        start: (
-                            11,
-                            9,
-                        ),
-                        name: "C",
-                        end: (
-                            11,
-                            11,
-                        ),
-                    },
-                ],
-                adaptations: [
-                    Precedence {
-                        trait: Some(
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                TraitUsage(
+                    TraitUsage {
+                        traits: [
                             Identifier {
                                 start: (
-                                    12,
-                                    13,
+                                    4,
+                                    9,
                                 ),
                                 name: "B",
                                 end: (
-                                    12,
-                                    14,
+                                    4,
+                                    11,
                                 ),
                             },
-                        ),
-                        method: Identifier {
-                            start: (
-                                12,
-                                16,
-                            ),
-                            name: "foo",
-                            end: (
-                                12,
-                                20,
-                            ),
-                        },
-                        insteadof: [
-                            Identifier {
-                                start: (
-                                    12,
-                                    30,
-                                ),
-                                name: "C",
-                                end: (
-                                    12,
-                                    31,
+                        ],
+                        adaptations: [
+                            Alias {
+                                trait: None,
+                                method: Identifier {
+                                    start: (
+                                        5,
+                                        9,
+                                    ),
+                                    name: "foo",
+                                    end: (
+                                        5,
+                                        13,
+                                    ),
+                                },
+                                alias: Identifier {
+                                    start: (
+                                        5,
+                                        26,
+                                    ),
+                                    name: "bar",
+                                    end: (
+                                        5,
+                                        29,
+                                    ),
+                                },
+                                visibility: Some(
+                                    Protected {
+                                        start: (
+                                            5,
+                                            16,
+                                        ),
+                                        end: (
+                                            5,
+                                            26,
+                                        ),
+                                    },
                                 ),
                             },
                         ],
                     },
-                ],
-            },
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+                ),
+            ],
         },
-    },
-    Class {
-        name: Identifier {
+    ),
+    Class(
+        Class {
+            start: (
+                9,
+                1,
+            ),
+            end: (
+                14,
+                1,
+            ),
+            name: Identifier {
+                start: (
+                    9,
+                    7,
+                ),
+                name: "Bar2",
+                end: (
+                    9,
+                    12,
+                ),
+            },
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                TraitUsage(
+                    TraitUsage {
+                        traits: [
+                            Identifier {
+                                start: (
+                                    10,
+                                    9,
+                                ),
+                                name: "B",
+                                end: (
+                                    10,
+                                    10,
+                                ),
+                            },
+                            Identifier {
+                                start: (
+                                    11,
+                                    9,
+                                ),
+                                name: "C",
+                                end: (
+                                    11,
+                                    11,
+                                ),
+                            },
+                        ],
+                        adaptations: [
+                            Precedence {
+                                trait: Some(
+                                    Identifier {
+                                        start: (
+                                            12,
+                                            13,
+                                        ),
+                                        name: "B",
+                                        end: (
+                                            12,
+                                            14,
+                                        ),
+                                    },
+                                ),
+                                method: Identifier {
+                                    start: (
+                                        12,
+                                        16,
+                                    ),
+                                    name: "foo",
+                                    end: (
+                                        12,
+                                        20,
+                                    ),
+                                },
+                                insteadof: [
+                                    Identifier {
+                                        start: (
+                                            12,
+                                            30,
+                                        ),
+                                        name: "C",
+                                        end: (
+                                            12,
+                                            31,
+                                        ),
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ),
+            ],
+        },
+    ),
+    Class(
+        Class {
             start: (
                 16,
-                7,
+                1,
             ),
-            name: "Bar3",
             end: (
-                16,
-                12,
+                18,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            TraitUse {
-                traits: [
-                    Identifier {
-                        start: (
-                            17,
-                            9,
-                        ),
-                        name: "B",
-                        end: (
-                            17,
-                            11,
-                        ),
-                    },
-                ],
-                adaptations: [
-                    Alias {
-                        trait: Some(
+            name: Identifier {
+                start: (
+                    16,
+                    7,
+                ),
+                name: "Bar3",
+                end: (
+                    16,
+                    12,
+                ),
+            },
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                TraitUsage(
+                    TraitUsage {
+                        traits: [
                             Identifier {
                                 start: (
                                     17,
-                                    13,
+                                    9,
                                 ),
                                 name: "B",
                                 end: (
                                     17,
-                                    14,
+                                    11,
                                 ),
                             },
-                        ),
-                        method: Identifier {
-                            start: (
-                                17,
-                                16,
-                            ),
-                            name: "foo",
-                            end: (
-                                17,
-                                20,
-                            ),
-                        },
-                        alias: Identifier {
-                            start: (
-                                17,
-                                23,
-                            ),
-                            name: "bar",
-                            end: (
-                                17,
-                                26,
-                            ),
-                        },
-                        visibility: None,
+                        ],
+                        adaptations: [
+                            Alias {
+                                trait: Some(
+                                    Identifier {
+                                        start: (
+                                            17,
+                                            13,
+                                        ),
+                                        name: "B",
+                                        end: (
+                                            17,
+                                            14,
+                                        ),
+                                    },
+                                ),
+                                method: Identifier {
+                                    start: (
+                                        17,
+                                        16,
+                                    ),
+                                    name: "foo",
+                                    end: (
+                                        17,
+                                        20,
+                                    ),
+                                },
+                                alias: Identifier {
+                                    start: (
+                                        17,
+                                        23,
+                                    ),
+                                    name: "bar",
+                                    end: (
+                                        17,
+                                        26,
+                                    ),
+                                },
+                                visibility: None,
+                            },
+                        ],
                     },
-                ],
-            },
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+                ),
+            ],
         },
-    },
-    Class {
-        name: Identifier {
+    ),
+    Class(
+        Class {
             start: (
                 20,
-                7,
+                1,
             ),
-            name: "Bar4",
             end: (
-                20,
-                12,
+                22,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            TraitUse {
-                traits: [
-                    Identifier {
-                        start: (
-                            21,
-                            9,
-                        ),
-                        name: "B",
-                        end: (
-                            21,
-                            11,
-                        ),
-                    },
-                ],
-                adaptations: [
-                    Alias {
-                        trait: None,
-                        method: Identifier {
-                            start: (
-                                21,
-                                13,
-                            ),
-                            name: "foo",
-                            end: (
-                                21,
-                                17,
-                            ),
-                        },
-                        alias: Identifier {
-                            start: (
-                                21,
-                                20,
-                            ),
-                            name: "bar",
-                            end: (
-                                21,
-                                23,
-                            ),
-                        },
-                        visibility: None,
-                    },
-                ],
+            name: Identifier {
+                start: (
+                    20,
+                    7,
+                ),
+                name: "Bar4",
+                end: (
+                    20,
+                    12,
+                ),
             },
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                TraitUsage(
+                    TraitUsage {
+                        traits: [
+                            Identifier {
+                                start: (
+                                    21,
+                                    9,
+                                ),
+                                name: "B",
+                                end: (
+                                    21,
+                                    11,
+                                ),
+                            },
+                        ],
+                        adaptations: [
+                            Alias {
+                                trait: None,
+                                method: Identifier {
+                                    start: (
+                                        21,
+                                        13,
+                                    ),
+                                    name: "foo",
+                                    end: (
+                                        21,
+                                        17,
+                                    ),
+                                },
+                                alias: Identifier {
+                                    start: (
+                                        21,
+                                        20,
+                                    ),
+                                    name: "bar",
+                                    end: (
+                                        21,
+                                        23,
+                                    ),
+                                },
+                                visibility: None,
+                            },
+                        ],
+                    },
+                ),
+            ],
         },
-    },
+    ),
 ]

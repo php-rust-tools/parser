@@ -14,8 +14,14 @@ pub enum InterfaceMember {
 pub struct Interface {
     pub start: Span,
     pub end: Span,
-    pub name: Identifier,
     pub attributes: Vec<AttributeGroup>,
-    pub extends: Vec<Identifier>,
+    pub name: Identifier,
+    pub extends: Option<InterfaceExtends>,
     pub members: Vec<InterfaceMember>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub struct InterfaceExtends {
+    pub span: Span,
+    pub parents: Vec<Identifier>,
 }

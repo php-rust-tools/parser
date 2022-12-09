@@ -18,80 +18,82 @@
                     18,
                 ),
             ),
-            Class {
-                name: Identifier {
+            Class(
+                Class {
                     start: (
                         5,
-                        13,
+                        7,
                     ),
-                    name: "Baz",
                     end: (
-                        5,
-                        17,
+                        7,
+                        1,
                     ),
-                },
-                attributes: [],
-                extends: None,
-                implements: [],
-                body: [
-                    Property {
-                        var: Variable {
-                            start: (
-                                6,
-                                29,
-                            ),
-                            name: "foo",
-                            end: (
-                                6,
-                                33,
-                            ),
-                        },
-                        attributes: [],
-                        value: None,
-                        type: Some(
-                            String,
+                    name: Identifier {
+                        start: (
+                            5,
+                            13,
                         ),
-                        modifiers: PropertyModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        6,
-                                        6,
-                                    ),
-                                    end: (
-                                        6,
-                                        13,
-                                    ),
-                                },
-                                Readonly {
-                                    start: (
-                                        6,
-                                        13,
-                                    ),
-                                    end: (
-                                        6,
-                                        22,
-                                    ),
-                                },
-                            ],
-                        },
+                        name: "Baz",
+                        end: (
+                            5,
+                            17,
+                        ),
                     },
-                ],
-                modifiers: ClassModifierGroup {
-                    modifiers: [
-                        Final {
-                            start: (
-                                5,
-                                1,
-                            ),
-                            end: (
-                                5,
-                                7,
-                            ),
-                        },
+                    extends: None,
+                    implements: None,
+                    attributes: [],
+                    members: [
+                        Property(
+                            Property {
+                                attributes: [],
+                                type: Some(
+                                    String,
+                                ),
+                                modifiers: PropertyModifierGroup {
+                                    modifiers: [
+                                        Public {
+                                            start: (
+                                                6,
+                                                6,
+                                            ),
+                                            end: (
+                                                6,
+                                                13,
+                                            ),
+                                        },
+                                        Readonly {
+                                            start: (
+                                                6,
+                                                13,
+                                            ),
+                                            end: (
+                                                6,
+                                                22,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                entries: [
+                                    PropertyEntry {
+                                        variable: Variable {
+                                            start: (
+                                                6,
+                                                29,
+                                            ),
+                                            name: "foo",
+                                            end: (
+                                                6,
+                                                33,
+                                            ),
+                                        },
+                                        value: None,
+                                    },
+                                ],
+                            },
+                        ),
                     ],
                 },
-            },
+            ),
         ],
     },
 ]

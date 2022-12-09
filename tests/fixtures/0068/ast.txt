@@ -1,53 +1,66 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 2,
-                7,
+                1,
             ),
-            name: "MyClass",
             end: (
-                2,
-                15,
+                5,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            Property {
-                var: Variable {
-                    start: (
-                        3,
-                        15,
-                    ),
-                    name: "a",
-                    end: (
-                        3,
-                        17,
-                    ),
-                },
-                attributes: [],
-                value: None,
-                type: None,
-                modifiers: PropertyModifierGroup {
-                    modifiers: [
-                        Protected {
-                            start: (
-                                3,
-                                5,
-                            ),
-                            end: (
-                                3,
-                                15,
-                            ),
-                        },
-                    ],
-                },
+            name: Identifier {
+                start: (
+                    2,
+                    7,
+                ),
+                name: "MyClass",
+                end: (
+                    2,
+                    15,
+                ),
             },
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                Property(
+                    Property {
+                        attributes: [],
+                        type: None,
+                        modifiers: PropertyModifierGroup {
+                            modifiers: [
+                                Protected {
+                                    start: (
+                                        3,
+                                        5,
+                                    ),
+                                    end: (
+                                        3,
+                                        15,
+                                    ),
+                                },
+                            ],
+                        },
+                        entries: [
+                            PropertyEntry {
+                                variable: Variable {
+                                    start: (
+                                        3,
+                                        15,
+                                    ),
+                                    name: "a",
+                                    end: (
+                                        3,
+                                        17,
+                                    ),
+                                },
+                                value: None,
+                            },
+                        ],
+                    },
+                ),
+            ],
         },
-    },
+    ),
 ]

@@ -1,253 +1,260 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 3,
-                7,
+                1,
             ),
-            name: "foo",
             end: (
-                3,
-                11,
+                10,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            Method(
-                Method {
-                    start: (
-                        4,
-                        12,
-                    ),
-                    end: (
-                        9,
-                        8,
-                    ),
-                    name: Identifier {
+            name: Identifier {
+                start: (
+                    3,
+                    7,
+                ),
+                name: "foo",
+                end: (
+                    3,
+                    11,
+                ),
+            },
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                Method(
+                    Method {
                         start: (
                             4,
-                            21,
-                        ),
-                        name: "__construct",
-                        end: (
-                            4,
-                            32,
-                        ),
-                    },
-                    attributes: [],
-                    parameters: MethodParameterList {
-                        start: (
-                            4,
-                            32,
+                            12,
                         ),
                         end: (
                             9,
-                            7,
+                            8,
                         ),
-                        members: [
-                            MethodParameter {
-                                start: (
-                                    5,
-                                    9,
-                                ),
-                                end: (
-                                    5,
-                                    25,
-                                ),
-                                name: Variable {
+                        name: Identifier {
+                            start: (
+                                4,
+                                21,
+                            ),
+                            name: "__construct",
+                            end: (
+                                4,
+                                32,
+                            ),
+                        },
+                        attributes: [],
+                        parameters: MethodParameterList {
+                            start: (
+                                4,
+                                32,
+                            ),
+                            end: (
+                                9,
+                                7,
+                            ),
+                            members: [
+                                MethodParameter {
                                     start: (
                                         5,
-                                        23,
+                                        9,
                                     ),
-                                    name: "a",
                                     end: (
                                         5,
                                         25,
                                     ),
+                                    name: Variable {
+                                        start: (
+                                            5,
+                                            23,
+                                        ),
+                                        name: "a",
+                                        end: (
+                                            5,
+                                            25,
+                                        ),
+                                    },
+                                    attributes: [],
+                                    type: Some(
+                                        String,
+                                    ),
+                                    variadic: false,
+                                    default: None,
+                                    modifiers: PromotedPropertyModifierGroup {
+                                        modifiers: [
+                                            Public {
+                                                start: (
+                                                    5,
+                                                    9,
+                                                ),
+                                                end: (
+                                                    5,
+                                                    16,
+                                                ),
+                                            },
+                                        ],
+                                    },
+                                    by_ref: false,
                                 },
-                                attributes: [],
-                                type: Some(
-                                    String,
-                                ),
-                                variadic: false,
-                                default: None,
-                                modifiers: PromotedPropertyModifierGroup {
-                                    modifiers: [
-                                        Public {
-                                            start: (
-                                                5,
-                                                9,
-                                            ),
-                                            end: (
-                                                5,
-                                                16,
-                                            ),
-                                        },
-                                    ],
-                                },
-                                by_ref: false,
-                            },
-                            MethodParameter {
-                                start: (
-                                    6,
-                                    9,
-                                ),
-                                end: (
-                                    6,
-                                    31,
-                                ),
-                                name: Variable {
+                                MethodParameter {
                                     start: (
                                         6,
-                                        29,
+                                        9,
                                     ),
-                                    name: "b",
                                     end: (
                                         6,
                                         31,
                                     ),
+                                    name: Variable {
+                                        start: (
+                                            6,
+                                            29,
+                                        ),
+                                        name: "b",
+                                        end: (
+                                            6,
+                                            31,
+                                        ),
+                                    },
+                                    attributes: [],
+                                    type: Some(
+                                        Integer,
+                                    ),
+                                    variadic: false,
+                                    default: None,
+                                    modifiers: PromotedPropertyModifierGroup {
+                                        modifiers: [
+                                            Public {
+                                                start: (
+                                                    6,
+                                                    9,
+                                                ),
+                                                end: (
+                                                    6,
+                                                    16,
+                                                ),
+                                            },
+                                            Readonly {
+                                                start: (
+                                                    6,
+                                                    16,
+                                                ),
+                                                end: (
+                                                    6,
+                                                    25,
+                                                ),
+                                            },
+                                        ],
+                                    },
+                                    by_ref: false,
                                 },
-                                attributes: [],
-                                type: Some(
-                                    Integer,
-                                ),
-                                variadic: false,
-                                default: None,
-                                modifiers: PromotedPropertyModifierGroup {
-                                    modifiers: [
-                                        Public {
-                                            start: (
-                                                6,
-                                                9,
-                                            ),
-                                            end: (
-                                                6,
-                                                16,
-                                            ),
-                                        },
-                                        Readonly {
-                                            start: (
-                                                6,
-                                                16,
-                                            ),
-                                            end: (
-                                                6,
-                                                25,
-                                            ),
-                                        },
-                                    ],
-                                },
-                                by_ref: false,
-                            },
-                            MethodParameter {
-                                start: (
-                                    7,
-                                    9,
-                                ),
-                                end: (
-                                    7,
-                                    34,
-                                ),
-                                name: Variable {
+                                MethodParameter {
                                     start: (
                                         7,
-                                        32,
+                                        9,
                                     ),
-                                    name: "c",
                                     end: (
                                         7,
                                         34,
                                     ),
+                                    name: Variable {
+                                        start: (
+                                            7,
+                                            32,
+                                        ),
+                                        name: "c",
+                                        end: (
+                                            7,
+                                            34,
+                                        ),
+                                    },
+                                    attributes: [],
+                                    type: Some(
+                                        Float,
+                                    ),
+                                    variadic: false,
+                                    default: None,
+                                    modifiers: PromotedPropertyModifierGroup {
+                                        modifiers: [
+                                            Public {
+                                                start: (
+                                                    7,
+                                                    9,
+                                                ),
+                                                end: (
+                                                    7,
+                                                    16,
+                                                ),
+                                            },
+                                            Readonly {
+                                                start: (
+                                                    7,
+                                                    16,
+                                                ),
+                                                end: (
+                                                    7,
+                                                    25,
+                                                ),
+                                            },
+                                        ],
+                                    },
+                                    by_ref: true,
                                 },
-                                attributes: [],
-                                type: Some(
-                                    Float,
-                                ),
-                                variadic: false,
-                                default: None,
-                                modifiers: PromotedPropertyModifierGroup {
-                                    modifiers: [
-                                        Public {
-                                            start: (
-                                                7,
-                                                9,
-                                            ),
-                                            end: (
-                                                7,
-                                                16,
-                                            ),
-                                        },
-                                        Readonly {
-                                            start: (
-                                                7,
-                                                16,
-                                            ),
-                                            end: (
-                                                7,
-                                                25,
-                                            ),
-                                        },
-                                    ],
-                                },
-                                by_ref: true,
-                            },
-                            MethodParameter {
-                                start: (
-                                    8,
-                                    9,
-                                ),
-                                end: (
-                                    8,
-                                    15,
-                                ),
-                                name: Variable {
+                                MethodParameter {
                                     start: (
                                         8,
-                                        13,
+                                        9,
                                     ),
-                                    name: "e",
                                     end: (
                                         8,
                                         15,
                                     ),
+                                    name: Variable {
+                                        start: (
+                                            8,
+                                            13,
+                                        ),
+                                        name: "e",
+                                        end: (
+                                            8,
+                                            15,
+                                        ),
+                                    },
+                                    attributes: [],
+                                    type: None,
+                                    variadic: true,
+                                    default: None,
+                                    modifiers: PromotedPropertyModifierGroup {
+                                        modifiers: [],
+                                    },
+                                    by_ref: true,
                                 },
-                                attributes: [],
-                                type: None,
-                                variadic: true,
-                                default: None,
-                                modifiers: PromotedPropertyModifierGroup {
-                                    modifiers: [],
+                            ],
+                        },
+                        body: Some(
+                            [],
+                        ),
+                        modifiers: MethodModifierGroup {
+                            modifiers: [
+                                Public {
+                                    start: (
+                                        4,
+                                        5,
+                                    ),
+                                    end: (
+                                        4,
+                                        12,
+                                    ),
                                 },
-                                by_ref: true,
-                            },
-                        ],
+                            ],
+                        },
+                        return_type: None,
+                        by_ref: false,
                     },
-                    body: Some(
-                        [],
-                    ),
-                    modifiers: MethodModifierGroup {
-                        modifiers: [
-                            Public {
-                                start: (
-                                    4,
-                                    5,
-                                ),
-                                end: (
-                                    4,
-                                    12,
-                                ),
-                            },
-                        ],
-                    },
-                    return_type: None,
-                    by_ref: false,
-                },
-            ),
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+                ),
+            ],
         },
-    },
+    ),
 ]

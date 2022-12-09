@@ -9,17 +9,6 @@
                 26,
                 1,
             ),
-            name: Identifier {
-                start: (
-                    5,
-                    11,
-                ),
-                name: "A",
-                end: (
-                    5,
-                    13,
-                ),
-            },
             attributes: [
                 AttributeGroup {
                     start: (
@@ -138,30 +127,49 @@
                     ],
                 },
             ],
-            extends: [
-                Identifier {
-                    start: (
+            name: Identifier {
+                start: (
+                    5,
+                    11,
+                ),
+                name: "A",
+                end: (
+                    5,
+                    13,
+                ),
+            },
+            extends: Some(
+                InterfaceExtends {
+                    span: (
                         5,
-                        21,
+                        13,
                     ),
-                    name: "B",
-                    end: (
-                        5,
-                        22,
-                    ),
+                    parents: [
+                        Identifier {
+                            start: (
+                                5,
+                                21,
+                            ),
+                            name: "B",
+                            end: (
+                                5,
+                                22,
+                            ),
+                        },
+                        Identifier {
+                            start: (
+                                5,
+                                24,
+                            ),
+                            name: "C",
+                            end: (
+                                5,
+                                26,
+                            ),
+                        },
+                    ],
                 },
-                Identifier {
-                    start: (
-                        5,
-                        24,
-                    ),
-                    name: "C",
-                    end: (
-                        5,
-                        26,
-                    ),
-                },
-            ],
+            ),
             members: [
                 Constant(
                     ClassishConstant {

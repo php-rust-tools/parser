@@ -1,106 +1,113 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 3,
-                7,
+                1,
             ),
-            name: "foo",
             end: (
-                3,
-                11,
+                7,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            Method(
-                Method {
-                    start: (
-                        4,
-                        12,
-                    ),
-                    end: (
-                        6,
-                        5,
-                    ),
-                    name: Identifier {
+            name: Identifier {
+                start: (
+                    3,
+                    7,
+                ),
+                name: "foo",
+                end: (
+                    3,
+                    11,
+                ),
+            },
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                Method(
+                    Method {
                         start: (
                             4,
-                            21,
-                        ),
-                        name: "bar",
-                        end: (
-                            4,
-                            24,
-                        ),
-                    },
-                    attributes: [],
-                    parameters: MethodParameterList {
-                        start: (
-                            4,
-                            24,
+                            12,
                         ),
                         end: (
-                            4,
-                            26,
+                            6,
+                            5,
                         ),
-                        members: [],
-                    },
-                    body: Some(
-                        [
-                            Expression {
-                                expr: Call {
-                                    target: Identifier(
-                                        Identifier {
-                                            start: (
-                                                5,
-                                                9,
-                                            ),
-                                            name: "exit",
-                                            end: (
-                                                5,
-                                                13,
-                                            ),
-                                        },
-                                    ),
-                                    args: [
-                                        Arg {
-                                            name: None,
-                                            value: LiteralInteger {
-                                                i: "1",
+                        name: Identifier {
+                            start: (
+                                4,
+                                21,
+                            ),
+                            name: "bar",
+                            end: (
+                                4,
+                                24,
+                            ),
+                        },
+                        attributes: [],
+                        parameters: MethodParameterList {
+                            start: (
+                                4,
+                                24,
+                            ),
+                            end: (
+                                4,
+                                26,
+                            ),
+                            members: [],
+                        },
+                        body: Some(
+                            [
+                                Expression {
+                                    expr: Call {
+                                        target: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    5,
+                                                    9,
+                                                ),
+                                                name: "exit",
+                                                end: (
+                                                    5,
+                                                    13,
+                                                ),
                                             },
-                                            unpack: false,
-                                        },
-                                    ],
+                                        ),
+                                        args: [
+                                            Arg {
+                                                name: None,
+                                                value: LiteralInteger {
+                                                    i: "1",
+                                                },
+                                                unpack: false,
+                                            },
+                                        ],
+                                    },
                                 },
-                            },
-                        ],
-                    ),
-                    modifiers: MethodModifierGroup {
-                        modifiers: [
-                            Public {
-                                start: (
-                                    4,
-                                    5,
-                                ),
-                                end: (
-                                    4,
-                                    12,
-                                ),
-                            },
-                        ],
+                            ],
+                        ),
+                        modifiers: MethodModifierGroup {
+                            modifiers: [
+                                Public {
+                                    start: (
+                                        4,
+                                        5,
+                                    ),
+                                    end: (
+                                        4,
+                                        12,
+                                    ),
+                                },
+                            ],
+                        },
+                        return_type: Some(
+                            ParentReference,
+                        ),
+                        by_ref: false,
                     },
-                    return_type: Some(
-                        ParentReference,
-                    ),
-                    by_ref: false,
-                },
-            ),
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+                ),
+            ],
         },
-    },
+    ),
 ]

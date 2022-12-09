@@ -1,147 +1,154 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 3,
-                7,
+                1,
             ),
-            name: "a",
             end: (
-                3,
                 9,
+                1,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [],
-        body: [
-            Method(
-                Method {
-                    start: (
-                        4,
-                        12,
-                    ),
-                    end: (
-                        8,
-                        5,
-                    ),
-                    name: Identifier {
+            name: Identifier {
+                start: (
+                    3,
+                    7,
+                ),
+                name: "a",
+                end: (
+                    3,
+                    9,
+                ),
+            },
+            extends: None,
+            implements: None,
+            attributes: [],
+            members: [
+                Method(
+                    Method {
                         start: (
                             4,
-                            21,
-                        ),
-                        name: "foo",
-                        end: (
-                            4,
-                            24,
-                        ),
-                    },
-                    attributes: [],
-                    parameters: MethodParameterList {
-                        start: (
-                            4,
-                            24,
+                            12,
                         ),
                         end: (
-                            4,
-                            27,
+                            8,
+                            5,
                         ),
-                        members: [],
-                    },
-                    body: Some(
-                        [
-                            Expression {
-                                expr: Infix {
-                                    lhs: Variable(
-                                        Variable {
-                                            start: (
-                                                5,
-                                                9,
-                                            ),
-                                            name: "q",
-                                            end: (
-                                                5,
-                                                12,
-                                            ),
-                                        },
-                                    ),
-                                    op: Assign,
-                                    rhs: Closure(
-                                        Closure {
-                                            start: (
-                                                5,
-                                                14,
-                                            ),
-                                            end: (
-                                                7,
-                                                9,
-                                            ),
-                                            attributes: [],
-                                            parameters: FunctionParameterList {
+                        name: Identifier {
+                            start: (
+                                4,
+                                21,
+                            ),
+                            name: "foo",
+                            end: (
+                                4,
+                                24,
+                            ),
+                        },
+                        attributes: [],
+                        parameters: MethodParameterList {
+                            start: (
+                                4,
+                                24,
+                            ),
+                            end: (
+                                4,
+                                27,
+                            ),
+                            members: [],
+                        },
+                        body: Some(
+                            [
+                                Expression {
+                                    expr: Infix {
+                                        lhs: Variable(
+                                            Variable {
                                                 start: (
                                                     5,
-                                                    22,
+                                                    9,
                                                 ),
+                                                name: "q",
                                                 end: (
                                                     5,
-                                                    25,
+                                                    12,
                                                 ),
-                                                members: [],
                                             },
-                                            return_ty: None,
-                                            uses: [],
-                                            by_ref: false,
-                                            body: [
-                                                Return {
-                                                    value: Some(
-                                                        StaticMethodCall {
-                                                            target: Parent,
-                                                            method: Identifier(
-                                                                Identifier {
-                                                                    start: (
-                                                                        6,
-                                                                        28,
-                                                                    ),
-                                                                    name: "bar",
-                                                                    end: (
-                                                                        6,
-                                                                        31,
-                                                                    ),
-                                                                },
-                                                            ),
-                                                            args: [],
-                                                        },
+                                        ),
+                                        op: Assign,
+                                        rhs: Closure(
+                                            Closure {
+                                                start: (
+                                                    5,
+                                                    14,
+                                                ),
+                                                end: (
+                                                    7,
+                                                    9,
+                                                ),
+                                                attributes: [],
+                                                parameters: FunctionParameterList {
+                                                    start: (
+                                                        5,
+                                                        22,
                                                     ),
+                                                    end: (
+                                                        5,
+                                                        25,
+                                                    ),
+                                                    members: [],
                                                 },
-                                            ],
-                                            static: false,
-                                        },
+                                                return_ty: None,
+                                                uses: [],
+                                                by_ref: false,
+                                                body: [
+                                                    Return {
+                                                        value: Some(
+                                                            StaticMethodCall {
+                                                                target: Parent,
+                                                                method: Identifier(
+                                                                    Identifier {
+                                                                        start: (
+                                                                            6,
+                                                                            28,
+                                                                        ),
+                                                                        name: "bar",
+                                                                        end: (
+                                                                            6,
+                                                                            31,
+                                                                        ),
+                                                                    },
+                                                                ),
+                                                                args: [],
+                                                            },
+                                                        ),
+                                                    },
+                                                ],
+                                                static: false,
+                                            },
+                                        ),
+                                    },
+                                },
+                            ],
+                        ),
+                        modifiers: MethodModifierGroup {
+                            modifiers: [
+                                Public {
+                                    start: (
+                                        4,
+                                        5,
+                                    ),
+                                    end: (
+                                        4,
+                                        12,
                                     ),
                                 },
-                            },
-                        ],
-                    ),
-                    modifiers: MethodModifierGroup {
-                        modifiers: [
-                            Public {
-                                start: (
-                                    4,
-                                    5,
-                                ),
-                                end: (
-                                    4,
-                                    12,
-                                ),
-                            },
-                        ],
+                            ],
+                        },
+                        return_type: None,
+                        by_ref: false,
                     },
-                    return_type: None,
-                    by_ref: false,
-                },
-            ),
-        ],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+                ),
+            ],
         },
-    },
+    ),
 ]

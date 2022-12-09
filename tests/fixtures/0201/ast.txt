@@ -1,45 +1,60 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 3,
-                7,
+                1,
             ),
-            name: "A",
             end: (
                 3,
-                9,
+                26,
             ),
-        },
-        attributes: [],
-        extends: None,
-        implements: [
-            Identifier {
+            name: Identifier {
                 start: (
                     3,
-                    20,
+                    7,
                 ),
-                name: "B",
+                name: "A",
                 end: (
                     3,
-                    21,
+                    9,
                 ),
             },
-            Identifier {
-                start: (
-                    3,
-                    23,
-                ),
-                name: "C",
-                end: (
-                    3,
-                    25,
-                ),
-            },
-        ],
-        body: [],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+            extends: None,
+            implements: Some(
+                ClassImplements {
+                    span: (
+                        3,
+                        9,
+                    ),
+                    interfaces: [
+                        Identifier {
+                            start: (
+                                3,
+                                20,
+                            ),
+                            name: "B",
+                            end: (
+                                3,
+                                21,
+                            ),
+                        },
+                        Identifier {
+                            start: (
+                                3,
+                                23,
+                            ),
+                            name: "C",
+                            end: (
+                                3,
+                                25,
+                            ),
+                        },
+                    ],
+                },
+            ),
+            attributes: [],
+            members: [],
         },
-    },
+    ),
 ]

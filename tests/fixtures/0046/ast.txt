@@ -1,34 +1,47 @@
 [
-    Class {
-        name: Identifier {
+    Class(
+        Class {
             start: (
                 3,
-                7,
+                1,
             ),
-            name: "Foo",
             end: (
                 3,
-                11,
+                24,
             ),
-        },
-        attributes: [],
-        extends: Some(
-            Identifier {
+            name: Identifier {
                 start: (
                     3,
-                    19,
+                    7,
                 ),
-                name: "Bar",
+                name: "Foo",
                 end: (
                     3,
-                    23,
+                    11,
                 ),
             },
-        ),
-        implements: [],
-        body: [],
-        modifiers: ClassModifierGroup {
-            modifiers: [],
+            extends: Some(
+                ClassExtends {
+                    span: (
+                        3,
+                        11,
+                    ),
+                    parent: Identifier {
+                        start: (
+                            3,
+                            19,
+                        ),
+                        name: "Bar",
+                        end: (
+                            3,
+                            23,
+                        ),
+                    },
+                },
+            ),
+            implements: None,
+            attributes: [],
+            members: [],
         },
-    },
+    ),
 ]

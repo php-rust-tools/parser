@@ -161,8 +161,7 @@ pub fn property_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<Proper
                 start: *start,
                 end: *end,
             }),
-            // TODO(azjezz): figure out more about the logic of `var` keyword.
-            TokenKind::Public | TokenKind::Var => Ok(PropertyModifier::Public {
+            TokenKind::Public => Ok(PropertyModifier::Public {
                 start: *start,
                 end: *end,
             }),
@@ -274,7 +273,6 @@ pub fn collect(state: &mut State) -> ParseResult<Vec<(Span, TokenKind, Span)>> {
     | TokenKind::Final
     | TokenKind::Abstract
     | TokenKind::Static
-    | TokenKind::Var
     | TokenKind::Readonly = state.current.kind.clone()
     {
         if collected_tokens.contains(&state.current.kind) {

@@ -1,24 +1,44 @@
 [
     Expression {
         expr: New {
-            target: AnonymousClass {
-                attributes: [],
-                extends: Some(
-                    Identifier {
-                        start: (
-                            1,
-                            25,
-                        ),
-                        name: "Foo",
-                        end: (
-                            1,
-                            29,
-                        ),
-                    },
-                ),
-                implements: [],
-                body: [],
-            },
+            target: AnonymousClass(
+                AnonymousClass {
+                    start: (
+                        1,
+                        11,
+                    ),
+                    end: (
+                        1,
+                        30,
+                    ),
+                    extends: Some(
+                        ClassExtends {
+                            span: (
+                                1,
+                                17,
+                            ),
+                            parent: Identifier {
+                                start: (
+                                    1,
+                                    25,
+                                ),
+                                name: "Foo",
+                                end: (
+                                    1,
+                                    29,
+                                ),
+                            },
+                        },
+                    ),
+                    implements: None,
+                    attributes: [],
+                    members: [],
+                },
+            ),
+            span: (
+                1,
+                7,
+            ),
             args: [],
         },
     },

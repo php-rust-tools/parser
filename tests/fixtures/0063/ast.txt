@@ -1,35 +1,57 @@
 [
     Expression {
         expr: New {
-            target: AnonymousClass {
-                attributes: [],
-                extends: None,
-                implements: [
-                    Identifier {
-                        start: (
-                            1,
-                            28,
-                        ),
-                        name: "Foo",
-                        end: (
-                            1,
-                            31,
-                        ),
-                    },
-                    Identifier {
-                        start: (
-                            1,
-                            33,
-                        ),
-                        name: "Bar",
-                        end: (
-                            1,
-                            37,
-                        ),
-                    },
-                ],
-                body: [],
-            },
+            target: AnonymousClass(
+                AnonymousClass {
+                    start: (
+                        1,
+                        11,
+                    ),
+                    end: (
+                        1,
+                        38,
+                    ),
+                    extends: None,
+                    implements: Some(
+                        ClassImplements {
+                            span: (
+                                1,
+                                17,
+                            ),
+                            interfaces: [
+                                Identifier {
+                                    start: (
+                                        1,
+                                        28,
+                                    ),
+                                    name: "Foo",
+                                    end: (
+                                        1,
+                                        31,
+                                    ),
+                                },
+                                Identifier {
+                                    start: (
+                                        1,
+                                        33,
+                                    ),
+                                    name: "Bar",
+                                    end: (
+                                        1,
+                                        37,
+                                    ),
+                                },
+                            ],
+                        },
+                    ),
+                    attributes: [],
+                    members: [],
+                },
+            ),
+            span: (
+                1,
+                7,
+            ),
             args: [],
         },
     },
