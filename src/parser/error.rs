@@ -10,6 +10,7 @@ pub type ParseResult<T> = Result<T, ParseError>;
 pub enum ParseError {
     SyntaxError(SyntaxError),
     ExpectedToken(Vec<String>, Option<String>, Span),
+    ExpectedIdentifier(Vec<String>, String, Span),
     MultipleModifiers(String, Span),
     MultipleVisibilityModifiers(Span),
     UnexpectedToken(String, Span),
@@ -68,13 +69,25 @@ impl Display for ParseError {
 
                     format!("{}, or {}", left.join(", "), right[0])
                 } else {
-                   expected.join(",")
+                   expected.join("")
                 };
 
                 match found {
                     Some(token) => write!(f, "Parse Error: unexpected token `{}`, expecting {} on line {} column {}", token, expected, span.0, span.1),
                     None => write!(f, "Parse Error: unexpected end of file, expecting {} on line {} column {}", expected, span.0, span.1),
                 }
+            },
+            Self::ExpectedIdentifier(expected, found, span) => {
+                let length  = expected.len();
+                let expected = if length >= 2 {
+                    let (left, right) = expected.split_at(length - 1);
+
+                    format!("{}`, or `{}", left.join("`, `"), right[0])
+                } else {
+                   expected.join("")
+                };
+
+                write!(f, "Parse Error: unexpected identifier `{}`, expecting `{}` on line {} column {}", found, expected, span.0, span.1)
             },
             Self::MissingTypeForReadonlyProperty(class, prop, span) => write!(f, "Parse Error: Readonly property {}::${} must have type on line {} column {}", class, prop, span.0, span.1),
             Self::MultipleModifiers(modifier, span) => write!(f, "Parse Error: Multiple {} modifiers are not allowed on line {} column {}", modifier, span.0, span.1),

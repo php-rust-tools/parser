@@ -1,9 +1,10 @@
 pub mod attributes;
-pub mod classish;
 pub mod comments;
+pub mod constant;
 pub mod enums;
 pub mod functions;
 pub mod identifiers;
+pub mod interfaces;
 pub mod modifiers;
 pub mod try_block;
 pub mod variables;
@@ -14,8 +15,9 @@ use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::attributes::AttributeGroup;
-use crate::parser::ast::classish::ClassishConstant;
 use crate::parser::ast::comments::Comment;
+use crate::parser::ast::constant::ClassishConstant;
+use crate::parser::ast::constant::Constant;
 use crate::parser::ast::enums::BackedEnum;
 use crate::parser::ast::enums::UnitEnum;
 use crate::parser::ast::functions::ArrowFunction;
@@ -23,6 +25,7 @@ use crate::parser::ast::functions::Closure;
 use crate::parser::ast::functions::Function;
 use crate::parser::ast::functions::Method;
 use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::interfaces::Interface;
 use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::modifiers::PropertyModifierGroup;
 use crate::parser::ast::modifiers::VisibilityModifier;
@@ -232,9 +235,7 @@ pub enum Statement {
         r#type: Option<Type>,
         modifiers: PropertyModifierGroup,
     },
-    Constant {
-        constants: Vec<Constant>,
-    },
+    Constant(Constant),
     ClassishConstant(ClassishConstant),
     Function(Function),
     Class {
@@ -254,12 +255,7 @@ pub enum Statement {
         traits: Vec<Identifier>,
         adaptations: Vec<TraitAdaptation>,
     },
-    Interface {
-        name: Identifier,
-        attributes: Vec<AttributeGroup>,
-        extends: Vec<Identifier>,
-        body: Block,
-    },
+    Interface(Interface),
     Method(Method),
     If {
         condition: Expression,
@@ -318,12 +314,6 @@ pub enum Statement {
         body: Block,
     },
     Noop(Span),
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct Constant {
-    pub name: Identifier,
-    pub value: Expression,
 }
 
 #[derive(Debug, Clone, PartialEq)]

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
-use crate::parser::ast::classish::ClassishConstant;
+use crate::parser::ast::constant::ClassishConstant;
 use crate::parser::ast::functions::Method;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::Expression;
@@ -33,8 +33,8 @@ pub struct UnitEnum {
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
 pub enum BackedEnumType {
-    String,
-    Int,
+    String(Span),
+    Int(Span),
 }
 
 #[derive(Debug, Clone, PartialEq)]

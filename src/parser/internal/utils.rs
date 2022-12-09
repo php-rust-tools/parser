@@ -127,3 +127,20 @@ pub fn skip_any_of(state: &mut State, kinds: &[TokenKind]) -> ParseResult<Span> 
         ))
     }
 }
+
+pub fn at_least_one_comma_separated<T>(
+    state: &mut State,
+    func: &(dyn Fn(&mut State) -> ParseResult<T>),
+) -> ParseResult<Vec<T>> {
+    let mut result: Vec<T> = vec![];
+    loop {
+        result.push(func(state)?);
+        if state.current.kind != TokenKind::Comma {
+            break;
+        }
+
+        state.next();
+    }
+
+    Ok(result)
+}

@@ -1,38 +1,48 @@
 [
-    Constant {
-        constants: [
-            Constant {
-                name: Identifier {
-                    start: (
-                        1,
-                        13,
-                    ),
-                    name: "FOO",
-                    end: (
-                        1,
-                        17,
-                    ),
+    Constant(
+        Constant {
+            start: (
+                1,
+                7,
+            ),
+            end: (
+                1,
+                29,
+            ),
+            entries: [
+                ConstantEntry {
+                    name: Identifier {
+                        start: (
+                            1,
+                            13,
+                        ),
+                        name: "FOO",
+                        end: (
+                            1,
+                            17,
+                        ),
+                    },
+                    value: LiteralInteger {
+                        i: "1",
+                    },
                 },
-                value: LiteralInteger {
-                    i: "1",
+                ConstantEntry {
+                    name: Identifier {
+                        start: (
+                            1,
+                            22,
+                        ),
+                        name: "BAR",
+                        end: (
+                            1,
+                            26,
+                        ),
+                    },
+                    value: LiteralInteger {
+                        i: "2",
+                    },
                 },
-            },
-            Constant {
-                name: Identifier {
-                    start: (
-                        1,
-                        22,
-                    ),
-                    name: "BAR",
-                    end: (
-                        1,
-                        26,
-                    ),
-                },
-                value: LiteralInteger {
-                    i: "2",
-                },
-            },
-        ],
-    },
+            ],
+        },
+    ),
 ]

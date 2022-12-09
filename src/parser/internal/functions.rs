@@ -1,5 +1,4 @@
 use crate::expected_scope;
-use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::functions::ArrowFunction;
 use crate::parser::ast::functions::Closure;
@@ -210,12 +209,8 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
     }))
 }
 
-pub fn method(
-    state: &mut State,
-    modifiers: MethodModifierGroup,
-    start: Span,
-) -> ParseResult<Method> {
-    utils::skip(state, TokenKind::Function)?;
+pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<Method> {
+    let start = utils::skip(state, TokenKind::Function)?;
 
     let by_ref = if state.current.kind == TokenKind::Ampersand {
         state.next();

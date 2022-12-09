@@ -138,8 +138,7 @@ macro_rules! expected_scope {
 #[macro_export]
 macro_rules! scoped {
     ($state:expr, $scope:expr, $block:block) => {{
-        let scope = $scope;
-        $state.enter(scope.clone());
+        $state.enter($scope);
 
         let result = $block;
 

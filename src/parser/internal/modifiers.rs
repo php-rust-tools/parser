@@ -149,31 +149,6 @@ pub fn enum_method_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<Met
 }
 
 #[inline(always)]
-pub fn interface_method_group(
-    input: Vec<(Span, TokenKind, Span)>,
-) -> ParseResult<MethodModifierGroup> {
-    let modifiers = input
-        .iter()
-        .map(|(start, token, end)| match token {
-            TokenKind::Public => Ok(MethodModifier::Public {
-                start: *start,
-                end: *end,
-            }),
-            TokenKind::Static => Ok(MethodModifier::Static {
-                start: *start,
-                end: *end,
-            }),
-            _ => Err(ParseError::CannotUseModifierOnInterfaceMethod(
-                token.to_string(),
-                *start,
-            )),
-        })
-        .collect::<ParseResult<Vec<MethodModifier>>>()?;
-
-    Ok(MethodModifierGroup { modifiers })
-}
-
-#[inline(always)]
 pub fn property_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<PropertyModifierGroup> {
     let modifiers = input
         .iter()
@@ -280,31 +255,6 @@ pub fn constant_group(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<Consta
                 }
             }
             _ => Err(ParseError::CannotUseModifierOnConstant(
-                token.to_string(),
-                *start,
-            )),
-        })
-        .collect::<ParseResult<Vec<ConstantModifier>>>()?;
-
-    Ok(ConstantModifierGroup { modifiers })
-}
-
-#[inline(always)]
-pub fn interface_constant_group(
-    input: Vec<(Span, TokenKind, Span)>,
-) -> ParseResult<ConstantModifierGroup> {
-    let modifiers = input
-        .iter()
-        .map(|(start, token, end)| match token {
-            TokenKind::Public => Ok(ConstantModifier::Public {
-                start: *start,
-                end: *end,
-            }),
-            TokenKind::Final => Ok(ConstantModifier::Final {
-                start: *start,
-                end: *end,
-            }),
-            _ => Err(ParseError::CannotUseModifierOnInterfaceConstant(
                 token.to_string(),
                 *start,
             )),
