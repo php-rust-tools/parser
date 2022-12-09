@@ -114,6 +114,7 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
                 let condition = expressions::lowest_precedence(state)?;
 
                 utils::skip_any_of(state, &[TokenKind::Colon, TokenKind::SemiColon])?;
+                utils::skip_close_tag(state)?;
 
                 let mut body = Block::new();
 

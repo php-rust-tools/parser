@@ -149,3 +149,19 @@ pub fn at_least_one_comma_separated<T>(
 
     Ok(result)
 }
+
+pub fn skip_close_tag(state: &mut State) -> ParseResult<()> {
+    if state.current.kind == TokenKind::CloseTag {
+        state.next();
+    }
+
+    Ok(())
+}
+
+pub fn skip_open_tag(state: &mut State) -> ParseResult<()> {
+    if let TokenKind::OpenTag(_) = state.current.kind {
+        state.next();
+    }
+
+    Ok(())
+}

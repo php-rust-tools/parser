@@ -286,6 +286,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::InlineHtml(html) => {
                 let s = Statement::InlineHtml(html.clone());
                 state.next();
+                utils::skip_open_tag(state)?;
                 s
             }
             TokenKind::SingleLineComment(comment) => {

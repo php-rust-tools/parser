@@ -141,6 +141,12 @@ impl State {
         self.update_scope();
     }
 
+    pub fn skip_close_tag(&mut self) {
+        if matches!(self.current.kind, TokenKind::CloseTag) {
+            self.next();
+        }
+    }
+
     pub fn skip_comments(&mut self) {
         while matches!(
             self.current.kind,
