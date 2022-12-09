@@ -121,6 +121,7 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
                 while state.current.kind != TokenKind::Case
                     && state.current.kind != TokenKind::Default
                     && state.current.kind != TokenKind::RightBrace
+                    && state.current.kind != end_token
                 {
                     body.push(parser::statement(state)?);
                     state.skip_comments();
@@ -140,7 +141,7 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
 
                 while state.current.kind != TokenKind::Case
                     && state.current.kind != TokenKind::Default
-                    && state.current.kind != TokenKind::RightBrace
+                    && state.current.kind != end_token
                 {
                     body.push(parser::statement(state)?);
                 }
