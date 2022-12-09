@@ -124,6 +124,17 @@ fn third_party_9_composer() {
     );
 }
 
+#[test]
+fn third_party_10_wordpress() {
+    test_repository(
+        "wordpress",
+        "https://github.com/WordPress/WordPress",
+        "master",
+        &["wp-admin", "wp-content", "wp-includes"],
+        &[]
+    );
+}
+
 fn test_repository(
     name: &str,
     repository: &str,
