@@ -113,6 +113,17 @@ fn third_party_8_symfony_polyfill() {
     );
 }
 
+#[test]
+fn third_party_9_composer() {
+    test_repository(
+        "composer",
+        "https://github.com/composer/composer",
+        "main",
+        &["src", "tests"],
+        &[]
+    );
+}
+
 fn test_repository(
     name: &str,
     repository: &str,
