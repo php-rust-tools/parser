@@ -437,8 +437,6 @@ impl Lexer {
                     }
                 };
 
-                // FIXME: Add support for nowdocs too by checking if a `'`
-                //        character is present before and after the identifier.
                 let label: ByteString = match self.peek_identifier(state) {
                     Some(_) => self.consume_identifier(state).into(),
                     None => match state.source.current() {
