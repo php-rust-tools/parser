@@ -1417,7 +1417,14 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                             let span = state.current.span;
                             state.next();
                             if let TokenKind::LiteralInteger(i) = &state.current.kind {
-                                let e = Expression::ArithmeticOperation(ArithmeticOperation::Negation { span, right: Box::new(Expression::LiteralInteger { i: i.clone() }) });
+                                let e = Expression::ArithmeticOperation(
+                                    ArithmeticOperation::Negation {
+                                        span,
+                                        right: Box::new(Expression::LiteralInteger {
+                                            i: i.clone(),
+                                        }),
+                                    },
+                                );
                                 state.next();
                                 e
                             } else {
