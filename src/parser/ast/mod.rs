@@ -496,10 +496,6 @@ pub enum Expression {
     YieldFrom {
         value: Box<Self>,
     },
-    Negate {
-        span: Span,
-        value: Box<Self>,
-    },
     UnaryPlus {
         span: Span,
         value: Box<Self>,
