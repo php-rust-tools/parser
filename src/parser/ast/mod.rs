@@ -375,6 +375,11 @@ pub struct Use {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
+    Parenthesized {
+        start: Span,
+        expr: Box<Expression>,
+        end: Span,
+    },
     List {
         items: Vec<ListItem>,
     },

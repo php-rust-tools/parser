@@ -63,19 +63,29 @@
                 ),
                 Expr(
                     DynamicVariable {
-                        name: Variable(
-                            Variable {
-                                start: (
-                                    1,
-                                    39,
-                                ),
-                                name: "foo",
-                                end: (
-                                    1,
-                                    43,
-                                ),
-                            },
-                        ),
+                        name: Parenthesized {
+                            start: (
+                                1,
+                                38,
+                            ),
+                            expr: Variable(
+                                Variable {
+                                    start: (
+                                        1,
+                                        39,
+                                    ),
+                                    name: "foo",
+                                    end: (
+                                        1,
+                                        43,
+                                    ),
+                                },
+                            ),
+                            end: (
+                                1,
+                                43,
+                            ),
+                        },
                     },
                 ),
             ],

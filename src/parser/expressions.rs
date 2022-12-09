@@ -476,13 +476,14 @@ expressions! {
 
     #[before(r#match), current(TokenKind::LeftParen)]
     left_parenthesis(|state: &mut State| {
+        let start = state.current.span;
         state.next();
 
-        let e = lowest_precedence(state)?;
+        let expr = lowest_precedence(state)?;
 
-        utils::skip_right_parenthesis(state)?;
+        let end = utils::skip_right_parenthesis(state)?;
 
-        Ok(e)
+        Ok(Expression::Parenthesized { start, expr: Box::new(expr), end })
     })
 
     #[before(array), current(TokenKind::Match)]
