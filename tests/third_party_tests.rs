@@ -29,7 +29,10 @@ fn third_party_2_laravel_framework() {
         "https://github.com/laravel/framework",
         "9.x",
         &["src", "tests"],
-        &[],
+        &[
+            // file contains syntax error for testing.
+            "tests/Foundation/fixtures/bad-syntax-strategy.php"
+        ],
     );
 }
 
