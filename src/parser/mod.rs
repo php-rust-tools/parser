@@ -124,30 +124,31 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
     let statement = if has_attributes {
         match &state.current.kind {
             TokenKind::Abstract => classish::class_definition(state)?,
-            TokenKind::Readonly => classish::class_definition(state)?,
+            TokenKind::Readonly if state.peek.kind != TokenKind::LeftParen => {
+                classish::class_definition(state)?
+            }
             TokenKind::Final => classish::class_definition(state)?,
             TokenKind::Class => classish::class_definition(state)?,
             TokenKind::Interface => classish::interface_definition(state)?,
             TokenKind::Trait => classish::trait_definition(state)?,
-            TokenKind::Enum => classish::enum_definition(state)?,
+            TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => {
+                classish::enum_definition(state)?
+            }
             TokenKind::Function
-                if matches!(
-                    state.peek.kind,
-                    TokenKind::Identifier(_) | TokenKind::Null | TokenKind::Ampersand
-                ) =>
+                if identifiers::is_ident_maybe_soft_reserved(&state.peek.kind)
+                    || state.peek.kind == TokenKind::Ampersand =>
             {
                 // FIXME: This is incredibly hacky but we don't have a way to look at
                 // the next N tokens right now. We could probably do with a `peek_buf()`
                 // method like the Lexer has.
                 if state.peek.kind == TokenKind::Ampersand {
-                    let mut cloned = state.iter.clone();
-                    if let Some((index, _)) = state.iter.clone().enumerate().next() {
+                    if let Some((_, token)) = state.iter.clone().enumerate().next() {
                         if !matches!(
-                            cloned.nth(index),
-                            Some(Token {
+                            token,
+                            Token {
                                 kind: TokenKind::Identifier(_),
                                 ..
-                            })
+                            }
                         ) {
                             let expr = expressions::lowest_precedence(state)?;
 
@@ -173,17 +174,19 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
     } else {
         match &state.current.kind {
             TokenKind::Abstract => classish::class_definition(state)?,
-            TokenKind::Readonly => classish::class_definition(state)?,
+            TokenKind::Readonly if state.peek.kind != TokenKind::LeftParen => {
+                classish::class_definition(state)?
+            }
             TokenKind::Final => classish::class_definition(state)?,
             TokenKind::Class => classish::class_definition(state)?,
             TokenKind::Interface => classish::interface_definition(state)?,
             TokenKind::Trait => classish::trait_definition(state)?,
-            TokenKind::Enum => classish::enum_definition(state)?,
+            TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => {
+                classish::enum_definition(state)?
+            }
             TokenKind::Function
-                if matches!(
-                    state.peek.kind,
-                    TokenKind::Identifier(_) | TokenKind::Null | TokenKind::Ampersand
-                ) =>
+                if identifiers::is_ident_maybe_soft_reserved(&state.peek.kind)
+                    || state.peek.kind == TokenKind::Ampersand =>
             {
                 // FIXME: This is incredibly hacky but we don't have a way to look at
                 // the next N tokens right now. We could probably do with a `peek_buf()`

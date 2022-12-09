@@ -244,9 +244,21 @@ expressions! {
         functions::arrow_function(state)
     })
 
-    #[before(list), current(TokenKind::Function)]
+    #[before(reserved_identifier_function_call), current(TokenKind::Function)]
     anonymous_function(|state: &mut State| {
         functions::anonymous_function(state)
+    })
+
+    #[before(list), current(
+        | TokenKind::True       | TokenKind::False | TokenKind::Null
+        | TokenKind::Readonly   | TokenKind::Self_ | TokenKind::Parent
+        | TokenKind::Enum       | TokenKind::From
+    ), peek(TokenKind::LeftParen)]
+    reserved_identifier_function_call(|state: &mut State| {
+        let ident = identifiers::ident_maybe_soft_reserved(state)?;
+        let lhs = Expression::Identifier(ident);
+
+        postfix(state, lhs, &TokenKind::LeftParen)
     })
 
     #[before(anonymous_class), current(TokenKind::List)]
@@ -814,7 +826,9 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             let property = match state.current.kind.clone() {
                 TokenKind::Dollar => variables::dynamic_variable(state)?,
                 TokenKind::Variable(_) => Expression::Variable(identifiers::var(state)?),
-                TokenKind::Identifier(_) => Expression::Identifier(identifiers::ident(state)?),
+                _ if identifiers::is_ident_maybe_reserved(&state.current.kind) => {
+                    Expression::Identifier(identifiers::ident_maybe_reserved(state)?)
+                }
                 TokenKind::LeftBrace => {
                     must_be_method_call = true;
                     state.next();
@@ -837,9 +851,6 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                         name: "class".into(),
                         end,
                     })
-                }
-                _ if identifiers::is_reserved_ident(&state.current.kind) => {
-                    Expression::Identifier(identifiers::ident_maybe_reserved(state)?)
                 }
                 _ => {
                     return expected_token_err!(["`{`", "`$`", "an identifier"], state);
