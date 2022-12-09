@@ -1,166 +1,190 @@
 [
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        3,
-                        1,
-                    ),
-                    name: "foo",
-                    end: (
-                        3,
-                        6,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: Call {
-                target: Identifier(
-                    Identifier {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
                         start: (
                             3,
-                            8,
+                            1,
                         ),
-                        name: "give_me_foo",
+                        name: "foo",
                         end: (
                             3,
-                            19,
+                            6,
                         ),
                     },
                 ),
-                args: [],
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        5,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        5,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: Array {
-                items: [
-                    ArrayItem {
-                        key: Some(
-                            LiteralString {
-                                value: "single",
-                            },
-                        ),
-                        value: Infix {
-                            lhs: Variable(
-                                Variable {
-                                    start: (
-                                        6,
-                                        17,
-                                    ),
-                                    name: "foo",
-                                    end: (
-                                        6,
-                                        22,
-                                    ),
-                                },
+                span: (
+                    3,
+                    6,
+                ),
+                right: Call {
+                    target: Identifier(
+                        Identifier {
+                            start: (
+                                3,
+                                8,
                             ),
-                            op: Instanceof,
-                            rhs: Identifier(
-                                Identifier {
-                                    start: (
-                                        6,
-                                        33,
-                                    ),
-                                    name: "Foo",
-                                    end: (
-                                        6,
-                                        36,
-                                    ),
-                                },
+                            name: "give_me_foo",
+                            end: (
+                                3,
+                                19,
                             ),
                         },
-                        unpack: false,
-                        by_ref: false,
-                    },
-                    ArrayItem {
-                        key: Some(
-                            LiteralString {
-                                value: "multiple",
-                            },
+                    ),
+                    args: [],
+                },
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            5,
+                            1,
                         ),
-                        value: Infix {
-                            lhs: Infix {
-                                lhs: Variable(
+                        name: "a",
+                        end: (
+                            5,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    5,
+                    4,
+                ),
+                right: Array {
+                    items: [
+                        ArrayItem {
+                            key: Some(
+                                LiteralString {
+                                    value: "single",
+                                },
+                            ),
+                            value: Instanceof {
+                                left: Variable(
                                     Variable {
                                         start: (
-                                            7,
-                                            19,
+                                            6,
+                                            17,
                                         ),
                                         name: "foo",
                                         end: (
+                                            6,
+                                            22,
+                                        ),
+                                    },
+                                ),
+                                span: (
+                                    6,
+                                    22,
+                                ),
+                                right: Identifier(
+                                    Identifier {
+                                        start: (
+                                            6,
+                                            33,
+                                        ),
+                                        name: "Foo",
+                                        end: (
+                                            6,
+                                            36,
+                                        ),
+                                    },
+                                ),
+                            },
+                            unpack: false,
+                            by_ref: false,
+                        },
+                        ArrayItem {
+                            key: Some(
+                                LiteralString {
+                                    value: "multiple",
+                                },
+                            ),
+                            value: LogicalOperation(
+                                And {
+                                    left: Instanceof {
+                                        left: Variable(
+                                            Variable {
+                                                start: (
+                                                    7,
+                                                    19,
+                                                ),
+                                                name: "foo",
+                                                end: (
+                                                    7,
+                                                    24,
+                                                ),
+                                            },
+                                        ),
+                                        span: (
                                             7,
                                             24,
                                         ),
+                                        right: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    7,
+                                                    35,
+                                                ),
+                                                name: "Bar",
+                                                end: (
+                                                    7,
+                                                    39,
+                                                ),
+                                            },
+                                        ),
                                     },
-                                ),
-                                op: Instanceof,
-                                rhs: Identifier(
-                                    Identifier {
-                                        start: (
-                                            7,
-                                            35,
+                                    span: (
+                                        7,
+                                        39,
+                                    ),
+                                    right: Instanceof {
+                                        left: Variable(
+                                            Variable {
+                                                start: (
+                                                    7,
+                                                    42,
+                                                ),
+                                                name: "foo",
+                                                end: (
+                                                    7,
+                                                    47,
+                                                ),
+                                            },
                                         ),
-                                        name: "Bar",
-                                        end: (
-                                            7,
-                                            39,
-                                        ),
-                                    },
-                                ),
-                            },
-                            op: And,
-                            rhs: Infix {
-                                lhs: Variable(
-                                    Variable {
-                                        start: (
-                                            7,
-                                            42,
-                                        ),
-                                        name: "foo",
-                                        end: (
+                                        span: (
                                             7,
                                             47,
                                         ),
-                                    },
-                                ),
-                                op: Instanceof,
-                                rhs: Identifier(
-                                    Identifier {
-                                        start: (
-                                            7,
-                                            58,
+                                        right: Identifier(
+                                            Identifier {
+                                                start: (
+                                                    7,
+                                                    58,
+                                                ),
+                                                name: "Baz",
+                                                end: (
+                                                    8,
+                                                    1,
+                                                ),
+                                            },
                                         ),
-                                        name: "Baz",
-                                        end: (
-                                            8,
-                                            1,
-                                        ),
                                     },
-                                ),
-                            },
+                                },
+                            ),
+                            unpack: false,
+                            by_ref: false,
                         },
-                        unpack: false,
-                        by_ref: false,
-                    },
-                ],
+                    ],
+                },
             },
-        },
+        ),
     },
 ]

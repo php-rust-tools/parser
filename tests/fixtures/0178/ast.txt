@@ -195,23 +195,28 @@
                     by_ref: false,
                     body: [
                         Expression {
-                            expr: Infix {
-                                lhs: Variable(
-                                    Variable {
-                                        start: (
-                                            34,
-                                            5,
-                                        ),
-                                        name: "last_message",
-                                        end: (
-                                            34,
-                                            19,
-                                        ),
-                                    },
-                                ),
-                                op: Assign,
-                                rhs: Null,
-                            },
+                            expr: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        Variable {
+                                            start: (
+                                                34,
+                                                5,
+                                            ),
+                                            name: "last_message",
+                                            end: (
+                                                34,
+                                                19,
+                                            ),
+                                        },
+                                    ),
+                                    span: (
+                                        34,
+                                        19,
+                                    ),
+                                    right: Null,
+                                },
+                            ),
                         },
                         Expression {
                             expr: Call {
@@ -332,35 +337,40 @@
                                                 by_ref: false,
                                                 body: [
                                                     Expression {
-                                                        expr: Infix {
-                                                            lhs: Variable(
-                                                                Variable {
-                                                                    start: (
-                                                                        37,
-                                                                        9,
-                                                                    ),
-                                                                    name: "last_message",
-                                                                    end: (
-                                                                        37,
-                                                                        23,
-                                                                    ),
-                                                                },
-                                                            ),
-                                                            op: Assign,
-                                                            rhs: Variable(
-                                                                Variable {
-                                                                    start: (
-                                                                        37,
-                                                                        25,
-                                                                    ),
-                                                                    name: "message",
-                                                                    end: (
-                                                                        37,
-                                                                        33,
-                                                                    ),
-                                                                },
-                                                            ),
-                                                        },
+                                                        expr: AssignmentOperation(
+                                                            Assign {
+                                                                left: Variable(
+                                                                    Variable {
+                                                                        start: (
+                                                                            37,
+                                                                            9,
+                                                                        ),
+                                                                        name: "last_message",
+                                                                        end: (
+                                                                            37,
+                                                                            23,
+                                                                        ),
+                                                                    },
+                                                                ),
+                                                                span: (
+                                                                    37,
+                                                                    23,
+                                                                ),
+                                                                right: Variable(
+                                                                    Variable {
+                                                                        start: (
+                                                                            37,
+                                                                            25,
+                                                                        ),
+                                                                        name: "message",
+                                                                        end: (
+                                                                            37,
+                                                                            33,
+                                                                        ),
+                                                                    },
+                                                                ),
+                                                            },
+                                                        ),
                                                     },
                                                 ],
                                                 static: true,
@@ -372,147 +382,162 @@
                             },
                         },
                         If {
-                            condition: Infix {
-                                lhs: Infix {
-                                    lhs: Null,
-                                    op: NotIdentical,
-                                    rhs: Variable(
-                                        Variable {
-                                            start: (
+                            condition: LogicalOperation(
+                                And {
+                                    left: ComparisonOperation(
+                                        NotIdentical {
+                                            left: Null,
+                                            span: (
                                                 43,
-                                                18,
+                                                14,
                                             ),
-                                            name: "last_message",
-                                            end: (
-                                                43,
-                                                32,
-                                            ),
-                                        },
-                                    ),
-                                },
-                                op: And,
-                                rhs: Call {
-                                    target: Identifier(
-                                        Identifier {
-                                            start: (
-                                                43,
-                                                35,
-                                            ),
-                                            name: "Str\contains",
-                                            end: (
-                                                43,
-                                                47,
-                                            ),
-                                        },
-                                    ),
-                                    args: [
-                                        Arg {
-                                            name: None,
-                                            value: Variable(
+                                            right: Variable(
                                                 Variable {
                                                     start: (
                                                         43,
-                                                        48,
+                                                        18,
                                                     ),
                                                     name: "last_message",
                                                     end: (
                                                         43,
-                                                        61,
+                                                        32,
                                                     ),
                                                 },
                                             ),
-                                            unpack: false,
                                         },
-                                        Arg {
-                                            name: None,
-                                            value: LiteralString {
-                                                value: "): ",
-                                            },
-                                            unpack: false,
-                                        },
-                                    ],
-                                },
-                            },
-                            then: [
-                                Expression {
-                                    expr: Infix {
-                                        lhs: Variable(
-                                            Variable {
+                                    ),
+                                    span: (
+                                        43,
+                                        32,
+                                    ),
+                                    right: Call {
+                                        target: Identifier(
+                                            Identifier {
                                                 start: (
-                                                    44,
-                                                    9,
+                                                    43,
+                                                    35,
                                                 ),
-                                                name: "last_message",
+                                                name: "Str\contains",
                                                 end: (
-                                                    44,
-                                                    23,
+                                                    43,
+                                                    47,
                                                 ),
                                             },
                                         ),
-                                        op: Assign,
-                                        rhs: Call {
-                                            target: Identifier(
-                                                Identifier {
+                                        args: [
+                                            Arg {
+                                                name: None,
+                                                value: Variable(
+                                                    Variable {
+                                                        start: (
+                                                            43,
+                                                            48,
+                                                        ),
+                                                        name: "last_message",
+                                                        end: (
+                                                            43,
+                                                            61,
+                                                        ),
+                                                    },
+                                                ),
+                                                unpack: false,
+                                            },
+                                            Arg {
+                                                name: None,
+                                                value: LiteralString {
+                                                    value: "): ",
+                                                },
+                                                unpack: false,
+                                            },
+                                        ],
+                                    },
+                                },
+                            ),
+                            then: [
+                                Expression {
+                                    expr: AssignmentOperation(
+                                        Assign {
+                                            left: Variable(
+                                                Variable {
                                                     start: (
                                                         44,
-                                                        25,
+                                                        9,
                                                     ),
-                                                    name: "Str\after",
+                                                    name: "last_message",
                                                     end: (
                                                         44,
-                                                        34,
+                                                        23,
                                                     ),
                                                 },
                                             ),
-                                            args: [
-                                                Arg {
-                                                    name: None,
-                                                    value: Call {
-                                                        target: Identifier(
-                                                            Identifier {
-                                                                start: (
-                                                                    45,
-                                                                    13,
-                                                                ),
-                                                                name: "Str\lowercase",
-                                                                end: (
-                                                                    45,
-                                                                    26,
-                                                                ),
-                                                            },
+                                            span: (
+                                                44,
+                                                23,
+                                            ),
+                                            right: Call {
+                                                target: Identifier(
+                                                    Identifier {
+                                                        start: (
+                                                            44,
+                                                            25,
                                                         ),
-                                                        args: [
-                                                            Arg {
-                                                                name: None,
-                                                                value: Variable(
-                                                                    Variable {
-                                                                        start: (
-                                                                            45,
-                                                                            27,
-                                                                        ),
-                                                                        name: "last_message",
-                                                                        end: (
-                                                                            45,
-                                                                            40,
-                                                                        ),
-                                                                    },
-                                                                ),
-                                                                unpack: false,
-                                                            },
-                                                        ],
+                                                        name: "Str\after",
+                                                        end: (
+                                                            44,
+                                                            34,
+                                                        ),
                                                     },
-                                                    unpack: false,
-                                                },
-                                                Arg {
-                                                    name: None,
-                                                    value: LiteralString {
-                                                        value: "): ",
+                                                ),
+                                                args: [
+                                                    Arg {
+                                                        name: None,
+                                                        value: Call {
+                                                            target: Identifier(
+                                                                Identifier {
+                                                                    start: (
+                                                                        45,
+                                                                        13,
+                                                                    ),
+                                                                    name: "Str\lowercase",
+                                                                    end: (
+                                                                        45,
+                                                                        26,
+                                                                    ),
+                                                                },
+                                                            ),
+                                                            args: [
+                                                                Arg {
+                                                                    name: None,
+                                                                    value: Variable(
+                                                                        Variable {
+                                                                            start: (
+                                                                                45,
+                                                                                27,
+                                                                            ),
+                                                                            name: "last_message",
+                                                                            end: (
+                                                                                45,
+                                                                                40,
+                                                                            ),
+                                                                        },
+                                                                    ),
+                                                                    unpack: false,
+                                                                },
+                                                            ],
+                                                        },
+                                                        unpack: false,
                                                     },
-                                                    unpack: false,
-                                                },
-                                            ],
+                                                    Arg {
+                                                        name: None,
+                                                        value: LiteralString {
+                                                            value: "): ",
+                                                        },
+                                                        unpack: false,
+                                                    },
+                                                ],
+                                            },
                                         },
-                                    },
+                                    ),
                                 },
                             ],
                             else_ifs: [],
@@ -530,96 +555,106 @@
                                 ),
                                 body: [
                                     Expression {
-                                        expr: Infix {
-                                            lhs: Variable(
-                                                Variable {
-                                                    start: (
-                                                        52,
-                                                        9,
-                                                    ),
-                                                    name: "value",
-                                                    end: (
-                                                        52,
-                                                        16,
-                                                    ),
-                                                },
-                                            ),
-                                            op: Assign,
-                                            rhs: Call {
-                                                target: Variable(
+                                        expr: AssignmentOperation(
+                                            Assign {
+                                                left: Variable(
                                                     Variable {
                                                         start: (
                                                             52,
-                                                            18,
+                                                            9,
                                                         ),
-                                                        name: "fun",
+                                                        name: "value",
                                                         end: (
                                                             52,
-                                                            22,
+                                                            16,
                                                         ),
                                                     },
                                                 ),
-                                                args: [],
+                                                span: (
+                                                    52,
+                                                    16,
+                                                ),
+                                                right: Call {
+                                                    target: Variable(
+                                                        Variable {
+                                                            start: (
+                                                                52,
+                                                                18,
+                                                            ),
+                                                            name: "fun",
+                                                            end: (
+                                                                52,
+                                                                22,
+                                                            ),
+                                                        },
+                                                    ),
+                                                    args: [],
+                                                },
                                             },
-                                        },
+                                        ),
                                     },
                                     Expression {
-                                        expr: Infix {
-                                            lhs: Variable(
-                                                Variable {
-                                                    start: (
-                                                        55,
-                                                        9,
-                                                    ),
-                                                    name: "result",
-                                                    end: (
-                                                        55,
-                                                        17,
-                                                    ),
+                                        expr: AssignmentOperation(
+                                            Assign {
+                                                left: Variable(
+                                                    Variable {
+                                                        start: (
+                                                            55,
+                                                            9,
+                                                        ),
+                                                        name: "result",
+                                                        end: (
+                                                            55,
+                                                            17,
+                                                        ),
+                                                    },
+                                                ),
+                                                span: (
+                                                    55,
+                                                    17,
+                                                ),
+                                                right: Array {
+                                                    items: [
+                                                        ArrayItem {
+                                                            key: None,
+                                                            value: Variable(
+                                                                Variable {
+                                                                    start: (
+                                                                        55,
+                                                                        20,
+                                                                    ),
+                                                                    name: "value",
+                                                                    end: (
+                                                                        55,
+                                                                        26,
+                                                                    ),
+                                                                },
+                                                            ),
+                                                            unpack: false,
+                                                            by_ref: false,
+                                                        },
+                                                        ArrayItem {
+                                                            key: None,
+                                                            value: Variable(
+                                                                Variable {
+                                                                    start: (
+                                                                        55,
+                                                                        28,
+                                                                    ),
+                                                                    name: "last_message",
+                                                                    end: (
+                                                                        55,
+                                                                        41,
+                                                                    ),
+                                                                },
+                                                            ),
+                                                            unpack: false,
+                                                            by_ref: false,
+                                                        },
+                                                    ],
                                                 },
-                                            ),
-                                            op: Assign,
-                                            rhs: Array {
-                                                items: [
-                                                    ArrayItem {
-                                                        key: None,
-                                                        value: Variable(
-                                                            Variable {
-                                                                start: (
-                                                                    55,
-                                                                    20,
-                                                                ),
-                                                                name: "value",
-                                                                end: (
-                                                                    55,
-                                                                    26,
-                                                                ),
-                                                            },
-                                                        ),
-                                                        unpack: false,
-                                                        by_ref: false,
-                                                    },
-                                                    ArrayItem {
-                                                        key: None,
-                                                        value: Variable(
-                                                            Variable {
-                                                                start: (
-                                                                    55,
-                                                                    28,
-                                                                ),
-                                                                name: "last_message",
-                                                                end: (
-                                                                    55,
-                                                                    41,
-                                                                ),
-                                                            },
-                                                        ),
-                                                        unpack: false,
-                                                        by_ref: false,
-                                                    },
-                                                ],
                                             },
-                                        },
+                                        ),
                                     },
                                     Return {
                                         value: Some(

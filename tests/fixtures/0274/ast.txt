@@ -60,73 +60,78 @@
                         body: Some(
                             [
                                 Expression {
-                                    expr: Infix {
-                                        lhs: Variable(
-                                            Variable {
-                                                start: (
-                                                    5,
-                                                    9,
-                                                ),
-                                                name: "q",
-                                                end: (
-                                                    5,
-                                                    12,
-                                                ),
-                                            },
-                                        ),
-                                        op: Assign,
-                                        rhs: Closure(
-                                            Closure {
-                                                start: (
-                                                    5,
-                                                    14,
-                                                ),
-                                                end: (
-                                                    7,
-                                                    9,
-                                                ),
-                                                attributes: [],
-                                                parameters: FunctionParameterList {
+                                    expr: AssignmentOperation(
+                                        Assign {
+                                            left: Variable(
+                                                Variable {
                                                     start: (
                                                         5,
-                                                        22,
+                                                        9,
                                                     ),
+                                                    name: "q",
                                                     end: (
                                                         5,
-                                                        25,
+                                                        12,
                                                     ),
-                                                    members: [],
                                                 },
-                                                return_ty: None,
-                                                uses: [],
-                                                by_ref: false,
-                                                body: [
-                                                    Return {
-                                                        value: Some(
-                                                            StaticMethodCall {
-                                                                target: Parent,
-                                                                method: Identifier(
-                                                                    Identifier {
-                                                                        start: (
-                                                                            6,
-                                                                            28,
-                                                                        ),
-                                                                        name: "bar",
-                                                                        end: (
-                                                                            6,
-                                                                            31,
-                                                                        ),
-                                                                    },
-                                                                ),
-                                                                args: [],
-                                                            },
+                                            ),
+                                            span: (
+                                                5,
+                                                12,
+                                            ),
+                                            right: Closure(
+                                                Closure {
+                                                    start: (
+                                                        5,
+                                                        14,
+                                                    ),
+                                                    end: (
+                                                        7,
+                                                        9,
+                                                    ),
+                                                    attributes: [],
+                                                    parameters: FunctionParameterList {
+                                                        start: (
+                                                            5,
+                                                            22,
                                                         ),
+                                                        end: (
+                                                            5,
+                                                            25,
+                                                        ),
+                                                        members: [],
                                                     },
-                                                ],
-                                                static: false,
-                                            },
-                                        ),
-                                    },
+                                                    return_ty: None,
+                                                    uses: [],
+                                                    by_ref: false,
+                                                    body: [
+                                                        Return {
+                                                            value: Some(
+                                                                StaticMethodCall {
+                                                                    target: Parent,
+                                                                    method: Identifier(
+                                                                        Identifier {
+                                                                            start: (
+                                                                                6,
+                                                                                28,
+                                                                            ),
+                                                                            name: "bar",
+                                                                            end: (
+                                                                                6,
+                                                                                31,
+                                                                            ),
+                                                                        },
+                                                                    ),
+                                                                    args: [],
+                                                                },
+                                                            ),
+                                                        },
+                                                    ],
+                                                    static: false,
+                                                },
+                                            ),
+                                        },
+                                    ),
                                 },
                             ],
                         ),

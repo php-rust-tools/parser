@@ -24,15 +24,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: ComparisonOperation(
+                        Equal {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                3,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "1",
+                            },
                         },
-                        op: Equals,
-                        rhs: LiteralInteger {
-                            i: "1",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -63,15 +68,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: ComparisonOperation(
+                        Identical {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                4,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "1",
+                            },
                         },
-                        op: Identical,
-                        rhs: LiteralInteger {
-                            i: "1",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -102,15 +112,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: ComparisonOperation(
+                        NotEqual {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                5,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "1",
+                            },
                         },
-                        op: NotEquals,
-                        rhs: LiteralInteger {
-                            i: "1",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -141,15 +156,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: ComparisonOperation(
+                        NotIdentical {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                6,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "1",
+                            },
                         },
-                        op: NotIdentical,
-                        rhs: LiteralInteger {
-                            i: "1",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -180,15 +200,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: ArithmeticOperation(
+                        Addition {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                7,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                        op: Add,
-                        rhs: LiteralInteger {
-                            i: "2",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -219,15 +244,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: ArithmeticOperation(
+                        Subtraction {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                8,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                        op: Sub,
-                        rhs: LiteralInteger {
-                            i: "2",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -258,15 +288,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: ArithmeticOperation(
+                        Division {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                9,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                        op: Div,
-                        rhs: LiteralInteger {
-                            i: "2",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -297,15 +332,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: BitwiseOperation(
+                        Xor {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                10,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                        op: BitwiseXor,
-                        rhs: LiteralInteger {
-                            i: "2",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -336,15 +376,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: ArithmeticOperation(
+                        Multiplication {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                11,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                        op: Mul,
-                        rhs: LiteralInteger {
-                            i: "2",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -375,15 +420,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: BitwiseOperation(
+                        RightShift {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                12,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                        op: RightShift,
-                        rhs: LiteralInteger {
-                            i: "2",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -414,15 +464,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: BitwiseOperation(
+                        LeftShift {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                13,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                        op: LeftShift,
-                        rhs: LiteralInteger {
-                            i: "2",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -453,15 +508,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: BitwiseOperation(
+                        Or {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                14,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                        op: BitwiseOr,
-                        rhs: LiteralInteger {
-                            i: "2",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -492,15 +552,20 @@
                 },
                 Arg {
                     name: None,
-                    value: Infix {
-                        lhs: LiteralInteger {
-                            i: "1",
+                    value: BitwiseOperation(
+                        And {
+                            left: LiteralInteger {
+                                i: "1",
+                            },
+                            span: (
+                                15,
+                                15,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                        op: BitwiseAnd,
-                        rhs: LiteralInteger {
-                            i: "2",
-                        },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -531,15 +596,17 @@
                 },
                 Arg {
                     name: None,
-                    value: BitwiseNot {
-                        span: (
-                            16,
-                            13,
-                        ),
-                        value: LiteralInteger {
-                            i: "2",
+                    value: BitwiseOperation(
+                        Not {
+                            span: (
+                                16,
+                                13,
+                            ),
+                            right: LiteralInteger {
+                                i: "2",
+                            },
                         },
-                    },
+                    ),
                     unpack: false,
                 },
             ],
@@ -547,33 +614,53 @@
     },
     Echo {
         values: [
-            Infix {
-                lhs: Infix {
-                    lhs: LiteralInteger {
-                        i: "1",
-                    },
-                    op: Add,
-                    rhs: Infix {
-                        lhs: Infix {
-                            lhs: LiteralInteger {
-                                i: "2",
+            ArithmeticOperation(
+                Subtraction {
+                    left: ArithmeticOperation(
+                        Addition {
+                            left: LiteralInteger {
+                                i: "1",
                             },
-                            op: Mul,
-                            rhs: LiteralInteger {
-                                i: "3",
-                            },
+                            span: (
+                                18,
+                                8,
+                            ),
+                            right: ArithmeticOperation(
+                                Division {
+                                    left: ArithmeticOperation(
+                                        Multiplication {
+                                            left: LiteralInteger {
+                                                i: "2",
+                                            },
+                                            span: (
+                                                18,
+                                                12,
+                                            ),
+                                            right: LiteralInteger {
+                                                i: "3",
+                                            },
+                                        },
+                                    ),
+                                    span: (
+                                        18,
+                                        16,
+                                    ),
+                                    right: LiteralInteger {
+                                        i: "4",
+                                    },
+                                },
+                            ),
                         },
-                        op: Div,
-                        rhs: LiteralInteger {
-                            i: "4",
-                        },
+                    ),
+                    span: (
+                        18,
+                        20,
+                    ),
+                    right: LiteralInteger {
+                        i: "5",
                     },
                 },
-                op: Sub,
-                rhs: LiteralInteger {
-                    i: "5",
-                },
-            },
+            ),
         ],
     },
 ]

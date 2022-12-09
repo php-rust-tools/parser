@@ -1,191 +1,226 @@
 [
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        3,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        3,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: Infix {
-                lhs: LiteralInteger {
-                    i: "2",
-                },
-                op: Pow,
-                rhs: LiteralInteger {
-                    i: "2",
-                },
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        5,
-                        1,
-                    ),
-                    name: "b",
-                    end: (
-                        5,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: Ternary {
-                condition: LiteralInteger {
-                    i: "1",
-                },
-                then: Some(
-                    LiteralInteger {
-                        i: "2",
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            1,
+                        ),
+                        name: "a",
+                        end: (
+                            3,
+                            4,
+                        ),
                     },
                 ),
-                else: LiteralInteger {
-                    i: "3",
-                },
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        7,
-                        1,
-                    ),
-                    name: "c",
-                    end: (
-                        7,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: Ternary {
-                condition: LiteralInteger {
-                    i: "1",
-                },
-                then: Some(
-                    Ternary {
-                        condition: LiteralInteger {
+                span: (
+                    3,
+                    4,
+                ),
+                right: ArithmeticOperation(
+                    Exponentiation {
+                        left: LiteralInteger {
                             i: "2",
                         },
-                        then: Some(
-                            LiteralInteger {
-                                i: "3",
-                            },
+                        span: (
+                            3,
+                            8,
                         ),
-                        else: LiteralInteger {
-                            i: "4",
+                        right: LiteralInteger {
+                            i: "2",
                         },
                     },
                 ),
-                else: LiteralInteger {
-                    i: "5",
-                },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        9,
-                        1,
-                    ),
-                    name: "d",
-                    end: (
-                        9,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: Ternary {
-                condition: LiteralInteger {
-                    i: "1",
-                },
-                then: None,
-                else: Ternary {
-                    condition: LiteralInteger {
-                        i: "2",
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            5,
+                            1,
+                        ),
+                        name: "b",
+                        end: (
+                            5,
+                            4,
+                        ),
                     },
-                    then: None,
+                ),
+                span: (
+                    5,
+                    4,
+                ),
+                right: Ternary {
+                    condition: LiteralInteger {
+                        i: "1",
+                    },
+                    then: Some(
+                        LiteralInteger {
+                            i: "2",
+                        },
+                    ),
                     else: LiteralInteger {
                         i: "3",
                     },
                 },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        11,
-                        1,
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            7,
+                            1,
+                        ),
+                        name: "c",
+                        end: (
+                            7,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    7,
+                    4,
+                ),
+                right: Ternary {
+                    condition: LiteralInteger {
+                        i: "1",
+                    },
+                    then: Some(
+                        Ternary {
+                            condition: LiteralInteger {
+                                i: "2",
+                            },
+                            then: Some(
+                                LiteralInteger {
+                                    i: "3",
+                                },
+                            ),
+                            else: LiteralInteger {
+                                i: "4",
+                            },
+                        },
                     ),
-                    name: "e",
-                    end: (
-                        11,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: Coalesce {
-                lhs: LiteralInteger {
-                    i: "1",
-                },
-                rhs: LiteralInteger {
-                    i: "2",
+                    else: LiteralInteger {
+                        i: "5",
+                    },
                 },
             },
-        },
+        ),
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        13,
-                        1,
-                    ),
-                    name: "f",
-                    end: (
-                        13,
-                        4,
-                    ),
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            9,
+                            1,
+                        ),
+                        name: "d",
+                        end: (
+                            9,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    9,
+                    4,
+                ),
+                right: Ternary {
+                    condition: LiteralInteger {
+                        i: "1",
+                    },
+                    then: None,
+                    else: Ternary {
+                        condition: LiteralInteger {
+                            i: "2",
+                        },
+                        then: None,
+                        else: LiteralInteger {
+                            i: "3",
+                        },
+                    },
                 },
-            ),
-            op: Assign,
-            rhs: Coalesce {
-                lhs: LiteralInteger {
-                    i: "1",
-                },
-                rhs: Coalesce {
+            },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            11,
+                            1,
+                        ),
+                        name: "e",
+                        end: (
+                            11,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    11,
+                    4,
+                ),
+                right: Coalesce {
                     lhs: LiteralInteger {
-                        i: "2",
+                        i: "1",
                     },
                     rhs: LiteralInteger {
-                        i: "3",
+                        i: "2",
                     },
                 },
             },
-        },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            13,
+                            1,
+                        ),
+                        name: "f",
+                        end: (
+                            13,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    13,
+                    4,
+                ),
+                right: Coalesce {
+                    lhs: LiteralInteger {
+                        i: "1",
+                    },
+                    rhs: Coalesce {
+                        lhs: LiteralInteger {
+                            i: "2",
+                        },
+                        rhs: LiteralInteger {
+                            i: "3",
+                        },
+                    },
+                },
+            },
+        ),
     },
 ]

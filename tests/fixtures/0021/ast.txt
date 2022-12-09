@@ -108,82 +108,87 @@
         ],
         else_ifs: [
             ElseIf {
-                condition: Infix {
-                    lhs: MethodCall {
-                        target: Variable(
-                            Variable {
-                                start: (
-                                    15,
-                                    9,
-                                ),
-                                name: "foo",
-                                end: (
-                                    15,
-                                    13,
-                                ),
-                            },
-                        ),
-                        method: Identifier(
-                            Identifier {
-                                start: (
-                                    15,
-                                    15,
-                                ),
-                                name: "bar",
-                                end: (
-                                    15,
-                                    18,
-                                ),
-                            },
-                        ),
-                        args: [],
-                    },
-                    op: And,
-                    rhs: NullsafeMethodCall {
-                        target: PropertyFetch {
+                condition: LogicalOperation(
+                    And {
+                        left: MethodCall {
                             target: Variable(
                                 Variable {
                                     start: (
                                         15,
-                                        24,
+                                        9,
                                     ),
-                                    name: "baz",
+                                    name: "foo",
                                     end: (
                                         15,
-                                        28,
+                                        13,
                                     ),
                                 },
                             ),
-                            property: Identifier(
+                            method: Identifier(
                                 Identifier {
                                     start: (
                                         15,
-                                        30,
+                                        15,
                                     ),
                                     name: "bar",
                                     end: (
                                         15,
-                                        33,
+                                        18,
                                     ),
                                 },
                             ),
+                            args: [],
                         },
-                        method: Identifier(
-                            Identifier {
-                                start: (
-                                    15,
-                                    36,
+                        span: (
+                            15,
+                            21,
+                        ),
+                        right: NullsafeMethodCall {
+                            target: PropertyFetch {
+                                target: Variable(
+                                    Variable {
+                                        start: (
+                                            15,
+                                            24,
+                                        ),
+                                        name: "baz",
+                                        end: (
+                                            15,
+                                            28,
+                                        ),
+                                    },
                                 ),
-                                name: "qux",
-                                end: (
-                                    15,
-                                    39,
+                                property: Identifier(
+                                    Identifier {
+                                        start: (
+                                            15,
+                                            30,
+                                        ),
+                                        name: "bar",
+                                        end: (
+                                            15,
+                                            33,
+                                        ),
+                                    },
                                 ),
                             },
-                        ),
-                        args: [],
+                            method: Identifier(
+                                Identifier {
+                                    start: (
+                                        15,
+                                        36,
+                                    ),
+                                    name: "qux",
+                                    end: (
+                                        15,
+                                        39,
+                                    ),
+                                },
+                            ),
+                            args: [],
+                        },
                     },
-                },
+                ),
                 body: [
                     Expression {
                         expr: Variable(

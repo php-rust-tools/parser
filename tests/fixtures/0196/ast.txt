@@ -1,76 +1,86 @@
 [
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        4,
-                        1,
-                    ),
-                    name: "a",
-                    end: (
-                        4,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: LiteralInteger {
-                i: "4",
-            },
-        },
-    },
-    Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        6,
-                        1,
-                    ),
-                    name: "b",
-                    end: (
-                        6,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: Match {
-                condition: Variable(
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
                     Variable {
                         start: (
-                            6,
-                            13,
+                            4,
+                            1,
                         ),
                         name: "a",
                         end: (
-                            6,
-                            15,
+                            4,
+                            4,
                         ),
                     },
                 ),
-                default: None,
-                arms: [
-                    MatchArm {
-                        conditions: [
-                            LiteralInteger {
-                                i: "1",
-                            },
-                            LiteralInteger {
-                                i: "2",
-                            },
-                            LiteralInteger {
-                                i: "3",
-                            },
-                            LiteralInteger {
-                                i: "4",
-                            },
-                        ],
-                        body: Null,
-                    },
-                ],
+                span: (
+                    4,
+                    4,
+                ),
+                right: LiteralInteger {
+                    i: "4",
+                },
             },
-        },
+        ),
+    },
+    Expression {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            6,
+                            1,
+                        ),
+                        name: "b",
+                        end: (
+                            6,
+                            4,
+                        ),
+                    },
+                ),
+                span: (
+                    6,
+                    4,
+                ),
+                right: Match {
+                    condition: Variable(
+                        Variable {
+                            start: (
+                                6,
+                                13,
+                            ),
+                            name: "a",
+                            end: (
+                                6,
+                                15,
+                            ),
+                        },
+                    ),
+                    default: None,
+                    arms: [
+                        MatchArm {
+                            conditions: [
+                                LiteralInteger {
+                                    i: "1",
+                                },
+                                LiteralInteger {
+                                    i: "2",
+                                },
+                                LiteralInteger {
+                                    i: "3",
+                                },
+                                LiteralInteger {
+                                    i: "4",
+                                },
+                            ],
+                            body: Null,
+                        },
+                    ],
+                },
+            },
+        ),
     },
 ]

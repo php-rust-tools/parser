@@ -265,8 +265,8 @@
                                                 11,
                                                 10,
                                             ),
-                                            expr: Infix {
-                                                lhs: Variable(
+                                            expr: Concat {
+                                                left: Variable(
                                                     Variable {
                                                         start: (
                                                             11,
@@ -279,8 +279,11 @@
                                                         ),
                                                     },
                                                 ),
-                                                op: Concat,
-                                                rhs: Identifier(
+                                                span: (
+                                                    11,
+                                                    17,
+                                                ),
+                                                right: Identifier(
                                                     Identifier {
                                                         start: (
                                                             11,
@@ -365,63 +368,73 @@
             by_ref: false,
             body: [
                 Expression {
-                    expr: Infix {
-                        lhs: Variable(
-                            Variable {
-                                start: (
-                                    16,
-                                    3,
-                                ),
-                                name: "\xf0\x9f\x92\xbb",
-                                end: (
-                                    16,
-                                    9,
-                                ),
-                            },
-                        ),
-                        op: Assign,
-                        rhs: New {
-                            target: Identifier(
-                                Identifier {
+                    expr: AssignmentOperation(
+                        Assign {
+                            left: Variable(
+                                Variable {
                                     start: (
                                         16,
-                                        15,
+                                        3,
                                     ),
                                     name: "\xf0\x9f\x92\xbb",
                                     end: (
                                         16,
-                                        19,
+                                        9,
                                     ),
                                 },
                             ),
                             span: (
                                 16,
-                                11,
+                                9,
                             ),
-                            args: [],
+                            right: New {
+                                target: Identifier(
+                                    Identifier {
+                                        start: (
+                                            16,
+                                            15,
+                                        ),
+                                        name: "\xf0\x9f\x92\xbb",
+                                        end: (
+                                            16,
+                                            19,
+                                        ),
+                                    },
+                                ),
+                                span: (
+                                    16,
+                                    11,
+                                ),
+                                args: [],
+                            },
                         },
-                    },
+                    ),
                 },
                 Expression {
-                    expr: Infix {
-                        lhs: Variable(
-                            Variable {
-                                start: (
-                                    17,
-                                    3,
-                                ),
-                                name: "\xf0\x9f\x93\x84",
-                                end: (
-                                    17,
-                                    9,
-                                ),
+                    expr: AssignmentOperation(
+                        Assign {
+                            left: Variable(
+                                Variable {
+                                    start: (
+                                        17,
+                                        3,
+                                    ),
+                                    name: "\xf0\x9f\x93\x84",
+                                    end: (
+                                        17,
+                                        9,
+                                    ),
+                                },
+                            ),
+                            span: (
+                                17,
+                                9,
+                            ),
+                            right: LiteralString {
+                                value: "hello, world",
                             },
-                        ),
-                        op: Assign,
-                        rhs: LiteralString {
-                            value: "hello, world",
                         },
-                    },
+                    ),
                 },
                 Expression {
                     expr: MethodCall {
@@ -506,25 +519,30 @@
         },
     },
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        23,
-                        1,
-                    ),
-                    name: "var\xef\xbf\xbd",
-                    end: (
-                        23,
-                        9,
-                    ),
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
+                        start: (
+                            23,
+                            1,
+                        ),
+                        name: "var\xef\xbf\xbd",
+                        end: (
+                            23,
+                            9,
+                        ),
+                    },
+                ),
+                span: (
+                    23,
+                    9,
+                ),
+                right: LiteralInteger {
+                    i: "1",
                 },
-            ),
-            op: Assign,
-            rhs: LiteralInteger {
-                i: "1",
             },
-        },
+        ),
     },
     Echo {
         values: [

@@ -1,40 +1,45 @@
 [
     Expression {
-        expr: Infix {
-            lhs: List {
-                items: [
-                    ListItem {
-                        key: None,
-                        value: Variable(
-                            Variable {
-                                start: (
-                                    3,
-                                    6,
-                                ),
-                                name: "a",
-                                end: (
-                                    3,
-                                    8,
-                                ),
-                            },
+        expr: AssignmentOperation(
+            Assign {
+                left: List {
+                    items: [
+                        ListItem {
+                            key: None,
+                            value: Variable(
+                                Variable {
+                                    start: (
+                                        3,
+                                        6,
+                                    ),
+                                    name: "a",
+                                    end: (
+                                        3,
+                                        8,
+                                    ),
+                                },
+                            ),
+                        },
+                    ],
+                },
+                span: (
+                    3,
+                    10,
+                ),
+                right: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            12,
+                        ),
+                        name: "foo",
+                        end: (
+                            3,
+                            16,
                         ),
                     },
-                ],
+                ),
             },
-            op: Assign,
-            rhs: Variable(
-                Variable {
-                    start: (
-                        3,
-                        12,
-                    ),
-                    name: "foo",
-                    end: (
-                        3,
-                        16,
-                    ),
-                },
-            ),
-        },
+        ),
     },
 ]

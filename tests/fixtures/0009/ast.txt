@@ -51,31 +51,36 @@
         },
     },
     Expression {
-        expr: Infix {
-            lhs: ArrayIndex {
-                array: Variable(
-                    Variable {
-                        start: (
-                            7,
-                            1,
-                        ),
-                        name: "foo",
-                        end: (
-                            7,
-                            5,
-                        ),
-                    },
+        expr: AssignmentOperation(
+            Assign {
+                left: ArrayIndex {
+                    array: Variable(
+                        Variable {
+                            start: (
+                                7,
+                                1,
+                            ),
+                            name: "foo",
+                            end: (
+                                7,
+                                5,
+                            ),
+                        },
+                    ),
+                    index: Some(
+                        LiteralString {
+                            value: "bar",
+                        },
+                    ),
+                },
+                span: (
+                    7,
+                    13,
                 ),
-                index: Some(
-                    LiteralString {
-                        value: "bar",
-                    },
-                ),
+                right: LiteralString {
+                    value: "baz",
+                },
             },
-            op: Assign,
-            rhs: LiteralString {
-                value: "baz",
-            },
-        },
+        ),
     },
 ]

@@ -1,44 +1,49 @@
 [
     Expression {
-        expr: Infix {
-            lhs: List {
-                items: [
-                    ListItem {
-                        key: Some(
-                            LiteralString {
-                                value: "foo",
-                            },
+        expr: AssignmentOperation(
+            Assign {
+                left: List {
+                    items: [
+                        ListItem {
+                            key: Some(
+                                LiteralString {
+                                    value: "foo",
+                                },
+                            ),
+                            value: Variable(
+                                Variable {
+                                    start: (
+                                        3,
+                                        15,
+                                    ),
+                                    name: "a",
+                                    end: (
+                                        3,
+                                        17,
+                                    ),
+                                },
+                            ),
+                        },
+                    ],
+                },
+                span: (
+                    3,
+                    19,
+                ),
+                right: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            21,
                         ),
-                        value: Variable(
-                            Variable {
-                                start: (
-                                    3,
-                                    15,
-                                ),
-                                name: "a",
-                                end: (
-                                    3,
-                                    17,
-                                ),
-                            },
+                        name: "foo",
+                        end: (
+                            3,
+                            25,
                         ),
                     },
-                ],
+                ),
             },
-            op: Assign,
-            rhs: Variable(
-                Variable {
-                    start: (
-                        3,
-                        21,
-                    ),
-                    name: "foo",
-                    end: (
-                        3,
-                        25,
-                    ),
-                },
-            ),
-        },
+        ),
     },
 ]

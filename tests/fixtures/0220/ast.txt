@@ -33,144 +33,149 @@
         ),
     ),
     Expression {
-        expr: Infix {
-            lhs: Variable(
-                Variable {
-                    start: (
-                        5,
-                        1,
-                    ),
-                    name: "e",
-                    end: (
-                        5,
-                        4,
-                    ),
-                },
-            ),
-            op: Assign,
-            rhs: New {
-                target: AnonymousClass(
-                    AnonymousClass {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    Variable {
                         start: (
                             5,
-                            10,
-                        ),
-                        end: (
-                            9,
                             1,
                         ),
-                        extends: Some(
-                            ClassExtends {
-                                span: (
-                                    5,
-                                    16,
-                                ),
-                                parent: Identifier {
-                                    start: (
-                                        5,
-                                        24,
-                                    ),
-                                    name: "bar",
-                                    end: (
-                                        5,
-                                        28,
-                                    ),
-                                },
-                            },
+                        name: "e",
+                        end: (
+                            5,
+                            4,
                         ),
-                        implements: None,
-                        attributes: [],
-                        members: [
-                            Method(
-                                Method {
-                                    start: (
-                                        6,
-                                        12,
-                                    ),
-                                    end: (
-                                        8,
-                                        5,
-                                    ),
-                                    name: Identifier {
-                                        start: (
-                                            6,
-                                            21,
-                                        ),
-                                        name: "bar",
-                                        end: (
-                                            6,
-                                            24,
-                                        ),
-                                    },
-                                    attributes: [],
-                                    parameters: MethodParameterList {
-                                        start: (
-                                            6,
-                                            24,
-                                        ),
-                                        end: (
-                                            6,
-                                            26,
-                                        ),
-                                        members: [],
-                                    },
-                                    body: Some(
-                                        [
-                                            Return {
-                                                value: Some(
-                                                    New {
-                                                        target: Identifier(
-                                                            Identifier {
-                                                                start: (
-                                                                    7,
-                                                                    20,
-                                                                ),
-                                                                name: "bar",
-                                                                end: (
-                                                                    7,
-                                                                    23,
-                                                                ),
-                                                            },
-                                                        ),
-                                                        span: (
-                                                            7,
-                                                            16,
-                                                        ),
-                                                        args: [],
-                                                    },
-                                                ),
-                                            },
-                                        ],
-                                    ),
-                                    modifiers: MethodModifierGroup {
-                                        modifiers: [
-                                            Public {
-                                                start: (
-                                                    6,
-                                                    5,
-                                                ),
-                                                end: (
-                                                    6,
-                                                    12,
-                                                ),
-                                            },
-                                        ],
-                                    },
-                                    return_type: Some(
-                                        ParentReference,
-                                    ),
-                                    by_ref: false,
-                                },
-                            ),
-                        ],
                     },
                 ),
                 span: (
                     5,
-                    6,
+                    4,
                 ),
-                args: [],
+                right: New {
+                    target: AnonymousClass(
+                        AnonymousClass {
+                            start: (
+                                5,
+                                10,
+                            ),
+                            end: (
+                                9,
+                                1,
+                            ),
+                            extends: Some(
+                                ClassExtends {
+                                    span: (
+                                        5,
+                                        16,
+                                    ),
+                                    parent: Identifier {
+                                        start: (
+                                            5,
+                                            24,
+                                        ),
+                                        name: "bar",
+                                        end: (
+                                            5,
+                                            28,
+                                        ),
+                                    },
+                                },
+                            ),
+                            implements: None,
+                            attributes: [],
+                            members: [
+                                Method(
+                                    Method {
+                                        start: (
+                                            6,
+                                            12,
+                                        ),
+                                        end: (
+                                            8,
+                                            5,
+                                        ),
+                                        name: Identifier {
+                                            start: (
+                                                6,
+                                                21,
+                                            ),
+                                            name: "bar",
+                                            end: (
+                                                6,
+                                                24,
+                                            ),
+                                        },
+                                        attributes: [],
+                                        parameters: MethodParameterList {
+                                            start: (
+                                                6,
+                                                24,
+                                            ),
+                                            end: (
+                                                6,
+                                                26,
+                                            ),
+                                            members: [],
+                                        },
+                                        body: Some(
+                                            [
+                                                Return {
+                                                    value: Some(
+                                                        New {
+                                                            target: Identifier(
+                                                                Identifier {
+                                                                    start: (
+                                                                        7,
+                                                                        20,
+                                                                    ),
+                                                                    name: "bar",
+                                                                    end: (
+                                                                        7,
+                                                                        23,
+                                                                    ),
+                                                                },
+                                                            ),
+                                                            span: (
+                                                                7,
+                                                                16,
+                                                            ),
+                                                            args: [],
+                                                        },
+                                                    ),
+                                                },
+                                            ],
+                                        ),
+                                        modifiers: MethodModifierGroup {
+                                            modifiers: [
+                                                Public {
+                                                    start: (
+                                                        6,
+                                                        5,
+                                                    ),
+                                                    end: (
+                                                        6,
+                                                        12,
+                                                    ),
+                                                },
+                                            ],
+                                        },
+                                        return_type: Some(
+                                            ParentReference,
+                                        ),
+                                        by_ref: false,
+                                    },
+                                ),
+                            ],
+                        },
+                    ),
+                    span: (
+                        5,
+                        6,
+                    ),
+                    args: [],
+                },
             },
-        },
+        ),
     },
 ]

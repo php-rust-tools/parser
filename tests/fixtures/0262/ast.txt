@@ -1,64 +1,69 @@
 [
     Expression {
-        expr: Infix {
-            lhs: List {
-                items: [
-                    ListItem {
-                        key: Some(
-                            LiteralString {
-                                value: "foo",
-                            },
-                        ),
-                        value: Variable(
-                            Variable {
-                                start: (
-                                    3,
-                                    15,
-                                ),
-                                name: "a",
-                                end: (
-                                    3,
-                                    17,
-                                ),
-                            },
-                        ),
-                    },
-                    ListItem {
-                        key: Some(
-                            LiteralString {
-                                value: "bar",
-                            },
-                        ),
-                        value: Variable(
-                            Variable {
-                                start: (
-                                    3,
-                                    28,
-                                ),
-                                name: "b",
-                                end: (
-                                    3,
-                                    30,
-                                ),
-                            },
-                        ),
-                    },
-                ],
-            },
-            op: Assign,
-            rhs: Variable(
-                Variable {
-                    start: (
-                        3,
-                        34,
-                    ),
-                    name: "foo",
-                    end: (
-                        3,
-                        38,
-                    ),
+        expr: AssignmentOperation(
+            Assign {
+                left: List {
+                    items: [
+                        ListItem {
+                            key: Some(
+                                LiteralString {
+                                    value: "foo",
+                                },
+                            ),
+                            value: Variable(
+                                Variable {
+                                    start: (
+                                        3,
+                                        15,
+                                    ),
+                                    name: "a",
+                                    end: (
+                                        3,
+                                        17,
+                                    ),
+                                },
+                            ),
+                        },
+                        ListItem {
+                            key: Some(
+                                LiteralString {
+                                    value: "bar",
+                                },
+                            ),
+                            value: Variable(
+                                Variable {
+                                    start: (
+                                        3,
+                                        28,
+                                    ),
+                                    name: "b",
+                                    end: (
+                                        3,
+                                        30,
+                                    ),
+                                },
+                            ),
+                        },
+                    ],
                 },
-            ),
-        },
+                span: (
+                    3,
+                    32,
+                ),
+                right: Variable(
+                    Variable {
+                        start: (
+                            3,
+                            34,
+                        ),
+                        name: "foo",
+                        end: (
+                            3,
+                            38,
+                        ),
+                    },
+                ),
+            },
+        ),
     },
 ]
