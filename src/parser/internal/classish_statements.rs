@@ -1,12 +1,8 @@
 use crate::expect_token;
 use crate::expected_scope;
-use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::classish::ClassishConstant;
-use crate::parser::ast::enums::BackedEnumCase;
-use crate::parser::ast::enums::BackedEnumMember;
-use crate::parser::ast::enums::UnitEnumCase;
-use crate::parser::ast::enums::UnitEnumMember;
+use crate::parser::ast::constant::ClassishConstant;
+use crate::parser::ast::constant::ConstantEntry;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::modifiers::ConstantModifierGroup;
 use crate::parser::ast::modifiers::VisibilityModifier;
@@ -25,130 +21,9 @@ use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::peek_token;
 
-pub fn interface_statement(state: &mut State) -> ParseResult<Statement> {
-    let has_attributes = attributes::gather_attributes(state)?;
-    let start = state.current.span;
-    let modifiers = modifiers::collect(state)?;
-
-    // if we have attributes, don't check const, we need a method.
-    if has_attributes || state.current.kind == TokenKind::Function {
-        Ok(Statement::Method(functions::method(
-            state,
-            modifiers::interface_method_group(modifiers)?,
-            start,
-        )?))
-    } else {
-        Ok(Statement::ClassishConstant(constant(
-            state,
-            modifiers::interface_constant_group(modifiers)?,
-            start,
-        )?))
-    }
-}
-
-pub fn unit_enum_member(state: &mut State) -> ParseResult<UnitEnumMember> {
-    let enum_name = expected_scope!([
-            Scope::Enum(enum_name, _) => enum_name,
-        ], state);
-
-    let has_attributes = attributes::gather_attributes(state)?;
-
-    if !has_attributes && state.current.kind == TokenKind::Case {
-        let start = state.current.span;
-        state.next();
-
-        let name = identifiers::ident(state)?;
-
-        if state.current.kind == TokenKind::Equals {
-            return Err(ParseError::CaseValueForUnitEnum(
-                name.to_string(),
-                state.named(&enum_name),
-                state.current.span,
-            ));
-        }
-
-        let end = utils::skip_semicolon(state)?;
-
-        return Ok(UnitEnumMember::Case(UnitEnumCase { start, end, name }));
-    }
-
-    let start = state.current.span;
-    let modifiers = modifiers::collect(state)?;
-
-    // if we have attributes, don't check const, we need a method.
-    if has_attributes || state.current.kind == TokenKind::Function {
-        Ok(UnitEnumMember::Method(functions::method(
-            state,
-            modifiers::enum_method_group(modifiers)?,
-            start,
-        )?))
-    } else {
-        Ok(UnitEnumMember::Constant(constant(
-            state,
-            modifiers::constant_group(modifiers)?,
-            start,
-        )?))
-    }
-}
-
-pub fn backed_enum_member(state: &mut State) -> ParseResult<BackedEnumMember> {
-    let enum_name = expected_scope!([
-            Scope::Enum(enum_name, _) => enum_name,
-        ], state);
-
-    let has_attributes = attributes::gather_attributes(state)?;
-
-    if !has_attributes && state.current.kind == TokenKind::Case {
-        let start = state.current.span;
-        state.next();
-
-        let name = identifiers::ident(state)?;
-
-        if state.current.kind == TokenKind::SemiColon {
-            return Err(ParseError::MissingCaseValueForBackedEnum(
-                name.to_string(),
-                state.named(&enum_name),
-                state.current.span,
-            ));
-        }
-
-        utils::skip(state, TokenKind::Equals)?;
-
-        let value = expressions::lowest_precedence(state)?;
-
-        let end = utils::skip_semicolon(state)?;
-
-        return Ok(BackedEnumMember::Case(BackedEnumCase {
-            start,
-            end,
-            name,
-            value,
-        }));
-    }
-
-    let start = state.current.span;
-    let modifiers = modifiers::collect(state)?;
-
-    // if we have attributes, don't check const, we need a method.
-    if has_attributes || state.current.kind == TokenKind::Function {
-        Ok(BackedEnumMember::Method(functions::method(
-            state,
-            modifiers::enum_method_group(modifiers)?,
-            start,
-        )?))
-    } else {
-        Ok(BackedEnumMember::Constant(constant(
-            state,
-            modifiers::constant_group(modifiers)?,
-            start,
-        )?))
-    }
-}
-
 pub fn class_like_statement(state: &mut State) -> ParseResult<Statement> {
     let has_attributes = attributes::gather_attributes(state)?;
 
-    let start = state.current.span;
     let modifiers = modifiers::collect(state)?;
 
     if !has_attributes && state.current.kind == TokenKind::Use {
@@ -159,7 +34,6 @@ pub fn class_like_statement(state: &mut State) -> ParseResult<Statement> {
         return Ok(Statement::ClassishConstant(constant(
             state,
             modifiers::constant_group(modifiers)?,
-            start,
         )?));
     }
 
@@ -167,7 +41,6 @@ pub fn class_like_statement(state: &mut State) -> ParseResult<Statement> {
         return Ok(Statement::Method(functions::method(
             state,
             modifiers::method_group(modifiers)?,
-            start,
         )?));
     }
 
@@ -381,26 +254,41 @@ fn parse_classish_uses(state: &mut State) -> ParseResult<Statement> {
     })
 }
 
-fn constant(
+pub fn constant(
     state: &mut State,
     modifiers: ConstantModifierGroup,
-    start: Span,
 ) -> ParseResult<ClassishConstant> {
+    let start = state.current.span;
+
     state.next();
 
-    let name = identifiers::ident(state)?;
+    let attributes = state.get_attributes();
 
-    utils::skip(state, TokenKind::Equals)?;
+    let mut entries = vec![];
 
-    let value = expressions::lowest_precedence(state)?;
+    loop {
+        let name = identifiers::ident(state)?;
+
+        utils::skip(state, TokenKind::Equals)?;
+
+        let value = expressions::lowest_precedence(state)?;
+
+        entries.push(ConstantEntry { name, value });
+
+        if state.current.kind == TokenKind::Comma {
+            state.next();
+        } else {
+            break;
+        }
+    }
 
     let end = utils::skip_semicolon(state)?;
 
     Ok(ClassishConstant {
         start,
         end,
-        name,
-        value,
+        attributes,
         modifiers,
+        entries,
     })
 }

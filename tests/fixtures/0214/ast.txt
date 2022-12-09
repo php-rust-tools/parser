@@ -1,101 +1,121 @@
 [
-    Interface {
-        name: Identifier {
+    Interface(
+        Interface {
             start: (
                 3,
-                11,
+                1,
             ),
-            name: "s",
             end: (
                 3,
-                13,
+                14,
             ),
-        },
-        attributes: [],
-        extends: [],
-        body: [],
-    },
-    Interface {
-        name: Identifier {
-            start: (
-                5,
-                11,
-            ),
-            name: "foo",
-            end: (
-                5,
-                15,
-            ),
-        },
-        attributes: [],
-        extends: [
-            Identifier {
+            name: Identifier {
                 start: (
-                    5,
-                    23,
+                    3,
+                    11,
                 ),
                 name: "s",
                 end: (
-                    5,
-                    25,
+                    3,
+                    13,
                 ),
             },
-        ],
-        body: [
-            Method(
-                Method {
-                    start: (
-                        6,
-                        5,
-                    ),
-                    end: (
-                        6,
-                        34,
-                    ),
-                    name: Identifier {
-                        start: (
-                            6,
-                            21,
-                        ),
-                        name: "bar",
-                        end: (
-                            6,
-                            24,
-                        ),
-                    },
-                    attributes: [],
-                    parameters: MethodParameterList {
-                        start: (
-                            6,
-                            24,
-                        ),
-                        end: (
-                            6,
-                            26,
-                        ),
-                        members: [],
-                    },
-                    body: None,
-                    modifiers: MethodModifierGroup {
-                        modifiers: [
-                            Public {
-                                start: (
-                                    6,
-                                    5,
-                                ),
-                                end: (
-                                    6,
-                                    12,
-                                ),
-                            },
-                        ],
-                    },
-                    return_type: Some(
-                        ParentReference,
-                    ),
-                    by_ref: false,
-                },
+            attributes: [],
+            extends: [],
+            members: [],
+        },
+    ),
+    Interface(
+        Interface {
+            start: (
+                5,
+                1,
             ),
-        ],
-    },
+            end: (
+                7,
+                1,
+            ),
+            name: Identifier {
+                start: (
+                    5,
+                    11,
+                ),
+                name: "foo",
+                end: (
+                    5,
+                    15,
+                ),
+            },
+            attributes: [],
+            extends: [
+                Identifier {
+                    start: (
+                        5,
+                        23,
+                    ),
+                    name: "s",
+                    end: (
+                        5,
+                        25,
+                    ),
+                },
+            ],
+            members: [
+                Method(
+                    Method {
+                        start: (
+                            6,
+                            12,
+                        ),
+                        end: (
+                            6,
+                            34,
+                        ),
+                        name: Identifier {
+                            start: (
+                                6,
+                                21,
+                            ),
+                            name: "bar",
+                            end: (
+                                6,
+                                24,
+                            ),
+                        },
+                        attributes: [],
+                        parameters: MethodParameterList {
+                            start: (
+                                6,
+                                24,
+                            ),
+                            end: (
+                                6,
+                                26,
+                            ),
+                            members: [],
+                        },
+                        body: None,
+                        modifiers: MethodModifierGroup {
+                            modifiers: [
+                                Public {
+                                    start: (
+                                        6,
+                                        5,
+                                    ),
+                                    end: (
+                                        6,
+                                        12,
+                                    ),
+                                },
+                            ],
+                        },
+                        return_type: Some(
+                            ParentReference,
+                        ),
+                        by_ref: false,
+                    },
+                ),
+            ],
+        },
+    ),
 ]

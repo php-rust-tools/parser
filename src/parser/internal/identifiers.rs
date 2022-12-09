@@ -1,24 +1,44 @@
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::variables::Variable;
+use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 
 use crate::peek_token;
 
+pub fn ident_of(state: &mut State, kinds: &[&str]) -> ParseResult<Identifier> {
+    let ident = ident(state)?;
+
+    let name = ident.name.to_string();
+
+    if kinds.contains(&name.as_str()) {
+        Ok(ident)
+    } else {
+        Err(ParseError::ExpectedIdentifier(
+            kinds.iter().map(|s| s.to_string()).collect(),
+            name,
+            state.current.span,
+        ))
+    }
+}
+
 /// Expect an unqualified identifier such as Foo or Bar.
 pub fn ident(state: &mut State) -> ParseResult<Identifier> {
-    let name = peek_token!([
-        TokenKind::Identifier(identifier) => {
-            identifier.clone()
-        },
-    ], state, "an identifier");
+    if let TokenKind::Identifier(name) = state.current.kind.clone() {
+        let start = state.current.span;
+        let end = state.peek.span;
 
-    let start = state.current.span;
-    state.next();
-    let end = state.current.span;
+        state.next();
 
-    Ok(Identifier { start, name, end })
+        Ok(Identifier { start, name, end })
+    } else {
+        Err(ParseError::ExpectedToken(
+            vec!["an identifier".to_owned()],
+            Some(state.current.kind.to_string()),
+            state.current.span,
+        ))
+    }
 }
 
 /// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.

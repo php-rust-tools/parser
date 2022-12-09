@@ -1,81 +1,91 @@
 [
-    Interface {
-        name: Identifier {
+    Interface(
+        Interface {
             start: (
                 3,
-                11,
+                1,
             ),
-            name: "foo",
             end: (
-                3,
-                15,
+                5,
+                1,
             ),
-        },
-        attributes: [],
-        extends: [],
-        body: [
-            Method(
-                Method {
-                    start: (
-                        4,
-                        6,
-                    ),
-                    end: (
-                        4,
-                        35,
-                    ),
-                    name: Identifier {
+            name: Identifier {
+                start: (
+                    3,
+                    11,
+                ),
+                name: "foo",
+                end: (
+                    3,
+                    15,
+                ),
+            },
+            attributes: [],
+            extends: [],
+            members: [
+                Method(
+                    Method {
                         start: (
                             4,
-                            30,
-                        ),
-                        name: "bar",
-                        end: (
-                            4,
-                            33,
-                        ),
-                    },
-                    attributes: [],
-                    parameters: MethodParameterList {
-                        start: (
-                            4,
-                            33,
+                            21,
                         ),
                         end: (
                             4,
                             35,
                         ),
-                        members: [],
+                        name: Identifier {
+                            start: (
+                                4,
+                                30,
+                            ),
+                            name: "bar",
+                            end: (
+                                4,
+                                33,
+                            ),
+                        },
+                        attributes: [],
+                        parameters: MethodParameterList {
+                            start: (
+                                4,
+                                33,
+                            ),
+                            end: (
+                                4,
+                                35,
+                            ),
+                            members: [],
+                        },
+                        body: None,
+                        modifiers: MethodModifierGroup {
+                            modifiers: [
+                                Public {
+                                    start: (
+                                        4,
+                                        6,
+                                    ),
+                                    end: (
+                                        4,
+                                        14,
+                                    ),
+                                },
+                                Static {
+                                    start: (
+                                        4,
+                                        14,
+                                    ),
+                                    end: (
+                                        4,
+                                        21,
+                                    ),
+                                },
+                            ],
+                        },
+                        return_type: None,
+                        by_ref: false,
                     },
-                    body: None,
-                    modifiers: MethodModifierGroup {
-                        modifiers: [
-                            Public {
-                                start: (
-                                    4,
-                                    6,
-                                ),
-                                end: (
-                                    4,
-                                    14,
-                                ),
-                            },
-                            Static {
-                                start: (
-                                    4,
-                                    14,
-                                ),
-                                end: (
-                                    4,
-                                    21,
-                                ),
-                            },
-                        ],
-                    },
-                    return_type: None,
-                    by_ref: false,
-                },
-            ),
-        ],
-    },
+                ),
+            ],
+        },
+    ),
 ]
