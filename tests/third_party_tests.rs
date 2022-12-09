@@ -102,6 +102,17 @@ fn third_party_7_mezzio_framework() {
     );
 }
 
+#[test]
+fn third_party_8_symfony_polyfill() {
+    test_repository(
+        "symfony-polyfill",
+        "https://github.com/symfony/polyfill",
+        "main",
+        &["src", "tests"],
+        &[],
+    );
+}
+
 fn test_repository(
     name: &str,
     repository: &str,
