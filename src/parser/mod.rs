@@ -49,6 +49,11 @@ pub fn parse(tokens: Vec<Token>) -> ParseResult<Program> {
             break;
         }
 
+        if state.current.kind == TokenKind::CloseTag {
+            state.next();
+            continue;
+        }
+
         ast.push(top_level_statement(&mut state)?);
 
         state.clear_comments();
