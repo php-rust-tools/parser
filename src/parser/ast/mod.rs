@@ -587,17 +587,6 @@ pub struct ListItem {
     pub value: Expression,
 }
 
-#[derive(Debug, Eq, PartialEq, Clone)]
-pub enum InfixOp {}
-
-impl From<TokenKind> for InfixOp {
-    fn from(k: TokenKind) -> Self {
-        match k {
-            _ => unreachable!(),
-        }
-    }
-}
-
 #[derive(Debug, Clone, PartialEq)]
 pub struct ElseIf {
     pub condition: Expression,
