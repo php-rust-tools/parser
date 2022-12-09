@@ -465,10 +465,6 @@ pub enum Expression {
         index: Option<Box<Self>>,
     },
     Null,
-    BooleanNot {
-        span: Span,
-        value: Box<Self>,
-    },
     MagicConst {
         span: Span,
         constant: MagicConst,
