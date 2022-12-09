@@ -374,14 +374,17 @@ impl Lexer {
 
                 while let Some(c) = state.source.current() {
                     if *c == b'\n' {
+                        state.source.next();
+                        break;
+                    }
+
+                    if state.source.read(2) == [b'?', b'>'] {
                         break;
                     }
 
                     buffer.push(*c);
                     state.source.next();
                 }
-
-                state.source.next();
 
                 if buffer.starts_with(b"#") {
                     TokenKind::HashMarkComment(buffer.into())
