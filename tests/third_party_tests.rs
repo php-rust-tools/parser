@@ -53,7 +53,18 @@ fn nikic_php_parser() {
     test_repository(
         "nikic/PHP-Parser",
         "https://github.com/nikic/PHP-Parser",
-        &[],
+        &[
+            // Auto-generated parsers with syntax mistakes
+            "vendor/ircmaxell/php-yacc/examples/00-basic-usage/parser.template.php",
+            "vendor/ircmaxell/php-yacc/examples/01-expression-support/parser.template.php",
+            "vendor/ircmaxell/php-yacc/examples/02-complex-expression-support/parser.template.php",
+            "vendor/ircmaxell/php-yacc/examples/10-php7/parser.kmyacc.php",
+            "vendor/ircmaxell/php-yacc/examples/10-php7/parser.phpyacc.php",
+            "vendor/ircmaxell/php-yacc/examples/10-php7/parser.template.php",
+            "vendor/ircmaxell/php-yacc/examples/20-custom-parser/parser.kmyacc.php",
+            "vendor/ircmaxell/php-yacc/examples/20-custom-parser/parser.phpyacc.php",
+            "vendor/ircmaxell/php-yacc/examples/20-custom-parser/parser.template.php",
+        ],
     );
 }
 
@@ -87,6 +98,52 @@ fn symfony_polyfill() {
         "https://github.com/symfony/polyfill",
         &[],
     );
+}
+
+#[test]
+fn madelineproto() {
+    test_repository(
+        "MadelineProto",
+        "https://github.com/danog/MadelineProto",
+        &[],
+    );
+}
+
+#[test]
+fn phabel() {
+    test_repository(
+        "phabel",
+        "https://github.com/phabelio/phabel",
+        &[
+            // Uses non-standard async/await syntax
+            "tests/TargetFuture/AwaitTest.php",
+        ],
+    );
+}
+
+#[test]
+fn psalm() {
+    test_repository("psalm", "https://github.com/vimeo/psalm", &[]);
+}
+
+#[test]
+fn phpstan() {
+    test_repository("phpstan", "https://github.com/phpstan/phpstan", &[]);
+}
+
+#[test]
+fn phpstan_src() {
+    test_repository("phpstan-src", "https://github.com/phpstan/phpstan-src", &[]);
+}
+
+#[test]
+fn rector() {
+    test_repository("rector", "https://github.com/rectorphp/rector", &[]);
+}
+
+#[test]
+fn rector_src() {
+    test_repository("rector-src", "https://github.com/rectorphp/rector-src", &[]);
 }
 
 #[test]
@@ -185,7 +242,16 @@ fn doctrine_orm() {
 
 #[test]
 fn doctrine_dbal() {
-    test_repository("doctrine-dbal", "https://github.com/doctrine/dbal", &[]);
+    test_repository(
+        "doctrine-dbal",
+        "https://github.com/doctrine/dbal",
+        &[
+            // Files with invalid syntax meant to be parsed only by phpstorm
+            "vendor/jetbrains/phpstorm-stubs/Core/Core_c.php",
+            "vendor/jetbrains/phpstorm-stubs/eio/eio.php",
+            "vendor/jetbrains/phpstorm-stubs/event/event.php",
+        ],
+    );
 }
 
 fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
@@ -209,6 +275,29 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
 
         if !output.status.success() {
             panic!("failed to clone repository: {:#?}", output)
+        }
+    }
+
+    let composer_json = out_path.join("composer.json");
+    let autoload = out_path.join("vendor").join("autoload.php");
+
+    if composer_json.exists() && !autoload.exists() {
+        let output = Command::new("composer")
+            .arg("update")
+            .arg("--ignore-platform-reqs")
+            .arg("--no-plugins")
+            .arg("--no-scripts")
+            .arg("--no-interaction")
+            .arg("--prefer-dist")
+            .current_dir(&out_path)
+            .output()
+            .expect("failed to run composer");
+
+        if !output.status.success() {
+            panic!(
+                "failed to run composer install in repository: {:#?}",
+                output
+            )
         }
     }
 
@@ -298,16 +387,17 @@ fn read_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) -> Vec<(St
             continue;
         }
 
+        let path = &entry
+            .as_path()
+            .strip_prefix(&root)
+            .unwrap()
+            .to_str()
+            .unwrap();
+
         if entry.is_file()
             && entry.extension().unwrap_or_default() == "php"
-            && !ignore.contains(
-                &entry
-                    .as_path()
-                    .strip_prefix(&root)
-                    .unwrap()
-                    .to_str()
-                    .unwrap(),
-            )
+            && !ignore.contains(path)
+            && !path.starts_with("vendor/symfony")
         {
             let name_entry = entry.clone();
             let fullanme_string = name_entry.to_string_lossy();
