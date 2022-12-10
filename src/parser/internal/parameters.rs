@@ -248,10 +248,10 @@ pub fn args_list(state: &mut State) -> ParseResult<Vec<Arg>> {
     while !state.is_eof() && state.current.kind != TokenKind::RightParen {
         let mut name = None;
         let mut unpack = false;
-        if identifiers::is_ident_maybe_reserved(&state.current.kind)
+        if identifiers::is_identifier_maybe_reserved(&state.current.kind)
             && state.peek.kind == TokenKind::Colon
         {
-            name = Some(identifiers::ident_maybe_reserved(state)?);
+            name = Some(identifiers::identifier_maybe_reserved(state)?);
             has_used_named_arguments = true;
             state.next();
         } else if state.current.kind == TokenKind::Ellipsis {

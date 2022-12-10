@@ -25,12 +25,12 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip(state, TokenKind::Enum)?;
 
-    let name = identifiers::ident(state)?;
+    let name = identifiers::identifier(state)?;
 
     let backed_type: Option<BackedEnumType> = if state.current.kind == TokenKind::Colon {
         utils::skip_colon(state)?;
 
-        let identifier = identifiers::ident_of(state, &["string", "int"])?;
+        let identifier = identifiers::identifier_of(state, &["string", "int"])?;
         Some(match &identifier.name[..] {
             b"string" => BackedEnumType::String(identifier.span),
             b"int" => BackedEnumType::Int(identifier.span),
@@ -111,7 +111,7 @@ fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMemb
         let start = state.current.span;
         state.next();
 
-        let name = identifiers::ident(state)?;
+        let name = identifiers::type_identifier(state)?;
 
         if state.current.kind == TokenKind::Equals {
             return Err(ParseError::CaseValueForUnitEnum(
@@ -150,7 +150,7 @@ fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnum
         let start = state.current.span;
         state.next();
 
-        let name = identifiers::ident(state)?;
+        let name = identifiers::identifier(state)?;
 
         if state.current.kind == TokenKind::SemiColon {
             return Err(ParseError::MissingCaseValueForBackedEnum(

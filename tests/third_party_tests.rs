@@ -381,12 +381,6 @@ fn read_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) -> Vec<(St
     entries.sort();
 
     for entry in entries {
-        if entry.is_dir() {
-            results.append(&mut read_directory(root.clone(), entry, ignore));
-
-            continue;
-        }
-
         let path = &entry
             .as_path()
             .strip_prefix(&root)
@@ -394,10 +388,19 @@ fn read_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) -> Vec<(St
             .to_str()
             .unwrap();
 
+        if path.starts_with("vendor/symfony") {
+            continue;
+        }
+
+        if entry.is_dir() {
+            results.append(&mut read_directory(root.clone(), entry, ignore));
+
+            continue;
+        }
+
         if entry.is_file()
             && entry.extension().unwrap_or_default() == "php"
             && !ignore.contains(path)
-            && !path.starts_with("vendor/symfony")
         {
             let name_entry = entry.clone();
             let fullanme_string = name_entry.to_string_lossy();

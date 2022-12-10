@@ -172,7 +172,7 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
         false
     };
 
-    let name = identifiers::ident_maybe_soft_reserved(state)?;
+    let name = identifiers::identifier_maybe_soft_reserved(state)?;
 
     // get attributes before processing parameters, otherwise
     // parameters will steal attributes of this function.
@@ -219,7 +219,7 @@ pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<
         false
     };
 
-    let name = identifiers::ident_maybe_reserved(state)?;
+    let name = identifiers::identifier_maybe_reserved(state)?;
 
     let has_body = expected_scope!([
             Scope::Class(_, class_modifiers, _) => {

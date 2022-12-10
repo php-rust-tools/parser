@@ -117,7 +117,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Trait => traits::parse(state)?,
             TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => enums::parse(state)?,
             TokenKind::Function
-                if identifiers::is_ident_maybe_soft_reserved(&state.peek.kind)
+                if identifiers::is_identifier_maybe_soft_reserved(&state.peek.kind)
                     || state.peek.kind == TokenKind::Ampersand =>
             {
                 // FIXME: This is incredibly hacky but we don't have a way to look at
@@ -165,7 +165,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Trait => traits::parse(state)?,
             TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => enums::parse(state)?,
             TokenKind::Function
-                if identifiers::is_ident_maybe_soft_reserved(&state.peek.kind)
+                if identifiers::is_identifier_maybe_soft_reserved(&state.peek.kind)
                     || state.peek.kind == TokenKind::Ampersand =>
             {
                 // FIXME: This is incredibly hacky but we don't have a way to look at
@@ -203,7 +203,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
 
                 let mut declares = Vec::new();
                 loop {
-                    let key = identifiers::ident(state)?;
+                    let key = identifiers::identifier(state)?;
 
                     utils::skip(state, TokenKind::Equals)?;
 
