@@ -284,6 +284,7 @@ pub fn args_list(state: &mut State) -> ParseResult<Vec<Arg>> {
 
         if state.current.kind == TokenKind::Comma {
             state.next();
+            state.skip_comments();
         } else {
             break;
         }
