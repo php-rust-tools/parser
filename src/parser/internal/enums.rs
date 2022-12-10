@@ -25,7 +25,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip(state, TokenKind::Enum)?;
 
-    let name = identifiers::identifier(state)?;
+    let name = identifiers::type_identifier(state)?;
 
     let backed_type: Option<BackedEnumType> = if state.current.kind == TokenKind::Colon {
         utils::skip_colon(state)?;
