@@ -67,7 +67,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --all -- --skip third_party
+          args: --all
 
       - name: bench
         run: hyperfine --prepare "cargo build -r" --runs 10 --warmup 2 -i "cargo test --all -r"

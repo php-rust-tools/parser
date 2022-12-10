@@ -12,23 +12,19 @@ enum TestResult {
 }
 
 #[test]
-fn third_party_1_php_standard_library() {
+fn php_standard_library() {
     test_repository(
         "php-standard-library",
         "https://github.com/azjezz/psl.git",
-        "2.2.x",
-        &["src", "tests", "examples"],
         &[],
     );
 }
 
 #[test]
-fn third_party_2_laravel_framework() {
+fn laravel_framework() {
     test_repository(
         "laravel-framework",
         "https://github.com/laravel/framework",
-        "9.x",
-        &["src", "tests"],
         &[
             // file contains syntax error for testing.
             "tests/Foundation/fixtures/bad-syntax-strategy.php",
@@ -37,12 +33,10 @@ fn third_party_2_laravel_framework() {
 }
 
 #[test]
-fn third_party_3_symfony_framework() {
+fn symfony_framework() {
     test_repository(
         "symfony-framework",
         "https://github.com/symfony/symfony",
-        "6.3",
-        &["src/Symfony/"],
         &[
             // stub
             "src/Symfony/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php",
@@ -55,34 +49,24 @@ fn third_party_3_symfony_framework() {
 }
 
 #[test]
-fn third_party_4_nikic_php_parser() {
+fn nikic_php_parser() {
     test_repository(
         "nikic/PHP-Parser",
         "https://github.com/nikic/PHP-Parser",
-        "4.x",
-        &["lib/PhpParser", "grammar", "test"],
         &[],
     );
 }
 
 #[test]
-fn third_party_5_yii_framework() {
-    test_repository(
-        "yii-framework",
-        "https://github.com/yiisoft/yii2",
-        "master",
-        &["framework", "tests"],
-        &[],
-    );
+fn yii_framework() {
+    test_repository("yii-framework", "https://github.com/yiisoft/yii2", &[]);
 }
 
 #[test]
-fn third_party_6_spiral_framework() {
+fn spiral_framework() {
     test_repository(
         "spiral-framework",
         "https://github.com/spiral/framework",
-        "master",
-        &["src", "tests"],
         &[
             // file contains syntax error used for testing.
             "src/Core/tests/Fixtures/CorruptedClass.php",
@@ -92,133 +76,119 @@ fn third_party_6_spiral_framework() {
 }
 
 #[test]
-fn third_party_7_mezzio_framework() {
-    test_repository(
-        "mezzio-framework",
-        "https://github.com/mezzio/mezzio",
-        "3.15.x",
-        &["src", "test"],
-        &[],
-    );
+fn mezzio_framework() {
+    test_repository("mezzio-framework", "https://github.com/mezzio/mezzio", &[]);
 }
 
 #[test]
-fn third_party_8_symfony_polyfill() {
+fn symfony_polyfill() {
     test_repository(
         "symfony-polyfill",
         "https://github.com/symfony/polyfill",
-        "main",
-        &["src", "tests"],
         &[],
     );
 }
 
 #[test]
-fn third_party_9_composer() {
-    test_repository(
-        "composer",
-        "https://github.com/composer/composer",
-        "main",
-        &["src", "tests"],
-        &[],
-    );
+fn composer() {
+    test_repository("composer", "https://github.com/composer/composer", &[]);
 }
 
 #[test]
-fn third_party_10_wordpress() {
-    test_repository(
-        "wordpress",
-        "https://github.com/WordPress/WordPress",
-        "master",
-        &["wp-admin", "wp-content", "wp-includes"],
-        &[],
-    );
+fn wordpress() {
+    test_repository("wordpress", "https://github.com/WordPress/WordPress", &[]);
 }
 
 #[test]
-fn third_party_11_chubbyphp_framework() {
+fn chubbyphp_framework() {
     test_repository(
         "chubbyphp-framework",
         "https://github.com/chubbyphp/chubbyphp-framework",
-        "master",
-        &["src", "tests"],
         &[],
     );
 }
 
 #[test]
-fn third_party_12_silverstripe_framework_core() {
+fn silverstripe_framework_core() {
     test_repository(
         "silverstripe-framework",
         "https://github.com/silverstripe/silverstripe-framework",
-        "4",
-        &["src", "tests"],
         &[],
     );
 }
 
 #[test]
-fn third_party_12_silverstripe_framework_cms() {
+fn silverstripe_framework_cms() {
     test_repository(
         "silverstripe-cms",
         "https://github.com/silverstripe/silverstripe-cms",
-        "4",
-        &["code", "tests"],
         &[],
     );
 }
 
 #[test]
-fn third_party_13_roundcubemail_web() {
+fn roundcubemail_web() {
     test_repository(
         "roundcubemail",
         "https://github.com/roundcube/roundcubemail",
-        "master",
-        &["config", "installer", "plugins", "program", "tests"],
         &[],
     );
 }
 
 #[test]
-fn third_party_14_phpmyadmin_web() {
+fn phpmyadmin_web() {
     test_repository(
         "phpmyadmin",
         "https://github.com/phpmyadmin/phpmyadmin",
-        "master",
-        &["libraries", "test", "examples"],
         &[],
     );
 }
 
 #[test]
-fn third_party_15_phpbb_web() {
+fn phpbb() {
+    test_repository("phpbb", "https://github.com/phpbb/phpbb", &[]);
+}
+
+#[test]
+fn drupal() {
+    test_repository("drupal", "https://github.com/drupal/core", &[]);
+}
+
+#[test]
+fn api_platform() {
+    test_repository("api-platform", "https://github.com/api-platform/core", &[]);
+}
+
+#[test]
+fn joomla() {
+    test_repository("joomla", "https://github.com/joomla/joomla-cms", &[]);
+}
+
+#[test]
+fn prestashop() {
     test_repository(
-        "phpbb",
-        "https://github.com/phpbb/phpbb",
-        "master",
-        &["phpBB", "tests", "build"],
+        "prestashop",
+        "https://github.com/PrestaShop/PrestaShop",
         &[],
     );
 }
 
 #[test]
-fn third_party_16_drupal_core() {
-    test_repository(
-        "drupal",
-        "https://github.com/drupal/core",
-        "9.4.x",
-        &["lib", "tests"],
-        &[],
-    );
+fn sylius() {
+    test_repository("sylius", "https://github.com/Sylius/Sylius", &[]);
 }
 
-fn test_repository(
-    name: &str,
-    repository: &str,
-    branch: &str,
-    directories: &[&str],
-    ignore: &[&str],
-) {
+#[test]
+fn doctrine_orm() {
+    test_repository("doctrine-orm", "https://github.com/doctrine/orm", &[]);
+}
+
+#[test]
+fn doctrine_dbal() {
+    test_repository("doctrine-dbal", "https://github.com/doctrine/dbal", &[]);
+}
+
+fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
     let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let out_dir = manifest.join("target").join("third-party");
     if !out_dir.exists() {
@@ -232,8 +202,6 @@ fn test_repository(
             .arg("clone")
             .arg("--depth")
             .arg("1")
-            .arg("-b")
-            .arg(branch)
             .arg(repository)
             .arg(&out_path)
             .output()
@@ -244,14 +212,7 @@ fn test_repository(
         }
     }
 
-    let mut entries = vec![];
-    for dir in directories {
-        entries.append(&mut read_directory(
-            out_path.clone(),
-            out_path.join(dir),
-            ignore,
-        ));
-    }
+    let entries = read_directory(out_path.clone(), out_path, ignore);
 
     let mut threads = vec![];
     for (index, chunk) in entries.chunks(entries.len() / 4).enumerate() {
@@ -269,9 +230,7 @@ fn test_repository(
 
                     match Lexer::new().tokenize(&code) {
                         Ok(tokens) => match php_parser_rs::parse(tokens) {
-                            Ok(ast) => {
-                                println!("✅ [{thread_name}][{name}]: {} statement(s).", ast.len());
-
+                            Ok(_) => {
                                 results.push(TestResult::Success);
                             }
                             Err(error) => {
