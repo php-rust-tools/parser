@@ -618,13 +618,6 @@ expressions! {
 
     #[before(static_postfix), current(TokenKind::Self_)]
     self_postfix(|state: &mut State| {
-        if !state.has_class_scope {
-            return Err(ParseError::CannotFindTypeInCurrentScope(
-                state.current.kind.to_string(),
-                state.current.span,
-            ));
-        }
-
         state.next();
 
         postfix(state, Expression::Self_, &TokenKind::DoubleColon)
@@ -632,13 +625,6 @@ expressions! {
 
     #[before(parent_postfix), current(TokenKind::Static)]
     static_postfix(|state: &mut State| {
-        if !state.has_class_scope {
-            return Err(ParseError::CannotFindTypeInCurrentScope(
-                state.current.kind.to_string(),
-                state.current.span,
-            ));
-        }
-
         state.next();
 
         postfix(state, Expression::Static, &TokenKind::DoubleColon)
@@ -646,13 +632,6 @@ expressions! {
 
     #[before(left_parenthesis), current(TokenKind::Parent)]
     parent_postfix(|state: &mut State| {
-        if !state.has_class_scope {
-            return Err(ParseError::CannotFindTypeInCurrentScope(
-                state.current.kind.to_string(),
-                state.current.span,
-            ));
-        }
-
         state.next();
 
         postfix(state, Expression::Parent, &TokenKind::DoubleColon)
@@ -693,37 +672,16 @@ expressions! {
 
         let target = match state.current.kind {
             TokenKind::Self_ => {
-                if !state.has_class_scope {
-                    return Err(ParseError::CannotFindTypeInCurrentScope(
-                        state.current.kind.to_string(),
-                        state.current.span,
-                    ));
-                }
-
                 state.next();
 
                 Expression::Self_
             }
             TokenKind::Static => {
-                if !state.has_class_scope {
-                    return Err(ParseError::CannotFindTypeInCurrentScope(
-                        state.current.kind.to_string(),
-                        state.current.span,
-                    ));
-                }
-
                 state.next();
 
                 Expression::Static
             }
             TokenKind::Parent => {
-                if !state.has_class_scope {
-                    return Err(ParseError::CannotFindTypeInCurrentScope(
-                        state.current.kind.to_string(),
-                        state.current.span,
-                    ));
-                }
-
                 state.next();
 
                 Expression::Parent

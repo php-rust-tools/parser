@@ -1,0 +1,33 @@
+[
+    Expression {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                3,
+                                1,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+                span: (
+                    3,
+                    4,
+                ),
+                right: ConstFetch {
+                    target: Static,
+                    constant: SimpleIdentifier {
+                        span: (
+                            3,
+                            14,
+                        ),
+                        name: "foo",
+                    },
+                },
+            },
+        ),
+    },
+]
