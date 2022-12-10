@@ -265,13 +265,13 @@ fn test_repository(
                             }
                             Err(error) => {
                                 results.push(TestResult::Error(format!(
-                                    "❌ [{thread_name}][{name}]: {error:?}"
+                                    "❌ [{thread_name}][{name}]: {error} ({error:?})"
                                 )));
                             }
                         },
                         Err(error) => {
                             results.push(TestResult::Error(format!(
-                                "❌ [{thread_name}][{name}]: {error:?}"
+                                "❌ [{thread_name}][{name}]: {error} ({error:?})"
                             )));
                         }
                     }
