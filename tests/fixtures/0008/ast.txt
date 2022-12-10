@@ -56,11 +56,9 @@
                     condition: LiteralInteger {
                         i: "1",
                     },
-                    then: Some(
-                        LiteralInteger {
-                            i: "2",
-                        },
-                    ),
+                    then: LiteralInteger {
+                        i: "2",
+                    },
                     else: LiteralInteger {
                         i: "3",
                     },
@@ -90,21 +88,17 @@
                     condition: LiteralInteger {
                         i: "1",
                     },
-                    then: Some(
-                        Ternary {
-                            condition: LiteralInteger {
-                                i: "2",
-                            },
-                            then: Some(
-                                LiteralInteger {
-                                    i: "3",
-                                },
-                            ),
-                            else: LiteralInteger {
-                                i: "4",
-                            },
+                    then: Ternary {
+                        condition: LiteralInteger {
+                            i: "2",
                         },
-                    ),
+                        then: LiteralInteger {
+                            i: "3",
+                        },
+                        else: LiteralInteger {
+                            i: "4",
+                        },
+                    },
                     else: LiteralInteger {
                         i: "5",
                     },
@@ -130,16 +124,22 @@
                     9,
                     4,
                 ),
-                right: Ternary {
+                right: ShortTernary {
                     condition: LiteralInteger {
                         i: "1",
                     },
-                    then: None,
-                    else: Ternary {
+                    span: (
+                        9,
+                        8,
+                    ),
+                    else: ShortTernary {
                         condition: LiteralInteger {
                             i: "2",
                         },
-                        then: None,
+                        span: (
+                            9,
+                            13,
+                        ),
                         else: LiteralInteger {
                             i: "3",
                         },
