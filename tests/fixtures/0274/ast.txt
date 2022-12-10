@@ -98,7 +98,17 @@
                                                         Return {
                                                             value: Some(
                                                                 StaticMethodCall {
-                                                                    target: Parent,
+                                                                    target: Identifier(
+                                                                        SimpleIdentifier(
+                                                                            SimpleIdentifier {
+                                                                                span: (
+                                                                                    6,
+                                                                                    20,
+                                                                                ),
+                                                                                name: "parent",
+                                                                            },
+                                                                        ),
+                                                                    ),
                                                                     method: Identifier(
                                                                         SimpleIdentifier(
                                                                             SimpleIdentifier {

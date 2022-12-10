@@ -52,7 +52,7 @@ pub fn type_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
     }
 }
 
-/// Expect an unqualified identifier such as Foo or Bar for a class, interface, trait, or an enum name.
+/// Expect an unqualified identifier such as foo or bar for a goto label name.
 pub fn label_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
     match state.current.kind.clone() {
         TokenKind::Identifier(name) => {
@@ -74,6 +74,38 @@ pub fn label_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
             state.current.kind.to_string(),
             state.current.span,
         )),
+        _ => Err(ParseError::ExpectedToken(
+            vec!["an identifier".to_owned()],
+            Some(state.current.kind.to_string()),
+            state.current.span,
+        )),
+    }
+}
+
+/// Expect an unqualified identifier such as FOO or BAR for a constant name.
+pub fn constant_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
+    match state.current.kind.clone() {
+        TokenKind::Identifier(name) => {
+            let span = state.current.span;
+
+            state.next();
+
+            Ok(SimpleIdentifier { span, name })
+        }
+        TokenKind::Enum | TokenKind::From | TokenKind::Self_ | TokenKind::Parent => {
+            let span = state.current.span;
+            let name = state.current.kind.to_string().into();
+
+            state.next();
+
+            Ok(SimpleIdentifier { span, name })
+        }
+        t if is_reserved_identifier(&t) => {
+            Err(ParseError::CannotUseReservedKeywordAsAConstantName(
+                state.current.kind.to_string(),
+                state.current.span,
+            ))
+        }
         _ => Err(ParseError::ExpectedToken(
             vec!["an identifier".to_owned()],
             Some(state.current.kind.to_string()),

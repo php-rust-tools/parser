@@ -1,0 +1,545 @@
+[
+    Namespace {
+        name: SimpleIdentifier {
+            span: (
+                3,
+                11,
+            ),
+            name: "f",
+        },
+        body: [
+            Noop(
+                (
+                    3,
+                    12,
+                ),
+            ),
+            Class(
+                Class {
+                    start: (
+                        5,
+                        1,
+                    ),
+                    end: (
+                        9,
+                        1,
+                    ),
+                    name: SimpleIdentifier {
+                        span: (
+                            5,
+                            7,
+                        ),
+                        name: "s",
+                    },
+                    extends: None,
+                    implements: None,
+                    attributes: [],
+                    members: [
+                        Method(
+                            Method {
+                                start: (
+                                    6,
+                                    19,
+                                ),
+                                end: (
+                                    8,
+                                    5,
+                                ),
+                                name: SimpleIdentifier {
+                                    span: (
+                                        6,
+                                        28,
+                                    ),
+                                    name: "foo",
+                                },
+                                attributes: [],
+                                parameters: MethodParameterList {
+                                    start: (
+                                        6,
+                                        31,
+                                    ),
+                                    end: (
+                                        6,
+                                        34,
+                                    ),
+                                    members: [],
+                                },
+                                body: Some(
+                                    [
+                                        Echo {
+                                            values: [
+                                                LiteralString {
+                                                    value: "huh?\n",
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                ),
+                                modifiers: MethodModifierGroup {
+                                    modifiers: [
+                                        Public {
+                                            start: (
+                                                6,
+                                                5,
+                                            ),
+                                            end: (
+                                                6,
+                                                12,
+                                            ),
+                                        },
+                                        Static {
+                                            start: (
+                                                6,
+                                                12,
+                                            ),
+                                            end: (
+                                                6,
+                                                19,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                return_type: None,
+                                by_ref: false,
+                            },
+                        ),
+                    ],
+                },
+            ),
+            Constant(
+                Constant {
+                    start: (
+                        11,
+                        1,
+                    ),
+                    end: (
+                        11,
+                        19,
+                    ),
+                    entries: [
+                        ConstantEntry {
+                            name: SimpleIdentifier {
+                                span: (
+                                    11,
+                                    7,
+                                ),
+                                name: "self",
+                            },
+                            value: New {
+                                target: Identifier(
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: (
+                                                11,
+                                                18,
+                                            ),
+                                            name: "s",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    11,
+                                    14,
+                                ),
+                                args: [],
+                            },
+                        },
+                    ],
+                },
+            ),
+            Constant(
+                Constant {
+                    start: (
+                        12,
+                        1,
+                    ),
+                    end: (
+                        12,
+                        21,
+                    ),
+                    entries: [
+                        ConstantEntry {
+                            name: SimpleIdentifier {
+                                span: (
+                                    12,
+                                    7,
+                                ),
+                                name: "parent",
+                            },
+                            value: New {
+                                target: Identifier(
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: (
+                                                12,
+                                                20,
+                                            ),
+                                            name: "s",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    12,
+                                    16,
+                                ),
+                                args: [],
+                            },
+                        },
+                    ],
+                },
+            ),
+            Class(
+                Class {
+                    start: (
+                        14,
+                        1,
+                    ),
+                    end: (
+                        27,
+                        1,
+                    ),
+                    name: SimpleIdentifier {
+                        span: (
+                            14,
+                            7,
+                        ),
+                        name: "a",
+                    },
+                    extends: None,
+                    implements: None,
+                    attributes: [],
+                    members: [
+                        Method(
+                            Method {
+                                start: (
+                                    15,
+                                    20,
+                                ),
+                                end: (
+                                    17,
+                                    5,
+                                ),
+                                name: SimpleIdentifier {
+                                    span: (
+                                        15,
+                                        29,
+                                    ),
+                                    name: "foo",
+                                },
+                                attributes: [],
+                                parameters: MethodParameterList {
+                                    start: (
+                                        15,
+                                        32,
+                                    ),
+                                    end: (
+                                        15,
+                                        35,
+                                    ),
+                                    members: [],
+                                },
+                                body: Some(
+                                    [
+                                        Echo {
+                                            values: [
+                                                LiteralString {
+                                                    value: "here!\n",
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                ),
+                                modifiers: MethodModifierGroup {
+                                    modifiers: [
+                                        Private {
+                                            start: (
+                                                15,
+                                                5,
+                                            ),
+                                            end: (
+                                                15,
+                                                13,
+                                            ),
+                                        },
+                                        Static {
+                                            start: (
+                                                15,
+                                                13,
+                                            ),
+                                            end: (
+                                                15,
+                                                20,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                return_type: None,
+                                by_ref: false,
+                            },
+                        ),
+                        Method(
+                            Method {
+                                start: (
+                                    19,
+                                    12,
+                                ),
+                                end: (
+                                    26,
+                                    5,
+                                ),
+                                name: SimpleIdentifier {
+                                    span: (
+                                        19,
+                                        21,
+                                    ),
+                                    name: "f",
+                                },
+                                attributes: [],
+                                parameters: MethodParameterList {
+                                    start: (
+                                        19,
+                                        22,
+                                    ),
+                                    end: (
+                                        19,
+                                        25,
+                                    ),
+                                    members: [],
+                                },
+                                body: Some(
+                                    [
+                                        Expression {
+                                            expr: Call {
+                                                target: Identifier(
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: (
+                                                                20,
+                                                                9,
+                                                            ),
+                                                            name: "var_dump",
+                                                        },
+                                                    ),
+                                                ),
+                                                args: [
+                                                    Arg {
+                                                        name: None,
+                                                        value: Identifier(
+                                                            SimpleIdentifier(
+                                                                SimpleIdentifier {
+                                                                    span: (
+                                                                        20,
+                                                                        18,
+                                                                    ),
+                                                                    name: "self",
+                                                                },
+                                                            ),
+                                                        ),
+                                                        unpack: false,
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                        Expression {
+                                            expr: Call {
+                                                target: Identifier(
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: (
+                                                                21,
+                                                                9,
+                                                            ),
+                                                            name: "var_dump",
+                                                        },
+                                                    ),
+                                                ),
+                                                args: [
+                                                    Arg {
+                                                        name: None,
+                                                        value: Identifier(
+                                                            SimpleIdentifier(
+                                                                SimpleIdentifier {
+                                                                    span: (
+                                                                        21,
+                                                                        18,
+                                                                    ),
+                                                                    name: "parent",
+                                                                },
+                                                            ),
+                                                        ),
+                                                        unpack: false,
+                                                    },
+                                                ],
+                                            },
+                                        },
+                                        Expression {
+                                            expr: StaticMethodCall {
+                                                target: Identifier(
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: (
+                                                                23,
+                                                                9,
+                                                            ),
+                                                            name: "self",
+                                                        },
+                                                    ),
+                                                ),
+                                                method: Identifier(
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: (
+                                                                23,
+                                                                15,
+                                                            ),
+                                                            name: "foo",
+                                                        },
+                                                    ),
+                                                ),
+                                                args: [],
+                                            },
+                                        },
+                                        Expression {
+                                            expr: StaticMethodCall {
+                                                target: Parenthesized {
+                                                    start: (
+                                                        24,
+                                                        9,
+                                                    ),
+                                                    expr: Identifier(
+                                                        SimpleIdentifier(
+                                                            SimpleIdentifier {
+                                                                span: (
+                                                                    24,
+                                                                    10,
+                                                                ),
+                                                                name: "self",
+                                                            },
+                                                        ),
+                                                    ),
+                                                    end: (
+                                                        24,
+                                                        14,
+                                                    ),
+                                                },
+                                                method: Identifier(
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: (
+                                                                24,
+                                                                17,
+                                                            ),
+                                                            name: "foo",
+                                                        },
+                                                    ),
+                                                ),
+                                                args: [],
+                                            },
+                                        },
+                                        Expression {
+                                            expr: StaticMethodCall {
+                                                target: Parenthesized {
+                                                    start: (
+                                                        25,
+                                                        9,
+                                                    ),
+                                                    expr: Identifier(
+                                                        SimpleIdentifier(
+                                                            SimpleIdentifier {
+                                                                span: (
+                                                                    25,
+                                                                    10,
+                                                                ),
+                                                                name: "parent",
+                                                            },
+                                                        ),
+                                                    ),
+                                                    end: (
+                                                        25,
+                                                        16,
+                                                    ),
+                                                },
+                                                method: Identifier(
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: (
+                                                                25,
+                                                                19,
+                                                            ),
+                                                            name: "foo",
+                                                        },
+                                                    ),
+                                                ),
+                                                args: [],
+                                            },
+                                        },
+                                    ],
+                                ),
+                                modifiers: MethodModifierGroup {
+                                    modifiers: [
+                                        Public {
+                                            start: (
+                                                19,
+                                                5,
+                                            ),
+                                            end: (
+                                                19,
+                                                12,
+                                            ),
+                                        },
+                                    ],
+                                },
+                                return_type: None,
+                                by_ref: false,
+                            },
+                        ),
+                    ],
+                },
+            ),
+            Expression {
+                expr: MethodCall {
+                    target: Parenthesized {
+                        start: (
+                            29,
+                            1,
+                        ),
+                        expr: New {
+                            target: Identifier(
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: (
+                                            29,
+                                            6,
+                                        ),
+                                        name: "a",
+                                    },
+                                ),
+                            ),
+                            span: (
+                                29,
+                                2,
+                            ),
+                            args: [],
+                        },
+                        end: (
+                            29,
+                            7,
+                        ),
+                    },
+                    method: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: (
+                                    29,
+                                    10,
+                                ),
+                                name: "f",
+                            },
+                        ),
+                    ),
+                    args: [],
+                },
+            },
+        ],
+    },
+]

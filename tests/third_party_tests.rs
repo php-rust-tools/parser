@@ -127,7 +127,7 @@ fn psalm() {
 }
 
 #[test]
-fn phpstan() {
+fn phpstan_bin() {
     test_repository("phpstan", "https://github.com/phpstan/phpstan", &[]);
 }
 
@@ -137,7 +137,7 @@ fn phpstan_src() {
 }
 
 #[test]
-fn rector() {
+fn rector_bin() {
     test_repository("rector", "https://github.com/rectorphp/rector", &[]);
 }
 
@@ -293,67 +293,54 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
             .output()
             .expect("failed to run composer");
 
-        if !output.status.success() {
-            panic!(
-                "failed to run composer install in repository: {:#?}",
-                output
-            )
-        }
+        panic!(
+            "failed to run composer install in repository: {:#?}",
+            output
+        )
     }
 
     let entries = read_directory(out_path.clone(), out_path, ignore);
 
-    let mut threads = vec![];
-    for (index, chunk) in entries.chunks(entries.len() / 4).enumerate() {
-        let chunk = chunk.to_vec();
-        let thread = thread::Builder::new()
-            .stack_size(16 * 1024 * 1024)
-            .name(format!("{name}:{index}"))
-            .spawn(move || {
-                let thread = thread::current();
-                let thread_name = thread.name().unwrap();
+    let thread = thread::Builder::new()
+        .stack_size(16 * 1024 * 1024)
+        .name(name.to_string())
+        .spawn(move || {
+            let thread = thread::current();
+            let thread_name = thread.name().unwrap();
 
-                let mut results = vec![];
-                for (name, filename) in chunk {
-                    let code = std::fs::read(&filename).unwrap();
+            let mut results = vec![];
+            for (name, filename) in entries {
+                let code = std::fs::read(&filename).unwrap();
 
-                    match Lexer::new().tokenize(&code) {
-                        Ok(tokens) => match php_parser_rs::parse(tokens) {
-                            Ok(_) => {
-                                results.push(TestResult::Success);
-                            }
-                            Err(error) => {
-                                results.push(TestResult::Error(format!(
-                                    "❌ [{thread_name}][{name}]: {error} ({error:?})"
-                                )));
-                            }
-                        },
+                match Lexer::new().tokenize(&code) {
+                    Ok(tokens) => match php_parser_rs::parse(tokens) {
+                        Ok(_) => {
+                            results.push(TestResult::Success);
+                        }
                         Err(error) => {
                             results.push(TestResult::Error(format!(
                                 "❌ [{thread_name}][{name}]: {error} ({error:?})"
                             )));
                         }
+                    },
+                    Err(error) => {
+                        results.push(TestResult::Error(format!(
+                            "❌ [{thread_name}][{name}]: {error} ({error:?})"
+                        )));
                     }
                 }
+            }
 
-                results
-            });
+            results
+        });
 
-        threads.push(thread);
-    }
-
-    let mut results = vec![];
-    for thread in threads {
-        let mut result = thread
-            .unwrap_or_else(|e| panic!("failed to spawn thread: {:#?}", e))
-            .join()
-            .unwrap_or_else(|e| panic!("failed to join thread: {:#?}", e));
-
-        results.append(&mut result);
-    }
+    let result = thread
+        .unwrap_or_else(|e| panic!("failed to spawn thread: {:#?}", e))
+        .join()
+        .unwrap_or_else(|e| panic!("failed to join thread: {:#?}", e));
 
     let mut fail = false;
-    results
+    result
         .iter()
         .map(|result| match result {
             TestResult::Error(message) => {
@@ -388,7 +375,11 @@ fn read_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) -> Vec<(St
             .to_str()
             .unwrap();
 
-        if path.starts_with("vendor/symfony") {
+        if path.starts_with("vendor/symfony")
+            || path.starts_with("vendor/doctrine/orm")
+            || path.starts_with("vendor/doctrine/dbal")
+            || path.starts_with("vendor/api-platform/core")
+        {
             continue;
         }
 

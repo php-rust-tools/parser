@@ -281,6 +281,18 @@ impl Lexer {
                             length: length + 1,
                         })
                     }
+                    Token {
+                        kind: TokenKind::True,
+                        ..
+                    } => TokenKind::FullyQualifiedIdentifier("\\true".into()),
+                    Token {
+                        kind: TokenKind::False,
+                        ..
+                    } => TokenKind::FullyQualifiedIdentifier("\\false".into()),
+                    Token {
+                        kind: TokenKind::Null,
+                        ..
+                    } => TokenKind::FullyQualifiedIdentifier("\\null".into()),
                     s => unreachable!("{:?}", s),
                 }
             }
