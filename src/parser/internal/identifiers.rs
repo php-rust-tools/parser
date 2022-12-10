@@ -52,6 +52,36 @@ pub fn type_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
     }
 }
 
+/// Expect an unqualified identifier such as Foo or Bar for a class, interface, trait, or an enum name.
+pub fn label_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
+    match state.current.kind.clone() {
+        TokenKind::Identifier(name) => {
+            let span = state.current.span;
+
+            state.next();
+
+            Ok(SimpleIdentifier { span, name })
+        }
+        TokenKind::Enum | TokenKind::From => {
+            let span = state.current.span;
+            let name = state.current.kind.to_string().into();
+
+            state.next();
+
+            Ok(SimpleIdentifier { span, name })
+        }
+        t if is_reserved_identifier(&t) => Err(ParseError::CannotUseReservedKeywordAsAGoToLabel(
+            state.current.kind.to_string(),
+            state.current.span,
+        )),
+        _ => Err(ParseError::ExpectedToken(
+            vec!["an identifier".to_owned()],
+            Some(state.current.kind.to_string()),
+            state.current.span,
+        )),
+    }
+}
+
 /// Expect an unqualified identifier such as Foo or Bar.
 pub fn identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
     if let TokenKind::Identifier(name) = state.current.kind.clone() {

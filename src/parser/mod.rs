@@ -115,7 +115,13 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Class => classes::parse(state)?,
             TokenKind::Interface => interfaces::parse(state)?,
             TokenKind::Trait => traits::parse(state)?,
-            TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => enums::parse(state)?,
+            TokenKind::Enum
+                if state.peek.kind != TokenKind::LeftParen
+                    && state.peek.kind != TokenKind::DoubleColon
+                    && state.peek.kind != TokenKind::Colon =>
+            {
+                enums::parse(state)?
+            }
             TokenKind::Function
                 if identifiers::is_identifier_maybe_soft_reserved(&state.peek.kind)
                     || state.peek.kind == TokenKind::Ampersand =>
@@ -163,7 +169,13 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Class => classes::parse(state)?,
             TokenKind::Interface => interfaces::parse(state)?,
             TokenKind::Trait => traits::parse(state)?,
-            TokenKind::Enum if state.peek.kind != TokenKind::LeftParen => enums::parse(state)?,
+            TokenKind::Enum
+                if state.peek.kind != TokenKind::LeftParen
+                    && state.peek.kind != TokenKind::DoubleColon
+                    && state.peek.kind != TokenKind::Colon =>
+            {
+                enums::parse(state)?
+            }
             TokenKind::Function
                 if identifiers::is_identifier_maybe_soft_reserved(&state.peek.kind)
                     || state.peek.kind == TokenKind::Ampersand =>
@@ -194,7 +206,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 }
             }
             TokenKind::Goto => goto::goto_statement(state)?,
-            TokenKind::Identifier(_) if state.peek.kind == TokenKind::Colon => {
+            token
+                if identifiers::is_identifier_maybe_reserved(token)
+                    && state.peek.kind == TokenKind::Colon =>
+            {
                 goto::label_statement(state)?
             }
             TokenKind::Declare => {

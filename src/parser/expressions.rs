@@ -170,7 +170,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                         Expression::Instanceof {
                             left: Box::new(left),
                             span,
-                            right: Box::new(Expression::Self_),
+                            right: Box::new(Expression::Parent),
                         }
                     }
                     TokenKind::Instanceof if state.current.kind == TokenKind::Static => {
@@ -186,7 +186,37 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                         Expression::Instanceof {
                             left: Box::new(left),
                             span,
-                            right: Box::new(Expression::Self_),
+                            right: Box::new(Expression::Static),
+                        }
+                    }
+                    TokenKind::Instanceof if state.current.kind == TokenKind::Enum => {
+                        let enum_span = state.current.span;
+                        state.next();
+
+                        Expression::Instanceof {
+                            left: Box::new(left),
+                            span,
+                            right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: enum_span,
+                                    name: "enum".into(),
+                                },
+                            ))),
+                        }
+                    }
+                    TokenKind::Instanceof if state.current.kind == TokenKind::From => {
+                        let from_span = state.current.span;
+                        state.next();
+
+                        Expression::Instanceof {
+                            left: Box::new(left),
+                            span,
+                            right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: from_span,
+                                    name: "from".into(),
+                                },
+                            ))),
                         }
                     }
                     _ => {
@@ -530,7 +560,7 @@ expressions! {
         functions::anonymous_function(state)
     })
 
-    #[before(list), current(
+    #[before(reserved_identifier_static_call), current(
         | TokenKind::True       | TokenKind::False | TokenKind::Null
         | TokenKind::Readonly   | TokenKind::Self_ | TokenKind::Parent
         | TokenKind::Enum       | TokenKind::From
@@ -540,6 +570,14 @@ expressions! {
         let lhs = Expression::Identifier(Identifier::SimpleIdentifier(ident));
 
         postfix(state, lhs, &TokenKind::LeftParen)
+    })
+
+    #[before(list), current(TokenKind::Enum | TokenKind::From), peek(TokenKind::DoubleColon)]
+    reserved_identifier_static_call(|state: &mut State| {
+        let ident = identifiers::type_identifier(state)?;
+        let lhs = Expression::Identifier(Identifier::SimpleIdentifier(ident));
+
+        postfix(state, lhs, &TokenKind::DoubleColon)
     })
 
     #[before(anonymous_class), current(TokenKind::List)]
@@ -775,6 +813,20 @@ expressions! {
                 state.next();
 
                 Expression::Parent
+            }
+            TokenKind::Enum => {
+                let span = state.current.span;
+
+                state.next();
+
+                Expression::Identifier(Identifier::SimpleIdentifier(SimpleIdentifier { span, name: "enum".into() }))
+            }
+            TokenKind::From => {
+                let span = state.current.span;
+
+                state.next();
+
+                Expression::Identifier(Identifier::SimpleIdentifier(SimpleIdentifier { span, name: "from".into() }))
             }
             _ => clone_or_new_precedence(state)?,
         };
