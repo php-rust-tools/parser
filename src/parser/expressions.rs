@@ -93,12 +93,17 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
             match kind {
                 TokenKind::Question => {
-                    let then = lowest_precedence(state)?;
+                    let then = if state.current.kind == TokenKind::Colon {
+                        None
+                    } else {
+                        Some(Box::new(lowest_precedence(state)?))
+                    };
+
                     utils::skip_colon(state)?;
                     let otherwise = for_precedence(state, rpred)?;
                     left = Expression::Ternary {
                         condition: Box::new(left),
-                        then: Some(Box::new(then)),
+                        then,
                         r#else: Box::new(otherwise),
                     }
                 }
