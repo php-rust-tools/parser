@@ -191,12 +191,23 @@ fn third_party_14_phpmyadmin_web() {
 }
 
 #[test]
-fn third_party_14_phpbb_web() {
+fn third_party_15_phpbb_web() {
     test_repository(
         "phpbb",
         "https://github.com/phpbb/phpbb",
         "master",
         &["phpBB", "tests", "build"],
+        &[],
+    );
+}
+
+#[test]
+fn third_party_16_drupal_core() {
+    test_repository(
+        "drupal",
+        "https://github.com/drupal/core",
+        "9.4.x",
+        &["lib", "tests"],
         &[],
     );
 }
