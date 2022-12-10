@@ -114,7 +114,10 @@ fn phabel() {
     test_repository(
         "phabel",
         "https://github.com/phabelio/phabel",
-        &[],
+        &[
+            // Uses non-standard async/await syntax
+            "tests/TargetFuture/AwaitTest.php",
+        ],
     );
 }
 
