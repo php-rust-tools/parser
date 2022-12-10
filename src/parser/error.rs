@@ -51,6 +51,7 @@ pub enum ParseError {
     CannotMixKeyedAndUnkeyedEntries(Span),
     CannotUsePositionalArgumentAfterNamedArgument(Span),
     CannotUseReservedKeywordAsATypeName(String, Span),
+    CannotUseReservedKeywordAsAGoToLabel(String, Span),
 }
 
 impl From<SyntaxError> for ParseError {
@@ -129,7 +130,8 @@ impl Display for ParseError {
             Self::CannotAssignReferenceToNonReferencableValue(span) => write!(f, "Parse Error: cannot assign reference to non-referencable value on line {} column {}", span.0, span.1),
             Self::CannotMixKeyedAndUnkeyedEntries(span) => write!(f, "Parse Error: cannot mix keyed and un-keyed entries on line {}", span.0),
             Self::CannotUsePositionalArgumentAfterNamedArgument(span) => write!(f, "Parse Error: cannot use positional argument after named argument on line {} column {}", span.0, span.1),
-            Self::CannotUseReservedKeywordAsATypeName(ty, span) => write!(f, "Parse Error: cannot use `{}` as a type name as it is reserved on line {} column {}", ty, span.0, span.1)
+            Self::CannotUseReservedKeywordAsATypeName(ty, span) => write!(f, "Parse Error: cannot use `{}` as a type name as it is reserved on line {} column {}", ty, span.0, span.1),
+            Self::CannotUseReservedKeywordAsAGoToLabel(ty, span) => write!(f, "Parse Error: cannot use `{}` as a goto label as it is reserved on line {} column {}", ty, span.0, span.1),
         }
     }
 }
