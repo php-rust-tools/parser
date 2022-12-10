@@ -9,16 +9,12 @@
                 5,
                 1,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     3,
                     10,
                 ),
                 name: "foo",
-                end: (
-                    3,
-                    13,
-                ),
             },
             attributes: [],
             parameters: FunctionParameterList {
@@ -38,31 +34,27 @@
                 Static {
                     vars: [
                         StaticVar {
-                            var: Variable {
-                                start: (
-                                    4,
-                                    12,
-                                ),
-                                name: "a",
-                                end: (
-                                    4,
-                                    14,
-                                ),
-                            },
+                            var: SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        4,
+                                        12,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
                             default: None,
                         },
                         StaticVar {
-                            var: Variable {
-                                start: (
-                                    4,
-                                    16,
-                                ),
-                                name: "b",
-                                end: (
-                                    4,
-                                    18,
-                                ),
-                            },
+                            var: SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        4,
+                                        16,
+                                    ),
+                                    name: "b",
+                                },
+                            ),
                             default: None,
                         },
                     ],

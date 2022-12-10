@@ -28,6 +28,7 @@ use crate::parser::ast::functions::ArrowFunction;
 use crate::parser::ast::functions::Closure;
 use crate::parser::ast::functions::Function;
 use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
 use crate::parser::ast::traits::Trait;
 use crate::parser::ast::try_block::TryBlock;
@@ -44,7 +45,7 @@ pub type Program = Block;
 
 #[derive(Debug, Eq, PartialEq, Clone)]
 pub enum Type {
-    Identifier(Identifier),
+    Identifier(SimpleIdentifier),
     // TODO: add `start` and `end` for all types.
     Nullable(Box<Type>),
     Union(Vec<Type>),
@@ -183,10 +184,10 @@ impl From<&TokenKind> for IncludeKind {
 pub enum Statement {
     InlineHtml(ByteString),
     Goto {
-        label: Identifier,
+        label: SimpleIdentifier,
     },
     Label {
-        label: Identifier,
+        label: SimpleIdentifier,
     },
     HaltCompiler {
         content: Option<ByteString>,
@@ -246,11 +247,11 @@ pub enum Statement {
         expr: Expression,
     },
     Namespace {
-        name: Identifier,
+        name: SimpleIdentifier,
         body: Block,
     },
     BracedNamespace {
-        name: Option<Identifier>,
+        name: Option<SimpleIdentifier>,
         body: Block,
     },
     Use {
@@ -258,7 +259,7 @@ pub enum Statement {
         kind: UseKind,
     },
     GroupUse {
-        prefix: Identifier,
+        prefix: SimpleIdentifier,
         kind: UseKind,
         uses: Vec<Use>,
     },
@@ -270,7 +271,8 @@ pub enum Statement {
         body: Block,
     },
     Global {
-        vars: Vec<Variable>,
+        span: Span,
+        variables: Vec<Variable>,
     },
     Declare {
         declares: Vec<DeclareItem>,
@@ -281,7 +283,7 @@ pub enum Statement {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeclareItem {
-    pub key: Identifier,
+    pub key: SimpleIdentifier,
     pub value: Expression,
 }
 
@@ -332,8 +334,8 @@ pub struct Case {
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Use {
-    pub name: Identifier,
-    pub alias: Option<Identifier>,
+    pub name: SimpleIdentifier,
+    pub alias: Option<SimpleIdentifier>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -377,10 +379,8 @@ pub enum Expression {
     LiteralFloat {
         f: ByteString,
     },
+    Identifier(Identifier),
     Variable(Variable),
-    DynamicVariable {
-        name: Box<Self>,
-    },
     Include {
         span: Span,
         kind: IncludeKind,
@@ -390,7 +390,6 @@ pub enum Expression {
         target: Box<Self>,
         args: Vec<Arg>,
     },
-    Identifier(Identifier),
     Static,
     Self_,
     Parent,
@@ -438,7 +437,7 @@ pub enum Expression {
     },
     ConstFetch {
         target: Box<Self>,
-        constant: Identifier,
+        constant: SimpleIdentifier,
     },
     MethodCall {
         target: Box<Self>,
@@ -507,7 +506,7 @@ pub enum Expression {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Arg {
-    pub name: Option<Identifier>,
+    pub name: Option<SimpleIdentifier>,
     pub value: Expression,
     pub unpack: bool,
 }

@@ -32,8 +32,8 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
         let identifier = identifiers::ident_of(state, &["string", "int"])?;
         Some(match &identifier.name[..] {
-            b"string" => BackedEnumType::String(identifier.start),
-            b"int" => BackedEnumType::Int(identifier.start),
+            b"string" => BackedEnumType::String(identifier.span),
+            b"int" => BackedEnumType::Int(identifier.span),
             _ => unreachable!(),
         })
     } else {

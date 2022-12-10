@@ -2,30 +2,26 @@
     Expression {
         expr: MethodCall {
             target: Variable(
-                Variable {
-                    start: (
-                        1,
-                        7,
-                    ),
-                    name: "foo",
-                    end: (
-                        1,
-                        11,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            1,
+                            7,
+                        ),
+                        name: "foo",
+                    },
+                ),
             ),
             method: Identifier(
-                Identifier {
-                    start: (
-                        1,
-                        13,
-                    ),
-                    name: "bar",
-                    end: (
-                        1,
-                        16,
-                    ),
-                },
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            1,
+                            13,
+                        ),
+                        name: "bar",
+                    },
+                ),
             ),
             args: [],
         },
@@ -34,45 +30,39 @@
         expr: MethodCall {
             target: MethodCall {
                 target: Variable(
-                    Variable {
-                        start: (
-                            1,
-                            20,
-                        ),
-                        name: "foo",
-                        end: (
-                            1,
-                            24,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                1,
+                                20,
+                            ),
+                            name: "foo",
+                        },
+                    ),
                 ),
                 method: Identifier(
-                    Identifier {
-                        start: (
-                            1,
-                            26,
-                        ),
-                        name: "bar",
-                        end: (
-                            1,
-                            29,
-                        ),
-                    },
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: (
+                                1,
+                                26,
+                            ),
+                            name: "bar",
+                        },
+                    ),
                 ),
                 args: [],
             },
             method: Identifier(
-                Identifier {
-                    start: (
-                        1,
-                        33,
-                    ),
-                    name: "baz",
-                    end: (
-                        1,
-                        36,
-                    ),
-                },
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            1,
+                            33,
+                        ),
+                        name: "baz",
+                    },
+                ),
             ),
             args: [],
         },
@@ -81,30 +71,26 @@
         expr: Call {
             target: MethodCall {
                 target: Variable(
-                    Variable {
-                        start: (
-                            1,
-                            40,
-                        ),
-                        name: "foo",
-                        end: (
-                            1,
-                            44,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                1,
+                                40,
+                            ),
+                            name: "foo",
+                        },
+                    ),
                 ),
                 method: Identifier(
-                    Identifier {
-                        start: (
-                            1,
-                            46,
-                        ),
-                        name: "bar",
-                        end: (
-                            1,
-                            49,
-                        ),
-                    },
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: (
+                                1,
+                                46,
+                            ),
+                            name: "bar",
+                        },
+                    ),
                 ),
                 args: [],
             },

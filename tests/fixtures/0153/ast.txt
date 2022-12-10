@@ -1,15 +1,11 @@
 [
     Namespace {
-        name: Identifier {
-            start: (
+        name: SimpleIdentifier {
+            span: (
                 3,
                 11,
             ),
             name: "Foo\Bar",
-            end: (
-                3,
-                18,
-            ),
         },
         body: [
             Noop(
@@ -28,16 +24,12 @@
                         9,
                         1,
                     ),
-                    name: Identifier {
-                        start: (
+                    name: SimpleIdentifier {
+                        span: (
                             5,
                             13,
                         ),
                         name: "Baz",
-                        end: (
-                            5,
-                            17,
-                        ),
                     },
                     extends: None,
                     implements: None,
@@ -53,16 +45,12 @@
                                     8,
                                     9,
                                 ),
-                                name: Identifier {
-                                    start: (
+                                name: SimpleIdentifier {
+                                    span: (
                                         6,
                                         22,
                                     ),
                                     name: "__construct",
-                                    end: (
-                                        6,
-                                        33,
-                                    ),
                                 },
                                 attributes: [],
                                 parameters: MethodParameterList {
@@ -84,16 +72,12 @@
                                                 7,
                                                 47,
                                             ),
-                                            name: Variable {
-                                                start: (
+                                            name: SimpleVariable {
+                                                span: (
                                                     7,
                                                     34,
                                                 ),
                                                 name: "name",
-                                                end: (
-                                                    7,
-                                                    40,
-                                                ),
                                             },
                                             attributes: [],
                                             type: Some(

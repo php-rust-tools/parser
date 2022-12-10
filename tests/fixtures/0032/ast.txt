@@ -4,89 +4,135 @@
             parts: [
                 Expr(
                     Variable(
-                        Variable {
-                            start: (
-                                1,
-                                10,
-                            ),
-                            name: "foo",
-                            end: (
-                                1,
-                                13,
-                            ),
-                        },
+                        BracedVariableVariable(
+                            BracedVariableVariable {
+                                start: (
+                                    1,
+                                    8,
+                                ),
+                                variable: Identifier(
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: (
+                                                1,
+                                                10,
+                                            ),
+                                            name: "foo",
+                                        },
+                                    ),
+                                ),
+                                end: (
+                                    1,
+                                    13,
+                                ),
+                            },
+                        ),
                     ),
                 ),
                 Expr(
-                    ArrayIndex {
-                        array: Variable(
-                            Variable {
+                    Variable(
+                        BracedVariableVariable(
+                            BracedVariableVariable {
                                 start: (
                                     1,
-                                    16,
+                                    14,
                                 ),
-                                name: "foo",
+                                variable: ArrayIndex {
+                                    array: Identifier(
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: (
+                                                    1,
+                                                    16,
+                                                ),
+                                                name: "foo",
+                                            },
+                                        ),
+                                    ),
+                                    index: Some(
+                                        LiteralInteger {
+                                            i: "0",
+                                        },
+                                    ),
+                                },
                                 end: (
                                     1,
-                                    19,
+                                    22,
                                 ),
                             },
                         ),
-                        index: Some(
-                            LiteralInteger {
-                                i: "0",
-                            },
-                        ),
-                    },
+                    ),
                 ),
                 Expr(
-                    ArrayIndex {
-                        array: Variable(
-                            Variable {
+                    Variable(
+                        BracedVariableVariable(
+                            BracedVariableVariable {
                                 start: (
                                     1,
-                                    25,
+                                    23,
                                 ),
-                                name: "foo",
+                                variable: ArrayIndex {
+                                    array: Identifier(
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: (
+                                                    1,
+                                                    25,
+                                                ),
+                                                name: "foo",
+                                            },
+                                        ),
+                                    ),
+                                    index: Some(
+                                        LiteralString {
+                                            value: "bar",
+                                        },
+                                    ),
+                                },
                                 end: (
                                     1,
-                                    28,
+                                    35,
                                 ),
                             },
                         ),
-                        index: Some(
-                            LiteralString {
-                                value: "bar",
-                            },
-                        ),
-                    },
+                    ),
                 ),
                 Expr(
-                    DynamicVariable {
-                        name: Parenthesized {
-                            start: (
-                                1,
-                                38,
-                            ),
-                            expr: Variable(
-                                Variable {
+                    Variable(
+                        BracedVariableVariable(
+                            BracedVariableVariable {
+                                start: (
+                                    1,
+                                    36,
+                                ),
+                                variable: Parenthesized {
                                     start: (
                                         1,
-                                        39,
+                                        38,
                                     ),
-                                    name: "foo",
+                                    expr: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    1,
+                                                    39,
+                                                ),
+                                                name: "foo",
+                                            },
+                                        ),
+                                    ),
                                     end: (
                                         1,
                                         43,
                                     ),
                                 },
-                            ),
-                            end: (
-                                1,
-                                43,
-                            ),
-                        },
-                    },
+                                end: (
+                                    1,
+                                    44,
+                                ),
+                            },
+                        ),
+                    ),
                 ),
             ],
         },

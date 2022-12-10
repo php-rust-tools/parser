@@ -4,14 +4,14 @@ use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::constant::ClassishConstant;
 use crate::parser::ast::functions::Method;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct UnitEnumCase {
     pub start: Span,
     pub end: Span,
-    pub name: Identifier,
+    pub name: SimpleIdentifier,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -25,9 +25,9 @@ pub enum UnitEnumMember {
 pub struct UnitEnum {
     pub start: Span,
     pub end: Span,
-    pub name: Identifier,
+    pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,
-    pub implements: Vec<Identifier>,
+    pub implements: Vec<SimpleIdentifier>,
     pub members: Vec<UnitEnumMember>,
 }
 
@@ -41,7 +41,7 @@ pub enum BackedEnumType {
 pub struct BackedEnumCase {
     pub start: Span,
     pub end: Span,
-    pub name: Identifier,
+    pub name: SimpleIdentifier,
     pub value: Expression,
 }
 
@@ -56,9 +56,9 @@ pub enum BackedEnumMember {
 pub struct BackedEnum {
     pub start: Span,
     pub end: Span,
-    pub name: Identifier,
+    pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,
-    pub implements: Vec<Identifier>,
+    pub implements: Vec<SimpleIdentifier>,
     pub backed_type: BackedEnumType,
     pub members: Vec<BackedEnumMember>,
 }

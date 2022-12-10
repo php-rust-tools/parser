@@ -28,32 +28,28 @@
                 body: [
                     If {
                         condition: Variable(
-                            Variable {
-                                start: (
-                                    4,
-                                    9,
-                                ),
-                                name: "foo",
-                                end: (
-                                    4,
-                                    13,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        4,
+                                        9,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
                         ),
                         then: [
                             Expression {
                                 expr: Variable(
-                                    Variable {
-                                        start: (
-                                            4,
-                                            15,
-                                        ),
-                                        name: "bar",
-                                        end: (
-                                            4,
-                                            19,
-                                        ),
-                                    },
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                4,
+                                                15,
+                                            ),
+                                            name: "bar",
+                                        },
+                                    ),
                                 ),
                             },
                         ],

@@ -7,17 +7,15 @@
                         ListItem {
                             key: None,
                             value: Variable(
-                                Variable {
-                                    start: (
-                                        3,
-                                        6,
-                                    ),
-                                    name: "a",
-                                    end: (
-                                        3,
-                                        8,
-                                    ),
-                                },
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: (
+                                            3,
+                                            6,
+                                        ),
+                                        name: "a",
+                                    },
+                                ),
                             ),
                         },
                     ],
@@ -27,17 +25,15 @@
                     10,
                 ),
                 right: Variable(
-                    Variable {
-                        start: (
-                            3,
-                            12,
-                        ),
-                        name: "foo",
-                        end: (
-                            3,
-                            16,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                3,
+                                12,
+                            ),
+                            name: "foo",
+                        },
+                    ),
                 ),
             },
         ),

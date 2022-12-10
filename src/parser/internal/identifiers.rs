@@ -1,13 +1,12 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifiers::Identifier;
-use crate::parser::ast::variables::Variable;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 
 use crate::peek_token;
 
-pub fn ident_of(state: &mut State, kinds: &[&str]) -> ParseResult<Identifier> {
+pub fn ident_of(state: &mut State, kinds: &[&str]) -> ParseResult<SimpleIdentifier> {
     let ident = ident(state)?;
 
     let name = ident.name.to_string();
@@ -24,14 +23,13 @@ pub fn ident_of(state: &mut State, kinds: &[&str]) -> ParseResult<Identifier> {
 }
 
 /// Expect an unqualified identifier such as Foo or Bar.
-pub fn ident(state: &mut State) -> ParseResult<Identifier> {
+pub fn ident(state: &mut State) -> ParseResult<SimpleIdentifier> {
     if let TokenKind::Identifier(name) = state.current.kind.clone() {
-        let start = state.current.span;
-        let end = state.peek.span;
+        let span = state.current.span;
 
         state.next();
 
-        Ok(Identifier { start, name, end })
+        Ok(SimpleIdentifier { span, name })
     } else {
         Err(ParseError::ExpectedToken(
             vec!["an identifier".to_owned()],
@@ -42,28 +40,28 @@ pub fn ident(state: &mut State) -> ParseResult<Identifier> {
 }
 
 /// Expect an unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
-pub fn name(state: &mut State) -> ParseResult<Identifier> {
+pub fn name(state: &mut State) -> ParseResult<SimpleIdentifier> {
     let name = peek_token!([
         TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => {
             name.clone()
         },
     ], state, "an identifier");
 
-    let start = state.current.span;
+    let span = state.current.span;
     state.next();
-    let end = state.current.span;
 
-    Ok(Identifier { start, name, end })
+    Ok(SimpleIdentifier { span, name })
 }
 
 /// Expect an optional unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
-pub fn optional_name(state: &mut State) -> Option<Identifier> {
+pub fn optional_name(state: &mut State) -> Option<SimpleIdentifier> {
     let ident = match &state.current.kind {
-        TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => Some(Identifier {
-            start: state.current.span,
-            name: name.clone(),
-            end: state.peek.span,
-        }),
+        TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => {
+            Some(SimpleIdentifier {
+                span: state.current.span,
+                name: name.clone(),
+            })
+        }
         _ => None,
     };
 
@@ -75,57 +73,41 @@ pub fn optional_name(state: &mut State) -> Option<Identifier> {
 }
 
 /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
-pub fn full_name(state: &mut State) -> ParseResult<Identifier> {
+pub fn full_name(state: &mut State) -> ParseResult<SimpleIdentifier> {
     let name = peek_token!([
             TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
                 name.clone()
             },
         ], state, "an identifier");
 
-    let start = state.current.span;
+    let span = state.current.span;
     state.next();
-    let end = state.current.span;
 
-    Ok(Identifier { start, name, end })
+    Ok(SimpleIdentifier { span, name })
 }
 
-pub fn var(state: &mut State) -> ParseResult<Variable> {
-    let name = peek_token!([
-            TokenKind::Variable(v) => v.clone(),
-        ], state, "a variable");
-
-    let start = state.current.span;
-    state.next();
-    let end = state.current.span;
-
-    Ok(Variable { start, name, end })
-}
-
-pub fn ident_maybe_reserved(state: &mut State) -> ParseResult<Identifier> {
+pub fn ident_maybe_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> {
     match state.current.kind {
         _ if is_reserved_ident(&state.current.kind) => {
             let name = state.current.kind.to_string().into();
 
-            let start = state.current.span;
+            let span = state.current.span;
             state.next();
-            let end = state.current.span;
 
-            Ok(Identifier { start, name, end })
+            Ok(SimpleIdentifier { span, name })
         }
         _ => ident(state),
     }
 }
 
-pub fn ident_maybe_soft_reserved(state: &mut State) -> ParseResult<Identifier> {
+pub fn ident_maybe_soft_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> {
     match state.current.kind {
         _ if is_soft_reserved_ident(&state.current.kind) => {
             let name = state.current.kind.to_string().into();
-
-            let start = state.current.span;
+            let span = state.current.span;
             state.next();
-            let end = state.current.span;
 
-            Ok(Identifier { start, name, end })
+            Ok(SimpleIdentifier { span, name })
         }
         _ => ident(state),
     }

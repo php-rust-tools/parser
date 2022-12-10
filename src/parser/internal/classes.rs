@@ -4,7 +4,7 @@ use crate::parser::ast::classes::Class;
 use crate::parser::ast::classes::ClassExtends;
 use crate::parser::ast::classes::ClassImplements;
 use crate::parser::ast::classes::ClassMember;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
@@ -44,9 +44,10 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
         state.next();
 
-        let interfaces = utils::at_least_one_comma_separated::<Identifier>(state, &|state| {
-            identifiers::full_name(state)
-        })?;
+        let interfaces =
+            utils::at_least_one_comma_separated::<SimpleIdentifier>(state, &|state| {
+                identifiers::full_name(state)
+            })?;
 
         Some(ClassImplements { span, interfaces })
     } else {
@@ -119,9 +120,10 @@ pub fn parse_anonymous(state: &mut State) -> ParseResult<Expression> {
 
         state.next();
 
-        let interfaces = utils::at_least_one_comma_separated::<Identifier>(state, &|state| {
-            identifiers::full_name(state)
-        })?;
+        let interfaces =
+            utils::at_least_one_comma_separated::<SimpleIdentifier>(state, &|state| {
+                identifiers::full_name(state)
+            })?;
 
         Some(ClassImplements { span, interfaces })
     } else {

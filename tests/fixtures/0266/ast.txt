@@ -1,17 +1,15 @@
 [
     If {
         condition: Variable(
-            Variable {
-                start: (
-                    3,
-                    5,
-                ),
-                name: "foo",
-                end: (
-                    3,
-                    9,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        3,
+                        5,
+                    ),
+                    name: "foo",
+                },
+            ),
         ),
         then: [],
         else_ifs: [],
@@ -19,17 +17,15 @@
             [
                 If {
                     condition: Variable(
-                        Variable {
-                            start: (
-                                5,
-                                12,
-                            ),
-                            name: "bar",
-                            end: (
-                                5,
-                                16,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    5,
+                                    12,
+                                ),
+                                name: "bar",
+                            },
+                        ),
                     ),
                     then: [],
                     else_ifs: [],

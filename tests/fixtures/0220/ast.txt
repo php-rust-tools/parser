@@ -9,16 +9,12 @@
                 3,
                 12,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     3,
                     7,
                 ),
                 name: "bar",
-                end: (
-                    3,
-                    11,
-                ),
             },
             extends: None,
             implements: None,
@@ -36,17 +32,15 @@
         expr: AssignmentOperation(
             Assign {
                 left: Variable(
-                    Variable {
-                        start: (
-                            5,
-                            1,
-                        ),
-                        name: "e",
-                        end: (
-                            5,
-                            4,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                5,
+                                1,
+                            ),
+                            name: "e",
+                        },
+                    ),
                 ),
                 span: (
                     5,
@@ -69,16 +63,12 @@
                                         5,
                                         16,
                                     ),
-                                    parent: Identifier {
-                                        start: (
+                                    parent: SimpleIdentifier {
+                                        span: (
                                             5,
                                             24,
                                         ),
                                         name: "bar",
-                                        end: (
-                                            5,
-                                            28,
-                                        ),
                                     },
                                 },
                             ),
@@ -95,16 +85,12 @@
                                             8,
                                             5,
                                         ),
-                                        name: Identifier {
-                                            start: (
+                                        name: SimpleIdentifier {
+                                            span: (
                                                 6,
                                                 21,
                                             ),
                                             name: "bar",
-                                            end: (
-                                                6,
-                                                24,
-                                            ),
                                         },
                                         attributes: [],
                                         parameters: MethodParameterList {
@@ -124,17 +110,15 @@
                                                     value: Some(
                                                         New {
                                                             target: Identifier(
-                                                                Identifier {
-                                                                    start: (
-                                                                        7,
-                                                                        20,
-                                                                    ),
-                                                                    name: "bar",
-                                                                    end: (
-                                                                        7,
-                                                                        23,
-                                                                    ),
-                                                                },
+                                                                SimpleIdentifier(
+                                                                    SimpleIdentifier {
+                                                                        span: (
+                                                                            7,
+                                                                            20,
+                                                                        ),
+                                                                        name: "bar",
+                                                                    },
+                                                                ),
                                                             ),
                                                             span: (
                                                                 7,

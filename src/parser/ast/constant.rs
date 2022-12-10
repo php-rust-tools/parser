@@ -1,12 +1,12 @@
 use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::ConstantModifierGroup;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ConstantEntry {
-    pub name: Identifier,
+    pub name: SimpleIdentifier,
     pub value: Expression,
 }
 

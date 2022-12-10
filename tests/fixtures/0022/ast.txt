@@ -1,48 +1,42 @@
 [
     Foreach {
         expr: Variable(
-            Variable {
-                start: (
-                    3,
-                    10,
-                ),
-                name: "a",
-                end: (
-                    3,
-                    13,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        3,
+                        10,
+                    ),
+                    name: "a",
+                },
+            ),
         ),
         by_ref: false,
         key_var: None,
         value_var: Variable(
-            Variable {
-                start: (
-                    3,
-                    16,
-                ),
-                name: "b",
-                end: (
-                    3,
-                    18,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        3,
+                        16,
+                    ),
+                    name: "b",
+                },
+            ),
         ),
         body: [
             Echo {
                 values: [
                     Variable(
-                        Variable {
-                            start: (
-                                4,
-                                10,
-                            ),
-                            name: "a",
-                            end: (
-                                4,
-                                12,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    4,
+                                    10,
+                                ),
+                                name: "a",
+                            },
+                        ),
                     ),
                 ],
             },
@@ -55,17 +49,15 @@
         body: [
             Expression {
                 expr: Variable(
-                    Variable {
-                        start: (
-                            8,
-                            5,
-                        ),
-                        name: "a",
-                        end: (
-                            8,
-                            7,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                8,
+                                5,
+                            ),
+                            name: "a",
+                        },
+                    ),
                 ),
             },
         ],
@@ -73,63 +65,55 @@
     For {
         init: [
             Variable(
-                Variable {
-                    start: (
-                        11,
-                        6,
-                    ),
-                    name: "a",
-                    end: (
-                        11,
-                        8,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            11,
+                            6,
+                        ),
+                        name: "a",
+                    },
+                ),
             ),
         ],
         condition: [
             Variable(
-                Variable {
-                    start: (
-                        11,
-                        10,
-                    ),
-                    name: "b",
-                    end: (
-                        11,
-                        12,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            11,
+                            10,
+                        ),
+                        name: "b",
+                    },
+                ),
             ),
         ],
         loop: [
             Variable(
-                Variable {
-                    start: (
-                        11,
-                        14,
-                    ),
-                    name: "c",
-                    end: (
-                        11,
-                        16,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            11,
+                            14,
+                        ),
+                        name: "c",
+                    },
+                ),
             ),
         ],
         then: [
             Expression {
                 expr: Variable(
-                    Variable {
-                        start: (
-                            12,
-                            5,
-                        ),
-                        name: "d",
-                        end: (
-                            12,
-                            7,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                12,
+                                5,
+                            ),
+                            name: "d",
+                        },
+                    ),
                 ),
             },
         ],

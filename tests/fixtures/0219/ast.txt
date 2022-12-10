@@ -9,16 +9,12 @@
                 7,
                 1,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     3,
                     6,
                 ),
                 name: "foo",
-                end: (
-                    3,
-                    10,
-                ),
             },
             attributes: [],
             implements: [],
@@ -33,16 +29,12 @@
                             6,
                             5,
                         ),
-                        name: Identifier {
-                            start: (
+                        name: SimpleIdentifier {
+                            span: (
                                 4,
                                 21,
                             ),
                             name: "bar",
-                            end: (
-                                4,
-                                24,
-                            ),
                         },
                         attributes: [],
                         parameters: MethodParameterList {
@@ -61,17 +53,15 @@
                                 Expression {
                                     expr: Call {
                                         target: Identifier(
-                                            Identifier {
-                                                start: (
-                                                    5,
-                                                    9,
-                                                ),
-                                                name: "exit",
-                                                end: (
-                                                    5,
-                                                    13,
-                                                ),
-                                            },
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: (
+                                                        5,
+                                                        9,
+                                                    ),
+                                                    name: "exit",
+                                                },
+                                            ),
                                         ),
                                         args: [
                                             Arg {

@@ -1,22 +1,32 @@
 [
     Expression {
-        expr: DynamicVariable {
-            name: Call {
-                target: Identifier(
-                    Identifier {
-                        start: (
-                            1,
-                            9,
+        expr: Variable(
+            BracedVariableVariable(
+                BracedVariableVariable {
+                    start: (
+                        1,
+                        7,
+                    ),
+                    variable: Call {
+                        target: Identifier(
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: (
+                                        1,
+                                        9,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
                         ),
-                        name: "foo",
-                        end: (
-                            1,
-                            12,
-                        ),
+                        args: [],
                     },
-                ),
-                args: [],
-            },
-        },
+                    end: (
+                        1,
+                        14,
+                    ),
+                },
+            ),
+        ),
     },
 ]

@@ -2,17 +2,15 @@
     Expression {
         expr: Match {
             condition: Variable(
-                Variable {
-                    start: (
-                        4,
-                        8,
-                    ),
-                    name: "s",
-                    end: (
-                        4,
-                        10,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            4,
+                            8,
+                        ),
+                        name: "s",
+                    },
+                ),
             ),
             default: Some(
                 DefaultMatchArm {
@@ -71,17 +69,15 @@
                 MatchArm {
                     conditions: [
                         Identifier(
-                            Identifier {
-                                start: (
-                                    9,
-                                    5,
-                                ),
-                                name: "_",
-                                end: (
-                                    9,
-                                    7,
-                                ),
-                            },
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: (
+                                        9,
+                                        5,
+                                    ),
+                                    name: "_",
+                                },
+                            ),
                         ),
                     ],
                     body: LiteralInteger {

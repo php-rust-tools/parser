@@ -11,16 +11,12 @@
             ),
             entries: [
                 ConstantEntry {
-                    name: Identifier {
-                        start: (
+                    name: SimpleIdentifier {
+                        span: (
                             3,
                             7,
                         ),
                         name: "\xe2\x86\xaa",
-                        end: (
-                            3,
-                            11,
-                        ),
                     },
                     value: LiteralString {
                         value: "\n",
@@ -40,16 +36,12 @@
                 1,
             ),
             attributes: [],
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     5,
                     11,
                 ),
                 name: "\xf0\x9f\x94\x8a",
-                end: (
-                    5,
-                    16,
-                ),
             },
             extends: None,
             members: [
@@ -63,16 +55,12 @@
                             6,
                             43,
                         ),
-                        name: Identifier {
-                            start: (
+                        name: SimpleIdentifier {
+                            span: (
                                 6,
                                 19,
                             ),
                             name: "\xf0\x9f\x93\x9d",
-                            end: (
-                                6,
-                                23,
-                            ),
                         },
                         attributes: [],
                         parameters: MethodParameterList {
@@ -94,16 +82,12 @@
                                         6,
                                         36,
                                     ),
-                                    name: Variable {
-                                        start: (
+                                    name: SimpleVariable {
+                                        span: (
                                             6,
                                             31,
                                         ),
                                         name: "\xf0\x9f\x93\x83",
-                                        end: (
-                                            6,
-                                            36,
-                                        ),
                                     },
                                     attributes: [],
                                     type: Some(
@@ -152,16 +136,12 @@
                 13,
                 1,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     9,
                     13,
                 ),
                 name: "\xf0\x9f\x92\xbb",
-                end: (
-                    9,
-                    18,
-                ),
             },
             extends: None,
             implements: Some(
@@ -171,16 +151,12 @@
                         18,
                     ),
                     interfaces: [
-                        Identifier {
-                            start: (
+                        SimpleIdentifier {
+                            span: (
                                 9,
                                 29,
                             ),
                             name: "\xf0\x9f\x94\x8a",
-                            end: (
-                                9,
-                                34,
-                            ),
                         },
                     ],
                 },
@@ -197,16 +173,12 @@
                             12,
                             3,
                         ),
-                        name: Identifier {
-                            start: (
+                        name: SimpleIdentifier {
+                            span: (
                                 10,
                                 19,
                             ),
                             name: "\xf0\x9f\x93\x9d",
-                            end: (
-                                10,
-                                23,
-                            ),
                         },
                         attributes: [],
                         parameters: MethodParameterList {
@@ -228,16 +200,12 @@
                                         10,
                                         36,
                                     ),
-                                    name: Variable {
-                                        start: (
+                                    name: SimpleVariable {
+                                        span: (
                                             10,
                                             31,
                                         ),
                                         name: "\xf0\x9f\x93\x83",
-                                        end: (
-                                            10,
-                                            36,
-                                        ),
                                     },
                                     attributes: [],
                                     type: Some(
@@ -267,34 +235,30 @@
                                             ),
                                             expr: Concat {
                                                 left: Variable(
-                                                    Variable {
-                                                        start: (
-                                                            11,
-                                                            11,
-                                                        ),
-                                                        name: "\xf0\x9f\x93\x83",
-                                                        end: (
-                                                            11,
-                                                            17,
-                                                        ),
-                                                    },
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: (
+                                                                11,
+                                                                11,
+                                                            ),
+                                                            name: "\xf0\x9f\x93\x83",
+                                                        },
+                                                    ),
                                                 ),
                                                 span: (
                                                     11,
                                                     17,
                                                 ),
                                                 right: Identifier(
-                                                    Identifier {
-                                                        start: (
-                                                            11,
-                                                            19,
-                                                        ),
-                                                        name: "\xe2\x86\xaa",
-                                                        end: (
-                                                            11,
-                                                            22,
-                                                        ),
-                                                    },
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: (
+                                                                11,
+                                                                19,
+                                                            ),
+                                                            name: "\xe2\x86\xaa",
+                                                        },
+                                                    ),
                                                 ),
                                             },
                                             end: (
@@ -339,16 +303,12 @@
                 19,
                 1,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     15,
                     10,
                 ),
                 name: "\xf0\x9f\x9a\xaa",
-                end: (
-                    15,
-                    14,
-                ),
             },
             attributes: [],
             parameters: FunctionParameterList {
@@ -371,17 +331,15 @@
                     expr: AssignmentOperation(
                         Assign {
                             left: Variable(
-                                Variable {
-                                    start: (
-                                        16,
-                                        3,
-                                    ),
-                                    name: "\xf0\x9f\x92\xbb",
-                                    end: (
-                                        16,
-                                        9,
-                                    ),
-                                },
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: (
+                                            16,
+                                            3,
+                                        ),
+                                        name: "\xf0\x9f\x92\xbb",
+                                    },
+                                ),
                             ),
                             span: (
                                 16,
@@ -389,17 +347,15 @@
                             ),
                             right: New {
                                 target: Identifier(
-                                    Identifier {
-                                        start: (
-                                            16,
-                                            15,
-                                        ),
-                                        name: "\xf0\x9f\x92\xbb",
-                                        end: (
-                                            16,
-                                            19,
-                                        ),
-                                    },
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: (
+                                                16,
+                                                15,
+                                            ),
+                                            name: "\xf0\x9f\x92\xbb",
+                                        },
+                                    ),
                                 ),
                                 span: (
                                     16,
@@ -414,17 +370,15 @@
                     expr: AssignmentOperation(
                         Assign {
                             left: Variable(
-                                Variable {
-                                    start: (
-                                        17,
-                                        3,
-                                    ),
-                                    name: "\xf0\x9f\x93\x84",
-                                    end: (
-                                        17,
-                                        9,
-                                    ),
-                                },
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: (
+                                            17,
+                                            3,
+                                        ),
+                                        name: "\xf0\x9f\x93\x84",
+                                    },
+                                ),
                             ),
                             span: (
                                 17,
@@ -439,58 +393,48 @@
                 Expression {
                     expr: MethodCall {
                         target: Variable(
-                            Variable {
-                                start: (
-                                    18,
-                                    3,
-                                ),
-                                name: "\xf0\x9f\x92\xbb",
-                                end: (
-                                    18,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        18,
+                                        3,
+                                    ),
+                                    name: "\xf0\x9f\x92\xbb",
+                                },
+                            ),
                         ),
                         method: Identifier(
-                            Identifier {
-                                start: (
-                                    18,
-                                    10,
-                                ),
-                                name: "\xf0\x9f\x93\x9d",
-                                end: (
-                                    18,
-                                    14,
-                                ),
-                            },
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: (
+                                        18,
+                                        10,
+                                    ),
+                                    name: "\xf0\x9f\x93\x9d",
+                                },
+                            ),
                         ),
                         args: [
                             Arg {
                                 name: Some(
-                                    Identifier {
-                                        start: (
+                                    SimpleIdentifier {
+                                        span: (
                                             18,
                                             15,
                                         ),
                                         name: "\xf0\x9f\x93\x83",
-                                        end: (
-                                            18,
-                                            19,
-                                        ),
                                     },
                                 ),
                                 value: Variable(
-                                    Variable {
-                                        start: (
-                                            18,
-                                            21,
-                                        ),
-                                        name: "\xf0\x9f\x93\x84",
-                                        end: (
-                                            18,
-                                            26,
-                                        ),
-                                    },
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                18,
+                                                21,
+                                            ),
+                                            name: "\xf0\x9f\x93\x84",
+                                        },
+                                    ),
                                 ),
                                 unpack: false,
                             },
@@ -503,17 +447,15 @@
     Expression {
         expr: Call {
             target: Identifier(
-                Identifier {
-                    start: (
-                        21,
-                        1,
-                    ),
-                    name: "\xf0\x9f\x9a\xaa",
-                    end: (
-                        21,
-                        5,
-                    ),
-                },
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            21,
+                            1,
+                        ),
+                        name: "\xf0\x9f\x9a\xaa",
+                    },
+                ),
             ),
             args: [],
         },
@@ -522,17 +464,15 @@
         expr: AssignmentOperation(
             Assign {
                 left: Variable(
-                    Variable {
-                        start: (
-                            23,
-                            1,
-                        ),
-                        name: "var\xef\xbf\xbd",
-                        end: (
-                            23,
-                            9,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                23,
+                                1,
+                            ),
+                            name: "var\xef\xbf\xbd",
+                        },
+                    ),
                 ),
                 span: (
                     23,
@@ -547,17 +487,15 @@
     Echo {
         values: [
             Variable(
-                Variable {
-                    start: (
-                        23,
-                        19,
-                    ),
-                    name: "var\xef\xbf\xbd",
-                    end: (
-                        23,
-                        26,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            23,
+                            19,
+                        ),
+                        name: "var\xef\xbf\xbd",
+                    },
+                ),
             ),
         ],
     },

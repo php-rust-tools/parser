@@ -2,30 +2,26 @@
     Expression {
         expr: MethodCall {
             target: Variable(
-                Variable {
-                    start: (
-                        1,
-                        7,
-                    ),
-                    name: "this",
-                    end: (
-                        1,
-                        12,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            1,
+                            7,
+                        ),
+                        name: "this",
+                    },
+                ),
             ),
             method: Identifier(
-                Identifier {
-                    start: (
-                        1,
-                        14,
-                    ),
-                    name: "foo",
-                    end: (
-                        1,
-                        17,
-                    ),
-                },
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            1,
+                            14,
+                        ),
+                        name: "foo",
+                    },
+                ),
             ),
             args: [
                 Arg {

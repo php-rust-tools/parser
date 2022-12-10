@@ -1,32 +1,28 @@
 [
     If {
         condition: Variable(
-            Variable {
-                start: (
-                    3,
-                    5,
-                ),
-                name: "a",
-                end: (
-                    3,
-                    7,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        3,
+                        5,
+                    ),
+                    name: "a",
+                },
+            ),
         ),
         then: [
             Expression {
                 expr: Variable(
-                    Variable {
-                        start: (
-                            4,
-                            5,
-                        ),
-                        name: "a",
-                        end: (
-                            4,
-                            7,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                4,
+                                5,
+                            ),
+                            name: "a",
+                        },
+                    ),
                 ),
             },
         ],
@@ -35,32 +31,28 @@
     },
     If {
         condition: Variable(
-            Variable {
-                start: (
-                    7,
-                    5,
-                ),
-                name: "a",
-                end: (
-                    7,
-                    7,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        7,
+                        5,
+                    ),
+                    name: "a",
+                },
+            ),
         ),
         then: [
             Expression {
                 expr: Variable(
-                    Variable {
-                        start: (
-                            8,
-                            5,
-                        ),
-                        name: "a",
-                        end: (
-                            8,
-                            7,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                8,
+                                5,
+                            ),
+                            name: "a",
+                        },
+                    ),
                 ),
             },
         ],
@@ -69,17 +61,15 @@
             [
                 Expression {
                     expr: Variable(
-                        Variable {
-                            start: (
-                                10,
-                                5,
-                            ),
-                            name: "b",
-                            end: (
-                                10,
-                                7,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    10,
+                                    5,
+                                ),
+                                name: "b",
+                            },
+                        ),
                     ),
                 },
             ],
@@ -92,17 +82,15 @@
         then: [
             Expression {
                 expr: Variable(
-                    Variable {
-                        start: (
-                            14,
-                            5,
-                        ),
-                        name: "a",
-                        end: (
-                            14,
-                            7,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                14,
+                                5,
+                            ),
+                            name: "a",
+                        },
+                    ),
                 ),
             },
         ],
@@ -112,30 +100,26 @@
                     And {
                         left: MethodCall {
                             target: Variable(
-                                Variable {
-                                    start: (
-                                        15,
-                                        9,
-                                    ),
-                                    name: "foo",
-                                    end: (
-                                        15,
-                                        13,
-                                    ),
-                                },
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: (
+                                            15,
+                                            9,
+                                        ),
+                                        name: "foo",
+                                    },
+                                ),
                             ),
                             method: Identifier(
-                                Identifier {
-                                    start: (
-                                        15,
-                                        15,
-                                    ),
-                                    name: "bar",
-                                    end: (
-                                        15,
-                                        18,
-                                    ),
-                                },
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: (
+                                            15,
+                                            15,
+                                        ),
+                                        name: "bar",
+                                    },
+                                ),
                             ),
                             args: [],
                         },
@@ -146,44 +130,38 @@
                         right: NullsafeMethodCall {
                             target: PropertyFetch {
                                 target: Variable(
-                                    Variable {
-                                        start: (
-                                            15,
-                                            24,
-                                        ),
-                                        name: "baz",
-                                        end: (
-                                            15,
-                                            28,
-                                        ),
-                                    },
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                15,
+                                                24,
+                                            ),
+                                            name: "baz",
+                                        },
+                                    ),
                                 ),
                                 property: Identifier(
-                                    Identifier {
-                                        start: (
-                                            15,
-                                            30,
-                                        ),
-                                        name: "bar",
-                                        end: (
-                                            15,
-                                            33,
-                                        ),
-                                    },
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: (
+                                                15,
+                                                30,
+                                            ),
+                                            name: "bar",
+                                        },
+                                    ),
                                 ),
                             },
                             method: Identifier(
-                                Identifier {
-                                    start: (
-                                        15,
-                                        36,
-                                    ),
-                                    name: "qux",
-                                    end: (
-                                        15,
-                                        39,
-                                    ),
-                                },
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: (
+                                            15,
+                                            36,
+                                        ),
+                                        name: "qux",
+                                    },
+                                ),
                             ),
                             args: [],
                         },
@@ -192,17 +170,15 @@
                 body: [
                     Expression {
                         expr: Variable(
-                            Variable {
-                                start: (
-                                    16,
-                                    5,
-                                ),
-                                name: "b",
-                                end: (
-                                    16,
-                                    7,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        16,
+                                        5,
+                                    ),
+                                    name: "b",
+                                },
+                            ),
                         ),
                     },
                 ],
@@ -217,17 +193,15 @@
         then: [
             Expression {
                 expr: Variable(
-                    Variable {
-                        start: (
-                            20,
-                            5,
-                        ),
-                        name: "a",
-                        end: (
-                            20,
-                            7,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                20,
+                                5,
+                            ),
+                            name: "a",
+                        },
+                    ),
                 ),
             },
         ],
@@ -239,17 +213,15 @@
                 body: [
                     Expression {
                         expr: Variable(
-                            Variable {
-                                start: (
-                                    22,
-                                    5,
-                                ),
-                                name: "b",
-                                end: (
-                                    22,
-                                    7,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        22,
+                                        5,
+                                    ),
+                                    name: "b",
+                                },
+                            ),
                         ),
                     },
                 ],
@@ -261,17 +233,15 @@
                 body: [
                     Expression {
                         expr: Variable(
-                            Variable {
-                                start: (
-                                    24,
-                                    5,
-                                ),
-                                name: "c",
-                                end: (
-                                    24,
-                                    7,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        24,
+                                        5,
+                                    ),
+                                    name: "c",
+                                },
+                            ),
                         ),
                     },
                 ],

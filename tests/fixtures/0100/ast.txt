@@ -2,23 +2,33 @@
     Expression {
         expr: StaticMethodCall {
             target: Identifier(
-                Identifier {
-                    start: (
-                        1,
-                        7,
-                    ),
-                    name: "Foo",
-                    end: (
-                        1,
-                        10,
-                    ),
-                },
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            1,
+                            7,
+                        ),
+                        name: "Foo",
+                    },
+                ),
             ),
-            method: DynamicVariable {
-                name: LiteralString {
-                    value: "foo",
-                },
-            },
+            method: Identifier(
+                DynamicIdentifier(
+                    DynamicIdentifier {
+                        start: (
+                            1,
+                            12,
+                        ),
+                        expr: LiteralString {
+                            value: "foo",
+                        },
+                        end: (
+                            1,
+                            18,
+                        ),
+                    },
+                ),
+            ),
             args: [],
         },
     },

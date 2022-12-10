@@ -3,17 +3,15 @@
         expr: AssignmentOperation(
             Assign {
                 left: Variable(
-                    Variable {
-                        start: (
-                            4,
-                            1,
-                        ),
-                        name: "a",
-                        end: (
-                            4,
-                            4,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                4,
+                                1,
+                            ),
+                            name: "a",
+                        },
+                    ),
                 ),
                 span: (
                     4,
@@ -29,17 +27,15 @@
         expr: AssignmentOperation(
             Assign {
                 left: Variable(
-                    Variable {
-                        start: (
-                            6,
-                            1,
-                        ),
-                        name: "b",
-                        end: (
-                            6,
-                            4,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                6,
+                                1,
+                            ),
+                            name: "b",
+                        },
+                    ),
                 ),
                 span: (
                     6,
@@ -47,17 +43,15 @@
                 ),
                 right: Match {
                     condition: Variable(
-                        Variable {
-                            start: (
-                                6,
-                                13,
-                            ),
-                            name: "a",
-                            end: (
-                                6,
-                                15,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    6,
+                                    13,
+                                ),
+                                name: "a",
+                            },
+                        ),
                     ),
                     default: Some(
                         DefaultMatchArm {

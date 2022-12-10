@@ -9,16 +9,12 @@
                 4,
                 12,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     4,
                     7,
                 ),
                 name: "Bar",
-                end: (
-                    4,
-                    11,
-                ),
             },
             extends: None,
             implements: None,
@@ -44,31 +40,25 @@
                             ),
                             expression: Call {
                                 target: Identifier(
-                                    Identifier {
-                                        start: (
-                                            3,
-                                            3,
-                                        ),
-                                        name: "Foo",
-                                        end: (
-                                            3,
-                                            6,
-                                        ),
-                                    },
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: (
+                                                3,
+                                                3,
+                                            ),
+                                            name: "Foo",
+                                        },
+                                    ),
                                 ),
                                 args: [
                                     Arg {
                                         name: Some(
-                                            Identifier {
-                                                start: (
+                                            SimpleIdentifier {
+                                                span: (
                                                     3,
                                                     7,
                                                 ),
                                                 name: "public",
-                                                end: (
-                                                    3,
-                                                    13,
-                                                ),
                                             },
                                         ),
                                         value: Bool {

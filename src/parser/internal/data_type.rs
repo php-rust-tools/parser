@@ -1,6 +1,6 @@
 use crate::expected_token;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Type;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
@@ -155,9 +155,8 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
             Ok(Some(Type::ParentReference))
         }
         TokenKind::Identifier(id) => {
-            let start = state.current.span;
+            let span = state.current.span;
             state.next();
-            let end = state.current.span;
 
             let name = &id[..];
             let lowered_name = name.to_ascii_lowercase();
@@ -176,19 +175,14 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
                 b"false" => Ok(Some(Type::False)),
                 b"array" => Ok(Some(Type::Array)),
                 b"callable" => Ok(Some(Type::Callable)),
-                _ => Ok(Some(Type::Identifier(Identifier {
-                    start,
-                    name: id,
-                    end,
-                }))),
+                _ => Ok(Some(Type::Identifier(SimpleIdentifier { span, name: id }))),
             }
         }
         TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
-            let start = state.current.span;
+            let span = state.current.span;
             state.next();
-            let end = state.current.span;
 
-            Ok(Some(Type::Identifier(Identifier { start, name, end })))
+            Ok(Some(Type::Identifier(SimpleIdentifier { span, name })))
         }
         _ => Ok(None),
     }

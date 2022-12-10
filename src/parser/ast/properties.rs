@@ -1,6 +1,6 @@
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::modifiers::PropertyModifierGroup;
-use crate::parser::ast::variables::Variable;
+use crate::parser::ast::variables::SimpleVariable;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Type;
 
@@ -14,7 +14,7 @@ pub struct Property {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct PropertyEntry {
-    pub variable: Variable,
+    pub variable: SimpleVariable,
     pub value: Option<Expression>,
 }
 
@@ -27,6 +27,6 @@ pub struct VariableProperty {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct VariablePropertyEntry {
-    pub variable: Variable,
+    pub variable: SimpleVariable,
     pub value: Option<Expression>,
 }

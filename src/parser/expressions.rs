@@ -5,7 +5,9 @@ use crate::lexer::token::DocStringIndentationKind;
 use crate::lexer::token::TokenKind;
 use crate::lexer::DocStringKind;
 
+use crate::parser::ast::identifiers::DynamicIdentifier;
 use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::variables::Variable;
 use crate::parser::ast::StringPart;
 use crate::parser::ast::{Expression, IncludeKind, MagicConst};
@@ -445,7 +447,7 @@ expressions! {
     ), peek(TokenKind::LeftParen)]
     reserved_identifier_function_call(|state: &mut State| {
         let ident = identifiers::ident_maybe_soft_reserved(state)?;
-        let lhs = Expression::Identifier(ident);
+        let lhs = Expression::Identifier(Identifier::SimpleIdentifier(ident));
 
         postfix(state, lhs, &TokenKind::LeftParen)
     })
@@ -519,7 +521,7 @@ expressions! {
         }
     })
 
-    #[before(variable), current(TokenKind::Clone)]
+    #[before(r#true), current(TokenKind::Clone)]
     clone(|state: &mut State| {
         state.next();
 
@@ -528,13 +530,6 @@ expressions! {
         Ok(Expression::Clone {
             target: Box::new(target),
         })
-    })
-
-    #[before(r#true), current(TokenKind::Variable(_))]
-    variable(|state: &mut State| {
-        Ok(Expression::Variable(
-            identifiers::var(state)?
-        ))
     })
 
     #[before(r#false), current(TokenKind::True)]
@@ -618,7 +613,7 @@ expressions! {
 
     #[before(self_postfix), current(TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_))]
     identifier(|state: &mut State| {
-        Ok(Expression::Identifier(identifiers::full_name(state)?))
+        Ok(Expression::Identifier(Identifier::SimpleIdentifier(identifiers::full_name(state)?)))
     })
 
     #[before(static_postfix), current(TokenKind::Self_)]
@@ -934,7 +929,7 @@ expressions! {
         })
     })
 
-    #[before(dynamic_variable), current(TokenKind::BitwiseNot)]
+    #[before(variable), current(TokenKind::BitwiseNot)]
     bitwise_prefix(|state: &mut State| {
         let span = state.current.span;
 
@@ -945,9 +940,9 @@ expressions! {
         Ok(Expression::BitwiseOperation(BitwiseOperation::Not { span, right }))
     })
 
-    #[before(unexpected_token), current(TokenKind::Dollar)]
-    dynamic_variable(|state: &mut State| {
-        variables::dynamic_variable(state)
+    #[before(unexpected_token), current(TokenKind::Dollar | TokenKind::DollarLeftBrace | TokenKind::Variable(_))]
+    variable(|state: &mut State| {
+        Ok(Expression::Variable(variables::dynamic_variable(state)?))
     })
 }
 
@@ -1005,33 +1000,37 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             let mut must_be_method_call = false;
 
             let property = match state.current.kind.clone() {
-                TokenKind::Dollar => variables::dynamic_variable(state)?,
-                TokenKind::Variable(_) => Expression::Variable(identifiers::var(state)?),
+                TokenKind::Variable(_) | TokenKind::Dollar | TokenKind::DollarLeftBrace => {
+                    Expression::Variable(variables::dynamic_variable(state)?)
+                }
                 _ if identifiers::is_ident_maybe_reserved(&state.current.kind) => {
-                    Expression::Identifier(identifiers::ident_maybe_reserved(state)?)
+                    Expression::Identifier(Identifier::SimpleIdentifier(
+                        identifiers::ident_maybe_reserved(state)?,
+                    ))
                 }
                 TokenKind::LeftBrace => {
+                    let start = state.current.span;
                     must_be_method_call = true;
                     state.next();
 
                     let name = lowest_precedence(state)?;
 
-                    utils::skip_right_brace(state)?;
+                    let end = utils::skip_right_brace(state)?;
 
-                    Expression::DynamicVariable {
-                        name: Box::new(name),
-                    }
+                    Expression::Identifier(Identifier::DynamicIdentifier(DynamicIdentifier {
+                        start,
+                        expr: Box::new(name),
+                        end,
+                    }))
                 }
                 TokenKind::Class => {
-                    let start = state.current.span;
+                    let span = state.current.span;
                     state.next();
-                    let end = state.current.span;
 
-                    Expression::Identifier(Identifier {
-                        start,
+                    Expression::Identifier(Identifier::SimpleIdentifier(SimpleIdentifier {
+                        span,
                         name: "class".into(),
-                        end,
-                    })
+                    }))
                 }
                 _ => {
                     return expected_token_err!(["`{`", "`$`", "an identifier"], state);
@@ -1041,16 +1040,6 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             let lhs = Box::new(lhs);
 
             match property {
-                // 1. If we have an identifier and the current token is not a left paren,
-                //    the resulting expression must be a constant fetch.
-                Expression::Identifier(identifier)
-                    if state.current.kind != TokenKind::LeftParen =>
-                {
-                    Expression::ConstFetch {
-                        target: lhs,
-                        constant: identifier,
-                    }
-                }
                 // 2. If the current token is a left paren, or if we know the property expression
                 //    is only valid a method call context, we can assume we're parsing a static
                 //    method call.
@@ -1061,6 +1050,14 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                         target: lhs,
                         method: Box::new(property),
                         args,
+                    }
+                }
+                // 1. If we have an identifier and the current token is not a left paren,
+                //    the resulting expression must be a constant fetch.
+                Expression::Identifier(Identifier::SimpleIdentifier(identifier)) => {
+                    Expression::ConstFetch {
+                        target: lhs,
+                        constant: identifier,
                     }
                 }
                 // 3. If we haven't met any of the previous conditions, we can assume
@@ -1075,15 +1072,31 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             state.next();
 
             let property = match state.current.kind {
-                TokenKind::LeftBrace => {
-                    utils::skip_left_brace(state)?;
-                    let expr = lowest_precedence(state)?;
-                    utils::skip_right_brace(state)?;
-                    expr
+                TokenKind::Variable(_) | TokenKind::Dollar | TokenKind::DollarLeftBrace => {
+                    Expression::Variable(variables::dynamic_variable(state)?)
                 }
-                TokenKind::Variable(_) => Expression::Variable(identifiers::var(state)?),
-                TokenKind::Dollar => variables::dynamic_variable(state)?,
-                _ => Expression::Identifier(identifiers::ident_maybe_reserved(state)?),
+                _ if identifiers::is_ident_maybe_reserved(&state.current.kind) => {
+                    Expression::Identifier(Identifier::SimpleIdentifier(
+                        identifiers::ident_maybe_reserved(state)?,
+                    ))
+                }
+                TokenKind::LeftBrace => {
+                    let start = state.current.span;
+                    state.next();
+
+                    let name = lowest_precedence(state)?;
+
+                    let end = utils::skip_right_brace(state)?;
+
+                    Expression::Identifier(Identifier::DynamicIdentifier(DynamicIdentifier {
+                        start,
+                        expr: Box::new(name),
+                        end,
+                    }))
+                }
+                _ => {
+                    return expected_token_err!(["`{`", "`$`", "an identifier"], state);
+                }
             };
 
             if state.current.kind == TokenKind::LeftParen {
@@ -1353,44 +1366,9 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
             part
         }
         TokenKind::DollarLeftBrace => {
-            state.next();
-            let e = match (state.current.kind.clone(), state.peek.kind.clone()) {
-                (TokenKind::Identifier(name), TokenKind::RightBrace) => {
-                    let start = state.current.span;
-                    let end = state.peek.span;
+            let variable = variables::dynamic_variable(state)?;
 
-                    state.next();
-                    state.next();
-                    // "${var}"
-                    // TODO: we should use a different node for this.
-                    Expression::Variable(Variable { start, name, end })
-                }
-                (TokenKind::Identifier(name), TokenKind::LeftBracket) => {
-                    let start = state.current.span;
-                    let end = state.peek.span;
-                    state.next();
-                    state.next();
-                    let var = Expression::Variable(Variable { start, name, end });
-
-                    let e = lowest_precedence(state)?;
-                    utils::skip_right_bracket(state)?;
-                    utils::skip_right_brace(state)?;
-
-                    // TODO: we should use a different node for this.
-                    Expression::ArrayIndex {
-                        array: Box::new(var),
-                        index: Some(Box::new(e)),
-                    }
-                }
-                _ => {
-                    // Arbitrary expressions are allowed, but are treated as variable variables.
-                    let e = lowest_precedence(state)?;
-                    utils::skip_right_brace(state)?;
-
-                    Expression::DynamicVariable { name: Box::new(e) }
-                }
-            };
-            Some(StringPart::Expr(Box::new(e)))
+            Some(StringPart::Expr(Box::new(Expression::Variable(variable))))
         }
         TokenKind::LeftBrace => {
             // "{$expr}"
@@ -1401,7 +1379,7 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
         }
         TokenKind::Variable(_) => {
             // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
-            let var = Expression::Variable(identifiers::var(state)?);
+            let variable = Expression::Variable(variables::dynamic_variable(state)?);
             let e = match state.current.kind {
                 TokenKind::LeftBracket => {
                     state.next();
@@ -1438,10 +1416,9 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                             state.next();
                             e
                         }
-                        TokenKind::Variable(_) => {
-                            let v = identifiers::var(state)?;
-                            Expression::Variable(v)
-                        }
+                        TokenKind::Variable(_) => Expression::Variable(Variable::SimpleVariable(
+                            variables::simple_variable(state)?,
+                        )),
                         _ => {
                             return expected_token_err!(
                                 ["`-`", "an integer", "an identifier", "a variable"],
@@ -1453,29 +1430,29 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                     utils::skip_right_bracket(state)?;
 
                     Expression::ArrayIndex {
-                        array: Box::new(var),
+                        array: Box::new(variable),
                         index: Some(Box::new(index)),
                     }
                 }
                 TokenKind::Arrow => {
                     state.next();
                     Expression::PropertyFetch {
-                        target: Box::new(var),
-                        property: Box::new(Expression::Identifier(
+                        target: Box::new(variable),
+                        property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             identifiers::ident_maybe_reserved(state)?,
-                        )),
+                        ))),
                     }
                 }
                 TokenKind::NullsafeArrow => {
                     state.next();
                     Expression::NullsafePropertyFetch {
-                        target: Box::new(var),
-                        property: Box::new(Expression::Identifier(
+                        target: Box::new(variable),
+                        property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             identifiers::ident_maybe_reserved(state)?,
-                        )),
+                        ))),
                     }
                 }
-                _ => var,
+                _ => variable,
             };
             Some(StringPart::Expr(Box::new(e)))
         }

@@ -1,19 +1,23 @@
 [
     Expression {
-        expr: DynamicVariable {
-            name: Variable(
-                Variable {
-                    start: (
+        expr: Variable(
+            VariableVariable(
+                VariableVariable {
+                    span: (
                         1,
-                        8,
+                        7,
                     ),
-                    name: "a",
-                    end: (
-                        1,
-                        10,
+                    variable: SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                1,
+                                8,
+                            ),
+                            name: "a",
+                        },
                     ),
                 },
             ),
-        },
+        ),
     },
 ]
