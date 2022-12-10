@@ -4,33 +4,29 @@
             parts: [
                 Expr(
                     Variable(
-                        Variable {
-                            start: (
-                                1,
-                                9,
-                            ),
-                            name: "foo",
-                            end: (
-                                1,
-                                13,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    1,
+                                    9,
+                                ),
+                                name: "foo",
+                            },
+                        ),
                     ),
                 ),
                 Expr(
                     ArrayIndex {
                         array: Variable(
-                            Variable {
-                                start: (
-                                    1,
-                                    15,
-                                ),
-                                name: "foo",
-                                end: (
-                                    1,
-                                    19,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        1,
+                                        15,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
                         ),
                         index: Some(
                             LiteralInteger {
@@ -42,17 +38,15 @@
                 Expr(
                     ArrayIndex {
                         array: Variable(
-                            Variable {
-                                start: (
-                                    1,
-                                    24,
-                                ),
-                                name: "foo",
-                                end: (
-                                    1,
-                                    28,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        1,
+                                        24,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
                         ),
                         index: Some(
                             LiteralString {
@@ -64,60 +58,52 @@
                 Expr(
                     PropertyFetch {
                         target: Variable(
-                            Variable {
-                                start: (
-                                    1,
-                                    37,
-                                ),
-                                name: "foo",
-                                end: (
-                                    1,
-                                    41,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        1,
+                                        37,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
                         ),
                         property: Identifier(
-                            Identifier {
-                                start: (
-                                    1,
-                                    43,
-                                ),
-                                name: "bar",
-                                end: (
-                                    1,
-                                    46,
-                                ),
-                            },
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: (
+                                        1,
+                                        43,
+                                    ),
+                                    name: "bar",
+                                },
+                            ),
                         ),
                     },
                 ),
                 Expr(
                     MethodCall {
                         target: Variable(
-                            Variable {
-                                start: (
-                                    1,
-                                    48,
-                                ),
-                                name: "foo",
-                                end: (
-                                    1,
-                                    52,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        1,
+                                        48,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
                         ),
                         method: Identifier(
-                            Identifier {
-                                start: (
-                                    1,
-                                    54,
-                                ),
-                                name: "bar",
-                                end: (
-                                    1,
-                                    57,
-                                ),
-                            },
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: (
+                                        1,
+                                        54,
+                                    ),
+                                    name: "bar",
+                                },
+                            ),
                         ),
                         args: [],
                     },

@@ -2,7 +2,7 @@ use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::constant::ClassishConstant;
 use crate::parser::ast::functions::Method;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum InterfaceMember {
@@ -15,7 +15,7 @@ pub struct Interface {
     pub start: Span,
     pub end: Span,
     pub attributes: Vec<AttributeGroup>,
-    pub name: Identifier,
+    pub name: SimpleIdentifier,
     pub extends: Option<InterfaceExtends>,
     pub members: Vec<InterfaceMember>,
 }
@@ -23,5 +23,5 @@ pub struct Interface {
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct InterfaceExtends {
     pub span: Span,
-    pub parents: Vec<Identifier>,
+    pub parents: Vec<SimpleIdentifier>,
 }

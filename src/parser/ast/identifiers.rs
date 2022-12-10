@@ -4,16 +4,29 @@ use serde::{Deserialize, Serialize};
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
+use crate::parser::ast::Expression;
 
-#[derive(Debug, Eq, PartialEq, Clone, Serialize, Deserialize)]
-pub struct Identifier {
-    pub start: Span,
-    pub name: ByteString,
-    pub end: Span,
+#[derive(Debug, PartialEq, Clone)]
+pub enum Identifier {
+    SimpleIdentifier(SimpleIdentifier),
+    DynamicIdentifier(DynamicIdentifier),
 }
 
-impl Display for Identifier {
+#[derive(Debug, Eq, PartialEq, Clone, Serialize, Deserialize)]
+pub struct SimpleIdentifier {
+    pub span: Span,
+    pub name: ByteString,
+}
+
+impl Display for SimpleIdentifier {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.name)
     }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct DynamicIdentifier {
+    pub start: Span,
+    pub expr: Box<Expression>,
+    pub end: Span,
 }

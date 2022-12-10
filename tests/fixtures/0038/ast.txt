@@ -9,16 +9,12 @@
                 9,
                 1,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     3,
                     10,
                 ),
                 name: "fib",
-                end: (
-                    3,
-                    13,
-                ),
             },
             attributes: [],
             parameters: FunctionParameterList {
@@ -40,16 +36,12 @@
                             3,
                             16,
                         ),
-                        name: Variable {
-                            start: (
+                        name: SimpleVariable {
+                            span: (
                                 3,
                                 14,
                             ),
                             name: "n",
-                            end: (
-                                3,
-                                16,
-                            ),
                         },
                         attributes: [],
                         type: None,
@@ -66,17 +58,15 @@
                     condition: ComparisonOperation(
                         LessThan {
                             left: Variable(
-                                Variable {
-                                    start: (
-                                        4,
-                                        9,
-                                    ),
-                                    name: "n",
-                                    end: (
-                                        4,
-                                        12,
-                                    ),
-                                },
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: (
+                                            4,
+                                            9,
+                                        ),
+                                        name: "n",
+                                    },
+                                ),
                             ),
                             span: (
                                 4,
@@ -91,17 +81,15 @@
                         Return {
                             value: Some(
                                 Variable(
-                                    Variable {
-                                        start: (
-                                            5,
-                                            16,
-                                        ),
-                                        name: "n",
-                                        end: (
-                                            5,
-                                            18,
-                                        ),
-                                    },
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                5,
+                                                16,
+                                            ),
+                                            name: "n",
+                                        },
+                                    ),
                                 ),
                             ),
                         },
@@ -115,17 +103,15 @@
                             Addition {
                                 left: Call {
                                     target: Identifier(
-                                        Identifier {
-                                            start: (
-                                                8,
-                                                12,
-                                            ),
-                                            name: "fib",
-                                            end: (
-                                                8,
-                                                15,
-                                            ),
-                                        },
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: (
+                                                    8,
+                                                    12,
+                                                ),
+                                                name: "fib",
+                                            },
+                                        ),
                                     ),
                                     args: [
                                         Arg {
@@ -133,17 +119,15 @@
                                             value: ArithmeticOperation(
                                                 Subtraction {
                                                     left: Variable(
-                                                        Variable {
-                                                            start: (
-                                                                8,
-                                                                16,
-                                                            ),
-                                                            name: "n",
-                                                            end: (
-                                                                8,
-                                                                19,
-                                                            ),
-                                                        },
+                                                        SimpleVariable(
+                                                            SimpleVariable {
+                                                                span: (
+                                                                    8,
+                                                                    16,
+                                                                ),
+                                                                name: "n",
+                                                            },
+                                                        ),
                                                     ),
                                                     span: (
                                                         8,
@@ -164,17 +148,15 @@
                                 ),
                                 right: Call {
                                     target: Identifier(
-                                        Identifier {
-                                            start: (
-                                                8,
-                                                26,
-                                            ),
-                                            name: "fib",
-                                            end: (
-                                                8,
-                                                29,
-                                            ),
-                                        },
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: (
+                                                    8,
+                                                    26,
+                                                ),
+                                                name: "fib",
+                                            },
+                                        ),
                                     ),
                                     args: [
                                         Arg {
@@ -182,17 +164,15 @@
                                             value: ArithmeticOperation(
                                                 Subtraction {
                                                     left: Variable(
-                                                        Variable {
-                                                            start: (
-                                                                8,
-                                                                30,
-                                                            ),
-                                                            name: "n",
-                                                            end: (
-                                                                8,
-                                                                33,
-                                                            ),
-                                                        },
+                                                        SimpleVariable(
+                                                            SimpleVariable {
+                                                                span: (
+                                                                    8,
+                                                                    30,
+                                                                ),
+                                                                name: "n",
+                                                            },
+                                                        ),
                                                     ),
                                                     span: (
                                                         8,

@@ -1,6 +1,6 @@
 use crate::expect_token;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::VisibilityModifier;
 use crate::parser::ast::traits::Trait;
 use crate::parser::ast::traits::TraitMember;
@@ -51,15 +51,16 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
         utils::skip_left_brace(state)?;
 
         while state.current.kind != TokenKind::RightBrace {
-            let (r#trait, method): (Option<Identifier>, Identifier) = match state.peek.kind {
-                TokenKind::DoubleColon => {
-                    let r#trait = identifiers::full_name(state)?;
-                    state.next();
-                    let method = identifiers::ident(state)?;
-                    (Some(r#trait), method)
-                }
-                _ => (None, identifiers::ident(state)?),
-            };
+            let (r#trait, method): (Option<SimpleIdentifier>, SimpleIdentifier) =
+                match state.peek.kind {
+                    TokenKind::DoubleColon => {
+                        let r#trait = identifiers::full_name(state)?;
+                        state.next();
+                        let method = identifiers::ident(state)?;
+                        (Some(r#trait), method)
+                    }
+                    _ => (None, identifiers::ident(state)?),
+                };
 
             expect_token!([
                     TokenKind::As => {
@@ -88,7 +89,7 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
                                         visibility,
                                     });
                                 } else {
-                                    let alias: Identifier = identifiers::name(state)?;
+                                    let alias: SimpleIdentifier = identifiers::name(state)?;
                                     adaptations.push(TraitUsageAdaptation::Alias {
                                         r#trait,
                                         method,
@@ -98,7 +99,7 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
                                 }
                             }
                             _ => {
-                                let alias: Identifier = identifiers::name(state)?;
+                                let alias: SimpleIdentifier = identifiers::name(state)?;
                                 adaptations.push(TraitUsageAdaptation::Alias {
                                     r#trait,
                                     method,

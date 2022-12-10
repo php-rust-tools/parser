@@ -12,16 +12,12 @@
                         4,
                         28,
                     ),
-                    name: Identifier {
-                        start: (
+                    name: SimpleIdentifier {
+                        span: (
                             4,
                             14,
                         ),
                         name: "globalFunc",
-                        end: (
-                            4,
-                            24,
-                        ),
                     },
                     attributes: [],
                     parameters: FunctionParameterList {
@@ -44,16 +40,12 @@
     },
     BracedNamespace {
         name: Some(
-            Identifier {
-                start: (
+            SimpleIdentifier {
+                span: (
                     7,
                     11,
                 ),
                 name: "foo",
-                end: (
-                    7,
-                    15,
-                ),
             },
         ),
         body: [
@@ -61,17 +53,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    8,
-                                    5,
-                                ),
-                                name: "a",
-                                end: (
-                                    8,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        8,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
                         ),
                         span: (
                             8,
@@ -113,17 +103,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    9,
-                                    5,
-                                ),
-                                name: "b",
-                                end: (
-                                    9,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        9,
+                                        5,
+                                    ),
+                                    name: "b",
+                                },
+                            ),
                         ),
                         span: (
                             9,
@@ -159,16 +147,12 @@
                                                 9,
                                                 23,
                                             ),
-                                            name: Variable {
-                                                start: (
+                                            name: SimpleVariable {
+                                                span: (
                                                     9,
                                                     21,
                                                 ),
                                                 name: "b",
-                                                end: (
-                                                    9,
-                                                    23,
-                                                ),
                                             },
                                             attributes: [],
                                             type: None,
@@ -192,17 +176,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    10,
-                                    5,
-                                ),
-                                name: "c",
-                                end: (
-                                    10,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        10,
+                                        5,
+                                    ),
+                                    name: "c",
+                                },
+                            ),
                         ),
                         span: (
                             10,
@@ -244,17 +226,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    11,
-                                    5,
-                                ),
-                                name: "d",
-                                end: (
-                                    11,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        11,
+                                        5,
+                                    ),
+                                    name: "d",
+                                },
+                            ),
                         ),
                         span: (
                             11,
@@ -290,16 +270,12 @@
                                                 11,
                                                 24,
                                             ),
-                                            name: Variable {
-                                                start: (
+                                            name: SimpleVariable {
+                                                span: (
                                                     11,
                                                     22,
                                                 ),
                                                 name: "b",
-                                                end: (
-                                                    11,
-                                                    24,
-                                                ),
                                             },
                                             attributes: [],
                                             type: None,
@@ -316,17 +292,15 @@
                                     Return {
                                         value: Some(
                                             Variable(
-                                                Variable {
-                                                    start: (
-                                                        11,
-                                                        35,
-                                                    ),
-                                                    name: "b",
-                                                    end: (
-                                                        11,
-                                                        37,
-                                                    ),
-                                                },
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: (
+                                                            11,
+                                                            35,
+                                                        ),
+                                                        name: "b",
+                                                    },
+                                                ),
                                             ),
                                         ),
                                     },
@@ -341,17 +315,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    12,
-                                    5,
-                                ),
-                                name: "e",
-                                end: (
-                                    12,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        12,
+                                        5,
+                                    ),
+                                    name: "e",
+                                },
+                            ),
                         ),
                         span: (
                             12,
@@ -392,17 +364,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    13,
-                                    5,
-                                ),
-                                name: "f",
-                                end: (
-                                    13,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        13,
+                                        5,
+                                    ),
+                                    name: "f",
+                                },
+                            ),
                         ),
                         span: (
                             13,
@@ -438,16 +408,12 @@
                                                 13,
                                                 17,
                                             ),
-                                            name: Variable {
-                                                start: (
+                                            name: SimpleVariable {
+                                                span: (
                                                     13,
                                                     15,
                                                 ),
                                                 name: "b",
-                                                end: (
-                                                    13,
-                                                    17,
-                                                ),
                                             },
                                             attributes: [],
                                             type: None,
@@ -470,17 +436,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    14,
-                                    5,
-                                ),
-                                name: "g",
-                                end: (
-                                    14,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        14,
+                                        5,
+                                    ),
+                                    name: "g",
+                                },
+                            ),
                         ),
                         span: (
                             14,
@@ -521,17 +485,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    15,
-                                    5,
-                                ),
-                                name: "h",
-                                end: (
-                                    15,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        15,
+                                        5,
+                                    ),
+                                    name: "h",
+                                },
+                            ),
                         ),
                         span: (
                             15,
@@ -567,16 +529,12 @@
                                                 15,
                                                 18,
                                             ),
-                                            name: Variable {
-                                                start: (
+                                            name: SimpleVariable {
+                                                span: (
                                                     15,
                                                     16,
                                                 ),
                                                 name: "b",
-                                                end: (
-                                                    15,
-                                                    18,
-                                                ),
                                             },
                                             attributes: [],
                                             type: None,
@@ -589,17 +547,15 @@
                                 return_type: None,
                                 by_ref: true,
                                 body: Variable(
-                                    Variable {
-                                        start: (
-                                            15,
-                                            23,
-                                        ),
-                                        name: "b",
-                                        end: (
-                                            15,
-                                            25,
-                                        ),
-                                    },
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                15,
+                                                23,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
                                 ),
                                 static: false,
                             },
@@ -611,16 +567,12 @@
     },
     BracedNamespace {
         name: Some(
-            Identifier {
-                start: (
+            SimpleIdentifier {
+                span: (
                     18,
                     11,
                 ),
                 name: "bar",
-                end: (
-                    18,
-                    15,
-                ),
             },
         ),
         body: [
@@ -628,17 +580,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    19,
-                                    5,
-                                ),
-                                name: "a",
-                                end: (
-                                    19,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        19,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
                         ),
                         span: (
                             19,
@@ -680,17 +630,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    20,
-                                    5,
-                                ),
-                                name: "b",
-                                end: (
-                                    20,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        20,
+                                        5,
+                                    ),
+                                    name: "b",
+                                },
+                            ),
                         ),
                         span: (
                             20,
@@ -726,16 +674,12 @@
                                                 20,
                                                 30,
                                             ),
-                                            name: Variable {
-                                                start: (
+                                            name: SimpleVariable {
+                                                span: (
                                                     20,
                                                     28,
                                                 ),
                                                 name: "b",
-                                                end: (
-                                                    20,
-                                                    30,
-                                                ),
                                             },
                                             attributes: [],
                                             type: None,
@@ -759,17 +703,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    21,
-                                    5,
-                                ),
-                                name: "c",
-                                end: (
-                                    21,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        21,
+                                        5,
+                                    ),
+                                    name: "c",
+                                },
+                            ),
                         ),
                         span: (
                             21,
@@ -811,17 +753,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    22,
-                                    5,
-                                ),
-                                name: "d",
-                                end: (
-                                    22,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        22,
+                                        5,
+                                    ),
+                                    name: "d",
+                                },
+                            ),
                         ),
                         span: (
                             22,
@@ -857,16 +797,12 @@
                                                 22,
                                                 31,
                                             ),
-                                            name: Variable {
-                                                start: (
+                                            name: SimpleVariable {
+                                                span: (
                                                     22,
                                                     29,
                                                 ),
                                                 name: "b",
-                                                end: (
-                                                    22,
-                                                    31,
-                                                ),
                                             },
                                             attributes: [],
                                             type: None,
@@ -883,17 +819,15 @@
                                     Return {
                                         value: Some(
                                             Variable(
-                                                Variable {
-                                                    start: (
-                                                        22,
-                                                        42,
-                                                    ),
-                                                    name: "b",
-                                                    end: (
-                                                        22,
-                                                        44,
-                                                    ),
-                                                },
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: (
+                                                            22,
+                                                            42,
+                                                        ),
+                                                        name: "b",
+                                                    },
+                                                ),
                                             ),
                                         ),
                                     },
@@ -908,17 +842,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    23,
-                                    5,
-                                ),
-                                name: "e",
-                                end: (
-                                    23,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        23,
+                                        5,
+                                    ),
+                                    name: "e",
+                                },
+                            ),
                         ),
                         span: (
                             23,
@@ -959,17 +891,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    24,
-                                    5,
-                                ),
-                                name: "f",
-                                end: (
-                                    24,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        24,
+                                        5,
+                                    ),
+                                    name: "f",
+                                },
+                            ),
                         ),
                         span: (
                             24,
@@ -1005,16 +935,12 @@
                                                 24,
                                                 24,
                                             ),
-                                            name: Variable {
-                                                start: (
+                                            name: SimpleVariable {
+                                                span: (
                                                     24,
                                                     22,
                                                 ),
                                                 name: "b",
-                                                end: (
-                                                    24,
-                                                    24,
-                                                ),
                                             },
                                             attributes: [],
                                             type: None,
@@ -1037,17 +963,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    25,
-                                    5,
-                                ),
-                                name: "g",
-                                end: (
-                                    25,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        25,
+                                        5,
+                                    ),
+                                    name: "g",
+                                },
+                            ),
                         ),
                         span: (
                             25,
@@ -1088,17 +1012,15 @@
                 expr: AssignmentOperation(
                     Assign {
                         left: Variable(
-                            Variable {
-                                start: (
-                                    26,
-                                    5,
-                                ),
-                                name: "h",
-                                end: (
-                                    26,
-                                    8,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        26,
+                                        5,
+                                    ),
+                                    name: "h",
+                                },
+                            ),
                         ),
                         span: (
                             26,
@@ -1134,16 +1056,12 @@
                                                 26,
                                                 25,
                                             ),
-                                            name: Variable {
-                                                start: (
+                                            name: SimpleVariable {
+                                                span: (
                                                     26,
                                                     23,
                                                 ),
                                                 name: "b",
-                                                end: (
-                                                    26,
-                                                    25,
-                                                ),
                                             },
                                             attributes: [],
                                             type: None,
@@ -1156,17 +1074,15 @@
                                 return_type: None,
                                 by_ref: true,
                                 body: Variable(
-                                    Variable {
-                                        start: (
-                                            26,
-                                            30,
-                                        ),
-                                        name: "b",
-                                        end: (
-                                            26,
-                                            32,
-                                        ),
-                                    },
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                26,
+                                                30,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
                                 ),
                                 static: true,
                             },
@@ -1178,16 +1094,12 @@
     },
     BracedNamespace {
         name: Some(
-            Identifier {
-                start: (
+            SimpleIdentifier {
+                span: (
                     29,
                     11,
                 ),
                 name: "baz",
-                end: (
-                    29,
-                    15,
-                ),
             },
         ),
         body: [
@@ -1201,16 +1113,12 @@
                         30,
                         22,
                     ),
-                    name: Identifier {
-                        start: (
+                    name: SimpleIdentifier {
+                        span: (
                             30,
                             14,
                         ),
                         name: "a",
-                        end: (
-                            30,
-                            15,
-                        ),
                     },
                     attributes: [],
                     parameters: FunctionParameterList {
@@ -1232,16 +1140,12 @@
                                     30,
                                     19,
                                 ),
-                                name: Variable {
-                                    start: (
+                                name: SimpleVariable {
+                                    span: (
                                         30,
                                         17,
                                     ),
                                     name: "b",
-                                    end: (
-                                        30,
-                                        19,
-                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -1266,16 +1170,12 @@
                         31,
                         34,
                     ),
-                    name: Identifier {
-                        start: (
+                    name: SimpleIdentifier {
+                        span: (
                             31,
                             15,
                         ),
                         name: "b",
-                        end: (
-                            31,
-                            16,
-                        ),
                     },
                     attributes: [],
                     parameters: FunctionParameterList {
@@ -1297,16 +1197,12 @@
                                     31,
                                     19,
                                 ),
-                                name: Variable {
-                                    start: (
+                                name: SimpleVariable {
+                                    span: (
                                         31,
                                         17,
                                     ),
                                     name: "b",
-                                    end: (
-                                        31,
-                                        19,
-                                    ),
                                 },
                                 attributes: [],
                                 type: None,
@@ -1322,17 +1218,15 @@
                         Return {
                             value: Some(
                                 Variable(
-                                    Variable {
-                                        start: (
-                                            31,
-                                            30,
-                                        ),
-                                        name: "b",
-                                        end: (
-                                            31,
-                                            32,
-                                        ),
-                                    },
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                31,
+                                                30,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
                                 ),
                             ),
                         },
@@ -1349,16 +1243,12 @@
                         32,
                         32,
                     ),
-                    name: Identifier {
-                        start: (
+                    name: SimpleIdentifier {
+                        span: (
                             32,
                             15,
                         ),
                         name: "c",
-                        end: (
-                            32,
-                            16,
-                        ),
                     },
                     attributes: [],
                     parameters: FunctionParameterList {
@@ -1378,17 +1268,15 @@
                         Return {
                             value: Some(
                                 Variable(
-                                    Variable {
-                                        start: (
-                                            32,
-                                            28,
-                                        ),
-                                        name: "b",
-                                        end: (
-                                            32,
-                                            30,
-                                        ),
-                                    },
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                32,
+                                                28,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
                                 ),
                             ),
                         },

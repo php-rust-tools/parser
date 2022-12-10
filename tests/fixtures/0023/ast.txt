@@ -1,93 +1,81 @@
 [
     Foreach {
         expr: Variable(
-            Variable {
-                start: (
-                    3,
-                    10,
-                ),
-                name: "a",
-                end: (
-                    3,
-                    13,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        3,
+                        10,
+                    ),
+                    name: "a",
+                },
+            ),
         ),
         by_ref: true,
         key_var: None,
         value_var: Variable(
-            Variable {
-                start: (
-                    3,
-                    17,
-                ),
-                name: "b",
-                end: (
-                    3,
-                    19,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        3,
+                        17,
+                    ),
+                    name: "b",
+                },
+            ),
         ),
         body: [],
     },
     Foreach {
         expr: Variable(
-            Variable {
-                start: (
-                    5,
-                    10,
-                ),
-                name: "a",
-                end: (
-                    5,
-                    13,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        5,
+                        10,
+                    ),
+                    name: "a",
+                },
+            ),
         ),
         by_ref: true,
         key_var: Some(
             Variable(
-                Variable {
-                    start: (
-                        5,
-                        16,
-                    ),
-                    name: "b",
-                    end: (
-                        5,
-                        19,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            5,
+                            16,
+                        ),
+                        name: "b",
+                    },
+                ),
             ),
         ),
         value_var: Variable(
-            Variable {
-                start: (
-                    5,
-                    23,
-                ),
-                name: "c",
-                end: (
-                    5,
-                    25,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        5,
+                        23,
+                    ),
+                    name: "c",
+                },
+            ),
         ),
         body: [],
     },
     Switch {
         condition: Variable(
-            Variable {
-                start: (
-                    7,
-                    9,
-                ),
-                name: "a",
-                end: (
-                    7,
-                    11,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        7,
+                        9,
+                    ),
+                    name: "a",
+                },
+            ),
         ),
         cases: [
             Case {
@@ -118,17 +106,15 @@
     },
     Foreach {
         expr: Variable(
-            Variable {
-                start: (
-                    14,
-                    10,
-                ),
-                name: "foo",
-                end: (
-                    14,
-                    15,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        14,
+                        10,
+                    ),
+                    name: "foo",
+                },
+            ),
         ),
         by_ref: false,
         key_var: None,
@@ -137,17 +123,15 @@
                 ArrayItem {
                     key: None,
                     value: Variable(
-                        Variable {
-                            start: (
-                                14,
-                                19,
-                            ),
-                            name: "baz",
-                            end: (
-                                14,
-                                23,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    14,
+                                    19,
+                                ),
+                                name: "baz",
+                            },
+                        ),
                     ),
                     unpack: false,
                     by_ref: false,
@@ -155,17 +139,15 @@
                 ArrayItem {
                     key: None,
                     value: Variable(
-                        Variable {
-                            start: (
-                                14,
-                                25,
-                            ),
-                            name: "car",
-                            end: (
-                                14,
-                                29,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    14,
+                                    25,
+                                ),
+                                name: "car",
+                            },
+                        ),
                     ),
                     unpack: false,
                     by_ref: false,
@@ -176,77 +158,67 @@
     },
     Foreach {
         expr: Variable(
-            Variable {
-                start: (
-                    16,
-                    10,
-                ),
-                name: "foo",
-                end: (
-                    16,
-                    15,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        16,
+                        10,
+                    ),
+                    name: "foo",
+                },
+            ),
         ),
         by_ref: false,
         key_var: Some(
             Variable(
-                Variable {
-                    start: (
-                        16,
-                        18,
-                    ),
-                    name: "bar",
-                    end: (
-                        16,
-                        23,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            16,
+                            18,
+                        ),
+                        name: "bar",
+                    },
+                ),
             ),
         ),
         value_var: Variable(
-            Variable {
-                start: (
-                    16,
-                    26,
-                ),
-                name: "baz",
-                end: (
-                    16,
-                    30,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        16,
+                        26,
+                    ),
+                    name: "baz",
+                },
+            ),
         ),
         body: [],
     },
     Foreach {
         expr: Variable(
-            Variable {
-                start: (
-                    18,
-                    10,
-                ),
-                name: "foo",
-                end: (
-                    18,
-                    15,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        18,
+                        10,
+                    ),
+                    name: "foo",
+                },
+            ),
         ),
         by_ref: false,
         key_var: None,
         value_var: Variable(
-            Variable {
-                start: (
-                    18,
-                    18,
-                ),
-                name: "bar",
-                end: (
-                    18,
-                    22,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        18,
+                        18,
+                    ),
+                    name: "bar",
+                },
+            ),
         ),
         body: [],
     },

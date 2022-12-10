@@ -1,15 +1,11 @@
 [
     Namespace {
-        name: Identifier {
-            start: (
+        name: SimpleIdentifier {
+            span: (
                 3,
                 11,
             ),
             name: "Foo\Bar",
-            end: (
-                3,
-                18,
-            ),
         },
         body: [
             Noop(
@@ -28,16 +24,12 @@
                         7,
                         1,
                     ),
-                    name: Identifier {
-                        start: (
+                    name: SimpleIdentifier {
+                        span: (
                             5,
                             13,
                         ),
                         name: "Baz",
-                        end: (
-                            5,
-                            17,
-                        ),
                     },
                     extends: None,
                     implements: None,
@@ -75,16 +67,12 @@
                                 },
                                 entries: [
                                     PropertyEntry {
-                                        variable: Variable {
-                                            start: (
+                                        variable: SimpleVariable {
+                                            span: (
                                                 6,
                                                 29,
                                             ),
                                             name: "foo",
-                                            end: (
-                                                6,
-                                                33,
-                                            ),
                                         },
                                         value: None,
                                     },

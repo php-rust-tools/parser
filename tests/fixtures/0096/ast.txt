@@ -2,33 +2,35 @@
     Expression {
         expr: PropertyFetch {
             target: Variable(
-                Variable {
-                    start: (
-                        1,
-                        7,
-                    ),
-                    name: "a",
-                    end: (
-                        1,
-                        9,
-                    ),
-                },
-            ),
-            property: DynamicVariable {
-                name: Variable(
-                    Variable {
-                        start: (
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
                             1,
-                            12,
+                            7,
                         ),
-                        name: "b",
-                        end: (
+                        name: "a",
+                    },
+                ),
+            ),
+            property: Variable(
+                VariableVariable(
+                    VariableVariable {
+                        span: (
                             1,
-                            14,
+                            11,
+                        ),
+                        variable: SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    1,
+                                    12,
+                                ),
+                                name: "b",
+                            },
                         ),
                     },
                 ),
-            },
+            ),
         },
     },
 ]

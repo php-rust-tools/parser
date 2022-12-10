@@ -8,8 +8,8 @@ use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::data_type;
-use crate::parser::internal::identifiers;
 use crate::parser::internal::utils;
+use crate::parser::internal::variables;
 use crate::parser::state::State;
 
 pub fn parse(
@@ -21,7 +21,7 @@ pub fn parse(
 
     let mut entries = vec![];
     loop {
-        let variable = identifiers::var(state)?;
+        let variable = variables::simple_variable(state)?;
         let mut value = None;
         if state.current.kind == TokenKind::Equals {
             state.next();
@@ -96,7 +96,7 @@ pub fn parse_var(state: &mut State, class: String) -> ParseResult<VariableProper
 
     let mut entries = vec![];
     loop {
-        let variable = identifiers::var(state)?;
+        let variable = variables::simple_variable(state)?;
         let mut value = None;
         if state.current.kind == TokenKind::Equals {
             state.next();

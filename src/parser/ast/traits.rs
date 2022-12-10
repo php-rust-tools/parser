@@ -2,7 +2,7 @@ use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::constant::ClassishConstant;
 use crate::parser::ast::functions::Method;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::VisibilityModifier;
 use crate::parser::ast::properties::Property;
 use crate::parser::ast::properties::VariableProperty;
@@ -11,7 +11,7 @@ use crate::parser::ast::properties::VariableProperty;
 pub struct Trait {
     pub start: Span,
     pub end: Span,
-    pub name: Identifier,
+    pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,
     pub members: Vec<TraitMember>,
 }
@@ -27,26 +27,26 @@ pub enum TraitMember {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TraitUsage {
-    pub traits: Vec<Identifier>,
+    pub traits: Vec<SimpleIdentifier>,
     pub adaptations: Vec<TraitUsageAdaptation>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TraitUsageAdaptation {
     Alias {
-        r#trait: Option<Identifier>,
-        method: Identifier,
-        alias: Identifier,
+        r#trait: Option<SimpleIdentifier>,
+        method: SimpleIdentifier,
+        alias: SimpleIdentifier,
         visibility: Option<VisibilityModifier>,
     },
     Visibility {
-        r#trait: Option<Identifier>,
-        method: Identifier,
+        r#trait: Option<SimpleIdentifier>,
+        method: SimpleIdentifier,
         visibility: VisibilityModifier,
     },
     Precedence {
-        r#trait: Option<Identifier>,
-        method: Identifier,
-        insteadof: Vec<Identifier>,
+        r#trait: Option<SimpleIdentifier>,
+        method: SimpleIdentifier,
+        insteadof: Vec<SimpleIdentifier>,
     },
 }

@@ -1,33 +1,29 @@
 [
     If {
         condition: Variable(
-            Variable {
-                start: (
-                    1,
-                    10,
-                ),
-                name: "foo",
-                end: (
-                    1,
-                    14,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        1,
+                        10,
+                    ),
+                    name: "foo",
+                },
+            ),
         ),
         then: [
             Return {
                 value: Some(
                     Variable(
-                        Variable {
-                            start: (
-                                1,
-                                25,
-                            ),
-                            name: "foo",
-                            end: (
-                                1,
-                                29,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    1,
+                                    25,
+                                ),
+                                name: "foo",
+                            },
+                        ),
                     ),
                 ),
             },
@@ -35,33 +31,29 @@
         else_ifs: [
             ElseIf {
                 condition: Variable(
-                    Variable {
-                        start: (
-                            1,
-                            40,
-                        ),
-                        name: "foo",
-                        end: (
-                            1,
-                            44,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                1,
+                                40,
+                            ),
+                            name: "foo",
+                        },
+                    ),
                 ),
                 body: [
                     Return {
                         value: Some(
                             Variable(
-                                Variable {
-                                    start: (
-                                        1,
-                                        55,
-                                    ),
-                                    name: "foo",
-                                    end: (
-                                        1,
-                                        59,
-                                    ),
-                                },
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: (
+                                            1,
+                                            55,
+                                        ),
+                                        name: "foo",
+                                    },
+                                ),
                             ),
                         ),
                     },
@@ -73,17 +65,15 @@
                 Return {
                     value: Some(
                         Variable(
-                            Variable {
-                                start: (
-                                    1,
-                                    77,
-                                ),
-                                name: "foo",
-                                end: (
-                                    1,
-                                    81,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        1,
+                                        77,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
                         ),
                     ),
                 },

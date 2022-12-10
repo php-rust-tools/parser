@@ -1,9 +1,9 @@
 use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::ast::modifiers::PromotedPropertyModifierGroup;
-use crate::parser::ast::variables::Variable;
+use crate::parser::ast::variables::SimpleVariable;
 use crate::parser::ast::Block;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Type;
@@ -12,7 +12,7 @@ use crate::parser::ast::Type;
 pub struct FunctionParameter {
     pub start: Span,
     pub end: Span,
-    pub name: Variable,
+    pub name: SimpleVariable,
     pub attributes: Vec<AttributeGroup>,
     pub r#type: Option<Type>,
     pub variadic: bool,
@@ -31,7 +31,7 @@ pub struct FunctionParameterList {
 pub struct Function {
     pub start: Span,
     pub end: Span,
-    pub name: Identifier,
+    pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,
     pub parameters: FunctionParameterList,
     pub return_type: Option<Type>,
@@ -74,7 +74,7 @@ pub struct ArrowFunction {
 pub struct MethodParameter {
     pub start: Span,
     pub end: Span,
-    pub name: Variable,
+    pub name: SimpleVariable,
     pub attributes: Vec<AttributeGroup>,
     pub r#type: Option<Type>,
     pub variadic: bool,
@@ -94,7 +94,7 @@ pub struct MethodParameterList {
 pub struct Method {
     pub start: Span,
     pub end: Span,
-    pub name: Identifier,
+    pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,
     pub parameters: MethodParameterList,
     pub body: Option<Block>,

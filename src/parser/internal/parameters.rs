@@ -13,6 +13,7 @@ use crate::parser::internal::attributes;
 use crate::parser::internal::data_type;
 use crate::parser::internal::modifiers;
 use crate::parser::internal::utils;
+use crate::parser::internal::variables;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 
@@ -45,7 +46,7 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
         }
 
         // 2. Then expect a variable.
-        let var = identifiers::var(state)?;
+        let var = variables::simple_variable(state)?;
 
         let mut default = None;
         if state.current.kind == TokenKind::Equals {
@@ -157,7 +158,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
         }
 
         // 2. Then expect a variable.
-        let var = identifiers::var(state)?;
+        let var = variables::simple_variable(state)?;
 
         if !modifiers.is_empty() {
             match construct {
@@ -282,6 +283,7 @@ pub fn args_list(state: &mut State) -> ParseResult<Vec<Arg>> {
             value,
         });
 
+        state.skip_comments();
         if state.current.kind == TokenKind::Comma {
             state.next();
             state.skip_comments();

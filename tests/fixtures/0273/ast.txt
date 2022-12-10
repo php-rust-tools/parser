@@ -9,16 +9,12 @@
                 7,
                 1,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     3,
                     7,
                 ),
                 name: "a",
-                end: (
-                    3,
-                    9,
-                ),
             },
             extends: None,
             implements: None,
@@ -34,16 +30,12 @@
                             6,
                             5,
                         ),
-                        name: Identifier {
-                            start: (
+                        name: SimpleIdentifier {
+                            span: (
                                 4,
                                 21,
                             ),
                             name: "foo",
-                            end: (
-                                4,
-                                24,
-                            ),
                         },
                         attributes: [],
                         parameters: MethodParameterList {
@@ -63,17 +55,15 @@
                                     expr: AssignmentOperation(
                                         Assign {
                                             left: Variable(
-                                                Variable {
-                                                    start: (
-                                                        5,
-                                                        9,
-                                                    ),
-                                                    name: "a",
-                                                    end: (
-                                                        5,
-                                                        12,
-                                                    ),
-                                                },
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: (
+                                                            5,
+                                                            9,
+                                                        ),
+                                                        name: "a",
+                                                    },
+                                                ),
                                             ),
                                             span: (
                                                 5,
@@ -82,17 +72,15 @@
                                             right: StaticMethodCall {
                                                 target: Static,
                                                 method: Identifier(
-                                                    Identifier {
-                                                        start: (
-                                                            5,
-                                                            22,
-                                                        ),
-                                                        name: "bar",
-                                                        end: (
-                                                            5,
-                                                            25,
-                                                        ),
-                                                    },
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: (
+                                                                5,
+                                                                22,
+                                                            ),
+                                                            name: "bar",
+                                                        },
+                                                    ),
                                                 ),
                                                 args: [],
                                             },

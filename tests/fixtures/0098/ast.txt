@@ -2,33 +2,35 @@
     Expression {
         expr: StaticPropertyFetch {
             target: Identifier(
-                Identifier {
-                    start: (
-                        1,
-                        7,
-                    ),
-                    name: "Foo",
-                    end: (
-                        1,
-                        10,
-                    ),
-                },
-            ),
-            property: DynamicVariable {
-                name: Variable(
-                    Variable {
-                        start: (
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
                             1,
-                            13,
+                            7,
                         ),
-                        name: "a",
-                        end: (
+                        name: "Foo",
+                    },
+                ),
+            ),
+            property: Variable(
+                VariableVariable(
+                    VariableVariable {
+                        span: (
                             1,
-                            15,
+                            12,
+                        ),
+                        variable: SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    1,
+                                    13,
+                                ),
+                                name: "a",
+                            },
                         ),
                     },
                 ),
-            },
+            ),
         },
     },
 ]

@@ -9,16 +9,12 @@
                 7,
                 1,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     3,
                     10,
                 ),
                 name: "bar",
-                end: (
-                    3,
-                    13,
-                ),
             },
             attributes: [],
             parameters: FunctionParameterList {
@@ -40,60 +36,44 @@
                             5,
                             1,
                         ),
-                        name: Variable {
-                            start: (
+                        name: SimpleVariable {
+                            span: (
                                 4,
                                 13,
                             ),
                             name: "i",
-                            end: (
-                                5,
-                                1,
-                            ),
                         },
                         attributes: [],
                         type: Some(
                             Union(
                                 [
                                     Identifier(
-                                        Identifier {
-                                            start: (
+                                        SimpleIdentifier {
+                                            span: (
                                                 4,
                                                 5,
                                             ),
                                             name: "A",
-                                            end: (
-                                                4,
-                                                6,
-                                            ),
                                         },
                                     ),
                                     Intersection(
                                         [
                                             Identifier(
-                                                Identifier {
-                                                    start: (
+                                                SimpleIdentifier {
+                                                    span: (
                                                         4,
                                                         8,
                                                     ),
                                                     name: "B",
-                                                    end: (
-                                                        4,
-                                                        9,
-                                                    ),
                                                 },
                                             ),
                                             Identifier(
-                                                Identifier {
-                                                    start: (
+                                                SimpleIdentifier {
+                                                    span: (
                                                         4,
                                                         10,
                                                     ),
                                                     name: "C",
-                                                    end: (
-                                                        4,
-                                                        11,
-                                                    ),
                                                 },
                                             ),
                                         ],
@@ -113,44 +93,32 @@
                         Intersection(
                             [
                                 Identifier(
-                                    Identifier {
-                                        start: (
+                                    SimpleIdentifier {
+                                        span: (
                                             5,
                                             5,
                                         ),
                                         name: "B",
-                                        end: (
-                                            5,
-                                            6,
-                                        ),
                                     },
                                 ),
                                 Identifier(
-                                    Identifier {
-                                        start: (
+                                    SimpleIdentifier {
+                                        span: (
                                             5,
                                             7,
                                         ),
                                         name: "C",
-                                        end: (
-                                            5,
-                                            8,
-                                        ),
                                     },
                                 ),
                             ],
                         ),
                         Identifier(
-                            Identifier {
-                                start: (
+                            SimpleIdentifier {
+                                span: (
                                     5,
                                     10,
                                 ),
                                 name: "A",
-                                end: (
-                                    5,
-                                    12,
-                                ),
                             },
                         ),
                     ],
@@ -161,17 +129,15 @@
                 Return {
                     value: Some(
                         Variable(
-                            Variable {
-                                start: (
-                                    6,
-                                    12,
-                                ),
-                                name: "i",
-                                end: (
-                                    6,
-                                    14,
-                                ),
-                            },
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        6,
+                                        12,
+                                    ),
+                                    name: "i",
+                                },
+                            ),
                         ),
                     ),
                 },

@@ -2,16 +2,12 @@
     Declare {
         declares: [
             DeclareItem {
-                key: Identifier {
-                    start: (
+                key: SimpleIdentifier {
+                    span: (
                         3,
                         9,
                     ),
                     name: "a",
-                    end: (
-                        3,
-                        10,
-                    ),
                 },
                 value: LiteralInteger {
                     i: "1",
@@ -21,17 +17,15 @@
         body: [
             Expression {
                 expr: Variable(
-                    Variable {
-                        start: (
-                            4,
-                            5,
-                        ),
-                        name: "a",
-                        end: (
-                            4,
-                            7,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                4,
+                                5,
+                            ),
+                            name: "a",
+                        },
+                    ),
                 ),
             },
         ],
@@ -39,16 +33,12 @@
     Declare {
         declares: [
             DeclareItem {
-                key: Identifier {
-                    start: (
+                key: SimpleIdentifier {
+                    span: (
                         7,
                         9,
                     ),
                     name: "b",
-                    end: (
-                        7,
-                        10,
-                    ),
                 },
                 value: LiteralString {
                     value: "9",
@@ -58,17 +48,15 @@
         body: [
             Expression {
                 expr: Variable(
-                    Variable {
-                        start: (
-                            8,
-                            5,
-                        ),
-                        name: "a",
-                        end: (
-                            8,
-                            7,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                8,
+                                5,
+                            ),
+                            name: "a",
+                        },
+                    ),
                 ),
             },
         ],
@@ -76,16 +64,12 @@
     Declare {
         declares: [
             DeclareItem {
-                key: Identifier {
-                    start: (
+                key: SimpleIdentifier {
+                    span: (
                         11,
                         9,
                     ),
                     name: "foo",
-                    end: (
-                        11,
-                        12,
-                    ),
                 },
                 value: LiteralFloat {
                     f: "1.42",

@@ -5,7 +5,7 @@ use std::vec::IntoIter;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::attributes::AttributeGroup;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::error::ParseError;
@@ -19,17 +19,17 @@ pub enum NamespaceType {
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Scope {
-    Namespace(Identifier),
-    BracedNamespace(Option<Identifier>),
+    Namespace(SimpleIdentifier),
+    BracedNamespace(Option<SimpleIdentifier>),
 
-    Interface(Identifier),
-    Class(Identifier, ClassModifierGroup, bool),
-    Trait(Identifier),
-    Enum(Identifier, bool),
+    Interface(SimpleIdentifier),
+    Class(SimpleIdentifier, ClassModifierGroup, bool),
+    Trait(SimpleIdentifier),
+    Enum(SimpleIdentifier, bool),
     AnonymousClass(bool),
 
-    Function(Identifier),
-    Method(Identifier, MethodModifierGroup),
+    Function(SimpleIdentifier),
+    Method(SimpleIdentifier, MethodModifierGroup),
     AnonymousFunction(bool),
     ArrowFunction(bool),
 }
@@ -139,12 +139,6 @@ impl State {
     pub fn exit(&mut self) {
         self.stack.pop_back();
         self.update_scope();
-    }
-
-    pub fn skip_close_tag(&mut self) {
-        if matches!(self.current.kind, TokenKind::CloseTag) {
-            self.next();
-        }
     }
 
     pub fn skip_comments(&mut self) {

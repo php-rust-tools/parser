@@ -9,16 +9,12 @@
                 7,
                 1,
             ),
-            name: Identifier {
-                start: (
+            name: SimpleIdentifier {
+                span: (
                     3,
                     10,
                 ),
                 name: "a",
-                end: (
-                    3,
-                    11,
-                ),
             },
             attributes: [],
             parameters: FunctionParameterList {
@@ -56,17 +52,15 @@
         expr: AssignmentOperation(
             Assign {
                 left: Variable(
-                    Variable {
-                        start: (
-                            9,
-                            1,
-                        ),
-                        name: "bar",
-                        end: (
-                            9,
-                            6,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                9,
+                                1,
+                            ),
+                            name: "bar",
+                        },
+                    ),
                 ),
                 span: (
                     9,
@@ -74,17 +68,15 @@
                 ),
                 right: Call {
                     target: Identifier(
-                        Identifier {
-                            start: (
-                                9,
-                                8,
-                            ),
-                            name: "a",
-                            end: (
-                                9,
-                                9,
-                            ),
-                        },
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: (
+                                    9,
+                                    8,
+                                ),
+                                name: "a",
+                            },
+                        ),
                     ),
                     args: [
                         Arg {
@@ -98,47 +90,37 @@
         ),
     },
     Label {
-        label: Identifier {
-            start: (
+        label: SimpleIdentifier {
+            span: (
                 11,
                 1,
             ),
             name: "foo",
-            end: (
-                11,
-                4,
-            ),
         },
     },
     Expression {
         expr: Call {
             target: Variable(
-                Variable {
-                    start: (
-                        12,
-                        5,
-                    ),
-                    name: "bar",
-                    end: (
-                        12,
-                        9,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            12,
+                            5,
+                        ),
+                        name: "bar",
+                    },
+                ),
             ),
             args: [],
         },
     },
     Goto {
-        label: Identifier {
-            start: (
+        label: SimpleIdentifier {
+            span: (
                 13,
                 10,
             ),
             name: "foo",
-            end: (
-                13,
-                13,
-            ),
         },
     },
 ]

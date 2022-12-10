@@ -1,14 +1,14 @@
 use serde::{Deserialize, Serialize};
 
 use crate::lexer::token::Span;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Block;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
 pub enum CatchType {
-    Identifier(Identifier),
-    Union(Vec<Identifier>),
+    Identifier(SimpleIdentifier),
+    Union(Vec<SimpleIdentifier>),
 }
 
 #[derive(Debug, Clone, PartialEq)]

@@ -1,6 +1,6 @@
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
 use crate::parser::ast::interfaces::InterfaceExtends;
 use crate::parser::ast::interfaces::InterfaceMember;
@@ -31,7 +31,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
         state.next();
 
-        let parents = utils::at_least_one_comma_separated::<Identifier>(state, &|state| {
+        let parents = utils::at_least_one_comma_separated::<SimpleIdentifier>(state, &|state| {
             identifiers::full_name(state)
         })?;
 

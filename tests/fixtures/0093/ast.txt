@@ -1,9 +1,21 @@
 [
     Expression {
-        expr: DynamicVariable {
-            name: LiteralString {
-                value: "foo",
-            },
-        },
+        expr: Variable(
+            BracedVariableVariable(
+                BracedVariableVariable {
+                    start: (
+                        1,
+                        7,
+                    ),
+                    variable: LiteralString {
+                        value: "foo",
+                    },
+                    end: (
+                        1,
+                        14,
+                    ),
+                },
+            ),
+        ),
     },
 ]

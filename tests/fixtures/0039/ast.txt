@@ -1,33 +1,29 @@
 [
     If {
         condition: Variable(
-            Variable {
-                start: (
-                    1,
-                    10,
-                ),
-                name: "foo",
-                end: (
-                    1,
-                    14,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        1,
+                        10,
+                    ),
+                    name: "foo",
+                },
+            ),
         ),
         then: [
             Return {
                 value: Some(
                     Variable(
-                        Variable {
-                            start: (
-                                1,
-                                23,
-                            ),
-                            name: "foo",
-                            end: (
-                                1,
-                                27,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    1,
+                                    23,
+                                ),
+                                name: "foo",
+                            },
+                        ),
                     ),
                 ),
             },

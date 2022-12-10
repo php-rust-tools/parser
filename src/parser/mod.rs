@@ -3,6 +3,7 @@ use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::comments::Comment;
 use crate::parser::ast::comments::CommentFormat;
+use crate::parser::ast::variables::Variable;
 use crate::parser::ast::{DeclareItem, Expression, Program, Statement, StaticVar};
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
@@ -22,6 +23,7 @@ use crate::parser::internal::traits;
 use crate::parser::internal::try_block;
 use crate::parser::internal::uses;
 use crate::parser::internal::utils;
+use crate::parser::internal::variables;
 use crate::parser::state::State;
 
 pub mod ast;
@@ -239,12 +241,13 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 Statement::Declare { declares, body }
             }
             TokenKind::Global => {
+                let span = state.current.span;
                 state.next();
 
-                let mut vars = vec![];
+                let mut variables = vec![];
                 // `loop` instead of `while` as we don't allow for extra commas.
                 loop {
-                    vars.push(identifiers::var(state)?);
+                    variables.push(variables::dynamic_variable(state)?);
 
                     if state.current.kind == TokenKind::Comma {
                         state.next();
@@ -254,7 +257,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 }
 
                 utils::skip_semicolon(state)?;
-                Statement::Global { vars }
+                Statement::Global { span, variables }
             }
             TokenKind::Static if matches!(state.peek.kind, TokenKind::Variable(_)) => {
                 state.next();
@@ -263,7 +266,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
 
                 // `loop` instead of `while` as we don't allow for extra commas.
                 loop {
-                    let var = identifiers::var(state)?;
+                    let var = variables::simple_variable(state)?;
                     let mut default = None;
 
                     if state.current.kind == TokenKind::Equals {
@@ -273,7 +276,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     }
 
                     // TODO: group static vars.
-                    vars.push(StaticVar { var, default });
+                    vars.push(StaticVar {
+                        var: Variable::SimpleVariable(var),
+                        default,
+                    });
 
                     if state.current.kind == TokenKind::Comma {
                         state.next();

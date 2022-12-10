@@ -1,34 +1,76 @@
+use crate::expected_token_err;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::Expression;
+use crate::parser::ast::variables::BracedVariableVariable;
+use crate::parser::ast::variables::SimpleVariable;
+use crate::parser::ast::variables::Variable;
+use crate::parser::ast::variables::VariableVariable;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
-use crate::parser::internal::identifiers;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
-use crate::peek_token;
 
-pub fn dynamic_variable(state: &mut State) -> ParseResult<Expression> {
-    state.next();
+pub fn simple_variable(state: &mut State) -> ParseResult<SimpleVariable> {
+    if let TokenKind::Variable(name) = state.current.kind.clone() {
+        let span = state.current.span;
+        state.next();
 
-    let expr = peek_token!([
-        TokenKind::LeftBrace => {
+        return Ok(SimpleVariable { span, name });
+    }
+
+    expected_token_err!("a variable", state)
+}
+
+pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
+    match state.current.kind.clone() {
+        TokenKind::Variable(name) => {
+            let span = state.current.span;
             state.next();
 
-            // TODO(azjezz): this is not an expression! it's a constant expression
-            let name = expressions::lowest_precedence(state)?;
-
-            utils::skip_right_brace(state)?;
-
-            Expression::DynamicVariable {
-                name: Box::new(name),
-            }
-        },
-        TokenKind::Variable(_) => {
-            Expression::DynamicVariable {
-                name: Box::new(Expression::Variable(identifiers::var(state)?)),
-            }
+            Ok(Variable::SimpleVariable(SimpleVariable { span, name }))
         }
-    ], state, ["`{`", "a variable"]);
+        TokenKind::DollarLeftBrace => {
+            let start = state.current.span;
+            state.next();
 
-    Ok(expr)
+            let expr = expressions::lowest_precedence(state)?;
+
+            let end = utils::skip_right_brace(state)?;
+
+            Ok(Variable::BracedVariableVariable(BracedVariableVariable {
+                start,
+                variable: Box::new(expr),
+                end,
+            }))
+        }
+        // todo(azjezz): figure out why the lexer does this.
+        TokenKind::Dollar if state.peek.kind == TokenKind::LeftBrace => {
+            let start = state.current.span;
+            state.next();
+            state.next();
+
+            let expr = expressions::lowest_precedence(state)?;
+
+            let end = utils::skip_right_brace(state)?;
+
+            Ok(Variable::BracedVariableVariable(BracedVariableVariable {
+                start,
+                variable: Box::new(expr),
+                end,
+            }))
+        }
+        TokenKind::Dollar => {
+            let span = state.current.span;
+            state.next();
+
+            let variable = dynamic_variable(state)?;
+
+            Ok(Variable::VariableVariable(VariableVariable {
+                span,
+                variable: Box::new(variable),
+            }))
+        }
+        _ => {
+            expected_token_err!("a variable", state)
+        }
+    }
 }

@@ -1,6 +1,6 @@
 use crate::lexer::token::TokenKind;
 use crate::parser;
-use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Block;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
@@ -40,7 +40,7 @@ pub fn namespace(state: &mut State) -> ParseResult<Statement> {
     }
 }
 
-fn unbraced_namespace(state: &mut State, name: Identifier) -> ParseResult<Statement> {
+fn unbraced_namespace(state: &mut State, name: SimpleIdentifier) -> ParseResult<Statement> {
     let body = scoped!(state, Scope::Namespace(name.clone()), {
         let mut body = Block::new();
         // since this is an unbraced namespace, as soon as we encouter another
@@ -56,7 +56,7 @@ fn unbraced_namespace(state: &mut State, name: Identifier) -> ParseResult<Statem
     Ok(Statement::Namespace { name, body })
 }
 
-fn braced_namespace(state: &mut State, name: Option<Identifier>) -> ParseResult<Statement> {
+fn braced_namespace(state: &mut State, name: Option<SimpleIdentifier>) -> ParseResult<Statement> {
     utils::skip_left_brace(state)?;
 
     let body = scoped!(state, Scope::BracedNamespace(name.clone()), {

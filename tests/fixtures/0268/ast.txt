@@ -1,17 +1,15 @@
 [
     While {
         condition: Variable(
-            Variable {
-                start: (
-                    3,
-                    8,
-                ),
-                name: "foo",
-                end: (
-                    3,
-                    12,
-                ),
-            },
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        3,
+                        8,
+                    ),
+                    name: "foo",
+                },
+            ),
         ),
         body: [],
     },

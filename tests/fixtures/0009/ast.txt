@@ -2,17 +2,15 @@
     Expression {
         expr: ArrayIndex {
             array: Variable(
-                Variable {
-                    start: (
-                        3,
-                        1,
-                    ),
-                    name: "foo",
-                    end: (
-                        3,
-                        5,
-                    ),
-                },
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            3,
+                            1,
+                        ),
+                        name: "foo",
+                    },
+                ),
             ),
             index: Some(
                 LiteralString {
@@ -25,17 +23,15 @@
         expr: ArrayIndex {
             array: ArrayIndex {
                 array: Variable(
-                    Variable {
-                        start: (
-                            5,
-                            1,
-                        ),
-                        name: "foo",
-                        end: (
-                            5,
-                            5,
-                        ),
-                    },
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                5,
+                                1,
+                            ),
+                            name: "foo",
+                        },
+                    ),
                 ),
                 index: Some(
                     LiteralString {
@@ -55,17 +51,15 @@
             Assign {
                 left: ArrayIndex {
                     array: Variable(
-                        Variable {
-                            start: (
-                                7,
-                                1,
-                            ),
-                            name: "foo",
-                            end: (
-                                7,
-                                5,
-                            ),
-                        },
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: (
+                                    7,
+                                    1,
+                                ),
+                                name: "foo",
+                            },
+                        ),
                     ),
                     index: Some(
                         LiteralString {
