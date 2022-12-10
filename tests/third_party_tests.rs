@@ -110,6 +110,62 @@ fn madelineproto() {
 }
 
 #[test]
+fn phabel() {
+    test_repository(
+        "phabel",
+        "https://github.com/phabelio/phabel",
+        &[],
+    );
+}
+
+#[test]
+fn psalm() {
+    test_repository(
+        "psalm",
+        "https://github.com/vimeo/psalm",
+        &[],
+    );
+}
+
+#[test]
+fn phpstan() {
+    test_repository(
+        "phpstan",
+        "https://github.com/phpstan/phpstan",
+        &[],
+    );
+}
+
+
+#[test]
+fn phpstan_src() {
+    test_repository(
+        "phpstan-src",
+        "https://github.com/phpstan/phpstan-src",
+        &[],
+    );
+}
+
+#[test]
+fn rector() {
+    test_repository(
+        "rector",
+        "https://github.com/rectorphp/rector",
+        &[],
+    );
+}
+
+
+#[test]
+fn rector_src() {
+    test_repository(
+        "rector-src",
+        "https://github.com/rectorphp/rector-src",
+        &[],
+    );
+}
+
+#[test]
 fn composer() {
     test_repository("composer", "https://github.com/composer/composer", &[]);
 }
@@ -350,16 +406,17 @@ fn read_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) -> Vec<(St
             continue;
         }
 
+        let path = &entry
+            .as_path()
+            .strip_prefix(&root)
+            .unwrap()
+            .to_str()
+            .unwrap();
+
         if entry.is_file()
             && entry.extension().unwrap_or_default() == "php"
-            && !ignore.contains(
-                &entry
-                    .as_path()
-                    .strip_prefix(&root)
-                    .unwrap()
-                    .to_str()
-                    .unwrap(),
-            )
+            && !ignore.contains(path)
+            && !path.starts_with("vendor/symfony")
         {
             let name_entry = entry.clone();
             let fullanme_string = name_entry.to_string_lossy();
