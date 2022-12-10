@@ -123,49 +123,27 @@ fn phabel() {
 
 #[test]
 fn psalm() {
-    test_repository(
-        "psalm",
-        "https://github.com/vimeo/psalm",
-        &[],
-    );
+    test_repository("psalm", "https://github.com/vimeo/psalm", &[]);
 }
 
 #[test]
 fn phpstan() {
-    test_repository(
-        "phpstan",
-        "https://github.com/phpstan/phpstan",
-        &[],
-    );
+    test_repository("phpstan", "https://github.com/phpstan/phpstan", &[]);
 }
-
 
 #[test]
 fn phpstan_src() {
-    test_repository(
-        "phpstan-src",
-        "https://github.com/phpstan/phpstan-src",
-        &[],
-    );
+    test_repository("phpstan-src", "https://github.com/phpstan/phpstan-src", &[]);
 }
 
 #[test]
 fn rector() {
-    test_repository(
-        "rector",
-        "https://github.com/rectorphp/rector",
-        &[],
-    );
+    test_repository("rector", "https://github.com/rectorphp/rector", &[]);
 }
-
 
 #[test]
 fn rector_src() {
-    test_repository(
-        "rector-src",
-        "https://github.com/rectorphp/rector-src",
-        &[],
-    );
+    test_repository("rector-src", "https://github.com/rectorphp/rector-src", &[]);
 }
 
 #[test]
