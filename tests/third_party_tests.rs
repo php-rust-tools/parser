@@ -168,6 +168,50 @@ fn third_party_12_silverstripe_framework_cms() {
     );
 }
 
+#[test]
+fn third_party_13_roundcubemail_web() {
+    test_repository(
+        "roundcubemail",
+        "https://github.com/roundcube/roundcubemail",
+        "master",
+        &["config", "installer", "plugins", "program", "tests"],
+        &[],
+    );
+}
+
+#[test]
+fn third_party_14_phpmyadmin_web() {
+    test_repository(
+        "phpmyadmin",
+        "https://github.com/phpmyadmin/phpmyadmin",
+        "master",
+        &["libraries", "test", "examples"],
+        &[],
+    );
+}
+
+#[test]
+fn third_party_15_phpbb_web() {
+    test_repository(
+        "phpbb",
+        "https://github.com/phpbb/phpbb",
+        "master",
+        &["phpBB", "tests", "build"],
+        &[],
+    );
+}
+
+#[test]
+fn third_party_16_drupal_core() {
+    test_repository(
+        "drupal",
+        "https://github.com/drupal/core",
+        "9.4.x",
+        &["lib", "tests"],
+        &[],
+    );
+}
+
 fn test_repository(
     name: &str,
     repository: &str,
@@ -232,13 +276,13 @@ fn test_repository(
                             }
                             Err(error) => {
                                 results.push(TestResult::Error(format!(
-                                    "❌ [{thread_name}][{name}]: {error:?}"
+                                    "❌ [{thread_name}][{name}]: {error} ({error:?})"
                                 )));
                             }
                         },
                         Err(error) => {
                             results.push(TestResult::Error(format!(
-                                "❌ [{thread_name}][{name}]: {error:?}"
+                                "❌ [{thread_name}][{name}]: {error} ({error:?})"
                             )));
                         }
                     }
