@@ -103,9 +103,11 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 }
 
 fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMember> {
-    let has_attributes = attributes::gather_attributes(state)?;
+    attributes::gather_attributes(state)?;
 
-    if !has_attributes && state.current.kind == TokenKind::Case {
+    if state.current.kind == TokenKind::Case {
+        let attributes = state.get_attributes();
+
         let start = state.current.span;
         state.next();
 
@@ -121,7 +123,12 @@ fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMemb
 
         let end = utils::skip_semicolon(state)?;
 
-        return Ok(UnitEnumMember::Case(UnitEnumCase { start, end, name }));
+        return Ok(UnitEnumMember::Case(UnitEnumCase {
+            start,
+            end,
+            name,
+            attributes,
+        }));
     }
 
     let modifiers = modifiers::collect(state)?;
@@ -135,9 +142,11 @@ fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMemb
 }
 
 fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnumMember> {
-    let has_attributes = attributes::gather_attributes(state)?;
+    attributes::gather_attributes(state)?;
 
-    if !has_attributes && state.current.kind == TokenKind::Case {
+    if state.current.kind == TokenKind::Case {
+        let attributes = state.get_attributes();
+
         let start = state.current.span;
         state.next();
 
@@ -162,6 +171,7 @@ fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnum
             end,
             name,
             value,
+            attributes,
         }));
     }
 

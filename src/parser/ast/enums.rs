@@ -7,10 +7,11 @@ use crate::parser::ast::functions::Method;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct UnitEnumCase {
     pub start: Span,
     pub end: Span,
+    pub attributes: Vec<AttributeGroup>,
     pub name: SimpleIdentifier,
 }
 
@@ -42,6 +43,7 @@ pub struct BackedEnumCase {
     pub start: Span,
     pub end: Span,
     pub name: SimpleIdentifier,
+    pub attributes: Vec<AttributeGroup>,
     pub value: Expression,
 }
 
