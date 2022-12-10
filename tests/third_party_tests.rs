@@ -249,6 +249,7 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
             .arg("update")
             .arg("--ignore-platform-reqs")
             .arg("--no-plugins")
+            .arg("--no-scripts")
             .current_dir(&out_path)
             .output()
             .expect("failed to run composer");
