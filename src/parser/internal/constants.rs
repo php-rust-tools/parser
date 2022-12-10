@@ -52,7 +52,7 @@ pub fn classish(
     let mut entries = vec![];
 
     loop {
-        let name = identifiers::ident(state)?;
+        let name = identifiers::ident_maybe_soft_reserved(state)?;
 
         utils::skip(state, TokenKind::Equals)?;
 
