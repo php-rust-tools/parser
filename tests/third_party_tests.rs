@@ -54,6 +54,7 @@ fn nikic_php_parser() {
         "nikic/PHP-Parser",
         "https://github.com/nikic/PHP-Parser",
         &[
+            // Auto-generated parsers with syntax mistakes
             "vendor/ircmaxell/php-yacc/examples/00-basic-usage/parser.template.php",
             "vendor/ircmaxell/php-yacc/examples/01-expression-support/parser.template.php",
             "vendor/ircmaxell/php-yacc/examples/02-complex-expression-support/parser.template.php",
@@ -208,6 +209,7 @@ fn doctrine_dbal() {
         "doctrine-dbal",
         "https://github.com/doctrine/dbal",
         &[
+            // Files with invalid syntax meant to be parsed only by phpstorm
             "vendor/jetbrains/phpstorm-stubs/Core/Core_c.php",
             "vendor/jetbrains/phpstorm-stubs/eio/eio.php",
             "vendor/jetbrains/phpstorm-stubs/event/event.php",
