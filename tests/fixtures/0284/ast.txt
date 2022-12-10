@@ -1,0 +1,138 @@
+[
+    Class(
+        Class {
+            start: (
+                7,
+                1,
+            ),
+            end: (
+                9,
+                1,
+            ),
+            name: SimpleIdentifier {
+                span: (
+                    7,
+                    7,
+                ),
+                name: "a",
+            },
+            extends: None,
+            implements: None,
+            attributes: [
+                AttributeGroup {
+                    start: (
+                        6,
+                        1,
+                    ),
+                    end: (
+                        6,
+                        64,
+                    ),
+                    members: [
+                        Attribute {
+                            start: (
+                                6,
+                                3,
+                            ),
+                            end: (
+                                6,
+                                19,
+                            ),
+                            expression: Call {
+                                target: Identifier(
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: (
+                                                6,
+                                                3,
+                                            ),
+                                            name: "foo",
+                                        },
+                                    ),
+                                ),
+                                args: [
+                                    Arg {
+                                        name: None,
+                                        value: ConstFetch {
+                                            target: Self_,
+                                            constant: SimpleIdentifier {
+                                                span: (
+                                                    6,
+                                                    13,
+                                                ),
+                                                name: "class",
+                                            },
+                                        },
+                                        unpack: false,
+                                    },
+                                ],
+                            },
+                        },
+                        Attribute {
+                            start: (
+                                6,
+                                21,
+                            ),
+                            end: (
+                                6,
+                                64,
+                            ),
+                            expression: Call {
+                                target: Identifier(
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: (
+                                                6,
+                                                21,
+                                            ),
+                                            name: "bar",
+                                        },
+                                    ),
+                                ),
+                                args: [
+                                    Arg {
+                                        name: None,
+                                        value: New {
+                                            target: Self_,
+                                            span: (
+                                                6,
+                                                25,
+                                            ),
+                                            args: [],
+                                        },
+                                        unpack: false,
+                                    },
+                                    Arg {
+                                        name: None,
+                                        value: New {
+                                            target: Parent,
+                                            span: (
+                                                6,
+                                                37,
+                                            ),
+                                            args: [],
+                                        },
+                                        unpack: false,
+                                    },
+                                    Arg {
+                                        name: None,
+                                        value: New {
+                                            target: Static,
+                                            span: (
+                                                6,
+                                                51,
+                                            ),
+                                            args: [],
+                                        },
+                                        unpack: false,
+                                    },
+                                ],
+                            },
+                        },
+                    ],
+                },
+            ],
+            members: [],
+        },
+    ),
+]
