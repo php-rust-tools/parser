@@ -1,4 +1,4 @@
-use crate::lexer::token::{Span, TokenKind};
+use crate::lexer::token::Span;
 
 use super::Expression;
 

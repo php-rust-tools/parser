@@ -4,7 +4,7 @@ use crate::lexer::error::SyntaxError;
 use crate::lexer::token::DocStringIndentationKind;
 use crate::lexer::token::TokenKind;
 use crate::lexer::DocStringKind;
-use crate::parser::ast;
+
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::variables::Variable;
 use crate::parser::ast::StringPart;
