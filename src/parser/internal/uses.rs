@@ -33,7 +33,7 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
 
             if state.current.kind == TokenKind::As {
                 state.next();
-                alias = Some(identifiers::ident(state)?);
+                alias = Some(identifiers::identifier(state)?);
             }
 
             uses.push(Use { name, alias });
@@ -56,7 +56,7 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
 
             if state.current.kind == TokenKind::As {
                 state.next();
-                alias = Some(identifiers::ident(state)?);
+                alias = Some(identifiers::identifier(state)?);
             }
 
             uses.push(Use { name, alias });

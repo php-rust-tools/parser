@@ -6,8 +6,8 @@ use crate::parser::state::State;
 
 use crate::peek_token;
 
-pub fn ident_of(state: &mut State, kinds: &[&str]) -> ParseResult<SimpleIdentifier> {
-    let ident = ident(state)?;
+pub fn identifier_of(state: &mut State, kinds: &[&str]) -> ParseResult<SimpleIdentifier> {
+    let ident = identifier(state)?;
 
     let name = ident.name.to_string();
 
@@ -22,8 +22,38 @@ pub fn ident_of(state: &mut State, kinds: &[&str]) -> ParseResult<SimpleIdentifi
     }
 }
 
+/// Expect an unqualified identifier such as Foo or Bar for a class, interface, trait, or an enum name.
+pub fn type_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
+    match state.current.kind.clone() {
+        TokenKind::Identifier(name) => {
+            let span = state.current.span;
+
+            state.next();
+
+            Ok(SimpleIdentifier { span, name })
+        }
+        TokenKind::Enum | TokenKind::From => {
+            let span = state.current.span;
+            let name = state.current.kind.to_string().into();
+
+            state.next();
+
+            Ok(SimpleIdentifier { span, name })
+        }
+        t if is_reserved_identifier(&t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
+            state.current.kind.to_string(),
+            state.current.span,
+        )),
+        _ => Err(ParseError::ExpectedToken(
+            vec!["an identifier".to_owned()],
+            Some(state.current.kind.to_string()),
+            state.current.span,
+        )),
+    }
+}
+
 /// Expect an unqualified identifier such as Foo or Bar.
-pub fn ident(state: &mut State) -> ParseResult<SimpleIdentifier> {
+pub fn identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
     if let TokenKind::Identifier(name) = state.current.kind.clone() {
         let span = state.current.span;
 
@@ -86,9 +116,9 @@ pub fn full_name(state: &mut State) -> ParseResult<SimpleIdentifier> {
     Ok(SimpleIdentifier { span, name })
 }
 
-pub fn ident_maybe_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> {
+pub fn identifier_maybe_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> {
     match state.current.kind {
-        _ if is_reserved_ident(&state.current.kind) => {
+        _ if is_reserved_identifier(&state.current.kind) => {
             let name = state.current.kind.to_string().into();
 
             let span = state.current.span;
@@ -96,51 +126,52 @@ pub fn ident_maybe_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> 
 
             Ok(SimpleIdentifier { span, name })
         }
-        _ => ident(state),
+        _ => identifier(state),
     }
 }
 
-pub fn ident_maybe_soft_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> {
+pub fn identifier_maybe_soft_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> {
     match state.current.kind {
-        _ if is_soft_reserved_ident(&state.current.kind) => {
+        _ if is_soft_reserved_identifier(&state.current.kind) => {
             let name = state.current.kind.to_string().into();
             let span = state.current.span;
             state.next();
 
             Ok(SimpleIdentifier { span, name })
         }
-        _ => ident(state),
+        _ => identifier(state),
     }
 }
 
-pub fn is_ident_maybe_soft_reserved(kind: &TokenKind) -> bool {
+pub fn is_identifier_maybe_soft_reserved(kind: &TokenKind) -> bool {
     if let TokenKind::Identifier(_) = kind {
         return true;
     }
 
-    is_soft_reserved_ident(kind)
+    is_soft_reserved_identifier(kind)
 }
 
-pub fn is_ident_maybe_reserved(kind: &TokenKind) -> bool {
+pub fn is_identifier_maybe_reserved(kind: &TokenKind) -> bool {
     if let TokenKind::Identifier(_) = kind {
         return true;
     }
 
-    is_reserved_ident(kind)
+    is_reserved_identifier(kind)
 }
 
-pub fn is_soft_reserved_ident(kind: &TokenKind) -> bool {
+pub fn is_soft_reserved_identifier(kind: &TokenKind) -> bool {
     matches!(kind, |TokenKind::Parent| TokenKind::Self_
         | TokenKind::True
         | TokenKind::False
+        | TokenKind::List
         | TokenKind::Null
         | TokenKind::Enum
         | TokenKind::From
         | TokenKind::Readonly)
 }
 
-pub fn is_reserved_ident(kind: &TokenKind) -> bool {
-    if is_soft_reserved_ident(kind) {
+pub fn is_reserved_identifier(kind: &TokenKind) -> bool {
+    if is_soft_reserved_identifier(kind) {
         return true;
     }
 

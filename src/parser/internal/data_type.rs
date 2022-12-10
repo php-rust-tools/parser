@@ -154,6 +154,13 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
 
             Ok(Some(Type::ParentReference))
         }
+        TokenKind::Enum | TokenKind::From => {
+            let span = state.current.span;
+            let name = state.current.kind.to_string().into();
+            state.next();
+
+            Ok(Some(Type::Identifier(SimpleIdentifier { span, name })))
+        }
         TokenKind::Identifier(id) => {
             let span = state.current.span;
             state.next();

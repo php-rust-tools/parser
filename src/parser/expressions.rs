@@ -90,6 +90,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
             }
 
             state.next();
+            state.skip_comments();
 
             left =
                 match kind {
@@ -535,7 +536,7 @@ expressions! {
         | TokenKind::Enum       | TokenKind::From
     ), peek(TokenKind::LeftParen)]
     reserved_identifier_function_call(|state: &mut State| {
-        let ident = identifiers::ident_maybe_soft_reserved(state)?;
+        let ident = identifiers::identifier_maybe_soft_reserved(state)?;
         let lhs = Expression::Identifier(Identifier::SimpleIdentifier(ident));
 
         postfix(state, lhs, &TokenKind::LeftParen)
@@ -1004,6 +1005,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
     Ok(match op {
         TokenKind::Coalesce => {
             state.next();
+            state.skip_comments();
 
             let rhs = null_coalesce_precedence(state)?;
 
@@ -1013,6 +1015,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             }
         }
         TokenKind::LeftParen => {
+            state.skip_comments();
             let args = parameters::args_list(state)?;
 
             Expression::Call {
@@ -1022,6 +1025,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
         }
         TokenKind::LeftBracket => {
             utils::skip_left_bracket(state)?;
+            state.skip_comments();
 
             if state.current.kind == TokenKind::RightBracket {
                 state.next();
@@ -1043,6 +1047,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
         }
         TokenKind::DoubleColon => {
             utils::skip_double_colon(state)?;
+            state.skip_comments();
 
             let mut must_be_method_call = false;
 
@@ -1050,9 +1055,9 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                 TokenKind::Variable(_) | TokenKind::Dollar | TokenKind::DollarLeftBrace => {
                     Expression::Variable(variables::dynamic_variable(state)?)
                 }
-                _ if identifiers::is_ident_maybe_reserved(&state.current.kind) => {
+                _ if identifiers::is_identifier_maybe_reserved(&state.current.kind) => {
                     Expression::Identifier(Identifier::SimpleIdentifier(
-                        identifiers::ident_maybe_reserved(state)?,
+                        identifiers::identifier_maybe_reserved(state)?,
                     ))
                 }
                 TokenKind::LeftBrace => {
@@ -1117,14 +1122,15 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
         }
         TokenKind::Arrow | TokenKind::NullsafeArrow => {
             state.next();
+            state.skip_comments();
 
             let property = match state.current.kind {
                 TokenKind::Variable(_) | TokenKind::Dollar | TokenKind::DollarLeftBrace => {
                     Expression::Variable(variables::dynamic_variable(state)?)
                 }
-                _ if identifiers::is_ident_maybe_reserved(&state.current.kind) => {
+                _ if identifiers::is_identifier_maybe_reserved(&state.current.kind) => {
                     Expression::Identifier(Identifier::SimpleIdentifier(
-                        identifiers::ident_maybe_reserved(state)?,
+                        identifiers::identifier_maybe_reserved(state)?,
                     ))
                 }
                 TokenKind::LeftBrace => {
@@ -1177,6 +1183,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
         TokenKind::Increment => {
             let span = state.current.span;
             state.next();
+            state.skip_comments();
 
             Expression::ArithmeticOperation(ArithmeticOperation::PostIncrement {
                 left: Box::new(lhs),
@@ -1186,6 +1193,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
         TokenKind::Decrement => {
             let span = state.current.span;
             state.next();
+            state.skip_comments();
 
             Expression::ArithmeticOperation(ArithmeticOperation::PostDecrement {
                 left: Box::new(lhs),
@@ -1486,7 +1494,7 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                     Expression::PropertyFetch {
                         target: Box::new(variable),
                         property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
-                            identifiers::ident_maybe_reserved(state)?,
+                            identifiers::identifier_maybe_reserved(state)?,
                         ))),
                     }
                 }
@@ -1495,7 +1503,7 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                     Expression::NullsafePropertyFetch {
                         target: Box::new(variable),
                         property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
-                            identifiers::ident_maybe_reserved(state)?,
+                            identifiers::identifier_maybe_reserved(state)?,
                         ))),
                     }
                 }

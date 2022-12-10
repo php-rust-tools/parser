@@ -24,7 +24,7 @@ use crate::scoped;
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let start = utils::skip(state, TokenKind::Interface)?;
 
-    let name = identifiers::ident(state)?;
+    let name = identifiers::type_identifier(state)?;
 
     let extends = if state.current.kind == TokenKind::Extends {
         let span = state.current.span;

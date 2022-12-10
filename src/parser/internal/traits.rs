@@ -56,10 +56,10 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
                     TokenKind::DoubleColon => {
                         let r#trait = identifiers::full_name(state)?;
                         state.next();
-                        let method = identifiers::ident(state)?;
+                        let method = identifiers::identifier(state)?;
                         (Some(r#trait), method)
                     }
-                    _ => (None, identifiers::ident(state)?),
+                    _ => (None, identifiers::identifier(state)?),
                 };
 
             expect_token!([
@@ -163,7 +163,7 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
 
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let start = utils::skip(state, TokenKind::Trait)?;
-    let name = identifiers::ident(state)?;
+    let name = identifiers::type_identifier(state)?;
     let class = name.name.to_string();
     let attributes = state.get_attributes();
 
