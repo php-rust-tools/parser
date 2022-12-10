@@ -53,7 +53,17 @@ fn nikic_php_parser() {
     test_repository(
         "nikic/PHP-Parser",
         "https://github.com/nikic/PHP-Parser",
-        &[],
+        &[
+            "vendor/ircmaxell/php-yacc/examples/00-basic-usage/parser.template.php",
+            "vendor/ircmaxell/php-yacc/examples/01-expression-support/parser.template.php",
+            "vendor/ircmaxell/php-yacc/examples/02-complex-expression-support/parser.template.php",
+            "vendor/ircmaxell/php-yacc/examples/10-php7/parser.kmyacc.php",
+            "vendor/ircmaxell/php-yacc/examples/10-php7/parser.phpyacc.php",
+            "vendor/ircmaxell/php-yacc/examples/10-php7/parser.template.php",
+            "vendor/ircmaxell/php-yacc/examples/20-custom-parser/parser.kmyacc.php",
+            "vendor/ircmaxell/php-yacc/examples/20-custom-parser/parser.phpyacc.php",
+            "vendor/ircmaxell/php-yacc/examples/20-custom-parser/parser.template.php",
+        ],
     );
 }
 
@@ -85,6 +95,15 @@ fn symfony_polyfill() {
     test_repository(
         "symfony-polyfill",
         "https://github.com/symfony/polyfill",
+        &[],
+    );
+}
+
+#[test]
+fn madelineproto() {
+    test_repository(
+        "MadelineProto",
+        "https://github.com/danog/MadelineProto",
         &[],
     );
 }
@@ -185,7 +204,15 @@ fn doctrine_orm() {
 
 #[test]
 fn doctrine_dbal() {
-    test_repository("doctrine-dbal", "https://github.com/doctrine/dbal", &[]);
+    test_repository(
+        "doctrine-dbal",
+        "https://github.com/doctrine/dbal",
+        &[
+            "vendor/jetbrains/phpstorm-stubs/Core/Core_c.php",
+            "vendor/jetbrains/phpstorm-stubs/eio/eio.php",
+            "vendor/jetbrains/phpstorm-stubs/event/event.php",
+        ],
+    );
 }
 
 fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
@@ -209,6 +236,26 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
 
         if !output.status.success() {
             panic!("failed to clone repository: {:#?}", output)
+        }
+    }
+
+    let composer_json = out_path.join("composer.json");
+    let autoload = out_path.join("vendor").join("autoload.php");
+
+    if composer_json.exists() && !autoload.exists() {
+        let output = Command::new("composer")
+            .arg("update")
+            .arg("--ignore-platform-reqs")
+            .arg("--no-plugins")
+            .current_dir(&out_path)
+            .output()
+            .expect("failed to run composer");
+
+        if !output.status.success() {
+            panic!(
+                "failed to run composer install in repository: {:#?}",
+                output
+            )
         }
     }
 
