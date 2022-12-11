@@ -739,30 +739,38 @@ expressions! {
         shell_exec(state)
     })
 
-    #[before(self_postfix), current(TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_))]
+    #[before(static_postfix), current(TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_))]
     identifier(|state: &mut State| {
         Ok(Expression::Identifier(Identifier::SimpleIdentifier(identifiers::full_name(state)?)))
     })
 
-    #[before(static_postfix), current(TokenKind::Self_)]
-    self_postfix(|state: &mut State| {
-        state.next();
-
-        postfix(state, Expression::Self_, &TokenKind::DoubleColon)
-    })
-
-    #[before(parent_postfix), current(TokenKind::Static)]
+    #[before(self_identifier), current(TokenKind::Static)]
     static_postfix(|state: &mut State| {
         state.next();
 
         postfix(state, Expression::Static, &TokenKind::DoubleColon)
     })
 
-    #[before(left_parenthesis), current(TokenKind::Parent)]
-    parent_postfix(|state: &mut State| {
+    #[before(parent_identifier), current(TokenKind::Self_)]
+    self_identifier(|state: &mut State| {
+        let span = state.current.span;
         state.next();
 
-        postfix(state, Expression::Parent, &TokenKind::DoubleColon)
+        Ok(Expression::Identifier(Identifier::SimpleIdentifier( SimpleIdentifier {
+            span,
+            name: "self".into()
+        })))
+    })
+
+    #[before(left_parenthesis), current(TokenKind::Parent)]
+    parent_identifier(|state: &mut State| {
+        let span = state.current.span;
+        state.next();
+
+        Ok(Expression::Identifier(Identifier::SimpleIdentifier( SimpleIdentifier {
+            span,
+            name: "parent".into()
+        })))
     })
 
     #[before(r#match), current(TokenKind::LeftParen)]

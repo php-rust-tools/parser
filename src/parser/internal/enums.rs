@@ -111,7 +111,7 @@ fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMemb
         let start = state.current.span;
         state.next();
 
-        let name = identifiers::type_identifier(state)?;
+        let name = identifiers::identifier_maybe_reserved(state)?;
 
         if state.current.kind == TokenKind::Equals {
             return Err(ParseError::CaseValueForUnitEnum(
@@ -150,7 +150,7 @@ fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnum
         let start = state.current.span;
         state.next();
 
-        let name = identifiers::identifier(state)?;
+        let name = identifiers::identifier_maybe_reserved(state)?;
 
         if state.current.kind == TokenKind::SemiColon {
             return Err(ParseError::MissingCaseValueForBackedEnum(

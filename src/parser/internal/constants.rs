@@ -15,7 +15,7 @@ pub fn parse(state: &mut State) -> ParseResult<Constant> {
     let mut entries = vec![];
 
     loop {
-        let name = identifiers::identifier(state)?;
+        let name = identifiers::constant_identifier(state)?;
 
         utils::skip(state, TokenKind::Equals)?;
 
@@ -52,7 +52,7 @@ pub fn classish(
     let mut entries = vec![];
 
     loop {
-        let name = identifiers::identifier_maybe_soft_reserved(state)?;
+        let name = identifiers::identifier_maybe_reserved(state)?;
 
         utils::skip(state, TokenKind::Equals)?;
 
