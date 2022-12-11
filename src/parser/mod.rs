@@ -41,7 +41,7 @@ pub fn parse(tokens: &[Token]) -> ParseResult<Program> {
 
     let mut ast = Program::new();
 
-    while state.stream.current().kind != TokenKind::Eof {
+    while !state.stream.is_eof() {
         if matches!(
             state.stream.current().kind,
             TokenKind::OpenTag(_) | TokenKind::CloseTag

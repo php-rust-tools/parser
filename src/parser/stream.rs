@@ -87,41 +87,25 @@ impl<'a> TokenStream<'a> {
     }
 
     /// Get current token.
-    pub fn current(&self) -> &Token {
-        let mut cursor = self.cursor;
-        loop {
-            if cursor >= self.length {
-                return &self.default;
-            }
-
-            let current = &self.tokens[cursor];
-
-            if matches!(
-                current.kind,
-                TokenKind::SingleLineComment(_)
-                    | TokenKind::MultiLineComment(_)
-                    | TokenKind::HashMarkComment(_)
-                    | TokenKind::DocumentComment(_)
-            ) {
-                cursor += 1;
-                continue;
-            }
-
-            return current;
+    pub const fn current(&self) -> &Token {
+        if self.cursor >= self.length {
+            return &self.default;
         }
+
+        &self.tokens[self.cursor]
     }
 
     /// Peek next token.
     ///
     /// All comments are skipped.
-    pub fn peek(&self) -> &Token {
+    pub const fn peek(&self) -> &Token {
         self.peek_nth(1)
     }
 
     /// Peek nth+1 token.
     ///
     /// All comments are skipped.
-    pub fn lookahead(&self, n: usize) -> &Token {
+    pub const fn lookahead(&self, n: usize) -> &Token {
         self.peek_nth(n + 1)
     }
 
@@ -129,9 +113,9 @@ impl<'a> TokenStream<'a> {
     ///
     /// All comments are skipped.
     #[inline(always)]
-    fn peek_nth(&self, n: usize) -> &Token {
-        let mut cursor = self.cursor;
-        let mut target = 0;
+    const fn peek_nth(&self, n: usize) -> &Token {
+        let mut cursor = self.cursor + 1;
+        let mut target = 1;
         loop {
             if cursor >= self.length {
                 return &self.default;
@@ -161,7 +145,11 @@ impl<'a> TokenStream<'a> {
 
     /// Check if current token is EOF.
     pub fn is_eof(&self) -> bool {
-        self.current().kind == TokenKind::Eof
+        if self.cursor >= self.length {
+            return true;
+        }
+
+        self.tokens[self.cursor].kind == TokenKind::Eof
     }
 
     /// Get all comments.
