@@ -8,48 +8,35 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
-    state.next();
-    state.skip_comments();
-
-    let kind = match state.current.kind {
+    state.stream.next();
+    let kind = match state.stream.current().kind {
         TokenKind::Function => {
-            state.next();
-
-            state.skip_comments();
+            state.stream.next();
             UseKind::Function
         }
         TokenKind::Const => {
-            state.next();
-
-            state.skip_comments();
+            state.stream.next();
             UseKind::Const
         }
         _ => UseKind::Normal,
     };
 
-    if state.peek.kind == TokenKind::LeftBrace {
+    if state.stream.peek().kind == TokenKind::LeftBrace {
         let prefix = identifiers::full_name(state)?;
-        state.next();
-        state.skip_comments();
-
+        state.stream.next();
         let mut uses = Vec::new();
-        while state.current.kind != TokenKind::RightBrace {
+        while state.stream.current().kind != TokenKind::RightBrace {
             let name = identifiers::full_type_name(state)?;
             let mut alias = None;
-            state.skip_comments();
-
-            if state.current.kind == TokenKind::As {
-                state.next();
+            if state.stream.current().kind == TokenKind::As {
+                state.stream.next();
                 alias = Some(identifiers::type_identifier(state)?);
-                state.skip_comments();
             }
 
             uses.push(Use { name, alias });
 
-            state.skip_comments();
-            if state.current.kind == TokenKind::Comma {
-                state.next();
-                state.skip_comments();
+            if state.stream.current().kind == TokenKind::Comma {
+                state.stream.next();
                 continue;
             }
         }
@@ -60,25 +47,21 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
         Ok(Statement::GroupUse { prefix, kind, uses })
     } else {
         let mut uses = Vec::new();
-        while !state.is_eof() {
+        while !state.stream.is_eof() {
             let name = identifiers::full_type_name(state)?;
             let mut alias = None;
-            state.skip_comments();
-
-            if state.current.kind == TokenKind::As {
-                state.next();
+            if state.stream.current().kind == TokenKind::As {
+                state.stream.next();
                 alias = Some(identifiers::type_identifier(state)?);
-                state.skip_comments();
             }
 
             uses.push(Use { name, alias });
 
-            if state.current.kind == TokenKind::Comma {
-                state.next();
+            if state.stream.current().kind == TokenKind::Comma {
+                state.stream.next();
                 continue;
             }
 
-            state.skip_comments();
             utils::skip_semicolon(state)?;
             break;
         }

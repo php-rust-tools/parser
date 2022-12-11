@@ -17,18 +17,15 @@ pub fn block_statement(state: &mut State) -> ParseResult<Statement> {
 }
 
 pub fn body(state: &mut State, until: &TokenKind) -> ParseResult<Block> {
-    state.skip_comments();
-
     let mut block = Block::new();
 
-    while !state.is_eof() && &state.current.kind != until {
-        if let TokenKind::OpenTag(_) = state.current.kind {
-            state.next();
+    while !state.stream.is_eof() && &state.stream.current().kind != until {
+        if let TokenKind::OpenTag(_) = state.stream.current().kind {
+            state.stream.next();
             continue;
         }
 
         block.push(parser::statement(state)?);
-        state.skip_comments();
     }
 
     Ok(block)

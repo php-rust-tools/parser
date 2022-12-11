@@ -24,6 +24,7 @@ use crate::parser::internal::uses;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;
 use crate::parser::state::State;
+use crate::parser::stream::TokenStream;
 
 pub mod ast;
 pub mod error;
@@ -32,67 +33,62 @@ mod expressions;
 mod internal;
 mod macros;
 mod state;
+mod stream;
 
-pub fn parse(tokens: Vec<Token>) -> ParseResult<Program> {
-    let mut state = State::new(tokens);
+pub fn parse(tokens: &[Token]) -> ParseResult<Program> {
+    let mut stream = TokenStream::new(tokens);
+    let mut state = State::new(&mut stream);
 
     let mut ast = Program::new();
 
-    while state.current.kind != TokenKind::Eof {
+    while state.stream.current().kind != TokenKind::Eof {
         if matches!(
-            state.current.kind,
+            state.stream.current().kind,
             TokenKind::OpenTag(_) | TokenKind::CloseTag
         ) {
-            state.next();
+            state.stream.next();
             continue;
         }
 
-        state.gather_comments();
-
-        if state.is_eof() {
+        if state.stream.is_eof() {
             break;
         }
 
-        if state.current.kind == TokenKind::CloseTag {
-            state.next();
+        if state.stream.current().kind == TokenKind::CloseTag {
+            state.stream.next();
             continue;
         }
 
         ast.push(top_level_statement(&mut state)?);
-
-        state.clear_comments();
     }
 
     Ok(ast.to_vec())
 }
 
 fn top_level_statement(state: &mut State) -> ParseResult<Statement> {
-    state.skip_comments();
-
-    let statement = match &state.current.kind {
+    let statement = match &state.stream.current().kind {
         TokenKind::Namespace => namespaces::namespace(state)?,
         TokenKind::Use => uses::use_statement(state)?,
         TokenKind::Const => Statement::Constant(constants::parse(state)?),
         TokenKind::HaltCompiler => {
-            state.next();
+            state.stream.next();
 
-            let content = if let TokenKind::InlineHtml(content) = state.current.kind.clone() {
-                state.next();
-                Some(content)
-            } else {
-                None
-            };
+            let content =
+                if let TokenKind::InlineHtml(content) = state.stream.current().kind.clone() {
+                    state.stream.next();
+                    Some(content)
+                } else {
+                    None
+                };
 
             Statement::HaltCompiler { content }
         }
         _ => statement(state)?,
     };
 
-    state.clear_comments();
-
     // A closing PHP tag is valid after the end of any top-level statement.
-    if state.current.kind == TokenKind::CloseTag {
-        state.next();
+    if state.stream.current().kind == TokenKind::CloseTag {
+        state.stream.next();
     }
 
     Ok(statement)
@@ -105,9 +101,9 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
     utils::skip_open_tag(state)?;
 
     let statement = if has_attributes {
-        match &state.current.kind {
+        match &state.stream.current().kind {
             TokenKind::Abstract => classes::parse(state)?,
-            TokenKind::Readonly if state.peek.kind != TokenKind::LeftParen => {
+            TokenKind::Readonly if state.stream.peek().kind != TokenKind::LeftParen => {
                 classes::parse(state)?
             }
             TokenKind::Final => classes::parse(state)?,
@@ -115,34 +111,23 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Interface => interfaces::parse(state)?,
             TokenKind::Trait => traits::parse(state)?,
             TokenKind::Enum
-                if state.peek.kind != TokenKind::LeftParen
-                    && state.peek.kind != TokenKind::DoubleColon
-                    && state.peek.kind != TokenKind::Colon =>
+                if state.stream.peek().kind != TokenKind::LeftParen
+                    && state.stream.peek().kind != TokenKind::DoubleColon
+                    && state.stream.peek().kind != TokenKind::Colon =>
             {
                 enums::parse(state)?
             }
             TokenKind::Function
-                if identifiers::is_identifier_maybe_soft_reserved(&state.peek.kind)
-                    || state.peek.kind == TokenKind::Ampersand =>
+                if identifiers::is_identifier_maybe_soft_reserved(&state.stream.peek().kind)
+                    || state.stream.peek().kind == TokenKind::Ampersand =>
             {
-                // FIXME: This is incredibly hacky but we don't have a way to look at
-                // the next N tokens right now. We could probably do with a `peek_buf()`
-                // method like the Lexer has.
-                if state.peek.kind == TokenKind::Ampersand {
-                    if let Some((_, token)) = state.iter.clone().enumerate().next() {
-                        if !matches!(
-                            token,
-                            Token {
-                                kind: TokenKind::Identifier(_),
-                                ..
-                            }
-                        ) {
-                            let expr = expressions::lowest_precedence(state)?;
+                if state.stream.peek().kind == TokenKind::Ampersand {
+                    if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
+                        let expr = expressions::lowest_precedence(state)?;
 
-                            utils::skip_semicolon(state)?;
+                        utils::skip_semicolon(state)?;
 
-                            return Ok(Statement::Expression { expr });
-                        }
+                        return Ok(Statement::Expression { expr });
                     }
 
                     functions::function(state)?
@@ -155,9 +140,9 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             },
         }
     } else {
-        match &state.current.kind {
+        match &state.stream.current().kind {
             TokenKind::Abstract => classes::parse(state)?,
-            TokenKind::Readonly if state.peek.kind != TokenKind::LeftParen => {
+            TokenKind::Readonly if state.stream.peek().kind != TokenKind::LeftParen => {
                 classes::parse(state)?
             }
             TokenKind::Final => classes::parse(state)?,
@@ -165,34 +150,23 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Interface => interfaces::parse(state)?,
             TokenKind::Trait => traits::parse(state)?,
             TokenKind::Enum
-                if state.peek.kind != TokenKind::LeftParen
-                    && state.peek.kind != TokenKind::DoubleColon
-                    && state.peek.kind != TokenKind::Colon =>
+                if state.stream.peek().kind != TokenKind::LeftParen
+                    && state.stream.peek().kind != TokenKind::DoubleColon
+                    && state.stream.peek().kind != TokenKind::Colon =>
             {
                 enums::parse(state)?
             }
             TokenKind::Function
-                if identifiers::is_identifier_maybe_soft_reserved(&state.peek.kind)
-                    || state.peek.kind == TokenKind::Ampersand =>
+                if identifiers::is_identifier_maybe_soft_reserved(&state.stream.peek().kind)
+                    || state.stream.peek().kind == TokenKind::Ampersand =>
             {
-                // FIXME: This is incredibly hacky but we don't have a way to look at
-                // the next N tokens right now. We could probably do with a `peek_buf()`
-                // method like the Lexer has.
-                if state.peek.kind == TokenKind::Ampersand {
-                    if let Some((_, token)) = state.iter.clone().enumerate().next() {
-                        if !matches!(
-                            token,
-                            Token {
-                                kind: TokenKind::Identifier(_),
-                                ..
-                            }
-                        ) {
-                            let expr = expressions::lowest_precedence(state)?;
+                if state.stream.peek().kind == TokenKind::Ampersand {
+                    if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
+                        let expr = expressions::lowest_precedence(state)?;
 
-                            utils::skip_semicolon(state)?;
+                        utils::skip_semicolon(state)?;
 
-                            return Ok(Statement::Expression { expr });
-                        }
+                        return Ok(Statement::Expression { expr });
                     }
 
                     functions::function(state)?
@@ -203,12 +177,12 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Goto => goto::goto_statement(state)?,
             token
                 if identifiers::is_identifier_maybe_reserved(token)
-                    && state.peek.kind == TokenKind::Colon =>
+                    && state.stream.peek().kind == TokenKind::Colon =>
             {
                 goto::label_statement(state)?
             }
             TokenKind::Declare => {
-                state.next();
+                state.stream.next();
                 utils::skip_left_parenthesis(state)?;
 
                 let mut declares = Vec::new();
@@ -221,8 +195,8 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
 
                     declares.push(DeclareItem { key, value });
 
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
+                    if state.stream.current().kind == TokenKind::Comma {
+                        state.stream.next();
                     } else {
                         break;
                     }
@@ -230,18 +204,18 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
 
                 utils::skip_right_parenthesis(state)?;
 
-                let body = if state.current.kind == TokenKind::LeftBrace {
-                    state.next();
+                let body = if state.stream.current().kind == TokenKind::LeftBrace {
+                    state.stream.next();
                     let b = blocks::body(state, &TokenKind::RightBrace)?;
                     utils::skip_right_brace(state)?;
                     b
-                } else if state.current.kind == TokenKind::Colon {
+                } else if state.stream.current().kind == TokenKind::Colon {
                     utils::skip_colon(state)?;
                     let b = blocks::body(state, &TokenKind::EndDeclare)?;
                     utils::skip(state, TokenKind::EndDeclare)?;
                     utils::skip_semicolon(state)?;
                     b
-                } else if state.current.kind == TokenKind::SemiColon {
+                } else if state.stream.current().kind == TokenKind::SemiColon {
                     utils::skip_semicolon(state)?;
                     vec![]
                 } else {
@@ -251,16 +225,16 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 Statement::Declare { declares, body }
             }
             TokenKind::Global => {
-                let span = state.current.span;
-                state.next();
+                let span = state.stream.current().span;
+                state.stream.next();
 
                 let mut variables = vec![];
                 // `loop` instead of `while` as we don't allow for extra commas.
                 loop {
                     variables.push(variables::dynamic_variable(state)?);
 
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
+                    if state.stream.current().kind == TokenKind::Comma {
+                        state.stream.next();
                     } else {
                         break;
                     }
@@ -269,8 +243,8 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 utils::skip_semicolon(state)?;
                 Statement::Global { span, variables }
             }
-            TokenKind::Static if matches!(state.peek.kind, TokenKind::Variable(_)) => {
-                state.next();
+            TokenKind::Static if matches!(state.stream.peek().kind, TokenKind::Variable(_)) => {
+                state.stream.next();
 
                 let mut vars = vec![];
 
@@ -279,8 +253,8 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     let var = variables::simple_variable(state)?;
                     let mut default = None;
 
-                    if state.current.kind == TokenKind::Equals {
-                        state.next();
+                    if state.stream.current().kind == TokenKind::Equals {
+                        state.stream.next();
 
                         default = Some(expressions::lowest_precedence(state)?);
                     }
@@ -291,8 +265,8 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         default,
                     });
 
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
+                    if state.stream.current().kind == TokenKind::Comma {
+                        state.stream.next();
                     } else {
                         break;
                     }
@@ -304,15 +278,15 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             }
             TokenKind::InlineHtml(html) => {
                 let s = Statement::InlineHtml(html.clone());
-                state.next();
+                state.stream.next();
                 utils::skip_open_tag(state)?;
                 s
             }
             TokenKind::SingleLineComment(comment) => {
-                let start = state.current.span;
+                let start = state.stream.current().span;
                 let content = comment.clone();
-                state.next();
-                let end = state.current.span;
+                state.stream.next();
+                let end = state.stream.current().span;
                 let format = CommentFormat::SingleLine;
 
                 Statement::Comment(Comment {
@@ -323,10 +297,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 })
             }
             TokenKind::MultiLineComment(comment) => {
-                let start = state.current.span;
+                let start = state.stream.current().span;
                 let content = comment.clone();
-                state.next();
-                let end = state.current.span;
+                state.stream.next();
+                let end = state.stream.current().span;
                 let format = CommentFormat::MultiLine;
 
                 Statement::Comment(Comment {
@@ -337,10 +311,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 })
             }
             TokenKind::HashMarkComment(comment) => {
-                let start = state.current.span;
+                let start = state.stream.current().span;
                 let content = comment.clone();
-                state.next();
-                let end = state.current.span;
+                state.stream.next();
+                let end = state.stream.current().span;
                 let format = CommentFormat::HashMark;
 
                 Statement::Comment(Comment {
@@ -351,10 +325,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 })
             }
             TokenKind::DocumentComment(comment) => {
-                let start = state.current.span;
+                let start = state.stream.current().span;
                 let content = comment.clone();
-                state.next();
-                let end = state.current.span;
+                state.stream.next();
+                let end = state.stream.current().span;
                 let format = CommentFormat::Document;
 
                 Statement::Comment(Comment {
@@ -373,14 +347,14 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Switch => control_flow::switch_statement(state)?,
             TokenKind::If => control_flow::if_statement(state)?,
             TokenKind::Echo => {
-                state.next();
+                state.stream.next();
 
                 let mut values = Vec::new();
                 loop {
                     values.push(expressions::lowest_precedence(state)?);
 
-                    if state.current.kind == TokenKind::Comma {
-                        state.next();
+                    if state.stream.current().kind == TokenKind::Comma {
+                        state.stream.next();
                     } else {
                         break;
                     }
@@ -390,9 +364,9 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 Statement::Echo { values }
             }
             TokenKind::Return => {
-                state.next();
+                state.stream.next();
 
-                if TokenKind::SemiColon == state.current.kind {
+                if TokenKind::SemiColon == state.stream.current().kind {
                     let ret = Statement::Return { value: None };
                     utils::skip_semicolon(state)?;
                     ret
@@ -405,9 +379,9 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 }
             }
             TokenKind::SemiColon => {
-                let start = state.current.span;
+                let start = state.stream.current().span;
 
-                state.next();
+                state.stream.next();
 
                 Statement::Noop(start)
             }
@@ -423,11 +397,9 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
         }
     };
 
-    state.skip_comments();
-
     // A closing PHP tag is valid after the end of any top-level statement.
-    if state.current.kind == TokenKind::CloseTag {
-        state.next();
+    if state.stream.current().kind == TokenKind::CloseTag {
+        state.stream.next();
     }
 
     Ok(statement)

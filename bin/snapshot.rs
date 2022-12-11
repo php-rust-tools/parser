@@ -45,7 +45,7 @@ fn main() {
 
         match tokens {
             Ok(tokens) => {
-                let ast = parse(tokens);
+                let ast = parse(&tokens);
                 match ast {
                     Ok(ast) => {
                         std::fs::write(ast_filename, format!("{:#?}\n", ast)).unwrap();

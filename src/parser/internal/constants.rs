@@ -23,10 +23,8 @@ pub fn parse(state: &mut State) -> ParseResult<Constant> {
 
         entries.push(ConstantEntry { name, value });
 
-        state.skip_comments();
-
-        if state.current.kind == TokenKind::Comma {
-            state.next();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
@@ -60,10 +58,8 @@ pub fn classish(
 
         entries.push(ConstantEntry { name, value });
 
-        state.skip_comments();
-
-        if state.current.kind == TokenKind::Comma {
-            state.next();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }

@@ -27,19 +27,19 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
 
     let mut default = None;
     let mut arms = Vec::new();
-    while state.current.kind != TokenKind::RightBrace {
-        if state.current.kind == TokenKind::Default {
+    while state.stream.current().kind != TokenKind::RightBrace {
+        if state.stream.current().kind == TokenKind::Default {
             if default.is_some() {
                 return Err(ParseError::MatchExpressionWithMultipleDefaultArms(
-                    state.current.span,
+                    state.stream.current().span,
                 ));
             }
 
-            state.next();
+            state.stream.next();
 
             // match conditions can have an extra comma at the end, including `default`.
-            if state.current.kind == TokenKind::Comma {
-                state.next();
+            if state.stream.current().kind == TokenKind::Comma {
+                state.stream.next();
             }
 
             utils::skip_double_arrow(state)?;
@@ -49,11 +49,11 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
             default = Some(Box::new(DefaultMatchArm { body }));
         } else {
             let mut conditions = Vec::new();
-            while state.current.kind != TokenKind::DoubleArrow {
+            while state.stream.current().kind != TokenKind::DoubleArrow {
                 conditions.push(expressions::lowest_precedence(state)?);
 
-                if state.current.kind == TokenKind::Comma {
-                    state.next();
+                if state.stream.current().kind == TokenKind::Comma {
+                    state.stream.next();
                 } else {
                     break;
                 }
@@ -70,9 +70,8 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
             arms.push(MatchArm { conditions, body });
         }
 
-        if state.current.kind == TokenKind::Comma {
-            state.next();
-            state.skip_comments();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
@@ -96,7 +95,7 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_right_parenthesis(state)?;
 
-    let end_token = if state.current.kind == TokenKind::Colon {
+    let end_token = if state.stream.current().kind == TokenKind::Colon {
         utils::skip_colon(state)?;
         TokenKind::EndSwitch
     } else {
@@ -105,10 +104,10 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
     };
 
     let mut cases = Vec::new();
-    while state.current.kind != end_token {
-        match state.current.kind {
+    while state.stream.current().kind != end_token {
+        match state.stream.current().kind {
             TokenKind::Case => {
-                state.next();
+                state.stream.next();
 
                 let condition = expressions::lowest_precedence(state)?;
 
@@ -117,13 +116,12 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
 
                 let mut body = Block::new();
 
-                while state.current.kind != TokenKind::Case
-                    && state.current.kind != TokenKind::Default
-                    && state.current.kind != TokenKind::RightBrace
-                    && state.current.kind != end_token
+                while state.stream.current().kind != TokenKind::Case
+                    && state.stream.current().kind != TokenKind::Default
+                    && state.stream.current().kind != TokenKind::RightBrace
+                    && state.stream.current().kind != end_token
                 {
                     body.push(parser::statement(state)?);
-                    state.skip_comments();
                 }
 
                 cases.push(Case {
@@ -132,16 +130,16 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
                 });
             }
             TokenKind::Default => {
-                state.next();
+                state.stream.next();
 
                 utils::skip_any_of(state, &[TokenKind::Colon, TokenKind::SemiColon])?;
                 utils::skip_close_tag(state)?;
 
                 let mut body = Block::new();
 
-                while state.current.kind != TokenKind::Case
-                    && state.current.kind != TokenKind::Default
-                    && state.current.kind != end_token
+                while state.stream.current().kind != TokenKind::Case
+                    && state.stream.current().kind != TokenKind::Default
+                    && state.stream.current().kind != end_token
                 {
                     body.push(parser::statement(state)?);
                 }
@@ -177,17 +175,17 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
     utils::skip_right_parenthesis(state)?;
 
     // FIXME: Tidy up duplication and make the intent a bit clearer.
-    match state.current.kind {
+    match state.stream.current().kind {
         TokenKind::Colon => {
             utils::skip_colon(state)?;
 
             let mut then = vec![];
             while !matches!(
-                state.current.kind,
+                state.stream.current().kind,
                 TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
             ) {
-                if let TokenKind::OpenTag(_) = state.current.kind {
-                    state.next();
+                if let TokenKind::OpenTag(_) = state.stream.current().kind {
+                    state.stream.next();
                     continue;
                 }
 
@@ -196,11 +194,11 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
 
             let mut else_ifs = vec![];
             loop {
-                if state.current.kind != TokenKind::ElseIf {
+                if state.stream.current().kind != TokenKind::ElseIf {
                     break;
                 }
 
-                state.next();
+                state.stream.next();
 
                 utils::skip_left_parenthesis(state)?;
                 let condition = expressions::lowest_precedence(state)?;
@@ -210,11 +208,11 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
 
                 let mut body = vec![];
                 while !matches!(
-                    state.current.kind,
+                    state.stream.current().kind,
                     TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
                 ) {
-                    if let TokenKind::OpenTag(_) = state.current.kind {
-                        state.next();
+                    if let TokenKind::OpenTag(_) = state.stream.current().kind {
+                        state.stream.next();
                         continue;
                     }
 
@@ -225,8 +223,8 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
             }
 
             let mut r#else = None;
-            if state.current.kind == TokenKind::Else {
-                state.next();
+            if state.stream.current().kind == TokenKind::Else {
+                state.stream.next();
                 utils::skip_colon(state)?;
 
                 let body = blocks::body(state, &TokenKind::EndIf)?;
@@ -246,7 +244,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
             })
         }
         _ => {
-            let then = if state.current.kind == TokenKind::LeftBrace {
+            let then = if state.stream.current().kind == TokenKind::LeftBrace {
                 utils::skip_left_brace(state)?;
                 let then = blocks::body(state, &TokenKind::RightBrace)?;
                 utils::skip_right_brace(state)?;
@@ -257,8 +255,8 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
 
             let mut else_ifs: Vec<ElseIf> = Vec::new();
             loop {
-                if state.current.kind == TokenKind::ElseIf {
-                    state.next();
+                if state.stream.current().kind == TokenKind::ElseIf {
+                    state.stream.next();
 
                     utils::skip_left_parenthesis(state)?;
 
@@ -266,7 +264,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
 
                     utils::skip_right_parenthesis(state)?;
 
-                    let body = if state.current.kind == TokenKind::LeftBrace {
+                    let body = if state.stream.current().kind == TokenKind::LeftBrace {
                         utils::skip_left_brace(state)?;
                         let then = blocks::body(state, &TokenKind::RightBrace)?;
                         utils::skip_right_brace(state)?;
@@ -281,7 +279,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
                 }
             }
 
-            if state.current.kind != TokenKind::Else {
+            if state.stream.current().kind != TokenKind::Else {
                 return Ok(Statement::If {
                     condition,
                     then,
@@ -293,7 +291,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
             utils::skip(state, TokenKind::Else)?;
 
             let r#else;
-            if state.current.kind == TokenKind::LeftBrace {
+            if state.stream.current().kind == TokenKind::LeftBrace {
                 utils::skip_left_brace(state)?;
 
                 r#else = blocks::body(state, &TokenKind::RightBrace)?;

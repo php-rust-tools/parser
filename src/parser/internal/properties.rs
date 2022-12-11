@@ -23,8 +23,8 @@ pub fn parse(
     loop {
         let variable = variables::simple_variable(state)?;
         let mut value = None;
-        if state.current.kind == TokenKind::Equals {
-            state.next();
+        if state.stream.current().kind == TokenKind::Equals {
+            state.stream.next();
             value = Some(expressions::lowest_precedence(state)?);
         }
 
@@ -33,7 +33,7 @@ pub fn parse(
                 return Err(ParseError::StaticPropertyUsingReadonlyModifier(
                     class,
                     variable.to_string(),
-                    state.current.span,
+                    state.stream.current().span,
                 ));
             }
 
@@ -41,7 +41,7 @@ pub fn parse(
                 return Err(ParseError::ReadonlyPropertyHasDefaultValue(
                     class,
                     variable.to_string(),
-                    state.current.span,
+                    state.stream.current().span,
                 ));
             }
         }
@@ -53,7 +53,7 @@ pub fn parse(
                         class,
                         variable.to_string(),
                         ty.clone(),
-                        state.current.span,
+                        state.stream.current().span,
                     ));
                 }
             }
@@ -62,7 +62,7 @@ pub fn parse(
                     return Err(ParseError::MissingTypeForReadonlyProperty(
                         class,
                         variable.to_string(),
-                        state.current.span,
+                        state.stream.current().span,
                     ));
                 }
             }
@@ -70,10 +70,8 @@ pub fn parse(
 
         entries.push(PropertyEntry { variable, value });
 
-        state.skip_comments();
-
-        if state.current.kind == TokenKind::Comma {
-            state.next();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
@@ -98,8 +96,8 @@ pub fn parse_var(state: &mut State, class: String) -> ParseResult<VariableProper
     loop {
         let variable = variables::simple_variable(state)?;
         let mut value = None;
-        if state.current.kind == TokenKind::Equals {
-            state.next();
+        if state.stream.current().kind == TokenKind::Equals {
+            state.stream.next();
             value = Some(expressions::lowest_precedence(state)?);
         }
 
@@ -109,17 +107,15 @@ pub fn parse_var(state: &mut State, class: String) -> ParseResult<VariableProper
                     class,
                     variable.to_string(),
                     ty.clone(),
-                    state.current.span,
+                    state.stream.current().span,
                 ));
             }
         }
 
         entries.push(VariablePropertyEntry { variable, value });
 
-        state.skip_comments();
-
-        if state.current.kind == TokenKind::Comma {
-            state.next();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }

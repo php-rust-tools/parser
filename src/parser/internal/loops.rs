@@ -16,22 +16,22 @@ pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip(state, TokenKind::As)?;
 
-    let mut by_ref = state.current.kind == TokenKind::Ampersand;
+    let mut by_ref = state.stream.current().kind == TokenKind::Ampersand;
     if by_ref {
-        state.next();
+        state.stream.next();
     }
 
     let mut key_var = None;
     let mut value_var = expressions::lowest_precedence(state)?;
 
-    if state.current.kind == TokenKind::DoubleArrow {
-        state.next();
+    if state.stream.current().kind == TokenKind::DoubleArrow {
+        state.stream.next();
 
         key_var = Some(value_var.clone());
 
-        by_ref = state.current.kind == TokenKind::Ampersand;
+        by_ref = state.stream.current().kind == TokenKind::Ampersand;
         if by_ref {
-            state.next();
+            state.stream.next();
         }
 
         value_var = expressions::lowest_precedence(state)?;
@@ -39,13 +39,13 @@ pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_right_parenthesis(state)?;
 
-    let body = if state.current.kind == TokenKind::Colon {
+    let body = if state.stream.current().kind == TokenKind::Colon {
         utils::skip_colon(state)?;
         let then = blocks::body(state, &TokenKind::EndForeach)?;
         utils::skip(state, TokenKind::EndForeach)?;
         utils::skip_semicolon(state)?;
         then
-    } else if state.current.kind == TokenKind::LeftBrace {
+    } else if state.stream.current().kind == TokenKind::LeftBrace {
         utils::skip_left_brace(state)?;
         let then = blocks::body(state, &TokenKind::RightBrace)?;
         utils::skip_right_brace(state)?;
@@ -70,14 +70,14 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
 
     let mut init = Vec::new();
     loop {
-        if state.current.kind == TokenKind::SemiColon {
+        if state.stream.current().kind == TokenKind::SemiColon {
             break;
         }
 
         init.push(expressions::lowest_precedence(state)?);
 
-        if state.current.kind == TokenKind::Comma {
-            state.next();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
@@ -87,14 +87,14 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
 
     let mut condition = Vec::new();
     loop {
-        if state.current.kind == TokenKind::SemiColon {
+        if state.stream.current().kind == TokenKind::SemiColon {
             break;
         }
 
         condition.push(expressions::lowest_precedence(state)?);
 
-        if state.current.kind == TokenKind::Comma {
-            state.next();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
@@ -103,14 +103,14 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
 
     let mut r#loop = Vec::new();
     loop {
-        if state.current.kind == TokenKind::RightParen {
+        if state.stream.current().kind == TokenKind::RightParen {
             break;
         }
 
         r#loop.push(expressions::lowest_precedence(state)?);
 
-        if state.current.kind == TokenKind::Comma {
-            state.next();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
@@ -118,13 +118,13 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_right_parenthesis(state)?;
 
-    let then = if state.current.kind == TokenKind::Colon {
+    let then = if state.stream.current().kind == TokenKind::Colon {
         utils::skip_colon(state)?;
         let then = blocks::body(state, &TokenKind::EndFor)?;
         utils::skip(state, TokenKind::EndFor)?;
         utils::skip_semicolon(state)?;
         then
-    } else if state.current.kind == TokenKind::LeftBrace {
+    } else if state.stream.current().kind == TokenKind::LeftBrace {
         utils::skip_left_brace(state)?;
         let then = blocks::body(state, &TokenKind::RightBrace)?;
         utils::skip_right_brace(state)?;
@@ -144,7 +144,7 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
 pub fn do_loop(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Do)?;
 
-    let body = if state.current.kind == TokenKind::LeftBrace {
+    let body = if state.stream.current().kind == TokenKind::LeftBrace {
         utils::skip_left_brace(state)?;
         let body = blocks::body(state, &TokenKind::RightBrace)?;
         utils::skip_right_brace(state)?;
@@ -172,16 +172,16 @@ pub fn while_loop(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_right_parenthesis(state)?;
 
-    let body = if state.current.kind == TokenKind::SemiColon {
+    let body = if state.stream.current().kind == TokenKind::SemiColon {
         utils::skip_semicolon(state)?;
         vec![]
-    } else if state.current.kind == TokenKind::Colon {
+    } else if state.stream.current().kind == TokenKind::Colon {
         utils::skip_colon(state)?;
         let then = blocks::body(state, &TokenKind::EndWhile)?;
         utils::skip(state, TokenKind::EndWhile)?;
         utils::skip_semicolon(state)?;
         then
-    } else if state.current.kind == TokenKind::LeftBrace {
+    } else if state.stream.current().kind == TokenKind::LeftBrace {
         utils::skip_left_brace(state)?;
         let then = blocks::body(state, &TokenKind::RightBrace)?;
         utils::skip_right_brace(state)?;
@@ -197,7 +197,7 @@ pub fn continue_statement(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Continue)?;
 
     let mut num = None;
-    if state.current.kind != TokenKind::SemiColon {
+    if state.stream.current().kind != TokenKind::SemiColon {
         num = Some(expressions::lowest_precedence(state)?);
     }
 
@@ -210,7 +210,7 @@ pub fn break_statement(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Break)?;
 
     let mut num = None;
-    if state.current.kind != TokenKind::SemiColon {
+    if state.stream.current().kind != TokenKind::SemiColon {
         num = Some(expressions::lowest_precedence(state)?);
     }
 
