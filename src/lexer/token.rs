@@ -43,6 +43,7 @@ impl From<DocStringIndentationKind> for u8 {
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Clone)]
 pub enum TokenKind {
+    Die,
     // Can't use `Self` as a name here, so suffixing with an underscore.
     Self_,
     Parent,
@@ -250,6 +251,7 @@ impl Default for Token {
 impl Display for TokenKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
+            Self::Die => "die",
             Self::Self_ => "self",
             Self::Parent => "parent",
             Self::Backtick => "`",

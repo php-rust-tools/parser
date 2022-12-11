@@ -51,27 +51,12 @@
                         body: Some(
                             [
                                 Expression {
-                                    expr: Call {
-                                        target: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        5,
-                                                        9,
-                                                    ),
-                                                    name: "exit",
-                                                },
-                                            ),
-                                        ),
-                                        args: [
-                                            Arg {
-                                                name: None,
-                                                value: LiteralInteger {
-                                                    i: "1",
-                                                },
-                                                unpack: false,
+                                    expr: Exit {
+                                        value: Some(
+                                            LiteralInteger {
+                                                i: "1",
                                             },
-                                        ],
+                                        ),
                                     },
                                 },
                             ],

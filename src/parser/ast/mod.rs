@@ -340,6 +340,12 @@ pub struct Use {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Expression {
+    Die {
+        value: Option<Box<Expression>>,
+    },
+    Exit {
+        value: Option<Box<Expression>>,
+    },
     ArithmeticOperation(ArithmeticOperation),
     AssignmentOperation(AssignmentOperation),
     BitwiseOperation(BitwiseOperation),

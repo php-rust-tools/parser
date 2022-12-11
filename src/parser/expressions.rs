@@ -549,9 +549,51 @@ expressions! {
         functions::arrow_function(state)
     })
 
-    #[before(reserved_identifier_function_call), current(TokenKind::Function)]
+    #[before(die), current(TokenKind::Function)]
     anonymous_function(|state: &mut State| {
         functions::anonymous_function(state)
+    })
+
+    #[before(exit), current(TokenKind::Die)]
+    die(|state: &mut State| {
+        state.stream.next();
+        let value = if state.stream.current().kind == TokenKind::LeftParen {
+            state.stream.next();
+
+            if state.stream.current().kind != TokenKind::RightParen {
+                let value = Some(Box::new(lowest_precedence(state)?));
+                utils::skip_right_parenthesis(state)?;
+                value
+            } else {
+                utils::skip_right_parenthesis(state)?;
+                None
+            }
+        } else {
+            None
+        };
+
+        Ok(Expression::Die { value })
+    })
+
+    #[before(reserved_identifier_function_call), current(TokenKind::Exit)]
+    exit(|state: &mut State| {
+        state.stream.next();
+        let value = if state.stream.current().kind == TokenKind::LeftParen {
+            state.stream.next();
+
+            if state.stream.current().kind != TokenKind::RightParen {
+                let value = Some(Box::new(lowest_precedence(state)?));
+                utils::skip_right_parenthesis(state)?;
+                value
+            } else {
+                utils::skip_right_parenthesis(state)?;
+                None
+            }
+        } else {
+            None
+        };
+
+        Ok(Expression::Exit { value })
     })
 
     #[before(reserved_identifier_static_call), current(

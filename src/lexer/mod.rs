@@ -1601,6 +1601,8 @@ fn parse_int(buffer: &[u8]) -> SyntaxResult<TokenKind> {
 
 fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident.to_ascii_lowercase().as_slice() {
+        b"die" => TokenKind::Die,
+        b"exit" => TokenKind::Exit,
         b"enddeclare" => TokenKind::EndDeclare,
         b"endswitch" => TokenKind::EndSwitch,
         b"endfor" => TokenKind::EndFor,

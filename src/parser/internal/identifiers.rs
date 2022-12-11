@@ -296,6 +296,7 @@ pub fn is_reserved_identifier(kind: &TokenKind) -> bool {
             | TokenKind::New
             | TokenKind::Clone
             | TokenKind::Exit
+            | TokenKind::Die
             | TokenKind::If
             | TokenKind::ElseIf
             | TokenKind::Else
