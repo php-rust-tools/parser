@@ -20,14 +20,22 @@
                 right: ArithmeticOperation(
                     Exponentiation {
                         left: LiteralInteger {
-                            i: "2",
+                            span: (
+                                3,
+                                6,
+                            ),
+                            value: "2",
                         },
                         span: (
                             3,
                             8,
                         ),
                         right: LiteralInteger {
-                            i: "2",
+                            span: (
+                                3,
+                                11,
+                            ),
+                            value: "2",
                         },
                     },
                 ),
@@ -54,13 +62,25 @@
                 ),
                 right: Ternary {
                     condition: LiteralInteger {
-                        i: "1",
+                        span: (
+                            5,
+                            6,
+                        ),
+                        value: "1",
                     },
                     then: LiteralInteger {
-                        i: "2",
+                        span: (
+                            5,
+                            10,
+                        ),
+                        value: "2",
                     },
                     else: LiteralInteger {
-                        i: "3",
+                        span: (
+                            5,
+                            14,
+                        ),
+                        value: "3",
                     },
                 },
             },
@@ -86,21 +106,41 @@
                 ),
                 right: Ternary {
                     condition: LiteralInteger {
-                        i: "1",
+                        span: (
+                            7,
+                            6,
+                        ),
+                        value: "1",
                     },
                     then: Ternary {
                         condition: LiteralInteger {
-                            i: "2",
+                            span: (
+                                7,
+                                10,
+                            ),
+                            value: "2",
                         },
                         then: LiteralInteger {
-                            i: "3",
+                            span: (
+                                7,
+                                14,
+                            ),
+                            value: "3",
                         },
                         else: LiteralInteger {
-                            i: "4",
+                            span: (
+                                7,
+                                18,
+                            ),
+                            value: "4",
                         },
                     },
                     else: LiteralInteger {
-                        i: "5",
+                        span: (
+                            7,
+                            22,
+                        ),
+                        value: "5",
                     },
                 },
             },
@@ -126,7 +166,11 @@
                 ),
                 right: ShortTernary {
                     condition: LiteralInteger {
-                        i: "1",
+                        span: (
+                            9,
+                            6,
+                        ),
+                        value: "1",
                     },
                     span: (
                         9,
@@ -134,14 +178,22 @@
                     ),
                     else: ShortTernary {
                         condition: LiteralInteger {
-                            i: "2",
+                            span: (
+                                9,
+                                11,
+                            ),
+                            value: "2",
                         },
                         span: (
                             9,
                             13,
                         ),
                         else: LiteralInteger {
-                            i: "3",
+                            span: (
+                                9,
+                                16,
+                            ),
+                            value: "3",
                         },
                     },
                 },
@@ -168,10 +220,18 @@
                 ),
                 right: Coalesce {
                     lhs: LiteralInteger {
-                        i: "1",
+                        span: (
+                            11,
+                            6,
+                        ),
+                        value: "1",
                     },
                     rhs: LiteralInteger {
-                        i: "2",
+                        span: (
+                            11,
+                            11,
+                        ),
+                        value: "2",
                     },
                 },
             },
@@ -197,14 +257,26 @@
                 ),
                 right: Coalesce {
                     lhs: LiteralInteger {
-                        i: "1",
+                        span: (
+                            13,
+                            6,
+                        ),
+                        value: "1",
                     },
                     rhs: Coalesce {
                         lhs: LiteralInteger {
-                            i: "2",
+                            span: (
+                                13,
+                                11,
+                            ),
+                            value: "2",
                         },
                         rhs: LiteralInteger {
-                            i: "3",
+                            span: (
+                                13,
+                                16,
+                            ),
+                            value: "3",
                         },
                     },
                 },

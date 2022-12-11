@@ -1,3 +1,6 @@
+use serde::Deserialize;
+use serde::Serialize;
+
 use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
@@ -8,7 +11,8 @@ use crate::parser::ast::Block;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Type;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct FunctionParameter {
     pub start: Span,
     pub end: Span,
@@ -20,14 +24,16 @@ pub struct FunctionParameter {
     pub by_ref: bool,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct FunctionParameterList {
     pub start: Span,
     pub end: Span,
     pub members: Vec<FunctionParameter>,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct Function {
     pub start: Span,
     pub end: Span,
@@ -39,13 +45,15 @@ pub struct Function {
     pub body: Block,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct ClosureUse {
     pub var: Expression,
     pub by_ref: bool,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct Closure {
     pub start: Span,
     pub end: Span,
@@ -58,7 +66,8 @@ pub struct Closure {
     pub r#static: bool,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct ArrowFunction {
     pub start: Span,
     pub end: Span,
@@ -70,7 +79,8 @@ pub struct ArrowFunction {
     pub r#static: bool,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct MethodParameter {
     pub start: Span,
     pub end: Span,
@@ -83,14 +93,16 @@ pub struct MethodParameter {
     pub by_ref: bool,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct MethodParameterList {
     pub start: Span,
     pub end: Span,
     pub members: Vec<MethodParameter>,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct Method {
     pub start: Span,
     pub end: Span,

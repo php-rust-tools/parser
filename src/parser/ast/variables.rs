@@ -1,31 +1,36 @@
-use std::fmt::Display;
+use serde::Deserialize;
+use serde::Serialize;
 
-use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::parser::ast::Expression;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Variable {
     SimpleVariable(SimpleVariable),
     VariableVariable(VariableVariable),
     BracedVariableVariable(BracedVariableVariable),
 }
 
-#[derive(Debug, Eq, PartialEq, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct SimpleVariable {
     pub span: Span,
     pub name: ByteString,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct VariableVariable {
     pub span: Span,
     pub variable: Box<Variable>,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct BracedVariableVariable {
     pub start: Span,
     pub variable: Box<Expression>,

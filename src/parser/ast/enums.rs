@@ -1,4 +1,5 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
+use serde::Serialize;
 
 use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
@@ -7,7 +8,8 @@ use crate::parser::ast::functions::Method;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct UnitEnumCase {
     pub start: Span,
     pub end: Span,
@@ -15,14 +17,16 @@ pub struct UnitEnumCase {
     pub name: SimpleIdentifier,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum UnitEnumMember {
     Case(UnitEnumCase),
     Method(Method),
     Constant(ClassishConstant),
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct UnitEnum {
     pub start: Span,
     pub end: Span,
@@ -38,7 +42,8 @@ pub enum BackedEnumType {
     Int(Span),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct BackedEnumCase {
     pub start: Span,
     pub end: Span,
@@ -47,14 +52,16 @@ pub struct BackedEnumCase {
     pub value: Expression,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum BackedEnumMember {
     Case(BackedEnumCase),
     Method(Method),
     Constant(ClassishConstant),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct BackedEnum {
     pub start: Span,
     pub end: Span,

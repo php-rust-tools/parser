@@ -1,26 +1,25 @@
+use crate::ident;
+use crate::ident_start;
+use crate::lexer::byte_string::ByteString;
+use crate::lexer::error::SyntaxError;
+use crate::lexer::error::SyntaxResult;
+use crate::lexer::source::Source;
+use crate::lexer::state::DocStringKind;
+use crate::lexer::state::StackFrame;
+use crate::lexer::state::State;
+use crate::lexer::token::DocStringIndentationKind;
+use crate::lexer::token::OpenTagKind;
+use crate::lexer::token::Token;
+use crate::lexer::token::TokenKind;
+
 pub mod byte_string;
 pub mod error;
 pub mod source;
 pub mod token;
 
+pub(crate) mod state;
+
 mod macros;
-mod state;
-
-use crate::lexer::byte_string::ByteString;
-use crate::lexer::error::SyntaxError;
-use crate::lexer::error::SyntaxResult;
-use crate::lexer::source::Source;
-use crate::lexer::state::StackFrame;
-use crate::lexer::state::State;
-use crate::lexer::token::OpenTagKind;
-use crate::lexer::token::Token;
-use crate::lexer::token::TokenKind;
-
-use crate::ident;
-use crate::ident_start;
-
-pub use self::state::DocStringKind;
-use self::token::DocStringIndentationKind;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Default)]
 pub struct Lexer;

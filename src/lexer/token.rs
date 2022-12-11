@@ -1,19 +1,23 @@
+use serde::Deserialize;
+use serde::Serialize;
+
 use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
-
-use super::state::DocStringKind;
+use crate::lexer::state::DocStringKind;
 
 pub type Span = (usize, usize);
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Clone)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum OpenTagKind {
     Full,
 }
 
 pub type DocStringIndentationAmount = usize;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum DocStringIndentationKind {
     Space,
     Tab,
@@ -41,7 +45,8 @@ impl From<DocStringIndentationKind> for u8 {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum TokenKind {
     Die,
     // Can't use `Self` as a name here, so suffixing with an underscore.
@@ -233,7 +238,8 @@ pub enum TokenKind {
     LogicalXor,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct Token {
     pub kind: TokenKind,
     pub span: Span,

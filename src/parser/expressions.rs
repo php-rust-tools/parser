@@ -1,13 +1,17 @@
 use crate::expect_token;
 use crate::expected_token_err;
 use crate::lexer::error::SyntaxError;
+use crate::lexer::state::DocStringKind;
 use crate::lexer::token::DocStringIndentationKind;
 use crate::lexer::token::TokenKind;
-use crate::lexer::DocStringKind;
-
 use crate::parser::ast::identifiers::DynamicIdentifier;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
+use crate::parser::ast::operators::ArithmeticOperation;
+use crate::parser::ast::operators::AssignmentOperation;
+use crate::parser::ast::operators::BitwiseOperation;
+use crate::parser::ast::operators::ComparisonOperation;
+use crate::parser::ast::operators::LogicalOperation;
 use crate::parser::ast::variables::Variable;
 use crate::parser::ast::StringPart;
 use crate::parser::ast::{Expression, IncludeKind, MagicConst};
@@ -25,12 +29,6 @@ use crate::parser::internal::precedences::Precedence;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;
 use crate::parser::state::State;
-
-use super::ast::operators::ArithmeticOperation;
-use super::ast::operators::AssignmentOperation;
-use super::ast::operators::BitwiseOperation;
-use super::ast::operators::ComparisonOperation;
-use super::ast::operators::LogicalOperation;
 
 pub fn lowest_precedence(state: &mut State) -> ParseResult<Expression> {
     for_precedence(state, Precedence::Lowest)
@@ -713,7 +711,11 @@ expressions! {
     #[before(literal_float), current(TokenKind::LiteralInteger(_))]
     literal_integer(|state: &mut State| {
         if let TokenKind::LiteralInteger(i) = &state.stream.current().kind {
-            let e = Expression::LiteralInteger { i: i.clone() };
+            let e = Expression::LiteralInteger {
+                span: state.stream.current().span,
+                value: i.clone()
+            };
+
             state.stream.next();
 
             Ok(e)
@@ -725,7 +727,10 @@ expressions! {
     #[before(literal_string), current(TokenKind::LiteralFloat(_))]
     literal_float(|state: &mut State| {
         if let TokenKind::LiteralFloat(f) = &state.stream.current().kind {
-            let e = Expression::LiteralFloat { f: f.clone() };
+            let e = Expression::LiteralFloat {
+                span: state.stream.current().span,
+                value: f.clone()
+            };
 
             state.stream.next();
 
@@ -738,7 +743,11 @@ expressions! {
     #[before(string_part), current(TokenKind::LiteralString(_))]
     literal_string(|state: &mut State| {
         if let TokenKind::LiteralString(value) = &state.stream.current().kind {
-            let e = Expression::LiteralString { value: value.clone() };
+            let e = Expression::LiteralString {
+                span: state.stream.current().span,
+                value: value.clone()
+            };
+
             state.stream.next();
 
             Ok(e)
@@ -1530,20 +1539,24 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                     // Full expression syntax is not allowed here,
                     // so we can't call expression.
                     let index = match &state.stream.current().kind {
-                        TokenKind::LiteralInteger(i) => {
-                            let e = Expression::LiteralInteger { i: i.clone() };
+                        TokenKind::LiteralInteger(value) => {
+                            let e = Expression::LiteralInteger {
+                                span: state.stream.current().span,
+                                value: value.clone(),
+                            };
                             state.stream.next();
                             e
                         }
                         TokenKind::Minus => {
                             let span = state.stream.current().span;
                             state.stream.next();
-                            if let TokenKind::LiteralInteger(i) = &state.stream.current().kind {
+                            if let TokenKind::LiteralInteger(value) = &state.stream.current().kind {
                                 let e = Expression::ArithmeticOperation(
                                     ArithmeticOperation::Negative {
                                         span,
                                         right: Box::new(Expression::LiteralInteger {
-                                            i: i.clone(),
+                                            span: state.stream.current().span,
+                                            value: value.clone(),
                                         }),
                                     },
                                 );
@@ -1555,6 +1568,7 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                         }
                         TokenKind::Identifier(ident) => {
                             let e = Expression::LiteralString {
+                                span: state.stream.current().span,
                                 value: ident.clone(),
                             };
                             state.stream.next();

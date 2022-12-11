@@ -1,17 +1,5 @@
-pub mod attributes;
-pub mod classes;
-pub mod comments;
-pub mod constant;
-pub mod enums;
-pub mod functions;
-pub mod identifiers;
-pub mod interfaces;
-pub mod modifiers;
-pub mod operators;
-pub mod properties;
-pub mod traits;
-pub mod try_block;
-pub mod variables;
+use serde::Deserialize;
+use serde::Serialize;
 
 use std::fmt::Display;
 
@@ -30,20 +18,35 @@ use crate::parser::ast::functions::Function;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
+use crate::parser::ast::operators::ArithmeticOperation;
+use crate::parser::ast::operators::AssignmentOperation;
+use crate::parser::ast::operators::BitwiseOperation;
+use crate::parser::ast::operators::ComparisonOperation;
+use crate::parser::ast::operators::LogicalOperation;
 use crate::parser::ast::traits::Trait;
 use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::variables::Variable;
 
-use self::operators::ArithmeticOperation;
-use self::operators::AssignmentOperation;
-use self::operators::BitwiseOperation;
-use self::operators::ComparisonOperation;
-use self::operators::LogicalOperation;
+pub mod attributes;
+pub mod classes;
+pub mod comments;
+pub mod constant;
+pub mod enums;
+pub mod functions;
+pub mod identifiers;
+pub mod interfaces;
+pub mod modifiers;
+pub mod operators;
+pub mod properties;
+pub mod traits;
+pub mod try_block;
+pub mod variables;
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Type {
     Identifier(SimpleIdentifier),
     // TODO: add `start` and `end` for all types.
@@ -147,20 +150,23 @@ impl Display for Type {
     }
 }
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum UseKind {
     Normal,
     Function,
     Const,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct StaticVar {
     pub var: Variable,
     pub default: Option<Expression>,
 }
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum IncludeKind {
     Include,
     IncludeOnce,
@@ -180,7 +186,8 @@ impl From<&TokenKind> for IncludeKind {
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Statement {
     InlineHtml(ByteString),
     Goto {
@@ -281,14 +288,16 @@ pub enum Statement {
     Noop(Span),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct DeclareItem {
     pub key: SimpleIdentifier,
     pub value: Expression,
 }
 
 // See https://www.php.net/manual/en/language.types.type-juggling.php#language.types.typecasting for more info.
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum CastKind {
     Int,
     Bool,
@@ -320,25 +329,29 @@ impl From<&TokenKind> for CastKind {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum BackedEnumType {
     String,
     Int,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct Case {
     pub condition: Option<Expression>,
     pub body: Block,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct Use {
     pub name: SimpleIdentifier,
     pub alias: Option<SimpleIdentifier>,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Expression {
     Die {
         value: Option<Box<Expression>>,
@@ -380,10 +393,12 @@ pub enum Expression {
         expr: Box<Self>,
     },
     LiteralInteger {
-        i: ByteString,
+        span: Span,
+        value: ByteString,
     },
     LiteralFloat {
-        f: ByteString,
+        span: Span,
+        value: ByteString,
     },
     Identifier(Identifier),
     Variable(Variable),
@@ -410,6 +425,7 @@ pub enum Expression {
         args: Vec<Arg>,
     },
     LiteralString {
+        span: Span,
         value: ByteString,
     },
     InterpolatedString {
@@ -515,31 +531,36 @@ pub enum Expression {
     },
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct Arg {
     pub name: Option<SimpleIdentifier>,
     pub value: Expression,
     pub unpack: bool,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct ClosureUse {
     pub var: Expression,
     pub by_ref: bool,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct DefaultMatchArm {
     pub body: Expression,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct MatchArm {
     pub conditions: Vec<Expression>,
     pub body: Expression,
 }
 
-#[derive(Debug, Eq, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum MagicConst {
     Directory,
     File,
@@ -551,13 +572,15 @@ pub enum MagicConst {
     Trait,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum StringPart {
     Const(ByteString),
     Expr(Box<Expression>),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct ArrayItem {
     pub key: Option<Expression>,
     pub value: Expression,
@@ -565,13 +588,15 @@ pub struct ArrayItem {
     pub by_ref: bool,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct ListItem {
     pub key: Option<Expression>,
     pub value: Expression,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct ElseIf {
     pub condition: Expression,
     pub body: Block,
