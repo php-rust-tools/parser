@@ -45,7 +45,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         state.next();
 
         while state.current.kind != TokenKind::LeftBrace {
-            implements.push(identifiers::full_name(state)?);
+            implements.push(identifiers::full_type_name(state)?);
 
             if state.current.kind == TokenKind::Comma {
                 state.next();

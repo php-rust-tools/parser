@@ -21,7 +21,10 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
                 key: None,
                 value: Expression::Empty,
             });
+
             state.next();
+            state.skip_comments();
+
             continue;
         }
 
@@ -37,13 +40,14 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
             ));
         }
 
+        let span = state.current.span;
         let mut value = expressions::lowest_precedence(state)?;
+
+        state.skip_comments();
 
         if state.current.kind == TokenKind::DoubleArrow {
             if !has_atleast_one_key && !items.is_empty() {
-                return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(
-                    state.current.span,
-                ));
+                return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(span));
             }
 
             state.next();
@@ -62,15 +66,14 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
 
             has_atleast_one_key = true;
             value = expressions::lowest_precedence(state)?;
+
+            state.skip_comments();
         } else if has_atleast_one_key {
-            return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(
-                state.current.span,
-            ));
+            return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(span));
         }
 
         items.push(ListItem { key, value });
 
-        state.skip_comments();
         if state.current.kind == TokenKind::Comma {
             state.next();
             state.skip_comments();
@@ -88,7 +91,6 @@ pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
     utils::skip(state, TokenKind::LeftBracket)?;
 
     let mut items = Vec::new();
-    state.skip_comments();
 
     while state.current.kind != TokenKind::RightBracket {
         // TODO: return an error here instead of
@@ -102,6 +104,8 @@ pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
                 by_ref: false,
             });
             state.next();
+            state.skip_comments();
+
             continue;
         }
 
@@ -116,8 +120,6 @@ pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
         state.next();
         state.skip_comments();
     }
-
-    state.skip_comments();
 
     utils::skip_right_bracket(state)?;
 
