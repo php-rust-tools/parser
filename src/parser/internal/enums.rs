@@ -193,8 +193,9 @@ fn method(
     let method = functions::method(state, modifiers::enum_method_group(modifiers)?)?;
 
     match method.name.name[..].to_ascii_lowercase().as_slice() {
-        b"__get" | b"__set" | b"__call" | b"__callstatic" | b"__invoke" | b"__serialize"
-        | b"__unserialize" | b"__destruct" | b"__wakeup" | b"__sleep" => {
+        b"__get" | b"__set" | b"__serialize" | b"__unserialize" | b"__destruct"
+        | b"__construct" | b"__wakeup" | b"__sleep" | b"__set_state" | b"__unset" | b"__isset"
+        | b"__debuginfo" | b"__clone" | b"__tostring" => {
             return Err(ParseError::EnumMayNotIncludesMagicMethod(
                 state.named(&enum_name),
                 method.name.to_string(),
