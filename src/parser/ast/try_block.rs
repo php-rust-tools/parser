@@ -1,17 +1,20 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
+use serde::Serialize;
 
 use crate::lexer::token::Span;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Block;
 use crate::parser::ast::Expression;
 
-#[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum CatchType {
     Identifier(SimpleIdentifier),
     Union(Vec<SimpleIdentifier>),
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct TryBlock {
     pub start: Span,
     pub end: Span,
@@ -20,7 +23,8 @@ pub struct TryBlock {
     pub finally: Option<FinallyBlock>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct CatchBlock {
     pub start: Span,
     pub end: Span,
@@ -29,7 +33,8 @@ pub struct CatchBlock {
     pub body: Block,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct FinallyBlock {
     pub start: Span,
     pub end: Span,

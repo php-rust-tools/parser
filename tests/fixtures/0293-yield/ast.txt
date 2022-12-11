@@ -38,7 +38,11 @@
                         key: None,
                         value: Some(
                             LiteralInteger {
-                                i: "1",
+                                span: (
+                                    4,
+                                    11,
+                                ),
+                                value: "1",
                             },
                         ),
                     },
@@ -53,12 +57,20 @@
                     expr: Yield {
                         key: Some(
                             LiteralInteger {
-                                i: "123",
+                                span: (
+                                    6,
+                                    11,
+                                ),
+                                value: "123",
                             },
                         ),
                         value: Some(
                             LiteralInteger {
-                                i: "41",
+                                span: (
+                                    6,
+                                    18,
+                                ),
+                                value: "41",
                             },
                         ),
                     },

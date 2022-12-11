@@ -1,4 +1,3 @@
-use super::identifiers;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::functions::FunctionParameter;
 use crate::parser::ast::functions::FunctionParameterList;
@@ -11,6 +10,7 @@ use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::attributes;
 use crate::parser::internal::data_type;
+use crate::parser::internal::identifiers;
 use crate::parser::internal::modifiers;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;

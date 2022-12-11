@@ -59,18 +59,24 @@ macro_rules! expect_token {
 macro_rules! expect_literal {
     ($state:expr) => {{
         match $state.stream.current().kind.clone() {
-            TokenKind::LiteralInteger(i) => {
-                let e = Expression::LiteralInteger { i };
+            TokenKind::LiteralInteger(value) => {
+                let span = $state.stream.current().span;
+                let e = Expression::LiteralInteger { span, value };
                 $state.stream.next();
                 e
             }
-            TokenKind::LiteralFloat(f) => {
-                let e = Expression::LiteralFloat { f };
+            TokenKind::LiteralFloat(value) => {
+                let span = $state.stream.current().span;
+                let e = Expression::LiteralFloat { span, value };
                 $state.stream.next();
                 e
             }
-            TokenKind::LiteralString(s) => {
-                let e = Expression::LiteralString { value: s.clone() };
+            TokenKind::LiteralString(value) => {
+                let span = $state.stream.current().span;
+                let e = Expression::LiteralString {
+                    span,
+                    value: value.clone(),
+                };
                 $state.stream.next();
                 e
             }

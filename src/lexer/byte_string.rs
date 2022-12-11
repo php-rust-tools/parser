@@ -1,6 +1,8 @@
-use serde::{Deserialize, Serialize};
-use std::cmp::{Eq, PartialEq};
-use std::ops::{Deref, DerefMut};
+use serde::Deserialize;
+use serde::Serialize;
+
+use std::ops::Deref;
+use std::ops::DerefMut;
 use std::str::from_utf8;
 
 /// A wrapper for Vec<u8> that provides a human-readable Debug impl and
@@ -8,7 +10,7 @@ use std::str::from_utf8;
 ///
 /// The Trunk lexer and parser work mainly with byte strings because
 /// valid PHP code is not required to be valid UTF-8.
-#[derive(PartialEq, Eq, PartialOrd, Clone, Serialize, Deserialize)]
+#[derive(PartialOrd, PartialEq, Eq, Clone)]
 pub struct ByteString {
     pub bytes: Vec<u8>,
     pub length: usize,
@@ -37,6 +39,14 @@ impl std::fmt::Display for ByteString {
     }
 }
 
+impl std::str::FromStr for ByteString {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(ByteString::new(s.as_bytes().to_vec()))
+    }
+}
+
 impl std::fmt::Debug for ByteString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "\"")?;
@@ -50,6 +60,25 @@ impl std::fmt::Debug for ByteString {
         }
         write!(f, "\"")?;
         Ok(())
+    }
+}
+
+impl Serialize for ByteString {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(&self.to_string())
+    }
+}
+
+impl<'de> Deserialize<'de> for ByteString {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        Ok(ByteString::new(s.into_bytes()))
     }
 }
 
