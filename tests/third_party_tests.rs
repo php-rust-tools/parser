@@ -70,7 +70,10 @@ fn nikic_php_parser() {
 
 #[test]
 fn yii_framework() {
-    test_repository("yii-framework", "https://github.com/yiisoft/yii2", &[]);
+    test_repository("yii-framework", "https://github.com/yiisoft/yii2", &[
+        // Outdated dependency in Yii has an actual syntax error, nothing wrong with parser.
+        "vendor/sebastian/diff/tests/ParserTest.php"
+    ]);
 }
 
 #[test]
