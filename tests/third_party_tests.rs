@@ -150,12 +150,14 @@ fn rector_bin() {
 
 #[test]
 fn rector_src() {
-    test_repository("rector-src", "https://github.com/rectorphp/rector-src", &[
-        // uses PHP 7 $foo{$x}
-        "build/target-repository/e2e/parse-php7-code/src/Foo.php",
-        // template
-        "vendor/rector/rector-generator/templates/rules/__Package__/Rector/__Category__/__Configured__Name__.php",
-    ]);
+    test_repository(
+        "rector-src",
+        "https://github.com/rectorphp/rector-src",
+        &[
+            // uses PHP 7 $foo{$x}
+            "build/target-repository/e2e/parse-php7-code/src/Foo.php",
+        ],
+    );
 }
 
 #[test]
@@ -228,8 +230,6 @@ fn api_platform() {
     test_repository("api-platform", "https://github.com/api-platform/core", &[
         "vendor/doctrine/mongodb-odm/lib/Doctrine/ODM/MongoDB/Aggregation/Stage/GraphLookup/Match.php",
         "vendor/doctrine/mongodb-odm/lib/Doctrine/ODM/MongoDB/Aggregation/Stage/Match.php",
-        // template
-        "vendor/rector/rector/vendor/rector/rector-generator/templates/rules/__Package__/Rector/__Category__/__Configured__Name__.php"
     ]);
 }
 
@@ -267,16 +267,7 @@ fn doctrine_orm() {
 
 #[test]
 fn doctrine_dbal() {
-    test_repository(
-        "doctrine-dbal",
-        "https://github.com/doctrine/dbal",
-        &[
-            // Files with invalid syntax meant to be parsed only by phpstorm
-            "vendor/jetbrains/phpstorm-stubs/Core/Core_c.php",
-            "vendor/jetbrains/phpstorm-stubs/eio/eio.php",
-            "vendor/jetbrains/phpstorm-stubs/event/event.php",
-        ],
-    );
+    test_repository("doctrine-dbal", "https://github.com/doctrine/dbal", &[]);
 }
 
 #[test]
@@ -411,6 +402,10 @@ fn read_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) -> Vec<(St
             || path.starts_with("vendor/doctrine/orm")
             || path.starts_with("vendor/doctrine/dbal")
             || path.starts_with("vendor/api-platform/core")
+            || path.starts_with("vendor/rector/rector")
+            || path.starts_with("vendor/phpstan/phpstan")
+            || path.starts_with("vendor/phpstan/php-8-stubs")
+            || path.starts_with("vendor/jetbrains/phpstorm-stubs")
         {
             continue;
         }
