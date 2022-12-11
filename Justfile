@@ -21,12 +21,8 @@ fix:
 
 # dump AST for the given file.
 dump file:
-    cargo run --bin php-parser-rs -- {{file}}
+    cargo run -r --bin php-parser-rs -- {{file}}
 
 # run all integration tests, except third-party.
-test filter='':
-    cargo test --all {{filter}}
-
-# run integration tests for third party libraries.
-test-third-party:
-    cargo test third_party -- --nocapture
+test filter='--all':
+    cargo test -r {{filter}}

@@ -21,3 +21,15 @@ path = "bin/snapshot.rs"
 [dependencies]
 serde = { version = "1.0.149", features = ["derive"] }
 serde_json = { version = "1.0.89" }
+
+[profile.release]
+opt-level = 3
+debug = false
+strip = 'symbols'
+debug-assertions = false
+overflow-checks = false
+lto = 'fat'
+panic = 'abort'
+incremental = true
+codegen-units = 1
+rpath = true
