@@ -53,6 +53,7 @@ pub enum ParseError {
     CannotUseReservedKeywordAsATypeName(String, Span),
     CannotUseReservedKeywordAsAGoToLabel(String, Span),
     CannotUseReservedKeywordAsAConstantName(String, Span),
+    EnumMayNotIncludesMagicMethod(String, String, Span),
 }
 
 impl From<SyntaxError> for ParseError {
@@ -134,6 +135,7 @@ impl Display for ParseError {
             Self::CannotUseReservedKeywordAsATypeName(ty, span) => write!(f, "Parse Error: cannot use `{}` as a type name as it is reserved on line {} column {}", ty, span.0, span.1),
             Self::CannotUseReservedKeywordAsAGoToLabel(ty, span) => write!(f, "Parse Error: cannot use `{}` as a goto label as it is reserved on line {} column {}", ty, span.0, span.1),
             Self::CannotUseReservedKeywordAsAConstantName(ty, span) => write!(f, "Parse Error: cannot use `{}` as a constant name as it is reserved on line {} column {}", ty, span.0, span.1),
+            Self::EnumMayNotIncludesMagicMethod(ty, method, span) => write!(f, "Parse Error: Enum `{}` may not include magic method `{}` on line {} column {}", ty, method, span.0, span.1),
         }
     }
 }

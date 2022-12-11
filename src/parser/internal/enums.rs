@@ -1,3 +1,4 @@
+use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::enums::BackedEnum;
 use crate::parser::ast::enums::BackedEnumCase;
@@ -6,6 +7,7 @@ use crate::parser::ast::enums::BackedEnumType;
 use crate::parser::ast::enums::UnitEnum;
 use crate::parser::ast::enums::UnitEnumCase;
 use crate::parser::ast::enums::UnitEnumMember;
+use crate::parser::ast::functions::Method;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
@@ -138,7 +140,7 @@ fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMemb
             .map(UnitEnumMember::Constant);
     }
 
-    functions::method(state, modifiers::enum_method_group(modifiers)?).map(UnitEnumMember::Method)
+    method(state, modifiers, enum_name).map(UnitEnumMember::Method)
 }
 
 fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnumMember> {
@@ -182,5 +184,27 @@ fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnum
             .map(BackedEnumMember::Constant);
     }
 
-    functions::method(state, modifiers::enum_method_group(modifiers)?).map(BackedEnumMember::Method)
+    method(state, modifiers, enum_name).map(BackedEnumMember::Method)
+}
+
+fn method(
+    state: &mut State,
+    modifiers: Vec<(Span, TokenKind, Span)>,
+    enum_name: String,
+) -> ParseResult<Method> {
+    let method = functions::method(state, modifiers::enum_method_group(modifiers)?)?;
+
+    match method.name.name[..].to_ascii_lowercase().as_slice() {
+        b"__get" | b"__set" | b"__call" | b"__callstatic" | b"__invoke" | b"__serialize"
+        | b"__unserialize" | b"__destruct" | b"__wakeup" | b"__sleep" => {
+            return Err(ParseError::EnumMayNotIncludesMagicMethod(
+                state.named(&enum_name),
+                method.name.to_string(),
+                method.name.span,
+            ))
+        }
+        _ => {}
+    }
+
+    Ok(method)
 }

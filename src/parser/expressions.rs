@@ -504,7 +504,7 @@ macro_rules! expressions {
     ($(#[before($else:ident), current($(|)? $( $current:pat_param )|+) $(, peek($(|)? $( $peek:pat_param )|+))?] $expr:ident($out:expr))+) => {
         $(
             #[inline(never)]
-            fn $expr(state: &mut State) -> ParseResult<Expression> {
+            pub(in crate::parser) fn $expr(state: &mut State) -> ParseResult<Expression> {
                 state.skip_comments();
 
                 match &state.current.kind {
@@ -587,7 +587,7 @@ expressions! {
 
     #[before(throw), current(TokenKind::New), peek(TokenKind::Class | TokenKind::Attribute)]
     anonymous_class(|state: &mut State| {
-        classes::parse_anonymous(state)
+        classes::parse_anonymous(state, None)
     })
 
     #[before(r#yield), current(TokenKind::Throw)]
@@ -802,6 +802,11 @@ expressions! {
         let span = state.current.span;
 
         state.next();
+        state.skip_comments();
+
+        if state.current.kind == TokenKind::Class || state.current.kind == TokenKind::Attribute {
+            return classes::parse_anonymous(state, Some(span));
+        };
 
         let target = match state.current.kind {
             TokenKind::Self_ => {

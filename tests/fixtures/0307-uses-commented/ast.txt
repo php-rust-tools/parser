@@ -1,0 +1,108 @@
+[
+    Use {
+        uses: [
+            Use {
+                name: SimpleIdentifier {
+                    span: (
+                        4,
+                        13,
+                    ),
+                    name: "foo",
+                },
+                alias: None,
+            },
+        ],
+        kind: Normal,
+    },
+    Use {
+        uses: [
+            Use {
+                name: SimpleIdentifier {
+                    span: (
+                        5,
+                        13,
+                    ),
+                    name: "bar",
+                },
+                alias: None,
+            },
+        ],
+        kind: Normal,
+    },
+    GroupUse {
+        prefix: SimpleIdentifier {
+            span: (
+                6,
+                5,
+            ),
+            name: "bar\",
+        },
+        kind: Normal,
+        uses: [
+            Use {
+                name: SimpleIdentifier {
+                    span: (
+                        7,
+                        13,
+                    ),
+                    name: "w",
+                },
+                alias: Some(
+                    SimpleIdentifier {
+                        span: (
+                            7,
+                            36,
+                        ),
+                        name: "b",
+                    },
+                ),
+            },
+            Use {
+                name: SimpleIdentifier {
+                    span: (
+                        8,
+                        13,
+                    ),
+                    name: "z",
+                },
+                alias: None,
+            },
+        ],
+    },
+    Function(
+        Function {
+            start: (
+                12,
+                1,
+            ),
+            end: (
+                12,
+                23,
+            ),
+            name: SimpleIdentifier {
+                span: (
+                    12,
+                    10,
+                ),
+                name: "qux",
+            },
+            attributes: [],
+            parameters: FunctionParameterList {
+                start: (
+                    12,
+                    13,
+                ),
+                end: (
+                    12,
+                    15,
+                ),
+                members: [],
+            },
+            return_type: Some(
+                Void,
+            ),
+            by_ref: false,
+            body: [],
+        },
+    ),
+]

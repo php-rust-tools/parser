@@ -133,7 +133,32 @@ fn phpstan_bin() {
 
 #[test]
 fn phpstan_src() {
-    test_repository("phpstan-src", "https://github.com/phpstan/phpstan-src", &[]);
+    test_repository(
+        "phpstan-src",
+        "https://github.com/phpstan/phpstan-src",
+        &[
+            "tests/PHPStan/Rules/Classes/data/invalid-promoted-properties.php",
+            "tests/PHPStan/Rules/Classes/data/trait-use-error.php",
+            "tests/PHPStan/Analyser/data/multipleParseErrors.php",
+            "tests/PHPStan/Analyser/data/parse-error.php",
+            "tests/PHPStan/Levels/data/namedArguments.php",
+            "tests/PHPStan/Rules/Classes/data/enum-sanity.php",
+            "tests/PHPStan/Rules/Classes/data/instanceof.php",
+            "tests/PHPStan/Rules/Functions/data/arrow-function-intersection-types.php",
+            "tests/PHPStan/Rules/Functions/data/closure-intersection-types.php",
+            "tests/PHPStan/Rules/Functions/data/intersection-types.php",
+            "tests/PHPStan/Rules/Methods/data/abstract-method.php",
+            "tests/PHPStan/Rules/Methods/data/call-method-in-enum.php",
+            "tests/PHPStan/Rules/Methods/data/intersection-types.php",
+            "tests/PHPStan/Rules/Methods/data/missing-method-impl.php",
+            "tests/PHPStan/Rules/Methods/data/named-arguments.php",
+            "tests/PHPStan/Rules/Methods/data/named-arguments.php",
+            "tests/PHPStan/Rules/Functions/data/closure-typehints.php",
+            "tests/PHPStan/Rules/Properties/data/intersection-types.php",
+            "tests/PHPStan/Rules/Properties/data/read-only-property-phpdoc-and-native.php",
+            "tests/PHPStan/Rules/Properties/data/read-only-property.php",
+        ],
+    );
 }
 
 #[test]
@@ -272,7 +297,11 @@ fn doctrine_dbal() {
 
 #[test]
 fn phpunit() {
-    test_repository("phpunit", "https://github.com/phpunit/phpunit", &[]);
+    test_repository(
+        "phpunit",
+        "https://github.com/sebastianbergmann/phpunit",
+        &[],
+    );
 }
 
 fn test_repository(name: &str, repository: &str, ignore: &[&str]) {

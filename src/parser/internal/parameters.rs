@@ -68,9 +68,9 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
         });
 
         state.skip_comments();
-
         if state.current.kind == TokenKind::Comma {
             state.next();
+            state.skip_comments();
         } else {
             break;
         }
@@ -219,9 +219,9 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
         });
 
         state.skip_comments();
-
         if state.current.kind == TokenKind::Comma {
             state.next();
+            state.skip_comments();
         } else {
             break;
         }
