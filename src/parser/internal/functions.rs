@@ -21,10 +21,10 @@ use crate::parser::state::State;
 use crate::scoped;
 
 pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
-    let start = state.current.span;
+    let start = state.stream.current().span;
 
-    let is_static = if state.current.kind == TokenKind::Static {
-        state.next();
+    let is_static = if state.stream.current().kind == TokenKind::Static {
+        state.stream.next();
 
         true
     } else {
@@ -33,8 +33,8 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
 
     utils::skip(state, TokenKind::Function)?;
 
-    let by_ref = if state.current.kind == TokenKind::Ampersand {
-        state.next();
+    let by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+        state.stream.next();
         true
     } else {
         false
@@ -44,15 +44,15 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
     let parameters = parameters::function_parameter_list(state)?;
 
     let mut uses = vec![];
-    if state.current.kind == TokenKind::Use {
-        state.next();
+    if state.stream.current().kind == TokenKind::Use {
+        state.stream.next();
 
         utils::skip_left_parenthesis(state)?;
 
-        while state.current.kind != TokenKind::RightParen {
+        while state.stream.current().kind != TokenKind::RightParen {
             let mut by_ref = false;
-            if state.current.kind == TokenKind::Ampersand {
-                state.next();
+            if state.stream.current().kind == TokenKind::Ampersand {
+                state.stream.next();
 
                 by_ref = true;
             }
@@ -64,15 +64,15 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
                 _ => {
                     return Err(ParseError::UnexpectedToken(
                         "expected variable".into(),
-                        state.current.span,
+                        state.stream.current().span,
                     ))
                 }
             };
 
             uses.push(var);
 
-            if state.current.kind == TokenKind::Comma {
-                state.next();
+            if state.stream.current().kind == TokenKind::Comma {
+                state.stream.next();
             } else {
                 break;
             }
@@ -82,7 +82,7 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
     }
 
     let mut return_ty = None;
-    if state.current.kind == TokenKind::Colon {
+    if state.stream.current().kind == TokenKind::Colon {
         utils::skip_colon(state)?;
 
         return_ty = Some(data_type::data_type(state)?);
@@ -111,10 +111,10 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
 }
 
 pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
-    let start = state.current.span;
+    let start = state.stream.current().span;
 
-    let is_static = if state.current.kind == TokenKind::Static {
-        state.next();
+    let is_static = if state.stream.current().kind == TokenKind::Static {
+        state.stream.next();
 
         true
     } else {
@@ -123,8 +123,8 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
 
     utils::skip(state, TokenKind::Fn)?;
 
-    let by_ref = if state.current.kind == TokenKind::Ampersand {
-        state.next();
+    let by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+        state.stream.next();
         true
     } else {
         false
@@ -134,7 +134,7 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
     let parameters = parameters::function_parameter_list(state)?;
 
     let mut return_type = None;
-    if state.current.kind == TokenKind::Colon {
+    if state.stream.current().kind == TokenKind::Colon {
         utils::skip_colon(state)?;
 
         return_type = Some(data_type::data_type(state)?);
@@ -146,7 +146,7 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
         Box::new(expressions::lowest_precedence(state)?)
     });
 
-    let end = state.current.span;
+    let end = state.stream.current().span;
 
     Ok(Expression::ArrowFunction(ArrowFunction {
         start,
@@ -161,12 +161,12 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
 }
 
 pub fn function(state: &mut State) -> ParseResult<Statement> {
-    let start = state.current.span;
+    let start = state.stream.current().span;
 
     utils::skip(state, TokenKind::Function)?;
 
-    let by_ref = if state.current.kind == TokenKind::Ampersand {
-        state.next();
+    let by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+        state.stream.next();
         true
     } else {
         false
@@ -182,7 +182,7 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
 
     let mut return_type = None;
 
-    if state.current.kind == TokenKind::Colon {
+    if state.stream.current().kind == TokenKind::Colon {
         utils::skip_colon(state)?;
 
         return_type = Some(data_type::data_type(state)?);
@@ -212,8 +212,8 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
 pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<Method> {
     let start = utils::skip(state, TokenKind::Function)?;
 
-    let by_ref = if state.current.kind == TokenKind::Ampersand {
-        state.next();
+    let by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+        state.stream.next();
         true
     } else {
         false
@@ -225,7 +225,7 @@ pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<
             Scope::Class(_, class_modifiers, _) => {
                 if !class_modifiers.has_abstract() && modifiers.has_abstract() {
                     return Err(ParseError::AbstractModifierOnNonAbstractClassMethod(
-                        state.current.span,
+                        state.stream.current().span,
                     ));
                 }
 
@@ -237,7 +237,7 @@ pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<
                 if name.to_string() == "__construct" {
                     return Err(ParseError::ConstructorInEnum(
                         state.named(&enum_name),
-                        state.current.span,
+                        state.stream.current().span,
                     ));
                 }
 
@@ -256,7 +256,7 @@ pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<
 
             let mut return_type = None;
 
-            if state.current.kind == TokenKind::Colon {
+            if state.stream.current().kind == TokenKind::Colon {
                 utils::skip_colon(state)?;
 
                 return_type = Some(data_type::data_type(state)?);

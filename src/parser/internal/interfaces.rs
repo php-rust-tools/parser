@@ -26,10 +26,10 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
     let name = identifiers::type_identifier(state)?;
 
-    let extends = if state.current.kind == TokenKind::Extends {
-        let span = state.current.span;
+    let extends = if state.stream.current().kind == TokenKind::Extends {
+        let span = state.stream.current().span;
 
-        state.next();
+        state.stream.next();
 
         let parents = utils::at_least_one_comma_separated::<SimpleIdentifier>(state, &|state| {
             identifiers::full_type_name(state)
@@ -46,8 +46,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         utils::skip_left_brace(state)?;
 
         let mut members = Vec::new();
-        while state.current.kind != TokenKind::RightBrace {
-            state.skip_comments();
+        while state.stream.current().kind != TokenKind::RightBrace {
             members.push(member(state)?);
         }
 
@@ -69,7 +68,7 @@ fn member(state: &mut State) -> ParseResult<InterfaceMember> {
 
     let modifiers = modifiers::collect(state)?;
 
-    if state.current.kind == TokenKind::Const {
+    if state.stream.current().kind == TokenKind::Const {
         constants::classish(state, constant_modifiers(modifiers)?).map(InterfaceMember::Constant)
     } else {
         method(state, method_modifiers(modifiers)?).map(InterfaceMember::Method)

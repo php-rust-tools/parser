@@ -1,8 +1,7 @@
 #[macro_export]
 macro_rules! peek_token {
     ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
-        $state.skip_comments();
-        match &$state.current.kind {
+        match &$state.stream.current().kind {
             $(
                 $( $pattern )|+ $( if $guard )? => $out,
             )+
@@ -12,8 +11,7 @@ macro_rules! peek_token {
         }
     }};
     ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )?),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
-        $state.skip_comments();
-        if !matches!($state.current.kind, $( $pattern )|+ $( if $guard )?) {
+        if !matches!($state.stream.current().kind, $( $pattern )|+ $( if $guard )?) {
             return $crate::expected_token_err!([ $($message,)+ ], $state);
         }
     }};
@@ -28,8 +26,8 @@ macro_rules! peek_token {
 #[macro_export]
 macro_rules! expect_token {
     ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
-        $state.skip_comments();
-        let token = $state.pull();
+        let token = $state.stream.current().clone();
+        $state.stream.next();
         match token.kind {
             $(
                 $( $pattern )|+ $( if $guard )? => {
@@ -60,21 +58,20 @@ macro_rules! expect_token {
 #[macro_export]
 macro_rules! expect_literal {
     ($state:expr) => {{
-        $state.skip_comments();
-        match $state.current.kind.clone() {
+        match $state.stream.current().kind.clone() {
             TokenKind::LiteralInteger(i) => {
                 let e = Expression::LiteralInteger { i };
-                $state.next();
+                $state.stream.next();
                 e
             }
             TokenKind::LiteralFloat(f) => {
                 let e = Expression::LiteralFloat { f };
-                $state.next();
+                $state.stream.next();
                 e
             }
             TokenKind::LiteralString(s) => {
                 let e = Expression::LiteralString { value: s.clone() };
-                $state.next();
+                $state.stream.next();
                 e
             }
             _ => {
@@ -98,19 +95,19 @@ macro_rules! expected_token_err {
 #[macro_export]
 macro_rules! expected_token {
     ([ $($expected:literal),+ $(,)? ], $state:expr $(,)?) => {{
-        match &$state.current.kind {
+        match &$state.stream.current().kind {
             TokenKind::Eof => {
                 $crate::parser::error::ParseError::ExpectedToken(
                     vec![$($expected.into()),+],
                     None,
-                    $state.current.span,
+                    $state.stream.current().span,
                 )
             },
             _ => {
                 $crate::parser::error::ParseError::ExpectedToken(
                     vec![$($expected.into()),+],
-                    Some($state.current.kind.to_string()),
-                    $state.current.span,
+                    Some($state.stream.current().kind.to_string()),
+                    $state.stream.current().span,
                 )
             }
         }
@@ -129,7 +126,7 @@ macro_rules! expected_scope {
                 $( $pattern )|+ $( if $guard )? => $out,
             )+
             _ => {
-                return Err($crate::parser::error::ParseError::UnpredictableState($state.current.span));
+                return Err($crate::parser::error::ParseError::UnpredictableState($state.stream.current().span));
             }
         }
     }};

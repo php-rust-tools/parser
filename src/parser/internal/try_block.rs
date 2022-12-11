@@ -13,9 +13,9 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn try_block(state: &mut State) -> ParseResult<Statement> {
-    let start = state.current.span;
+    let start = state.stream.current().span;
 
-    state.next();
+    state.stream.next();
     utils::skip_left_brace(state)?;
 
     let body = blocks::body(state, &TokenKind::RightBrace)?;
@@ -24,17 +24,17 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
 
     let mut catches = Vec::new();
     loop {
-        if state.current.kind != TokenKind::Catch {
+        if state.stream.current().kind != TokenKind::Catch {
             break;
         }
 
-        let catch_start = state.current.span;
+        let catch_start = state.stream.current().span;
 
-        state.next();
+        state.stream.next();
         utils::skip_left_parenthesis(state)?;
 
         let types = catch_type(state)?;
-        let var = if state.current.kind == TokenKind::RightParen {
+        let var = if state.stream.current().kind == TokenKind::RightParen {
             None
         } else {
             // TODO(azjezz): this is a variable, no an expression?
@@ -48,7 +48,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
 
         utils::skip_right_brace(state)?;
 
-        let catch_end = state.current.span;
+        let catch_end = state.stream.current().span;
 
         catches.push(CatchBlock {
             start: catch_start,
@@ -60,15 +60,15 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
     }
 
     let mut finally = None;
-    if state.current.kind == TokenKind::Finally {
-        let finally_start = state.current.span;
-        state.next();
+    if state.stream.current().kind == TokenKind::Finally {
+        let finally_start = state.stream.current().span;
+        state.stream.next();
         utils::skip_left_brace(state)?;
 
         let finally_body = blocks::body(state, &TokenKind::RightBrace)?;
 
         utils::skip_right_brace(state)?;
-        let finally_end = state.current.span;
+        let finally_end = state.stream.current().span;
 
         finally = Some(FinallyBlock {
             start: finally_start,
@@ -81,7 +81,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
         return Err(ParseError::TryWithoutCatchOrFinally(start));
     }
 
-    let end = state.current.span;
+    let end = state.stream.current().span;
 
     Ok(Statement::Try(TryBlock {
         start,
@@ -96,20 +96,20 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
 fn catch_type(state: &mut State) -> ParseResult<CatchType> {
     let id = identifiers::full_name(state)?;
 
-    if state.current.kind == TokenKind::Pipe {
-        state.next();
+    if state.stream.current().kind == TokenKind::Pipe {
+        state.stream.next();
 
         let mut types = vec![id];
 
-        while !state.is_eof() {
+        while !state.stream.is_eof() {
             let id = identifiers::full_name(state)?;
             types.push(id);
 
-            if state.current.kind != TokenKind::Pipe {
+            if state.stream.current().kind != TokenKind::Pipe {
                 break;
             }
 
-            state.next();
+            state.stream.next();
         }
 
         return Ok(CatchType::Union(types));

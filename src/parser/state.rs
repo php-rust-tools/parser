@@ -1,15 +1,13 @@
 use std::collections::VecDeque;
 use std::fmt::Display;
-use std::vec::IntoIter;
 
-use crate::lexer::token::Token;
-use crate::lexer::token::TokenKind;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
+use crate::parser::stream::TokenStream;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum NamespaceType {
@@ -34,29 +32,21 @@ pub enum Scope {
     ArrowFunction(bool),
 }
 
-#[derive(Debug, Clone)]
-pub struct State {
+#[derive(Debug)]
+pub struct State<'a> {
     pub stack: VecDeque<Scope>,
-    pub current: Token,
-    pub peek: Token,
-    pub iter: IntoIter<Token>,
-    pub comments: Vec<Token>,
+    pub stream: &'a mut TokenStream<'a>,
     pub attributes: Vec<AttributeGroup>,
     pub namespace_type: Option<NamespaceType>,
     pub has_class_scope: bool,
     pub has_class_parent_scope: bool,
 }
 
-impl State {
-    pub fn new(tokens: Vec<Token>) -> Self {
-        let mut iter = tokens.into_iter();
-
+impl<'a> State<'a> {
+    pub fn new(tokens: &'a mut TokenStream<'a>) -> Self {
         Self {
             stack: VecDeque::with_capacity(32),
-            current: iter.next().unwrap_or_default(),
-            peek: iter.next().unwrap_or_default(),
-            iter,
-            comments: vec![],
+            stream: tokens,
             namespace_type: None,
             has_class_scope: false,
             has_class_parent_scope: false,
@@ -112,13 +102,13 @@ impl State {
     pub fn scope(&self) -> ParseResult<&Scope> {
         self.stack
             .back()
-            .ok_or(ParseError::UnpredictableState(self.current.span))
+            .ok_or_else(|| ParseError::UnpredictableState(self.stream.current().span))
     }
 
     pub fn parent(&self) -> ParseResult<&Scope> {
         self.stack
             .get(self.stack.len() - 2)
-            .ok_or(ParseError::UnpredictableState(self.current.span))
+            .ok_or_else(|| ParseError::UnpredictableState(self.stream.current().span))
     }
 
     pub fn enter(&mut self, scope: Scope) {
@@ -139,64 +129,6 @@ impl State {
     pub fn exit(&mut self) {
         self.stack.pop_back();
         self.update_scope();
-    }
-
-    pub fn skip_comments(&mut self) {
-        while matches!(
-            self.current.kind,
-            TokenKind::SingleLineComment(_)
-                | TokenKind::MultiLineComment(_)
-                | TokenKind::HashMarkComment(_)
-                | TokenKind::DocumentComment(_)
-        ) {
-            self.next();
-        }
-    }
-
-    pub fn gather_comments(&mut self) {
-        while matches!(
-            self.current.kind,
-            TokenKind::SingleLineComment(_)
-                | TokenKind::MultiLineComment(_)
-                | TokenKind::HashMarkComment(_)
-                | TokenKind::DocumentComment(_)
-        ) {
-            self.comments.push(self.current.clone());
-            self.next();
-        }
-    }
-
-    pub fn clear_comments(&mut self) -> Vec<Token> {
-        let mut comments = vec![];
-
-        std::mem::swap(&mut self.comments, &mut comments);
-
-        comments
-    }
-
-    pub fn is_eof(&mut self) -> bool {
-        self.current.kind == TokenKind::Eof
-    }
-
-    pub fn pull(&mut self) -> Token {
-        let mut current: Token = Default::default();
-
-        std::mem::swap(&mut current, &mut self.current);
-        std::mem::swap(&mut self.current, &mut self.peek);
-
-        // peek already contains default.
-        if let Some(t) = self.iter.next() {
-            self.peek = t;
-        }
-
-        current
-    }
-
-    pub fn next(&mut self) {
-        // move peek to current
-        std::mem::swap(&mut self.current, &mut self.peek);
-
-        self.peek = self.iter.next().unwrap_or_default()
     }
 
     fn update_scope(&mut self) {

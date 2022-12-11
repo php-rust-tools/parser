@@ -23,13 +23,13 @@ use crate::parser::state::State;
 use crate::scoped;
 
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
-    let start = state.current.span;
+    let start = state.stream.current().span;
 
     utils::skip(state, TokenKind::Enum)?;
 
     let name = identifiers::type_identifier(state)?;
 
-    let backed_type: Option<BackedEnumType> = if state.current.kind == TokenKind::Colon {
+    let backed_type: Option<BackedEnumType> = if state.stream.current().kind == TokenKind::Colon {
         utils::skip_colon(state)?;
 
         let identifier = identifiers::identifier_of(state, &["string", "int"])?;
@@ -43,14 +43,14 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     };
 
     let mut implements = Vec::new();
-    if state.current.kind == TokenKind::Implements {
-        state.next();
+    if state.stream.current().kind == TokenKind::Implements {
+        state.stream.next();
 
-        while state.current.kind != TokenKind::LeftBrace {
+        while state.stream.current().kind != TokenKind::LeftBrace {
             implements.push(identifiers::full_type_name(state)?);
 
-            if state.current.kind == TokenKind::Comma {
-                state.next();
+            if state.stream.current().kind == TokenKind::Comma {
+                state.stream.next();
             } else {
                 break;
             }
@@ -63,8 +63,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
             utils::skip_left_brace(state)?;
 
             let mut members = Vec::new();
-            while state.current.kind != TokenKind::RightBrace {
-                state.skip_comments();
+            while state.stream.current().kind != TokenKind::RightBrace {
                 members.push(backed_member(state, name.to_string())?);
             }
 
@@ -85,8 +84,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
             utils::skip_left_brace(state)?;
 
             let mut members = Vec::new();
-            while state.current.kind != TokenKind::RightBrace {
-                state.skip_comments();
+            while state.stream.current().kind != TokenKind::RightBrace {
                 members.push(unit_member(state, name.to_string())?);
             }
 
@@ -107,19 +105,19 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMember> {
     attributes::gather_attributes(state)?;
 
-    if state.current.kind == TokenKind::Case {
+    if state.stream.current().kind == TokenKind::Case {
         let attributes = state.get_attributes();
 
-        let start = state.current.span;
-        state.next();
+        let start = state.stream.current().span;
+        state.stream.next();
 
         let name = identifiers::identifier_maybe_reserved(state)?;
 
-        if state.current.kind == TokenKind::Equals {
+        if state.stream.current().kind == TokenKind::Equals {
             return Err(ParseError::CaseValueForUnitEnum(
                 name.to_string(),
                 state.named(&enum_name),
-                state.current.span,
+                state.stream.current().span,
             ));
         }
 
@@ -135,7 +133,7 @@ fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMemb
 
     let modifiers = modifiers::collect(state)?;
 
-    if state.current.kind == TokenKind::Const {
+    if state.stream.current().kind == TokenKind::Const {
         return constants::classish(state, modifiers::constant_group(modifiers)?)
             .map(UnitEnumMember::Constant);
     }
@@ -146,19 +144,19 @@ fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMemb
 fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnumMember> {
     attributes::gather_attributes(state)?;
 
-    if state.current.kind == TokenKind::Case {
+    if state.stream.current().kind == TokenKind::Case {
         let attributes = state.get_attributes();
 
-        let start = state.current.span;
-        state.next();
+        let start = state.stream.current().span;
+        state.stream.next();
 
         let name = identifiers::identifier_maybe_reserved(state)?;
 
-        if state.current.kind == TokenKind::SemiColon {
+        if state.stream.current().kind == TokenKind::SemiColon {
             return Err(ParseError::MissingCaseValueForBackedEnum(
                 name.to_string(),
                 state.named(&enum_name),
-                state.current.span,
+                state.stream.current().span,
             ));
         }
 
@@ -179,7 +177,7 @@ fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnum
 
     let modifiers = modifiers::collect(state)?;
 
-    if state.current.kind == TokenKind::Const {
+    if state.stream.current().kind == TokenKind::Const {
         return constants::classish(state, modifiers::constant_group(modifiers)?)
             .map(BackedEnumMember::Constant);
     }

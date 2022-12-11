@@ -20,13 +20,11 @@ use crate::parser::state::State;
 pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterList, ParseError> {
     let mut members = Vec::new();
 
-    let list_start = state.current.span;
+    let list_start = state.stream.current().span;
     utils::skip_left_parenthesis(state)?;
 
-    state.skip_comments();
-
-    while !state.is_eof() && state.current.kind != TokenKind::RightParen {
-        let start = state.current.span;
+    while !state.stream.is_eof() && state.stream.current().kind != TokenKind::RightParen {
+        let start = state.stream.current().span;
 
         attributes::gather_attributes(state)?;
 
@@ -35,13 +33,13 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
         let mut variadic = false;
         let mut by_ref = false;
 
-        if state.current.kind == TokenKind::Ampersand {
-            state.next();
+        if state.stream.current().kind == TokenKind::Ampersand {
+            state.stream.next();
             by_ref = true;
         }
 
-        if state.current.kind == TokenKind::Ellipsis {
-            state.next();
+        if state.stream.current().kind == TokenKind::Ellipsis {
+            state.stream.next();
             variadic = true;
         }
 
@@ -49,12 +47,12 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
         let var = variables::simple_variable(state)?;
 
         let mut default = None;
-        if state.current.kind == TokenKind::Equals {
-            state.next();
+        if state.stream.current().kind == TokenKind::Equals {
+            state.stream.next();
             default = Some(expressions::lowest_precedence(state)?);
         }
 
-        let end = state.current.span;
+        let end = state.stream.current().span;
 
         members.push(FunctionParameter {
             start,
@@ -67,10 +65,8 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
             by_ref,
         });
 
-        state.skip_comments();
-        if state.current.kind == TokenKind::Comma {
-            state.next();
-            state.skip_comments();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
@@ -78,7 +74,7 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
 
     utils::skip_right_parenthesis(state)?;
 
-    let list_end = state.current.span;
+    let list_end = state.stream.current().span;
 
     Ok(FunctionParameterList {
         start: list_start,
@@ -126,13 +122,11 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
 
     let mut members = Vec::new();
 
-    let list_start = state.current.span;
+    let list_start = state.stream.current().span;
     utils::skip_left_parenthesis(state)?;
 
-    state.skip_comments();
-
-    while !state.is_eof() && state.current.kind != TokenKind::RightParen {
-        let start = state.current.span;
+    while !state.stream.is_eof() && state.stream.current().kind != TokenKind::RightParen {
+        let start = state.stream.current().span;
 
         attributes::gather_attributes(state)?;
 
@@ -143,15 +137,17 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
         let mut variadic = false;
         let mut by_ref = false;
 
-        if matches!(state.current.kind, TokenKind::Ampersand) {
-            state.next();
+        if matches!(state.stream.current().kind, TokenKind::Ampersand) {
+            state.stream.next();
             by_ref = true;
         }
 
-        if matches!(state.current.kind, TokenKind::Ellipsis) {
-            state.next();
+        if matches!(state.stream.current().kind, TokenKind::Ellipsis) {
+            state.stream.next();
             if !modifiers.is_empty() {
-                return Err(ParseError::VariadicPromotedProperty(state.current.span));
+                return Err(ParseError::VariadicPromotedProperty(
+                    state.stream.current().span,
+                ));
             }
 
             variadic = true;
@@ -164,12 +160,12 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
             match construct {
                 0 => {
                     return Err(ParseError::PromotedPropertyOutsideConstructor(
-                        state.current.span,
+                        state.stream.current().span,
                     ));
                 }
                 1 => {
                     return Err(ParseError::PromotedPropertyOnAbstractConstructor(
-                        state.current.span,
+                        state.stream.current().span,
                     ));
                 }
                 _ => {}
@@ -182,7 +178,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
                             class_name,
                             var.to_string(),
                             ty.clone(),
-                            state.current.span,
+                            state.stream.current().span,
                         ));
                     }
                 }
@@ -191,7 +187,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
                         return Err(ParseError::MissingTypeForReadonlyProperty(
                             class_name,
                             var.to_string(),
-                            state.current.span,
+                            state.stream.current().span,
                         ));
                     }
                 }
@@ -199,12 +195,12 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
         }
 
         let mut default = None;
-        if state.current.kind == TokenKind::Equals {
-            state.next();
+        if state.stream.current().kind == TokenKind::Equals {
+            state.stream.next();
             default = Some(expressions::lowest_precedence(state)?);
         }
 
-        let end = state.current.span;
+        let end = state.stream.current().span;
 
         members.push(MethodParameter {
             start,
@@ -218,10 +214,8 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
             by_ref,
         });
 
-        state.skip_comments();
-        if state.current.kind == TokenKind::Comma {
-            state.next();
-            state.skip_comments();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
@@ -229,7 +223,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
 
     utils::skip_right_parenthesis(state)?;
 
-    let list_end = state.current.span;
+    let list_end = state.stream.current().span;
 
     Ok(MethodParameterList {
         start: list_start,
@@ -240,32 +234,31 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
 
 pub fn args_list(state: &mut State) -> ParseResult<Vec<Arg>> {
     utils::skip_left_parenthesis(state)?;
-    state.skip_comments();
 
     let mut args = Vec::new();
     let mut has_used_named_arguments = false;
 
-    while !state.is_eof() && state.current.kind != TokenKind::RightParen {
+    while !state.stream.is_eof() && state.stream.current().kind != TokenKind::RightParen {
         let mut name = None;
         let mut unpack = false;
-        if identifiers::is_identifier_maybe_reserved(&state.current.kind)
-            && state.peek.kind == TokenKind::Colon
+        if identifiers::is_identifier_maybe_reserved(&state.stream.current().kind)
+            && state.stream.peek().kind == TokenKind::Colon
         {
             name = Some(identifiers::identifier_maybe_reserved(state)?);
             has_used_named_arguments = true;
-            state.next();
-        } else if state.current.kind == TokenKind::Ellipsis {
-            state.next();
+            state.stream.next();
+        } else if state.stream.current().kind == TokenKind::Ellipsis {
+            state.stream.next();
             unpack = true;
         }
 
         if name.is_none() && has_used_named_arguments {
             return Err(ParseError::CannotUsePositionalArgumentAfterNamedArgument(
-                state.current.span,
+                state.stream.current().span,
             ));
         }
 
-        if unpack && state.current.kind == TokenKind::RightParen {
+        if unpack && state.stream.current().kind == TokenKind::RightParen {
             args.push(Arg {
                 name: None,
                 unpack: false,
@@ -283,10 +276,8 @@ pub fn args_list(state: &mut State) -> ParseResult<Vec<Arg>> {
             value,
         });
 
-        state.skip_comments();
-        if state.current.kind == TokenKind::Comma {
-            state.next();
-            state.skip_comments();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }

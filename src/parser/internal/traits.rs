@@ -21,25 +21,27 @@ use crate::peek_token;
 use crate::scoped;
 
 pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
-    state.next();
+    state.stream.next();
 
     let mut traits = Vec::new();
 
-    while state.current.kind != TokenKind::SemiColon && state.current.kind != TokenKind::LeftBrace {
+    while state.stream.current().kind != TokenKind::SemiColon
+        && state.stream.current().kind != TokenKind::LeftBrace
+    {
         let t = identifiers::full_type_name(state)?;
         traits.push(t);
 
-        if state.current.kind == TokenKind::Comma {
-            if state.peek.kind == TokenKind::SemiColon {
+        if state.stream.current().kind == TokenKind::Comma {
+            if state.stream.peek().kind == TokenKind::SemiColon {
                 // will fail with unexpected token `,`
                 // as `use` doesn't allow for trailing commas.
                 utils::skip_semicolon(state)?;
-            } else if state.peek.kind == TokenKind::LeftBrace {
+            } else if state.stream.peek().kind == TokenKind::LeftBrace {
                 // will fail with unexpected token `{`
                 // as `use` doesn't allow for trailing commas.
                 utils::skip_left_brace(state)?;
             } else {
-                state.next();
+                state.stream.next();
             }
         } else {
             break;
@@ -47,15 +49,15 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
     }
 
     let mut adaptations = Vec::new();
-    if state.current.kind == TokenKind::LeftBrace {
+    if state.stream.current().kind == TokenKind::LeftBrace {
         utils::skip_left_brace(state)?;
 
-        while state.current.kind != TokenKind::RightBrace {
+        while state.stream.current().kind != TokenKind::RightBrace {
             let (r#trait, method): (Option<SimpleIdentifier>, SimpleIdentifier) =
-                match state.peek.kind {
+                match state.stream.peek().kind {
                     TokenKind::DoubleColon => {
                         let r#trait = identifiers::full_type_name(state)?;
-                        state.next();
+                        state.stream.next();
                         let method = identifiers::identifier(state)?;
                         (Some(r#trait), method)
                     }
@@ -64,25 +66,25 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
 
             expect_token!([
                     TokenKind::As => {
-                        match state.current.kind {
+                        match state.stream.current().kind {
                             TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
                                 let visibility = peek_token!([
                                     TokenKind::Public => VisibilityModifier::Public {
-                                        start: state.current.span,
-                                        end: state.peek.span
+                                        start: state.stream.current().span,
+                                        end: state.stream.peek().span
                                     },
                                     TokenKind::Protected => VisibilityModifier::Protected {
-                                        start: state.current.span,
-                                        end: state.peek.span
+                                        start: state.stream.current().span,
+                                        end: state.stream.peek().span
                                     },
                                     TokenKind::Private => VisibilityModifier::Private {
-                                        start: state.current.span,
-                                        end: state.peek.span
+                                        start: state.stream.current().span,
+                                        end: state.stream.peek().span
                                     },
                                 ], state, ["`private`", "`protected`", "`public`"]);
-                                state.next();
+                                state.stream.next();
 
-                                if state.current.kind == TokenKind::SemiColon {
+                                if state.stream.current().kind == TokenKind::SemiColon {
                                     adaptations.push(TraitUsageAdaptation::Visibility {
                                         r#trait,
                                         method,
@@ -113,25 +115,25 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
                         let mut insteadof = Vec::new();
                         insteadof.push(identifiers::full_type_name(state)?);
 
-                        if state.current.kind == TokenKind::Comma {
-                            if state.peek.kind == TokenKind::SemiColon {
+                        if state.stream.current().kind == TokenKind::Comma {
+                            if state.stream.peek().kind == TokenKind::SemiColon {
                                 // will fail with unexpected token `,`
                                 // as `insteadof` doesn't allow for trailing commas.
                                 utils::skip_semicolon(state)?;
                             }
 
-                            state.next();
+                            state.stream.next();
 
-                            while state.current.kind != TokenKind::SemiColon {
+                            while state.stream.current().kind != TokenKind::SemiColon {
                                 insteadof.push(identifiers::full_type_name(state)?);
 
-                                if state.current.kind == TokenKind::Comma {
-                                    if state.peek.kind == TokenKind::SemiColon {
+                                if state.stream.current().kind == TokenKind::Comma {
+                                    if state.stream.peek().kind == TokenKind::SemiColon {
                                         // will fail with unexpected token `,`
                                         // as `insteadof` doesn't allow for trailing commas.
                                         utils::skip_semicolon(state)?;
                                     } else {
-                                        state.next();
+                                        state.stream.next();
                                     }
                                 } else {
                                     break;
@@ -171,14 +173,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         utils::skip_left_brace(state)?;
 
         let mut members = Vec::new();
-        while state.current.kind != TokenKind::RightBrace && !state.is_eof() {
-            state.gather_comments();
-
-            if state.current.kind == TokenKind::RightBrace {
-                state.clear_comments();
-                break;
-            }
-
+        while state.stream.current().kind != TokenKind::RightBrace && !state.stream.is_eof() {
             members.push(member(state, class.clone())?);
         }
 
@@ -197,22 +192,22 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 fn member(state: &mut State, class: String) -> ParseResult<TraitMember> {
     let has_attributes = attributes::gather_attributes(state)?;
 
-    if !has_attributes && state.current.kind == TokenKind::Use {
+    if !has_attributes && state.stream.current().kind == TokenKind::Use {
         return usage(state).map(TraitMember::TraitUsage);
     }
 
-    if state.current.kind == TokenKind::Var {
+    if state.stream.current().kind == TokenKind::Var {
         return properties::parse_var(state, class).map(TraitMember::VariableProperty);
     }
 
     let modifiers = modifiers::collect(state)?;
 
-    if state.current.kind == TokenKind::Const {
+    if state.stream.current().kind == TokenKind::Const {
         return constants::classish(state, modifiers::constant_group(modifiers)?)
             .map(TraitMember::Constant);
     }
 
-    if state.current.kind == TokenKind::Function {
+    if state.stream.current().kind == TokenKind::Function {
         return functions::method(state, modifiers::method_group(modifiers)?)
             .map(TraitMember::Method);
     }

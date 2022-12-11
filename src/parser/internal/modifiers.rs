@@ -273,44 +273,50 @@ pub fn collect(state: &mut State) -> ParseResult<Vec<(Span, TokenKind, Span)>> {
     | TokenKind::Final
     | TokenKind::Abstract
     | TokenKind::Static
-    | TokenKind::Readonly = state.current.kind.clone()
+    | TokenKind::Readonly = state.stream.current().kind.clone()
     {
-        if collected_tokens.contains(&state.current.kind) {
+        if collected_tokens.contains(&state.stream.current().kind) {
             return Err(ParseError::MultipleModifiers(
-                state.current.kind.to_string(),
-                state.current.span,
+                state.stream.current().kind.to_string(),
+                state.stream.current().span,
             ));
         }
 
         // garud against multiple visibility modifiers, we don't care where these modifiers are used.
-        match state.current.kind {
+        match state.stream.current().kind {
             TokenKind::Private
                 if collected_tokens.contains(&TokenKind::Protected)
                     || collected_tokens.contains(&TokenKind::Public) =>
             {
-                return Err(ParseError::MultipleVisibilityModifiers(state.current.span));
+                return Err(ParseError::MultipleVisibilityModifiers(
+                    state.stream.current().span,
+                ));
             }
             TokenKind::Protected
                 if collected_tokens.contains(&TokenKind::Private)
                     || collected_tokens.contains(&TokenKind::Public) =>
             {
-                return Err(ParseError::MultipleVisibilityModifiers(state.current.span));
+                return Err(ParseError::MultipleVisibilityModifiers(
+                    state.stream.current().span,
+                ));
             }
             TokenKind::Public
                 if collected_tokens.contains(&TokenKind::Private)
                     || collected_tokens.contains(&TokenKind::Protected) =>
             {
-                return Err(ParseError::MultipleVisibilityModifiers(state.current.span));
+                return Err(ParseError::MultipleVisibilityModifiers(
+                    state.stream.current().span,
+                ));
             }
             _ => {}
         };
 
-        let start = state.current.span;
-        let end = state.peek.span;
-        collected.push((start, state.current.kind.clone(), end));
-        collected_tokens.push(state.current.kind.clone());
+        let start = state.stream.current().span;
+        let end = state.stream.peek().span;
+        collected.push((start, state.stream.current().kind.clone(), end));
+        collected_tokens.push(state.stream.current().kind.clone());
 
-        state.next();
+        state.stream.next();
     }
 
     Ok(collected)

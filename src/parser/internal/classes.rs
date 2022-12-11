@@ -29,10 +29,10 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
     let name = identifiers::type_identifier(state)?;
 
-    let extends = if state.current.kind == TokenKind::Extends {
-        let span = state.current.span;
+    let extends = if state.stream.current().kind == TokenKind::Extends {
+        let span = state.stream.current().span;
 
-        state.next();
+        state.stream.next();
         let parent = identifiers::full_type_name(state)?;
 
         Some(ClassExtends { span, parent })
@@ -40,10 +40,10 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         None
     };
 
-    let implements = if state.current.kind == TokenKind::Implements {
-        let span = state.current.span;
+    let implements = if state.stream.current().kind == TokenKind::Implements {
+        let span = state.stream.current().span;
 
-        state.next();
+        state.stream.next();
 
         let interfaces =
             utils::at_least_one_comma_separated::<SimpleIdentifier>(state, &|state| {
@@ -64,14 +64,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         Scope::Class(name.clone(), modifiers, extends.is_some()),
         {
             let mut members = Vec::new();
-            while state.current.kind != TokenKind::RightBrace {
-                state.gather_comments();
-
-                if state.current.kind == TokenKind::RightBrace {
-                    state.clear_comments();
-                    break;
-                }
-
+            while state.stream.current().kind != TokenKind::RightBrace {
                 members.push(member(state, classname.clone())?);
             }
 
@@ -104,14 +97,14 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
 
     let mut args = vec![];
 
-    if state.current.kind == TokenKind::LeftParen {
+    if state.stream.current().kind == TokenKind::LeftParen {
         args = parameters::args_list(state)?;
     }
 
-    let extends = if state.current.kind == TokenKind::Extends {
-        let span = state.current.span;
+    let extends = if state.stream.current().kind == TokenKind::Extends {
+        let span = state.stream.current().span;
 
-        state.next();
+        state.stream.next();
         let parent = identifiers::full_name(state)?;
 
         Some(ClassExtends { span, parent })
@@ -119,10 +112,10 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
         None
     };
 
-    let implements = if state.current.kind == TokenKind::Implements {
-        let span = state.current.span;
+    let implements = if state.stream.current().kind == TokenKind::Implements {
+        let span = state.stream.current().span;
 
-        state.next();
+        state.stream.next();
 
         let interfaces =
             utils::at_least_one_comma_separated::<SimpleIdentifier>(state, &|state| {
@@ -139,14 +132,7 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
 
     let members = scoped!(state, Scope::AnonymousClass(extends.is_some()), {
         let mut members = Vec::new();
-        while state.current.kind != TokenKind::RightBrace {
-            state.gather_comments();
-
-            if state.current.kind == TokenKind::RightBrace {
-                state.clear_comments();
-                break;
-            }
-
+        while state.stream.current().kind != TokenKind::RightBrace {
             members.push(member(state, "class@anonymous".to_owned())?);
         }
 
@@ -172,21 +158,21 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
 fn member(state: &mut State, class: String) -> ParseResult<ClassMember> {
     let has_attributes = attributes::gather_attributes(state)?;
 
-    if !has_attributes && state.current.kind == TokenKind::Use {
+    if !has_attributes && state.stream.current().kind == TokenKind::Use {
         return traits::usage(state).map(ClassMember::TraitUsage);
     }
 
-    if state.current.kind == TokenKind::Var {
+    if state.stream.current().kind == TokenKind::Var {
         return properties::parse_var(state, class).map(ClassMember::VariableProperty);
     }
 
     let modifiers = modifiers::collect(state)?;
 
-    if state.current.kind == TokenKind::Const {
+    if state.stream.current().kind == TokenKind::Const {
         return classish(state, modifiers::constant_group(modifiers)?).map(ClassMember::Constant);
     }
 
-    if state.current.kind == TokenKind::Function {
+    if state.stream.current().kind == TokenKind::Function {
         return method(state, modifiers::method_group(modifiers)?).map(ClassMember::Method);
     }
 

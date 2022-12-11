@@ -25,7 +25,7 @@ fn main() -> ParseResult<()> {
     let tokens = lexer.tokenize(&contents)?;
     dbg!(&tokens);
 
-    let ast = php_parser_rs::parse(tokens)?;
+    let ast = php_parser_rs::parse(&tokens)?;
 
     dbg!(ast);
 

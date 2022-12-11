@@ -15,68 +15,66 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
     let mut items = Vec::new();
     let mut has_atleast_one_key = false;
 
-    while state.current.kind != TokenKind::RightParen {
-        if state.current.kind == TokenKind::Comma {
+    while state.stream.current().kind != TokenKind::RightParen {
+        if state.stream.current().kind == TokenKind::Comma {
             items.push(ListItem {
                 key: None,
                 value: Expression::Empty,
             });
 
-            state.next();
-            state.skip_comments();
+            state.stream.next();
 
             continue;
         }
 
         let mut key = None;
 
-        if state.current.kind == TokenKind::Ellipsis {
-            return Err(ParseError::IllegalSpreadOperator(state.current.span));
-        }
-
-        if state.current.kind == TokenKind::Ampersand {
-            return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
-                state.current.span,
+        if state.stream.current().kind == TokenKind::Ellipsis {
+            return Err(ParseError::IllegalSpreadOperator(
+                state.stream.current().span,
             ));
         }
 
-        let span = state.current.span;
+        if state.stream.current().kind == TokenKind::Ampersand {
+            return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
+                state.stream.current().span,
+            ));
+        }
+
+        let span = state.stream.current().span;
         let mut value = expressions::lowest_precedence(state)?;
 
-        state.skip_comments();
-
-        if state.current.kind == TokenKind::DoubleArrow {
+        if state.stream.current().kind == TokenKind::DoubleArrow {
             if !has_atleast_one_key && !items.is_empty() {
                 return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(span));
             }
 
-            state.next();
+            state.stream.next();
 
             key = Some(value);
 
-            if state.current.kind == TokenKind::Ellipsis {
-                return Err(ParseError::IllegalSpreadOperator(state.current.span));
+            if state.stream.current().kind == TokenKind::Ellipsis {
+                return Err(ParseError::IllegalSpreadOperator(
+                    state.stream.current().span,
+                ));
             }
 
-            if state.current.kind == TokenKind::Ampersand {
+            if state.stream.current().kind == TokenKind::Ampersand {
                 return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
-                    state.current.span,
+                    state.stream.current().span,
                 ));
             }
 
             has_atleast_one_key = true;
             value = expressions::lowest_precedence(state)?;
-
-            state.skip_comments();
         } else if has_atleast_one_key {
             return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(span));
         }
 
         items.push(ListItem { key, value });
 
-        if state.current.kind == TokenKind::Comma {
-            state.next();
-            state.skip_comments();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
@@ -92,33 +90,29 @@ pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
 
     let mut items = Vec::new();
 
-    while state.current.kind != TokenKind::RightBracket {
+    while state.stream.current().kind != TokenKind::RightBracket {
         // TODO: return an error here instead of
         // an empty array element
         // see: https://3v4l.org/uLTVA
-        if state.current.kind == TokenKind::Comma {
+        if state.stream.current().kind == TokenKind::Comma {
             items.push(ArrayItem {
                 key: None,
                 value: Expression::Empty,
                 unpack: false,
                 by_ref: false,
             });
-            state.next();
-            state.skip_comments();
+            state.stream.next();
 
             continue;
         }
 
         items.push(array_pair(state)?);
 
-        state.skip_comments();
-
-        if state.current.kind != TokenKind::Comma {
+        if state.stream.current().kind != TokenKind::Comma {
             break;
         }
 
-        state.next();
-        state.skip_comments();
+        state.stream.next();
     }
 
     utils::skip_right_bracket(state)?;
@@ -132,18 +126,18 @@ pub fn legacy_array_expression(state: &mut State) -> ParseResult<Expression> {
 
     let mut items = vec![];
 
-    while state.current.kind != TokenKind::RightParen {
+    while state.stream.current().kind != TokenKind::RightParen {
         let mut key = None;
-        let unpack = if state.current.kind == TokenKind::Ellipsis {
-            state.next();
+        let unpack = if state.stream.current().kind == TokenKind::Ellipsis {
+            state.stream.next();
             true
         } else {
             false
         };
 
-        let (mut by_ref, amper_span) = if state.current.kind == TokenKind::Ampersand {
-            let span = state.current.span;
-            state.next();
+        let (mut by_ref, amper_span) = if state.stream.current().kind == TokenKind::Ampersand {
+            let span = state.stream.current().span;
+            state.stream.next();
             (true, span)
         } else {
             (false, (0, 0))
@@ -152,8 +146,8 @@ pub fn legacy_array_expression(state: &mut State) -> ParseResult<Expression> {
         let mut value = expressions::lowest_precedence(state)?;
 
         // TODO: return error for `[...$a => $b]`.
-        if state.current.kind == TokenKind::DoubleArrow {
-            state.next();
+        if state.stream.current().kind == TokenKind::DoubleArrow {
+            state.stream.next();
 
             if by_ref {
                 return Err(ParseError::UnexpectedToken(
@@ -164,8 +158,8 @@ pub fn legacy_array_expression(state: &mut State) -> ParseResult<Expression> {
 
             key = Some(value);
 
-            by_ref = if state.current.kind == TokenKind::Ampersand {
-                state.next();
+            by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+                state.stream.next();
                 true
             } else {
                 false
@@ -181,13 +175,11 @@ pub fn legacy_array_expression(state: &mut State) -> ParseResult<Expression> {
             by_ref,
         });
 
-        if state.current.kind == TokenKind::Comma {
-            state.next();
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
         } else {
             break;
         }
-
-        state.skip_comments();
     }
 
     utils::skip_right_parenthesis(state)?;
@@ -197,24 +189,24 @@ pub fn legacy_array_expression(state: &mut State) -> ParseResult<Expression> {
 
 fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
     let mut key = None;
-    let unpack = if state.current.kind == TokenKind::Ellipsis {
-        state.next();
+    let unpack = if state.stream.current().kind == TokenKind::Ellipsis {
+        state.stream.next();
         true
     } else {
         false
     };
 
-    let (mut by_ref, amper_span) = if state.current.kind == TokenKind::Ampersand {
-        let span = state.current.span;
-        state.next();
+    let (mut by_ref, amper_span) = if state.stream.current().kind == TokenKind::Ampersand {
+        let span = state.stream.current().span;
+        state.stream.next();
         (true, span)
     } else {
         (false, (0, 0))
     };
 
     let mut value = expressions::lowest_precedence(state)?;
-    if state.current.kind == TokenKind::DoubleArrow {
-        state.next();
+    if state.stream.current().kind == TokenKind::DoubleArrow {
+        state.stream.next();
 
         if by_ref {
             return Err(ParseError::UnexpectedToken(
@@ -224,8 +216,8 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
         }
 
         key = Some(value);
-        by_ref = if state.current.kind == TokenKind::Ampersand {
-            state.next();
+        by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+            state.stream.next();
             true
         } else {
             false

@@ -10,9 +10,9 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn simple_variable(state: &mut State) -> ParseResult<SimpleVariable> {
-    if let TokenKind::Variable(name) = state.current.kind.clone() {
-        let span = state.current.span;
-        state.next();
+    if let TokenKind::Variable(name) = state.stream.current().kind.clone() {
+        let span = state.stream.current().span;
+        state.stream.next();
 
         return Ok(SimpleVariable { span, name });
     }
@@ -21,16 +21,16 @@ pub fn simple_variable(state: &mut State) -> ParseResult<SimpleVariable> {
 }
 
 pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
-    match state.current.kind.clone() {
+    match state.stream.current().kind.clone() {
         TokenKind::Variable(name) => {
-            let span = state.current.span;
-            state.next();
+            let span = state.stream.current().span;
+            state.stream.next();
 
             Ok(Variable::SimpleVariable(SimpleVariable { span, name }))
         }
         TokenKind::DollarLeftBrace => {
-            let start = state.current.span;
-            state.next();
+            let start = state.stream.current().span;
+            state.stream.next();
 
             let expr = expressions::lowest_precedence(state)?;
 
@@ -43,10 +43,10 @@ pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
             }))
         }
         // todo(azjezz): figure out why the lexer does this.
-        TokenKind::Dollar if state.peek.kind == TokenKind::LeftBrace => {
-            let start = state.current.span;
-            state.next();
-            state.next();
+        TokenKind::Dollar if state.stream.peek().kind == TokenKind::LeftBrace => {
+            let start = state.stream.current().span;
+            state.stream.next();
+            state.stream.next();
 
             let expr = expressions::lowest_precedence(state)?;
 
@@ -59,8 +59,8 @@ pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
             }))
         }
         TokenKind::Dollar => {
-            let span = state.current.span;
-            state.next();
+            let span = state.stream.current().span;
+            state.stream.next();
 
             let variable = dynamic_variable(state)?;
 
