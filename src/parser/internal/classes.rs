@@ -32,7 +32,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         let span = state.current.span;
 
         state.next();
-        let parent = identifiers::full_name(state)?;
+        let parent = identifiers::full_type_name(state)?;
 
         Some(ClassExtends { span, parent })
     } else {
@@ -46,7 +46,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
         let interfaces =
             utils::at_least_one_comma_separated::<SimpleIdentifier>(state, &|state| {
-                identifiers::full_name(state)
+                identifiers::full_type_name(state)
             })?;
 
         Some(ClassImplements { span, interfaces })

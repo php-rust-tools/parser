@@ -1,0 +1,77 @@
+[
+    Expression {
+        expr: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: (
+                                3,
+                                1,
+                            ),
+                            name: "e",
+                        },
+                    ),
+                ),
+                span: (
+                    3,
+                    4,
+                ),
+                right: Call {
+                    target: Parenthesized {
+                        start: (
+                            3,
+                            6,
+                        ),
+                        expr: ArrowFunction(
+                            ArrowFunction {
+                                start: (
+                                    3,
+                                    7,
+                                ),
+                                end: (
+                                    3,
+                                    33,
+                                ),
+                                attributes: [],
+                                parameters: FunctionParameterList {
+                                    start: (
+                                        3,
+                                        10,
+                                    ),
+                                    end: (
+                                        3,
+                                        12,
+                                    ),
+                                    members: [],
+                                },
+                                return_type: Some(
+                                    Identifier(
+                                        SimpleIdentifier {
+                                            span: (
+                                                3,
+                                                14,
+                                            ),
+                                            name: "\Generator",
+                                        },
+                                    ),
+                                ),
+                                by_ref: false,
+                                body: Yield {
+                                    key: None,
+                                    value: None,
+                                },
+                                static: false,
+                            },
+                        ),
+                        end: (
+                            3,
+                            33,
+                        ),
+                    },
+                    args: [],
+                },
+            },
+        ),
+    },
+]

@@ -1,0 +1,167 @@
+[
+    Interface(
+        Interface {
+            start: (
+                3,
+                1,
+            ),
+            end: (
+                3,
+                36,
+            ),
+            attributes: [],
+            name: SimpleIdentifier {
+                span: (
+                    3,
+                    11,
+                ),
+                name: "enum",
+            },
+            extends: Some(
+                InterfaceExtends {
+                    span: (
+                        3,
+                        16,
+                    ),
+                    parents: [
+                        SimpleIdentifier {
+                            span: (
+                                3,
+                                24,
+                            ),
+                            name: "enum",
+                        },
+                        SimpleIdentifier {
+                            span: (
+                                3,
+                                30,
+                            ),
+                            name: "from",
+                        },
+                    ],
+                },
+            ),
+            members: [],
+        },
+    ),
+    Class(
+        Class {
+            start: (
+                5,
+                1,
+            ),
+            end: (
+                5,
+                48,
+            ),
+            name: SimpleIdentifier {
+                span: (
+                    5,
+                    7,
+                ),
+                name: "enum",
+            },
+            extends: Some(
+                ClassExtends {
+                    span: (
+                        5,
+                        12,
+                    ),
+                    parent: SimpleIdentifier {
+                        span: (
+                            5,
+                            20,
+                        ),
+                        name: "enum",
+                    },
+                },
+            ),
+            implements: Some(
+                ClassImplements {
+                    span: (
+                        5,
+                        25,
+                    ),
+                    interfaces: [
+                        SimpleIdentifier {
+                            span: (
+                                5,
+                                36,
+                            ),
+                            name: "enum",
+                        },
+                        SimpleIdentifier {
+                            span: (
+                                5,
+                                42,
+                            ),
+                            name: "from",
+                        },
+                    ],
+                },
+            ),
+            attributes: [],
+            members: [],
+        },
+    ),
+    Class(
+        Class {
+            start: (
+                6,
+                1,
+            ),
+            end: (
+                6,
+                61,
+            ),
+            name: SimpleIdentifier {
+                span: (
+                    6,
+                    7,
+                ),
+                name: "from",
+            },
+            extends: Some(
+                ClassExtends {
+                    span: (
+                        6,
+                        12,
+                    ),
+                    parent: SimpleIdentifier {
+                        span: (
+                            6,
+                            20,
+                        ),
+                        name: "from",
+                    },
+                },
+            ),
+            implements: Some(
+                ClassImplements {
+                    span: (
+                        6,
+                        25,
+                    ),
+                    interfaces: [
+                        SimpleIdentifier {
+                            span: (
+                                6,
+                                36,
+                            ),
+                            name: "Foo\enum",
+                        },
+                        SimpleIdentifier {
+                            span: (
+                                6,
+                                46,
+                            ),
+                            name: "\Bar\Baz\from",
+                        },
+                    ],
+                },
+            ),
+            attributes: [],
+            members: [],
+        },
+    ),
+]

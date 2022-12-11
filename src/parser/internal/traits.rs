@@ -26,7 +26,7 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
     let mut traits = Vec::new();
 
     while state.current.kind != TokenKind::SemiColon && state.current.kind != TokenKind::LeftBrace {
-        let t = identifiers::full_name(state)?;
+        let t = identifiers::full_type_name(state)?;
         traits.push(t);
 
         if state.current.kind == TokenKind::Comma {
@@ -54,7 +54,7 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
             let (r#trait, method): (Option<SimpleIdentifier>, SimpleIdentifier) =
                 match state.peek.kind {
                     TokenKind::DoubleColon => {
-                        let r#trait = identifiers::full_name(state)?;
+                        let r#trait = identifiers::full_type_name(state)?;
                         state.next();
                         let method = identifiers::identifier(state)?;
                         (Some(r#trait), method)
@@ -111,7 +111,7 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
                     },
                     TokenKind::Insteadof => {
                         let mut insteadof = Vec::new();
-                        insteadof.push(identifiers::full_name(state)?);
+                        insteadof.push(identifiers::full_type_name(state)?);
 
                         if state.current.kind == TokenKind::Comma {
                             if state.peek.kind == TokenKind::SemiColon {
@@ -123,7 +123,7 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
                             state.next();
 
                             while state.current.kind != TokenKind::SemiColon {
-                                insteadof.push(identifiers::full_name(state)?);
+                                insteadof.push(identifiers::full_type_name(state)?);
 
                                 if state.current.kind == TokenKind::Comma {
                                     if state.peek.kind == TokenKind::SemiColon {

@@ -138,12 +138,24 @@ fn phpstan_src() {
 
 #[test]
 fn rector_bin() {
-    test_repository("rector", "https://github.com/rectorphp/rector", &[]);
+    test_repository(
+        "rector",
+        "https://github.com/rectorphp/rector",
+        &[
+            // uses PHP 7 $foo{$x}
+            "e2e/parse-php7-code/src/Foo.php",
+        ],
+    );
 }
 
 #[test]
 fn rector_src() {
-    test_repository("rector-src", "https://github.com/rectorphp/rector-src", &[]);
+    test_repository("rector-src", "https://github.com/rectorphp/rector-src", &[
+        // uses PHP 7 $foo{$x}
+        "build/target-repository/e2e/parse-php7-code/src/Foo.php",
+        // template
+        "vendor/rector/rector-generator/templates/rules/__Package__/Rector/__Category__/__Configured__Name__.php",
+    ]);
 }
 
 #[test]
@@ -213,12 +225,25 @@ fn drupal() {
 
 #[test]
 fn api_platform() {
-    test_repository("api-platform", "https://github.com/api-platform/core", &[]);
+    test_repository("api-platform", "https://github.com/api-platform/core", &[
+        "vendor/doctrine/mongodb-odm/lib/Doctrine/ODM/MongoDB/Aggregation/Stage/GraphLookup/Match.php",
+        "vendor/doctrine/mongodb-odm/lib/Doctrine/ODM/MongoDB/Aggregation/Stage/Match.php",
+        // template
+        "vendor/rector/rector/vendor/rector/rector-generator/templates/rules/__Package__/Rector/__Category__/__Configured__Name__.php"
+    ]);
 }
 
 #[test]
 fn joomla() {
-    test_repository("joomla", "https://github.com/joomla/joomla-cms", &[]);
+    test_repository(
+        "joomla",
+        "https://github.com/joomla/joomla-cms",
+        &[
+            // uses PHP 7 curly brackets array/string access
+            "libraries/vendor/hoa/console/Chrome/Text.php",
+            "libraries/vendor/phpunit/php-code-coverage/tests/_files/Crash.php",
+        ],
+    );
 }
 
 #[test]
@@ -254,6 +279,11 @@ fn doctrine_dbal() {
     );
 }
 
+#[test]
+fn phpunit() {
+    test_repository("phpunit", "https://github.com/phpunit/phpunit", &[]);
+}
+
 fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
     let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let out_dir = manifest.join("target").join("third-party");
@@ -283,7 +313,7 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
 
     if composer_json.exists() && !autoload.exists() {
         let output = Command::new("composer")
-            .arg("update")
+            .arg("install")
             .arg("--ignore-platform-reqs")
             .arg("--no-plugins")
             .arg("--no-scripts")
@@ -293,10 +323,12 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
             .output()
             .expect("failed to run composer");
 
-        panic!(
-            "failed to run composer install in repository: {:#?}",
-            output
-        )
+        if !output.status.success() {
+            panic!(
+                "failed to run composer install in repository: {:#?}",
+                output
+            );
+        }
     }
 
     let entries = read_directory(out_path.clone(), out_path, ignore);

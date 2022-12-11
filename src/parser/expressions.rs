@@ -594,22 +594,19 @@ expressions! {
     throw(|state: &mut State| {
 
         state.next();
-
-        // TODO(azjezz): we start parsing from anynomous class here, because we know that
-        // the right expression can't be an anonymous function, or a list.
-        // however, there's many other things that it can't be.
-        let value = anonymous_class(state)?;
+        state.skip_comments();
 
         Ok(Expression::Throw{
-            value: Box::new(value)
+            value: Box::new(for_precedence(state, Precedence::Lowest)?)
         })
     })
 
     #[before(clone), current(TokenKind::Yield)]
     r#yield(|state: &mut State| {
         state.next();
+        state.skip_comments();
 
-        if state.current.kind == TokenKind::SemiColon {
+        if state.current.kind == TokenKind::SemiColon || state.current.kind == TokenKind::RightParen {
             Ok(Expression::Yield {
                 key: None,
                 value: None,
@@ -985,8 +982,8 @@ expressions! {
 
         let right = Box::new(for_precedence(state, Precedence::Prefix)?);
         let expr = match op {
-            TokenKind::Minus => Expression::ArithmeticOperation(ArithmeticOperation::Negation { span, right }),
-            TokenKind::Plus => Expression::ArithmeticOperation(ArithmeticOperation::Identity { span, right }),
+            TokenKind::Minus => Expression::ArithmeticOperation(ArithmeticOperation::Negative { span, right }),
+            TokenKind::Plus => Expression::ArithmeticOperation(ArithmeticOperation::Positive { span, right }),
             TokenKind::Decrement => Expression::ArithmeticOperation(ArithmeticOperation::PreDecrement { span, right }),
             TokenKind::Increment => Expression::ArithmeticOperation(ArithmeticOperation::PreIncrement { span, right }),
             _ => unreachable!(),
@@ -1511,7 +1508,7 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                             state.next();
                             if let TokenKind::LiteralInteger(i) = &state.current.kind {
                                 let e = Expression::ArithmeticOperation(
-                                    ArithmeticOperation::Negation {
+                                    ArithmeticOperation::Negative {
                                         span,
                                         right: Box::new(Expression::LiteralInteger {
                                             i: i.clone(),

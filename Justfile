@@ -24,7 +24,7 @@ dump file:
     cargo run --bin php-parser-rs -- {{file}}
 
 # run all integration tests, except third-party.
-test filter='-- --skip third_party':
+test filter='':
     cargo test --all {{filter}}
 
 # run integration tests for third party libraries.

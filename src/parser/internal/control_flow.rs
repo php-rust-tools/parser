@@ -28,8 +28,6 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
     let mut default = None;
     let mut arms = Vec::new();
     while state.current.kind != TokenKind::RightBrace {
-        state.skip_comments();
-
         if state.current.kind == TokenKind::Default {
             if default.is_some() {
                 return Err(ParseError::MatchExpressionWithMultipleDefaultArms(
@@ -74,6 +72,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
 
         if state.current.kind == TokenKind::Comma {
             state.next();
+            state.skip_comments();
         } else {
             break;
         }

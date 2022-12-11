@@ -34,11 +34,11 @@ pub enum ArithmeticOperation {
         span: Span,
         right: Box<Expression>,
     },
-    Negation {
+    Negative {
         span: Span,
         right: Box<Expression>,
     },
-    Identity {
+    Positive {
         span: Span,
         right: Box<Expression>,
     },
