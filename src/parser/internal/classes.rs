@@ -1,3 +1,4 @@
+use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::classes::AnonymousClass;
 use crate::parser::ast::classes::Class;
@@ -91,8 +92,11 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     }))
 }
 
-pub fn parse_anonymous(state: &mut State) -> ParseResult<Expression> {
-    let span = utils::skip(state, TokenKind::New)?;
+pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Expression> {
+    let span = match span {
+        Some(span) => span,
+        None => utils::skip(state, TokenKind::New)?,
+    };
 
     attributes::gather_attributes(state)?;
 

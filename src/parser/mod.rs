@@ -5,7 +5,6 @@ use crate::parser::ast::comments::Comment;
 use crate::parser::ast::comments::CommentFormat;
 use crate::parser::ast::variables::Variable;
 use crate::parser::ast::{DeclareItem, Expression, Program, Statement, StaticVar};
-use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::attributes;
 use crate::parser::internal::blocks;
@@ -151,13 +150,9 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     functions::function(state)?
                 }
             }
-            _ => {
-                // Note, we can get attributes and know their span, maybe use that in the
-                // error in the future?
-                return Err(ParseError::ExpectedItemDefinitionAfterAttributes(
-                    state.current.span,
-                ));
-            }
+            _ => Statement::Expression {
+                expr: expressions::attributes(state)?,
+            },
         }
     } else {
         match &state.current.kind {
