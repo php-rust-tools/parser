@@ -233,27 +233,12 @@
             by_ref: false,
             body: [
                 Expression {
-                    expr: Call {
-                        target: Identifier(
-                            SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: (
-                                        9,
-                                        5,
-                                    ),
-                                    name: "exit",
-                                },
-                            ),
-                        ),
-                        args: [
-                            Arg {
-                                name: None,
-                                value: LiteralInteger {
-                                    i: "0",
-                                },
-                                unpack: false,
+                    expr: Exit {
+                        value: Some(
+                            LiteralInteger {
+                                i: "0",
                             },
-                        ],
+                        ),
                     },
                 },
             ],

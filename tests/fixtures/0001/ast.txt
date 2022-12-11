@@ -91,27 +91,12 @@
             by_ref: false,
             body: [
                 Expression {
-                    expr: Call {
-                        target: Identifier(
-                            SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: (
-                                        4,
-                                        5,
-                                    ),
-                                    name: "exit",
-                                },
-                            ),
-                        ),
-                        args: [
-                            Arg {
-                                name: None,
-                                value: LiteralInteger {
-                                    i: "1",
-                                },
-                                unpack: false,
+                    expr: Exit {
+                        value: Some(
+                            LiteralInteger {
+                                i: "1",
                             },
-                        ],
+                        ),
                     },
                 },
             ],
