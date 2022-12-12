@@ -13,7 +13,7 @@
         ),
         then: [
             Expression {
-                expr: Variable(
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -23,6 +23,10 @@
                             name: "a",
                         },
                     ),
+                ),
+                end: (
+                    4,
+                    7,
                 ),
             },
         ],
@@ -43,7 +47,7 @@
         ),
         then: [
             Expression {
-                expr: Variable(
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -54,13 +58,17 @@
                         },
                     ),
                 ),
+                end: (
+                    8,
+                    7,
+                ),
             },
         ],
         else_ifs: [],
         else: Some(
             [
                 Expression {
-                    expr: Variable(
+                    expression: Variable(
                         SimpleVariable(
                             SimpleVariable {
                                 span: (
@@ -70,6 +78,10 @@
                                 name: "b",
                             },
                         ),
+                    ),
+                    end: (
+                        10,
+                        7,
                     ),
                 },
             ],
@@ -81,7 +93,7 @@
         },
         then: [
             Expression {
-                expr: Variable(
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -91,6 +103,10 @@
                             name: "a",
                         },
                     ),
+                ),
+                end: (
+                    14,
+                    7,
                 ),
             },
         ],
@@ -117,7 +133,7 @@
                                             15,
                                             15,
                                         ),
-                                        name: "bar",
+                                        value: "bar",
                                     },
                                 ),
                             ),
@@ -147,7 +163,7 @@
                                                 15,
                                                 30,
                                             ),
-                                            name: "bar",
+                                            value: "bar",
                                         },
                                     ),
                                 ),
@@ -159,7 +175,7 @@
                                             15,
                                             36,
                                         ),
-                                        name: "qux",
+                                        value: "qux",
                                     },
                                 ),
                             ),
@@ -169,7 +185,7 @@
                 ),
                 body: [
                     Expression {
-                        expr: Variable(
+                        expression: Variable(
                             SimpleVariable(
                                 SimpleVariable {
                                     span: (
@@ -179,6 +195,10 @@
                                     name: "b",
                                 },
                             ),
+                        ),
+                        end: (
+                            16,
+                            7,
                         ),
                     },
                 ],
@@ -192,7 +212,7 @@
         },
         then: [
             Expression {
-                expr: Variable(
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -203,6 +223,10 @@
                         },
                     ),
                 ),
+                end: (
+                    20,
+                    7,
+                ),
             },
         ],
         else_ifs: [
@@ -212,7 +236,7 @@
                 },
                 body: [
                     Expression {
-                        expr: Variable(
+                        expression: Variable(
                             SimpleVariable(
                                 SimpleVariable {
                                     span: (
@@ -223,6 +247,10 @@
                                 },
                             ),
                         ),
+                        end: (
+                            22,
+                            7,
+                        ),
                     },
                 ],
             },
@@ -232,7 +260,7 @@
                 },
                 body: [
                     Expression {
-                        expr: Variable(
+                        expression: Variable(
                             SimpleVariable(
                                 SimpleVariable {
                                     span: (
@@ -242,6 +270,10 @@
                                     name: "c",
                                 },
                             ),
+                        ),
+                        end: (
+                            24,
+                            7,
                         ),
                     },
                 ],

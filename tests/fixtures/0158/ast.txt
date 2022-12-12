@@ -1,104 +1,116 @@
 [
-    Namespace {
-        name: SimpleIdentifier {
-            span: (
-                3,
-                11,
-            ),
-            name: "Foo\Bar",
-        },
-        body: [
-            Noop(
-                (
+    Namespace(
+        Unbraced(
+            UnbracedNamespace {
+                start: (
+                    3,
+                    1,
+                ),
+                end: (
                     3,
                     18,
                 ),
-            ),
-            Function(
-                Function {
-                    start: (
-                        5,
-                        1,
+                name: SimpleIdentifier {
+                    span: (
+                        3,
+                        11,
                     ),
-                    end: (
-                        5,
-                        17,
-                    ),
-                    name: SimpleIdentifier {
-                        span: (
-                            5,
-                            10,
-                        ),
-                        name: "foo",
-                    },
-                    attributes: [],
-                    parameters: FunctionParameterList {
-                        start: (
-                            5,
-                            13,
-                        ),
-                        end: (
-                            5,
-                            16,
-                        ),
-                        members: [],
-                    },
-                    return_type: None,
-                    by_ref: false,
-                    body: [],
+                    value: "Foo\Bar",
                 },
-            ),
-        ],
-    },
-    Namespace {
-        name: SimpleIdentifier {
-            span: (
-                7,
-                11,
-            ),
-            name: "Foo\Baz",
-        },
-        body: [
-            Noop(
-                (
+                statements: [
+                    Function(
+                        Function {
+                            start: (
+                                5,
+                                1,
+                            ),
+                            end: (
+                                5,
+                                17,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    5,
+                                    10,
+                                ),
+                                value: "foo",
+                            },
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    5,
+                                    13,
+                                ),
+                                end: (
+                                    5,
+                                    16,
+                                ),
+                                members: [],
+                            },
+                            return_type: None,
+                            by_ref: false,
+                            body: [],
+                        },
+                    ),
+                ],
+            },
+        ),
+    ),
+    Namespace(
+        Unbraced(
+            UnbracedNamespace {
+                start: (
+                    7,
+                    1,
+                ),
+                end: (
                     7,
                     18,
                 ),
-            ),
-            Function(
-                Function {
-                    start: (
-                        9,
-                        1,
+                name: SimpleIdentifier {
+                    span: (
+                        7,
+                        11,
                     ),
-                    end: (
-                        9,
-                        17,
-                    ),
-                    name: SimpleIdentifier {
-                        span: (
-                            9,
-                            10,
-                        ),
-                        name: "foo",
-                    },
-                    attributes: [],
-                    parameters: FunctionParameterList {
-                        start: (
-                            9,
-                            13,
-                        ),
-                        end: (
-                            9,
-                            16,
-                        ),
-                        members: [],
-                    },
-                    return_type: None,
-                    by_ref: false,
-                    body: [],
+                    value: "Foo\Baz",
                 },
-            ),
-        ],
-    },
+                statements: [
+                    Function(
+                        Function {
+                            start: (
+                                9,
+                                1,
+                            ),
+                            end: (
+                                9,
+                                17,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    9,
+                                    10,
+                                ),
+                                value: "foo",
+                            },
+                            attributes: [],
+                            parameters: FunctionParameterList {
+                                start: (
+                                    9,
+                                    13,
+                                ),
+                                end: (
+                                    9,
+                                    16,
+                                ),
+                                members: [],
+                            },
+                            return_type: None,
+                            by_ref: false,
+                            body: [],
+                        },
+                    ),
+                ],
+            },
+        ),
+    ),
 ]

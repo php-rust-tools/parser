@@ -1,6 +1,6 @@
 [
     Expression {
-        expr: MethodCall {
+        expression: MethodCall {
             target: Variable(
                 SimpleVariable(
                     SimpleVariable {
@@ -19,15 +19,19 @@
                             1,
                             13,
                         ),
-                        name: "bar",
+                        value: "bar",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            1,
+            18,
+        ),
     },
     Expression {
-        expr: MethodCall {
+        expression: MethodCall {
             target: MethodCall {
                 target: Variable(
                     SimpleVariable(
@@ -47,7 +51,7 @@
                                 1,
                                 26,
                             ),
-                            name: "bar",
+                            value: "bar",
                         },
                     ),
                 ),
@@ -60,15 +64,19 @@
                             1,
                             33,
                         ),
-                        name: "baz",
+                        value: "baz",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            1,
+            38,
+        ),
     },
     Expression {
-        expr: Call {
+        expression: Call {
             target: MethodCall {
                 target: Variable(
                     SimpleVariable(
@@ -88,7 +96,7 @@
                                 1,
                                 46,
                             ),
-                            name: "bar",
+                            value: "bar",
                         },
                     ),
                 ),
@@ -96,5 +104,9 @@
             },
             args: [],
         },
+        end: (
+            1,
+            53,
+        ),
     },
 ]

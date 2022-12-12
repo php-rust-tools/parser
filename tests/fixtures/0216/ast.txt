@@ -1,12 +1,8 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                7,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,79 +10,96 @@
                     3,
                     7,
                 ),
-                name: "foo",
+                value: "foo",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            4,
-                            12,
-                        ),
-                        end: (
-                            6,
-                            5,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                4,
-                                21,
-                            ),
-                            name: "bar",
-                        },
-                        attributes: [],
-                        parameters: MethodParameterList {
+            body: ClassBody {
+                start: (
+                    3,
+                    11,
+                ),
+                end: (
+                    7,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 4,
-                                24,
+                                12,
                             ),
                             end: (
-                                4,
-                                26,
+                                6,
+                                5,
                             ),
-                            members: [],
-                        },
-                        body: Some(
-                            [
-                                Expression {
-                                    expr: Exit {
-                                        value: Some(
-                                            LiteralInteger {
-                                                span: (
-                                                    5,
-                                                    14,
-                                                ),
-                                                value: "1",
-                                            },
+                            name: SimpleIdentifier {
+                                span: (
+                                    4,
+                                    21,
+                                ),
+                                value: "bar",
+                            },
+                            attributes: [],
+                            parameters: MethodParameterList {
+                                start: (
+                                    4,
+                                    24,
+                                ),
+                                end: (
+                                    4,
+                                    26,
+                                ),
+                                members: [],
+                            },
+                            body: Some(
+                                [
+                                    Expression {
+                                        expression: Exit {
+                                            value: Some(
+                                                LiteralInteger {
+                                                    span: (
+                                                        5,
+                                                        14,
+                                                    ),
+                                                    value: "1",
+                                                },
+                                            ),
+                                        },
+                                        end: (
+                                            5,
+                                            16,
                                         ),
                                     },
-                                },
-                            ],
-                        ),
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        4,
-                                        5,
-                                    ),
-                                    end: (
-                                        4,
-                                        12,
-                                    ),
-                                },
-                            ],
+                                ],
+                            ),
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            4,
+                                            5,
+                                        ),
+                                        end: (
+                                            4,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: Some(
+                                ParentReference,
+                            ),
+                            by_ref: false,
                         },
-                        return_type: Some(
-                            ParentReference,
-                        ),
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
 ]

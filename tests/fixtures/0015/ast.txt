@@ -1,93 +1,198 @@
 [
-    Declare {
-        declares: [
-            DeclareItem {
-                key: SimpleIdentifier {
-                    span: (
-                        3,
-                        9,
-                    ),
-                    name: "a",
-                },
-                value: LiteralInteger {
-                    span: (
-                        3,
-                        11,
-                    ),
-                    value: "1",
-                },
-            },
-        ],
-        body: [
-            Expression {
-                expr: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
+    Declare(
+        Declare {
+            span: (
+                3,
+                1,
+            ),
+            entries: DeclareEntryGroup {
+                start: (
+                    3,
+                    8,
+                ),
+                end: (
+                    3,
+                    12,
+                ),
+                entries: [
+                    DeclareEntry {
+                        key: SimpleIdentifier {
                             span: (
-                                4,
-                                5,
+                                3,
+                                9,
                             ),
-                            name: "a",
+                            value: "a",
                         },
+                        span: (
+                            3,
+                            10,
+                        ),
+                        value: LiteralInteger {
+                            span: (
+                                3,
+                                11,
+                            ),
+                            value: "1",
+                        },
+                    },
+                ],
+            },
+            body: Block {
+                start: (
+                    3,
+                    13,
+                ),
+                statements: [
+                    Expression {
+                        expression: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        4,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
+                        ),
+                        end: (
+                            4,
+                            7,
+                        ),
+                    },
+                ],
+                end: (
+                    (
+                        5,
+                        1,
+                    ),
+                    (
+                        5,
+                        11,
                     ),
                 ),
             },
-        ],
-    },
-    Declare {
-        declares: [
-            DeclareItem {
-                key: SimpleIdentifier {
-                    span: (
-                        7,
-                        9,
-                    ),
-                    name: "b",
-                },
-                value: LiteralString {
-                    span: (
-                        7,
-                        11,
-                    ),
-                    value: "9",
-                },
-            },
-        ],
-        body: [
-            Expression {
-                expr: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
+        },
+    ),
+    Declare(
+        Declare {
+            span: (
+                7,
+                1,
+            ),
+            entries: DeclareEntryGroup {
+                start: (
+                    7,
+                    8,
+                ),
+                end: (
+                    7,
+                    14,
+                ),
+                entries: [
+                    DeclareEntry {
+                        key: SimpleIdentifier {
                             span: (
-                                8,
-                                5,
+                                7,
+                                9,
                             ),
-                            name: "a",
+                            value: "b",
                         },
+                        span: (
+                            7,
+                            10,
+                        ),
+                        value: LiteralString {
+                            span: (
+                                7,
+                                11,
+                            ),
+                            value: "9",
+                        },
+                    },
+                ],
+            },
+            body: Block {
+                start: (
+                    7,
+                    15,
+                ),
+                statements: [
+                    Expression {
+                        expression: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        8,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
+                        ),
+                        end: (
+                            8,
+                            7,
+                        ),
+                    },
+                ],
+                end: (
+                    (
+                        9,
+                        1,
+                    ),
+                    (
+                        9,
+                        11,
                     ),
                 ),
             },
-        ],
-    },
-    Declare {
-        declares: [
-            DeclareItem {
-                key: SimpleIdentifier {
-                    span: (
-                        11,
-                        9,
-                    ),
-                    name: "foo",
-                },
-                value: LiteralFloat {
-                    span: (
-                        11,
-                        13,
-                    ),
-                    value: "1.42",
-                },
+        },
+    ),
+    Declare(
+        Declare {
+            span: (
+                11,
+                1,
+            ),
+            entries: DeclareEntryGroup {
+                start: (
+                    11,
+                    8,
+                ),
+                end: (
+                    11,
+                    17,
+                ),
+                entries: [
+                    DeclareEntry {
+                        key: SimpleIdentifier {
+                            span: (
+                                11,
+                                9,
+                            ),
+                            value: "foo",
+                        },
+                        span: (
+                            11,
+                            12,
+                        ),
+                        value: LiteralFloat {
+                            span: (
+                                11,
+                                13,
+                            ),
+                            value: "1.42",
+                        },
+                    },
+                ],
             },
-        ],
-        body: [],
-    },
+            body: Noop {
+                span: (
+                    11,
+                    18,
+                ),
+            },
+        },
+    ),
 ]

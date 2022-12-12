@@ -1,12 +1,8 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                9,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,109 +10,126 @@
                     3,
                     7,
                 ),
-                name: "Foo",
+                value: "Foo",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            5,
-                            5,
-                        ),
-                        end: (
-                            8,
-                            5,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                5,
-                                14,
-                            ),
-                            name: "bar",
-                        },
-                        attributes: [],
-                        parameters: MethodParameterList {
+            body: ClassBody {
+                start: (
+                    4,
+                    1,
+                ),
+                end: (
+                    9,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 5,
-                                17,
-                            ),
-                            end: (
-                                6,
                                 5,
                             ),
-                            members: [],
-                        },
-                        body: Some(
-                            [
-                                Expression {
-                                    expr: Closure(
-                                        Closure {
-                                            start: (
-                                                7,
-                                                9,
-                                            ),
-                                            end: (
-                                                7,
-                                                38,
-                                            ),
-                                            attributes: [],
-                                            parameters: FunctionParameterList {
+                            end: (
+                                8,
+                                5,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    5,
+                                    14,
+                                ),
+                                value: "bar",
+                            },
+                            attributes: [],
+                            parameters: MethodParameterList {
+                                start: (
+                                    5,
+                                    17,
+                                ),
+                                end: (
+                                    6,
+                                    5,
+                                ),
+                                members: [],
+                            },
+                            body: Some(
+                                [
+                                    Expression {
+                                        expression: Closure(
+                                            Closure {
                                                 start: (
                                                     7,
-                                                    25,
+                                                    9,
                                                 ),
                                                 end: (
                                                     7,
-                                                    37,
+                                                    38,
                                                 ),
-                                                members: [
-                                                    FunctionParameter {
-                                                        start: (
-                                                            7,
-                                                            26,
-                                                        ),
-                                                        end: (
-                                                            7,
-                                                            35,
-                                                        ),
-                                                        name: SimpleVariable {
-                                                            span: (
+                                                attributes: [],
+                                                parameters: FunctionParameterList {
+                                                    start: (
+                                                        7,
+                                                        25,
+                                                    ),
+                                                    end: (
+                                                        7,
+                                                        37,
+                                                    ),
+                                                    members: [
+                                                        FunctionParameter {
+                                                            start: (
                                                                 7,
-                                                                31,
+                                                                26,
                                                             ),
-                                                            name: "foo",
+                                                            end: (
+                                                                7,
+                                                                35,
+                                                            ),
+                                                            name: SimpleVariable {
+                                                                span: (
+                                                                    7,
+                                                                    31,
+                                                                ),
+                                                                name: "foo",
+                                                            },
+                                                            attributes: [],
+                                                            type: Some(
+                                                                SelfReference,
+                                                            ),
+                                                            variadic: false,
+                                                            default: None,
+                                                            by_ref: false,
                                                         },
-                                                        attributes: [],
-                                                        type: Some(
-                                                            SelfReference,
-                                                        ),
-                                                        variadic: false,
-                                                        default: None,
-                                                        by_ref: false,
-                                                    },
-                                                ],
+                                                    ],
+                                                },
+                                                return_ty: None,
+                                                uses: [],
+                                                by_ref: false,
+                                                body: [],
+                                                static: true,
                                             },
-                                            return_ty: None,
-                                            uses: [],
-                                            by_ref: false,
-                                            body: [],
-                                            static: true,
-                                        },
-                                    ),
-                                },
-                            ],
-                        ),
-                        modifiers: MethodModifierGroup {
-                            modifiers: [],
+                                        ),
+                                        end: (
+                                            7,
+                                            39,
+                                        ),
+                                    },
+                                ],
+                            ),
+                            modifiers: MethodModifierGroup {
+                                modifiers: [],
+                            },
+                            return_type: None,
+                            by_ref: false,
                         },
-                        return_type: None,
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
 ]

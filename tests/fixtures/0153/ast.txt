@@ -1,150 +1,176 @@
 [
-    Namespace {
-        name: SimpleIdentifier {
-            span: (
-                3,
-                11,
-            ),
-            name: "Foo\Bar",
-        },
-        body: [
-            Noop(
-                (
+    Namespace(
+        Unbraced(
+            UnbracedNamespace {
+                start: (
+                    3,
+                    1,
+                ),
+                end: (
                     3,
                     18,
                 ),
-            ),
-            Class(
-                Class {
-                    start: (
-                        5,
-                        7,
+                name: SimpleIdentifier {
+                    span: (
+                        3,
+                        11,
                     ),
-                    end: (
-                        9,
-                        1,
-                    ),
-                    name: SimpleIdentifier {
-                        span: (
-                            5,
-                            13,
-                        ),
-                        name: "Baz",
-                    },
-                    extends: None,
-                    implements: None,
-                    attributes: [],
-                    members: [
-                        Method(
-                            Method {
-                                start: (
-                                    6,
+                    value: "Foo\Bar",
+                },
+                statements: [
+                    Class(
+                        Class {
+                            span: (
+                                5,
+                                7,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    5,
                                     13,
                                 ),
-                                end: (
-                                    8,
-                                    9,
+                                value: "Baz",
+                            },
+                            modifiers: ClassModifierGroup {
+                                modifiers: [
+                                    Final {
+                                        start: (
+                                            5,
+                                            1,
+                                        ),
+                                        end: (
+                                            5,
+                                            7,
+                                        ),
+                                    },
+                                ],
+                            },
+                            extends: None,
+                            implements: None,
+                            attributes: [],
+                            body: ClassBody {
+                                start: (
+                                    5,
+                                    17,
                                 ),
-                                name: SimpleIdentifier {
-                                    span: (
-                                        6,
-                                        22,
-                                    ),
-                                    name: "__construct",
-                                },
-                                attributes: [],
-                                parameters: MethodParameterList {
-                                    start: (
-                                        6,
-                                        33,
-                                    ),
-                                    end: (
-                                        8,
-                                        8,
-                                    ),
-                                    members: [
-                                        MethodParameter {
+                                end: (
+                                    9,
+                                    1,
+                                ),
+                                members: [
+                                    Method(
+                                        Method {
                                             start: (
-                                                7,
-                                                11,
+                                                6,
+                                                13,
                                             ),
                                             end: (
-                                                7,
-                                                47,
+                                                8,
+                                                9,
                                             ),
-                                            name: SimpleVariable {
+                                            name: SimpleIdentifier {
                                                 span: (
-                                                    7,
-                                                    34,
+                                                    6,
+                                                    22,
                                                 ),
-                                                name: "name",
+                                                value: "__construct",
                                             },
                                             attributes: [],
-                                            type: Some(
-                                                String,
-                                            ),
-                                            variadic: false,
-                                            default: Some(
-                                                LiteralString {
-                                                    span: (
-                                                        7,
-                                                        42,
-                                                    ),
-                                                    value: "foo",
-                                                },
-                                            ),
-                                            modifiers: PromotedPropertyModifierGroup {
-                                                modifiers: [
-                                                    Public {
+                                            parameters: MethodParameterList {
+                                                start: (
+                                                    6,
+                                                    33,
+                                                ),
+                                                end: (
+                                                    8,
+                                                    8,
+                                                ),
+                                                members: [
+                                                    MethodParameter {
                                                         start: (
                                                             7,
                                                             11,
                                                         ),
                                                         end: (
                                                             7,
-                                                            18,
+                                                            47,
                                                         ),
+                                                        name: SimpleVariable {
+                                                            span: (
+                                                                7,
+                                                                34,
+                                                            ),
+                                                            name: "name",
+                                                        },
+                                                        attributes: [],
+                                                        type: Some(
+                                                            String,
+                                                        ),
+                                                        variadic: false,
+                                                        default: Some(
+                                                            LiteralString {
+                                                                span: (
+                                                                    7,
+                                                                    42,
+                                                                ),
+                                                                value: "foo",
+                                                            },
+                                                        ),
+                                                        modifiers: PromotedPropertyModifierGroup {
+                                                            modifiers: [
+                                                                Public {
+                                                                    start: (
+                                                                        7,
+                                                                        11,
+                                                                    ),
+                                                                    end: (
+                                                                        7,
+                                                                        18,
+                                                                    ),
+                                                                },
+                                                                Readonly {
+                                                                    start: (
+                                                                        7,
+                                                                        18,
+                                                                    ),
+                                                                    end: (
+                                                                        7,
+                                                                        27,
+                                                                    ),
+                                                                },
+                                                            ],
+                                                        },
+                                                        by_ref: false,
                                                     },
-                                                    Readonly {
+                                                ],
+                                            },
+                                            body: Some(
+                                                [],
+                                            ),
+                                            modifiers: MethodModifierGroup {
+                                                modifiers: [
+                                                    Public {
                                                         start: (
-                                                            7,
-                                                            18,
+                                                            6,
+                                                            6,
                                                         ),
                                                         end: (
-                                                            7,
-                                                            27,
+                                                            6,
+                                                            13,
                                                         ),
                                                     },
                                                 ],
                                             },
+                                            return_type: None,
                                             by_ref: false,
                                         },
-                                    ],
-                                },
-                                body: Some(
-                                    [],
-                                ),
-                                modifiers: MethodModifierGroup {
-                                    modifiers: [
-                                        Public {
-                                            start: (
-                                                6,
-                                                6,
-                                            ),
-                                            end: (
-                                                6,
-                                                13,
-                                            ),
-                                        },
-                                    ],
-                                },
-                                return_type: None,
-                                by_ref: false,
+                                    ),
+                                ],
                             },
-                        ),
-                    ],
-                },
-            ),
-        ],
-    },
+                        },
+                    ),
+                ],
+            },
+        ),
+    ),
 ]

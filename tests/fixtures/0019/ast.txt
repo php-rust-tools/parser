@@ -1,1066 +1,1283 @@
 [
-    BracedNamespace {
-        name: None,
-        body: [
-            Function(
-                Function {
+    Namespace(
+        Braced(
+            BracedNamespace {
+                span: (
+                    3,
+                    1,
+                ),
+                name: None,
+                body: BracedNamespaceBody {
                     start: (
-                        4,
-                        5,
+                        3,
+                        11,
                     ),
                     end: (
-                        4,
-                        28,
+                        5,
+                        1,
                     ),
-                    name: SimpleIdentifier {
-                        span: (
-                            4,
-                            14,
+                    statements: [
+                        Function(
+                            Function {
+                                start: (
+                                    4,
+                                    5,
+                                ),
+                                end: (
+                                    4,
+                                    28,
+                                ),
+                                name: SimpleIdentifier {
+                                    span: (
+                                        4,
+                                        14,
+                                    ),
+                                    value: "globalFunc",
+                                },
+                                attributes: [],
+                                parameters: FunctionParameterList {
+                                    start: (
+                                        4,
+                                        24,
+                                    ),
+                                    end: (
+                                        4,
+                                        27,
+                                    ),
+                                    members: [],
+                                },
+                                return_type: None,
+                                by_ref: false,
+                                body: [],
+                            },
                         ),
-                        name: "globalFunc",
-                    },
-                    attributes: [],
-                    parameters: FunctionParameterList {
-                        start: (
-                            4,
-                            24,
-                        ),
-                        end: (
-                            4,
-                            27,
-                        ),
-                        members: [],
-                    },
-                    return_type: None,
-                    by_ref: false,
-                    body: [],
+                    ],
                 },
-            ),
-        ],
-    },
-    BracedNamespace {
-        name: Some(
-            SimpleIdentifier {
+            },
+        ),
+    ),
+    Namespace(
+        Braced(
+            BracedNamespace {
                 span: (
                     7,
-                    11,
+                    1,
                 ),
-                name: "foo",
-            },
-        ),
-        body: [
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        8,
-                                        5,
-                                    ),
-                                    name: "a",
-                                },
-                            ),
-                        ),
+                name: Some(
+                    SimpleIdentifier {
                         span: (
-                            8,
-                            8,
+                            7,
+                            11,
                         ),
-                        right: Closure(
-                            Closure {
-                                start: (
-                                    8,
-                                    10,
-                                ),
-                                end: (
-                                    8,
-                                    23,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        8,
-                                        19,
-                                    ),
-                                    end: (
-                                        8,
-                                        22,
-                                    ),
-                                    members: [],
-                                },
-                                return_ty: None,
-                                uses: [],
-                                by_ref: false,
-                                body: [],
-                                static: false,
-                            },
-                        ),
+                        value: "foo",
                     },
                 ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
+                body: BracedNamespaceBody {
+                    start: (
+                        7,
+                        15,
+                    ),
+                    end: (
+                        16,
+                        1,
+                    ),
+                    statements: [
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    8,
+                                                    5,
+                                                ),
+                                                name: "a",
+                                            },
+                                        ),
+                                    ),
                                     span: (
-                                        9,
-                                        5,
+                                        8,
+                                        8,
                                     ),
-                                    name: "b",
-                                },
-                            ),
-                        ),
-                        span: (
-                            9,
-                            8,
-                        ),
-                        right: Closure(
-                            Closure {
-                                start: (
-                                    9,
-                                    10,
-                                ),
-                                end: (
-                                    9,
-                                    26,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        9,
-                                        19,
-                                    ),
-                                    end: (
-                                        9,
-                                        25,
-                                    ),
-                                    members: [
-                                        FunctionParameter {
+                                    right: Closure(
+                                        Closure {
                                             start: (
-                                                9,
-                                                20,
+                                                8,
+                                                10,
                                             ),
                                             end: (
-                                                9,
+                                                8,
                                                 23,
                                             ),
-                                            name: SimpleVariable {
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    8,
+                                                    19,
+                                                ),
+                                                end: (
+                                                    8,
+                                                    22,
+                                                ),
+                                                members: [],
+                                            },
+                                            return_ty: None,
+                                            uses: [],
+                                            by_ref: false,
+                                            body: [],
+                                            static: false,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                8,
+                                24,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
                                                 span: (
                                                     9,
-                                                    21,
+                                                    5,
                                                 ),
                                                 name: "b",
                                             },
-                                            attributes: [],
-                                            type: None,
-                                            variadic: false,
-                                            default: None,
-                                            by_ref: true,
-                                        },
-                                    ],
-                                },
-                                return_ty: None,
-                                uses: [],
-                                by_ref: false,
-                                body: [],
-                                static: false,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
+                                        ),
+                                    ),
                                     span: (
-                                        10,
-                                        5,
+                                        9,
+                                        8,
                                     ),
-                                    name: "c",
-                                },
-                            ),
-                        ),
-                        span: (
-                            10,
-                            8,
-                        ),
-                        right: Closure(
-                            Closure {
-                                start: (
-                                    10,
-                                    10,
-                                ),
-                                end: (
-                                    10,
-                                    24,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        10,
-                                        20,
-                                    ),
-                                    end: (
-                                        10,
-                                        23,
-                                    ),
-                                    members: [],
-                                },
-                                return_ty: None,
-                                uses: [],
-                                by_ref: true,
-                                body: [],
-                                static: false,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        11,
-                                        5,
-                                    ),
-                                    name: "d",
-                                },
-                            ),
-                        ),
-                        span: (
-                            11,
-                            8,
-                        ),
-                        right: Closure(
-                            Closure {
-                                start: (
-                                    11,
-                                    10,
-                                ),
-                                end: (
-                                    11,
-                                    39,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        11,
-                                        20,
-                                    ),
-                                    end: (
-                                        11,
-                                        26,
-                                    ),
-                                    members: [
-                                        FunctionParameter {
+                                    right: Closure(
+                                        Closure {
                                             start: (
-                                                11,
-                                                21,
+                                                9,
+                                                10,
                                             ),
                                             end: (
-                                                11,
+                                                9,
+                                                26,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    9,
+                                                    19,
+                                                ),
+                                                end: (
+                                                    9,
+                                                    25,
+                                                ),
+                                                members: [
+                                                    FunctionParameter {
+                                                        start: (
+                                                            9,
+                                                            20,
+                                                        ),
+                                                        end: (
+                                                            9,
+                                                            23,
+                                                        ),
+                                                        name: SimpleVariable {
+                                                            span: (
+                                                                9,
+                                                                21,
+                                                            ),
+                                                            name: "b",
+                                                        },
+                                                        attributes: [],
+                                                        type: None,
+                                                        variadic: false,
+                                                        default: None,
+                                                        by_ref: true,
+                                                    },
+                                                ],
+                                            },
+                                            return_ty: None,
+                                            uses: [],
+                                            by_ref: false,
+                                            body: [],
+                                            static: false,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                9,
+                                27,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    10,
+                                                    5,
+                                                ),
+                                                name: "c",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        10,
+                                        8,
+                                    ),
+                                    right: Closure(
+                                        Closure {
+                                            start: (
+                                                10,
+                                                10,
+                                            ),
+                                            end: (
+                                                10,
                                                 24,
                                             ),
-                                            name: SimpleVariable {
-                                                span: (
-                                                    11,
-                                                    22,
-                                                ),
-                                                name: "b",
-                                            },
                                             attributes: [],
-                                            type: None,
-                                            variadic: false,
-                                            default: None,
-                                            by_ref: true,
-                                        },
-                                    ],
-                                },
-                                return_ty: None,
-                                uses: [],
-                                by_ref: true,
-                                body: [
-                                    Return {
-                                        value: Some(
-                                            Variable(
-                                                SimpleVariable(
-                                                    SimpleVariable {
-                                                        span: (
-                                                            11,
-                                                            35,
-                                                        ),
-                                                        name: "b",
-                                                    },
-                                                ),
-                                            ),
-                                        ),
-                                    },
-                                ],
-                                static: false,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        12,
-                                        5,
-                                    ),
-                                    name: "e",
-                                },
-                            ),
-                        ),
-                        span: (
-                            12,
-                            8,
-                        ),
-                        right: ArrowFunction(
-                            ArrowFunction {
-                                start: (
-                                    12,
-                                    10,
-                                ),
-                                end: (
-                                    12,
-                                    23,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        12,
-                                        13,
-                                    ),
-                                    end: (
-                                        12,
-                                        16,
-                                    ),
-                                    members: [],
-                                },
-                                return_type: None,
-                                by_ref: false,
-                                body: Null,
-                                static: false,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        13,
-                                        5,
-                                    ),
-                                    name: "f",
-                                },
-                            ),
-                        ),
-                        span: (
-                            13,
-                            8,
-                        ),
-                        right: ArrowFunction(
-                            ArrowFunction {
-                                start: (
-                                    13,
-                                    10,
-                                ),
-                                end: (
-                                    13,
-                                    26,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        13,
-                                        13,
-                                    ),
-                                    end: (
-                                        13,
-                                        19,
-                                    ),
-                                    members: [
-                                        FunctionParameter {
-                                            start: (
-                                                13,
-                                                14,
-                                            ),
-                                            end: (
-                                                13,
-                                                17,
-                                            ),
-                                            name: SimpleVariable {
-                                                span: (
-                                                    13,
-                                                    15,
-                                                ),
-                                                name: "b",
-                                            },
-                                            attributes: [],
-                                            type: None,
-                                            variadic: false,
-                                            default: None,
-                                            by_ref: true,
-                                        },
-                                    ],
-                                },
-                                return_type: None,
-                                by_ref: false,
-                                body: Null,
-                                static: false,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        14,
-                                        5,
-                                    ),
-                                    name: "g",
-                                },
-                            ),
-                        ),
-                        span: (
-                            14,
-                            8,
-                        ),
-                        right: ArrowFunction(
-                            ArrowFunction {
-                                start: (
-                                    14,
-                                    10,
-                                ),
-                                end: (
-                                    14,
-                                    24,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        14,
-                                        14,
-                                    ),
-                                    end: (
-                                        14,
-                                        17,
-                                    ),
-                                    members: [],
-                                },
-                                return_type: None,
-                                by_ref: true,
-                                body: Null,
-                                static: false,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        15,
-                                        5,
-                                    ),
-                                    name: "h",
-                                },
-                            ),
-                        ),
-                        span: (
-                            15,
-                            8,
-                        ),
-                        right: ArrowFunction(
-                            ArrowFunction {
-                                start: (
-                                    15,
-                                    10,
-                                ),
-                                end: (
-                                    15,
-                                    25,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        15,
-                                        14,
-                                    ),
-                                    end: (
-                                        15,
-                                        20,
-                                    ),
-                                    members: [
-                                        FunctionParameter {
-                                            start: (
-                                                15,
-                                                15,
-                                            ),
-                                            end: (
-                                                15,
-                                                18,
-                                            ),
-                                            name: SimpleVariable {
-                                                span: (
-                                                    15,
-                                                    16,
-                                                ),
-                                                name: "b",
-                                            },
-                                            attributes: [],
-                                            type: None,
-                                            variadic: false,
-                                            default: None,
-                                            by_ref: true,
-                                        },
-                                    ],
-                                },
-                                return_type: None,
-                                by_ref: true,
-                                body: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: (
-                                                15,
-                                                23,
-                                            ),
-                                            name: "b",
-                                        },
-                                    ),
-                                ),
-                                static: false,
-                            },
-                        ),
-                    },
-                ),
-            },
-        ],
-    },
-    BracedNamespace {
-        name: Some(
-            SimpleIdentifier {
-                span: (
-                    18,
-                    11,
-                ),
-                name: "bar",
-            },
-        ),
-        body: [
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        19,
-                                        5,
-                                    ),
-                                    name: "a",
-                                },
-                            ),
-                        ),
-                        span: (
-                            19,
-                            8,
-                        ),
-                        right: Closure(
-                            Closure {
-                                start: (
-                                    19,
-                                    10,
-                                ),
-                                end: (
-                                    19,
-                                    30,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        19,
-                                        26,
-                                    ),
-                                    end: (
-                                        19,
-                                        29,
-                                    ),
-                                    members: [],
-                                },
-                                return_ty: None,
-                                uses: [],
-                                by_ref: false,
-                                body: [],
-                                static: true,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        20,
-                                        5,
-                                    ),
-                                    name: "b",
-                                },
-                            ),
-                        ),
-                        span: (
-                            20,
-                            8,
-                        ),
-                        right: Closure(
-                            Closure {
-                                start: (
-                                    20,
-                                    10,
-                                ),
-                                end: (
-                                    20,
-                                    33,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        20,
-                                        26,
-                                    ),
-                                    end: (
-                                        20,
-                                        32,
-                                    ),
-                                    members: [
-                                        FunctionParameter {
-                                            start: (
-                                                20,
-                                                27,
-                                            ),
-                                            end: (
-                                                20,
-                                                30,
-                                            ),
-                                            name: SimpleVariable {
-                                                span: (
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    10,
                                                     20,
-                                                    28,
                                                 ),
-                                                name: "b",
-                                            },
-                                            attributes: [],
-                                            type: None,
-                                            variadic: false,
-                                            default: None,
-                                            by_ref: true,
-                                        },
-                                    ],
-                                },
-                                return_ty: None,
-                                uses: [],
-                                by_ref: false,
-                                body: [],
-                                static: true,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        21,
-                                        5,
-                                    ),
-                                    name: "c",
-                                },
-                            ),
-                        ),
-                        span: (
-                            21,
-                            8,
-                        ),
-                        right: Closure(
-                            Closure {
-                                start: (
-                                    21,
-                                    10,
-                                ),
-                                end: (
-                                    21,
-                                    31,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        21,
-                                        27,
-                                    ),
-                                    end: (
-                                        21,
-                                        30,
-                                    ),
-                                    members: [],
-                                },
-                                return_ty: None,
-                                uses: [],
-                                by_ref: true,
-                                body: [],
-                                static: true,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        22,
-                                        5,
-                                    ),
-                                    name: "d",
-                                },
-                            ),
-                        ),
-                        span: (
-                            22,
-                            8,
-                        ),
-                        right: Closure(
-                            Closure {
-                                start: (
-                                    22,
-                                    10,
-                                ),
-                                end: (
-                                    22,
-                                    46,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        22,
-                                        27,
-                                    ),
-                                    end: (
-                                        22,
-                                        33,
-                                    ),
-                                    members: [
-                                        FunctionParameter {
-                                            start: (
-                                                22,
-                                                28,
-                                            ),
-                                            end: (
-                                                22,
-                                                31,
-                                            ),
-                                            name: SimpleVariable {
-                                                span: (
-                                                    22,
-                                                    29,
-                                                ),
-                                                name: "b",
-                                            },
-                                            attributes: [],
-                                            type: None,
-                                            variadic: false,
-                                            default: None,
-                                            by_ref: true,
-                                        },
-                                    ],
-                                },
-                                return_ty: None,
-                                uses: [],
-                                by_ref: true,
-                                body: [
-                                    Return {
-                                        value: Some(
-                                            Variable(
-                                                SimpleVariable(
-                                                    SimpleVariable {
-                                                        span: (
-                                                            22,
-                                                            42,
-                                                        ),
-                                                        name: "b",
-                                                    },
-                                                ),
-                                            ),
-                                        ),
-                                    },
-                                ],
-                                static: true,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        23,
-                                        5,
-                                    ),
-                                    name: "e",
-                                },
-                            ),
-                        ),
-                        span: (
-                            23,
-                            8,
-                        ),
-                        right: ArrowFunction(
-                            ArrowFunction {
-                                start: (
-                                    23,
-                                    10,
-                                ),
-                                end: (
-                                    23,
-                                    30,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        23,
-                                        20,
-                                    ),
-                                    end: (
-                                        23,
-                                        23,
-                                    ),
-                                    members: [],
-                                },
-                                return_type: None,
-                                by_ref: false,
-                                body: Null,
-                                static: true,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        24,
-                                        5,
-                                    ),
-                                    name: "f",
-                                },
-                            ),
-                        ),
-                        span: (
-                            24,
-                            8,
-                        ),
-                        right: ArrowFunction(
-                            ArrowFunction {
-                                start: (
-                                    24,
-                                    10,
-                                ),
-                                end: (
-                                    24,
-                                    33,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        24,
-                                        20,
-                                    ),
-                                    end: (
-                                        24,
-                                        26,
-                                    ),
-                                    members: [
-                                        FunctionParameter {
-                                            start: (
-                                                24,
-                                                21,
-                                            ),
-                                            end: (
-                                                24,
-                                                24,
-                                            ),
-                                            name: SimpleVariable {
-                                                span: (
-                                                    24,
-                                                    22,
-                                                ),
-                                                name: "b",
-                                            },
-                                            attributes: [],
-                                            type: None,
-                                            variadic: false,
-                                            default: None,
-                                            by_ref: true,
-                                        },
-                                    ],
-                                },
-                                return_type: None,
-                                by_ref: false,
-                                body: Null,
-                                static: true,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        25,
-                                        5,
-                                    ),
-                                    name: "g",
-                                },
-                            ),
-                        ),
-                        span: (
-                            25,
-                            8,
-                        ),
-                        right: ArrowFunction(
-                            ArrowFunction {
-                                start: (
-                                    25,
-                                    10,
-                                ),
-                                end: (
-                                    25,
-                                    31,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        25,
-                                        21,
-                                    ),
-                                    end: (
-                                        25,
-                                        24,
-                                    ),
-                                    members: [],
-                                },
-                                return_type: None,
-                                by_ref: true,
-                                body: Null,
-                                static: true,
-                            },
-                        ),
-                    },
-                ),
-            },
-            Expression {
-                expr: AssignmentOperation(
-                    Assign {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: (
-                                        26,
-                                        5,
-                                    ),
-                                    name: "h",
-                                },
-                            ),
-                        ),
-                        span: (
-                            26,
-                            8,
-                        ),
-                        right: ArrowFunction(
-                            ArrowFunction {
-                                start: (
-                                    26,
-                                    10,
-                                ),
-                                end: (
-                                    26,
-                                    32,
-                                ),
-                                attributes: [],
-                                parameters: FunctionParameterList {
-                                    start: (
-                                        26,
-                                        21,
-                                    ),
-                                    end: (
-                                        26,
-                                        27,
-                                    ),
-                                    members: [
-                                        FunctionParameter {
-                                            start: (
-                                                26,
-                                                22,
-                                            ),
-                                            end: (
-                                                26,
-                                                25,
-                                            ),
-                                            name: SimpleVariable {
-                                                span: (
-                                                    26,
+                                                end: (
+                                                    10,
                                                     23,
                                                 ),
+                                                members: [],
+                                            },
+                                            return_ty: None,
+                                            uses: [],
+                                            by_ref: true,
+                                            body: [],
+                                            static: false,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                10,
+                                25,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    11,
+                                                    5,
+                                                ),
+                                                name: "d",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        11,
+                                        8,
+                                    ),
+                                    right: Closure(
+                                        Closure {
+                                            start: (
+                                                11,
+                                                10,
+                                            ),
+                                            end: (
+                                                11,
+                                                39,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    11,
+                                                    20,
+                                                ),
+                                                end: (
+                                                    11,
+                                                    26,
+                                                ),
+                                                members: [
+                                                    FunctionParameter {
+                                                        start: (
+                                                            11,
+                                                            21,
+                                                        ),
+                                                        end: (
+                                                            11,
+                                                            24,
+                                                        ),
+                                                        name: SimpleVariable {
+                                                            span: (
+                                                                11,
+                                                                22,
+                                                            ),
+                                                            name: "b",
+                                                        },
+                                                        attributes: [],
+                                                        type: None,
+                                                        variadic: false,
+                                                        default: None,
+                                                        by_ref: true,
+                                                    },
+                                                ],
+                                            },
+                                            return_ty: None,
+                                            uses: [],
+                                            by_ref: true,
+                                            body: [
+                                                Return {
+                                                    value: Some(
+                                                        Variable(
+                                                            SimpleVariable(
+                                                                SimpleVariable {
+                                                                    span: (
+                                                                        11,
+                                                                        35,
+                                                                    ),
+                                                                    name: "b",
+                                                                },
+                                                            ),
+                                                        ),
+                                                    ),
+                                                },
+                                            ],
+                                            static: false,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                11,
+                                40,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    12,
+                                                    5,
+                                                ),
+                                                name: "e",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        12,
+                                        8,
+                                    ),
+                                    right: ArrowFunction(
+                                        ArrowFunction {
+                                            start: (
+                                                12,
+                                                10,
+                                            ),
+                                            end: (
+                                                12,
+                                                23,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    12,
+                                                    13,
+                                                ),
+                                                end: (
+                                                    12,
+                                                    16,
+                                                ),
+                                                members: [],
+                                            },
+                                            return_type: None,
+                                            by_ref: false,
+                                            body: Null,
+                                            static: false,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                12,
+                                23,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    13,
+                                                    5,
+                                                ),
+                                                name: "f",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        13,
+                                        8,
+                                    ),
+                                    right: ArrowFunction(
+                                        ArrowFunction {
+                                            start: (
+                                                13,
+                                                10,
+                                            ),
+                                            end: (
+                                                13,
+                                                26,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    13,
+                                                    13,
+                                                ),
+                                                end: (
+                                                    13,
+                                                    19,
+                                                ),
+                                                members: [
+                                                    FunctionParameter {
+                                                        start: (
+                                                            13,
+                                                            14,
+                                                        ),
+                                                        end: (
+                                                            13,
+                                                            17,
+                                                        ),
+                                                        name: SimpleVariable {
+                                                            span: (
+                                                                13,
+                                                                15,
+                                                            ),
+                                                            name: "b",
+                                                        },
+                                                        attributes: [],
+                                                        type: None,
+                                                        variadic: false,
+                                                        default: None,
+                                                        by_ref: true,
+                                                    },
+                                                ],
+                                            },
+                                            return_type: None,
+                                            by_ref: false,
+                                            body: Null,
+                                            static: false,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                13,
+                                26,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    14,
+                                                    5,
+                                                ),
+                                                name: "g",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        14,
+                                        8,
+                                    ),
+                                    right: ArrowFunction(
+                                        ArrowFunction {
+                                            start: (
+                                                14,
+                                                10,
+                                            ),
+                                            end: (
+                                                14,
+                                                24,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    14,
+                                                    14,
+                                                ),
+                                                end: (
+                                                    14,
+                                                    17,
+                                                ),
+                                                members: [],
+                                            },
+                                            return_type: None,
+                                            by_ref: true,
+                                            body: Null,
+                                            static: false,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                14,
+                                24,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    15,
+                                                    5,
+                                                ),
+                                                name: "h",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        15,
+                                        8,
+                                    ),
+                                    right: ArrowFunction(
+                                        ArrowFunction {
+                                            start: (
+                                                15,
+                                                10,
+                                            ),
+                                            end: (
+                                                15,
+                                                25,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    15,
+                                                    14,
+                                                ),
+                                                end: (
+                                                    15,
+                                                    20,
+                                                ),
+                                                members: [
+                                                    FunctionParameter {
+                                                        start: (
+                                                            15,
+                                                            15,
+                                                        ),
+                                                        end: (
+                                                            15,
+                                                            18,
+                                                        ),
+                                                        name: SimpleVariable {
+                                                            span: (
+                                                                15,
+                                                                16,
+                                                            ),
+                                                            name: "b",
+                                                        },
+                                                        attributes: [],
+                                                        type: None,
+                                                        variadic: false,
+                                                        default: None,
+                                                        by_ref: true,
+                                                    },
+                                                ],
+                                            },
+                                            return_type: None,
+                                            by_ref: true,
+                                            body: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: (
+                                                            15,
+                                                            23,
+                                                        ),
+                                                        name: "b",
+                                                    },
+                                                ),
+                                            ),
+                                            static: false,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                15,
+                                25,
+                            ),
+                        },
+                    ],
+                },
+            },
+        ),
+    ),
+    Namespace(
+        Braced(
+            BracedNamespace {
+                span: (
+                    18,
+                    1,
+                ),
+                name: Some(
+                    SimpleIdentifier {
+                        span: (
+                            18,
+                            11,
+                        ),
+                        value: "bar",
+                    },
+                ),
+                body: BracedNamespaceBody {
+                    start: (
+                        18,
+                        15,
+                    ),
+                    end: (
+                        27,
+                        1,
+                    ),
+                    statements: [
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    19,
+                                                    5,
+                                                ),
+                                                name: "a",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        19,
+                                        8,
+                                    ),
+                                    right: Closure(
+                                        Closure {
+                                            start: (
+                                                19,
+                                                10,
+                                            ),
+                                            end: (
+                                                19,
+                                                30,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    19,
+                                                    26,
+                                                ),
+                                                end: (
+                                                    19,
+                                                    29,
+                                                ),
+                                                members: [],
+                                            },
+                                            return_ty: None,
+                                            uses: [],
+                                            by_ref: false,
+                                            body: [],
+                                            static: true,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                19,
+                                31,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    20,
+                                                    5,
+                                                ),
+                                                name: "b",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        20,
+                                        8,
+                                    ),
+                                    right: Closure(
+                                        Closure {
+                                            start: (
+                                                20,
+                                                10,
+                                            ),
+                                            end: (
+                                                20,
+                                                33,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    20,
+                                                    26,
+                                                ),
+                                                end: (
+                                                    20,
+                                                    32,
+                                                ),
+                                                members: [
+                                                    FunctionParameter {
+                                                        start: (
+                                                            20,
+                                                            27,
+                                                        ),
+                                                        end: (
+                                                            20,
+                                                            30,
+                                                        ),
+                                                        name: SimpleVariable {
+                                                            span: (
+                                                                20,
+                                                                28,
+                                                            ),
+                                                            name: "b",
+                                                        },
+                                                        attributes: [],
+                                                        type: None,
+                                                        variadic: false,
+                                                        default: None,
+                                                        by_ref: true,
+                                                    },
+                                                ],
+                                            },
+                                            return_ty: None,
+                                            uses: [],
+                                            by_ref: false,
+                                            body: [],
+                                            static: true,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                20,
+                                34,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    21,
+                                                    5,
+                                                ),
+                                                name: "c",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        21,
+                                        8,
+                                    ),
+                                    right: Closure(
+                                        Closure {
+                                            start: (
+                                                21,
+                                                10,
+                                            ),
+                                            end: (
+                                                21,
+                                                31,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    21,
+                                                    27,
+                                                ),
+                                                end: (
+                                                    21,
+                                                    30,
+                                                ),
+                                                members: [],
+                                            },
+                                            return_ty: None,
+                                            uses: [],
+                                            by_ref: true,
+                                            body: [],
+                                            static: true,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                21,
+                                32,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    22,
+                                                    5,
+                                                ),
+                                                name: "d",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        22,
+                                        8,
+                                    ),
+                                    right: Closure(
+                                        Closure {
+                                            start: (
+                                                22,
+                                                10,
+                                            ),
+                                            end: (
+                                                22,
+                                                46,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    22,
+                                                    27,
+                                                ),
+                                                end: (
+                                                    22,
+                                                    33,
+                                                ),
+                                                members: [
+                                                    FunctionParameter {
+                                                        start: (
+                                                            22,
+                                                            28,
+                                                        ),
+                                                        end: (
+                                                            22,
+                                                            31,
+                                                        ),
+                                                        name: SimpleVariable {
+                                                            span: (
+                                                                22,
+                                                                29,
+                                                            ),
+                                                            name: "b",
+                                                        },
+                                                        attributes: [],
+                                                        type: None,
+                                                        variadic: false,
+                                                        default: None,
+                                                        by_ref: true,
+                                                    },
+                                                ],
+                                            },
+                                            return_ty: None,
+                                            uses: [],
+                                            by_ref: true,
+                                            body: [
+                                                Return {
+                                                    value: Some(
+                                                        Variable(
+                                                            SimpleVariable(
+                                                                SimpleVariable {
+                                                                    span: (
+                                                                        22,
+                                                                        42,
+                                                                    ),
+                                                                    name: "b",
+                                                                },
+                                                            ),
+                                                        ),
+                                                    ),
+                                                },
+                                            ],
+                                            static: true,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                22,
+                                47,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    23,
+                                                    5,
+                                                ),
+                                                name: "e",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        23,
+                                        8,
+                                    ),
+                                    right: ArrowFunction(
+                                        ArrowFunction {
+                                            start: (
+                                                23,
+                                                10,
+                                            ),
+                                            end: (
+                                                23,
+                                                30,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    23,
+                                                    20,
+                                                ),
+                                                end: (
+                                                    23,
+                                                    23,
+                                                ),
+                                                members: [],
+                                            },
+                                            return_type: None,
+                                            by_ref: false,
+                                            body: Null,
+                                            static: true,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                23,
+                                30,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    24,
+                                                    5,
+                                                ),
+                                                name: "f",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        24,
+                                        8,
+                                    ),
+                                    right: ArrowFunction(
+                                        ArrowFunction {
+                                            start: (
+                                                24,
+                                                10,
+                                            ),
+                                            end: (
+                                                24,
+                                                33,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    24,
+                                                    20,
+                                                ),
+                                                end: (
+                                                    24,
+                                                    26,
+                                                ),
+                                                members: [
+                                                    FunctionParameter {
+                                                        start: (
+                                                            24,
+                                                            21,
+                                                        ),
+                                                        end: (
+                                                            24,
+                                                            24,
+                                                        ),
+                                                        name: SimpleVariable {
+                                                            span: (
+                                                                24,
+                                                                22,
+                                                            ),
+                                                            name: "b",
+                                                        },
+                                                        attributes: [],
+                                                        type: None,
+                                                        variadic: false,
+                                                        default: None,
+                                                        by_ref: true,
+                                                    },
+                                                ],
+                                            },
+                                            return_type: None,
+                                            by_ref: false,
+                                            body: Null,
+                                            static: true,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                24,
+                                33,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    25,
+                                                    5,
+                                                ),
+                                                name: "g",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        25,
+                                        8,
+                                    ),
+                                    right: ArrowFunction(
+                                        ArrowFunction {
+                                            start: (
+                                                25,
+                                                10,
+                                            ),
+                                            end: (
+                                                25,
+                                                31,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    25,
+                                                    21,
+                                                ),
+                                                end: (
+                                                    25,
+                                                    24,
+                                                ),
+                                                members: [],
+                                            },
+                                            return_type: None,
+                                            by_ref: true,
+                                            body: Null,
+                                            static: true,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                25,
+                                31,
+                            ),
+                        },
+                        Expression {
+                            expression: AssignmentOperation(
+                                Assign {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: (
+                                                    26,
+                                                    5,
+                                                ),
+                                                name: "h",
+                                            },
+                                        ),
+                                    ),
+                                    span: (
+                                        26,
+                                        8,
+                                    ),
+                                    right: ArrowFunction(
+                                        ArrowFunction {
+                                            start: (
+                                                26,
+                                                10,
+                                            ),
+                                            end: (
+                                                26,
+                                                32,
+                                            ),
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                start: (
+                                                    26,
+                                                    21,
+                                                ),
+                                                end: (
+                                                    26,
+                                                    27,
+                                                ),
+                                                members: [
+                                                    FunctionParameter {
+                                                        start: (
+                                                            26,
+                                                            22,
+                                                        ),
+                                                        end: (
+                                                            26,
+                                                            25,
+                                                        ),
+                                                        name: SimpleVariable {
+                                                            span: (
+                                                                26,
+                                                                23,
+                                                            ),
+                                                            name: "b",
+                                                        },
+                                                        attributes: [],
+                                                        type: None,
+                                                        variadic: false,
+                                                        default: None,
+                                                        by_ref: true,
+                                                    },
+                                                ],
+                                            },
+                                            return_type: None,
+                                            by_ref: true,
+                                            body: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: (
+                                                            26,
+                                                            30,
+                                                        ),
+                                                        name: "b",
+                                                    },
+                                                ),
+                                            ),
+                                            static: true,
+                                        },
+                                    ),
+                                },
+                            ),
+                            end: (
+                                26,
+                                32,
+                            ),
+                        },
+                    ],
+                },
+            },
+        ),
+    ),
+    Namespace(
+        Braced(
+            BracedNamespace {
+                span: (
+                    29,
+                    1,
+                ),
+                name: Some(
+                    SimpleIdentifier {
+                        span: (
+                            29,
+                            11,
+                        ),
+                        value: "baz",
+                    },
+                ),
+                body: BracedNamespaceBody {
+                    start: (
+                        29,
+                        15,
+                    ),
+                    end: (
+                        33,
+                        1,
+                    ),
+                    statements: [
+                        Function(
+                            Function {
+                                start: (
+                                    30,
+                                    5,
+                                ),
+                                end: (
+                                    30,
+                                    22,
+                                ),
+                                name: SimpleIdentifier {
+                                    span: (
+                                        30,
+                                        14,
+                                    ),
+                                    value: "a",
+                                },
+                                attributes: [],
+                                parameters: FunctionParameterList {
+                                    start: (
+                                        30,
+                                        15,
+                                    ),
+                                    end: (
+                                        30,
+                                        21,
+                                    ),
+                                    members: [
+                                        FunctionParameter {
+                                            start: (
+                                                30,
+                                                16,
+                                            ),
+                                            end: (
+                                                30,
+                                                19,
+                                            ),
+                                            name: SimpleVariable {
+                                                span: (
+                                                    30,
+                                                    17,
+                                                ),
                                                 name: "b",
                                             },
                                             attributes: [],
@@ -1072,217 +1289,136 @@
                                     ],
                                 },
                                 return_type: None,
-                                by_ref: true,
-                                body: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: (
-                                                26,
-                                                30,
-                                            ),
-                                            name: "b",
-                                        },
-                                    ),
-                                ),
-                                static: true,
+                                by_ref: false,
+                                body: [],
                             },
                         ),
-                    },
-                ),
-            },
-        ],
-    },
-    BracedNamespace {
-        name: Some(
-            SimpleIdentifier {
-                span: (
-                    29,
-                    11,
-                ),
-                name: "baz",
-            },
-        ),
-        body: [
-            Function(
-                Function {
-                    start: (
-                        30,
-                        5,
-                    ),
-                    end: (
-                        30,
-                        22,
-                    ),
-                    name: SimpleIdentifier {
-                        span: (
-                            30,
-                            14,
-                        ),
-                        name: "a",
-                    },
-                    attributes: [],
-                    parameters: FunctionParameterList {
-                        start: (
-                            30,
-                            15,
-                        ),
-                        end: (
-                            30,
-                            21,
-                        ),
-                        members: [
-                            FunctionParameter {
-                                start: (
-                                    30,
-                                    16,
-                                ),
-                                end: (
-                                    30,
-                                    19,
-                                ),
-                                name: SimpleVariable {
-                                    span: (
-                                        30,
-                                        17,
-                                    ),
-                                    name: "b",
-                                },
-                                attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                by_ref: true,
-                            },
-                        ],
-                    },
-                    return_type: None,
-                    by_ref: false,
-                    body: [],
-                },
-            ),
-            Function(
-                Function {
-                    start: (
-                        31,
-                        5,
-                    ),
-                    end: (
-                        31,
-                        34,
-                    ),
-                    name: SimpleIdentifier {
-                        span: (
-                            31,
-                            15,
-                        ),
-                        name: "b",
-                    },
-                    attributes: [],
-                    parameters: FunctionParameterList {
-                        start: (
-                            31,
-                            16,
-                        ),
-                        end: (
-                            31,
-                            21,
-                        ),
-                        members: [
-                            FunctionParameter {
+                        Function(
+                            Function {
                                 start: (
                                     31,
-                                    17,
+                                    5,
                                 ),
                                 end: (
                                     31,
-                                    19,
+                                    34,
                                 ),
-                                name: SimpleVariable {
+                                name: SimpleIdentifier {
                                     span: (
                                         31,
-                                        17,
+                                        15,
                                     ),
-                                    name: "b",
+                                    value: "b",
                                 },
                                 attributes: [],
-                                type: None,
-                                variadic: false,
-                                default: None,
-                                by_ref: false,
-                            },
-                        ],
-                    },
-                    return_type: None,
-                    by_ref: true,
-                    body: [
-                        Return {
-                            value: Some(
-                                Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: (
+                                parameters: FunctionParameterList {
+                                    start: (
+                                        31,
+                                        16,
+                                    ),
+                                    end: (
+                                        31,
+                                        21,
+                                    ),
+                                    members: [
+                                        FunctionParameter {
+                                            start: (
                                                 31,
-                                                30,
+                                                17,
                                             ),
-                                            name: "b",
+                                            end: (
+                                                31,
+                                                19,
+                                            ),
+                                            name: SimpleVariable {
+                                                span: (
+                                                    31,
+                                                    17,
+                                                ),
+                                                name: "b",
+                                            },
+                                            attributes: [],
+                                            type: None,
+                                            variadic: false,
+                                            default: None,
+                                            by_ref: false,
                                         },
-                                    ),
+                                    ],
+                                },
+                                return_type: None,
+                                by_ref: true,
+                                body: [
+                                    Return {
+                                        value: Some(
+                                            Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: (
+                                                            31,
+                                                            30,
+                                                        ),
+                                                        name: "b",
+                                                    },
+                                                ),
+                                            ),
+                                        ),
+                                    },
+                                ],
+                            },
+                        ),
+                        Function(
+                            Function {
+                                start: (
+                                    32,
+                                    5,
                                 ),
-                            ),
-                        },
+                                end: (
+                                    32,
+                                    32,
+                                ),
+                                name: SimpleIdentifier {
+                                    span: (
+                                        32,
+                                        15,
+                                    ),
+                                    value: "c",
+                                },
+                                attributes: [],
+                                parameters: FunctionParameterList {
+                                    start: (
+                                        32,
+                                        16,
+                                    ),
+                                    end: (
+                                        32,
+                                        19,
+                                    ),
+                                    members: [],
+                                },
+                                return_type: None,
+                                by_ref: true,
+                                body: [
+                                    Return {
+                                        value: Some(
+                                            Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: (
+                                                            32,
+                                                            28,
+                                                        ),
+                                                        name: "b",
+                                                    },
+                                                ),
+                                            ),
+                                        ),
+                                    },
+                                ],
+                            },
+                        ),
                     ],
                 },
-            ),
-            Function(
-                Function {
-                    start: (
-                        32,
-                        5,
-                    ),
-                    end: (
-                        32,
-                        32,
-                    ),
-                    name: SimpleIdentifier {
-                        span: (
-                            32,
-                            15,
-                        ),
-                        name: "c",
-                    },
-                    attributes: [],
-                    parameters: FunctionParameterList {
-                        start: (
-                            32,
-                            16,
-                        ),
-                        end: (
-                            32,
-                            19,
-                        ),
-                        members: [],
-                    },
-                    return_type: None,
-                    by_ref: true,
-                    body: [
-                        Return {
-                            value: Some(
-                                Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: (
-                                                32,
-                                                28,
-                                            ),
-                                            name: "b",
-                                        },
-                                    ),
-                                ),
-                            ),
-                        },
-                    ],
-                },
-            ),
-        ],
-    },
+            },
+        ),
+    ),
 ]

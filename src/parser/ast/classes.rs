@@ -6,31 +6,40 @@ use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::constant::ClassishConstant;
 use crate::parser::ast::functions::Method;
 use crate::parser::ast::identifiers::SimpleIdentifier;
+use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::properties::Property;
 use crate::parser::ast::properties::VariableProperty;
 use crate::parser::ast::traits::TraitUsage;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
-pub struct Class {
+pub struct ClassBody {
     pub start: Span,
     pub end: Span,
-    pub name: SimpleIdentifier,
-    pub extends: Option<ClassExtends>,
-    pub implements: Option<ClassImplements>,
-    pub attributes: Vec<AttributeGroup>,
     pub members: Vec<ClassMember>,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
-pub struct AnonymousClass {
-    pub start: Span,
-    pub end: Span,
+pub struct Class {
+    pub span: Span,
+    pub name: SimpleIdentifier,
+    #[serde(flatten)]
+    pub modifiers: ClassModifierGroup,
     pub extends: Option<ClassExtends>,
     pub implements: Option<ClassImplements>,
     pub attributes: Vec<AttributeGroup>,
-    pub members: Vec<ClassMember>,
+    pub body: ClassBody,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub struct AnonymousClass {
+    pub span: Span,
+    pub extends: Option<ClassExtends>,
+    pub implements: Option<ClassImplements>,
+    pub attributes: Vec<AttributeGroup>,
+    pub body: ClassBody,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
@@ -48,7 +57,7 @@ pub struct ClassImplements {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ClassMember {
     Constant(ClassishConstant),
     TraitUsage(TraitUsage),

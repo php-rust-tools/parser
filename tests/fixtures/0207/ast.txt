@@ -1,12 +1,8 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                7,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,76 +10,93 @@
                     3,
                     7,
                 ),
-                name: "foo",
+                value: "foo",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                TraitUsage(
-                    TraitUsage {
-                        traits: [
-                            SimpleIdentifier {
-                                span: (
-                                    4,
-                                    9,
-                                ),
-                                name: "a",
-                            },
-                            SimpleIdentifier {
-                                span: (
-                                    4,
-                                    12,
-                                ),
-                                name: "b",
-                            },
-                            SimpleIdentifier {
-                                span: (
-                                    4,
-                                    15,
-                                ),
-                                name: "c",
-                            },
-                        ],
-                        adaptations: [
-                            Precedence {
-                                trait: Some(
-                                    SimpleIdentifier {
-                                        span: (
-                                            5,
-                                            9,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                                method: SimpleIdentifier {
+            body: ClassBody {
+                start: (
+                    3,
+                    11,
+                ),
+                end: (
+                    7,
+                    1,
+                ),
+                members: [
+                    TraitUsage(
+                        TraitUsage {
+                            span: (
+                                4,
+                                5,
+                            ),
+                            traits: [
+                                SimpleIdentifier {
                                     span: (
-                                        5,
+                                        4,
+                                        9,
+                                    ),
+                                    value: "a",
+                                },
+                                SimpleIdentifier {
+                                    span: (
+                                        4,
                                         12,
                                     ),
-                                    name: "s",
+                                    value: "b",
                                 },
-                                insteadof: [
-                                    SimpleIdentifier {
+                                SimpleIdentifier {
+                                    span: (
+                                        4,
+                                        15,
+                                    ),
+                                    value: "c",
+                                },
+                            ],
+                            adaptations: [
+                                Precedence {
+                                    trait: Some(
+                                        SimpleIdentifier {
+                                            span: (
+                                                5,
+                                                9,
+                                            ),
+                                            value: "a",
+                                        },
+                                    ),
+                                    method: SimpleIdentifier {
                                         span: (
                                             5,
-                                            24,
+                                            12,
                                         ),
-                                        name: "b",
+                                        value: "s",
                                     },
-                                    SimpleIdentifier {
-                                        span: (
-                                            5,
-                                            27,
-                                        ),
-                                        name: "c",
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                ),
-            ],
+                                    insteadof: [
+                                        SimpleIdentifier {
+                                            span: (
+                                                5,
+                                                24,
+                                            ),
+                                            value: "b",
+                                        },
+                                        SimpleIdentifier {
+                                            span: (
+                                                5,
+                                                27,
+                                            ),
+                                            value: "c",
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ),
+                ],
+            },
         },
     ),
 ]

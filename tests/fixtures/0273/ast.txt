@@ -1,12 +1,8 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                7,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,100 +10,117 @@
                     3,
                     7,
                 ),
-                name: "a",
+                value: "a",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            4,
-                            12,
-                        ),
-                        end: (
-                            6,
-                            5,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                4,
-                                21,
-                            ),
-                            name: "foo",
-                        },
-                        attributes: [],
-                        parameters: MethodParameterList {
+            body: ClassBody {
+                start: (
+                    3,
+                    9,
+                ),
+                end: (
+                    7,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 4,
-                                24,
+                                12,
                             ),
                             end: (
-                                4,
-                                27,
+                                6,
+                                5,
                             ),
-                            members: [],
-                        },
-                        body: Some(
-                            [
-                                Expression {
-                                    expr: AssignmentOperation(
-                                        Assign {
-                                            left: Variable(
-                                                SimpleVariable(
-                                                    SimpleVariable {
-                                                        span: (
-                                                            5,
-                                                            9,
-                                                        ),
-                                                        name: "a",
-                                                    },
-                                                ),
-                                            ),
-                                            span: (
-                                                5,
-                                                12,
-                                            ),
-                                            right: StaticMethodCall {
-                                                target: Static,
-                                                method: Identifier(
-                                                    SimpleIdentifier(
-                                                        SimpleIdentifier {
+                            name: SimpleIdentifier {
+                                span: (
+                                    4,
+                                    21,
+                                ),
+                                value: "foo",
+                            },
+                            attributes: [],
+                            parameters: MethodParameterList {
+                                start: (
+                                    4,
+                                    24,
+                                ),
+                                end: (
+                                    4,
+                                    27,
+                                ),
+                                members: [],
+                            },
+                            body: Some(
+                                [
+                                    Expression {
+                                        expression: AssignmentOperation(
+                                            Assign {
+                                                left: Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
                                                             span: (
                                                                 5,
-                                                                22,
+                                                                9,
                                                             ),
-                                                            name: "bar",
+                                                            name: "a",
                                                         },
                                                     ),
                                                 ),
-                                                args: [],
+                                                span: (
+                                                    5,
+                                                    12,
+                                                ),
+                                                right: StaticMethodCall {
+                                                    target: Static,
+                                                    method: Identifier(
+                                                        SimpleIdentifier(
+                                                            SimpleIdentifier {
+                                                                span: (
+                                                                    5,
+                                                                    22,
+                                                                ),
+                                                                value: "bar",
+                                                            },
+                                                        ),
+                                                    ),
+                                                    args: [],
+                                                },
                                             },
-                                        },
-                                    ),
-                                },
-                            ],
-                        ),
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        4,
-                                        5,
-                                    ),
-                                    end: (
-                                        4,
-                                        12,
-                                    ),
-                                },
-                            ],
+                                        ),
+                                        end: (
+                                            5,
+                                            27,
+                                        ),
+                                    },
+                                ],
+                            ),
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            4,
+                                            5,
+                                        ),
+                                        end: (
+                                            4,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: None,
+                            by_ref: false,
                         },
-                        return_type: None,
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
 ]

@@ -1,12 +1,8 @@
 [
     Interface(
         Interface {
-            start: (
+            span: (
                 4,
-                1,
-            ),
-            end: (
-                6,
                 1,
             ),
             attributes: [],
@@ -15,61 +11,71 @@
                     4,
                     11,
                 ),
-                name: "foo",
+                value: "foo",
             },
             extends: None,
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            5,
-                            12,
-                        ),
-                        end: (
-                            5,
-                            34,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                5,
-                                21,
-                            ),
-                            name: "bar",
-                        },
-                        attributes: [],
-                        parameters: MethodParameterList {
+            body: InterfaceBody {
+                start: (
+                    4,
+                    15,
+                ),
+                end: (
+                    6,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 5,
-                                24,
+                                12,
                             ),
                             end: (
                                 5,
-                                26,
+                                34,
                             ),
-                            members: [],
+                            name: SimpleIdentifier {
+                                span: (
+                                    5,
+                                    21,
+                                ),
+                                value: "bar",
+                            },
+                            attributes: [],
+                            parameters: MethodParameterList {
+                                start: (
+                                    5,
+                                    24,
+                                ),
+                                end: (
+                                    5,
+                                    26,
+                                ),
+                                members: [],
+                            },
+                            body: None,
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            5,
+                                            5,
+                                        ),
+                                        end: (
+                                            5,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: Some(
+                                ParentReference,
+                            ),
+                            by_ref: false,
                         },
-                        body: None,
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        5,
-                                        5,
-                                    ),
-                                    end: (
-                                        5,
-                                        12,
-                                    ),
-                                },
-                            ],
-                        },
-                        return_type: Some(
-                            ParentReference,
-                        ),
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
 ]

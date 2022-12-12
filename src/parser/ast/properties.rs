@@ -12,6 +12,7 @@ use crate::parser::ast::Type;
 pub struct Property {
     pub attributes: Vec<AttributeGroup>,
     pub r#type: Option<Type>,
+    #[serde(flatten)]
     pub modifiers: PropertyModifierGroup,
     pub entries: Vec<PropertyEntry>,
 }

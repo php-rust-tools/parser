@@ -8,7 +8,7 @@ use crate::lexer::token::Span;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Variable {
     SimpleVariable(SimpleVariable),
     VariableVariable(VariableVariable),

@@ -1,20 +1,19 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 3,
                 1,
-            ),
-            end: (
-                3,
-                24,
             ),
             name: SimpleIdentifier {
                 span: (
                     3,
                     7,
                 ),
-                name: "Foo",
+                value: "Foo",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: Some(
                 ClassExtends {
@@ -27,13 +26,23 @@
                             3,
                             19,
                         ),
-                        name: "Bar",
+                        value: "Bar",
                     },
                 },
             ),
             implements: None,
             attributes: [],
-            members: [],
+            body: ClassBody {
+                start: (
+                    3,
+                    23,
+                ),
+                end: (
+                    3,
+                    24,
+                ),
+                members: [],
+            },
         },
     ),
 ]

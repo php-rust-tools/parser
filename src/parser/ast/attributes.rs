@@ -9,6 +9,7 @@ use crate::parser::ast::Expression;
 pub struct Attribute {
     pub start: Span,
     pub end: Span,
+    // TODO(azjezz): name + arg list
     pub expression: Expression,
 }
 

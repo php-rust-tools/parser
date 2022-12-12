@@ -1,6 +1,6 @@
 [
     Expression {
-        expr: ArrayIndex {
+        expression: ArrayIndex {
             array: Variable(
                 SimpleVariable(
                     SimpleVariable {
@@ -22,9 +22,13 @@
                 },
             ),
         },
+        end: (
+            3,
+            12,
+        ),
     },
     Expression {
-        expr: ArrayIndex {
+        expression: ArrayIndex {
             array: ArrayIndex {
                 array: Variable(
                     SimpleVariable(
@@ -57,9 +61,13 @@
                 },
             ),
         },
+        end: (
+            5,
+            19,
+        ),
     },
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: ArrayIndex {
                     array: Variable(
@@ -95,6 +103,10 @@
                     value: "baz",
                 },
             },
+        ),
+        end: (
+            7,
+            20,
         ),
     },
 ]

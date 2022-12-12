@@ -3,6 +3,7 @@ use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::VisibilityModifier;
 use crate::parser::ast::traits::Trait;
+use crate::parser::ast::traits::TraitBody;
 use crate::parser::ast::traits::TraitMember;
 use crate::parser::ast::traits::TraitUsage;
 use crate::parser::ast::traits::TraitUsageAdaptation;
@@ -21,7 +22,7 @@ use crate::peek_token;
 use crate::scoped;
 
 pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
-    state.stream.next();
+    let span = utils::skip(state, TokenKind::Use)?;
 
     let mut traits = Vec::new();
 
@@ -158,34 +159,40 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
     }
 
     Ok(TraitUsage {
+        span,
         traits,
         adaptations,
     })
 }
 
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
-    let start = utils::skip(state, TokenKind::Trait)?;
+    let span = utils::skip(state, TokenKind::Trait)?;
     let name = identifiers::type_identifier(state)?;
-    let class = name.name.to_string();
+    let class = name.value.to_string();
     let attributes = state.get_attributes();
 
-    let (members, end) = scoped!(state, Scope::Trait(name.clone()), {
-        utils::skip_left_brace(state)?;
+    let body = scoped!(state, Scope::Trait(name.clone()), {
+        let start = utils::skip_left_brace(state)?;
 
         let mut members = Vec::new();
         while state.stream.current().kind != TokenKind::RightBrace && !state.stream.is_eof() {
             members.push(member(state, class.clone())?);
         }
 
-        (members, utils::skip_right_brace(state)?)
+        let end = utils::skip_right_brace(state)?;
+
+        TraitBody {
+            start,
+            end,
+            members,
+        }
     });
 
     Ok(Statement::Trait(Trait {
-        start,
-        end,
+        span,
         name,
         attributes,
-        members,
+        body,
     }))
 }
 

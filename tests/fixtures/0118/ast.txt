@@ -1,12 +1,8 @@
 [
     UnitEnum(
         UnitEnum {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                6,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,52 +10,62 @@
                     3,
                     6,
                 ),
-                name: "Foo",
+                value: "Foo",
             },
             attributes: [],
             implements: [],
-            members: [
-                Case(
-                    UnitEnumCase {
-                        start: (
-                            4,
-                            5,
-                        ),
-                        end: (
-                            4,
-                            13,
-                        ),
-                        attributes: [],
-                        name: SimpleIdentifier {
-                            span: (
+            body: UnitEnumBody {
+                start: (
+                    3,
+                    10,
+                ),
+                end: (
+                    6,
+                    1,
+                ),
+                members: [
+                    Case(
+                        UnitEnumCase {
+                            start: (
                                 4,
-                                10,
-                            ),
-                            name: "Bar",
-                        },
-                    },
-                ),
-                Case(
-                    UnitEnumCase {
-                        start: (
-                            5,
-                            5,
-                        ),
-                        end: (
-                            5,
-                            13,
-                        ),
-                        attributes: [],
-                        name: SimpleIdentifier {
-                            span: (
                                 5,
-                                10,
                             ),
-                            name: "Baz",
+                            end: (
+                                4,
+                                13,
+                            ),
+                            attributes: [],
+                            name: SimpleIdentifier {
+                                span: (
+                                    4,
+                                    10,
+                                ),
+                                value: "Bar",
+                            },
                         },
-                    },
-                ),
-            ],
+                    ),
+                    Case(
+                        UnitEnumCase {
+                            start: (
+                                5,
+                                5,
+                            ),
+                            end: (
+                                5,
+                                13,
+                            ),
+                            attributes: [],
+                            name: SimpleIdentifier {
+                                span: (
+                                    5,
+                                    10,
+                                ),
+                                value: "Baz",
+                            },
+                        },
+                    ),
+                ],
+            },
         },
     ),
 ]

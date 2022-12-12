@@ -14,7 +14,7 @@
                     3,
                     10,
                 ),
-                name: "foo",
+                value: "foo",
             },
             attributes: [],
             parameters: FunctionParameterList {
@@ -326,7 +326,7 @@
         },
     ),
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -352,9 +352,13 @@
                 },
             },
         ),
+        end: (
+            11,
+            12,
+        ),
     },
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -380,9 +384,13 @@
                 },
             },
         ),
+        end: (
+            12,
+            9,
+        ),
     },
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -408,9 +416,13 @@
                 },
             },
         ),
+        end: (
+            13,
+            9,
+        ),
     },
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -436,9 +448,13 @@
                 },
             },
         ),
+        end: (
+            14,
+            9,
+        ),
     },
     Expression {
-        expr: Call {
+        expression: Call {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -446,7 +462,7 @@
                             15,
                             1,
                         ),
-                        name: "foo",
+                        value: "foo",
                     },
                 ),
             ),
@@ -481,5 +497,9 @@
                 },
             ],
         },
+        end: (
+            15,
+            16,
+        ),
     },
 ]

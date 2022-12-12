@@ -5,7 +5,7 @@ use crate::lexer::token::Span;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ArithmeticOperation {
     Addition {
         left: Box<Expression>,
@@ -64,7 +64,7 @@ pub enum ArithmeticOperation {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum AssignmentOperation {
     Assign {
         left: Box<Expression>,
@@ -139,7 +139,7 @@ pub enum AssignmentOperation {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum BitwiseOperation {
     And {
         left: Box<Expression>,
@@ -173,7 +173,7 @@ pub enum BitwiseOperation {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ComparisonOperation {
     Equal {
         left: Box<Expression>,
@@ -228,7 +228,7 @@ pub enum ComparisonOperation {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum LogicalOperation {
     And {
         left: Box<Expression>,

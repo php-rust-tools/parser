@@ -1,36 +1,41 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 4,
                 1,
-            ),
-            end: (
-                4,
-                13,
             ),
             name: SimpleIdentifier {
                 span: (
                     4,
                     7,
                 ),
-                name: "enum",
+                value: "enum",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [],
+            body: ClassBody {
+                start: (
+                    4,
+                    12,
+                ),
+                end: (
+                    4,
+                    13,
+                ),
+                members: [],
+            },
         },
     ),
     Interface(
         Interface {
-            start: (
+            span: (
                 5,
                 1,
-            ),
-            end: (
-                5,
-                17,
             ),
             attributes: [],
             name: SimpleIdentifier {
@@ -38,53 +43,75 @@
                     5,
                     11,
                 ),
-                name: "enum",
+                value: "enum",
             },
             extends: None,
-            members: [],
+            body: InterfaceBody {
+                start: (
+                    5,
+                    16,
+                ),
+                end: (
+                    5,
+                    17,
+                ),
+                members: [],
+            },
         },
     ),
     Trait(
         Trait {
-            start: (
+            span: (
                 6,
                 1,
-            ),
-            end: (
-                6,
-                13,
             ),
             name: SimpleIdentifier {
                 span: (
                     6,
                     7,
                 ),
-                name: "enum",
+                value: "enum",
             },
             attributes: [],
-            members: [],
+            body: TraitBody {
+                start: (
+                    6,
+                    12,
+                ),
+                end: (
+                    6,
+                    13,
+                ),
+                members: [],
+            },
         },
     ),
     UnitEnum(
         UnitEnum {
-            start: (
+            span: (
                 7,
                 1,
-            ),
-            end: (
-                7,
-                12,
             ),
             name: SimpleIdentifier {
                 span: (
                     7,
                     6,
                 ),
-                name: "enum",
+                value: "enum",
             },
             attributes: [],
             implements: [],
-            members: [],
+            body: UnitEnumBody {
+                start: (
+                    7,
+                    11,
+                ),
+                end: (
+                    7,
+                    12,
+                ),
+                members: [],
+            },
         },
     ),
     Function(
@@ -102,7 +129,7 @@
                     8,
                     10,
                 ),
-                name: "enum",
+                value: "enum",
             },
             attributes: [],
             parameters: FunctionParameterList {
@@ -123,7 +150,7 @@
                             8,
                             18,
                         ),
-                        name: "enum",
+                        value: "enum",
                     },
                 ),
             ),
@@ -133,36 +160,41 @@
     ),
     Class(
         Class {
-            start: (
+            span: (
                 10,
                 1,
-            ),
-            end: (
-                10,
-                13,
             ),
             name: SimpleIdentifier {
                 span: (
                     10,
                     7,
                 ),
-                name: "from",
+                value: "from",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [],
+            body: ClassBody {
+                start: (
+                    10,
+                    12,
+                ),
+                end: (
+                    10,
+                    13,
+                ),
+                members: [],
+            },
         },
     ),
     Interface(
         Interface {
-            start: (
+            span: (
                 11,
                 1,
-            ),
-            end: (
-                11,
-                17,
             ),
             attributes: [],
             name: SimpleIdentifier {
@@ -170,53 +202,75 @@
                     11,
                     11,
                 ),
-                name: "from",
+                value: "from",
             },
             extends: None,
-            members: [],
+            body: InterfaceBody {
+                start: (
+                    11,
+                    16,
+                ),
+                end: (
+                    11,
+                    17,
+                ),
+                members: [],
+            },
         },
     ),
     Trait(
         Trait {
-            start: (
+            span: (
                 12,
                 1,
-            ),
-            end: (
-                12,
-                13,
             ),
             name: SimpleIdentifier {
                 span: (
                     12,
                     7,
                 ),
-                name: "from",
+                value: "from",
             },
             attributes: [],
-            members: [],
+            body: TraitBody {
+                start: (
+                    12,
+                    12,
+                ),
+                end: (
+                    12,
+                    13,
+                ),
+                members: [],
+            },
         },
     ),
     UnitEnum(
         UnitEnum {
-            start: (
+            span: (
                 13,
                 1,
-            ),
-            end: (
-                13,
-                12,
             ),
             name: SimpleIdentifier {
                 span: (
                     13,
                     6,
                 ),
-                name: "from",
+                value: "from",
             },
             attributes: [],
             implements: [],
-            members: [],
+            body: UnitEnumBody {
+                start: (
+                    13,
+                    11,
+                ),
+                end: (
+                    13,
+                    12,
+                ),
+                members: [],
+            },
         },
     ),
     Function(
@@ -234,7 +288,7 @@
                     14,
                     10,
                 ),
-                name: "from",
+                value: "from",
             },
             attributes: [],
             parameters: FunctionParameterList {
@@ -255,7 +309,7 @@
                             14,
                             18,
                         ),
-                        name: "from",
+                        value: "from",
                     },
                 ),
             ),
@@ -264,7 +318,7 @@
         },
     ),
     Expression {
-        expr: Call {
+        expression: Call {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -272,15 +326,19 @@
                             16,
                             1,
                         ),
-                        name: "from",
+                        value: "from",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            16,
+            7,
+        ),
     },
     Expression {
-        expr: Call {
+        expression: Call {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -288,15 +346,19 @@
                             17,
                             1,
                         ),
-                        name: "enum",
+                        value: "enum",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            17,
+            7,
+        ),
     },
     Expression {
-        expr: Call {
+        expression: Call {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -304,15 +366,19 @@
                             19,
                             1,
                         ),
-                        name: "from",
+                        value: "from",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            19,
+            7,
+        ),
     },
     Expression {
-        expr: Call {
+        expression: Call {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -320,15 +386,19 @@
                             20,
                             1,
                         ),
-                        name: "enum",
+                        value: "enum",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            20,
+            7,
+        ),
     },
     Expression {
-        expr: StaticMethodCall {
+        expression: StaticMethodCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -336,7 +406,7 @@
                             22,
                             1,
                         ),
-                        name: "enum",
+                        value: "enum",
                     },
                 ),
             ),
@@ -347,15 +417,19 @@
                             22,
                             7,
                         ),
-                        name: "foo",
+                        value: "foo",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            22,
+            12,
+        ),
     },
     Expression {
-        expr: StaticMethodCall {
+        expression: StaticMethodCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -363,7 +437,7 @@
                             23,
                             1,
                         ),
-                        name: "from",
+                        value: "from",
                     },
                 ),
             ),
@@ -374,15 +448,19 @@
                             23,
                             7,
                         ),
-                        name: "foo",
+                        value: "foo",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            23,
+            12,
+        ),
     },
     Expression {
-        expr: StaticMethodCall {
+        expression: StaticMethodCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -390,7 +468,7 @@
                             25,
                             1,
                         ),
-                        name: "enum",
+                        value: "enum",
                     },
                 ),
             ),
@@ -401,15 +479,19 @@
                             25,
                             7,
                         ),
-                        name: "foo",
+                        value: "foo",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            25,
+            12,
+        ),
     },
     Expression {
-        expr: StaticMethodCall {
+        expression: StaticMethodCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -417,7 +499,7 @@
                             26,
                             1,
                         ),
-                        name: "from",
+                        value: "from",
                     },
                 ),
             ),
@@ -428,15 +510,19 @@
                             26,
                             7,
                         ),
-                        name: "foo",
+                        value: "foo",
                     },
                 ),
             ),
             args: [],
         },
+        end: (
+            26,
+            12,
+        ),
     },
     Expression {
-        expr: Instanceof {
+        expression: Instanceof {
             left: Variable(
                 SimpleVariable(
                     SimpleVariable {
@@ -459,14 +545,18 @@
                             28,
                             15,
                         ),
-                        name: "enum",
+                        value: "enum",
                     },
                 ),
             ),
         },
+        end: (
+            28,
+            19,
+        ),
     },
     Expression {
-        expr: Instanceof {
+        expression: Instanceof {
             left: Variable(
                 SimpleVariable(
                     SimpleVariable {
@@ -489,14 +579,18 @@
                             29,
                             15,
                         ),
-                        name: "from",
+                        value: "from",
                     },
                 ),
             ),
         },
+        end: (
+            29,
+            19,
+        ),
     },
     Expression {
-        expr: Instanceof {
+        expression: Instanceof {
             left: Variable(
                 SimpleVariable(
                     SimpleVariable {
@@ -519,14 +613,18 @@
                             31,
                             15,
                         ),
-                        name: "enum",
+                        value: "enum",
                     },
                 ),
             ),
         },
+        end: (
+            31,
+            19,
+        ),
     },
     Expression {
-        expr: Instanceof {
+        expression: Instanceof {
             left: Variable(
                 SimpleVariable(
                     SimpleVariable {
@@ -549,14 +647,18 @@
                             32,
                             15,
                         ),
-                        name: "from",
+                        value: "from",
                     },
                 ),
             ),
         },
+        end: (
+            32,
+            19,
+        ),
     },
     Expression {
-        expr: ConstFetch {
+        expression: ConstFetch {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -564,7 +666,7 @@
                             34,
                             1,
                         ),
-                        name: "enum",
+                        value: "enum",
                     },
                 ),
             ),
@@ -573,12 +675,16 @@
                     34,
                     7,
                 ),
-                name: "class",
+                value: "class",
             },
         },
+        end: (
+            34,
+            12,
+        ),
     },
     Expression {
-        expr: ConstFetch {
+        expression: ConstFetch {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -586,7 +692,7 @@
                             35,
                             1,
                         ),
-                        name: "from",
+                        value: "from",
                     },
                 ),
             ),
@@ -595,12 +701,16 @@
                     35,
                     7,
                 ),
-                name: "class",
+                value: "class",
             },
         },
+        end: (
+            35,
+            12,
+        ),
     },
     Expression {
-        expr: ConstFetch {
+        expression: ConstFetch {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -608,7 +718,7 @@
                             36,
                             1,
                         ),
-                        name: "enum",
+                        value: "enum",
                     },
                 ),
             ),
@@ -617,12 +727,16 @@
                     36,
                     7,
                 ),
-                name: "class",
+                value: "class",
             },
         },
+        end: (
+            36,
+            12,
+        ),
     },
     Expression {
-        expr: ConstFetch {
+        expression: ConstFetch {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -630,7 +744,7 @@
                             37,
                             1,
                         ),
-                        name: "from",
+                        value: "from",
                     },
                 ),
             ),
@@ -639,9 +753,13 @@
                     37,
                     7,
                 ),
-                name: "class",
+                value: "class",
             },
         },
+        end: (
+            37,
+            12,
+        ),
     },
     Label {
         label: SimpleIdentifier {
@@ -649,17 +767,21 @@
                 39,
                 1,
             ),
-            name: "from",
+            value: "from",
         },
     },
     Expression {
-        expr: LiteralInteger {
+        expression: LiteralInteger {
             span: (
                 39,
                 7,
             ),
             value: "12",
         },
+        end: (
+            39,
+            9,
+        ),
     },
     Goto {
         label: SimpleIdentifier {
@@ -667,7 +789,7 @@
                 41,
                 6,
             ),
-            name: "from",
+            value: "from",
         },
     },
     Label {
@@ -676,17 +798,21 @@
                 43,
                 1,
             ),
-            name: "enum",
+            value: "enum",
         },
     },
     Expression {
-        expr: LiteralInteger {
+        expression: LiteralInteger {
             span: (
                 43,
                 7,
             ),
             value: "123",
         },
+        end: (
+            43,
+            10,
+        ),
     },
     Goto {
         label: SimpleIdentifier {
@@ -694,7 +820,7 @@
                 45,
                 6,
             ),
-            name: "enum",
+            value: "enum",
         },
     },
 ]
