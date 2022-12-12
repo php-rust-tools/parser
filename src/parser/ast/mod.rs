@@ -154,7 +154,7 @@ impl Display for Type {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, Copy)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub enum UseKind {
     Normal,
@@ -333,6 +333,7 @@ pub struct Case {
 pub struct Use {
     pub name: SimpleIdentifier,
     pub alias: Option<SimpleIdentifier>,
+    pub kind: Option<UseKind>,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]

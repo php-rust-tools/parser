@@ -2,6 +2,7 @@ use crate::lexer::token::TokenKind;
 use crate::parser::ast::Statement;
 use crate::parser::ast::Use;
 use crate::parser::ast::UseKind;
+use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::utils;
@@ -9,6 +10,7 @@ use crate::parser::state::State;
 
 pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
     state.stream.next();
+
     let kind = match state.stream.current().kind {
         TokenKind::Function => {
             state.stream.next();
@@ -26,6 +28,26 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
         state.stream.next();
         let mut uses = Vec::new();
         while state.stream.current().kind != TokenKind::RightBrace {
+            let use_kind = match state.stream.current().kind {
+                TokenKind::Function => {
+                    if kind != UseKind::Normal {
+                        return Err(ParseError::UnexpectedToken(state.stream.current().kind.to_string(), state.stream.current().span));
+                    }
+
+                    state.stream.next();
+                    Some(UseKind::Function)
+                },
+                TokenKind::Const => {
+                    if kind != UseKind::Normal {
+                        return Err(ParseError::UnexpectedToken(state.stream.current().kind.to_string(), state.stream.current().span));
+                    }
+                    
+                    state.stream.next();
+                    Some(UseKind::Const)
+                },
+                _ => None,
+            };
+
             let name = identifiers::full_type_name(state)?;
             let mut alias = None;
             if state.stream.current().kind == TokenKind::As {
@@ -33,7 +55,7 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
                 alias = Some(identifiers::type_identifier(state)?);
             }
 
-            uses.push(Use { name, alias });
+            uses.push(Use { name, kind: use_kind, alias });
 
             if state.stream.current().kind == TokenKind::Comma {
                 state.stream.next();
@@ -55,7 +77,7 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
                 alias = Some(identifiers::type_identifier(state)?);
             }
 
-            uses.push(Use { name, alias });
+            uses.push(Use { name, kind: None, alias });
 
             if state.stream.current().kind == TokenKind::Comma {
                 state.stream.next();

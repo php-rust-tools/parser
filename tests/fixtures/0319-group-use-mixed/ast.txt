@@ -1,0 +1,72 @@
+[
+    GroupUse {
+        prefix: SimpleIdentifier {
+            span: (
+                3,
+                5,
+            ),
+            value: "Uses\",
+        },
+        kind: Normal,
+        uses: [
+            Use {
+                name: SimpleIdentifier {
+                    span: (
+                        4,
+                        5,
+                    ),
+                    value: "Baz",
+                },
+                alias: None,
+                kind: None,
+            },
+            Use {
+                name: SimpleIdentifier {
+                    span: (
+                        5,
+                        14,
+                    ),
+                    value: "Foo",
+                },
+                alias: Some(
+                    SimpleIdentifier {
+                        span: (
+                            5,
+                            21,
+                        ),
+                        value: "fooFunctionAgain",
+                    },
+                ),
+                kind: Some(
+                    Function,
+                ),
+            },
+            Use {
+                name: SimpleIdentifier {
+                    span: (
+                        6,
+                        11,
+                    ),
+                    value: "MY_CONSTANT",
+                },
+                alias: None,
+                kind: Some(
+                    Const,
+                ),
+            },
+            Use {
+                name: SimpleIdentifier {
+                    span: (
+                        7,
+                        11,
+                    ),
+                    value: "OTHER_CONSTANT",
+                },
+                alias: None,
+                kind: Some(
+                    Const,
+                ),
+            },
+        ],
+    },
+]
