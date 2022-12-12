@@ -2,7 +2,9 @@ use php_parser_rs::lexer::Lexer;
 use php_parser_rs::parser::error::ParseResult;
 
 fn main() -> ParseResult<()> {
-    let file = match std::env::args().nth(1) {
+    let args = std::env::args().collect::<Vec<String>>();
+
+    let file = match args.get(1) {
         Some(file) => file,
         None => {
             eprintln!("Usage: php-parser [file]");
@@ -23,15 +25,19 @@ fn main() -> ParseResult<()> {
     let tokens = Lexer::new().tokenize(&contents)?;
     let ast = php_parser_rs::parse(&tokens)?;
 
-    match serde_json::to_string_pretty(&ast) {
-        Ok(json) => {
-            println!("{}", json);
+    if args.contains(&String::from("--json")) {
+        match serde_json::to_string_pretty(&ast) {
+            Ok(json) => {
+                println!("{}", json);
+            }
+            Err(e) => {
+                eprintln!("Failed to serialize AST: {}", e);
+    
+                ::std::process::exit(1);
+            }
         }
-        Err(e) => {
-            eprintln!("Failed to serialize AST: {}", e);
-
-            ::std::process::exit(1);
-        }
+    } else {
+        dbg!(&ast);
     }
 
     Ok(())

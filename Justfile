@@ -20,8 +20,8 @@ fix:
     cargo clippy --fix --allow-dirty --allow-staged
 
 # dump AST for the given file.
-dump file:
-    cargo run -r --bin php-parser-rs -- {{file}}
+dump file *args:
+    cargo run -r --bin php-parser-rs -- {{file}} {{args}}
 
 # run all integration tests, except third-party.
 test filter='--all':
