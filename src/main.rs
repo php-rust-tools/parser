@@ -13,7 +13,7 @@ fn main() -> ParseResult<()> {
         }
     };
 
-    let contents = match std::fs::read(&file) {
+    let contents = match std::fs::read(file) {
         Ok(contents) => contents,
         Err(error) => {
             eprintln!("Failed to read file: {}", error);
@@ -32,7 +32,7 @@ fn main() -> ParseResult<()> {
             }
             Err(e) => {
                 eprintln!("Failed to serialize AST: {}", e);
-    
+
                 ::std::process::exit(1);
             }
         }
