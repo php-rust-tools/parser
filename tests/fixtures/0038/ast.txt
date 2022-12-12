@@ -105,7 +105,7 @@
                     value: Some(
                         ArithmeticOperation(
                             Addition {
-                                left: Call {
+                                left: FunctionCall {
                                     target: Identifier(
                                         SimpleIdentifier(
                                             SimpleIdentifier {
@@ -117,44 +117,53 @@
                                             },
                                         ),
                                     ),
-                                    args: [
-                                        Arg {
-                                            name: None,
-                                            value: ArithmeticOperation(
-                                                Subtraction {
-                                                    left: Variable(
-                                                        SimpleVariable(
-                                                            SimpleVariable {
-                                                                span: (
-                                                                    8,
-                                                                    16,
-                                                                ),
-                                                                name: "n",
-                                                            },
+                                    arguments: ArgumentList {
+                                        start: (
+                                            8,
+                                            15,
+                                        ),
+                                        arguments: [
+                                            Positional {
+                                                ellipsis: None,
+                                                value: ArithmeticOperation(
+                                                    Subtraction {
+                                                        left: Variable(
+                                                            SimpleVariable(
+                                                                SimpleVariable {
+                                                                    span: (
+                                                                        8,
+                                                                        16,
+                                                                    ),
+                                                                    name: "n",
+                                                                },
+                                                            ),
                                                         ),
-                                                    ),
-                                                    span: (
-                                                        8,
-                                                        19,
-                                                    ),
-                                                    right: LiteralInteger {
                                                         span: (
                                                             8,
-                                                            21,
+                                                            19,
                                                         ),
-                                                        value: "1",
+                                                        right: LiteralInteger {
+                                                            span: (
+                                                                8,
+                                                                21,
+                                                            ),
+                                                            value: "1",
+                                                        },
                                                     },
-                                                },
-                                            ),
-                                            unpack: false,
-                                        },
-                                    ],
+                                                ),
+                                            },
+                                        ],
+                                        end: (
+                                            8,
+                                            22,
+                                        ),
+                                    },
                                 },
                                 span: (
                                     8,
                                     24,
                                 ),
-                                right: Call {
+                                right: FunctionCall {
                                     target: Identifier(
                                         SimpleIdentifier(
                                             SimpleIdentifier {
@@ -166,38 +175,47 @@
                                             },
                                         ),
                                     ),
-                                    args: [
-                                        Arg {
-                                            name: None,
-                                            value: ArithmeticOperation(
-                                                Subtraction {
-                                                    left: Variable(
-                                                        SimpleVariable(
-                                                            SimpleVariable {
-                                                                span: (
-                                                                    8,
-                                                                    30,
-                                                                ),
-                                                                name: "n",
-                                                            },
+                                    arguments: ArgumentList {
+                                        start: (
+                                            8,
+                                            29,
+                                        ),
+                                        arguments: [
+                                            Positional {
+                                                ellipsis: None,
+                                                value: ArithmeticOperation(
+                                                    Subtraction {
+                                                        left: Variable(
+                                                            SimpleVariable(
+                                                                SimpleVariable {
+                                                                    span: (
+                                                                        8,
+                                                                        30,
+                                                                    ),
+                                                                    name: "n",
+                                                                },
+                                                            ),
                                                         ),
-                                                    ),
-                                                    span: (
-                                                        8,
-                                                        33,
-                                                    ),
-                                                    right: LiteralInteger {
                                                         span: (
                                                             8,
-                                                            35,
+                                                            33,
                                                         ),
-                                                        value: "2",
+                                                        right: LiteralInteger {
+                                                            span: (
+                                                                8,
+                                                                35,
+                                                            ),
+                                                            value: "2",
+                                                        },
                                                     },
-                                                },
-                                            ),
-                                            unpack: false,
-                                        },
-                                    ],
+                                                ),
+                                            },
+                                        ],
+                                        end: (
+                                            8,
+                                            36,
+                                        ),
+                                    },
                                 },
                             },
                         ),

@@ -454,7 +454,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -466,36 +466,45 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: Array {
-                        items: [
-                            ArrayItem {
-                                key: Some(
-                                    LiteralInteger {
+            arguments: ArgumentList {
+                start: (
+                    15,
+                    4,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: Array {
+                            items: [
+                                ArrayItem {
+                                    key: Some(
+                                        LiteralInteger {
+                                            span: (
+                                                15,
+                                                6,
+                                            ),
+                                            value: "3",
+                                        },
+                                    ),
+                                    value: LiteralString {
                                         span: (
                                             15,
-                                            6,
+                                            11,
                                         ),
-                                        value: "3",
+                                        value: "f",
                                     },
-                                ),
-                                value: LiteralString {
-                                    span: (
-                                        15,
-                                        11,
-                                    ),
-                                    value: "f",
+                                    unpack: false,
+                                    by_ref: false,
                                 },
-                                unpack: false,
-                                by_ref: false,
-                            },
-                        ],
+                            ],
+                        },
                     },
-                    unpack: false,
-                },
-            ],
+                ],
+                end: (
+                    15,
+                    15,
+                ),
+            },
         },
         end: (
             15,

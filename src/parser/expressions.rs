@@ -4,6 +4,7 @@ use crate::lexer::error::SyntaxError;
 use crate::lexer::state::DocStringKind;
 use crate::lexer::token::DocStringIndentationKind;
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::arguments::ArgumentPlaceholder;
 use crate::parser::ast::identifiers::DynamicIdentifier;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
@@ -881,15 +882,16 @@ expressions! {
             _ => clone_or_new_precedence(state)?,
         };
 
-        let mut args = vec![];
-        if state.stream.current().kind == TokenKind::LeftParen {
-            args = parameters::args_list(state)?;
-        }
+        let arguments = if state.stream.current().kind == TokenKind::LeftParen {
+            Some(parameters::argument_list(state)?)
+        } else {
+            None
+        };
 
         Ok(Expression::New {
             target: Box::new(target),
             span,
-            args,
+            arguments,
         })
     })
 
@@ -1116,11 +1118,27 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             }
         }
         TokenKind::LeftParen => {
-            let args = parameters::args_list(state)?;
+            // `(...)` closure creation
+            if state.stream.lookahead(0).kind == TokenKind::Ellipsis
+                && state.stream.lookahead(1).kind == TokenKind::RightParen
+            {
+                let placeholder = ArgumentPlaceholder {
+                    start: utils::skip(state, TokenKind::LeftParen)?,
+                    ellipsis: utils::skip(state, TokenKind::Ellipsis)?,
+                    end: utils::skip(state, TokenKind::RightParen)?,
+                };
 
-            Expression::Call {
-                target: Box::new(lhs),
-                args,
+                Expression::FunctionClosureCreation {
+                    target: Box::new(lhs),
+                    placeholder,
+                }
+            } else {
+                let arguments = parameters::argument_list(state)?;
+
+                Expression::FunctionCall {
+                    target: Box::new(lhs),
+                    arguments,
+                }
             }
         }
         TokenKind::LeftBracket => {
@@ -1145,7 +1163,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             }
         }
         TokenKind::DoubleColon => {
-            utils::skip_double_colon(state)?;
+            let span = utils::skip_double_colon(state)?;
 
             let mut must_be_method_call = false;
 
@@ -1194,12 +1212,31 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                 //    is only valid a method call context, we can assume we're parsing a static
                 //    method call.
                 _ if state.stream.current().kind == TokenKind::LeftParen || must_be_method_call => {
-                    let args = parameters::args_list(state)?;
+                    // `(...)` closure creation
+                    if state.stream.lookahead(0).kind == TokenKind::Ellipsis
+                        && state.stream.lookahead(1).kind == TokenKind::RightParen
+                    {
+                        let placeholder = ArgumentPlaceholder {
+                            start: utils::skip(state, TokenKind::LeftParen)?,
+                            ellipsis: utils::skip(state, TokenKind::Ellipsis)?,
+                            end: utils::skip(state, TokenKind::RightParen)?,
+                        };
 
-                    Expression::StaticMethodCall {
-                        target: lhs,
-                        method: Box::new(property),
-                        args,
+                        Expression::StaticMethodClosureCreation {
+                            target: lhs,
+                            span,
+                            method: Box::new(property),
+                            placeholder,
+                        }
+                    } else {
+                        let arguments = parameters::argument_list(state)?;
+
+                        Expression::StaticMethodCall {
+                            target: lhs,
+                            span,
+                            method: Box::new(property),
+                            arguments,
+                        }
                     }
                 }
                 // 1. If we have an identifier and the current token is not a left paren,
@@ -1219,6 +1256,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             }
         }
         TokenKind::Arrow | TokenKind::NullsafeArrow => {
+            let span = state.stream.current().span;
             state.stream.next();
 
             let property = match state.stream.current().kind {
@@ -1250,19 +1288,41 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             };
 
             if state.stream.current().kind == TokenKind::LeftParen {
-                let args = parameters::args_list(state)?;
-
                 if op == &TokenKind::NullsafeArrow {
+                    let arguments = parameters::argument_list(state)?;
+
                     Expression::NullsafeMethodCall {
                         target: Box::new(lhs),
                         method: Box::new(property),
-                        args,
+                        span,
+                        arguments,
                     }
                 } else {
-                    Expression::MethodCall {
-                        target: Box::new(lhs),
-                        method: Box::new(property),
-                        args,
+                    // `(...)` closure creation
+                    if state.stream.lookahead(0).kind == TokenKind::Ellipsis
+                        && state.stream.lookahead(1).kind == TokenKind::RightParen
+                    {
+                        let placeholder = ArgumentPlaceholder {
+                            start: utils::skip(state, TokenKind::LeftParen)?,
+                            ellipsis: utils::skip(state, TokenKind::Ellipsis)?,
+                            end: utils::skip(state, TokenKind::RightParen)?,
+                        };
+
+                        Expression::MethodClosureCreation {
+                            target: Box::new(lhs),
+                            method: Box::new(property),
+                            span,
+                            placeholder,
+                        }
+                    } else {
+                        let arguments = parameters::argument_list(state)?;
+
+                        Expression::MethodCall {
+                            target: Box::new(lhs),
+                            method: Box::new(property),
+                            span,
+                            arguments,
+                        }
                     }
                 }
             } else if op == &TokenKind::NullsafeArrow {

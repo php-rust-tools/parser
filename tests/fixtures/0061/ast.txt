@@ -1,6 +1,10 @@
 [
     Expression {
         expression: New {
+            span: (
+                1,
+                7,
+            ),
             target: AnonymousClass(
                 AnonymousClass {
                     span: (
@@ -23,34 +27,40 @@
                     },
                 },
             ),
-            span: (
-                1,
-                7,
+            arguments: Some(
+                ArgumentList {
+                    start: (
+                        1,
+                        16,
+                    ),
+                    arguments: [
+                        Positional {
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: (
+                                    1,
+                                    17,
+                                ),
+                                value: "1",
+                            },
+                        },
+                        Positional {
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: (
+                                    1,
+                                    20,
+                                ),
+                                value: "2",
+                            },
+                        },
+                    ],
+                    end: (
+                        1,
+                        21,
+                    ),
+                },
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralInteger {
-                        span: (
-                            1,
-                            17,
-                        ),
-                        value: "1",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: LiteralInteger {
-                        span: (
-                            1,
-                            20,
-                        ),
-                        value: "2",
-                    },
-                    unpack: false,
-                },
-            ],
         },
         end: (
             1,

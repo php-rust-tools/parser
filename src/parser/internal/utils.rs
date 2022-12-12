@@ -79,45 +79,49 @@ pub fn skip_colon(state: &mut State) -> ParseResult<Span> {
 }
 
 pub fn skip(state: &mut State, kind: TokenKind) -> ParseResult<Span> {
-    if state.stream.current().kind == kind {
-        let end = state.stream.current().span;
+    let current = state.stream.current().clone();
+
+    if current.kind == kind {
+        let end = current.span;
 
         state.stream.next();
 
         Ok(end)
     } else {
-        let found = if state.stream.current().kind == TokenKind::Eof {
+        let found = if current.kind == TokenKind::Eof {
             None
         } else {
-            Some(state.stream.current().kind.to_string())
+            Some(current.kind.to_string())
         };
 
         Err(ParseError::ExpectedToken(
             vec![format!("`{}`", kind)],
             found,
-            state.stream.current().span,
+            current.span,
         ))
     }
 }
 
 pub fn skip_any_of(state: &mut State, kinds: &[TokenKind]) -> ParseResult<Span> {
-    if kinds.contains(&state.stream.current().kind) {
-        let end = state.stream.current().span;
+    let current = state.stream.current().clone();
+
+    if kinds.contains(&current.kind) {
+        let end = current.span;
 
         state.stream.next();
 
         Ok(end)
     } else {
-        let found = if state.stream.current().kind == TokenKind::Eof {
+        let found = if current.kind == TokenKind::Eof {
             None
         } else {
-            Some(state.stream.current().kind.to_string())
+            Some(current.kind.to_string())
         };
 
         Err(ParseError::ExpectedToken(
             kinds.iter().map(|kind| format!("`{}`", kind)).collect(),
             found,
-            state.stream.current().span,
+            current.span,
         ))
     }
 }

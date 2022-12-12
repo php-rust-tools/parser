@@ -6,6 +6,8 @@ use std::fmt::Display;
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::arguments::ArgumentList;
+use crate::parser::ast::arguments::ArgumentPlaceholder;
 use crate::parser::ast::classes::AnonymousClass;
 use crate::parser::ast::classes::Class;
 use crate::parser::ast::comments::Comment;
@@ -29,6 +31,7 @@ use crate::parser::ast::traits::Trait;
 use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::variables::Variable;
 
+pub mod arguments;
 pub mod attributes;
 pub mod classes;
 pub mod comments;
@@ -373,7 +376,6 @@ pub enum Expression {
         items: Vec<ListItem>,
     },
     Empty,
-    VariadicPlaceholder,
     ErrorSuppress {
         span: Span,
         expr: Box<Self>,
@@ -393,9 +395,50 @@ pub enum Expression {
         kind: IncludeKind,
         path: Box<Expression>,
     },
-    Call {
-        target: Box<Self>,
-        args: Vec<Arg>,
+    // `foo(1, 2, 3)`
+    FunctionCall {
+        target: Box<Self>,       // `foo`
+        arguments: ArgumentList, // `(1, 2, 3)`
+    },
+    // `foo(...)`
+    FunctionClosureCreation {
+        target: Box<Self>,                // `foo`
+        placeholder: ArgumentPlaceholder, // `(...)`
+    },
+    // `$foo->bar(1, 2, 3)`
+    MethodCall {
+        target: Box<Self>,       // `$foo`
+        span: Span,              // `->`
+        method: Box<Self>,       // `bar`
+        arguments: ArgumentList, // `(1, 2, 3)`
+    },
+    // `$foo->bar(...)`
+    MethodClosureCreation {
+        target: Box<Self>,                // `$foo`
+        span: Span,                       // `->`
+        method: Box<Self>,                // `bar`
+        placeholder: ArgumentPlaceholder, // `(...)`
+    },
+    // `$foo?->bar(1, 2, 3)`
+    NullsafeMethodCall {
+        target: Box<Self>,       // `$foo`
+        span: Span,              // `?->`
+        method: Box<Self>,       // `bar`
+        arguments: ArgumentList, // `(1, 2, 3)`
+    },
+    // `Foo::bar(1, 2, 3)`
+    StaticMethodCall {
+        target: Box<Self>,       // `Foo`
+        span: Span,              // `::`
+        method: Box<Self>,       // `bar`
+        arguments: ArgumentList, // `(1, 2, 3)`
+    },
+    // `Foo::bar(...)`
+    StaticMethodClosureCreation {
+        target: Box<Self>,                // `Foo`
+        span: Span,                       // `::`
+        method: Box<Self>,                // `bar`
+        placeholder: ArgumentPlaceholder, // `(...)`
     },
     Static,
     Self_,
@@ -406,9 +449,9 @@ pub enum Expression {
     Closure(Closure),
     ArrowFunction(ArrowFunction),
     New {
-        target: Box<Self>,
         span: Span,
-        args: Vec<Arg>,
+        target: Box<Self>,
+        arguments: Option<ArgumentList>,
     },
     LiteralString {
         span: Span,
@@ -434,11 +477,6 @@ pub enum Expression {
         target: Box<Self>,
         property: Box<Self>,
     },
-    NullsafeMethodCall {
-        target: Box<Self>,
-        method: Box<Self>,
-        args: Vec<Arg>,
-    },
     StaticPropertyFetch {
         target: Box<Self>,
         property: Box<Self>,
@@ -446,16 +484,6 @@ pub enum Expression {
     ConstFetch {
         target: Box<Self>,
         constant: SimpleIdentifier,
-    },
-    MethodCall {
-        target: Box<Self>,
-        method: Box<Self>,
-        args: Vec<Arg>,
-    },
-    StaticMethodCall {
-        target: Box<Self>,
-        method: Box<Self>,
-        args: Vec<Arg>,
     },
     AnonymousClass(AnonymousClass),
     Bool {
@@ -515,21 +543,6 @@ pub enum Expression {
         kind: CastKind,
         value: Box<Self>,
     },
-}
-
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub struct Arg {
-    pub name: Option<SimpleIdentifier>,
-    pub value: Expression,
-    pub unpack: bool,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub struct ClosureUse {
-    pub var: Expression,
-    pub by_ref: bool,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]

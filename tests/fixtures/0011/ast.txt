@@ -1,6 +1,6 @@
 [
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -12,53 +12,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            3,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ComparisonOperation(
-                        Equal {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            3,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    3,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 3,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            3,
-                                            19,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            Equal {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                3,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    3,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                3,
+                                                19,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    3,
+                    21,
+                ),
+            },
         },
         end: (
             3,
@@ -66,7 +74,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -78,53 +86,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            4,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ComparisonOperation(
-                        Identical {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            4,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    4,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 4,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            4,
-                                            20,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            Identical {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                4,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    4,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                4,
+                                                20,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    4,
+                    22,
+                ),
+            },
         },
         end: (
             4,
@@ -132,7 +148,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -144,53 +160,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            5,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ComparisonOperation(
-                        NotEqual {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            5,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    5,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 5,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            5,
-                                            19,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            NotEqual {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                5,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    5,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                5,
+                                                19,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    5,
+                    21,
+                ),
+            },
         },
         end: (
             5,
@@ -198,7 +222,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -210,53 +234,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            6,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ComparisonOperation(
-                        NotIdentical {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            6,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    6,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 6,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            6,
-                                            20,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            NotIdentical {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                6,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    6,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                6,
+                                                20,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    6,
+                    22,
+                ),
+            },
         },
         end: (
             6,
@@ -264,7 +296,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -276,53 +308,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            7,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ArithmeticOperation(
-                        Addition {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            7,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    7,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 7,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            7,
-                                            18,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Addition {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                7,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    7,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                7,
+                                                18,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    7,
+                    20,
+                ),
+            },
         },
         end: (
             7,
@@ -330,7 +370,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -342,53 +382,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            8,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ArithmeticOperation(
-                        Subtraction {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            8,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    8,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 8,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            8,
-                                            18,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Subtraction {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                8,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    8,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                8,
+                                                18,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    8,
+                    20,
+                ),
+            },
         },
         end: (
             8,
@@ -396,7 +444,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -408,53 +456,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            9,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ArithmeticOperation(
-                        Division {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            9,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    9,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 9,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            9,
-                                            18,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Division {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                9,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    9,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                9,
+                                                18,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    9,
+                    20,
+                ),
+            },
         },
         end: (
             9,
@@ -462,7 +518,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -474,53 +530,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            10,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        Xor {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            10,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    10,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 10,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            10,
-                                            18,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            Xor {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                10,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    10,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                10,
+                                                18,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    10,
+                    20,
+                ),
+            },
         },
         end: (
             10,
@@ -528,7 +592,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -540,53 +604,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            11,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ArithmeticOperation(
-                        Multiplication {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            11,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    11,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 11,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            11,
-                                            18,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Multiplication {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                11,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    11,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                11,
+                                                18,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    11,
+                    20,
+                ),
+            },
         },
         end: (
             11,
@@ -594,7 +666,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -606,53 +678,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            12,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        RightShift {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            12,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    12,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 12,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            12,
-                                            19,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            RightShift {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                12,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    12,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                12,
+                                                19,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    12,
+                    21,
+                ),
+            },
         },
         end: (
             12,
@@ -660,7 +740,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -672,53 +752,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            13,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        LeftShift {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            13,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    13,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 13,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            13,
-                                            19,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            LeftShift {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                13,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    13,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                13,
+                                                19,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    13,
+                    21,
+                ),
+            },
         },
         end: (
             13,
@@ -726,7 +814,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -738,53 +826,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            14,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        Or {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            14,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    14,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 14,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            14,
-                                            18,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            Or {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                14,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    14,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                14,
+                                                18,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    14,
+                    20,
+                ),
+            },
         },
         end: (
             14,
@@ -792,7 +888,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -804,53 +900,61 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            15,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        And {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            15,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
+            arguments: ArgumentList {
+                start: (
+                    15,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 15,
-                                16,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            15,
-                                            18,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            And {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                15,
+                                                13,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
+                                ),
+                                span: (
+                                    15,
+                                    16,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                15,
+                                                18,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    15,
+                    20,
+                ),
+            },
         },
         end: (
             15,
@@ -858,7 +962,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -870,42 +974,50 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            16,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        Not {
+            arguments: ArgumentList {
+                start: (
+                    16,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 16,
-                                13,
+                                8,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: (
-                                            16,
-                                            14,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            value: "a",
                         },
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            Not {
+                                span: (
+                                    16,
+                                    13,
+                                ),
+                                right: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: (
+                                                16,
+                                                14,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    },
+                ],
+                end: (
+                    16,
+                    16,
+                ),
+            },
         },
         end: (
             16,

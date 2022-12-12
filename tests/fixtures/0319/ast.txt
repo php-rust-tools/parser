@@ -1,0 +1,314 @@
+[
+    Expression {
+        expression: FunctionClosureCreation {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            3,
+                            1,
+                        ),
+                        value: "foo",
+                    },
+                ),
+            ),
+            placeholder: ArgumentPlaceholder {
+                start: (
+                    3,
+                    4,
+                ),
+                ellipsis: (
+                    3,
+                    5,
+                ),
+                end: (
+                    3,
+                    8,
+                ),
+            },
+        },
+        end: (
+            3,
+            9,
+        ),
+    },
+    Expression {
+        expression: MethodClosureCreation {
+            target: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            5,
+                            1,
+                        ),
+                        name: "foo",
+                    },
+                ),
+            ),
+            span: (
+                5,
+                5,
+            ),
+            method: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            5,
+                            7,
+                        ),
+                        value: "bar",
+                    },
+                ),
+            ),
+            placeholder: ArgumentPlaceholder {
+                start: (
+                    5,
+                    10,
+                ),
+                ellipsis: (
+                    5,
+                    11,
+                ),
+                end: (
+                    5,
+                    14,
+                ),
+            },
+        },
+        end: (
+            5,
+            15,
+        ),
+    },
+    Expression {
+        expression: StaticMethodClosureCreation {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            7,
+                            1,
+                        ),
+                        value: "Foo",
+                    },
+                ),
+            ),
+            span: (
+                7,
+                4,
+            ),
+            method: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            7,
+                            6,
+                        ),
+                        value: "bar",
+                    },
+                ),
+            ),
+            placeholder: ArgumentPlaceholder {
+                start: (
+                    7,
+                    9,
+                ),
+                ellipsis: (
+                    7,
+                    10,
+                ),
+                end: (
+                    7,
+                    13,
+                ),
+            },
+        },
+        end: (
+            7,
+            14,
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            9,
+                            1,
+                        ),
+                        value: "foo",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                start: (
+                    9,
+                    4,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralInteger {
+                            span: (
+                                9,
+                                5,
+                            ),
+                            value: "1",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralInteger {
+                            span: (
+                                9,
+                                8,
+                            ),
+                            value: "2",
+                        },
+                    },
+                ],
+                end: (
+                    9,
+                    9,
+                ),
+            },
+        },
+        end: (
+            9,
+            10,
+        ),
+    },
+    Expression {
+        expression: MethodCall {
+            target: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: (
+                            11,
+                            1,
+                        ),
+                        name: "foo",
+                    },
+                ),
+            ),
+            span: (
+                11,
+                5,
+            ),
+            method: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            11,
+                            7,
+                        ),
+                        value: "bar",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                start: (
+                    11,
+                    10,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralInteger {
+                            span: (
+                                11,
+                                11,
+                            ),
+                            value: "1",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralInteger {
+                            span: (
+                                11,
+                                14,
+                            ),
+                            value: "2",
+                        },
+                    },
+                ],
+                end: (
+                    11,
+                    15,
+                ),
+            },
+        },
+        end: (
+            11,
+            16,
+        ),
+    },
+    Expression {
+        expression: StaticMethodCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            13,
+                            1,
+                        ),
+                        value: "Foo",
+                    },
+                ),
+            ),
+            span: (
+                13,
+                4,
+            ),
+            method: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: (
+                            13,
+                            6,
+                        ),
+                        value: "bar",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                start: (
+                    13,
+                    9,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralInteger {
+                            span: (
+                                13,
+                                10,
+                            ),
+                            value: "1",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralInteger {
+                            span: (
+                                13,
+                                13,
+                            ),
+                            value: "2",
+                        },
+                    },
+                ],
+                end: (
+                    13,
+                    14,
+                ),
+            },
+        },
+        end: (
+            13,
+            15,
+        ),
+    },
+]

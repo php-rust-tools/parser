@@ -67,6 +67,10 @@
                                     12,
                                 ),
                                 variable: New {
+                                    span: (
+                                        4,
+                                        14,
+                                    ),
                                     target: AnonymousClass(
                                         AnonymousClass {
                                             span: (
@@ -152,11 +156,19 @@
                                             },
                                         },
                                     ),
-                                    span: (
-                                        4,
-                                        14,
+                                    arguments: Some(
+                                        ArgumentList {
+                                            start: (
+                                                4,
+                                                23,
+                                            ),
+                                            arguments: [],
+                                            end: (
+                                                4,
+                                                24,
+                                            ),
+                                        },
                                     ),
-                                    args: [],
                                 },
                                 end: (
                                     8,
@@ -310,7 +322,7 @@
                                 [
                                     Return {
                                         value: Some(
-                                            Call {
+                                            FunctionCall {
                                                 target: Identifier(
                                                     SimpleIdentifier(
                                                         SimpleIdentifier {
@@ -322,15 +334,24 @@
                                                         },
                                                     ),
                                                 ),
-                                                args: [
-                                                    Arg {
-                                                        name: None,
-                                                        value: Array {
-                                                            items: [],
+                                                arguments: ArgumentList {
+                                                    start: (
+                                                        18,
+                                                        19,
+                                                    ),
+                                                    arguments: [
+                                                        Positional {
+                                                            ellipsis: None,
+                                                            value: Array {
+                                                                items: [],
+                                                            },
                                                         },
-                                                        unpack: false,
-                                                    },
-                                                ],
+                                                    ],
+                                                    end: (
+                                                        18,
+                                                        22,
+                                                    ),
+                                                },
                                             },
                                         ),
                                     },
@@ -381,6 +402,10 @@
                     },
                 ),
             ),
+            span: (
+                22,
+                2,
+            ),
             method: Variable(
                 BracedVariableVariable(
                     BracedVariableVariable {
@@ -388,7 +413,7 @@
                             22,
                             4,
                         ),
-                        variable: Call {
+                        variable: FunctionCall {
                             target: Parenthesized {
                                 start: (
                                     22,
@@ -440,7 +465,17 @@
                                     2,
                                 ),
                             },
-                            args: [],
+                            arguments: ArgumentList {
+                                start: (
+                                    24,
+                                    3,
+                                ),
+                                arguments: [],
+                                end: (
+                                    24,
+                                    4,
+                                ),
+                            },
                         },
                         end: (
                             24,
@@ -449,7 +484,17 @@
                     },
                 ),
             ),
-            args: [],
+            arguments: ArgumentList {
+                start: (
+                    24,
+                    6,
+                ),
+                arguments: [],
+                end: (
+                    24,
+                    7,
+                ),
+            },
         },
         end: (
             24,

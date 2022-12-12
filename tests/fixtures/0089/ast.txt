@@ -1,6 +1,6 @@
 [
     Expression {
-        expression: MethodCall {
+        expression: MethodClosureCreation {
             target: Variable(
                 SimpleVariable(
                     SimpleVariable {
@@ -11,6 +11,10 @@
                         name: "this",
                     },
                 ),
+            ),
+            span: (
+                1,
+                12,
             ),
             method: Identifier(
                 SimpleIdentifier(
@@ -23,13 +27,20 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: VariadicPlaceholder,
-                    unpack: false,
-                },
-            ],
+            placeholder: ArgumentPlaceholder {
+                start: (
+                    1,
+                    17,
+                ),
+                ellipsis: (
+                    1,
+                    18,
+                ),
+                end: (
+                    1,
+                    21,
+                ),
+            },
         },
         end: (
             1,

@@ -1,10 +1,10 @@
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::arguments::Argument;
+use crate::parser::ast::arguments::ArgumentList;
 use crate::parser::ast::functions::FunctionParameter;
 use crate::parser::ast::functions::FunctionParameterList;
 use crate::parser::ast::functions::MethodParameter;
 use crate::parser::ast::functions::MethodParameterList;
-use crate::parser::ast::Arg;
-use crate::parser::ast::Expression;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
@@ -232,49 +232,24 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
     })
 }
 
-pub fn args_list(state: &mut State) -> ParseResult<Vec<Arg>> {
-    utils::skip_left_parenthesis(state)?;
+pub fn argument_list(state: &mut State) -> ParseResult<ArgumentList> {
+    let start = utils::skip_left_parenthesis(state)?;
 
-    let mut args = Vec::new();
+    let mut arguments = Vec::new();
     let mut has_used_named_arguments = false;
 
     while !state.stream.is_eof() && state.stream.current().kind != TokenKind::RightParen {
-        let mut name = None;
-        let mut unpack = false;
-        if identifiers::is_identifier_maybe_reserved(&state.stream.current().kind)
-            && state.stream.peek().kind == TokenKind::Colon
-        {
-            name = Some(identifiers::identifier_maybe_reserved(state)?);
+        let span = state.stream.current().span;
+        let (named, argument) = argument(state)?;
+        if named {
             has_used_named_arguments = true;
-            state.stream.next();
-        } else if state.stream.current().kind == TokenKind::Ellipsis {
-            state.stream.next();
-            unpack = true;
-        }
-
-        if name.is_none() && has_used_named_arguments {
+        } else if has_used_named_arguments {
             return Err(ParseError::CannotUsePositionalArgumentAfterNamedArgument(
-                state.stream.current().span,
+                span,
             ));
         }
 
-        if unpack && state.stream.current().kind == TokenKind::RightParen {
-            args.push(Arg {
-                name: None,
-                unpack: false,
-                value: Expression::VariadicPlaceholder,
-            });
-
-            break;
-        }
-
-        let value = expressions::lowest_precedence(state)?;
-
-        args.push(Arg {
-            name,
-            unpack,
-            value,
-        });
+        arguments.push(argument);
 
         if state.stream.current().kind == TokenKind::Comma {
             state.stream.next();
@@ -283,7 +258,51 @@ pub fn args_list(state: &mut State) -> ParseResult<Vec<Arg>> {
         }
     }
 
-    utils::skip_right_parenthesis(state)?;
+    let end = utils::skip_right_parenthesis(state)?;
 
-    Ok(args)
+    Ok(ArgumentList {
+        start,
+        end,
+        arguments,
+    })
+}
+
+fn argument(state: &mut State) -> ParseResult<(bool, Argument)> {
+    if identifiers::is_identifier_maybe_reserved(&state.stream.current().kind)
+        && state.stream.peek().kind == TokenKind::Colon
+    {
+        let name = identifiers::identifier_maybe_reserved(state)?;
+        let span = utils::skip(state, TokenKind::Colon)?;
+        let unpack = if state.stream.current().kind == TokenKind::Ellipsis {
+            Some(utils::skip(state, TokenKind::Ellipsis)?)
+        } else {
+            None
+        };
+        let value = expressions::lowest_precedence(state)?;
+
+        return Ok((
+            true,
+            Argument::Named {
+                name,
+                span,
+                ellipsis: unpack,
+                value,
+            },
+        ));
+    }
+
+    let unpack = if state.stream.current().kind == TokenKind::Ellipsis {
+        Some(utils::skip(state, TokenKind::Ellipsis)?)
+    } else {
+        None
+    };
+    let value = expressions::lowest_precedence(state)?;
+
+    Ok((
+        false,
+        Argument::Positional {
+            ellipsis: unpack,
+            value,
+        },
+    ))
 }

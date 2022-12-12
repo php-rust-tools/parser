@@ -67,6 +67,10 @@
                                     12,
                                 ),
                                 variable: New {
+                                    span: (
+                                        4,
+                                        14,
+                                    ),
                                     target: AnonymousClass(
                                         AnonymousClass {
                                             span: (
@@ -152,11 +156,19 @@
                                             },
                                         },
                                     ),
-                                    span: (
-                                        4,
-                                        14,
+                                    arguments: Some(
+                                        ArgumentList {
+                                            start: (
+                                                4,
+                                                23,
+                                            ),
+                                            arguments: [],
+                                            end: (
+                                                4,
+                                                24,
+                                            ),
+                                        },
                                     ),
-                                    args: [],
                                 },
                                 end: (
                                     8,
@@ -249,7 +261,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Variable(
                 BracedVariableVariable(
                     BracedVariableVariable {
@@ -257,7 +269,7 @@
                             16,
                             1,
                         ),
-                        variable: Call {
+                        variable: FunctionCall {
                             target: Parenthesized {
                                 start: (
                                     16,
@@ -309,7 +321,17 @@
                                     2,
                                 ),
                             },
-                            args: [],
+                            arguments: ArgumentList {
+                                start: (
+                                    18,
+                                    3,
+                                ),
+                                arguments: [],
+                                end: (
+                                    18,
+                                    4,
+                                ),
+                            },
                         },
                         end: (
                             18,
@@ -318,15 +340,24 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: Array {
-                        items: [],
+            arguments: ArgumentList {
+                start: (
+                    18,
+                    6,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: Array {
+                            items: [],
+                        },
                     },
-                    unpack: false,
-                },
-            ],
+                ],
+                end: (
+                    18,
+                    9,
+                ),
+            },
         },
         end: (
             18,
