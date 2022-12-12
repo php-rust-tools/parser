@@ -81,7 +81,7 @@ impl<'a> Source<'a> {
         self.read(len) == search
     }
 
-    pub fn at_case_insensative(&self, search: &[u8], len: usize) -> bool {
+    pub fn at_case_insensitive(&self, search: &[u8], len: usize) -> bool {
         let (from, until) = self.to_bound(len);
 
         let slice = &self.input[from..until];
