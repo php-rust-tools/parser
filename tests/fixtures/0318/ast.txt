@@ -1,0 +1,34 @@
+[
+    ShortEcho {
+        span: (
+            1,
+            1,
+        ),
+        values: [
+            LiteralString {
+                span: (
+                    1,
+                    5,
+                ),
+                value: "<?php\n",
+            },
+        ],
+    },
+    InlineHtml(
+        "\nsome html\n",
+    ),
+    Echo {
+        values: [
+            LiteralString {
+                span: (
+                    4,
+                    10,
+                ),
+                value: "// ",
+            },
+        ],
+    },
+    InlineHtml(
+        "\n",
+    ),
+]
