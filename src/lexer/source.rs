@@ -72,7 +72,7 @@ impl<'a> Source<'a> {
     }
 
     pub fn read_remaining(&self) -> &'a [u8] {
-        let from = self.from_bound();
+        let from = self.current_bound();
 
         &self.input[from..]
     }
@@ -81,13 +81,21 @@ impl<'a> Source<'a> {
         self.read(len) == search
     }
 
+    pub fn at_case_insensative(&self, search: &[u8], len: usize) -> bool {
+        let (from, until) = self.to_bound(len);
+
+        let slice = &self.input[from..until];
+
+        slice.eq_ignore_ascii_case(search)
+    }
+
     pub fn peek(&self, i: usize, n: usize) -> &'a [u8] {
-        let (from, until) = self.bound(i, n);
+        let (from, until) = self.between_bound(i, n);
 
         &self.input[from..until]
     }
 
-    const fn bound(&self, i: usize, n: usize) -> (usize, usize) {
+    const fn between_bound(&self, i: usize, n: usize) -> (usize, usize) {
         let from = self.cursor + i;
         if from >= self.length {
             return (self.length, self.length);
@@ -116,7 +124,7 @@ impl<'a> Source<'a> {
         (self.cursor, until)
     }
 
-    const fn from_bound(&self) -> usize {
+    const fn current_bound(&self) -> usize {
         if self.cursor >= self.length {
             self.length
         } else {

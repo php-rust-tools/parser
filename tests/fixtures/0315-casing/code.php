@@ -1,0 +1,3 @@
+<?PHP
+
+ECHO (STRING) $VAR;

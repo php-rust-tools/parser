@@ -1,0 +1,2 @@
+<?= "<?php\n" ?>
+some html

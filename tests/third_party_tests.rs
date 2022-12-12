@@ -283,13 +283,26 @@ fn prestashop() {
     test_repository(
         "prestashop",
         "https://github.com/PrestaShop/PrestaShop",
-        &[],
+        &[
+            // uses PHP 7 curly brackets array/string access
+            "vendor/marcusschwarz/lesserphp/lessify.inc.php",
+            "vendor/greenlion/php-sql-parser/libs/codesniffer/PhOSCo/Sniffs/Commenting/FileCommentSniff.php",
+            // broken file used for testing
+            "vendor/phpunit/php-code-coverage/tests/_files/Crash.php"
+        ],
     );
 }
 
 #[test]
 fn sylius() {
-    test_repository("sylius", "https://github.com/Sylius/Sylius", &[]);
+    test_repository(
+        "sylius",
+        "https://github.com/Sylius/Sylius",
+        &[
+            // broken file used for testing
+            "vendor/phpunit/php-code-coverage/tests/_files/Crash.php",
+        ],
+    );
 }
 
 #[test]
