@@ -342,6 +342,9 @@ pub struct Use {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Expression {
+    Eval {
+        value: Box<Expression>,
+    },
     Die {
         value: Option<Box<Expression>>,
     },

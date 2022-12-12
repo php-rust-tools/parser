@@ -548,9 +548,18 @@ expressions! {
         functions::arrow_function(state)
     })
 
-    #[before(die), current(TokenKind::Function)]
+    #[before(eval), current(TokenKind::Function)]
     anonymous_function(|state: &mut State| {
         functions::anonymous_function(state)
+    })
+
+    #[before(die), current(TokenKind::Eval), peek(TokenKind::LeftParen)]
+    eval(|state: &mut State| {
+        state.stream.next();
+        utils::skip_left_parenthesis(state)?;
+        let value = Box::new(lowest_precedence(state)?);
+        utils::skip_right_parenthesis(state)?;
+        Ok(Expression::Eval { value })
     })
 
     #[before(exit), current(TokenKind::Die)]
