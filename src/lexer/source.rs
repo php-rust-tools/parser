@@ -95,6 +95,25 @@ impl<'a> Source<'a> {
         &self.input[from..until]
     }
 
+    pub fn peek_ignoring_whitespace(&self, i: usize, n: usize) -> &'a [u8] {
+        let mut i = i;
+
+        loop {
+            let c = self.peek(i, 1);
+
+            if c.is_empty() {
+                return &[];
+            }
+
+            match c[0] {
+                b' ' | b'\t' | b'\r' | b'\n' => i += 1,
+                _ => break,
+            }
+        }
+
+        self.peek(i, n)
+    }
+
     const fn between_bound(&self, i: usize, n: usize) -> (usize, usize) {
         let from = self.cursor + i;
         if from >= self.length {

@@ -19,7 +19,7 @@ pub fn gather_attributes(state: &mut State) -> ParseResult<bool> {
 
     loop {
         let start = state.stream.current().span;
-        let name = identifiers::full_type_name(state)?;
+        let name = identifiers::full_type_name_including_self(state)?;
         let arguments = if state.stream.current().kind == TokenKind::LeftParen {
             Some(parameters::argument_list(state)?)
         } else {

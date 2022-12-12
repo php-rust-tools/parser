@@ -144,6 +144,7 @@ fn phpstan_src() {
         "phpstan-src",
         "https://github.com/phpstan/phpstan-src",
         &[
+            // borken files used for testing.
             "tests/PHPStan/Rules/Classes/data/invalid-promoted-properties.php",
             "tests/PHPStan/Rules/Classes/data/trait-use-error.php",
             "tests/PHPStan/Analyser/data/multipleParseErrors.php",
@@ -164,6 +165,9 @@ fn phpstan_src() {
             "tests/PHPStan/Rules/Properties/data/intersection-types.php",
             "tests/PHPStan/Rules/Properties/data/read-only-property-phpdoc-and-native.php",
             "tests/PHPStan/Rules/Properties/data/read-only-property.php",
+            "tests/PHPStan/Analyser/data/bug-7135.php",
+            "tests/PHPStan/Rules/Classes/data/first-class-instantiation-callable.php",
+            "tests/PHPStan/Rules/Classes/data/instantiation-callable.php",
         ],
     );
 }

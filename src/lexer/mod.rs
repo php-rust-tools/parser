@@ -101,7 +101,7 @@ impl Lexer {
     }
 
     fn skip_whitespace(&self, state: &mut State) {
-        while let Some(b' ' | b'\n' | b'\r' | b'\t') = state.source.current() {
+        while let Some(true) = state.source.current().map(|u: &u8| u.is_ascii_whitespace()) {
             state.source.next();
         }
     }
@@ -556,42 +556,124 @@ impl Lexer {
             [b'(', ..] => {
                 state.source.next();
 
-                if state.source.at_case_insensitive(b"int)", 4) {
-                    state.source.skip(4);
-                    TokenKind::IntCast
-                } else if state.source.at_case_insensitive(b"integer)", 8) {
-                    state.source.skip(8);
-                    TokenKind::IntegerCast
-                } else if state.source.at_case_insensitive(b"bool)", 5) {
-                    state.source.skip(5);
-                    TokenKind::BoolCast
-                } else if state.source.at_case_insensitive(b"boolean)", 8) {
-                    state.source.skip(8);
-                    TokenKind::BooleanCast
-                } else if state.source.at_case_insensitive(b"float)", 6) {
-                    state.source.skip(6);
-                    TokenKind::FloatCast
-                } else if state.source.at_case_insensitive(b"double)", 7) {
-                    state.source.skip(7);
-                    TokenKind::DoubleCast
-                } else if state.source.at_case_insensitive(b"real)", 5) {
-                    state.source.skip(5);
-                    TokenKind::RealCast
-                } else if state.source.at_case_insensitive(b"string)", 7) {
-                    state.source.skip(7);
-                    TokenKind::StringCast
-                } else if state.source.at_case_insensitive(b"binary)", 7) {
-                    state.source.skip(7);
-                    TokenKind::BinaryCast
-                } else if state.source.at_case_insensitive(b"array)", 6) {
-                    state.source.skip(6);
-                    TokenKind::ArrayCast
-                } else if state.source.at_case_insensitive(b"object)", 7) {
-                    state.source.skip(7);
-                    TokenKind::ObjectCast
-                } else if state.source.at_case_insensitive(b"unset)", 6) {
-                    state.source.skip(6);
-                    TokenKind::UnsetCast
+                self.skip_whitespace(state);
+
+                if state.source.at_case_insensitive(b"int", 3) {
+                    if state.source.at_case_insensitive(b"integer", 7)
+                        && state.source.peek_ignoring_whitespace(7, 1) == [b')']
+                    {
+                        state.source.skip(7);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::IntegerCast
+                    } else if state.source.peek_ignoring_whitespace(3, 1) == [b')'] {
+                        state.source.skip(3);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::IntCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
+                } else if state.source.at_case_insensitive(b"bool", 4) {
+                    if state.source.at_case_insensitive(b"boolean", 7)
+                        && state.source.peek_ignoring_whitespace(7, 1) == [b')']
+                    {
+                        state.source.skip(7);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::BooleanCast
+                    } else if state.source.peek_ignoring_whitespace(4, 1) == [b')'] {
+                        state.source.skip(4);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::BoolCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
+                } else if state.source.at_case_insensitive(b"float", 5) {
+                    if state.source.peek_ignoring_whitespace(5, 1) == [b')'] {
+                        state.source.skip(5);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::FloatCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
+                } else if state.source.at_case_insensitive(b"double", 6) {
+                    if state.source.peek_ignoring_whitespace(6, 1) == [b')'] {
+                        state.source.skip(6);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::DoubleCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
+                } else if state.source.at_case_insensitive(b"real", 4) {
+                    if state.source.peek_ignoring_whitespace(4, 1) == [b')'] {
+                        state.source.skip(4);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::RealCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
+                } else if state.source.at_case_insensitive(b"string", 6) {
+                    if state.source.peek_ignoring_whitespace(6, 1) == [b')'] {
+                        state.source.skip(6);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::StringCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
+                } else if state.source.at_case_insensitive(b"binary", 6) {
+                    if state.source.peek_ignoring_whitespace(6, 1) == [b')'] {
+                        state.source.skip(6);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::BinaryCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
+                } else if state.source.at_case_insensitive(b"array", 5) {
+                    if state.source.peek_ignoring_whitespace(5, 1) == [b')'] {
+                        state.source.skip(5);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::ArrayCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
+                } else if state.source.at_case_insensitive(b"object", 6) {
+                    if state.source.peek_ignoring_whitespace(6, 1) == [b')'] {
+                        state.source.skip(6);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::ObjectCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
+                } else if state.source.at_case_insensitive(b"unset", 5) {
+                    if state.source.peek_ignoring_whitespace(5, 1) == [b')'] {
+                        state.source.skip(5);
+                        self.skip_whitespace(state);
+                        state.source.skip(1);
+
+                        TokenKind::UnsetCast
+                    } else {
+                        TokenKind::LeftParen
+                    }
                 } else {
                     TokenKind::LeftParen
                 }

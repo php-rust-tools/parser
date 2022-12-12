@@ -216,6 +216,42 @@ pub fn full_type_name(state: &mut State) -> ParseResult<SimpleIdentifier> {
     }
 }
 
+/// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
+pub fn full_type_name_including_self(state: &mut State) -> ParseResult<SimpleIdentifier> {
+    match state.stream.current().kind.clone() {
+        TokenKind::Identifier(name)
+        | TokenKind::QualifiedIdentifier(name)
+        | TokenKind::FullyQualifiedIdentifier(name) => {
+            let span = state.stream.current().span;
+
+            state.stream.next();
+
+            Ok(SimpleIdentifier { span, value: name })
+        }
+        TokenKind::Enum
+        | TokenKind::From
+        | TokenKind::Self_
+        | TokenKind::Static
+        | TokenKind::Parent => {
+            let span = state.stream.current().span;
+            let name = state.stream.current().kind.to_string().into();
+
+            state.stream.next();
+
+            Ok(SimpleIdentifier { span, value: name })
+        }
+        t if is_reserved_identifier(&t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
+            state.stream.current().kind.to_string(),
+            state.stream.current().span,
+        )),
+        _ => Err(ParseError::ExpectedToken(
+            vec!["an identifier".to_owned()],
+            Some(state.stream.current().kind.to_string()),
+            state.stream.current().span,
+        )),
+    }
+}
+
 pub fn identifier_maybe_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> {
     match state.stream.current().kind {
         _ if is_reserved_identifier(&state.stream.current().kind) => {
