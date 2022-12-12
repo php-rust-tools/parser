@@ -375,7 +375,7 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
         }
     }
 
-    let entries = read_directory(out_path.clone(), out_path, ignore);
+    let entries = read_directory(name, out_path.clone(), out_path, ignore);
 
     let thread = thread::Builder::new()
         .stack_size(16 * 1024 * 1024)
@@ -433,7 +433,12 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
     }
 }
 
-fn read_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) -> Vec<(String, PathBuf)> {
+fn read_directory(
+    name: &str,
+    root: PathBuf,
+    directory: PathBuf,
+    ignore: &[&str],
+) -> Vec<(String, PathBuf)> {
     let mut results = vec![];
     let mut entries = fs::read_dir(&directory)
         .unwrap()
@@ -451,20 +456,21 @@ fn read_directory(root: PathBuf, directory: PathBuf, ignore: &[&str]) -> Vec<(St
             .to_str()
             .unwrap();
 
-        if path.starts_with("vendor/symfony")
-            || path.starts_with("vendor/doctrine/orm")
-            || path.starts_with("vendor/doctrine/dbal")
-            || path.starts_with("vendor/api-platform/core")
-            || path.starts_with("vendor/rector/rector")
-            || path.starts_with("vendor/phpstan/phpstan")
-            || path.starts_with("vendor/phpstan/php-8-stubs")
-            || path.starts_with("vendor/jetbrains/phpstorm-stubs")
+        if name != "php-standard-library"
+            && (path.starts_with("vendor/symfony")
+                || path.starts_with("vendor/doctrine/orm")
+                || path.starts_with("vendor/doctrine/dbal")
+                || path.starts_with("vendor/api-platform/core")
+                || path.starts_with("vendor/rector/rector")
+                || path.starts_with("vendor/phpstan/phpstan")
+                || path.starts_with("vendor/phpstan/php-8-stubs")
+                || path.starts_with("vendor/jetbrains/phpstorm-stubs"))
         {
             continue;
         }
 
         if entry.is_dir() {
-            results.append(&mut read_directory(root.clone(), entry, ignore));
+            results.append(&mut read_directory(name, root.clone(), entry, ignore));
 
             continue;
         }
