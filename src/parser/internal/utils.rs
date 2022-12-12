@@ -1,3 +1,4 @@
+use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::error::ParseError;
@@ -148,7 +149,7 @@ pub fn skip_close_tag(state: &mut State) -> ParseResult<()> {
 }
 
 pub fn skip_open_tag(state: &mut State) -> ParseResult<()> {
-    if let TokenKind::OpenTag(_) = state.stream.current().kind {
+    if let TokenKind::OpenTag(OpenTagKind::Full) = state.stream.current().kind {
         state.stream.next();
     }
 

@@ -1,4 +1,5 @@
 use crate::expect_literal;
+use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::comments::Comment;
@@ -44,7 +45,7 @@ pub fn parse(tokens: &[Token]) -> ParseResult<Program> {
     while !state.stream.is_eof() {
         if matches!(
             state.stream.current().kind,
-            TokenKind::OpenTag(_) | TokenKind::CloseTag
+            TokenKind::OpenTag(OpenTagKind::Full) | TokenKind::CloseTag
         ) {
             state.stream.next();
             continue;
@@ -141,6 +142,25 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
         }
     } else {
         match &state.stream.current().kind {
+            TokenKind::OpenTag(OpenTagKind::Echo) => {
+                let span = state.stream.current().span;
+                state.stream.next();
+
+                let mut values = Vec::new();
+                loop {
+                    values.push(expressions::lowest_precedence(state)?);
+
+                    if state.stream.current().kind == TokenKind::Comma {
+                        state.stream.next();
+                    } else {
+                        break;
+                    }
+                }
+
+                utils::skip_semicolon(state)?;
+
+                Statement::ShortEcho { span, values }
+            },
             TokenKind::Abstract => classes::parse(state)?,
             TokenKind::Readonly if state.stream.peek().kind != TokenKind::LeftParen => {
                 classes::parse(state)?

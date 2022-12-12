@@ -247,6 +247,10 @@ pub enum Statement {
     Continue {
         num: Option<Expression>,
     },
+    ShortEcho {
+        span: Span,
+        values: Vec<Expression>,
+    },
     Echo {
         values: Vec<Expression>,
     },
