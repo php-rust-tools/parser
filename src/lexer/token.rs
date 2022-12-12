@@ -12,6 +12,7 @@ pub type Span = (usize, usize);
 #[serde(rename_all = "snake_case")]
 pub enum OpenTagKind {
     Full,
+    Echo,
 }
 
 pub type DocStringIndentationAmount = usize;
@@ -377,6 +378,7 @@ impl Display for TokenKind {
             Self::Null => "null",
             Self::OpenTag(kind) => match kind {
                 OpenTagKind::Full => "<?php",
+                OpenTagKind::Echo => "<?=",
             },
             Self::Percent => "%",
             Self::PercentEquals => "%=",
