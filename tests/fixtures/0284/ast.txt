@@ -37,7 +37,7 @@
                                 6,
                                 19,
                             ),
-                            expression: Call {
+                            expression: FunctionCall {
                                 target: Identifier(
                                     SimpleIdentifier(
                                         SimpleIdentifier {
@@ -49,32 +49,41 @@
                                         },
                                     ),
                                 ),
-                                args: [
-                                    Arg {
-                                        name: None,
-                                        value: ConstFetch {
-                                            target: Identifier(
-                                                SimpleIdentifier(
-                                                    SimpleIdentifier {
-                                                        span: (
-                                                            6,
-                                                            7,
-                                                        ),
-                                                        value: "self",
-                                                    },
+                                arguments: ArgumentList {
+                                    start: (
+                                        6,
+                                        6,
+                                    ),
+                                    arguments: [
+                                        Positional {
+                                            ellipsis: None,
+                                            value: ConstFetch {
+                                                target: Identifier(
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: (
+                                                                6,
+                                                                7,
+                                                            ),
+                                                            value: "self",
+                                                        },
+                                                    ),
                                                 ),
-                                            ),
-                                            constant: SimpleIdentifier {
-                                                span: (
-                                                    6,
-                                                    13,
-                                                ),
-                                                value: "class",
+                                                constant: SimpleIdentifier {
+                                                    span: (
+                                                        6,
+                                                        13,
+                                                    ),
+                                                    value: "class",
+                                                },
                                             },
                                         },
-                                        unpack: false,
-                                    },
-                                ],
+                                    ],
+                                    end: (
+                                        6,
+                                        18,
+                                    ),
+                                },
                             },
                         },
                         Attribute {
@@ -86,7 +95,7 @@
                                 6,
                                 64,
                             ),
-                            expression: Call {
+                            expression: FunctionCall {
                                 target: Identifier(
                                     SimpleIdentifier(
                                         SimpleIdentifier {
@@ -98,44 +107,87 @@
                                         },
                                     ),
                                 ),
-                                args: [
-                                    Arg {
-                                        name: None,
-                                        value: New {
-                                            target: Self_,
-                                            span: (
-                                                6,
-                                                25,
-                                            ),
-                                            args: [],
+                                arguments: ArgumentList {
+                                    start: (
+                                        6,
+                                        24,
+                                    ),
+                                    arguments: [
+                                        Positional {
+                                            ellipsis: None,
+                                            value: New {
+                                                span: (
+                                                    6,
+                                                    25,
+                                                ),
+                                                target: Self_,
+                                                arguments: Some(
+                                                    ArgumentList {
+                                                        start: (
+                                                            6,
+                                                            33,
+                                                        ),
+                                                        arguments: [],
+                                                        end: (
+                                                            6,
+                                                            34,
+                                                        ),
+                                                    },
+                                                ),
+                                            },
                                         },
-                                        unpack: false,
-                                    },
-                                    Arg {
-                                        name: None,
-                                        value: New {
-                                            target: Parent,
-                                            span: (
-                                                6,
-                                                37,
-                                            ),
-                                            args: [],
+                                        Positional {
+                                            ellipsis: None,
+                                            value: New {
+                                                span: (
+                                                    6,
+                                                    37,
+                                                ),
+                                                target: Parent,
+                                                arguments: Some(
+                                                    ArgumentList {
+                                                        start: (
+                                                            6,
+                                                            47,
+                                                        ),
+                                                        arguments: [],
+                                                        end: (
+                                                            6,
+                                                            48,
+                                                        ),
+                                                    },
+                                                ),
+                                            },
                                         },
-                                        unpack: false,
-                                    },
-                                    Arg {
-                                        name: None,
-                                        value: New {
-                                            target: Static,
-                                            span: (
-                                                6,
-                                                51,
-                                            ),
-                                            args: [],
+                                        Positional {
+                                            ellipsis: None,
+                                            value: New {
+                                                span: (
+                                                    6,
+                                                    51,
+                                                ),
+                                                target: Static,
+                                                arguments: Some(
+                                                    ArgumentList {
+                                                        start: (
+                                                            6,
+                                                            61,
+                                                        ),
+                                                        arguments: [],
+                                                        end: (
+                                                            6,
+                                                            62,
+                                                        ),
+                                                    },
+                                                ),
+                                            },
                                         },
-                                        unpack: false,
-                                    },
-                                ],
+                                    ],
+                                    end: (
+                                        6,
+                                        63,
+                                    ),
+                                },
                             },
                         },
                     ],

@@ -1,6 +1,6 @@
 [
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -12,68 +12,79 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: (
-                                    3,
-                                    5,
-                                ),
-                                name: "a",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    3,
+                    4,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        3,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
                         ),
-                    ),
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: (
-                                    3,
-                                    9,
-                                ),
-                                name: "b",
-                            },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        3,
+                                        9,
+                                    ),
+                                    name: "b",
+                                },
+                            ),
                         ),
-                    ),
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: (
-                                    3,
-                                    13,
-                                ),
-                                name: "c",
-                            },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        3,
+                                        13,
+                                    ),
+                                    name: "c",
+                                },
+                            ),
                         ),
-                    ),
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: (
-                                    3,
-                                    20,
-                                ),
-                                name: "d",
-                            },
+                    },
+                    Positional {
+                        ellipsis: Some(
+                            (
+                                3,
+                                17,
+                            ),
                         ),
-                    ),
-                    unpack: true,
-                },
-            ],
+                        value: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        3,
+                                        20,
+                                    ),
+                                    name: "d",
+                                },
+                            ),
+                        ),
+                    },
+                ],
+                end: (
+                    3,
+                    22,
+                ),
+            },
         },
         end: (
             3,

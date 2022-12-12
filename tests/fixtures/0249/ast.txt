@@ -37,7 +37,7 @@
                                 3,
                                 20,
                             ),
-                            expression: Call {
+                            expression: FunctionCall {
                                 target: Identifier(
                                     SimpleIdentifier(
                                         SimpleIdentifier {
@@ -49,23 +49,35 @@
                                         },
                                     ),
                                 ),
-                                args: [
-                                    Arg {
-                                        name: Some(
-                                            SimpleIdentifier {
+                                arguments: ArgumentList {
+                                    start: (
+                                        3,
+                                        6,
+                                    ),
+                                    arguments: [
+                                        Named {
+                                            name: SimpleIdentifier {
                                                 span: (
                                                     3,
                                                     7,
                                                 ),
                                                 value: "public",
                                             },
-                                        ),
-                                        value: Bool {
-                                            value: true,
+                                            span: (
+                                                3,
+                                                13,
+                                            ),
+                                            ellipsis: None,
+                                            value: Bool {
+                                                value: true,
+                                            },
                                         },
-                                        unpack: false,
-                                    },
-                                ],
+                                    ],
+                                    end: (
+                                        3,
+                                        19,
+                                    ),
+                                },
                             },
                         },
                     ],

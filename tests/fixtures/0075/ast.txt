@@ -12,6 +12,10 @@
                     },
                 ),
             ),
+            span: (
+                1,
+                9,
+            ),
             method: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -23,23 +27,32 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: (
-                                    1,
-                                    14,
-                                ),
-                                name: "c",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    1,
+                    13,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: (
+                                        1,
+                                        14,
+                                    ),
+                                    name: "c",
+                                },
+                            ),
                         ),
-                    ),
-                    unpack: false,
-                },
-            ],
+                    },
+                ],
+                end: (
+                    1,
+                    16,
+                ),
+            },
         },
         end: (
             1,

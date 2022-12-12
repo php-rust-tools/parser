@@ -1,6 +1,6 @@
 [
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -12,45 +12,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            3,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ComparisonOperation(
-                        Equal {
-                            left: LiteralInteger {
-                                span: (
-                                    3,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    3,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 3,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            Equal {
+                                left: LiteralInteger {
+                                    span: (
+                                        3,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     3,
-                                    18,
+                                    15,
                                 ),
-                                value: "1",
+                                right: LiteralInteger {
+                                    span: (
+                                        3,
+                                        18,
+                                    ),
+                                    value: "1",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    3,
+                    19,
+                ),
+            },
         },
         end: (
             3,
@@ -58,7 +66,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -70,45 +78,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            4,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ComparisonOperation(
-                        Identical {
-                            left: LiteralInteger {
-                                span: (
-                                    4,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    4,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 4,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            Identical {
+                                left: LiteralInteger {
+                                    span: (
+                                        4,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     4,
-                                    19,
+                                    15,
                                 ),
-                                value: "1",
+                                right: LiteralInteger {
+                                    span: (
+                                        4,
+                                        19,
+                                    ),
+                                    value: "1",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    4,
+                    20,
+                ),
+            },
         },
         end: (
             4,
@@ -116,7 +132,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -128,45 +144,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            5,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ComparisonOperation(
-                        NotEqual {
-                            left: LiteralInteger {
-                                span: (
-                                    5,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    5,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 5,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            NotEqual {
+                                left: LiteralInteger {
+                                    span: (
+                                        5,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     5,
-                                    18,
+                                    15,
                                 ),
-                                value: "1",
+                                right: LiteralInteger {
+                                    span: (
+                                        5,
+                                        18,
+                                    ),
+                                    value: "1",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    5,
+                    19,
+                ),
+            },
         },
         end: (
             5,
@@ -174,7 +198,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -186,45 +210,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            6,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ComparisonOperation(
-                        NotIdentical {
-                            left: LiteralInteger {
-                                span: (
-                                    6,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    6,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 6,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            NotIdentical {
+                                left: LiteralInteger {
+                                    span: (
+                                        6,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     6,
-                                    19,
+                                    15,
                                 ),
-                                value: "1",
+                                right: LiteralInteger {
+                                    span: (
+                                        6,
+                                        19,
+                                    ),
+                                    value: "1",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    6,
+                    20,
+                ),
+            },
         },
         end: (
             6,
@@ -232,7 +264,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -244,45 +276,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            7,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ArithmeticOperation(
-                        Addition {
-                            left: LiteralInteger {
-                                span: (
-                                    7,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    7,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 7,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Addition {
+                                left: LiteralInteger {
+                                    span: (
+                                        7,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     7,
-                                    17,
+                                    15,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        7,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    7,
+                    18,
+                ),
+            },
         },
         end: (
             7,
@@ -290,7 +330,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -302,45 +342,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            8,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ArithmeticOperation(
-                        Subtraction {
-                            left: LiteralInteger {
-                                span: (
-                                    8,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    8,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 8,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Subtraction {
+                                left: LiteralInteger {
+                                    span: (
+                                        8,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     8,
-                                    17,
+                                    15,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        8,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    8,
+                    18,
+                ),
+            },
         },
         end: (
             8,
@@ -348,7 +396,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -360,45 +408,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            9,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ArithmeticOperation(
-                        Division {
-                            left: LiteralInteger {
-                                span: (
-                                    9,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    9,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 9,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Division {
+                                left: LiteralInteger {
+                                    span: (
+                                        9,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     9,
-                                    17,
+                                    15,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        9,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    9,
+                    18,
+                ),
+            },
         },
         end: (
             9,
@@ -406,7 +462,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -418,45 +474,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            10,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        Xor {
-                            left: LiteralInteger {
-                                span: (
-                                    10,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    10,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 10,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            Xor {
+                                left: LiteralInteger {
+                                    span: (
+                                        10,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     10,
-                                    17,
+                                    15,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        10,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    10,
+                    18,
+                ),
+            },
         },
         end: (
             10,
@@ -464,7 +528,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -476,45 +540,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            11,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: ArithmeticOperation(
-                        Multiplication {
-                            left: LiteralInteger {
-                                span: (
-                                    11,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    11,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 11,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Multiplication {
+                                left: LiteralInteger {
+                                    span: (
+                                        11,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     11,
-                                    17,
+                                    15,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        11,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    11,
+                    18,
+                ),
+            },
         },
         end: (
             11,
@@ -522,7 +594,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -534,45 +606,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            12,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        RightShift {
-                            left: LiteralInteger {
-                                span: (
-                                    12,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    12,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 12,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            RightShift {
+                                left: LiteralInteger {
+                                    span: (
+                                        12,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     12,
-                                    18,
+                                    15,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        12,
+                                        18,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    12,
+                    19,
+                ),
+            },
         },
         end: (
             12,
@@ -580,7 +660,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -592,45 +672,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            13,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        LeftShift {
-                            left: LiteralInteger {
-                                span: (
-                                    13,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    13,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 13,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            LeftShift {
+                                left: LiteralInteger {
+                                    span: (
+                                        13,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     13,
-                                    18,
+                                    15,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        13,
+                                        18,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    13,
+                    19,
+                ),
+            },
         },
         end: (
             13,
@@ -638,7 +726,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -650,45 +738,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            14,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        Or {
-                            left: LiteralInteger {
-                                span: (
-                                    14,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    14,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 14,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            Or {
+                                left: LiteralInteger {
+                                    span: (
+                                        14,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     14,
-                                    17,
+                                    15,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        14,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    14,
+                    18,
+                ),
+            },
         },
         end: (
             14,
@@ -696,7 +792,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -708,45 +804,53 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            15,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        And {
-                            left: LiteralInteger {
-                                span: (
-                                    15,
-                                    13,
-                                ),
-                                value: "1",
-                            },
+            arguments: ArgumentList {
+                start: (
+                    15,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 15,
-                                15,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            And {
+                                left: LiteralInteger {
+                                    span: (
+                                        15,
+                                        13,
+                                    ),
+                                    value: "1",
+                                },
                                 span: (
                                     15,
-                                    17,
+                                    15,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        15,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    15,
+                    18,
+                ),
+            },
         },
         end: (
             15,
@@ -754,7 +858,7 @@
         ),
     },
     Expression {
-        expression: Call {
+        expression: FunctionCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -766,38 +870,46 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: LiteralString {
-                        span: (
-                            16,
-                            8,
-                        ),
-                        value: "a",
-                    },
-                    unpack: false,
-                },
-                Arg {
-                    name: None,
-                    value: BitwiseOperation(
-                        Not {
+            arguments: ArgumentList {
+                start: (
+                    16,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        ellipsis: None,
+                        value: LiteralString {
                             span: (
                                 16,
-                                13,
+                                8,
                             ),
-                            right: LiteralInteger {
+                            value: "a",
+                        },
+                    },
+                    Positional {
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            Not {
                                 span: (
                                     16,
-                                    14,
+                                    13,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: (
+                                        16,
+                                        14,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
-                    unpack: false,
-                },
-            ],
+                        ),
+                    },
+                ],
+                end: (
+                    16,
+                    15,
+                ),
+            },
         },
         end: (
             16,

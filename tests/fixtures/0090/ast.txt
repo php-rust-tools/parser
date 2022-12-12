@@ -1,6 +1,6 @@
 [
     Expression {
-        expression: StaticMethodCall {
+        expression: StaticMethodClosureCreation {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -11,6 +11,10 @@
                         value: "A",
                     },
                 ),
+            ),
+            span: (
+                1,
+                8,
             ),
             method: Identifier(
                 SimpleIdentifier(
@@ -23,13 +27,20 @@
                     },
                 ),
             ),
-            args: [
-                Arg {
-                    name: None,
-                    value: VariadicPlaceholder,
-                    unpack: false,
-                },
-            ],
+            placeholder: ArgumentPlaceholder {
+                start: (
+                    1,
+                    13,
+                ),
+                ellipsis: (
+                    1,
+                    14,
+                ),
+                end: (
+                    1,
+                    17,
+                ),
+            },
         },
         end: (
             1,

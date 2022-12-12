@@ -101,11 +101,11 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
 
     let class_span = utils::skip(state, TokenKind::Class)?;
 
-    let mut args = vec![];
-
-    if state.stream.current().kind == TokenKind::LeftParen {
-        args = parameters::args_list(state)?;
-    }
+    let arguments = if state.stream.current().kind == TokenKind::LeftParen {
+        Some(parameters::argument_list(state)?)
+    } else {
+        None
+    };
 
     let extends = if state.stream.current().kind == TokenKind::Extends {
         let span = state.stream.current().span;
@@ -161,7 +161,7 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
             body,
         })),
         span,
-        args,
+        arguments,
     })
 }
 

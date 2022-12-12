@@ -143,6 +143,10 @@
                                         value: "self",
                                     },
                                     value: New {
+                                        span: (
+                                            11,
+                                            14,
+                                        ),
                                         target: Identifier(
                                             SimpleIdentifier(
                                                 SimpleIdentifier {
@@ -154,11 +158,7 @@
                                                 },
                                             ),
                                         ),
-                                        span: (
-                                            11,
-                                            14,
-                                        ),
-                                        args: [],
+                                        arguments: None,
                                     },
                                 },
                             ],
@@ -184,6 +184,10 @@
                                         value: "parent",
                                     },
                                     value: New {
+                                        span: (
+                                            12,
+                                            16,
+                                        ),
                                         target: Identifier(
                                             SimpleIdentifier(
                                                 SimpleIdentifier {
@@ -195,11 +199,7 @@
                                                 },
                                             ),
                                         ),
-                                        span: (
-                                            12,
-                                            16,
-                                        ),
-                                        args: [],
+                                        arguments: None,
                                     },
                                 },
                             ],
@@ -338,7 +338,7 @@
                                             body: Some(
                                                 [
                                                     Expression {
-                                                        expression: Call {
+                                                        expression: FunctionCall {
                                                             target: Identifier(
                                                                 SimpleIdentifier(
                                                                     SimpleIdentifier {
@@ -350,23 +350,32 @@
                                                                     },
                                                                 ),
                                                             ),
-                                                            args: [
-                                                                Arg {
-                                                                    name: None,
-                                                                    value: Identifier(
-                                                                        SimpleIdentifier(
-                                                                            SimpleIdentifier {
-                                                                                span: (
-                                                                                    20,
-                                                                                    18,
-                                                                                ),
-                                                                                value: "self",
-                                                                            },
+                                                            arguments: ArgumentList {
+                                                                start: (
+                                                                    20,
+                                                                    17,
+                                                                ),
+                                                                arguments: [
+                                                                    Positional {
+                                                                        ellipsis: None,
+                                                                        value: Identifier(
+                                                                            SimpleIdentifier(
+                                                                                SimpleIdentifier {
+                                                                                    span: (
+                                                                                        20,
+                                                                                        18,
+                                                                                    ),
+                                                                                    value: "self",
+                                                                                },
+                                                                            ),
                                                                         ),
-                                                                    ),
-                                                                    unpack: false,
-                                                                },
-                                                            ],
+                                                                    },
+                                                                ],
+                                                                end: (
+                                                                    20,
+                                                                    22,
+                                                                ),
+                                                            },
                                                         },
                                                         end: (
                                                             20,
@@ -374,7 +383,7 @@
                                                         ),
                                                     },
                                                     Expression {
-                                                        expression: Call {
+                                                        expression: FunctionCall {
                                                             target: Identifier(
                                                                 SimpleIdentifier(
                                                                     SimpleIdentifier {
@@ -386,23 +395,32 @@
                                                                     },
                                                                 ),
                                                             ),
-                                                            args: [
-                                                                Arg {
-                                                                    name: None,
-                                                                    value: Identifier(
-                                                                        SimpleIdentifier(
-                                                                            SimpleIdentifier {
-                                                                                span: (
-                                                                                    21,
-                                                                                    18,
-                                                                                ),
-                                                                                value: "parent",
-                                                                            },
+                                                            arguments: ArgumentList {
+                                                                start: (
+                                                                    21,
+                                                                    17,
+                                                                ),
+                                                                arguments: [
+                                                                    Positional {
+                                                                        ellipsis: None,
+                                                                        value: Identifier(
+                                                                            SimpleIdentifier(
+                                                                                SimpleIdentifier {
+                                                                                    span: (
+                                                                                        21,
+                                                                                        18,
+                                                                                    ),
+                                                                                    value: "parent",
+                                                                                },
+                                                                            ),
                                                                         ),
-                                                                    ),
-                                                                    unpack: false,
-                                                                },
-                                                            ],
+                                                                    },
+                                                                ],
+                                                                end: (
+                                                                    21,
+                                                                    24,
+                                                                ),
+                                                            },
                                                         },
                                                         end: (
                                                             21,
@@ -422,6 +440,10 @@
                                                                     },
                                                                 ),
                                                             ),
+                                                            span: (
+                                                                23,
+                                                                13,
+                                                            ),
                                                             method: Identifier(
                                                                 SimpleIdentifier(
                                                                     SimpleIdentifier {
@@ -433,7 +455,17 @@
                                                                     },
                                                                 ),
                                                             ),
-                                                            args: [],
+                                                            arguments: ArgumentList {
+                                                                start: (
+                                                                    23,
+                                                                    18,
+                                                                ),
+                                                                arguments: [],
+                                                                end: (
+                                                                    23,
+                                                                    19,
+                                                                ),
+                                                            },
                                                         },
                                                         end: (
                                                             23,
@@ -463,6 +495,10 @@
                                                                     14,
                                                                 ),
                                                             },
+                                                            span: (
+                                                                24,
+                                                                15,
+                                                            ),
                                                             method: Identifier(
                                                                 SimpleIdentifier(
                                                                     SimpleIdentifier {
@@ -474,7 +510,17 @@
                                                                     },
                                                                 ),
                                                             ),
-                                                            args: [],
+                                                            arguments: ArgumentList {
+                                                                start: (
+                                                                    24,
+                                                                    20,
+                                                                ),
+                                                                arguments: [],
+                                                                end: (
+                                                                    24,
+                                                                    21,
+                                                                ),
+                                                            },
                                                         },
                                                         end: (
                                                             24,
@@ -504,6 +550,10 @@
                                                                     16,
                                                                 ),
                                                             },
+                                                            span: (
+                                                                25,
+                                                                17,
+                                                            ),
                                                             method: Identifier(
                                                                 SimpleIdentifier(
                                                                     SimpleIdentifier {
@@ -515,7 +565,17 @@
                                                                     },
                                                                 ),
                                                             ),
-                                                            args: [],
+                                                            arguments: ArgumentList {
+                                                                start: (
+                                                                    25,
+                                                                    22,
+                                                                ),
+                                                                arguments: [],
+                                                                end: (
+                                                                    25,
+                                                                    23,
+                                                                ),
+                                                            },
                                                         },
                                                         end: (
                                                             25,
@@ -554,6 +614,10 @@
                                     1,
                                 ),
                                 expr: New {
+                                    span: (
+                                        29,
+                                        2,
+                                    ),
                                     target: Identifier(
                                         SimpleIdentifier(
                                             SimpleIdentifier {
@@ -565,17 +629,17 @@
                                             },
                                         ),
                                     ),
-                                    span: (
-                                        29,
-                                        2,
-                                    ),
-                                    args: [],
+                                    arguments: None,
                                 },
                                 end: (
                                     29,
                                     7,
                                 ),
                             },
+                            span: (
+                                29,
+                                8,
+                            ),
                             method: Identifier(
                                 SimpleIdentifier(
                                     SimpleIdentifier {
@@ -587,7 +651,17 @@
                                     },
                                 ),
                             ),
-                            args: [],
+                            arguments: ArgumentList {
+                                start: (
+                                    29,
+                                    11,
+                                ),
+                                arguments: [],
+                                end: (
+                                    29,
+                                    12,
+                                ),
+                            },
                         },
                         end: (
                             29,

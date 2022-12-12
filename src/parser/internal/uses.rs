@@ -31,20 +31,26 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
             let use_kind = match state.stream.current().kind {
                 TokenKind::Function => {
                     if kind != UseKind::Normal {
-                        return Err(ParseError::UnexpectedToken(state.stream.current().kind.to_string(), state.stream.current().span));
+                        return Err(ParseError::UnexpectedToken(
+                            state.stream.current().kind.to_string(),
+                            state.stream.current().span,
+                        ));
                     }
 
                     state.stream.next();
                     Some(UseKind::Function)
-                },
+                }
                 TokenKind::Const => {
                     if kind != UseKind::Normal {
-                        return Err(ParseError::UnexpectedToken(state.stream.current().kind.to_string(), state.stream.current().span));
+                        return Err(ParseError::UnexpectedToken(
+                            state.stream.current().kind.to_string(),
+                            state.stream.current().span,
+                        ));
                     }
-                    
+
                     state.stream.next();
                     Some(UseKind::Const)
-                },
+                }
                 _ => None,
             };
 
@@ -55,7 +61,11 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
                 alias = Some(identifiers::type_identifier(state)?);
             }
 
-            uses.push(Use { name, kind: use_kind, alias });
+            uses.push(Use {
+                name,
+                kind: use_kind,
+                alias,
+            });
 
             if state.stream.current().kind == TokenKind::Comma {
                 state.stream.next();
@@ -77,7 +87,11 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
                 alias = Some(identifiers::type_identifier(state)?);
             }
 
-            uses.push(Use { name, kind: None, alias });
+            uses.push(Use {
+                name,
+                kind: None,
+                alias,
+            });
 
             if state.stream.current().kind == TokenKind::Comma {
                 state.stream.next();
