@@ -1,39 +1,68 @@
 [
-    Declare {
-        declares: [
-            DeclareItem {
-                key: SimpleIdentifier {
-                    span: (
-                        4,
-                        5,
-                    ),
-                    name: "a",
-                },
-                value: LiteralInteger {
-                    span: (
-                        4,
-                        9,
-                    ),
-                    value: "3",
-                },
+    Declare(
+        Declare {
+            span: (
+                3,
+                1,
+            ),
+            entries: DeclareEntryGroup {
+                start: (
+                    3,
+                    8,
+                ),
+                end: (
+                    6,
+                    1,
+                ),
+                entries: [
+                    DeclareEntry {
+                        key: SimpleIdentifier {
+                            span: (
+                                4,
+                                5,
+                            ),
+                            value: "a",
+                        },
+                        span: (
+                            4,
+                            7,
+                        ),
+                        value: LiteralInteger {
+                            span: (
+                                4,
+                                9,
+                            ),
+                            value: "3",
+                        },
+                    },
+                    DeclareEntry {
+                        key: SimpleIdentifier {
+                            span: (
+                                5,
+                                5,
+                            ),
+                            value: "c",
+                        },
+                        span: (
+                            5,
+                            7,
+                        ),
+                        value: LiteralString {
+                            span: (
+                                5,
+                                9,
+                            ),
+                            value: "f",
+                        },
+                    },
+                ],
             },
-            DeclareItem {
-                key: SimpleIdentifier {
-                    span: (
-                        5,
-                        5,
-                    ),
-                    name: "c",
-                },
-                value: LiteralString {
-                    span: (
-                        5,
-                        9,
-                    ),
-                    value: "f",
-                },
+            body: Noop {
+                span: (
+                    6,
+                    2,
+                ),
             },
-        ],
-        body: [],
-    },
+        },
+    ),
 ]

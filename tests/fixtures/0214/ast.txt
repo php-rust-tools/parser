@@ -1,13 +1,9 @@
 [
     Interface(
         Interface {
-            start: (
+            span: (
                 3,
                 1,
-            ),
-            end: (
-                3,
-                14,
             ),
             attributes: [],
             name: SimpleIdentifier {
@@ -15,20 +11,26 @@
                     3,
                     11,
                 ),
-                name: "s",
+                value: "s",
             },
             extends: None,
-            members: [],
+            body: InterfaceBody {
+                start: (
+                    3,
+                    13,
+                ),
+                end: (
+                    3,
+                    14,
+                ),
+                members: [],
+            },
         },
     ),
     Interface(
         Interface {
-            start: (
+            span: (
                 5,
-                1,
-            ),
-            end: (
-                7,
                 1,
             ),
             attributes: [],
@@ -37,7 +39,7 @@
                     5,
                     11,
                 ),
-                name: "foo",
+                value: "foo",
             },
             extends: Some(
                 InterfaceExtends {
@@ -51,63 +53,73 @@
                                 5,
                                 23,
                             ),
-                            name: "s",
+                            value: "s",
                         },
                     ],
                 },
             ),
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            6,
-                            12,
-                        ),
-                        end: (
-                            6,
-                            34,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                6,
-                                21,
-                            ),
-                            name: "bar",
-                        },
-                        attributes: [],
-                        parameters: MethodParameterList {
+            body: InterfaceBody {
+                start: (
+                    5,
+                    25,
+                ),
+                end: (
+                    7,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 6,
-                                24,
+                                12,
                             ),
                             end: (
                                 6,
-                                26,
+                                34,
                             ),
-                            members: [],
+                            name: SimpleIdentifier {
+                                span: (
+                                    6,
+                                    21,
+                                ),
+                                value: "bar",
+                            },
+                            attributes: [],
+                            parameters: MethodParameterList {
+                                start: (
+                                    6,
+                                    24,
+                                ),
+                                end: (
+                                    6,
+                                    26,
+                                ),
+                                members: [],
+                            },
+                            body: None,
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            6,
+                                            5,
+                                        ),
+                                        end: (
+                                            6,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: Some(
+                                ParentReference,
+                            ),
+                            by_ref: false,
                         },
-                        body: None,
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        6,
-                                        5,
-                                    ),
-                                    end: (
-                                        6,
-                                        12,
-                                    ),
-                                },
-                            ],
-                        },
-                        return_type: Some(
-                            ParentReference,
-                        ),
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
 ]

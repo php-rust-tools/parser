@@ -1,6 +1,6 @@
 [
     Expression {
-        expr: PropertyFetch {
+        expression: PropertyFetch {
             target: Variable(
                 SimpleVariable(
                     SimpleVariable {
@@ -19,14 +19,18 @@
                             1,
                             13,
                         ),
-                        name: "bar",
+                        value: "bar",
                     },
                 ),
             ),
         },
+        end: (
+            1,
+            16,
+        ),
     },
     Expression {
-        expr: PropertyFetch {
+        expression: PropertyFetch {
             target: PropertyFetch {
                 target: Variable(
                     SimpleVariable(
@@ -46,7 +50,7 @@
                                 1,
                                 24,
                             ),
-                            name: "bar",
+                            value: "bar",
                         },
                     ),
                 ),
@@ -58,10 +62,14 @@
                             1,
                             29,
                         ),
-                        name: "baz",
+                        value: "baz",
                     },
                 ),
             ),
         },
+        end: (
+            1,
+            32,
+        ),
     },
 ]

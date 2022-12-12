@@ -89,6 +89,7 @@ pub struct MethodParameter {
     pub r#type: Option<Type>,
     pub variadic: bool,
     pub default: Option<Expression>,
+    #[serde(flatten)]
     pub modifiers: PromotedPropertyModifierGroup,
     pub by_ref: bool,
 }
@@ -110,6 +111,7 @@ pub struct Method {
     pub attributes: Vec<AttributeGroup>,
     pub parameters: MethodParameterList,
     pub body: Option<Block>,
+    #[serde(flatten)]
     pub modifiers: MethodModifierGroup,
     pub return_type: Option<Type>,
     pub by_ref: bool,

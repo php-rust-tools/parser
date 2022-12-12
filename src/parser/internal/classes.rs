@@ -2,6 +2,7 @@ use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::classes::AnonymousClass;
 use crate::parser::ast::classes::Class;
+use crate::parser::ast::classes::ClassBody;
 use crate::parser::ast::classes::ClassExtends;
 use crate::parser::ast::classes::ClassImplements;
 use crate::parser::ast::classes::ClassMember;
@@ -25,7 +26,7 @@ use crate::scoped;
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let modifiers = modifiers::class_group(modifiers::collect(state)?)?;
 
-    let start = utils::skip(state, TokenKind::Class)?;
+    let span = utils::skip(state, TokenKind::Class)?;
 
     let name = identifiers::type_identifier(state)?;
 
@@ -56,32 +57,37 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     };
 
     let attributes = state.get_attributes();
-    utils::skip_left_brace(state)?;
 
-    let classname = name.name.to_string();
-    let members = scoped!(
+    let classname = name.value.to_string();
+    let body = scoped!(
         state,
-        Scope::Class(name.clone(), modifiers, extends.is_some()),
+        Scope::Class(name.clone(), modifiers.clone(), extends.is_some()),
         {
+            let start = utils::skip_left_brace(state)?;
+
             let mut members = Vec::new();
             while state.stream.current().kind != TokenKind::RightBrace {
                 members.push(member(state, classname.clone())?);
             }
 
-            members
+            let end = utils::skip_right_brace(state)?;
+
+            ClassBody {
+                start,
+                members,
+                end,
+            }
         }
     );
 
-    let end = utils::skip_right_brace(state)?;
-
     Ok(Statement::Class(Class {
-        start,
-        end,
+        span,
         name,
+        modifiers,
         extends,
         implements,
         attributes,
-        members,
+        body,
     }))
 }
 
@@ -93,7 +99,7 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
 
     attributes::gather_attributes(state)?;
 
-    let start = utils::skip(state, TokenKind::Class)?;
+    let class_span = utils::skip(state, TokenKind::Class)?;
 
     let mut args = vec![];
 
@@ -128,27 +134,31 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
     };
 
     let attributes = state.get_attributes();
-    utils::skip_left_brace(state)?;
 
-    let members = scoped!(state, Scope::AnonymousClass(extends.is_some()), {
+    let body = scoped!(state, Scope::AnonymousClass(extends.is_some()), {
+        let start = utils::skip_left_brace(state)?;
+
         let mut members = Vec::new();
         while state.stream.current().kind != TokenKind::RightBrace {
             members.push(member(state, "class@anonymous".to_owned())?);
         }
 
-        members
-    });
+        let end = utils::skip_right_brace(state)?;
 
-    let end = utils::skip_right_brace(state)?;
+        ClassBody {
+            start,
+            members,
+            end,
+        }
+    });
 
     Ok(Expression::New {
         target: Box::new(Expression::AnonymousClass(AnonymousClass {
-            start,
-            end,
+            span: class_span,
             extends,
             implements,
             attributes,
-            members,
+            body,
         })),
         span,
         args,

@@ -159,7 +159,10 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
             let name = state.stream.current().kind.to_string().into();
             state.stream.next();
 
-            Ok(Some(Type::Identifier(SimpleIdentifier { span, name })))
+            Ok(Some(Type::Identifier(SimpleIdentifier {
+                span,
+                value: name,
+            })))
         }
         TokenKind::Identifier(id) => {
             let span = state.stream.current().span;
@@ -182,14 +185,17 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
                 b"false" => Ok(Some(Type::False)),
                 b"array" => Ok(Some(Type::Array)),
                 b"callable" => Ok(Some(Type::Callable)),
-                _ => Ok(Some(Type::Identifier(SimpleIdentifier { span, name: id }))),
+                _ => Ok(Some(Type::Identifier(SimpleIdentifier { span, value: id }))),
             }
         }
         TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
             let span = state.stream.current().span;
             state.stream.next();
 
-            Ok(Some(Type::Identifier(SimpleIdentifier { span, name })))
+            Ok(Some(Type::Identifier(SimpleIdentifier {
+                span,
+                value: name,
+            })))
         }
         _ => Ok(None),
     }

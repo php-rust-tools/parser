@@ -1,12 +1,8 @@
 [
     Trait(
         Trait {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                10,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,77 +10,91 @@
                     3,
                     7,
                 ),
-                name: "foo",
+                value: "foo",
             },
             attributes: [],
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            7,
-                            12,
-                        ),
-                        end: (
-                            9,
-                            5,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                7,
-                                21,
-                            ),
-                            name: "bar",
-                        },
-                        attributes: [],
-                        parameters: MethodParameterList {
+            body: TraitBody {
+                start: (
+                    3,
+                    11,
+                ),
+                end: (
+                    10,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 7,
-                                24,
+                                12,
                             ),
                             end: (
-                                7,
-                                26,
+                                9,
+                                5,
                             ),
-                            members: [],
-                        },
-                        body: Some(
-                            [
-                                Expression {
-                                    expr: Exit {
-                                        value: Some(
-                                            LiteralInteger {
-                                                span: (
-                                                    8,
-                                                    14,
-                                                ),
-                                                value: "1",
-                                            },
+                            name: SimpleIdentifier {
+                                span: (
+                                    7,
+                                    21,
+                                ),
+                                value: "bar",
+                            },
+                            attributes: [],
+                            parameters: MethodParameterList {
+                                start: (
+                                    7,
+                                    24,
+                                ),
+                                end: (
+                                    7,
+                                    26,
+                                ),
+                                members: [],
+                            },
+                            body: Some(
+                                [
+                                    Expression {
+                                        expression: Exit {
+                                            value: Some(
+                                                LiteralInteger {
+                                                    span: (
+                                                        8,
+                                                        14,
+                                                    ),
+                                                    value: "1",
+                                                },
+                                            ),
+                                        },
+                                        end: (
+                                            8,
+                                            16,
                                         ),
                                     },
-                                },
-                            ],
-                        ),
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        7,
-                                        5,
-                                    ),
-                                    end: (
-                                        7,
-                                        12,
-                                    ),
-                                },
-                            ],
+                                ],
+                            ),
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            7,
+                                            5,
+                                        ),
+                                        end: (
+                                            7,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: Some(
+                                ParentReference,
+                            ),
+                            by_ref: false,
                         },
-                        return_type: Some(
-                            ParentReference,
-                        ),
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
 ]

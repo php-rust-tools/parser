@@ -1,71 +1,77 @@
 [
     Expression {
-        expr: New {
+        expression: New {
             target: AnonymousClass(
                 AnonymousClass {
-                    start: (
+                    span: (
                         3,
                         5,
-                    ),
-                    end: (
-                        5,
-                        1,
                     ),
                     extends: None,
                     implements: None,
                     attributes: [],
-                    members: [
-                        Method(
-                            Method {
-                                start: (
-                                    4,
-                                    12,
-                                ),
-                                end: (
-                                    4,
-                                    28,
-                                ),
-                                name: SimpleIdentifier {
-                                    span: (
-                                        4,
-                                        21,
-                                    ),
-                                    name: "foo",
-                                },
-                                attributes: [],
-                                parameters: MethodParameterList {
+                    body: ClassBody {
+                        start: (
+                            3,
+                            11,
+                        ),
+                        end: (
+                            5,
+                            1,
+                        ),
+                        members: [
+                            Method(
+                                Method {
                                     start: (
                                         4,
-                                        24,
+                                        12,
                                     ),
                                     end: (
                                         4,
-                                        27,
+                                        28,
                                     ),
-                                    members: [],
+                                    name: SimpleIdentifier {
+                                        span: (
+                                            4,
+                                            21,
+                                        ),
+                                        value: "foo",
+                                    },
+                                    attributes: [],
+                                    parameters: MethodParameterList {
+                                        start: (
+                                            4,
+                                            24,
+                                        ),
+                                        end: (
+                                            4,
+                                            27,
+                                        ),
+                                        members: [],
+                                    },
+                                    body: Some(
+                                        [],
+                                    ),
+                                    modifiers: MethodModifierGroup {
+                                        modifiers: [
+                                            Public {
+                                                start: (
+                                                    4,
+                                                    5,
+                                                ),
+                                                end: (
+                                                    4,
+                                                    12,
+                                                ),
+                                            },
+                                        ],
+                                    },
+                                    return_type: None,
+                                    by_ref: false,
                                 },
-                                body: Some(
-                                    [],
-                                ),
-                                modifiers: MethodModifierGroup {
-                                    modifiers: [
-                                        Public {
-                                            start: (
-                                                4,
-                                                5,
-                                            ),
-                                            end: (
-                                                4,
-                                                12,
-                                            ),
-                                        },
-                                    ],
-                                },
-                                return_type: None,
-                                by_ref: false,
-                            },
-                        ),
-                    ],
+                            ),
+                        ],
+                    },
                 },
             ),
             span: (
@@ -74,5 +80,9 @@
             ),
             args: [],
         },
+        end: (
+            5,
+            2,
+        ),
     },
 ]

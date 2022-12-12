@@ -1,11 +1,11 @@
 [
     Expression {
-        expr: ShellExec {
+        expression: ShellExec {
             parts: [
-                Const(
+                Literal(
                     "Hello, ",
                 ),
-                Expr(
+                Expression(
                     Variable(
                         SimpleVariable(
                             SimpleVariable {
@@ -20,5 +20,9 @@
                 ),
             ],
         },
+        end: (
+            3,
+            17,
+        ),
     },
 ]

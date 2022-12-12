@@ -18,7 +18,7 @@ pub struct UnitEnumCase {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum UnitEnumMember {
     Case(UnitEnumCase),
     Method(Method),
@@ -27,16 +27,24 @@ pub enum UnitEnumMember {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
-pub struct UnitEnum {
+pub struct UnitEnumBody {
     pub start: Span,
     pub end: Span,
-    pub name: SimpleIdentifier,
-    pub attributes: Vec<AttributeGroup>,
-    pub implements: Vec<SimpleIdentifier>,
     pub members: Vec<UnitEnumMember>,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub struct UnitEnum {
+    pub span: Span,
+    pub name: SimpleIdentifier,
+    pub attributes: Vec<AttributeGroup>,
+    pub implements: Vec<SimpleIdentifier>,
+    pub body: UnitEnumBody,
+}
+
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[serde(tag = "type", content = "span")]
 pub enum BackedEnumType {
     String(Span),
     Int(Span),
@@ -53,7 +61,7 @@ pub struct BackedEnumCase {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum BackedEnumMember {
     Case(BackedEnumCase),
     Method(Method),
@@ -62,12 +70,19 @@ pub enum BackedEnumMember {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
-pub struct BackedEnum {
+pub struct BackedEnumBody {
     pub start: Span,
     pub end: Span,
+    pub members: Vec<BackedEnumMember>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub struct BackedEnum {
+    pub span: Span,
     pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,
     pub implements: Vec<SimpleIdentifier>,
     pub backed_type: BackedEnumType,
-    pub members: Vec<BackedEnumMember>,
+    pub body: BackedEnumBody,
 }

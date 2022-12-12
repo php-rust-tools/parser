@@ -1,8 +1,8 @@
 [
     Expression {
-        expr: InterpolatedString {
+        expression: InterpolatedString {
             parts: [
-                Expr(
+                Expression(
                     Variable(
                         SimpleVariable(
                             SimpleVariable {
@@ -15,7 +15,7 @@
                         ),
                     ),
                 ),
-                Expr(
+                Expression(
                     ArrayIndex {
                         array: Variable(
                             SimpleVariable(
@@ -39,7 +39,7 @@
                         ),
                     },
                 ),
-                Expr(
+                Expression(
                     ArrayIndex {
                         array: Variable(
                             SimpleVariable(
@@ -63,7 +63,7 @@
                         ),
                     },
                 ),
-                Expr(
+                Expression(
                     PropertyFetch {
                         target: Variable(
                             SimpleVariable(
@@ -83,13 +83,13 @@
                                         1,
                                         43,
                                     ),
-                                    name: "bar",
+                                    value: "bar",
                                 },
                             ),
                         ),
                     },
                 ),
-                Expr(
+                Expression(
                     MethodCall {
                         target: Variable(
                             SimpleVariable(
@@ -109,7 +109,7 @@
                                         1,
                                         54,
                                     ),
-                                    name: "bar",
+                                    value: "bar",
                                 },
                             ),
                         ),
@@ -118,5 +118,9 @@
                 ),
             ],
         },
+        end: (
+            1,
+            61,
+        ),
     },
 ]

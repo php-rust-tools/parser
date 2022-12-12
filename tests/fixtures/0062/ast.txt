@@ -1,15 +1,11 @@
 [
     Expression {
-        expr: New {
+        expression: New {
             target: AnonymousClass(
                 AnonymousClass {
-                    start: (
+                    span: (
                         1,
                         11,
-                    ),
-                    end: (
-                        1,
-                        30,
                     ),
                     extends: Some(
                         ClassExtends {
@@ -22,13 +18,23 @@
                                     1,
                                     25,
                                 ),
-                                name: "Foo",
+                                value: "Foo",
                             },
                         },
                     ),
                     implements: None,
                     attributes: [],
-                    members: [],
+                    body: ClassBody {
+                        start: (
+                            1,
+                            29,
+                        ),
+                        end: (
+                            1,
+                            30,
+                        ),
+                        members: [],
+                    },
                 },
             ),
             span: (
@@ -37,5 +43,9 @@
             ),
             args: [],
         },
+        end: (
+            1,
+            31,
+        ),
     },
 ]

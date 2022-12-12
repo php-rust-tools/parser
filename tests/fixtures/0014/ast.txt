@@ -1,12 +1,8 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                7,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,67 +10,80 @@
                     3,
                     7,
                 ),
-                name: "Foo2",
+                value: "Foo2",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                TraitUsage(
-                    TraitUsage {
-                        traits: [
-                            SimpleIdentifier {
-                                span: (
-                                    4,
-                                    9,
-                                ),
-                                name: "B",
-                            },
-                        ],
-                        adaptations: [
-                            Alias {
-                                trait: None,
-                                method: SimpleIdentifier {
+            body: ClassBody {
+                start: (
+                    3,
+                    12,
+                ),
+                end: (
+                    7,
+                    1,
+                ),
+                members: [
+                    TraitUsage(
+                        TraitUsage {
+                            span: (
+                                4,
+                                5,
+                            ),
+                            traits: [
+                                SimpleIdentifier {
                                     span: (
-                                        5,
+                                        4,
                                         9,
                                     ),
-                                    name: "foo",
+                                    value: "B",
                                 },
-                                alias: SimpleIdentifier {
-                                    span: (
-                                        5,
-                                        26,
-                                    ),
-                                    name: "bar",
-                                },
-                                visibility: Some(
-                                    Protected {
-                                        start: (
+                            ],
+                            adaptations: [
+                                Alias {
+                                    trait: None,
+                                    method: SimpleIdentifier {
+                                        span: (
                                             5,
-                                            16,
+                                            9,
                                         ),
-                                        end: (
+                                        value: "foo",
+                                    },
+                                    alias: SimpleIdentifier {
+                                        span: (
                                             5,
                                             26,
                                         ),
+                                        value: "bar",
                                     },
-                                ),
-                            },
-                        ],
-                    },
-                ),
-            ],
+                                    visibility: Some(
+                                        Protected {
+                                            start: (
+                                                5,
+                                                16,
+                                            ),
+                                            end: (
+                                                5,
+                                                26,
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
+                        },
+                    ),
+                ],
+            },
         },
     ),
     Class(
         Class {
-            start: (
+            span: (
                 9,
-                1,
-            ),
-            end: (
-                14,
                 1,
             ),
             name: SimpleIdentifier {
@@ -82,72 +91,85 @@
                     9,
                     7,
                 ),
-                name: "Bar2",
+                value: "Bar2",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                TraitUsage(
-                    TraitUsage {
-                        traits: [
-                            SimpleIdentifier {
-                                span: (
-                                    10,
-                                    9,
-                                ),
-                                name: "B",
-                            },
-                            SimpleIdentifier {
-                                span: (
-                                    11,
-                                    9,
-                                ),
-                                name: "C",
-                            },
-                        ],
-                        adaptations: [
-                            Precedence {
-                                trait: Some(
-                                    SimpleIdentifier {
-                                        span: (
-                                            12,
-                                            13,
-                                        ),
-                                        name: "B",
-                                    },
-                                ),
-                                method: SimpleIdentifier {
-                                    span: (
-                                        12,
-                                        16,
-                                    ),
-                                    name: "foo",
-                                },
-                                insteadof: [
-                                    SimpleIdentifier {
-                                        span: (
-                                            12,
-                                            30,
-                                        ),
-                                        name: "C",
-                                    },
-                                ],
-                            },
-                        ],
-                    },
+            body: ClassBody {
+                start: (
+                    9,
+                    12,
                 ),
-            ],
+                end: (
+                    14,
+                    1,
+                ),
+                members: [
+                    TraitUsage(
+                        TraitUsage {
+                            span: (
+                                10,
+                                5,
+                            ),
+                            traits: [
+                                SimpleIdentifier {
+                                    span: (
+                                        10,
+                                        9,
+                                    ),
+                                    value: "B",
+                                },
+                                SimpleIdentifier {
+                                    span: (
+                                        11,
+                                        9,
+                                    ),
+                                    value: "C",
+                                },
+                            ],
+                            adaptations: [
+                                Precedence {
+                                    trait: Some(
+                                        SimpleIdentifier {
+                                            span: (
+                                                12,
+                                                13,
+                                            ),
+                                            value: "B",
+                                        },
+                                    ),
+                                    method: SimpleIdentifier {
+                                        span: (
+                                            12,
+                                            16,
+                                        ),
+                                        value: "foo",
+                                    },
+                                    insteadof: [
+                                        SimpleIdentifier {
+                                            span: (
+                                                12,
+                                                30,
+                                            ),
+                                            value: "C",
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ),
+                ],
+            },
         },
     ),
     Class(
         Class {
-            start: (
+            span: (
                 16,
-                1,
-            ),
-            end: (
-                18,
                 1,
             ),
             name: SimpleIdentifier {
@@ -155,64 +177,77 @@
                     16,
                     7,
                 ),
-                name: "Bar3",
+                value: "Bar3",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                TraitUsage(
-                    TraitUsage {
-                        traits: [
-                            SimpleIdentifier {
-                                span: (
-                                    17,
-                                    9,
-                                ),
-                                name: "B",
-                            },
-                        ],
-                        adaptations: [
-                            Alias {
-                                trait: Some(
-                                    SimpleIdentifier {
+            body: ClassBody {
+                start: (
+                    16,
+                    12,
+                ),
+                end: (
+                    18,
+                    1,
+                ),
+                members: [
+                    TraitUsage(
+                        TraitUsage {
+                            span: (
+                                17,
+                                5,
+                            ),
+                            traits: [
+                                SimpleIdentifier {
+                                    span: (
+                                        17,
+                                        9,
+                                    ),
+                                    value: "B",
+                                },
+                            ],
+                            adaptations: [
+                                Alias {
+                                    trait: Some(
+                                        SimpleIdentifier {
+                                            span: (
+                                                17,
+                                                13,
+                                            ),
+                                            value: "B",
+                                        },
+                                    ),
+                                    method: SimpleIdentifier {
                                         span: (
                                             17,
-                                            13,
+                                            16,
                                         ),
-                                        name: "B",
+                                        value: "foo",
                                     },
-                                ),
-                                method: SimpleIdentifier {
-                                    span: (
-                                        17,
-                                        16,
-                                    ),
-                                    name: "foo",
+                                    alias: SimpleIdentifier {
+                                        span: (
+                                            17,
+                                            23,
+                                        ),
+                                        value: "bar",
+                                    },
+                                    visibility: None,
                                 },
-                                alias: SimpleIdentifier {
-                                    span: (
-                                        17,
-                                        23,
-                                    ),
-                                    name: "bar",
-                                },
-                                visibility: None,
-                            },
-                        ],
-                    },
-                ),
-            ],
+                            ],
+                        },
+                    ),
+                ],
+            },
         },
     ),
     Class(
         Class {
-            start: (
+            span: (
                 20,
-                1,
-            ),
-            end: (
-                22,
                 1,
             ),
             name: SimpleIdentifier {
@@ -220,46 +255,63 @@
                     20,
                     7,
                 ),
-                name: "Bar4",
+                value: "Bar4",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                TraitUsage(
-                    TraitUsage {
-                        traits: [
-                            SimpleIdentifier {
-                                span: (
-                                    21,
-                                    9,
-                                ),
-                                name: "B",
-                            },
-                        ],
-                        adaptations: [
-                            Alias {
-                                trait: None,
-                                method: SimpleIdentifier {
-                                    span: (
-                                        21,
-                                        13,
-                                    ),
-                                    name: "foo",
-                                },
-                                alias: SimpleIdentifier {
-                                    span: (
-                                        21,
-                                        20,
-                                    ),
-                                    name: "bar",
-                                },
-                                visibility: None,
-                            },
-                        ],
-                    },
+            body: ClassBody {
+                start: (
+                    20,
+                    12,
                 ),
-            ],
+                end: (
+                    22,
+                    1,
+                ),
+                members: [
+                    TraitUsage(
+                        TraitUsage {
+                            span: (
+                                21,
+                                5,
+                            ),
+                            traits: [
+                                SimpleIdentifier {
+                                    span: (
+                                        21,
+                                        9,
+                                    ),
+                                    value: "B",
+                                },
+                            ],
+                            adaptations: [
+                                Alias {
+                                    trait: None,
+                                    method: SimpleIdentifier {
+                                        span: (
+                                            21,
+                                            13,
+                                        ),
+                                        value: "foo",
+                                    },
+                                    alias: SimpleIdentifier {
+                                        span: (
+                                            21,
+                                            20,
+                                        ),
+                                        value: "bar",
+                                    },
+                                    visibility: None,
+                                },
+                            ],
+                        },
+                    ),
+                ],
+            },
         },
     ),
 ]

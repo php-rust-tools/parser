@@ -1,12 +1,8 @@
 [
     UnitEnum(
         UnitEnum {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                5,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,62 +10,72 @@
                     3,
                     6,
                 ),
-                name: "EnumWithInvoke",
+                value: "EnumWithInvoke",
             },
             attributes: [],
             implements: [],
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            4,
-                            12,
-                        ),
-                        end: (
-                            4,
-                            33,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                4,
-                                21,
-                            ),
-                            name: "__invoke",
-                        },
-                        attributes: [],
-                        parameters: MethodParameterList {
+            body: UnitEnumBody {
+                start: (
+                    3,
+                    21,
+                ),
+                end: (
+                    5,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 4,
-                                29,
+                                12,
                             ),
                             end: (
                                 4,
-                                32,
+                                33,
                             ),
-                            members: [],
+                            name: SimpleIdentifier {
+                                span: (
+                                    4,
+                                    21,
+                                ),
+                                value: "__invoke",
+                            },
+                            attributes: [],
+                            parameters: MethodParameterList {
+                                start: (
+                                    4,
+                                    29,
+                                ),
+                                end: (
+                                    4,
+                                    32,
+                                ),
+                                members: [],
+                            },
+                            body: Some(
+                                [],
+                            ),
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            4,
+                                            5,
+                                        ),
+                                        end: (
+                                            4,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: None,
+                            by_ref: false,
                         },
-                        body: Some(
-                            [],
-                        ),
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        4,
-                                        5,
-                                    ),
-                                    end: (
-                                        4,
-                                        12,
-                                    ),
-                                },
-                            ],
-                        },
-                        return_type: None,
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
 ]

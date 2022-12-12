@@ -14,7 +14,7 @@
                     9,
                     10,
                 ),
-                name: "a",
+                value: "a",
             },
             attributes: [
                 AttributeGroup {
@@ -43,7 +43,7 @@
                                             4,
                                             5,
                                         ),
-                                        name: "A1",
+                                        value: "A1",
                                     },
                                 ),
                             ),
@@ -65,7 +65,7 @@
                                                 5,
                                                 5,
                                             ),
-                                            name: "A2",
+                                            value: "A2",
                                         },
                                     ),
                                 ),
@@ -89,7 +89,7 @@
                                                 6,
                                                 5,
                                             ),
-                                            name: "A3",
+                                            value: "A3",
                                         },
                                     ),
                                 ),
@@ -125,7 +125,7 @@
                                                 7,
                                                 5,
                                             ),
-                                            name: "A4",
+                                            value: "A4",
                                         },
                                     ),
                                 ),
@@ -137,7 +137,7 @@
                                                     7,
                                                     8,
                                                 ),
-                                                name: "x",
+                                                value: "x",
                                             },
                                         ),
                                         value: LiteralInteger {
@@ -208,7 +208,7 @@
                                                         10,
                                                         7,
                                                     ),
-                                                    name: "A5",
+                                                    value: "A5",
                                                 },
                                             ),
                                         ),
@@ -271,7 +271,7 @@
                                                         12,
                                                         7,
                                                     ),
-                                                    name: "A6",
+                                                    value: "A6",
                                                 },
                                             ),
                                         ),
@@ -327,7 +327,7 @@
                                                         14,
                                                         7,
                                                     ),
-                                                    name: "A7",
+                                                    value: "A7",
                                                 },
                                             ),
                                         ),
@@ -351,12 +351,8 @@
     ),
     Class(
         Class {
-            start: (
+            span: (
                 20,
-                1,
-            ),
-            end: (
-                34,
                 1,
             ),
             name: SimpleIdentifier {
@@ -364,7 +360,10 @@
                     20,
                     7,
                 ),
-                name: "C",
+                value: "C",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
@@ -395,7 +394,7 @@
                                             19,
                                             3,
                                         ),
-                                        name: "A8",
+                                        value: "A8",
                                     },
                                 ),
                             ),
@@ -417,7 +416,7 @@
                                                 19,
                                                 7,
                                             ),
-                                            name: "A9",
+                                            value: "A9",
                                         },
                                     ),
                                 ),
@@ -441,7 +440,7 @@
                                                 19,
                                                 13,
                                             ),
-                                            name: "A10",
+                                            value: "A10",
                                         },
                                     ),
                                 ),
@@ -453,7 +452,7 @@
                                                     19,
                                                     17,
                                                 ),
-                                                name: "foo",
+                                                value: "foo",
                                             },
                                         ),
                                         value: Identifier(
@@ -463,7 +462,7 @@
                                                         19,
                                                         22,
                                                     ),
-                                                    name: "bar",
+                                                    value: "bar",
                                                 },
                                             ),
                                         ),
@@ -475,403 +474,409 @@
                     ],
                 },
             ],
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            22,
-                            12,
-                        ),
-                        end: (
-                            25,
-                            8,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                22,
-                                21,
-                            ),
-                            name: "__construct",
-                        },
-                        attributes: [
-                            AttributeGroup {
-                                start: (
-                                    21,
-                                    5,
-                                ),
-                                end: (
-                                    21,
-                                    10,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            21,
-                                            7,
-                                        ),
-                                        end: (
-                                            21,
-                                            10,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        21,
-                                                        7,
-                                                    ),
-                                                    name: "A11",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ],
-                        parameters: MethodParameterList {
+            body: ClassBody {
+                start: (
+                    20,
+                    9,
+                ),
+                end: (
+                    34,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 22,
-                                32,
+                                12,
                             ),
                             end: (
                                 25,
-                                7,
+                                8,
                             ),
-                            members: [
-                                MethodParameter {
+                            name: SimpleIdentifier {
+                                span: (
+                                    22,
+                                    21,
+                                ),
+                                value: "__construct",
+                            },
+                            attributes: [
+                                AttributeGroup {
                                     start: (
-                                        23,
-                                        9,
+                                        21,
+                                        5,
                                     ),
                                     end: (
-                                        24,
-                                        34,
+                                        21,
+                                        10,
                                     ),
-                                    name: SimpleVariable {
-                                        span: (
-                                            24,
-                                            32,
-                                        ),
-                                        name: "s",
-                                    },
-                                    attributes: [
-                                        AttributeGroup {
+                                    members: [
+                                        Attribute {
                                             start: (
-                                                23,
-                                                9,
+                                                21,
+                                                7,
                                             ),
                                             end: (
-                                                23,
-                                                14,
+                                                21,
+                                                10,
                                             ),
-                                            members: [
-                                                Attribute {
-                                                    start: (
-                                                        23,
-                                                        11,
-                                                    ),
-                                                    end: (
-                                                        23,
-                                                        14,
-                                                    ),
-                                                    expression: Identifier(
-                                                        SimpleIdentifier(
-                                                            SimpleIdentifier {
-                                                                span: (
-                                                                    23,
-                                                                    11,
-                                                                ),
-                                                                name: "A12",
-                                                            },
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            21,
+                                                            7,
                                                         ),
-                                                    ),
-                                                },
-                                            ],
+                                                        value: "A11",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ],
-                                    type: Some(
-                                        String,
-                                    ),
-                                    variadic: false,
-                                    default: None,
-                                    modifiers: PromotedPropertyModifierGroup {
-                                        modifiers: [
-                                            Public {
+                                },
+                            ],
+                            parameters: MethodParameterList {
+                                start: (
+                                    22,
+                                    32,
+                                ),
+                                end: (
+                                    25,
+                                    7,
+                                ),
+                                members: [
+                                    MethodParameter {
+                                        start: (
+                                            23,
+                                            9,
+                                        ),
+                                        end: (
+                                            24,
+                                            34,
+                                        ),
+                                        name: SimpleVariable {
+                                            span: (
+                                                24,
+                                                32,
+                                            ),
+                                            name: "s",
+                                        },
+                                        attributes: [
+                                            AttributeGroup {
                                                 start: (
-                                                    24,
+                                                    23,
                                                     9,
                                                 ),
                                                 end: (
-                                                    24,
-                                                    16,
+                                                    23,
+                                                    14,
                                                 ),
-                                            },
-                                            Readonly {
-                                                start: (
-                                                    24,
-                                                    16,
-                                                ),
-                                                end: (
-                                                    24,
-                                                    25,
-                                                ),
+                                                members: [
+                                                    Attribute {
+                                                        start: (
+                                                            23,
+                                                            11,
+                                                        ),
+                                                        end: (
+                                                            23,
+                                                            14,
+                                                        ),
+                                                        expression: Identifier(
+                                                            SimpleIdentifier(
+                                                                SimpleIdentifier {
+                                                                    span: (
+                                                                        23,
+                                                                        11,
+                                                                    ),
+                                                                    value: "A12",
+                                                                },
+                                                            ),
+                                                        ),
+                                                    },
+                                                ],
                                             },
                                         ],
-                                    },
-                                    by_ref: false,
-                                },
-                            ],
-                        },
-                        body: Some(
-                            [],
-                        ),
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        22,
-                                        5,
-                                    ),
-                                    end: (
-                                        22,
-                                        12,
-                                    ),
-                                },
-                            ],
-                        },
-                        return_type: None,
-                        by_ref: false,
-                    },
-                ),
-                Method(
-                    Method {
-                        start: (
-                            28,
-                            12,
-                        ),
-                        end: (
-                            30,
-                            8,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                28,
-                                21,
-                            ),
-                            name: "m",
-                        },
-                        attributes: [
-                            AttributeGroup {
-                                start: (
-                                    27,
-                                    5,
-                                ),
-                                end: (
-                                    27,
-                                    10,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            27,
-                                            7,
+                                        type: Some(
+                                            String,
                                         ),
-                                        end: (
-                                            27,
-                                            10,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        27,
-                                                        7,
-                                                    ),
-                                                    name: "A13",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ],
-                        parameters: MethodParameterList {
-                            start: (
-                                28,
-                                22,
-                            ),
-                            end: (
-                                30,
-                                7,
-                            ),
-                            members: [
-                                MethodParameter {
-                                    start: (
-                                        29,
-                                        9,
-                                    ),
-                                    end: (
-                                        29,
-                                        22,
-                                    ),
-                                    name: SimpleVariable {
-                                        span: (
-                                            29,
-                                            16,
-                                        ),
-                                        name: "param",
-                                    },
-                                    attributes: [
-                                        AttributeGroup {
-                                            start: (
-                                                29,
-                                                9,
-                                            ),
-                                            end: (
-                                                29,
-                                                14,
-                                            ),
-                                            members: [
-                                                Attribute {
+                                        variadic: false,
+                                        default: None,
+                                        modifiers: PromotedPropertyModifierGroup {
+                                            modifiers: [
+                                                Public {
                                                     start: (
-                                                        29,
-                                                        11,
+                                                        24,
+                                                        9,
                                                     ),
                                                     end: (
-                                                        29,
-                                                        14,
+                                                        24,
+                                                        16,
                                                     ),
-                                                    expression: Identifier(
-                                                        SimpleIdentifier(
-                                                            SimpleIdentifier {
-                                                                span: (
-                                                                    29,
-                                                                    11,
-                                                                ),
-                                                                name: "A14",
-                                                            },
-                                                        ),
+                                                },
+                                                Readonly {
+                                                    start: (
+                                                        24,
+                                                        16,
+                                                    ),
+                                                    end: (
+                                                        24,
+                                                        25,
                                                     ),
                                                 },
                                             ],
                                         },
-                                    ],
-                                    type: None,
-                                    variadic: false,
-                                    default: None,
-                                    modifiers: PromotedPropertyModifierGroup {
-                                        modifiers: [],
+                                        by_ref: false,
                                     },
-                                    by_ref: false,
-                                },
-                            ],
-                        },
-                        body: Some(
-                            [],
-                        ),
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        28,
-                                        5,
-                                    ),
-                                    end: (
-                                        28,
-                                        12,
-                                    ),
-                                },
-                            ],
-                        },
-                        return_type: None,
-                        by_ref: false,
-                    },
-                ),
-                Property(
-                    Property {
-                        attributes: [
-                            AttributeGroup {
-                                start: (
-                                    32,
-                                    5,
-                                ),
-                                end: (
-                                    32,
-                                    10,
-                                ),
-                                members: [
-                                    Attribute {
+                                ],
+                            },
+                            body: Some(
+                                [],
+                            ),
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
                                         start: (
-                                            32,
-                                            7,
+                                            22,
+                                            5,
                                         ),
                                         end: (
-                                            32,
-                                            10,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        32,
-                                                        7,
-                                                    ),
-                                                    name: "A15",
-                                                },
-                                            ),
+                                            22,
+                                            12,
                                         ),
                                     },
                                 ],
                             },
-                        ],
-                        type: None,
-                        modifiers: PropertyModifierGroup {
-                            modifiers: [
-                                Public {
+                            return_type: None,
+                            by_ref: false,
+                        },
+                    ),
+                    Method(
+                        Method {
+                            start: (
+                                28,
+                                12,
+                            ),
+                            end: (
+                                30,
+                                8,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    28,
+                                    21,
+                                ),
+                                value: "m",
+                            },
+                            attributes: [
+                                AttributeGroup {
                                     start: (
-                                        33,
+                                        27,
                                         5,
                                     ),
                                     end: (
-                                        33,
-                                        12,
+                                        27,
+                                        10,
                                     ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                27,
+                                                7,
+                                            ),
+                                            end: (
+                                                27,
+                                                10,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            27,
+                                                            7,
+                                                        ),
+                                                        value: "A13",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ],
+                            parameters: MethodParameterList {
+                                start: (
+                                    28,
+                                    22,
+                                ),
+                                end: (
+                                    30,
+                                    7,
+                                ),
+                                members: [
+                                    MethodParameter {
+                                        start: (
+                                            29,
+                                            9,
+                                        ),
+                                        end: (
+                                            29,
+                                            22,
+                                        ),
+                                        name: SimpleVariable {
+                                            span: (
+                                                29,
+                                                16,
+                                            ),
+                                            name: "param",
+                                        },
+                                        attributes: [
+                                            AttributeGroup {
+                                                start: (
+                                                    29,
+                                                    9,
+                                                ),
+                                                end: (
+                                                    29,
+                                                    14,
+                                                ),
+                                                members: [
+                                                    Attribute {
+                                                        start: (
+                                                            29,
+                                                            11,
+                                                        ),
+                                                        end: (
+                                                            29,
+                                                            14,
+                                                        ),
+                                                        expression: Identifier(
+                                                            SimpleIdentifier(
+                                                                SimpleIdentifier {
+                                                                    span: (
+                                                                        29,
+                                                                        11,
+                                                                    ),
+                                                                    value: "A14",
+                                                                },
+                                                            ),
+                                                        ),
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                        type: None,
+                                        variadic: false,
+                                        default: None,
+                                        modifiers: PromotedPropertyModifierGroup {
+                                            modifiers: [],
+                                        },
+                                        by_ref: false,
+                                    },
+                                ],
+                            },
+                            body: Some(
+                                [],
+                            ),
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            28,
+                                            5,
+                                        ),
+                                        end: (
+                                            28,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: None,
+                            by_ref: false,
+                        },
+                    ),
+                    Property(
+                        Property {
+                            attributes: [
+                                AttributeGroup {
+                                    start: (
+                                        32,
+                                        5,
+                                    ),
+                                    end: (
+                                        32,
+                                        10,
+                                    ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                32,
+                                                7,
+                                            ),
+                                            end: (
+                                                32,
+                                                10,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            32,
+                                                            7,
+                                                        ),
+                                                        value: "A15",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ],
+                            type: None,
+                            modifiers: PropertyModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            33,
+                                            5,
+                                        ),
+                                        end: (
+                                            33,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            entries: [
+                                PropertyEntry {
+                                    variable: SimpleVariable {
+                                        span: (
+                                            33,
+                                            12,
+                                        ),
+                                        name: "prop",
+                                    },
+                                    value: None,
                                 },
                             ],
                         },
-                        entries: [
-                            PropertyEntry {
-                                variable: SimpleVariable {
-                                    span: (
-                                        33,
-                                        12,
-                                    ),
-                                    name: "prop",
-                                },
-                                value: None,
-                            },
-                        ],
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
     Trait(
         Trait {
-            start: (
+            span: (
                 37,
                 1,
-            ),
-            end: (
-                37,
-                10,
             ),
             name: SimpleIdentifier {
                 span: (
                     37,
                     7,
                 ),
-                name: "F",
+                value: "F",
             },
             attributes: [
                 AttributeGroup {
@@ -900,7 +905,7 @@
                                             36,
                                             3,
                                         ),
-                                        name: "A16",
+                                        value: "A16",
                                     },
                                 ),
                             ),
@@ -908,25 +913,31 @@
                     ],
                 },
             ],
-            members: [],
+            body: TraitBody {
+                start: (
+                    37,
+                    9,
+                ),
+                end: (
+                    37,
+                    10,
+                ),
+                members: [],
+            },
         },
     ),
     UnitEnum(
         UnitEnum {
-            start: (
+            span: (
                 40,
                 1,
-            ),
-            end: (
-                40,
-                9,
             ),
             name: SimpleIdentifier {
                 span: (
                     40,
                     6,
                 ),
-                name: "P",
+                value: "P",
             },
             attributes: [
                 AttributeGroup {
@@ -955,7 +966,7 @@
                                             39,
                                             3,
                                         ),
-                                        name: "A17",
+                                        value: "A17",
                                     },
                                 ),
                             ),
@@ -964,25 +975,31 @@
                 },
             ],
             implements: [],
-            members: [],
+            body: UnitEnumBody {
+                start: (
+                    40,
+                    8,
+                ),
+                end: (
+                    40,
+                    9,
+                ),
+                members: [],
+            },
         },
     ),
     BackedEnum(
         BackedEnum {
-            start: (
+            span: (
                 43,
                 1,
-            ),
-            end: (
-                43,
-                14,
             ),
             name: SimpleIdentifier {
                 span: (
                     43,
                     6,
                 ),
-                name: "B",
+                value: "B",
             },
             attributes: [
                 AttributeGroup {
@@ -1011,7 +1028,7 @@
                                             42,
                                             3,
                                         ),
-                                        name: "A18",
+                                        value: "A18",
                                     },
                                 ),
                             ),
@@ -1026,18 +1043,24 @@
                     9,
                 ),
             ),
-            members: [],
+            body: BackedEnumBody {
+                start: (
+                    43,
+                    13,
+                ),
+                end: (
+                    43,
+                    14,
+                ),
+                members: [],
+            },
         },
     ),
     Interface(
         Interface {
-            start: (
+            span: (
                 46,
                 1,
-            ),
-            end: (
-                46,
-                14,
             ),
             attributes: [
                 AttributeGroup {
@@ -1066,7 +1089,7 @@
                                             45,
                                             3,
                                         ),
-                                        name: "A19",
+                                        value: "A19",
                                     },
                                 ),
                             ),
@@ -1079,28 +1102,34 @@
                     46,
                     11,
                 ),
-                name: "I",
+                value: "I",
             },
             extends: None,
-            members: [],
+            body: InterfaceBody {
+                start: (
+                    46,
+                    13,
+                ),
+                end: (
+                    46,
+                    14,
+                ),
+                members: [],
+            },
         },
     ),
     Trait(
         Trait {
-            start: (
+            span: (
                 49,
                 1,
-            ),
-            end: (
-                49,
-                10,
             ),
             name: SimpleIdentifier {
                 span: (
                     49,
                     7,
                 ),
-                name: "T",
+                value: "T",
             },
             attributes: [
                 AttributeGroup {
@@ -1129,7 +1158,7 @@
                                             48,
                                             3,
                                         ),
-                                        name: "A20",
+                                        value: "A20",
                                     },
                                 ),
                             ),
@@ -1137,11 +1166,21 @@
                     ],
                 },
             ],
-            members: [],
+            body: TraitBody {
+                start: (
+                    49,
+                    9,
+                ),
+                end: (
+                    49,
+                    10,
+                ),
+                members: [],
+            },
         },
     ),
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -1195,7 +1234,7 @@
                                                         51,
                                                         8,
                                                     ),
-                                                    name: "A21",
+                                                    value: "A21",
                                                 },
                                             ),
                                         ),
@@ -1223,9 +1262,13 @@
                 ),
             },
         ),
+        end: (
+            51,
+            26,
+        ),
     },
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -1279,7 +1322,7 @@
                                                         52,
                                                         8,
                                                     ),
-                                                    name: "A22",
+                                                    value: "A22",
                                                 },
                                             ),
                                         ),
@@ -1312,9 +1355,13 @@
                 ),
             },
         ),
+        end: (
+            52,
+            22,
+        ),
     },
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -1368,7 +1415,7 @@
                                                         53,
                                                         8,
                                                     ),
-                                                    name: "A23",
+                                                    value: "A23",
                                                 },
                                             ),
                                         ),
@@ -1396,9 +1443,13 @@
                 ),
             },
         ),
+        end: (
+            53,
+            33,
+        ),
     },
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -1452,7 +1503,7 @@
                                                         54,
                                                         8,
                                                     ),
-                                                    name: "A24",
+                                                    value: "A24",
                                                 },
                                             ),
                                         ),
@@ -1485,9 +1536,13 @@
                 ),
             },
         ),
+        end: (
+            54,
+            29,
+        ),
     },
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -1507,13 +1562,9 @@
                 right: New {
                     target: AnonymousClass(
                         AnonymousClass {
-                            start: (
+                            span: (
                                 55,
                                 17,
-                            ),
-                            end: (
-                                58,
-                                1,
                             ),
                             extends: None,
                             implements: None,
@@ -1544,7 +1595,7 @@
                                                             55,
                                                             12,
                                                         ),
-                                                        name: "A25",
+                                                        value: "A25",
                                                     },
                                                 ),
                                             ),
@@ -1552,60 +1603,70 @@
                                     ],
                                 },
                             ],
-                            members: [
-                                VariableProperty(
-                                    VariableProperty {
-                                        attributes: [
-                                            AttributeGroup {
-                                                start: (
-                                                    56,
-                                                    5,
-                                                ),
-                                                end: (
-                                                    56,
-                                                    10,
-                                                ),
-                                                members: [
-                                                    Attribute {
-                                                        start: (
-                                                            56,
-                                                            7,
-                                                        ),
-                                                        end: (
-                                                            56,
-                                                            10,
-                                                        ),
-                                                        expression: Identifier(
-                                                            SimpleIdentifier(
-                                                                SimpleIdentifier {
-                                                                    span: (
-                                                                        56,
-                                                                        7,
-                                                                    ),
-                                                                    name: "A26",
-                                                                },
-                                                            ),
-                                                        ),
-                                                    },
-                                                ],
-                                            },
-                                        ],
-                                        type: None,
-                                        entries: [
-                                            VariablePropertyEntry {
-                                                variable: SimpleVariable {
-                                                    span: (
-                                                        57,
-                                                        9,
-                                                    ),
-                                                    name: "s",
-                                                },
-                                                value: None,
-                                            },
-                                        ],
-                                    },
+                            body: ClassBody {
+                                start: (
+                                    55,
+                                    23,
                                 ),
-                            ],
+                                end: (
+                                    58,
+                                    1,
+                                ),
+                                members: [
+                                    VariableProperty(
+                                        VariableProperty {
+                                            attributes: [
+                                                AttributeGroup {
+                                                    start: (
+                                                        56,
+                                                        5,
+                                                    ),
+                                                    end: (
+                                                        56,
+                                                        10,
+                                                    ),
+                                                    members: [
+                                                        Attribute {
+                                                            start: (
+                                                                56,
+                                                                7,
+                                                            ),
+                                                            end: (
+                                                                56,
+                                                                10,
+                                                            ),
+                                                            expression: Identifier(
+                                                                SimpleIdentifier(
+                                                                    SimpleIdentifier {
+                                                                        span: (
+                                                                            56,
+                                                                            7,
+                                                                        ),
+                                                                        value: "A26",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        },
+                                                    ],
+                                                },
+                                            ],
+                                            type: None,
+                                            entries: [
+                                                VariablePropertyEntry {
+                                                    variable: SimpleVariable {
+                                                        span: (
+                                                            57,
+                                                            9,
+                                                        ),
+                                                        name: "s",
+                                                    },
+                                                    value: None,
+                                                },
+                                            ],
+                                        },
+                                    ),
+                                ],
+                            },
                         },
                     ),
                     span: (
@@ -1615,6 +1676,10 @@
                     args: [],
                 },
             },
+        ),
+        end: (
+            58,
+            2,
         ),
     },
 ]

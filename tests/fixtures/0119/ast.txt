@@ -1,12 +1,8 @@
 [
     BackedEnum(
         BackedEnum {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                6,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,7 +10,7 @@
                     3,
                     6,
                 ),
-                name: "Foo",
+                value: "Foo",
             },
             attributes: [],
             implements: [],
@@ -24,62 +20,72 @@
                     11,
                 ),
             ),
-            members: [
-                Case(
-                    BackedEnumCase {
-                        start: (
-                            4,
-                            5,
-                        ),
-                        end: (
-                            4,
-                            19,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                4,
-                                10,
-                            ),
-                            name: "Bar",
-                        },
-                        attributes: [],
-                        value: LiteralString {
-                            span: (
-                                4,
-                                16,
-                            ),
-                            value: "3",
-                        },
-                    },
+            body: BackedEnumBody {
+                start: (
+                    3,
+                    18,
                 ),
-                Case(
-                    BackedEnumCase {
-                        start: (
-                            5,
-                            5,
-                        ),
-                        end: (
-                            5,
-                            19,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                5,
-                                10,
-                            ),
-                            name: "Baz",
-                        },
-                        attributes: [],
-                        value: LiteralString {
-                            span: (
-                                5,
-                                16,
-                            ),
-                            value: "g",
-                        },
-                    },
+                end: (
+                    6,
+                    1,
                 ),
-            ],
+                members: [
+                    Case(
+                        BackedEnumCase {
+                            start: (
+                                4,
+                                5,
+                            ),
+                            end: (
+                                4,
+                                19,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    4,
+                                    10,
+                                ),
+                                value: "Bar",
+                            },
+                            attributes: [],
+                            value: LiteralString {
+                                span: (
+                                    4,
+                                    16,
+                                ),
+                                value: "3",
+                            },
+                        },
+                    ),
+                    Case(
+                        BackedEnumCase {
+                            start: (
+                                5,
+                                5,
+                            ),
+                            end: (
+                                5,
+                                19,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    5,
+                                    10,
+                                ),
+                                value: "Baz",
+                            },
+                            attributes: [],
+                            value: LiteralString {
+                                span: (
+                                    5,
+                                    16,
+                                ),
+                                value: "g",
+                            },
+                        },
+                    ),
+                ],
+            },
         },
     ),
 ]

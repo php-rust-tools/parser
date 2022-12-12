@@ -1,25 +1,34 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 3,
                 1,
-            ),
-            end: (
-                3,
-                12,
             ),
             name: SimpleIdentifier {
                 span: (
                     3,
                     7,
                 ),
-                name: "bar",
+                value: "bar",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [],
+            body: ClassBody {
+                start: (
+                    3,
+                    11,
+                ),
+                end: (
+                    3,
+                    12,
+                ),
+                members: [],
+            },
         },
     ),
     Noop(
@@ -29,7 +38,7 @@
         ),
     ),
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -49,13 +58,9 @@
                 right: New {
                     target: AnonymousClass(
                         AnonymousClass {
-                            start: (
+                            span: (
                                 5,
                                 10,
-                            ),
-                            end: (
-                                9,
-                                1,
                             ),
                             extends: Some(
                                 ClassExtends {
@@ -68,89 +73,99 @@
                                             5,
                                             24,
                                         ),
-                                        name: "bar",
+                                        value: "bar",
                                     },
                                 },
                             ),
                             implements: None,
                             attributes: [],
-                            members: [
-                                Method(
-                                    Method {
-                                        start: (
-                                            6,
-                                            12,
-                                        ),
-                                        end: (
-                                            8,
-                                            5,
-                                        ),
-                                        name: SimpleIdentifier {
-                                            span: (
-                                                6,
-                                                21,
-                                            ),
-                                            name: "bar",
-                                        },
-                                        attributes: [],
-                                        parameters: MethodParameterList {
+                            body: ClassBody {
+                                start: (
+                                    5,
+                                    28,
+                                ),
+                                end: (
+                                    9,
+                                    1,
+                                ),
+                                members: [
+                                    Method(
+                                        Method {
                                             start: (
                                                 6,
-                                                24,
+                                                12,
                                             ),
                                             end: (
-                                                6,
-                                                26,
+                                                8,
+                                                5,
                                             ),
-                                            members: [],
-                                        },
-                                        body: Some(
-                                            [
-                                                Return {
-                                                    value: Some(
-                                                        New {
-                                                            target: Identifier(
-                                                                SimpleIdentifier(
-                                                                    SimpleIdentifier {
-                                                                        span: (
-                                                                            7,
-                                                                            20,
-                                                                        ),
-                                                                        name: "bar",
-                                                                    },
+                                            name: SimpleIdentifier {
+                                                span: (
+                                                    6,
+                                                    21,
+                                                ),
+                                                value: "bar",
+                                            },
+                                            attributes: [],
+                                            parameters: MethodParameterList {
+                                                start: (
+                                                    6,
+                                                    24,
+                                                ),
+                                                end: (
+                                                    6,
+                                                    26,
+                                                ),
+                                                members: [],
+                                            },
+                                            body: Some(
+                                                [
+                                                    Return {
+                                                        value: Some(
+                                                            New {
+                                                                target: Identifier(
+                                                                    SimpleIdentifier(
+                                                                        SimpleIdentifier {
+                                                                            span: (
+                                                                                7,
+                                                                                20,
+                                                                            ),
+                                                                            value: "bar",
+                                                                        },
+                                                                    ),
                                                                 ),
-                                                            ),
-                                                            span: (
-                                                                7,
-                                                                16,
-                                                            ),
-                                                            args: [],
-                                                        },
-                                                    ),
-                                                },
-                                            ],
-                                        ),
-                                        modifiers: MethodModifierGroup {
-                                            modifiers: [
-                                                Public {
-                                                    start: (
-                                                        6,
-                                                        5,
-                                                    ),
-                                                    end: (
-                                                        6,
-                                                        12,
-                                                    ),
-                                                },
-                                            ],
+                                                                span: (
+                                                                    7,
+                                                                    16,
+                                                                ),
+                                                                args: [],
+                                                            },
+                                                        ),
+                                                    },
+                                                ],
+                                            ),
+                                            modifiers: MethodModifierGroup {
+                                                modifiers: [
+                                                    Public {
+                                                        start: (
+                                                            6,
+                                                            5,
+                                                        ),
+                                                        end: (
+                                                            6,
+                                                            12,
+                                                        ),
+                                                    },
+                                                ],
+                                            },
+                                            return_type: Some(
+                                                ParentReference,
+                                            ),
+                                            by_ref: false,
                                         },
-                                        return_type: Some(
-                                            ParentReference,
-                                        ),
-                                        by_ref: false,
-                                    },
-                                ),
-                            ],
+                                    ),
+                                ],
+                            },
                         },
                     ),
                     span: (
@@ -160,6 +175,10 @@
                     args: [],
                 },
             },
+        ),
+        end: (
+            9,
+            2,
         ),
     },
 ]

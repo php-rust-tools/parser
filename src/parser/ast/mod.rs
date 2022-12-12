@@ -10,6 +10,7 @@ use crate::parser::ast::classes::AnonymousClass;
 use crate::parser::ast::classes::Class;
 use crate::parser::ast::comments::Comment;
 use crate::parser::ast::constant::Constant;
+use crate::parser::ast::declares::Declare;
 use crate::parser::ast::enums::BackedEnum;
 use crate::parser::ast::enums::UnitEnum;
 use crate::parser::ast::functions::ArrowFunction;
@@ -18,6 +19,7 @@ use crate::parser::ast::functions::Function;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
+use crate::parser::ast::namespaces::Namespace;
 use crate::parser::ast::operators::ArithmeticOperation;
 use crate::parser::ast::operators::AssignmentOperation;
 use crate::parser::ast::operators::BitwiseOperation;
@@ -31,11 +33,13 @@ pub mod attributes;
 pub mod classes;
 pub mod comments;
 pub mod constant;
+pub mod declares;
 pub mod enums;
 pub mod functions;
 pub mod identifiers;
 pub mod interfaces;
 pub mod modifiers;
+pub mod namespaces;
 pub mod operators;
 pub mod properties;
 pub mod traits;
@@ -46,7 +50,7 @@ pub type Block = Vec<Statement>;
 pub type Program = Block;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Type {
     Identifier(SimpleIdentifier),
     // TODO: add `start` and `end` for all types.
@@ -151,7 +155,7 @@ impl Display for Type {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type")]
 pub enum UseKind {
     Normal,
     Function,
@@ -166,7 +170,7 @@ pub struct StaticVar {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type")]
 pub enum IncludeKind {
     Include,
     IncludeOnce,
@@ -187,7 +191,7 @@ impl From<&TokenKind> for IncludeKind {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Statement {
     InlineHtml(ByteString),
     Goto {
@@ -255,16 +259,10 @@ pub enum Statement {
         values: Vec<Expression>,
     },
     Expression {
-        expr: Expression,
+        expression: Expression,
+        end: Span,
     },
-    Namespace {
-        name: SimpleIdentifier,
-        body: Block,
-    },
-    BracedNamespace {
-        name: Option<SimpleIdentifier>,
-        body: Block,
-    },
+    Namespace(Namespace),
     Use {
         uses: Vec<Use>,
         kind: UseKind,
@@ -285,23 +283,13 @@ pub enum Statement {
         span: Span,
         variables: Vec<Variable>,
     },
-    Declare {
-        declares: Vec<DeclareItem>,
-        body: Block,
-    },
+    Declare(Declare),
     Noop(Span),
-}
-
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub struct DeclareItem {
-    pub key: SimpleIdentifier,
-    pub value: Expression,
 }
 
 // See https://www.php.net/manual/en/language.types.type-juggling.php#language.types.typecasting for more info.
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type")]
 pub enum CastKind {
     Int,
     Bool,
@@ -335,13 +323,6 @@ impl From<&TokenKind> for CastKind {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
-pub enum BackedEnumType {
-    String,
-    Int,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
 pub struct Case {
     pub condition: Option<Expression>,
     pub body: Block,
@@ -355,7 +336,7 @@ pub struct Use {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Expression {
     Die {
         value: Option<Box<Expression>>,
@@ -564,7 +545,7 @@ pub struct MatchArm {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type")]
 pub enum MagicConst {
     Directory,
     File,
@@ -577,10 +558,10 @@ pub enum MagicConst {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum StringPart {
-    Const(ByteString),
-    Expr(Box<Expression>),
+    Literal(ByteString),
+    Expression(Box<Expression>),
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]

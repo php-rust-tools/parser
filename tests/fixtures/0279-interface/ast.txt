@@ -1,12 +1,8 @@
 [
     Interface(
         Interface {
-            start: (
+            span: (
                 5,
-                1,
-            ),
-            end: (
-                26,
                 1,
             ),
             attributes: [
@@ -36,7 +32,7 @@
                                             3,
                                             3,
                                         ),
-                                        name: "A",
+                                        value: "A",
                                     },
                                 ),
                             ),
@@ -57,7 +53,7 @@
                                             3,
                                             6,
                                         ),
-                                        name: "B",
+                                        value: "B",
                                     },
                                 ),
                             ),
@@ -90,7 +86,7 @@
                                             4,
                                             3,
                                         ),
-                                        name: "C",
+                                        value: "C",
                                     },
                                 ),
                             ),
@@ -111,7 +107,7 @@
                                             4,
                                             6,
                                         ),
-                                        name: "D",
+                                        value: "D",
                                     },
                                 ),
                             ),
@@ -124,7 +120,7 @@
                     5,
                     11,
                 ),
-                name: "A",
+                value: "A",
             },
             extends: Some(
                 InterfaceExtends {
@@ -138,628 +134,638 @@
                                 5,
                                 21,
                             ),
-                            name: "B",
+                            value: "B",
                         },
                         SimpleIdentifier {
                             span: (
                                 5,
                                 24,
                             ),
-                            name: "C",
+                            value: "C",
                         },
                     ],
                 },
             ),
-            members: [
-                Constant(
-                    ClassishConstant {
-                        start: (
-                            7,
-                            5,
-                        ),
-                        end: (
-                            7,
-                            18,
-                        ),
-                        attributes: [
-                            AttributeGroup {
-                                start: (
-                                    6,
-                                    5,
-                                ),
-                                end: (
-                                    6,
-                                    8,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            6,
-                                            7,
-                                        ),
-                                        end: (
-                                            6,
-                                            8,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        6,
-                                                        7,
-                                                    ),
-                                                    name: "R",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ],
-                        modifiers: ConstantModifierGroup {
-                            modifiers: [],
-                        },
-                        entries: [
-                            ConstantEntry {
-                                name: SimpleIdentifier {
-                                    span: (
-                                        7,
-                                        11,
-                                    ),
-                                    name: "F",
-                                },
-                                value: LiteralInteger {
-                                    span: (
-                                        7,
-                                        15,
-                                    ),
-                                    value: "344",
-                                },
-                            },
-                        ],
-                    },
+            body: InterfaceBody {
+                start: (
+                    5,
+                    26,
                 ),
-                Constant(
-                    ClassishConstant {
-                        start: (
-                            10,
-                            12,
-                        ),
-                        end: (
-                            10,
-                            25,
-                        ),
-                        attributes: [
-                            AttributeGroup {
-                                start: (
-                                    9,
-                                    5,
-                                ),
-                                end: (
-                                    9,
-                                    8,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            9,
-                                            7,
-                                        ),
-                                        end: (
-                                            9,
-                                            8,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        9,
-                                                        7,
-                                                    ),
-                                                    name: "R",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ],
-                        modifiers: ConstantModifierGroup {
-                            modifiers: [
-                                Public {
+                end: (
+                    26,
+                    1,
+                ),
+                members: [
+                    Constant(
+                        ClassishConstant {
+                            start: (
+                                7,
+                                5,
+                            ),
+                            end: (
+                                7,
+                                18,
+                            ),
+                            attributes: [
+                                AttributeGroup {
                                     start: (
-                                        10,
+                                        6,
                                         5,
                                     ),
                                     end: (
-                                        10,
+                                        6,
+                                        8,
+                                    ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                6,
+                                                7,
+                                            ),
+                                            end: (
+                                                6,
+                                                8,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            6,
+                                                            7,
+                                                        ),
+                                                        value: "R",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: (
+                                            7,
+                                            11,
+                                        ),
+                                        value: "F",
+                                    },
+                                    value: LiteralInteger {
+                                        span: (
+                                            7,
+                                            15,
+                                        ),
+                                        value: "344",
+                                    },
+                                },
+                            ],
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            start: (
+                                10,
+                                12,
+                            ),
+                            end: (
+                                10,
+                                25,
+                            ),
+                            attributes: [
+                                AttributeGroup {
+                                    start: (
+                                        9,
+                                        5,
+                                    ),
+                                    end: (
+                                        9,
+                                        8,
+                                    ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                9,
+                                                7,
+                                            ),
+                                            end: (
+                                                9,
+                                                8,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            9,
+                                                            7,
+                                                        ),
+                                                        value: "R",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            10,
+                                            5,
+                                        ),
+                                        end: (
+                                            10,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: (
+                                            10,
+                                            18,
+                                        ),
+                                        value: "O",
+                                    },
+                                    value: LiteralInteger {
+                                        span: (
+                                            10,
+                                            22,
+                                        ),
+                                        value: "344",
+                                    },
+                                },
+                            ],
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            start: (
+                                14,
+                                18,
+                            ),
+                            end: (
+                                14,
+                                40,
+                            ),
+                            attributes: [
+                                AttributeGroup {
+                                    start: (
                                         12,
-                                    ),
-                                },
-                            ],
-                        },
-                        entries: [
-                            ConstantEntry {
-                                name: SimpleIdentifier {
-                                    span: (
-                                        10,
-                                        18,
-                                    ),
-                                    name: "O",
-                                },
-                                value: LiteralInteger {
-                                    span: (
-                                        10,
-                                        22,
-                                    ),
-                                    value: "344",
-                                },
-                            },
-                        ],
-                    },
-                ),
-                Constant(
-                    ClassishConstant {
-                        start: (
-                            14,
-                            18,
-                        ),
-                        end: (
-                            14,
-                            40,
-                        ),
-                        attributes: [
-                            AttributeGroup {
-                                start: (
-                                    12,
-                                    5,
-                                ),
-                                end: (
-                                    12,
-                                    8,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            12,
-                                            7,
-                                        ),
-                                        end: (
-                                            12,
-                                            8,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        12,
-                                                        7,
-                                                    ),
-                                                    name: "R",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ],
-                            },
-                            AttributeGroup {
-                                start: (
-                                    13,
-                                    5,
-                                ),
-                                end: (
-                                    13,
-                                    8,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            13,
-                                            7,
-                                        ),
-                                        end: (
-                                            13,
-                                            8,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        13,
-                                                        7,
-                                                    ),
-                                                    name: "P",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ],
-                        modifiers: ConstantModifierGroup {
-                            modifiers: [
-                                Final {
-                                    start: (
-                                        14,
                                         5,
                                     ),
                                     end: (
-                                        14,
-                                        11,
+                                        12,
+                                        8,
                                     ),
-                                },
-                                Public {
-                                    start: (
-                                        14,
-                                        11,
-                                    ),
-                                    end: (
-                                        14,
-                                        18,
-                                    ),
-                                },
-                            ],
-                        },
-                        entries: [
-                            ConstantEntry {
-                                name: SimpleIdentifier {
-                                    span: (
-                                        14,
-                                        24,
-                                    ),
-                                    name: "R",
-                                },
-                                value: LiteralInteger {
-                                    span: (
-                                        14,
-                                        28,
-                                    ),
-                                    value: "344",
-                                },
-                            },
-                            ConstantEntry {
-                                name: SimpleIdentifier {
-                                    span: (
-                                        14,
-                                        33,
-                                    ),
-                                    name: "P",
-                                },
-                                value: LiteralInteger {
-                                    span: (
-                                        14,
-                                        37,
-                                    ),
-                                    value: "214",
-                                },
-                            },
-                        ],
-                    },
-                ),
-                Constant(
-                    ClassishConstant {
-                        start: (
-                            18,
-                            11,
-                        ),
-                        end: (
-                            18,
-                            23,
-                        ),
-                        attributes: [
-                            AttributeGroup {
-                                start: (
-                                    16,
-                                    5,
-                                ),
-                                end: (
-                                    16,
-                                    8,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            16,
-                                            7,
-                                        ),
-                                        end: (
-                                            16,
-                                            8,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        16,
-                                                        7,
-                                                    ),
-                                                    name: "R",
-                                                },
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                12,
+                                                7,
                                             ),
-                                        ),
-                                    },
-                                ],
-                            },
-                            AttributeGroup {
-                                start: (
-                                    17,
-                                    5,
-                                ),
-                                end: (
-                                    17,
-                                    8,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            17,
-                                            7,
-                                        ),
-                                        end: (
-                                            17,
-                                            8,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        17,
-                                                        7,
-                                                    ),
-                                                    name: "P",
-                                                },
+                                            end: (
+                                                12,
+                                                8,
                                             ),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ],
-                        modifiers: ConstantModifierGroup {
-                            modifiers: [
-                                Final {
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            12,
+                                                            7,
+                                                        ),
+                                                        value: "R",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                                AttributeGroup {
                                     start: (
-                                        18,
+                                        13,
                                         5,
                                     ),
                                     end: (
-                                        18,
-                                        11,
+                                        13,
+                                        8,
                                     ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                13,
+                                                7,
+                                            ),
+                                            end: (
+                                                13,
+                                                8,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            13,
+                                                            7,
+                                                        ),
+                                                        value: "P",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [
+                                    Final {
+                                        start: (
+                                            14,
+                                            5,
+                                        ),
+                                        end: (
+                                            14,
+                                            11,
+                                        ),
+                                    },
+                                    Public {
+                                        start: (
+                                            14,
+                                            11,
+                                        ),
+                                        end: (
+                                            14,
+                                            18,
+                                        ),
+                                    },
+                                ],
+                            },
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: (
+                                            14,
+                                            24,
+                                        ),
+                                        value: "R",
+                                    },
+                                    value: LiteralInteger {
+                                        span: (
+                                            14,
+                                            28,
+                                        ),
+                                        value: "344",
+                                    },
+                                },
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: (
+                                            14,
+                                            33,
+                                        ),
+                                        value: "P",
+                                    },
+                                    value: LiteralInteger {
+                                        span: (
+                                            14,
+                                            37,
+                                        ),
+                                        value: "214",
+                                    },
                                 },
                             ],
                         },
-                        entries: [
-                            ConstantEntry {
-                                name: SimpleIdentifier {
-                                    span: (
-                                        18,
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            start: (
+                                18,
+                                11,
+                            ),
+                            end: (
+                                18,
+                                23,
+                            ),
+                            attributes: [
+                                AttributeGroup {
+                                    start: (
+                                        16,
+                                        5,
+                                    ),
+                                    end: (
+                                        16,
+                                        8,
+                                    ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                16,
+                                                7,
+                                            ),
+                                            end: (
+                                                16,
+                                                8,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            16,
+                                                            7,
+                                                        ),
+                                                        value: "R",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                                AttributeGroup {
+                                    start: (
                                         17,
-                                    ),
-                                    name: "M",
-                                },
-                                value: LiteralInteger {
-                                    span: (
-                                        18,
-                                        21,
-                                    ),
-                                    value: "34",
-                                },
-                            },
-                        ],
-                    },
-                ),
-                Method(
-                    Method {
-                        start: (
-                            21,
-                            12,
-                        ),
-                        end: (
-                            21,
-                            32,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                21,
-                                21,
-                            ),
-                            name: "bar",
-                        },
-                        attributes: [
-                            AttributeGroup {
-                                start: (
-                                    20,
-                                    5,
-                                ),
-                                end: (
-                                    20,
-                                    8,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            20,
-                                            7,
-                                        ),
-                                        end: (
-                                            20,
-                                            8,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        20,
-                                                        7,
-                                                    ),
-                                                    name: "M",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ],
-                        parameters: MethodParameterList {
-                            start: (
-                                21,
-                                24,
-                            ),
-                            end: (
-                                21,
-                                26,
-                            ),
-                            members: [],
-                        },
-                        body: None,
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        21,
                                         5,
                                     ),
                                     end: (
-                                        21,
-                                        12,
+                                        17,
+                                        8,
                                     ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                17,
+                                                7,
+                                            ),
+                                            end: (
+                                                17,
+                                                8,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            17,
+                                                            7,
+                                                        ),
+                                                        value: "P",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [
+                                    Final {
+                                        start: (
+                                            18,
+                                            5,
+                                        ),
+                                        end: (
+                                            18,
+                                            11,
+                                        ),
+                                    },
+                                ],
+                            },
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: (
+                                            18,
+                                            17,
+                                        ),
+                                        value: "M",
+                                    },
+                                    value: LiteralInteger {
+                                        span: (
+                                            18,
+                                            21,
+                                        ),
+                                        value: "34",
+                                    },
                                 },
                             ],
                         },
-                        return_type: Some(
-                            Void,
-                        ),
-                        by_ref: false,
-                    },
-                ),
-                Method(
-                    Method {
-                        start: (
-                            25,
-                            19,
-                        ),
-                        end: (
-                            25,
-                            39,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                25,
-                                28,
-                            ),
-                            name: "baz",
-                        },
-                        attributes: [
-                            AttributeGroup {
-                                start: (
-                                    23,
-                                    5,
-                                ),
-                                end: (
-                                    23,
-                                    8,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            23,
-                                            7,
-                                        ),
-                                        end: (
-                                            23,
-                                            8,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        23,
-                                                        7,
-                                                    ),
-                                                    name: "Q",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ],
-                            },
-                            AttributeGroup {
-                                start: (
-                                    24,
-                                    5,
-                                ),
-                                end: (
-                                    24,
-                                    8,
-                                ),
-                                members: [
-                                    Attribute {
-                                        start: (
-                                            24,
-                                            7,
-                                        ),
-                                        end: (
-                                            24,
-                                            8,
-                                        ),
-                                        expression: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: (
-                                                        24,
-                                                        7,
-                                                    ),
-                                                    name: "S",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ],
-                            },
-                        ],
-                        parameters: MethodParameterList {
+                    ),
+                    Method(
+                        Method {
                             start: (
-                                25,
-                                31,
+                                21,
+                                12,
                             ),
                             end: (
-                                25,
-                                33,
+                                21,
+                                32,
                             ),
-                            members: [],
-                        },
-                        body: None,
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
+                            name: SimpleIdentifier {
+                                span: (
+                                    21,
+                                    21,
+                                ),
+                                value: "bar",
+                            },
+                            attributes: [
+                                AttributeGroup {
                                     start: (
-                                        25,
+                                        20,
                                         5,
                                     ),
                                     end: (
-                                        25,
-                                        12,
+                                        20,
+                                        8,
                                     ),
-                                },
-                                Static {
-                                    start: (
-                                        25,
-                                        12,
-                                    ),
-                                    end: (
-                                        25,
-                                        19,
-                                    ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                20,
+                                                7,
+                                            ),
+                                            end: (
+                                                20,
+                                                8,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            20,
+                                                            7,
+                                                        ),
+                                                        value: "M",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
                                 },
                             ],
+                            parameters: MethodParameterList {
+                                start: (
+                                    21,
+                                    24,
+                                ),
+                                end: (
+                                    21,
+                                    26,
+                                ),
+                                members: [],
+                            },
+                            body: None,
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            21,
+                                            5,
+                                        ),
+                                        end: (
+                                            21,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: Some(
+                                Void,
+                            ),
+                            by_ref: false,
                         },
-                        return_type: Some(
-                            Void,
-                        ),
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                    Method(
+                        Method {
+                            start: (
+                                25,
+                                19,
+                            ),
+                            end: (
+                                25,
+                                39,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    25,
+                                    28,
+                                ),
+                                value: "baz",
+                            },
+                            attributes: [
+                                AttributeGroup {
+                                    start: (
+                                        23,
+                                        5,
+                                    ),
+                                    end: (
+                                        23,
+                                        8,
+                                    ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                23,
+                                                7,
+                                            ),
+                                            end: (
+                                                23,
+                                                8,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            23,
+                                                            7,
+                                                        ),
+                                                        value: "Q",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                                AttributeGroup {
+                                    start: (
+                                        24,
+                                        5,
+                                    ),
+                                    end: (
+                                        24,
+                                        8,
+                                    ),
+                                    members: [
+                                        Attribute {
+                                            start: (
+                                                24,
+                                                7,
+                                            ),
+                                            end: (
+                                                24,
+                                                8,
+                                            ),
+                                            expression: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: (
+                                                            24,
+                                                            7,
+                                                        ),
+                                                        value: "S",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                },
+                            ],
+                            parameters: MethodParameterList {
+                                start: (
+                                    25,
+                                    31,
+                                ),
+                                end: (
+                                    25,
+                                    33,
+                                ),
+                                members: [],
+                            },
+                            body: None,
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            25,
+                                            5,
+                                        ),
+                                        end: (
+                                            25,
+                                            12,
+                                        ),
+                                    },
+                                    Static {
+                                        start: (
+                                            25,
+                                            12,
+                                        ),
+                                        end: (
+                                            25,
+                                            19,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: Some(
+                                Void,
+                            ),
+                            by_ref: false,
+                        },
+                    ),
+                ],
+            },
         },
     ),
 ]

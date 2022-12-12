@@ -28,6 +28,7 @@ pub struct ClassishConstant {
     pub start: Span,
     pub end: Span,
     pub attributes: Vec<AttributeGroup>,
+    #[serde(flatten)]
     pub modifiers: ConstantModifierGroup,
     pub entries: Vec<ConstantEntry>,
 }

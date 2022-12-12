@@ -13,7 +13,7 @@
         ),
         then: [
             Expression {
-                expr: Variable(
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -23,6 +23,10 @@
                             name: "A",
                         },
                     ),
+                ),
+                end: (
+                    3,
+                    11,
                 ),
             },
         ],
@@ -41,7 +45,7 @@
                 ),
                 body: [
                     Expression {
-                        expr: Variable(
+                        expression: Variable(
                             SimpleVariable(
                                 SimpleVariable {
                                     span: (
@@ -52,6 +56,10 @@
                                 },
                             ),
                         ),
+                        end: (
+                            4,
+                            15,
+                        ),
                     },
                 ],
             },
@@ -59,7 +67,7 @@
         else: Some(
             [
                 Expression {
-                    expr: Variable(
+                    expression: Variable(
                         SimpleVariable(
                             SimpleVariable {
                                 span: (
@@ -69,6 +77,10 @@
                                 name: "C",
                             },
                         ),
+                    ),
+                    end: (
+                        5,
+                        8,
                     ),
                 },
             ],
@@ -80,7 +92,7 @@
         loop: [],
         then: [
             Expression {
-                expr: Variable(
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -90,6 +102,10 @@
                             name: "foo",
                         },
                     ),
+                ),
+                end: (
+                    7,
+                    14,
                 ),
             },
         ],
@@ -121,7 +137,7 @@
         ),
         body: [
             Expression {
-                expr: Variable(
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -131,6 +147,10 @@
                             name: "AB",
                         },
                     ),
+                ),
+                end: (
+                    9,
+                    23,
                 ),
             },
         ],
@@ -149,7 +169,7 @@
         ),
         body: [
             Expression {
-                expr: Variable(
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -159,6 +179,10 @@
                             name: "A",
                         },
                     ),
+                ),
+                end: (
+                    11,
+                    14,
                 ),
             },
         ],
@@ -177,7 +201,7 @@
         ),
         body: [
             Expression {
-                expr: Variable(
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -188,31 +212,53 @@
                         },
                     ),
                 ),
+                end: (
+                    13,
+                    6,
+                ),
             },
         ],
     },
-    Declare {
-        declares: [
-            DeclareItem {
-                key: SimpleIdentifier {
-                    span: (
-                        15,
-                        10,
-                    ),
-                    name: "a",
-                },
-                value: LiteralString {
-                    span: (
-                        15,
-                        12,
-                    ),
-                    value: "b",
-                },
+    Declare(
+        Declare {
+            span: (
+                15,
+                1,
+            ),
+            entries: DeclareEntryGroup {
+                start: (
+                    15,
+                    9,
+                ),
+                end: (
+                    15,
+                    15,
+                ),
+                entries: [
+                    DeclareEntry {
+                        key: SimpleIdentifier {
+                            span: (
+                                15,
+                                10,
+                            ),
+                            value: "a",
+                        },
+                        span: (
+                            15,
+                            11,
+                        ),
+                        value: LiteralString {
+                            span: (
+                                15,
+                                12,
+                            ),
+                            value: "b",
+                        },
+                    },
+                ],
             },
-        ],
-        body: [
-            Expression {
-                expr: Variable(
+            body: Expression {
+                expression: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: (
@@ -223,7 +269,11 @@
                         },
                     ),
                 ),
+                end: (
+                    15,
+                    19,
+                ),
             },
-        ],
-    },
+        },
+    ),
 ]

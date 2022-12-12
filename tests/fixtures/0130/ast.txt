@@ -1,12 +1,8 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                7,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,63 +10,76 @@
                     3,
                     7,
                 ),
-                name: "foo",
+                value: "foo",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            4,
-                            12,
-                        ),
-                        end: (
-                            6,
-                            5,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                4,
-                                21,
-                            ),
-                            name: "foreach",
-                        },
-                        attributes: [],
-                        parameters: MethodParameterList {
+            body: ClassBody {
+                start: (
+                    3,
+                    11,
+                ),
+                end: (
+                    7,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 4,
-                                28,
+                                12,
                             ),
                             end: (
-                                4,
-                                31,
+                                6,
+                                5,
                             ),
-                            members: [],
+                            name: SimpleIdentifier {
+                                span: (
+                                    4,
+                                    21,
+                                ),
+                                value: "foreach",
+                            },
+                            attributes: [],
+                            parameters: MethodParameterList {
+                                start: (
+                                    4,
+                                    28,
+                                ),
+                                end: (
+                                    4,
+                                    31,
+                                ),
+                                members: [],
+                            },
+                            body: Some(
+                                [],
+                            ),
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            4,
+                                            5,
+                                        ),
+                                        end: (
+                                            4,
+                                            12,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: None,
+                            by_ref: false,
                         },
-                        body: Some(
-                            [],
-                        ),
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        4,
-                                        5,
-                                    ),
-                                    end: (
-                                        4,
-                                        12,
-                                    ),
-                                },
-                            ],
-                        },
-                        return_type: None,
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
 ]

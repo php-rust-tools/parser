@@ -1,478 +1,438 @@
 [
-    Declare {
-        declares: [
-            DeclareItem {
-                key: SimpleIdentifier {
-                    span: (
-                        11,
-                        9,
-                    ),
-                    name: "strict_types",
-                },
-                value: LiteralInteger {
-                    span: (
-                        11,
-                        22,
-                    ),
-                    value: "1",
-                },
-            },
-        ],
-        body: [],
-    },
-    Namespace {
-        name: SimpleIdentifier {
+    Declare(
+        Declare {
             span: (
-                13,
                 11,
+                1,
             ),
-            name: "Psl\Internal",
+            entries: DeclareEntryGroup {
+                start: (
+                    11,
+                    8,
+                ),
+                end: (
+                    11,
+                    23,
+                ),
+                entries: [
+                    DeclareEntry {
+                        key: SimpleIdentifier {
+                            span: (
+                                11,
+                                9,
+                            ),
+                            value: "strict_types",
+                        },
+                        span: (
+                            11,
+                            21,
+                        ),
+                        value: LiteralInteger {
+                            span: (
+                                11,
+                                22,
+                            ),
+                            value: "1",
+                        },
+                    },
+                ],
+            },
+            body: Noop {
+                span: (
+                    11,
+                    24,
+                ),
+            },
         },
-        body: [
-            Noop(
-                (
+    ),
+    Namespace(
+        Unbraced(
+            UnbracedNamespace {
+                start: (
+                    13,
+                    1,
+                ),
+                end: (
                     13,
                     23,
                 ),
-            ),
-            Use {
-                uses: [
-                    Use {
-                        name: SimpleIdentifier {
-                            span: (
-                                15,
-                                5,
-                            ),
-                            name: "Closure",
-                        },
-                        alias: None,
-                    },
-                ],
-                kind: Normal,
-            },
-            Use {
-                uses: [
-                    Use {
-                        name: SimpleIdentifier {
-                            span: (
-                                16,
-                                5,
-                            ),
-                            name: "Psl\Str",
-                        },
-                        alias: None,
-                    },
-                ],
-                kind: Normal,
-            },
-            Use {
-                uses: [
-                    Use {
-                        name: SimpleIdentifier {
-                            span: (
-                                18,
-                                14,
-                            ),
-                            name: "restore_error_handler",
-                        },
-                        alias: None,
-                    },
-                ],
-                kind: Function,
-            },
-            Use {
-                uses: [
-                    Use {
-                        name: SimpleIdentifier {
-                            span: (
-                                19,
-                                14,
-                            ),
-                            name: "set_error_handler",
-                        },
-                        alias: None,
-                    },
-                ],
-                kind: Function,
-            },
-            Function(
-                Function {
-                    start: (
-                        32,
-                        1,
+                name: SimpleIdentifier {
+                    span: (
+                        13,
+                        11,
                     ),
-                    end: (
-                        61,
-                        1,
-                    ),
-                    name: SimpleIdentifier {
-                        span: (
-                            32,
-                            10,
-                        ),
-                        name: "box",
+                    value: "Psl\Internal",
+                },
+                statements: [
+                    Use {
+                        uses: [
+                            Use {
+                                name: SimpleIdentifier {
+                                    span: (
+                                        15,
+                                        5,
+                                    ),
+                                    value: "Closure",
+                                },
+                                alias: None,
+                            },
+                        ],
+                        kind: Normal,
                     },
-                    attributes: [],
-                    parameters: FunctionParameterList {
-                        start: (
-                            32,
-                            13,
-                        ),
-                        end: (
-                            32,
-                            27,
-                        ),
-                        members: [
-                            FunctionParameter {
+                    Use {
+                        uses: [
+                            Use {
+                                name: SimpleIdentifier {
+                                    span: (
+                                        16,
+                                        5,
+                                    ),
+                                    value: "Psl\Str",
+                                },
+                                alias: None,
+                            },
+                        ],
+                        kind: Normal,
+                    },
+                    Use {
+                        uses: [
+                            Use {
+                                name: SimpleIdentifier {
+                                    span: (
+                                        18,
+                                        14,
+                                    ),
+                                    value: "restore_error_handler",
+                                },
+                                alias: None,
+                            },
+                        ],
+                        kind: Function,
+                    },
+                    Use {
+                        uses: [
+                            Use {
+                                name: SimpleIdentifier {
+                                    span: (
+                                        19,
+                                        14,
+                                    ),
+                                    value: "set_error_handler",
+                                },
+                                alias: None,
+                            },
+                        ],
+                        kind: Function,
+                    },
+                    Function(
+                        Function {
+                            start: (
+                                32,
+                                1,
+                            ),
+                            end: (
+                                61,
+                                1,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    32,
+                                    10,
+                                ),
+                                value: "box",
+                            },
+                            attributes: [],
+                            parameters: FunctionParameterList {
                                 start: (
                                     32,
-                                    14,
+                                    13,
                                 ),
                                 end: (
                                     32,
-                                    26,
+                                    27,
                                 ),
-                                name: SimpleVariable {
-                                    span: (
-                                        32,
-                                        22,
-                                    ),
-                                    name: "fun",
-                                },
-                                attributes: [],
-                                type: Some(
-                                    Identifier(
-                                        SimpleIdentifier {
+                                members: [
+                                    FunctionParameter {
+                                        start: (
+                                            32,
+                                            14,
+                                        ),
+                                        end: (
+                                            32,
+                                            26,
+                                        ),
+                                        name: SimpleVariable {
                                             span: (
                                                 32,
-                                                14,
+                                                22,
                                             ),
-                                            name: "Closure",
+                                            name: "fun",
                                         },
-                                    ),
-                                ),
-                                variadic: false,
-                                default: None,
-                                by_ref: false,
-                            },
-                        ],
-                    },
-                    return_type: Some(
-                        Array,
-                    ),
-                    by_ref: false,
-                    body: [
-                        Expression {
-                            expr: AssignmentOperation(
-                                Assign {
-                                    left: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: (
-                                                    34,
-                                                    5,
-                                                ),
-                                                name: "last_message",
-                                            },
-                                        ),
-                                    ),
-                                    span: (
-                                        34,
-                                        19,
-                                    ),
-                                    right: Null,
-                                },
-                            ),
-                        },
-                        Expression {
-                            expr: Call {
-                                target: Identifier(
-                                    SimpleIdentifier(
-                                        SimpleIdentifier {
-                                            span: (
-                                                36,
-                                                5,
-                                            ),
-                                            name: "set_error_handler",
-                                        },
-                                    ),
-                                ),
-                                args: [
-                                    Arg {
-                                        name: None,
-                                        value: Closure(
-                                            Closure {
-                                                start: (
-                                                    36,
-                                                    23,
-                                                ),
-                                                end: (
-                                                    38,
-                                                    5,
-                                                ),
-                                                attributes: [],
-                                                parameters: FunctionParameterList {
-                                                    start: (
-                                                        36,
-                                                        39,
+                                        attributes: [],
+                                        type: Some(
+                                            Identifier(
+                                                SimpleIdentifier {
+                                                    span: (
+                                                        32,
+                                                        14,
                                                     ),
-                                                    end: (
-                                                        36,
-                                                        69,
-                                                    ),
-                                                    members: [
-                                                        FunctionParameter {
-                                                            start: (
-                                                                36,
-                                                                40,
-                                                            ),
-                                                            end: (
-                                                                36,
-                                                                50,
-                                                            ),
-                                                            name: SimpleVariable {
-                                                                span: (
-                                                                    36,
-                                                                    44,
-                                                                ),
-                                                                name: "_type",
-                                                            },
-                                                            attributes: [],
-                                                            type: Some(
-                                                                Integer,
-                                                            ),
-                                                            variadic: false,
-                                                            default: None,
-                                                            by_ref: false,
-                                                        },
-                                                        FunctionParameter {
-                                                            start: (
-                                                                36,
-                                                                52,
-                                                            ),
-                                                            end: (
-                                                                36,
-                                                                67,
-                                                            ),
-                                                            name: SimpleVariable {
-                                                                span: (
-                                                                    36,
-                                                                    59,
-                                                                ),
-                                                                name: "message",
-                                                            },
-                                                            attributes: [],
-                                                            type: Some(
-                                                                String,
-                                                            ),
-                                                            variadic: false,
-                                                            default: None,
-                                                            by_ref: false,
-                                                        },
-                                                    ],
+                                                    value: "Closure",
                                                 },
-                                                return_ty: None,
-                                                uses: [
-                                                    ClosureUse {
-                                                        var: Variable(
-                                                            SimpleVariable(
-                                                                SimpleVariable {
-                                                                    span: (
-                                                                        36,
-                                                                        75,
-                                                                    ),
-                                                                    name: "last_message",
-                                                                },
-                                                            ),
-                                                        ),
-                                                        by_ref: true,
-                                                    },
-                                                ],
-                                                by_ref: false,
-                                                body: [
-                                                    Expression {
-                                                        expr: AssignmentOperation(
-                                                            Assign {
-                                                                left: Variable(
-                                                                    SimpleVariable(
-                                                                        SimpleVariable {
-                                                                            span: (
-                                                                                37,
-                                                                                9,
-                                                                            ),
-                                                                            name: "last_message",
-                                                                        },
-                                                                    ),
-                                                                ),
-                                                                span: (
-                                                                    37,
-                                                                    23,
-                                                                ),
-                                                                right: Variable(
-                                                                    SimpleVariable(
-                                                                        SimpleVariable {
-                                                                            span: (
-                                                                                37,
-                                                                                25,
-                                                                            ),
-                                                                            name: "message",
-                                                                        },
-                                                                    ),
-                                                                ),
-                                                            },
-                                                        ),
-                                                    },
-                                                ],
-                                                static: true,
-                                            },
+                                            ),
                                         ),
-                                        unpack: false,
+                                        variadic: false,
+                                        default: None,
+                                        by_ref: false,
                                     },
                                 ],
                             },
-                        },
-                        If {
-                            condition: LogicalOperation(
-                                And {
-                                    left: ComparisonOperation(
-                                        NotIdentical {
-                                            left: Null,
-                                            span: (
-                                                43,
-                                                14,
-                                            ),
-                                            right: Variable(
+                            return_type: Some(
+                                Array,
+                            ),
+                            by_ref: false,
+                            body: [
+                                Expression {
+                                    expression: AssignmentOperation(
+                                        Assign {
+                                            left: Variable(
                                                 SimpleVariable(
                                                     SimpleVariable {
                                                         span: (
-                                                            43,
-                                                            18,
+                                                            34,
+                                                            5,
                                                         ),
                                                         name: "last_message",
                                                     },
                                                 ),
                                             ),
+                                            span: (
+                                                34,
+                                                19,
+                                            ),
+                                            right: Null,
                                         },
                                     ),
-                                    span: (
-                                        43,
-                                        32,
+                                    end: (
+                                        34,
+                                        25,
                                     ),
-                                    right: Call {
+                                },
+                                Expression {
+                                    expression: Call {
                                         target: Identifier(
                                             SimpleIdentifier(
                                                 SimpleIdentifier {
                                                     span: (
-                                                        43,
-                                                        35,
+                                                        36,
+                                                        5,
                                                     ),
-                                                    name: "Str\contains",
+                                                    value: "set_error_handler",
                                                 },
                                             ),
                                         ),
                                         args: [
                                             Arg {
                                                 name: None,
-                                                value: Variable(
-                                                    SimpleVariable(
-                                                        SimpleVariable {
-                                                            span: (
-                                                                43,
-                                                                48,
+                                                value: Closure(
+                                                    Closure {
+                                                        start: (
+                                                            36,
+                                                            23,
+                                                        ),
+                                                        end: (
+                                                            38,
+                                                            5,
+                                                        ),
+                                                        attributes: [],
+                                                        parameters: FunctionParameterList {
+                                                            start: (
+                                                                36,
+                                                                39,
                                                             ),
-                                                            name: "last_message",
+                                                            end: (
+                                                                36,
+                                                                69,
+                                                            ),
+                                                            members: [
+                                                                FunctionParameter {
+                                                                    start: (
+                                                                        36,
+                                                                        40,
+                                                                    ),
+                                                                    end: (
+                                                                        36,
+                                                                        50,
+                                                                    ),
+                                                                    name: SimpleVariable {
+                                                                        span: (
+                                                                            36,
+                                                                            44,
+                                                                        ),
+                                                                        name: "_type",
+                                                                    },
+                                                                    attributes: [],
+                                                                    type: Some(
+                                                                        Integer,
+                                                                    ),
+                                                                    variadic: false,
+                                                                    default: None,
+                                                                    by_ref: false,
+                                                                },
+                                                                FunctionParameter {
+                                                                    start: (
+                                                                        36,
+                                                                        52,
+                                                                    ),
+                                                                    end: (
+                                                                        36,
+                                                                        67,
+                                                                    ),
+                                                                    name: SimpleVariable {
+                                                                        span: (
+                                                                            36,
+                                                                            59,
+                                                                        ),
+                                                                        name: "message",
+                                                                    },
+                                                                    attributes: [],
+                                                                    type: Some(
+                                                                        String,
+                                                                    ),
+                                                                    variadic: false,
+                                                                    default: None,
+                                                                    by_ref: false,
+                                                                },
+                                                            ],
                                                         },
-                                                    ),
+                                                        return_ty: None,
+                                                        uses: [
+                                                            ClosureUse {
+                                                                var: Variable(
+                                                                    SimpleVariable(
+                                                                        SimpleVariable {
+                                                                            span: (
+                                                                                36,
+                                                                                75,
+                                                                            ),
+                                                                            name: "last_message",
+                                                                        },
+                                                                    ),
+                                                                ),
+                                                                by_ref: true,
+                                                            },
+                                                        ],
+                                                        by_ref: false,
+                                                        body: [
+                                                            Expression {
+                                                                expression: AssignmentOperation(
+                                                                    Assign {
+                                                                        left: Variable(
+                                                                            SimpleVariable(
+                                                                                SimpleVariable {
+                                                                                    span: (
+                                                                                        37,
+                                                                                        9,
+                                                                                    ),
+                                                                                    name: "last_message",
+                                                                                },
+                                                                            ),
+                                                                        ),
+                                                                        span: (
+                                                                            37,
+                                                                            23,
+                                                                        ),
+                                                                        right: Variable(
+                                                                            SimpleVariable(
+                                                                                SimpleVariable {
+                                                                                    span: (
+                                                                                        37,
+                                                                                        25,
+                                                                                    ),
+                                                                                    name: "message",
+                                                                                },
+                                                                            ),
+                                                                        ),
+                                                                    },
+                                                                ),
+                                                                end: (
+                                                                    37,
+                                                                    33,
+                                                                ),
+                                                            },
+                                                        ],
+                                                        static: true,
+                                                    },
                                                 ),
-                                                unpack: false,
-                                            },
-                                            Arg {
-                                                name: None,
-                                                value: LiteralString {
-                                                    span: (
-                                                        43,
-                                                        63,
-                                                    ),
-                                                    value: "): ",
-                                                },
                                                 unpack: false,
                                             },
                                         ],
                                     },
+                                    end: (
+                                        38,
+                                        7,
+                                    ),
                                 },
-                            ),
-                            then: [
-                                Expression {
-                                    expr: AssignmentOperation(
-                                        Assign {
-                                            left: Variable(
-                                                SimpleVariable(
-                                                    SimpleVariable {
-                                                        span: (
-                                                            44,
-                                                            9,
+                                If {
+                                    condition: LogicalOperation(
+                                        And {
+                                            left: ComparisonOperation(
+                                                NotIdentical {
+                                                    left: Null,
+                                                    span: (
+                                                        43,
+                                                        14,
+                                                    ),
+                                                    right: Variable(
+                                                        SimpleVariable(
+                                                            SimpleVariable {
+                                                                span: (
+                                                                    43,
+                                                                    18,
+                                                                ),
+                                                                name: "last_message",
+                                                            },
                                                         ),
-                                                        name: "last_message",
-                                                    },
-                                                ),
+                                                    ),
+                                                },
                                             ),
                                             span: (
-                                                44,
-                                                23,
+                                                43,
+                                                32,
                                             ),
                                             right: Call {
                                                 target: Identifier(
                                                     SimpleIdentifier(
                                                         SimpleIdentifier {
                                                             span: (
-                                                                44,
-                                                                25,
+                                                                43,
+                                                                35,
                                                             ),
-                                                            name: "Str\after",
+                                                            value: "Str\contains",
                                                         },
                                                     ),
                                                 ),
                                                 args: [
                                                     Arg {
                                                         name: None,
-                                                        value: Call {
-                                                            target: Identifier(
-                                                                SimpleIdentifier(
-                                                                    SimpleIdentifier {
-                                                                        span: (
-                                                                            45,
-                                                                            13,
-                                                                        ),
-                                                                        name: "Str\lowercase",
-                                                                    },
-                                                                ),
-                                                            ),
-                                                            args: [
-                                                                Arg {
-                                                                    name: None,
-                                                                    value: Variable(
-                                                                        SimpleVariable(
-                                                                            SimpleVariable {
-                                                                                span: (
-                                                                                    45,
-                                                                                    27,
-                                                                                ),
-                                                                                name: "last_message",
-                                                                            },
-                                                                        ),
+                                                        value: Variable(
+                                                            SimpleVariable(
+                                                                SimpleVariable {
+                                                                    span: (
+                                                                        43,
+                                                                        48,
                                                                     ),
-                                                                    unpack: false,
+                                                                    name: "last_message",
                                                                 },
-                                                            ],
-                                                        },
+                                                            ),
+                                                        ),
                                                         unpack: false,
                                                     },
                                                     Arg {
                                                         name: None,
                                                         value: LiteralString {
                                                             span: (
-                                                                47,
-                                                                13,
+                                                                43,
+                                                                63,
                                                             ),
                                                             value: "): ",
                                                         },
@@ -482,136 +442,101 @@
                                             },
                                         },
                                     ),
-                                },
-                            ],
-                            else_ifs: [],
-                            else: None,
-                        },
-                        Try(
-                            TryBlock {
-                                start: (
-                                    51,
-                                    5,
-                                ),
-                                end: (
-                                    61,
-                                    1,
-                                ),
-                                body: [
-                                    Expression {
-                                        expr: AssignmentOperation(
-                                            Assign {
-                                                left: Variable(
-                                                    SimpleVariable(
-                                                        SimpleVariable {
-                                                            span: (
-                                                                52,
-                                                                9,
-                                                            ),
-                                                            name: "value",
-                                                        },
-                                                    ),
-                                                ),
-                                                span: (
-                                                    52,
-                                                    16,
-                                                ),
-                                                right: Call {
-                                                    target: Variable(
+                                    then: [
+                                        Expression {
+                                            expression: AssignmentOperation(
+                                                Assign {
+                                                    left: Variable(
                                                         SimpleVariable(
                                                             SimpleVariable {
                                                                 span: (
-                                                                    52,
-                                                                    18,
+                                                                    44,
+                                                                    9,
                                                                 ),
-                                                                name: "fun",
+                                                                name: "last_message",
                                                             },
                                                         ),
                                                     ),
-                                                    args: [],
-                                                },
-                                            },
-                                        ),
-                                    },
-                                    Expression {
-                                        expr: AssignmentOperation(
-                                            Assign {
-                                                left: Variable(
-                                                    SimpleVariable(
-                                                        SimpleVariable {
-                                                            span: (
-                                                                55,
-                                                                9,
-                                                            ),
-                                                            name: "result",
-                                                        },
+                                                    span: (
+                                                        44,
+                                                        23,
                                                     ),
-                                                ),
-                                                span: (
-                                                    55,
-                                                    17,
-                                                ),
-                                                right: Array {
-                                                    items: [
-                                                        ArrayItem {
-                                                            key: None,
-                                                            value: Variable(
-                                                                SimpleVariable(
-                                                                    SimpleVariable {
-                                                                        span: (
-                                                                            55,
-                                                                            20,
-                                                                        ),
-                                                                        name: "value",
-                                                                    },
-                                                                ),
+                                                    right: Call {
+                                                        target: Identifier(
+                                                            SimpleIdentifier(
+                                                                SimpleIdentifier {
+                                                                    span: (
+                                                                        44,
+                                                                        25,
+                                                                    ),
+                                                                    value: "Str\after",
+                                                                },
                                                             ),
-                                                            unpack: false,
-                                                            by_ref: false,
-                                                        },
-                                                        ArrayItem {
-                                                            key: None,
-                                                            value: Variable(
-                                                                SimpleVariable(
-                                                                    SimpleVariable {
-                                                                        span: (
-                                                                            55,
-                                                                            28,
-                                                                        ),
-                                                                        name: "last_message",
-                                                                    },
-                                                                ),
-                                                            ),
-                                                            unpack: false,
-                                                            by_ref: false,
-                                                        },
-                                                    ],
-                                                },
-                                            },
-                                        ),
-                                    },
-                                    Return {
-                                        value: Some(
-                                            Variable(
-                                                SimpleVariable(
-                                                    SimpleVariable {
-                                                        span: (
-                                                            57,
-                                                            16,
                                                         ),
-                                                        name: "result",
+                                                        args: [
+                                                            Arg {
+                                                                name: None,
+                                                                value: Call {
+                                                                    target: Identifier(
+                                                                        SimpleIdentifier(
+                                                                            SimpleIdentifier {
+                                                                                span: (
+                                                                                    45,
+                                                                                    13,
+                                                                                ),
+                                                                                value: "Str\lowercase",
+                                                                            },
+                                                                        ),
+                                                                    ),
+                                                                    args: [
+                                                                        Arg {
+                                                                            name: None,
+                                                                            value: Variable(
+                                                                                SimpleVariable(
+                                                                                    SimpleVariable {
+                                                                                        span: (
+                                                                                            45,
+                                                                                            27,
+                                                                                        ),
+                                                                                        name: "last_message",
+                                                                                    },
+                                                                                ),
+                                                                            ),
+                                                                            unpack: false,
+                                                                        },
+                                                                    ],
+                                                                },
+                                                                unpack: false,
+                                                            },
+                                                            Arg {
+                                                                name: None,
+                                                                value: LiteralString {
+                                                                    span: (
+                                                                        47,
+                                                                        13,
+                                                                    ),
+                                                                    value: "): ",
+                                                                },
+                                                                unpack: false,
+                                                            },
+                                                        ],
                                                     },
-                                                ),
+                                                },
                                             ),
-                                        ),
-                                    },
-                                ],
-                                catches: [],
-                                finally: Some(
-                                    FinallyBlock {
+                                            end: (
+                                                48,
+                                                10,
+                                            ),
+                                        },
+                                    ],
+                                    else_ifs: [],
+                                    else: None,
+                                },
+                                Try(
+                                    TryBlock {
                                         start: (
-                                            58,
-                                            7,
+                                            51,
+                                            5,
                                         ),
                                         end: (
                                             61,
@@ -619,29 +544,163 @@
                                         ),
                                         body: [
                                             Expression {
-                                                expr: Call {
-                                                    target: Identifier(
-                                                        SimpleIdentifier(
-                                                            SimpleIdentifier {
-                                                                span: (
-                                                                    59,
-                                                                    9,
+                                                expression: AssignmentOperation(
+                                                    Assign {
+                                                        left: Variable(
+                                                            SimpleVariable(
+                                                                SimpleVariable {
+                                                                    span: (
+                                                                        52,
+                                                                        9,
+                                                                    ),
+                                                                    name: "value",
+                                                                },
+                                                            ),
+                                                        ),
+                                                        span: (
+                                                            52,
+                                                            16,
+                                                        ),
+                                                        right: Call {
+                                                            target: Variable(
+                                                                SimpleVariable(
+                                                                    SimpleVariable {
+                                                                        span: (
+                                                                            52,
+                                                                            18,
+                                                                        ),
+                                                                        name: "fun",
+                                                                    },
                                                                 ),
-                                                                name: "restore_error_handler",
+                                                            ),
+                                                            args: [],
+                                                        },
+                                                    },
+                                                ),
+                                                end: (
+                                                    52,
+                                                    24,
+                                                ),
+                                            },
+                                            Expression {
+                                                expression: AssignmentOperation(
+                                                    Assign {
+                                                        left: Variable(
+                                                            SimpleVariable(
+                                                                SimpleVariable {
+                                                                    span: (
+                                                                        55,
+                                                                        9,
+                                                                    ),
+                                                                    name: "result",
+                                                                },
+                                                            ),
+                                                        ),
+                                                        span: (
+                                                            55,
+                                                            17,
+                                                        ),
+                                                        right: Array {
+                                                            items: [
+                                                                ArrayItem {
+                                                                    key: None,
+                                                                    value: Variable(
+                                                                        SimpleVariable(
+                                                                            SimpleVariable {
+                                                                                span: (
+                                                                                    55,
+                                                                                    20,
+                                                                                ),
+                                                                                name: "value",
+                                                                            },
+                                                                        ),
+                                                                    ),
+                                                                    unpack: false,
+                                                                    by_ref: false,
+                                                                },
+                                                                ArrayItem {
+                                                                    key: None,
+                                                                    value: Variable(
+                                                                        SimpleVariable(
+                                                                            SimpleVariable {
+                                                                                span: (
+                                                                                    55,
+                                                                                    28,
+                                                                                ),
+                                                                                name: "last_message",
+                                                                            },
+                                                                        ),
+                                                                    ),
+                                                                    unpack: false,
+                                                                    by_ref: false,
+                                                                },
+                                                            ],
+                                                        },
+                                                    },
+                                                ),
+                                                end: (
+                                                    55,
+                                                    42,
+                                                ),
+                                            },
+                                            Return {
+                                                value: Some(
+                                                    Variable(
+                                                        SimpleVariable(
+                                                            SimpleVariable {
+                                                                span: (
+                                                                    57,
+                                                                    16,
+                                                                ),
+                                                                name: "result",
                                                             },
                                                         ),
                                                     ),
-                                                    args: [],
-                                                },
+                                                ),
                                             },
                                         ],
+                                        catches: [],
+                                        finally: Some(
+                                            FinallyBlock {
+                                                start: (
+                                                    58,
+                                                    7,
+                                                ),
+                                                end: (
+                                                    61,
+                                                    1,
+                                                ),
+                                                body: [
+                                                    Expression {
+                                                        expression: Call {
+                                                            target: Identifier(
+                                                                SimpleIdentifier(
+                                                                    SimpleIdentifier {
+                                                                        span: (
+                                                                            59,
+                                                                            9,
+                                                                        ),
+                                                                        value: "restore_error_handler",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                            args: [],
+                                                        },
+                                                        end: (
+                                                            59,
+                                                            32,
+                                                        ),
+                                                    },
+                                                ],
+                                            },
+                                        ),
                                     },
                                 ),
-                            },
-                        ),
-                    ],
-                },
-            ),
-        ],
-    },
+                            ],
+                        },
+                    ),
+                ],
+            },
+        ),
+    ),
 ]

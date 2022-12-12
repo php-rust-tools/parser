@@ -1,8 +1,8 @@
 [
     Expression {
-        expr: InterpolatedString {
+        expression: InterpolatedString {
             parts: [
-                Expr(
+                Expression(
                     Variable(
                         SimpleVariable(
                             SimpleVariable {
@@ -15,10 +15,10 @@
                         ),
                     ),
                 ),
-                Const(
+                Literal(
                     " abc ",
                 ),
-                Expr(
+                Expression(
                     PropertyFetch {
                         target: Variable(
                             SimpleVariable(
@@ -38,16 +38,16 @@
                                         1,
                                         23,
                                     ),
-                                    name: "a",
+                                    value: "a",
                                 },
                             ),
                         ),
                     },
                 ),
-                Const(
+                Literal(
                     " def ",
                 ),
-                Expr(
+                Expression(
                     ArrayIndex {
                         array: Variable(
                             SimpleVariable(
@@ -71,10 +71,10 @@
                         ),
                     },
                 ),
-                Const(
+                Literal(
                     " ghi ",
                 ),
-                Expr(
+                Expression(
                     ArrayIndex {
                         array: Variable(
                             SimpleVariable(
@@ -100,5 +100,9 @@
                 ),
             ],
         },
+        end: (
+            1,
+            51,
+        ),
     },
 ]

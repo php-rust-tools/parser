@@ -1,12 +1,8 @@
 [
     Interface(
         Interface {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                5,
                 1,
             ),
             attributes: [],
@@ -15,59 +11,69 @@
                     3,
                     11,
                 ),
-                name: "foo",
+                value: "foo",
             },
             extends: None,
-            members: [
-                Method(
-                    Method {
-                        start: (
-                            4,
-                            13,
-                        ),
-                        end: (
-                            4,
-                            27,
-                        ),
-                        name: SimpleIdentifier {
-                            span: (
-                                4,
-                                22,
-                            ),
-                            name: "bar",
-                        },
-                        attributes: [],
-                        parameters: MethodParameterList {
+            body: InterfaceBody {
+                start: (
+                    3,
+                    15,
+                ),
+                end: (
+                    5,
+                    1,
+                ),
+                members: [
+                    Method(
+                        Method {
                             start: (
                                 4,
-                                25,
+                                13,
                             ),
                             end: (
                                 4,
                                 27,
                             ),
-                            members: [],
+                            name: SimpleIdentifier {
+                                span: (
+                                    4,
+                                    22,
+                                ),
+                                value: "bar",
+                            },
+                            attributes: [],
+                            parameters: MethodParameterList {
+                                start: (
+                                    4,
+                                    25,
+                                ),
+                                end: (
+                                    4,
+                                    27,
+                                ),
+                                members: [],
+                            },
+                            body: None,
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public {
+                                        start: (
+                                            4,
+                                            6,
+                                        ),
+                                        end: (
+                                            4,
+                                            13,
+                                        ),
+                                    },
+                                ],
+                            },
+                            return_type: None,
+                            by_ref: false,
                         },
-                        body: None,
-                        modifiers: MethodModifierGroup {
-                            modifiers: [
-                                Public {
-                                    start: (
-                                        4,
-                                        6,
-                                    ),
-                                    end: (
-                                        4,
-                                        13,
-                                    ),
-                                },
-                            ],
-                        },
-                        return_type: None,
-                        by_ref: false,
-                    },
-                ),
-            ],
+                    ),
+                ],
+            },
         },
     ),
 ]

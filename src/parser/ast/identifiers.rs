@@ -7,7 +7,7 @@ use crate::lexer::token::Span;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Identifier {
     SimpleIdentifier(SimpleIdentifier),
     DynamicIdentifier(DynamicIdentifier),
@@ -17,12 +17,12 @@ pub enum Identifier {
 #[serde(rename_all = "snake_case")]
 pub struct SimpleIdentifier {
     pub span: Span,
-    pub name: ByteString,
+    pub value: ByteString,
 }
 
 impl Display for SimpleIdentifier {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name)
+        write!(f, "{}", self.value)
     }
 }
 

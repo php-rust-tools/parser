@@ -1,6 +1,6 @@
 [
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -25,7 +25,7 @@
                                     3,
                                     8,
                                 ),
-                                name: "give_me_foo",
+                                value: "give_me_foo",
                             },
                         ),
                     ),
@@ -33,9 +33,13 @@
                 },
             },
         ),
+        end: (
+            3,
+            21,
+        ),
     },
     Expression {
-        expr: AssignmentOperation(
+        expression: AssignmentOperation(
             Assign {
                 left: Variable(
                     SimpleVariable(
@@ -87,7 +91,7 @@
                                                 6,
                                                 33,
                                             ),
-                                            name: "Foo",
+                                            value: "Foo",
                                         },
                                     ),
                                 ),
@@ -130,7 +134,7 @@
                                                         7,
                                                         35,
                                                     ),
-                                                    name: "Bar",
+                                                    value: "Bar",
                                                 },
                                             ),
                                         ),
@@ -162,7 +166,7 @@
                                                         7,
                                                         58,
                                                     ),
-                                                    name: "Baz",
+                                                    value: "Baz",
                                                 },
                                             ),
                                         ),
@@ -175,6 +179,10 @@
                     ],
                 },
             },
+        ),
+        end: (
+            8,
+            2,
         ),
     },
 ]

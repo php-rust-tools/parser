@@ -4,8 +4,12 @@ use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::comments::Comment;
 use crate::parser::ast::comments::CommentFormat;
+use crate::parser::ast::declares::Declare;
+use crate::parser::ast::declares::DeclareBody;
+use crate::parser::ast::declares::DeclareEntry;
+use crate::parser::ast::declares::DeclareEntryGroup;
 use crate::parser::ast::variables::Variable;
-use crate::parser::ast::{DeclareItem, Expression, Program, Statement, StaticVar};
+use crate::parser::ast::{Expression, Program, Statement, StaticVar};
 use crate::parser::error::ParseResult;
 use crate::parser::internal::attributes;
 use crate::parser::internal::blocks;
@@ -124,11 +128,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             {
                 if state.stream.peek().kind == TokenKind::Ampersand {
                     if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
-                        let expr = expressions::lowest_precedence(state)?;
+                        let expression = expressions::lowest_precedence(state)?;
+                        let end = utils::skip_semicolon(state)?;
 
-                        utils::skip_semicolon(state)?;
-
-                        return Ok(Statement::Expression { expr });
+                        return Ok(Statement::Expression { expression, end });
                     }
 
                     functions::function(state)?
@@ -136,9 +139,12 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     functions::function(state)?
                 }
             }
-            _ => Statement::Expression {
-                expr: expressions::attributes(state)?,
-            },
+            _ => {
+                let expression = expressions::attributes(state)?;
+                let end = utils::skip_semicolon(state)?;
+
+                Statement::Expression { expression, end }
+            }
         }
     } else {
         match &state.stream.current().kind {
@@ -160,7 +166,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 utils::skip_semicolon(state)?;
 
                 Statement::ShortEcho { span, values }
-            },
+            }
             TokenKind::Abstract => classes::parse(state)?,
             TokenKind::Readonly if state.stream.peek().kind != TokenKind::LeftParen => {
                 classes::parse(state)?
@@ -182,11 +188,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             {
                 if state.stream.peek().kind == TokenKind::Ampersand {
                     if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
-                        let expr = expressions::lowest_precedence(state)?;
+                        let expression = expressions::lowest_precedence(state)?;
+                        let end = utils::skip_semicolon(state)?;
 
-                        utils::skip_semicolon(state)?;
-
-                        return Ok(Statement::Expression { expr });
+                        return Ok(Statement::Expression { expression, end });
                     }
 
                     functions::function(state)?
@@ -202,47 +207,77 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 goto::label_statement(state)?
             }
             TokenKind::Declare => {
-                state.stream.next();
-                utils::skip_left_parenthesis(state)?;
+                let span = utils::skip(state, TokenKind::Declare)?;
 
-                let mut declares = Vec::new();
-                loop {
-                    let key = identifiers::identifier(state)?;
+                let entries = {
+                    let start = utils::skip_left_parenthesis(state)?;
+                    let mut entries = Vec::new();
+                    loop {
+                        let key = identifiers::identifier(state)?;
+                        let span = utils::skip(state, TokenKind::Equals)?;
+                        let value = expect_literal!(state);
 
-                    utils::skip(state, TokenKind::Equals)?;
+                        entries.push(DeclareEntry { key, span, value });
 
-                    let value = expect_literal!(state);
-
-                    declares.push(DeclareItem { key, value });
-
-                    if state.stream.current().kind == TokenKind::Comma {
-                        state.stream.next();
-                    } else {
-                        break;
+                        if state.stream.current().kind == TokenKind::Comma {
+                            state.stream.next();
+                        } else {
+                            break;
+                        }
                     }
-                }
+                    let end = utils::skip_right_parenthesis(state)?;
 
-                utils::skip_right_parenthesis(state)?;
-
-                let body = if state.stream.current().kind == TokenKind::LeftBrace {
-                    state.stream.next();
-                    let b = blocks::body(state, &TokenKind::RightBrace)?;
-                    utils::skip_right_brace(state)?;
-                    b
-                } else if state.stream.current().kind == TokenKind::Colon {
-                    utils::skip_colon(state)?;
-                    let b = blocks::body(state, &TokenKind::EndDeclare)?;
-                    utils::skip(state, TokenKind::EndDeclare)?;
-                    utils::skip_semicolon(state)?;
-                    b
-                } else if state.stream.current().kind == TokenKind::SemiColon {
-                    utils::skip_semicolon(state)?;
-                    vec![]
-                } else {
-                    vec![statement(state)?]
+                    DeclareEntryGroup {
+                        start,
+                        entries,
+                        end,
+                    }
                 };
 
-                Statement::Declare { declares, body }
+                let body = match state.stream.current().kind.clone() {
+                    TokenKind::SemiColon => {
+                        let span = utils::skip_semicolon(state)?;
+
+                        DeclareBody::Noop { span }
+                    }
+                    TokenKind::LeftBrace => {
+                        let start = utils::skip_left_brace(state)?;
+                        let statements = blocks::body(state, &TokenKind::RightBrace)?;
+                        let end = utils::skip_right_brace(state)?;
+
+                        DeclareBody::Braced {
+                            start,
+                            statements,
+                            end,
+                        }
+                    }
+                    TokenKind::Colon => {
+                        let start = utils::skip_colon(state)?;
+                        let statements = blocks::body(state, &TokenKind::EndDeclare)?;
+                        let end = (
+                            utils::skip(state, TokenKind::EndDeclare)?,
+                            utils::skip_semicolon(state)?,
+                        );
+
+                        DeclareBody::Block {
+                            start,
+                            statements,
+                            end,
+                        }
+                    }
+                    _ => {
+                        let expression = expressions::lowest_precedence(state)?;
+                        let end = utils::skip_semicolon(state)?;
+
+                        DeclareBody::Expression { expression, end }
+                    }
+                };
+
+                Statement::Declare(Declare {
+                    span,
+                    entries,
+                    body,
+                })
             }
             TokenKind::Global => {
                 let span = state.stream.current().span;
@@ -408,11 +443,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Try => try_block::try_block(state)?,
             TokenKind::LeftBrace => blocks::block_statement(state)?,
             _ => {
-                let expr = expressions::lowest_precedence(state)?;
+                let expression = expressions::lowest_precedence(state)?;
+                let end = utils::skip_semicolon(state)?;
 
-                utils::skip_semicolon(state)?;
-
-                Statement::Expression { expr }
+                Statement::Expression { expression, end }
             }
         }
     };

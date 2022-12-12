@@ -1,87 +1,113 @@
 [
-    Namespace {
-        name: SimpleIdentifier {
-            span: (
-                3,
-                11,
-            ),
-            name: "Foo\Bar",
-        },
-        body: [
-            Noop(
-                (
+    Namespace(
+        Unbraced(
+            UnbracedNamespace {
+                start: (
+                    3,
+                    1,
+                ),
+                end: (
                     3,
                     18,
                 ),
-            ),
-            Class(
-                Class {
-                    start: (
-                        5,
-                        7,
+                name: SimpleIdentifier {
+                    span: (
+                        3,
+                        11,
                     ),
-                    end: (
-                        7,
-                        1,
-                    ),
-                    name: SimpleIdentifier {
-                        span: (
-                            5,
-                            13,
-                        ),
-                        name: "Baz",
-                    },
-                    extends: None,
-                    implements: None,
-                    attributes: [],
-                    members: [
-                        Property(
-                            Property {
-                                attributes: [],
-                                type: Some(
-                                    String,
+                    value: "Foo\Bar",
+                },
+                statements: [
+                    Class(
+                        Class {
+                            span: (
+                                5,
+                                7,
+                            ),
+                            name: SimpleIdentifier {
+                                span: (
+                                    5,
+                                    13,
                                 ),
-                                modifiers: PropertyModifierGroup {
-                                    modifiers: [
-                                        Public {
-                                            start: (
-                                                6,
-                                                6,
-                                            ),
-                                            end: (
-                                                6,
-                                                13,
-                                            ),
-                                        },
-                                        Readonly {
-                                            start: (
-                                                6,
-                                                13,
-                                            ),
-                                            end: (
-                                                6,
-                                                22,
-                                            ),
-                                        },
-                                    ],
-                                },
-                                entries: [
-                                    PropertyEntry {
-                                        variable: SimpleVariable {
-                                            span: (
-                                                6,
-                                                29,
-                                            ),
-                                            name: "foo",
-                                        },
-                                        value: None,
+                                value: "Baz",
+                            },
+                            modifiers: ClassModifierGroup {
+                                modifiers: [
+                                    Final {
+                                        start: (
+                                            5,
+                                            1,
+                                        ),
+                                        end: (
+                                            5,
+                                            7,
+                                        ),
                                     },
                                 ],
                             },
-                        ),
-                    ],
-                },
-            ),
-        ],
-    },
+                            extends: None,
+                            implements: None,
+                            attributes: [],
+                            body: ClassBody {
+                                start: (
+                                    5,
+                                    17,
+                                ),
+                                end: (
+                                    7,
+                                    1,
+                                ),
+                                members: [
+                                    Property(
+                                        Property {
+                                            attributes: [],
+                                            type: Some(
+                                                String,
+                                            ),
+                                            modifiers: PropertyModifierGroup {
+                                                modifiers: [
+                                                    Public {
+                                                        start: (
+                                                            6,
+                                                            6,
+                                                        ),
+                                                        end: (
+                                                            6,
+                                                            13,
+                                                        ),
+                                                    },
+                                                    Readonly {
+                                                        start: (
+                                                            6,
+                                                            13,
+                                                        ),
+                                                        end: (
+                                                            6,
+                                                            22,
+                                                        ),
+                                                    },
+                                                ],
+                                            },
+                                            entries: [
+                                                PropertyEntry {
+                                                    variable: SimpleVariable {
+                                                        span: (
+                                                            6,
+                                                            29,
+                                                        ),
+                                                        name: "foo",
+                                                    },
+                                                    value: None,
+                                                },
+                                            ],
+                                        },
+                                    ),
+                                ],
+                            },
+                        },
+                    ),
+                ],
+            },
+        ),
+    ),
 ]

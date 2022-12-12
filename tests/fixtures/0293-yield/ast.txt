@@ -14,7 +14,7 @@
                     3,
                     10,
                 ),
-                name: "foo",
+                value: "foo",
             },
             attributes: [],
             parameters: FunctionParameterList {
@@ -34,7 +34,7 @@
             by_ref: false,
             body: [
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: None,
                         value: Some(
                             LiteralInteger {
@@ -46,15 +46,23 @@
                             },
                         ),
                     },
+                    end: (
+                        4,
+                        12,
+                    ),
                 },
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: None,
                         value: None,
                     },
+                    end: (
+                        5,
+                        10,
+                    ),
                 },
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: Some(
                             LiteralInteger {
                                 span: (
@@ -74,9 +82,13 @@
                             },
                         ),
                     },
+                    end: (
+                        6,
+                        20,
+                    ),
                 },
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: None,
                         value: Some(
                             Variable(
@@ -92,9 +104,13 @@
                             ),
                         ),
                     },
+                    end: (
+                        7,
+                        13,
+                    ),
                 },
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: None,
                         value: Some(
                             ArithmeticOperation(
@@ -118,9 +134,13 @@
                             ),
                         ),
                     },
+                    end: (
+                        9,
+                        15,
+                    ),
                 },
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: None,
                         value: Some(
                             ArithmeticOperation(
@@ -144,9 +164,13 @@
                             ),
                         ),
                     },
+                    end: (
+                        10,
+                        15,
+                    ),
                 },
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: Some(
                             ArithmeticOperation(
                                 PreIncrement {
@@ -206,9 +230,13 @@
                             },
                         ),
                     },
+                    end: (
+                        12,
+                        31,
+                    ),
                 },
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: Some(
                             Ternary {
                                 condition: ArithmeticOperation(
@@ -300,9 +328,13 @@
                             },
                         ),
                     },
+                    end: (
+                        13,
+                        43,
+                    ),
                 },
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: Some(
                             ArithmeticOperation(
                                 PostIncrement {
@@ -362,9 +394,13 @@
                             },
                         ),
                     },
+                    end: (
+                        15,
+                        31,
+                    ),
                 },
                 Expression {
-                    expr: Yield {
+                    expression: Yield {
                         key: Some(
                             Ternary {
                                 condition: ArithmeticOperation(
@@ -456,6 +492,10 @@
                             },
                         ),
                     },
+                    end: (
+                        16,
+                        43,
+                    ),
                 },
             ],
         },

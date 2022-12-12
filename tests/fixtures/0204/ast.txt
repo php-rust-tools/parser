@@ -1,12 +1,8 @@
 [
     Class(
         Class {
-            start: (
+            span: (
                 3,
-                1,
-            ),
-            end: (
-                5,
                 1,
             ),
             name: SimpleIdentifier {
@@ -14,34 +10,51 @@
                     3,
                     7,
                 ),
-                name: "foo",
+                value: "foo",
+            },
+            modifiers: ClassModifierGroup {
+                modifiers: [],
             },
             extends: None,
             implements: None,
             attributes: [],
-            members: [
-                TraitUsage(
-                    TraitUsage {
-                        traits: [
-                            SimpleIdentifier {
-                                span: (
-                                    4,
-                                    9,
-                                ),
-                                name: "a",
-                            },
-                            SimpleIdentifier {
-                                span: (
-                                    4,
-                                    12,
-                                ),
-                                name: "b",
-                            },
-                        ],
-                        adaptations: [],
-                    },
+            body: ClassBody {
+                start: (
+                    3,
+                    11,
                 ),
-            ],
+                end: (
+                    5,
+                    1,
+                ),
+                members: [
+                    TraitUsage(
+                        TraitUsage {
+                            span: (
+                                4,
+                                5,
+                            ),
+                            traits: [
+                                SimpleIdentifier {
+                                    span: (
+                                        4,
+                                        9,
+                                    ),
+                                    value: "a",
+                                },
+                                SimpleIdentifier {
+                                    span: (
+                                        4,
+                                        12,
+                                    ),
+                                    value: "b",
+                                },
+                            ],
+                            adaptations: [],
+                        },
+                    ),
+                ],
+            },
         },
     ),
 ]

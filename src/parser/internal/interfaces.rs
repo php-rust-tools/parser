@@ -2,6 +2,7 @@ use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
+use crate::parser::ast::interfaces::InterfaceBody;
 use crate::parser::ast::interfaces::InterfaceExtends;
 use crate::parser::ast::interfaces::InterfaceMember;
 use crate::parser::ast::modifiers::ConstantModifier;
@@ -22,7 +23,7 @@ use crate::parser::state::State;
 use crate::scoped;
 
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
-    let start = utils::skip(state, TokenKind::Interface)?;
+    let span = utils::skip(state, TokenKind::Interface)?;
 
     let name = identifiers::type_identifier(state)?;
 
@@ -42,24 +43,29 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
     let attributes = state.get_attributes();
 
-    let (members, end) = scoped!(state, Scope::Interface(name.clone()), {
-        utils::skip_left_brace(state)?;
+    let body = scoped!(state, Scope::Interface(name.clone()), {
+        let start = utils::skip_left_brace(state)?;
 
         let mut members = Vec::new();
         while state.stream.current().kind != TokenKind::RightBrace {
             members.push(member(state)?);
         }
 
-        (members, utils::skip_right_brace(state)?)
+        let end = utils::skip_right_brace(state)?;
+
+        InterfaceBody {
+            start,
+            members,
+            end,
+        }
     });
 
     Ok(Statement::Interface(Interface {
-        start,
-        end,
+        span,
         name,
         attributes,
         extends,
-        members,
+        body,
     }))
 }
 

@@ -4,7 +4,7 @@ use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type")]
 pub enum CommentFormat {
     SingleLine,
     MultiLine,

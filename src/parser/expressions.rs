@@ -195,7 +195,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                             right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                                 SimpleIdentifier {
                                     span: enum_span,
-                                    name: "enum".into(),
+                                    value: "enum".into(),
                                 },
                             ))),
                         }
@@ -210,7 +210,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                             right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                                 SimpleIdentifier {
                                     span: from_span,
-                                    name: "from".into(),
+                                    value: "from".into(),
                                 },
                             ))),
                         }
@@ -796,7 +796,7 @@ expressions! {
 
         Ok(Expression::Identifier(Identifier::SimpleIdentifier( SimpleIdentifier {
             span,
-            name: "self".into()
+            value: "self".into()
         })))
     })
 
@@ -807,7 +807,7 @@ expressions! {
 
         Ok(Expression::Identifier(Identifier::SimpleIdentifier( SimpleIdentifier {
             span,
-            name: "parent".into()
+            value: "parent".into()
         })))
     })
 
@@ -869,14 +869,14 @@ expressions! {
 
                 state.stream.next();
 
-                Expression::Identifier(Identifier::SimpleIdentifier(SimpleIdentifier { span, name: "enum".into() }))
+                Expression::Identifier(Identifier::SimpleIdentifier(SimpleIdentifier { span, value: "enum".into() }))
             }
             TokenKind::From => {
                 let span = state.stream.current().span;
 
                 state.stream.next();
 
-                Expression::Identifier(Identifier::SimpleIdentifier(SimpleIdentifier { span, name: "from".into() }))
+                Expression::Identifier(Identifier::SimpleIdentifier(SimpleIdentifier { span, value: "from".into() }))
             }
             _ => clone_or_new_precedence(state)?,
         };
@@ -1179,7 +1179,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
 
                     Expression::Identifier(Identifier::SimpleIdentifier(SimpleIdentifier {
                         span,
-                        name: "class".into(),
+                        value: "class".into(),
                     }))
                 }
                 _ => {
@@ -1371,7 +1371,7 @@ fn doc_string(state: &mut State, kind: DocStringKind) -> ParseResult<Expression>
                     }
 
                     match part {
-                        StringPart::Const(bytes) => {
+                        StringPart::Literal(bytes) => {
                             // 1. If this line doesn't start with any whitespace,
                             //    we can return an error early because we know
                             //    the label was indented.
@@ -1510,7 +1510,7 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
     Ok(match &state.stream.current().kind {
         TokenKind::StringPart(s) => {
             let part = if s.len() > 0 {
-                Some(StringPart::Const(s.clone()))
+                Some(StringPart::Literal(s.clone()))
             } else {
                 None
             };
@@ -1521,14 +1521,16 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
         TokenKind::DollarLeftBrace => {
             let variable = variables::dynamic_variable(state)?;
 
-            Some(StringPart::Expr(Box::new(Expression::Variable(variable))))
+            Some(StringPart::Expression(Box::new(Expression::Variable(
+                variable,
+            ))))
         }
         TokenKind::LeftBrace => {
             // "{$expr}"
             state.stream.next();
             let e = lowest_precedence(state)?;
             utils::skip_right_brace(state)?;
-            Some(StringPart::Expr(Box::new(e)))
+            Some(StringPart::Expression(Box::new(e)))
         }
         TokenKind::Variable(_) => {
             // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
@@ -1612,7 +1614,7 @@ fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>
                 }
                 _ => variable,
             };
-            Some(StringPart::Expr(Box::new(e)))
+            Some(StringPart::Expression(Box::new(e)))
         }
         _ => {
             return expected_token_err!(["`${`", "`{$", "`\"`", "a variable"], state);
