@@ -75,4 +75,4 @@ jobs:
           args: -r --all
 
       - name: bench
-        run: hyperfine --prepare "cargo build -r" --runs 10 --warmup 2 -i "cargo test --all -r"
+        run: hyperfine --prepare "cargo build -r" --runs 10 --warmup 2 -i "cargo test -r php_standard"
