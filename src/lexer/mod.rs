@@ -110,7 +110,7 @@ impl Lexer {
         let inline_span = state.source.span();
         let mut buffer = Vec::new();
         while let Some(char) = state.source.current() {
-            if state.source.at_case_insensative(b"<?php", 5) {
+            if state.source.at_case_insensitive(b"<?php", 5) {
                 let tag_span = state.source.span();
 
                 state.source.skip(5);
@@ -125,6 +125,25 @@ impl Lexer {
 
                 tokens.push(Token {
                     kind: TokenKind::OpenTag(OpenTagKind::Full),
+                    span: tag_span,
+                });
+
+                return Ok(());
+            } else if state.source.at_case_insensitive(b"<?=", 3) {
+                let tag_span = state.source.span();
+
+                state.source.skip(3);
+                state.replace(StackFrame::Scripting);
+
+                if !buffer.is_empty() {
+                    tokens.push(Token {
+                        kind: TokenKind::InlineHtml(buffer.into()),
+                        span: inline_span,
+                    });
+                }
+
+                tokens.push(Token {
+                    kind: TokenKind::OpenTag(OpenTagKind::Echo),
                     span: tag_span,
                 });
 
@@ -537,40 +556,40 @@ impl Lexer {
             [b'(', ..] => {
                 state.source.next();
 
-                if state.source.at_case_insensative(b"int)", 4) {
+                if state.source.at_case_insensitive(b"int)", 4) {
                     state.source.skip(4);
                     TokenKind::IntCast
-                } else if state.source.at_case_insensative(b"integer)", 8) {
+                } else if state.source.at_case_insensitive(b"integer)", 8) {
                     state.source.skip(8);
                     TokenKind::IntegerCast
-                } else if state.source.at_case_insensative(b"bool)", 5) {
+                } else if state.source.at_case_insensitive(b"bool)", 5) {
                     state.source.skip(5);
                     TokenKind::BoolCast
-                } else if state.source.at_case_insensative(b"boolean)", 8) {
+                } else if state.source.at_case_insensitive(b"boolean)", 8) {
                     state.source.skip(8);
                     TokenKind::BooleanCast
-                } else if state.source.at_case_insensative(b"float)", 6) {
+                } else if state.source.at_case_insensitive(b"float)", 6) {
                     state.source.skip(6);
                     TokenKind::FloatCast
-                } else if state.source.at_case_insensative(b"double)", 7) {
+                } else if state.source.at_case_insensitive(b"double)", 7) {
                     state.source.skip(7);
                     TokenKind::DoubleCast
-                } else if state.source.at_case_insensative(b"real)", 5) {
+                } else if state.source.at_case_insensitive(b"real)", 5) {
                     state.source.skip(5);
                     TokenKind::RealCast
-                } else if state.source.at_case_insensative(b"string)", 7) {
+                } else if state.source.at_case_insensitive(b"string)", 7) {
                     state.source.skip(7);
                     TokenKind::StringCast
-                } else if state.source.at_case_insensative(b"binary)", 7) {
+                } else if state.source.at_case_insensitive(b"binary)", 7) {
                     state.source.skip(7);
                     TokenKind::BinaryCast
-                } else if state.source.at_case_insensative(b"array)", 6) {
+                } else if state.source.at_case_insensitive(b"array)", 6) {
                     state.source.skip(6);
                     TokenKind::ArrayCast
-                } else if state.source.at_case_insensative(b"object)", 7) {
+                } else if state.source.at_case_insensitive(b"object)", 7) {
                     state.source.skip(7);
                     TokenKind::ObjectCast
-                } else if state.source.at_case_insensative(b"unset)", 6) {
+                } else if state.source.at_case_insensitive(b"unset)", 6) {
                     state.source.skip(6);
                     TokenKind::UnsetCast
                 } else {

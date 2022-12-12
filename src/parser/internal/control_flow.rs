@@ -1,4 +1,5 @@
 use crate::expected_token_err;
+use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::TokenKind;
 use crate::parser;
 use crate::parser::ast::Block;
@@ -184,7 +185,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
                 state.stream.current().kind,
                 TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
             ) {
-                if let TokenKind::OpenTag(_) = state.stream.current().kind {
+                if let TokenKind::OpenTag(OpenTagKind::Full) = state.stream.current().kind {
                     state.stream.next();
                     continue;
                 }
@@ -211,7 +212,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
                     state.stream.current().kind,
                     TokenKind::ElseIf | TokenKind::Else | TokenKind::EndIf
                 ) {
-                    if let TokenKind::OpenTag(_) = state.stream.current().kind {
+                    if let TokenKind::OpenTag(OpenTagKind::Full) = state.stream.current().kind {
                         state.stream.next();
                         continue;
                     }

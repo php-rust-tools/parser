@@ -1,0 +1,51 @@
+[
+    ShortEcho {
+        span: (
+            1,
+            1,
+        ),
+        values: [
+            LiteralString {
+                span: (
+                    1,
+                    5,
+                ),
+                value: "<?php\n",
+            },
+        ],
+    },
+    InlineHtml(
+        "\nsome html\n",
+    ),
+    If {
+        condition: Variable(
+            SimpleVariable(
+                SimpleVariable {
+                    span: (
+                        4,
+                        9,
+                    ),
+                    name: "d",
+                },
+            ),
+        ),
+        then: [
+            Echo {
+                values: [
+                    LiteralString {
+                        span: (
+                            5,
+                            14,
+                        ),
+                        value: "// ",
+                    },
+                ],
+            },
+        ],
+        else_ifs: [],
+        else: None,
+    },
+    InlineHtml(
+        "\n",
+    ),
+]

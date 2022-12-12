@@ -1,3 +1,4 @@
+use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::TokenKind;
 use crate::parser;
 use crate::parser::ast::Block;
@@ -20,7 +21,7 @@ pub fn body(state: &mut State, until: &TokenKind) -> ParseResult<Block> {
     let mut block = Block::new();
 
     while !state.stream.is_eof() && &state.stream.current().kind != until {
-        if let TokenKind::OpenTag(_) = state.stream.current().kind {
+        if let TokenKind::OpenTag(OpenTagKind::Full) = state.stream.current().kind {
             state.stream.next();
             continue;
         }
