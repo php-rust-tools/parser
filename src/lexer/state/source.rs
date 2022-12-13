@@ -17,7 +17,7 @@ impl<'a> Source<'a> {
             input,
             length,
             cursor: 0,
-            span: (1, 1),
+            span: Span(1, 1),
         }
     }
 

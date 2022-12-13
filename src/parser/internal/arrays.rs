@@ -1,3 +1,4 @@
+use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::ArrayItem;
 use crate::parser::ast::Expression;
@@ -140,7 +141,7 @@ pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
             state.stream.next();
             (true, span)
         } else {
-            (false, (0, 0))
+            (false, Span(0, 0))
         };
 
         let mut value = expressions::lowest_precedence(state)?;
@@ -206,7 +207,7 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
         state.stream.next();
         (true, span)
     } else {
-        (false, (0, 0))
+        (false, Span(0, 0))
     };
 
     let mut value = expressions::lowest_precedence(state)?;

@@ -11,7 +11,8 @@ snapshot:
 
 # regenerate schema
 schema:
-    cargo run --bin php-parser-schema
+    rm schema.json
+    cargo run --bin php-parser-schema >> schema.json
 
 # detect linting problems.
 lint:

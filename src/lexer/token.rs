@@ -6,7 +6,21 @@ use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
 
-pub type Span = (usize, usize);
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct Span(pub usize, pub usize);
+
+impl From<(usize, usize)> for Span {
+    fn from((start, end): (usize, usize)) -> Self {
+        Self(start, end)
+    }
+}
+
+impl Into<(usize, usize)> for Span {
+    fn into(self) -> (usize, usize) {
+        (self.0, self.1)
+    }
+}
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -257,7 +271,7 @@ impl Default for Token {
     fn default() -> Self {
         Self {
             kind: TokenKind::Eof,
-            span: (0, 0),
+            span: Span(0, 0),
         }
     }
 }

@@ -5,7 +5,7 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: (
+                            span: Span(
                                 3,
                                 1,
                             ),
@@ -13,25 +13,25 @@
                         },
                     ),
                 ),
-                span: (
+                span: Span(
                     3,
                     4,
                 ),
                 right: ArithmeticOperation(
                     Exponentiation {
                         left: LiteralInteger {
-                            span: (
+                            span: Span(
                                 3,
                                 6,
                             ),
                             value: "2",
                         },
-                        span: (
+                        span: Span(
                             3,
                             8,
                         ),
                         right: LiteralInteger {
-                            span: (
+                            span: Span(
                                 3,
                                 11,
                             ),
@@ -41,7 +41,7 @@
                 ),
             },
         ),
-        end: (
+        end: Span(
             3,
             12,
         ),
@@ -52,7 +52,7 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: (
+                            span: Span(
                                 5,
                                 1,
                             ),
@@ -60,27 +60,27 @@
                         },
                     ),
                 ),
-                span: (
+                span: Span(
                     5,
                     4,
                 ),
                 right: Ternary {
                     condition: LiteralInteger {
-                        span: (
+                        span: Span(
                             5,
                             6,
                         ),
                         value: "1",
                     },
                     then: LiteralInteger {
-                        span: (
+                        span: Span(
                             5,
                             10,
                         ),
                         value: "2",
                     },
                     else: LiteralInteger {
-                        span: (
+                        span: Span(
                             5,
                             14,
                         ),
@@ -89,7 +89,7 @@
                 },
             },
         ),
-        end: (
+        end: Span(
             5,
             15,
         ),
@@ -100,7 +100,7 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: (
+                            span: Span(
                                 7,
                                 1,
                             ),
@@ -108,13 +108,13 @@
                         },
                     ),
                 ),
-                span: (
+                span: Span(
                     7,
                     4,
                 ),
                 right: Ternary {
                     condition: LiteralInteger {
-                        span: (
+                        span: Span(
                             7,
                             6,
                         ),
@@ -122,21 +122,21 @@
                     },
                     then: Ternary {
                         condition: LiteralInteger {
-                            span: (
+                            span: Span(
                                 7,
                                 10,
                             ),
                             value: "2",
                         },
                         then: LiteralInteger {
-                            span: (
+                            span: Span(
                                 7,
                                 14,
                             ),
                             value: "3",
                         },
                         else: LiteralInteger {
-                            span: (
+                            span: Span(
                                 7,
                                 18,
                             ),
@@ -144,7 +144,7 @@
                         },
                     },
                     else: LiteralInteger {
-                        span: (
+                        span: Span(
                             7,
                             22,
                         ),
@@ -153,7 +153,7 @@
                 },
             },
         ),
-        end: (
+        end: Span(
             7,
             23,
         ),
@@ -164,7 +164,7 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: (
+                            span: Span(
                                 9,
                                 1,
                             ),
@@ -172,36 +172,36 @@
                         },
                     ),
                 ),
-                span: (
+                span: Span(
                     9,
                     4,
                 ),
                 right: ShortTernary {
                     condition: LiteralInteger {
-                        span: (
+                        span: Span(
                             9,
                             6,
                         ),
                         value: "1",
                     },
-                    span: (
+                    span: Span(
                         9,
                         8,
                     ),
                     else: ShortTernary {
                         condition: LiteralInteger {
-                            span: (
+                            span: Span(
                                 9,
                                 11,
                             ),
                             value: "2",
                         },
-                        span: (
+                        span: Span(
                             9,
                             13,
                         ),
                         else: LiteralInteger {
-                            span: (
+                            span: Span(
                                 9,
                                 16,
                             ),
@@ -211,7 +211,7 @@
                 },
             },
         ),
-        end: (
+        end: Span(
             9,
             17,
         ),
@@ -222,7 +222,7 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: (
+                            span: Span(
                                 11,
                                 1,
                             ),
@@ -230,20 +230,20 @@
                         },
                     ),
                 ),
-                span: (
+                span: Span(
                     11,
                     4,
                 ),
                 right: Coalesce {
                     lhs: LiteralInteger {
-                        span: (
+                        span: Span(
                             11,
                             6,
                         ),
                         value: "1",
                     },
                     rhs: LiteralInteger {
-                        span: (
+                        span: Span(
                             11,
                             11,
                         ),
@@ -252,7 +252,7 @@
                 },
             },
         ),
-        end: (
+        end: Span(
             11,
             12,
         ),
@@ -263,7 +263,7 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: (
+                            span: Span(
                                 13,
                                 1,
                             ),
@@ -271,13 +271,13 @@
                         },
                     ),
                 ),
-                span: (
+                span: Span(
                     13,
                     4,
                 ),
                 right: Coalesce {
                     lhs: LiteralInteger {
-                        span: (
+                        span: Span(
                             13,
                             6,
                         ),
@@ -285,14 +285,14 @@
                     },
                     rhs: Coalesce {
                         lhs: LiteralInteger {
-                            span: (
+                            span: Span(
                                 13,
                                 11,
                             ),
                             value: "2",
                         },
                         rhs: LiteralInteger {
-                            span: (
+                            span: Span(
                                 13,
                                 16,
                             ),
@@ -302,7 +302,7 @@
                 },
             },
         ),
-        end: (
+        end: Span(
             13,
             17,
         ),

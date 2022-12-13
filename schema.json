@@ -44,21 +44,7 @@
           ]
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -84,24 +70,14 @@
               ],
               "properties": {
                 "ellipsis": {
-                  "type": [
-                    "array",
-                    "null"
-                  ],
-                  "items": [
+                  "anyOf": [
                     {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
+                      "$ref": "#/definitions/Span"
                     },
                     {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
+                      "type": "null"
                     }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  ]
                 },
                 "value": {
                   "$ref": "#/definitions/Expression"
@@ -132,44 +108,20 @@
               ],
               "properties": {
                 "ellipsis": {
-                  "type": [
-                    "array",
-                    "null"
-                  ],
-                  "items": [
+                  "anyOf": [
                     {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
+                      "$ref": "#/definitions/Span"
                     },
                     {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
+                      "type": "null"
                     }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  ]
                 },
                 "name": {
                   "$ref": "#/definitions/SimpleIdentifier"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "value": {
                   "$ref": "#/definitions/Expression"
@@ -195,38 +147,10 @@
           }
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -239,55 +163,13 @@
       ],
       "properties": {
         "ellipsis": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -321,21 +203,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -369,21 +237,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -417,21 +271,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -465,21 +305,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -513,21 +339,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -561,21 +373,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -605,21 +403,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -649,21 +433,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -693,21 +463,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -737,21 +493,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -781,21 +523,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -825,21 +553,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -901,21 +615,7 @@
           "type": "boolean"
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "parameters": {
           "$ref": "#/definitions/FunctionParameterList"
@@ -931,21 +631,7 @@
           ]
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "static": {
           "type": "boolean"
@@ -982,21 +668,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1030,21 +702,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1078,21 +736,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1126,21 +770,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1174,21 +804,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1222,21 +838,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1270,21 +872,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1318,21 +906,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1366,21 +940,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1414,21 +974,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1462,21 +1008,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1510,21 +1042,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1558,21 +1076,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1606,21 +1110,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -1647,41 +1137,13 @@
           ]
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "name": {
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -1694,21 +1156,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "members": {
           "type": "array",
@@ -1717,21 +1165,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -1768,21 +1202,7 @@
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -1795,21 +1215,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "members": {
           "type": "array",
@@ -1818,21 +1224,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -1853,41 +1245,13 @@
           }
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "name": {
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "value": {
           "$ref": "#/definitions/Expression"
@@ -1962,21 +1326,7 @@
           ],
           "properties": {
             "span": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer",
-                  "format": "uint",
-                  "minimum": 0.0
-                },
-                {
-                  "type": "integer",
-                  "format": "uint",
-                  "minimum": 0.0
-                }
-              ],
-              "maxItems": 2,
-              "minItems": 2
+              "$ref": "#/definitions/Span"
             },
             "type": {
               "type": "string",
@@ -1994,21 +1344,7 @@
           ],
           "properties": {
             "span": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer",
-                  "format": "uint",
-                  "minimum": 0.0
-                },
-                {
-                  "type": "integer",
-                  "format": "uint",
-                  "minimum": 0.0
-                }
-              ],
-              "maxItems": 2,
-              "minItems": 2
+              "$ref": "#/definitions/Span"
             },
             "type": {
               "type": "string",
@@ -2050,21 +1386,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -2098,21 +1420,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -2146,21 +1454,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -2194,21 +1488,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -2242,21 +1522,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -2286,21 +1552,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -2329,21 +1581,7 @@
           ]
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -2356,38 +1594,10 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "statements": {
           "type": "array",
@@ -2406,38 +1616,10 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "variable": {
           "$ref": "#/definitions/Expression"
@@ -2590,38 +1772,10 @@
           }
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "types": {
           "$ref": "#/definitions/CatchType"
@@ -2730,21 +1884,7 @@
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -2757,21 +1897,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "members": {
           "type": "array",
@@ -2780,21 +1906,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -2809,21 +1921,7 @@
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -2841,21 +1939,7 @@
           }
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -2976,38 +2060,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3034,38 +2090,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3092,38 +2120,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3148,21 +2148,7 @@
           }
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "entries": {
           "type": "array",
@@ -3177,21 +2163,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -3224,21 +2196,7 @@
           "type": "boolean"
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "parameters": {
           "$ref": "#/definitions/FunctionParameterList"
@@ -3254,21 +2212,7 @@
           ]
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "static": {
           "type": "boolean"
@@ -3309,41 +2253,13 @@
           "$ref": "#/definitions/ByteString"
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "format": {
           "$ref": "#/definitions/CommentFormat"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -3437,21 +2353,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3485,21 +2387,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3533,21 +2421,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3581,21 +2455,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3629,21 +2489,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3677,21 +2523,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3725,21 +2557,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3773,21 +2591,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3821,21 +2625,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3869,21 +2659,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -3900,21 +2676,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "entries": {
           "type": "array",
@@ -3923,21 +2685,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -3979,38 +2727,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -4037,38 +2757,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -4095,38 +2787,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -4153,38 +2817,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -4207,21 +2843,7 @@
           "$ref": "#/definitions/DeclareEntryGroup"
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -4240,21 +2862,7 @@
               ],
               "properties": {
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -4276,38 +2884,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "statements": {
                   "type": "array",
@@ -4334,21 +2914,7 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "expression": {
                   "$ref": "#/definitions/Expression"
@@ -4376,59 +2942,17 @@
                   "type": "array",
                   "items": [
                     {
-                      "type": "array",
-                      "items": [
-                        {
-                          "type": "integer",
-                          "format": "uint",
-                          "minimum": 0.0
-                        },
-                        {
-                          "type": "integer",
-                          "format": "uint",
-                          "minimum": 0.0
-                        }
-                      ],
-                      "maxItems": 2,
-                      "minItems": 2
+                      "$ref": "#/definitions/Span"
                     },
                     {
-                      "type": "array",
-                      "items": [
-                        {
-                          "type": "integer",
-                          "format": "uint",
-                          "minimum": 0.0
-                        },
-                        {
-                          "type": "integer",
-                          "format": "uint",
-                          "minimum": 0.0
-                        }
-                      ],
-                      "maxItems": 2,
-                      "minItems": 2
+                      "$ref": "#/definitions/Span"
                     }
                   ],
                   "maxItems": 2,
                   "minItems": 2
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "statements": {
                   "type": "array",
@@ -4455,21 +2979,7 @@
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "value": {
           "$ref": "#/definitions/Expression"
@@ -4485,21 +2995,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "entries": {
           "type": "array",
@@ -4508,21 +3004,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -4546,41 +3028,13 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "expr": {
           "$ref": "#/definitions/Expression"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -4808,21 +3262,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -4856,21 +3296,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -4900,21 +3326,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -4942,41 +3354,13 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "expr": {
                   "$ref": "#/definitions/Expression"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -5049,21 +3433,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -5090,21 +3460,7 @@
               ],
               "properties": {
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "value": {
                   "$ref": "#/definitions/ByteString"
@@ -5134,21 +3490,7 @@
               ],
               "properties": {
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "value": {
                   "$ref": "#/definitions/ByteString"
@@ -5221,21 +3563,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -5330,21 +3658,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -5382,21 +3696,7 @@
                   "$ref": "#/definitions/ArgumentPlaceholder"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -5434,21 +3734,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -5486,21 +3772,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -5538,21 +3810,7 @@
                   "$ref": "#/definitions/ArgumentPlaceholder"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -5625,21 +3883,7 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "items": {
                   "type": "array",
@@ -5648,21 +3892,7 @@
                   }
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -5691,21 +3921,7 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "items": {
                   "type": "array",
@@ -5714,38 +3930,10 @@
                   }
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -5818,21 +4006,7 @@
                   ]
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -5862,21 +4036,7 @@
               ],
               "properties": {
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "value": {
                   "$ref": "#/definitions/ByteString"
@@ -6023,21 +4183,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -6071,21 +4217,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -6119,21 +4251,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -6290,21 +4408,7 @@
                   "$ref": "#/definitions/MagicConst"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -6372,21 +4476,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -6604,21 +4694,7 @@
               ],
               "properties": {
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "value": {
                   "$ref": "#/definitions/Expression"
@@ -6648,21 +4724,7 @@
               ],
               "properties": {
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "value": {
                   "$ref": "#/definitions/Expression"
@@ -6696,21 +4758,7 @@
                   "$ref": "#/definitions/CastKind"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "value": {
                   "$ref": "#/definitions/Expression"
@@ -6736,38 +4784,10 @@
           }
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -6799,21 +4819,7 @@
           "type": "boolean"
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "name": {
           "$ref": "#/definitions/SimpleIdentifier"
@@ -6832,21 +4838,7 @@
           ]
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -6881,41 +4873,13 @@
           ]
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "name": {
           "$ref": "#/definitions/SimpleVariable"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "type": {
           "anyOf": [
@@ -6941,21 +4905,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "members": {
           "type": "array",
@@ -6964,21 +4914,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -7114,21 +5050,7 @@
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -7141,21 +5063,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "members": {
           "type": "array",
@@ -7164,21 +5072,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -7196,21 +5090,7 @@
           }
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -7305,21 +5185,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -7353,21 +5219,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -7397,21 +5249,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -7445,21 +5283,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -7493,21 +5317,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -7541,21 +5351,7 @@
                   "$ref": "#/definitions/Expression"
                 },
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -7728,21 +5524,7 @@
           "type": "boolean"
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "modifiers": {
           "type": "array",
@@ -7767,21 +5549,7 @@
           ]
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -7808,38 +5576,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -7866,38 +5606,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -7924,38 +5636,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -7982,38 +5666,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8040,38 +5696,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8098,38 +5726,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8169,21 +5769,7 @@
           ]
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "modifiers": {
           "type": "array",
@@ -8195,21 +5781,7 @@
           "$ref": "#/definitions/SimpleVariable"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "type": {
           "anyOf": [
@@ -8235,21 +5807,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "members": {
           "type": "array",
@@ -8258,21 +5816,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -8339,38 +5883,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8397,38 +5913,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8455,38 +5943,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8513,38 +5973,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8634,38 +6066,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8692,38 +6096,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8750,38 +6126,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8808,38 +6156,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8866,38 +6186,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8913,21 +6205,7 @@
       ],
       "properties": {
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "value": {
           "$ref": "#/definitions/ByteString"
@@ -8945,23 +6223,26 @@
           "$ref": "#/definitions/ByteString"
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
+    },
+    "Span": {
+      "type": "array",
+      "items": [
+        {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        },
+        {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        }
+      ],
+      "maxItems": 2,
+      "minItems": 2
     },
     "Statement": {
       "oneOf": [
@@ -9544,21 +6825,7 @@
               ],
               "properties": {
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "values": {
                   "type": "array",
@@ -9620,21 +6887,7 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "expression": {
                   "$ref": "#/definitions/Expression"
@@ -9853,21 +7106,7 @@
               ],
               "properties": {
                 "span": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "variables": {
                   "type": "array",
@@ -9911,21 +7150,7 @@
               ]
             },
             "value": {
-              "type": "array",
-              "items": [
-                {
-                  "type": "integer",
-                  "format": "uint",
-                  "minimum": 0.0
-                },
-                {
-                  "type": "integer",
-                  "format": "uint",
-                  "minimum": 0.0
-                }
-              ],
-              "maxItems": 2,
-              "minItems": 2
+              "$ref": "#/definitions/Span"
             }
           }
         }
@@ -10014,21 +7239,7 @@
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -10041,21 +7252,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "members": {
           "type": "array",
@@ -10064,21 +7261,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -10191,21 +7374,7 @@
           }
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "traits": {
           "type": "array",
@@ -10374,21 +7543,7 @@
           }
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "finally": {
           "anyOf": [
@@ -10401,21 +7556,7 @@
           ]
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -10749,41 +7890,13 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "name": {
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "statements": {
           "type": "array",
@@ -10822,21 +7935,7 @@
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -10849,21 +7948,7 @@
       ],
       "properties": {
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "members": {
           "type": "array",
@@ -10872,21 +7957,7 @@
           }
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -10906,41 +7977,13 @@
           }
         },
         "end": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "name": {
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "start": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -11197,21 +8240,7 @@
       ],
       "properties": {
         "span": {
-          "type": "array",
-          "items": [
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            },
-            {
-              "type": "integer",
-              "format": "uint",
-              "minimum": 0.0
-            }
-          ],
-          "maxItems": 2,
-          "minItems": 2
+          "$ref": "#/definitions/Span"
         },
         "variable": {
           "$ref": "#/definitions/Variable"
@@ -11241,38 +8270,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -11299,38 +8300,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -11357,38 +8330,10 @@
               ],
               "properties": {
                 "end": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
-                  "type": "array",
-                  "items": [
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    },
-                    {
-                      "type": "integer",
-                      "format": "uint",
-                      "minimum": 0.0
-                    }
-                  ],
-                  "maxItems": 2,
-                  "minItems": 2
+                  "$ref": "#/definitions/Span"
                 }
               }
             }

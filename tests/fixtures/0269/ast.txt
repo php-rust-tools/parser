@@ -1,25 +1,25 @@
 [
     Constant(
         Constant {
-            start: (
+            start: Span(
                 3,
                 1,
             ),
-            end: (
+            end: Span(
                 3,
                 17,
             ),
             entries: [
                 ConstantEntry {
                     name: SimpleIdentifier {
-                        span: (
+                        span: Span(
                             3,
                             7,
                         ),
                         value: "\xe2\x86\xaa",
                     },
                     value: LiteralString {
-                        span: (
+                        span: Span(
                             3,
                             13,
                         ),
@@ -31,13 +31,13 @@
     ),
     Interface(
         Interface {
-            span: (
+            span: Span(
                 5,
                 1,
             ),
             attributes: [],
             name: SimpleIdentifier {
-                span: (
+                span: Span(
                     5,
                     11,
                 ),
@@ -45,27 +45,27 @@
             },
             extends: None,
             body: InterfaceBody {
-                start: (
+                start: Span(
                     5,
                     16,
                 ),
-                end: (
+                end: Span(
                     7,
                     1,
                 ),
                 members: [
                     Method(
                         Method {
-                            start: (
+                            start: Span(
                                 6,
                                 10,
                             ),
-                            end: (
+                            end: Span(
                                 6,
                                 43,
                             ),
                             name: SimpleIdentifier {
-                                span: (
+                                span: Span(
                                     6,
                                     19,
                                 ),
@@ -73,26 +73,26 @@
                             },
                             attributes: [],
                             parameters: MethodParameterList {
-                                start: (
+                                start: Span(
                                     6,
                                     23,
                                 ),
-                                end: (
+                                end: Span(
                                     6,
                                     37,
                                 ),
                                 members: [
                                     MethodParameter {
-                                        start: (
+                                        start: Span(
                                             6,
                                             24,
                                         ),
-                                        end: (
+                                        end: Span(
                                             6,
                                             36,
                                         ),
                                         name: SimpleVariable {
-                                            span: (
+                                            span: Span(
                                                 6,
                                                 31,
                                             ),
@@ -115,11 +115,11 @@
                             modifiers: MethodModifierGroup {
                                 modifiers: [
                                     Public {
-                                        start: (
+                                        start: Span(
                                             6,
                                             3,
                                         ),
-                                        end: (
+                                        end: Span(
                                             6,
                                             10,
                                         ),
@@ -138,12 +138,12 @@
     ),
     Class(
         Class {
-            span: (
+            span: Span(
                 9,
                 7,
             ),
             name: SimpleIdentifier {
-                span: (
+                span: Span(
                     9,
                     13,
                 ),
@@ -152,11 +152,11 @@
             modifiers: ClassModifierGroup {
                 modifiers: [
                     Final {
-                        start: (
+                        start: Span(
                             9,
                             1,
                         ),
-                        end: (
+                        end: Span(
                             9,
                             7,
                         ),
@@ -166,13 +166,13 @@
             extends: None,
             implements: Some(
                 ClassImplements {
-                    span: (
+                    span: Span(
                         9,
                         18,
                     ),
                     interfaces: [
                         SimpleIdentifier {
-                            span: (
+                            span: Span(
                                 9,
                                 29,
                             ),
@@ -183,27 +183,27 @@
             ),
             attributes: [],
             body: ClassBody {
-                start: (
+                start: Span(
                     9,
                     34,
                 ),
-                end: (
+                end: Span(
                     13,
                     1,
                 ),
                 members: [
                     Method(
                         Method {
-                            start: (
+                            start: Span(
                                 10,
                                 10,
                             ),
-                            end: (
+                            end: Span(
                                 12,
                                 3,
                             ),
                             name: SimpleIdentifier {
-                                span: (
+                                span: Span(
                                     10,
                                     19,
                                 ),
@@ -211,26 +211,26 @@
                             },
                             attributes: [],
                             parameters: MethodParameterList {
-                                start: (
+                                start: Span(
                                     10,
                                     23,
                                 ),
-                                end: (
+                                end: Span(
                                     10,
                                     37,
                                 ),
                                 members: [
                                     MethodParameter {
-                                        start: (
+                                        start: Span(
                                             10,
                                             24,
                                         ),
-                                        end: (
+                                        end: Span(
                                             10,
                                             36,
                                         ),
                                         name: SimpleVariable {
-                                            span: (
+                                            span: Span(
                                                 10,
                                                 31,
                                             ),
@@ -253,12 +253,12 @@
                                 [
                                     Expression {
                                         expression: Print {
-                                            span: (
+                                            span: Span(
                                                 11,
                                                 5,
                                             ),
                                             value: Parenthesized {
-                                                start: (
+                                                start: Span(
                                                     11,
                                                     10,
                                                 ),
@@ -266,7 +266,7 @@
                                                     left: Variable(
                                                         SimpleVariable(
                                                             SimpleVariable {
-                                                                span: (
+                                                                span: Span(
                                                                     11,
                                                                     11,
                                                                 ),
@@ -274,14 +274,14 @@
                                                             },
                                                         ),
                                                     ),
-                                                    span: (
+                                                    span: Span(
                                                         11,
                                                         17,
                                                     ),
                                                     right: Identifier(
                                                         SimpleIdentifier(
                                                             SimpleIdentifier {
-                                                                span: (
+                                                                span: Span(
                                                                     11,
                                                                     19,
                                                                 ),
@@ -290,13 +290,13 @@
                                                         ),
                                                     ),
                                                 },
-                                                end: (
+                                                end: Span(
                                                     11,
                                                     22,
                                                 ),
                                             },
                                         },
-                                        end: (
+                                        end: Span(
                                             11,
                                             23,
                                         ),
@@ -306,11 +306,11 @@
                             modifiers: MethodModifierGroup {
                                 modifiers: [
                                     Public {
-                                        start: (
+                                        start: Span(
                                             10,
                                             3,
                                         ),
-                                        end: (
+                                        end: Span(
                                             10,
                                             10,
                                         ),
@@ -329,16 +329,16 @@
     ),
     Function(
         Function {
-            start: (
+            start: Span(
                 15,
                 1,
             ),
-            end: (
+            end: Span(
                 19,
                 1,
             ),
             name: SimpleIdentifier {
-                span: (
+                span: Span(
                     15,
                     10,
                 ),
@@ -346,11 +346,11 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: (
+                start: Span(
                     15,
                     14,
                 ),
-                end: (
+                end: Span(
                     15,
                     16,
                 ),
@@ -367,7 +367,7 @@
                             left: Variable(
                                 SimpleVariable(
                                     SimpleVariable {
-                                        span: (
+                                        span: Span(
                                             16,
                                             3,
                                         ),
@@ -375,19 +375,19 @@
                                     },
                                 ),
                             ),
-                            span: (
+                            span: Span(
                                 16,
                                 9,
                             ),
                             right: New {
-                                span: (
+                                span: Span(
                                     16,
                                     11,
                                 ),
                                 target: Identifier(
                                     SimpleIdentifier(
                                         SimpleIdentifier {
-                                            span: (
+                                            span: Span(
                                                 16,
                                                 15,
                                             ),
@@ -397,12 +397,12 @@
                                 ),
                                 arguments: Some(
                                     ArgumentList {
-                                        start: (
+                                        start: Span(
                                             16,
                                             19,
                                         ),
                                         arguments: [],
-                                        end: (
+                                        end: Span(
                                             16,
                                             20,
                                         ),
@@ -411,7 +411,7 @@
                             },
                         },
                     ),
-                    end: (
+                    end: Span(
                         16,
                         21,
                     ),
@@ -422,7 +422,7 @@
                             left: Variable(
                                 SimpleVariable(
                                     SimpleVariable {
-                                        span: (
+                                        span: Span(
                                             17,
                                             3,
                                         ),
@@ -430,12 +430,12 @@
                                     },
                                 ),
                             ),
-                            span: (
+                            span: Span(
                                 17,
                                 9,
                             ),
                             right: LiteralString {
-                                span: (
+                                span: Span(
                                     17,
                                     11,
                                 ),
@@ -443,7 +443,7 @@
                             },
                         },
                     ),
-                    end: (
+                    end: Span(
                         17,
                         25,
                     ),
@@ -453,7 +453,7 @@
                         target: Variable(
                             SimpleVariable(
                                 SimpleVariable {
-                                    span: (
+                                    span: Span(
                                         18,
                                         3,
                                     ),
@@ -461,14 +461,14 @@
                                 },
                             ),
                         ),
-                        span: (
+                        span: Span(
                             18,
                             8,
                         ),
                         method: Identifier(
                             SimpleIdentifier(
                                 SimpleIdentifier {
-                                    span: (
+                                    span: Span(
                                         18,
                                         10,
                                     ),
@@ -477,20 +477,20 @@
                             ),
                         ),
                         arguments: ArgumentList {
-                            start: (
+                            start: Span(
                                 18,
                                 14,
                             ),
                             arguments: [
                                 Named {
                                     name: SimpleIdentifier {
-                                        span: (
+                                        span: Span(
                                             18,
                                             15,
                                         ),
                                         value: "\xf0\x9f\x93\x83",
                                     },
-                                    span: (
+                                    span: Span(
                                         18,
                                         19,
                                     ),
@@ -498,7 +498,7 @@
                                     value: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: (
+                                                span: Span(
                                                     18,
                                                     21,
                                                 ),
@@ -508,13 +508,13 @@
                                     ),
                                 },
                             ],
-                            end: (
+                            end: Span(
                                 18,
                                 26,
                             ),
                         },
                     },
-                    end: (
+                    end: Span(
                         18,
                         27,
                     ),
@@ -527,7 +527,7 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: (
+                        span: Span(
                             21,
                             1,
                         ),
@@ -536,18 +536,18 @@
                 ),
             ),
             arguments: ArgumentList {
-                start: (
+                start: Span(
                     21,
                     5,
                 ),
                 arguments: [],
-                end: (
+                end: Span(
                     21,
                     6,
                 ),
             },
         },
-        end: (
+        end: Span(
             21,
             7,
         ),
@@ -558,7 +558,7 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: (
+                            span: Span(
                                 23,
                                 1,
                             ),
@@ -566,12 +566,12 @@
                         },
                     ),
                 ),
-                span: (
+                span: Span(
                     23,
                     9,
                 ),
                 right: LiteralInteger {
-                    span: (
+                    span: Span(
                         23,
                         11,
                     ),
@@ -579,7 +579,7 @@
                 },
             },
         ),
-        end: (
+        end: Span(
             23,
             12,
         ),
@@ -589,7 +589,7 @@
             Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: (
+                        span: Span(
                             23,
                             19,
                         ),
