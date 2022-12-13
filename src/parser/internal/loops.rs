@@ -12,7 +12,7 @@ pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_left_parenthesis(state)?;
 
-    let expr = expressions::lowest_precedence(state)?;
+    let expr = expressions::create(state)?;
 
     utils::skip(state, TokenKind::As)?;
 
@@ -22,7 +22,7 @@ pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
     }
 
     let mut key_var = None;
-    let mut value_var = expressions::lowest_precedence(state)?;
+    let mut value_var = expressions::create(state)?;
 
     if state.stream.current().kind == TokenKind::DoubleArrow {
         state.stream.next();
@@ -34,7 +34,7 @@ pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
             state.stream.next();
         }
 
-        value_var = expressions::lowest_precedence(state)?;
+        value_var = expressions::create(state)?;
     }
 
     utils::skip_right_parenthesis(state)?;
@@ -74,7 +74,7 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
             break;
         }
 
-        init.push(expressions::lowest_precedence(state)?);
+        init.push(expressions::create(state)?);
 
         if state.stream.current().kind == TokenKind::Comma {
             state.stream.next();
@@ -91,7 +91,7 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
             break;
         }
 
-        condition.push(expressions::lowest_precedence(state)?);
+        condition.push(expressions::create(state)?);
 
         if state.stream.current().kind == TokenKind::Comma {
             state.stream.next();
@@ -107,7 +107,7 @@ pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
             break;
         }
 
-        r#loop.push(expressions::lowest_precedence(state)?);
+        r#loop.push(expressions::create(state)?);
 
         if state.stream.current().kind == TokenKind::Comma {
             state.stream.next();
@@ -156,7 +156,7 @@ pub fn do_loop(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::While)?;
 
     utils::skip_left_parenthesis(state)?;
-    let condition = expressions::lowest_precedence(state)?;
+    let condition = expressions::create(state)?;
     utils::skip_right_parenthesis(state)?;
     utils::skip_semicolon(state)?;
 
@@ -168,7 +168,7 @@ pub fn while_loop(state: &mut State) -> ParseResult<Statement> {
 
     utils::skip_left_parenthesis(state)?;
 
-    let condition = expressions::lowest_precedence(state)?;
+    let condition = expressions::create(state)?;
 
     utils::skip_right_parenthesis(state)?;
 
@@ -198,7 +198,7 @@ pub fn continue_statement(state: &mut State) -> ParseResult<Statement> {
 
     let mut num = None;
     if state.stream.current().kind != TokenKind::SemiColon {
-        num = Some(expressions::lowest_precedence(state)?);
+        num = Some(expressions::create(state)?);
     }
 
     utils::skip_semicolon(state)?;
@@ -211,7 +211,7 @@ pub fn break_statement(state: &mut State) -> ParseResult<Statement> {
 
     let mut num = None;
     if state.stream.current().kind != TokenKind::SemiColon {
-        num = Some(expressions::lowest_precedence(state)?);
+        num = Some(expressions::create(state)?);
     }
 
     utils::skip_semicolon(state)?;

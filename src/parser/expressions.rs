@@ -27,20 +27,20 @@ use crate::parser::internal::utils;
 use crate::parser::internal::variables;
 use crate::parser::state::State;
 
-pub fn lowest_precedence(state: &mut State) -> ParseResult<Expression> {
+pub fn create(state: &mut State) -> ParseResult<Expression> {
     for_precedence(state, Precedence::Lowest)
 }
 
-pub fn null_coalesce_precedence(state: &mut State) -> ParseResult<Expression> {
+fn null_coalesce_precedence(state: &mut State) -> ParseResult<Expression> {
     for_precedence(state, Precedence::NullCoalesce)
 }
 
-pub fn clone_or_new_precedence(state: &mut State) -> ParseResult<Expression> {
+fn clone_or_new_precedence(state: &mut State) -> ParseResult<Expression> {
     for_precedence(state, Precedence::CloneOrNew)
 }
 
 fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expression> {
-    let mut left = create(state)?;
+    let mut left = left(state)?;
 
     if state.stream.current().kind == TokenKind::SemiColon {
         return Ok(left);
@@ -90,7 +90,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                     TokenKind::Question => {
                         if state.stream.current().kind == TokenKind::Colon {
                             utils::skip_colon(state)?;
-                            let r#else = lowest_precedence(state)?;
+                            let r#else = create(state)?;
 
                             Expression::ShortTernary {
                                 condition: Box::new(left),
@@ -98,9 +98,9 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                                 r#else: Box::new(r#else),
                             }
                         } else {
-                            let then = lowest_precedence(state)?;
+                            let then = create(state)?;
                             utils::skip_colon(state)?;
-                            let r#else = lowest_precedence(state)?;
+                            let r#else = create(state)?;
 
                             Expression::Ternary {
                                 condition: Box::new(left),
@@ -110,7 +110,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                         }
                     }
                     TokenKind::QuestionColon => {
-                        let r#else = lowest_precedence(state)?;
+                        let r#else = create(state)?;
                         Expression::ShortTernary {
                             condition: Box::new(left),
                             span,
@@ -483,7 +483,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
     Ok(left)
 }
 
-fn create(state: &mut State) -> ParseResult<Expression> {
+fn left(state: &mut State) -> ParseResult<Expression> {
     if state.stream.is_eof() {
         return Err(ParseError::UnexpectedEndOfFile);
     }
@@ -501,8 +501,6 @@ macro_rules! expressions {
         )+
     ) => {
         $(
-            #[inline(never)]
-            #[allow(unused_variables)]
             pub(in crate::parser) fn $expr($state: &mut State) -> ParseResult<Expression> {
                 match &$state.stream.current().kind {
                     $( $current )|+ $( if matches!(&$state.stream.peek().kind, $( $peek )|+ ))? => $out,
@@ -563,7 +561,7 @@ expressions! {
     eval({
         state.stream.next();
         utils::skip_left_parenthesis(state)?;
-        let value = Box::new(lowest_precedence(state)?);
+        let value = Box::new(create(state)?);
         utils::skip_right_parenthesis(state)?;
         Ok(Expression::Eval { value })
     })
@@ -575,7 +573,7 @@ expressions! {
             state.stream.next();
 
             if state.stream.current().kind != TokenKind::RightParen {
-                let value = Some(Box::new(lowest_precedence(state)?));
+                let value = Some(Box::new(create(state)?));
                 utils::skip_right_parenthesis(state)?;
                 value
             } else {
@@ -596,7 +594,7 @@ expressions! {
             state.stream.next();
 
             if state.stream.current().kind != TokenKind::RightParen {
-                let value = Some(Box::new(lowest_precedence(state)?));
+                let value = Some(Box::new(create(state)?));
                 utils::skip_right_parenthesis(state)?;
                 value
             } else {
@@ -837,7 +835,7 @@ expressions! {
         let start = state.stream.current().span;
         state.stream.next();
 
-        let expr = lowest_precedence(state)?;
+        let expr = create(state)?;
 
         let end = utils::skip_right_parenthesis(state)?;
 
@@ -1012,7 +1010,7 @@ expressions! {
 
         state.stream.next();
 
-        let path = lowest_precedence(state)?;
+        let path = create(state)?;
 
         Ok(Expression::Include {
             span,
@@ -1178,7 +1176,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                     index: None,
                 }
             } else {
-                let index = lowest_precedence(state)?;
+                let index = create(state)?;
 
                 utils::skip_right_bracket(state)?;
 
@@ -1207,7 +1205,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                     must_be_method_call = true;
                     state.stream.next();
 
-                    let name = lowest_precedence(state)?;
+                    let name = create(state)?;
 
                     let end = utils::skip_right_brace(state)?;
 
@@ -1299,7 +1297,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                     let start = state.stream.current().span;
                     state.stream.next();
 
-                    let name = lowest_precedence(state)?;
+                    let name = create(state)?;
 
                     let end = utils::skip_right_brace(state)?;
 

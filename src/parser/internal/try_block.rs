@@ -38,7 +38,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
             None
         } else {
             // TODO(azjezz): this is a variable, no an expression?
-            Some(expressions::lowest_precedence(state)?)
+            Some(expressions::create(state)?)
         };
 
         utils::skip_right_parenthesis(state)?;

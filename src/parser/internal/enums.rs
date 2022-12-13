@@ -172,7 +172,7 @@ fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnum
 
         utils::skip(state, TokenKind::Equals)?;
 
-        let value = expressions::lowest_precedence(state)?;
+        let value = expressions::create(state)?;
 
         let end = utils::skip_semicolon(state)?;
 

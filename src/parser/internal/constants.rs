@@ -19,7 +19,7 @@ pub fn parse(state: &mut State) -> ParseResult<Constant> {
 
         utils::skip(state, TokenKind::Equals)?;
 
-        let value = expressions::lowest_precedence(state)?;
+        let value = expressions::create(state)?;
 
         entries.push(ConstantEntry { name, value });
 
@@ -54,7 +54,7 @@ pub fn classish(
 
         utils::skip(state, TokenKind::Equals)?;
 
-        let value = expressions::lowest_precedence(state)?;
+        let value = expressions::create(state)?;
 
         entries.push(ConstantEntry { name, value });
 

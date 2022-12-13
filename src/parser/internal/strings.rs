@@ -10,7 +10,7 @@ use crate::parser::ast::Expression;
 use crate::parser::ast::StringPart;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
-use crate::parser::expressions::lowest_precedence;
+use crate::parser::expressions::create;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;
@@ -240,7 +240,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
         TokenKind::LeftBrace => {
             // "{$expr}"
             state.stream.next();
-            let e = lowest_precedence(state)?;
+            let e = create(state)?;
             utils::skip_right_brace(state)?;
             Some(StringPart::Expression(Box::new(e)))
         }
