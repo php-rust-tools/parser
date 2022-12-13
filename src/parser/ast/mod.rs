@@ -157,7 +157,7 @@ impl Display for Type {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub enum UseKind {
     Normal,

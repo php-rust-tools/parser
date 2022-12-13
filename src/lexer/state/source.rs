@@ -21,14 +21,6 @@ impl<'a> Source<'a> {
         }
     }
 
-    pub fn from<B: ?Sized + AsRef<[u8]>>(input: &'a B) -> Self {
-        Self::new(input.as_ref())
-    }
-
-    pub const fn cursor(&self) -> usize {
-        self.cursor
-    }
-
     pub const fn span(&self) -> Span {
         self.span
     }
@@ -71,10 +63,13 @@ impl<'a> Source<'a> {
         &self.input[from..until]
     }
 
+    #[inline(always)]
     pub fn read_remaining(&self) -> &'a [u8] {
-        let from = self.current_bound();
-
-        &self.input[from..]
+        &self.input[(if self.cursor >= self.length {
+            self.length
+        } else {
+            self.cursor
+        })..]
     }
 
     pub fn at(&self, search: &[u8], len: usize) -> bool {
@@ -90,7 +85,15 @@ impl<'a> Source<'a> {
     }
 
     pub fn peek(&self, i: usize, n: usize) -> &'a [u8] {
-        let (from, until) = self.between_bound(i, n);
+        let from = self.cursor + i;
+        if from >= self.length {
+            return &self.input[self.length..self.length];
+        }
+
+        let mut until = from + n;
+        if until >= self.length {
+            until = self.length;
+        }
 
         &self.input[from..until]
     }
@@ -114,21 +117,6 @@ impl<'a> Source<'a> {
         self.peek(i, n)
     }
 
-    const fn between_bound(&self, i: usize, n: usize) -> (usize, usize) {
-        let from = self.cursor + i;
-        if from >= self.length {
-            return (self.length, self.length);
-        }
-
-        let mut until = from + n;
-
-        if until >= self.length {
-            until = self.length;
-        }
-
-        (from, until)
-    }
-
     const fn to_bound(&self, n: usize) -> (usize, usize) {
         if self.cursor >= self.length {
             return (self.length, self.length);
@@ -141,13 +129,5 @@ impl<'a> Source<'a> {
         }
 
         (self.cursor, until)
-    }
-
-    const fn current_bound(&self) -> usize {
-        if self.cursor >= self.length {
-            self.length
-        } else {
-            self.cursor
-        }
     }
 }

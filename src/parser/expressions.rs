@@ -1,8 +1,5 @@
-use crate::expect_token;
 use crate::expected_token_err;
-use crate::lexer::error::SyntaxError;
-use crate::lexer::state::DocStringKind;
-use crate::lexer::token::DocStringIndentationKind;
+use crate::lexer::token::DocStringKind;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::arguments::ArgumentPlaceholder;
 use crate::parser::ast::identifiers::DynamicIdentifier;
@@ -13,8 +10,6 @@ use crate::parser::ast::operators::AssignmentOperation;
 use crate::parser::ast::operators::BitwiseOperation;
 use crate::parser::ast::operators::ComparisonOperation;
 use crate::parser::ast::operators::LogicalOperation;
-use crate::parser::ast::variables::Variable;
-use crate::parser::ast::StringPart;
 use crate::parser::ast::{Expression, IncludeKind, MagicConst};
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
@@ -27,6 +22,7 @@ use crate::parser::internal::identifiers;
 use crate::parser::internal::parameters;
 use crate::parser::internal::precedences::Associativity;
 use crate::parser::internal::precedences::Precedence;
+use crate::parser::internal::strings;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;
 use crate::parser::state::State;
@@ -766,25 +762,24 @@ expressions! {
         }
     })
 
-    #[before(start_doc_string), current(TokenKind::StringPart(_))]
+    #[before(heredoc), current(TokenKind::StringPart(_))]
     string_part(|state: &mut State| {
-        interpolated_string(state)
+        strings::interpolated(state)
     })
 
-    #[before(backtick), current(TokenKind::StartDocString(_, _))]
-    start_doc_string(|state: &mut State| {
-        if let TokenKind::StartDocString(_, kind) = &state.stream.current().kind {
-            let kind = *kind;
+    #[before(nowdoc), current(TokenKind::StartDocString(_, DocStringKind::Heredoc))]
+    heredoc(|state: &mut State| {
+        strings::heredoc(state)
+    })
 
-            doc_string(state, kind)
-        } else {
-            unreachable!("{}:{}", file!(), line!());
-        }
+    #[before(backtick), current(TokenKind::StartDocString(_, DocStringKind::Nowdoc))]
+    nowdoc(|state: &mut State| {
+        strings::nowdoc(state)
     })
 
     #[before(identifier), current(TokenKind::Backtick)]
     backtick(|state: &mut State| {
-        shell_exec(state)
+        strings::shell_exec(state)
     })
 
     #[before(static_postfix), current(TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_))]
@@ -1365,329 +1360,6 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             })
         }
         _ => todo!("postfix: {:?}", op),
-    })
-}
-
-#[inline(always)]
-fn interpolated_string(state: &mut State) -> ParseResult<Expression> {
-    let mut parts = Vec::new();
-
-    while state.stream.current().kind != TokenKind::DoubleQuote {
-        if let Some(part) = interpolated_string_part(state)? {
-            parts.push(part);
-        }
-    }
-
-    state.stream.next();
-
-    Ok(Expression::InterpolatedString { parts })
-}
-
-#[inline(always)]
-fn shell_exec(state: &mut State) -> ParseResult<Expression> {
-    state.stream.next();
-
-    let mut parts = Vec::new();
-
-    while state.stream.current().kind != TokenKind::Backtick {
-        if let Some(part) = interpolated_string_part(state)? {
-            parts.push(part);
-        }
-    }
-
-    state.stream.next();
-
-    Ok(Expression::ShellExec { parts })
-}
-
-#[inline(always)]
-fn doc_string(state: &mut State, kind: DocStringKind) -> ParseResult<Expression> {
-    let span = state.stream.current().span;
-    state.stream.next();
-
-    Ok(match kind {
-        DocStringKind::Heredoc => {
-            let mut parts = Vec::new();
-
-            while !matches!(
-                state.stream.current().kind,
-                TokenKind::EndDocString(_, _, _)
-            ) {
-                if let Some(part) = interpolated_string_part(state)? {
-                    parts.push(part);
-                }
-            }
-
-            let (indentation_type, indentation_amount) = match state.stream.current().kind {
-                TokenKind::EndDocString(_, indentation_type, indentation_amount) => {
-                    (indentation_type, indentation_amount)
-                }
-                _ => unreachable!(),
-            };
-
-            state.stream.next();
-
-            let mut new_line = true;
-            if indentation_type != DocStringIndentationKind::None {
-                let indentation_char: u8 = indentation_type.into();
-
-                for part in parts.iter_mut() {
-                    // We only need to strip and validate indentation
-                    // for individual lines, so we can skip checks if
-                    // we know we're not on a new line.
-                    if !new_line {
-                        continue;
-                    }
-
-                    match part {
-                        StringPart::Literal(bytes) => {
-                            // 1. If this line doesn't start with any whitespace,
-                            //    we can return an error early because we know
-                            //    the label was indented.
-                            if !bytes.starts_with(&[b' ']) && !bytes.starts_with(&[b'\t']) {
-                                return Err(ParseError::SyntaxError(
-                                    SyntaxError::InvalidDocBodyIndentationLevel(
-                                        indentation_amount,
-                                        span,
-                                    ),
-                                ));
-                            }
-
-                            // 2. If this line doesn't start with the correct
-                            //    type of whitespace, we can also return an error.
-                            if !bytes.starts_with(&[indentation_char]) {
-                                return Err(ParseError::SyntaxError(
-                                    SyntaxError::InvalidDocIndentation(span),
-                                ));
-                            }
-
-                            // 3. We now know that the whitespace at the start of
-                            //    this line is correct, so we need to check that the
-                            //    amount of whitespace is correct too. In this case,
-                            //    the amount of whitespace just needs to be at least
-                            //    the same, so we can create a vector containing the
-                            //    minimum and check using `starts_with()`.
-                            let expected_whitespace_buffer =
-                                vec![indentation_char; indentation_amount];
-                            if !bytes.starts_with(&expected_whitespace_buffer) {
-                                return Err(ParseError::SyntaxError(
-                                    SyntaxError::InvalidDocBodyIndentationLevel(
-                                        indentation_amount,
-                                        span,
-                                    ),
-                                ));
-                            }
-
-                            // 4. All of the above checks have passed, so we know
-                            //    there are no more possible errors. Let's now
-                            //    strip the leading whitespace accordingly.
-                            *bytes = bytes
-                                .strip_prefix(&expected_whitespace_buffer[..])
-                                .unwrap()
-                                .into();
-                            new_line = bytes.ends_with(&[b'\n']);
-                        }
-                        _ => continue,
-                    }
-                }
-            }
-
-            Expression::Heredoc { parts }
-        }
-        DocStringKind::Nowdoc => {
-            let mut string_part = expect_token!([
-                TokenKind::StringPart(s) => s,
-            ], state, "constant string");
-
-            let (indentation_type, indentation_amount) = match state.stream.current().kind {
-                TokenKind::EndDocString(_, indentation_type, indentation_amount) => {
-                    (indentation_type, indentation_amount)
-                }
-                _ => unreachable!(),
-            };
-
-            state.stream.next();
-
-            if indentation_type != DocStringIndentationKind::None {
-                let indentation_char: u8 = indentation_type.into();
-
-                let mut lines = string_part
-                    .split(|b| *b == b'\n')
-                    .map(|s| s.to_vec())
-                    .collect::<Vec<Vec<u8>>>();
-
-                for line in lines.iter_mut() {
-                    if line.is_empty() {
-                        continue;
-                    }
-
-                    // 1. If this line doesn't start with any whitespace,
-                    //    we can return an error early because we know
-                    //    the label was indented.
-                    if !line.starts_with(&[b' ']) && !line.starts_with(&[b'\t']) {
-                        return Err(ParseError::SyntaxError(
-                            SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span),
-                        ));
-                    }
-
-                    // 2. If this line doesn't start with the correct
-                    //    type of whitespace, we can also return an error.
-                    if !line.starts_with(&[indentation_char]) {
-                        return Err(ParseError::SyntaxError(SyntaxError::InvalidDocIndentation(
-                            span,
-                        )));
-                    }
-
-                    // 3. We now know that the whitespace at the start of
-                    //    this line is correct, so we need to check that the
-                    //    amount of whitespace is correct too. In this case,
-                    //    the amount of whitespace just needs to be at least
-                    //    the same, so we can create a vector containing the
-                    //    minimum and check using `starts_with()`.
-                    let expected_whitespace_buffer = vec![indentation_char; indentation_amount];
-                    if !line.starts_with(&expected_whitespace_buffer) {
-                        return Err(ParseError::SyntaxError(
-                            SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span),
-                        ));
-                    }
-
-                    // 4. All of the above checks have passed, so we know
-                    //    there are no more possible errors. Let's now
-                    //    strip the leading whitespace accordingly.
-                    *line = line
-                        .strip_prefix(&expected_whitespace_buffer[..])
-                        .unwrap()
-                        .into();
-                }
-
-                let mut bytes = Vec::new();
-                for (i, line) in lines.iter().enumerate() {
-                    bytes.extend(line);
-                    if i < lines.len() - 1 {
-                        bytes.push(b'\n');
-                    }
-                }
-                string_part = bytes.into();
-            }
-
-            Expression::Nowdoc { value: string_part }
-        }
-    })
-}
-
-fn interpolated_string_part(state: &mut State) -> ParseResult<Option<StringPart>> {
-    Ok(match &state.stream.current().kind {
-        TokenKind::StringPart(s) => {
-            let part = if s.len() > 0 {
-                Some(StringPart::Literal(s.clone()))
-            } else {
-                None
-            };
-
-            state.stream.next();
-            part
-        }
-        TokenKind::DollarLeftBrace => {
-            let variable = variables::dynamic_variable(state)?;
-
-            Some(StringPart::Expression(Box::new(Expression::Variable(
-                variable,
-            ))))
-        }
-        TokenKind::LeftBrace => {
-            // "{$expr}"
-            state.stream.next();
-            let e = lowest_precedence(state)?;
-            utils::skip_right_brace(state)?;
-            Some(StringPart::Expression(Box::new(e)))
-        }
-        TokenKind::Variable(_) => {
-            // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
-            let variable = Expression::Variable(variables::dynamic_variable(state)?);
-            let e = match state.stream.current().kind {
-                TokenKind::LeftBracket => {
-                    state.stream.next();
-                    // Full expression syntax is not allowed here,
-                    // so we can't call expression.
-                    let index = match &state.stream.current().kind {
-                        TokenKind::LiteralInteger(value) => {
-                            let e = Expression::LiteralInteger {
-                                span: state.stream.current().span,
-                                value: value.clone(),
-                            };
-                            state.stream.next();
-                            e
-                        }
-                        TokenKind::Minus => {
-                            let span = state.stream.current().span;
-                            state.stream.next();
-                            if let TokenKind::LiteralInteger(value) = &state.stream.current().kind {
-                                let e = Expression::ArithmeticOperation(
-                                    ArithmeticOperation::Negative {
-                                        span,
-                                        right: Box::new(Expression::LiteralInteger {
-                                            span: state.stream.current().span,
-                                            value: value.clone(),
-                                        }),
-                                    },
-                                );
-                                state.stream.next();
-                                e
-                            } else {
-                                return expected_token_err!("an integer", state);
-                            }
-                        }
-                        TokenKind::Identifier(ident) => {
-                            let e = Expression::LiteralString {
-                                span: state.stream.current().span,
-                                value: ident.clone(),
-                            };
-                            state.stream.next();
-                            e
-                        }
-                        TokenKind::Variable(_) => Expression::Variable(Variable::SimpleVariable(
-                            variables::simple_variable(state)?,
-                        )),
-                        _ => {
-                            return expected_token_err!(
-                                ["`-`", "an integer", "an identifier", "a variable"],
-                                state
-                            );
-                        }
-                    };
-
-                    utils::skip_right_bracket(state)?;
-
-                    Expression::ArrayIndex {
-                        array: Box::new(variable),
-                        index: Some(Box::new(index)),
-                    }
-                }
-                TokenKind::Arrow => {
-                    state.stream.next();
-                    Expression::PropertyFetch {
-                        target: Box::new(variable),
-                        property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
-                            identifiers::identifier_maybe_reserved(state)?,
-                        ))),
-                    }
-                }
-                TokenKind::NullsafeArrow => {
-                    state.stream.next();
-                    Expression::NullsafePropertyFetch {
-                        target: Box::new(variable),
-                        property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
-                            identifiers::identifier_maybe_reserved(state)?,
-                        ))),
-                    }
-                }
-                _ => variable,
-            };
-            Some(StringPart::Expression(Box::new(e)))
-        }
-        _ => {
-            return expected_token_err!(["`${`", "`{$", "`\"`", "a variable"], state);
-        }
     })
 }
 

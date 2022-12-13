@@ -1,21 +1,14 @@
-use serde::Deserialize;
-use serde::Serialize;
-
 use std::collections::VecDeque;
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::error::SyntaxError;
 use crate::lexer::error::SyntaxResult;
-use crate::lexer::source::Source;
+use crate::lexer::state::source::Source;
 use crate::lexer::token::DocStringIndentationAmount;
 use crate::lexer::token::DocStringIndentationKind;
+use crate::lexer::token::DocStringKind;
 
-#[derive(Debug, Copy, PartialEq, Eq, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum DocStringKind {
-    Heredoc,
-    Nowdoc,
-}
+pub mod source;
 
 #[derive(Debug)]
 pub enum StackFrame {

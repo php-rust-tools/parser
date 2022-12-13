@@ -3,25 +3,24 @@ use crate::ident_start;
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::error::SyntaxError;
 use crate::lexer::error::SyntaxResult;
-use crate::lexer::source::Source;
-use crate::lexer::state::DocStringKind;
+use crate::lexer::state::source::Source;
 use crate::lexer::state::StackFrame;
 use crate::lexer::state::State;
 use crate::lexer::token::DocStringIndentationKind;
+use crate::lexer::token::DocStringKind;
 use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 
 pub mod byte_string;
 pub mod error;
-pub mod source;
 pub mod token;
 
-pub(crate) mod state;
+mod state;
 
 mod macros;
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy, Default)]
+#[derive(Debug, PartialEq, Eq, Clone, Default)]
 pub struct Lexer;
 
 impl Lexer {
@@ -68,10 +67,12 @@ impl Lexer {
                 StackFrame::ShellExec => self.shell_exec(&mut state, &mut tokens)?,
                 // The doc string state is entered when tokenizing heredocs and nowdocs.
                 StackFrame::DocString(kind, label, ..) => {
-                    let kind = *kind;
                     let label = label.clone();
 
-                    self.docstring(&mut state, &mut tokens, kind, label)?;
+                    match kind {
+                        DocStringKind::Heredoc => self.heredoc(&mut state, &mut tokens, label)?,
+                        DocStringKind::Nowdoc => self.nowdoc(&mut state, &mut tokens, label)?,
+                    }
                 }
                 // LookingForProperty is entered inside double quotes,
                 // backticks, or a heredoc, expecting a variable name.
@@ -503,7 +504,7 @@ impl Lexer {
 
                 state.source.next();
                 state.replace(StackFrame::DocString(
-                    doc_string_kind,
+                    doc_string_kind.clone(),
                     label.clone(),
                     DocStringIndentationKind::None,
                     0,
@@ -984,21 +985,6 @@ impl Lexer {
         }
 
         tokens.push(Token { kind, span });
-
-        Ok(())
-    }
-
-    fn docstring(
-        &self,
-        state: &mut State,
-        tokens: &mut Vec<Token>,
-        kind: DocStringKind,
-        label: ByteString,
-    ) -> SyntaxResult<()> {
-        match kind {
-            DocStringKind::Heredoc => self.heredoc(state, tokens, label)?,
-            DocStringKind::Nowdoc => self.nowdoc(state, tokens, label)?,
-        };
 
         Ok(())
     }
