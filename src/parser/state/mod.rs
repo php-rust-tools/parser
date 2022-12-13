@@ -7,7 +7,9 @@ use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
-use crate::parser::stream::TokenStream;
+use crate::parser::state::stream::TokenStream;
+
+pub mod stream;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum NamespaceType {

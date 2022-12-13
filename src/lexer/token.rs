@@ -4,20 +4,26 @@ use serde::Serialize;
 use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
-use crate::lexer::state::DocStringKind;
 
 pub type Span = (usize, usize);
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum OpenTagKind {
     Full,
     Echo,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum DocStringKind {
+    Heredoc,
+    Nowdoc,
+}
+
 pub type DocStringIndentationAmount = usize;
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum DocStringIndentationKind {
     Space,

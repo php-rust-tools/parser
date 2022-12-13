@@ -16,6 +16,7 @@ pub(in crate::parser) mod namespaces;
 pub(in crate::parser) mod parameters;
 pub(in crate::parser) mod precedences;
 pub(in crate::parser) mod properties;
+pub(in crate::parser) mod strings;
 pub(in crate::parser) mod traits;
 pub(in crate::parser) mod try_block;
 pub(in crate::parser) mod uses;

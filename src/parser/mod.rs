@@ -28,8 +28,8 @@ use crate::parser::internal::try_block;
 use crate::parser::internal::uses;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;
+use crate::parser::state::stream::TokenStream;
 use crate::parser::state::State;
-use crate::parser::stream::TokenStream;
 
 pub mod ast;
 pub mod error;
@@ -38,7 +38,6 @@ mod expressions;
 mod internal;
 mod macros;
 mod state;
-mod stream;
 
 pub fn parse(tokens: &[Token]) -> ParseResult<Program> {
     let mut stream = TokenStream::new(tokens);
