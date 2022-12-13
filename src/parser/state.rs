@@ -9,7 +9,7 @@ use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::stream::TokenStream;
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum NamespaceType {
     Braced,
     Unbraced,
@@ -74,7 +74,7 @@ impl<'a> State<'a> {
     /// Note: even when a namespace scope is exited, the namespace type
     /// is retained, until the next namespace scope is entered.
     pub fn namespace_type(&self) -> Option<NamespaceType> {
-        self.namespace_type.clone()
+        self.namespace_type
     }
 
     pub fn namespace(&self) -> Option<&Scope> {
