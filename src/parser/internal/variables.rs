@@ -32,7 +32,7 @@ pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
             let start = state.stream.current().span;
             state.stream.next();
 
-            let expr = expressions::lowest_precedence(state)?;
+            let expr = expressions::create(state)?;
 
             let end = utils::skip_right_brace(state)?;
 
@@ -48,7 +48,7 @@ pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
             state.stream.next();
             state.stream.next();
 
-            let expr = expressions::lowest_precedence(state)?;
+            let expr = expressions::create(state)?;
 
             let end = utils::skip_right_brace(state)?;
 

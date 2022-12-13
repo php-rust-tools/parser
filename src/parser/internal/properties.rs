@@ -25,7 +25,7 @@ pub fn parse(
         let mut value = None;
         if state.stream.current().kind == TokenKind::Equals {
             state.stream.next();
-            value = Some(expressions::lowest_precedence(state)?);
+            value = Some(expressions::create(state)?);
         }
 
         if modifiers.has_readonly() {
@@ -98,7 +98,7 @@ pub fn parse_var(state: &mut State, class: String) -> ParseResult<VariableProper
         let mut value = None;
         if state.stream.current().kind == TokenKind::Equals {
             state.stream.next();
-            value = Some(expressions::lowest_precedence(state)?);
+            value = Some(expressions::create(state)?);
         }
 
         if let Some(ty) = &ty {

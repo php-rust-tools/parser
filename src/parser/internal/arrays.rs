@@ -43,7 +43,7 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
         }
 
         let span = state.stream.current().span;
-        let mut value = expressions::lowest_precedence(state)?;
+        let mut value = expressions::create(state)?;
 
         if state.stream.current().kind == TokenKind::DoubleArrow {
             if !has_atleast_one_key && !items.is_empty() {
@@ -67,7 +67,7 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
             }
 
             has_atleast_one_key = true;
-            value = expressions::lowest_precedence(state)?;
+            value = expressions::create(state)?;
         } else if has_atleast_one_key {
             return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(span));
         }
@@ -144,7 +144,7 @@ pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
             (false, Span(0, 0))
         };
 
-        let mut value = expressions::lowest_precedence(state)?;
+        let mut value = expressions::create(state)?;
 
         // TODO: return error for `[...$a => $b]`.
         if state.stream.current().kind == TokenKind::DoubleArrow {
@@ -166,7 +166,7 @@ pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
                 false
             };
 
-            value = expressions::lowest_precedence(state)?;
+            value = expressions::create(state)?;
         }
 
         items.push(ArrayItem {
@@ -210,7 +210,7 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
         (false, Span(0, 0))
     };
 
-    let mut value = expressions::lowest_precedence(state)?;
+    let mut value = expressions::create(state)?;
     if state.stream.current().kind == TokenKind::DoubleArrow {
         state.stream.next();
 
@@ -228,7 +228,7 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
         } else {
             false
         };
-        value = expressions::lowest_precedence(state)?;
+        value = expressions::create(state)?;
     }
 
     Ok(ArrayItem {

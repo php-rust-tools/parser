@@ -127,7 +127,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             {
                 if state.stream.peek().kind == TokenKind::Ampersand {
                     if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
-                        let expression = expressions::lowest_precedence(state)?;
+                        let expression = expressions::create(state)?;
                         let end = utils::skip_semicolon(state)?;
 
                         return Ok(Statement::Expression { expression, end });
@@ -153,7 +153,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
 
                 let mut values = Vec::new();
                 loop {
-                    values.push(expressions::lowest_precedence(state)?);
+                    values.push(expressions::create(state)?);
 
                     if state.stream.current().kind == TokenKind::Comma {
                         state.stream.next();
@@ -187,7 +187,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             {
                 if state.stream.peek().kind == TokenKind::Ampersand {
                     if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
-                        let expression = expressions::lowest_precedence(state)?;
+                        let expression = expressions::create(state)?;
                         let end = utils::skip_semicolon(state)?;
 
                         return Ok(Statement::Expression { expression, end });
@@ -265,7 +265,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         }
                     }
                     _ => {
-                        let expression = expressions::lowest_precedence(state)?;
+                        let expression = expressions::create(state)?;
                         let end = utils::skip_semicolon(state)?;
 
                         DeclareBody::Expression { expression, end }
@@ -310,7 +310,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     if state.stream.current().kind == TokenKind::Equals {
                         state.stream.next();
 
-                        default = Some(expressions::lowest_precedence(state)?);
+                        default = Some(expressions::create(state)?);
                     }
 
                     // TODO: group static vars.
@@ -405,7 +405,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
 
                 let mut values = Vec::new();
                 loop {
-                    values.push(expressions::lowest_precedence(state)?);
+                    values.push(expressions::create(state)?);
 
                     if state.stream.current().kind == TokenKind::Comma {
                         state.stream.next();
@@ -426,7 +426,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     ret
                 } else {
                     let ret = Statement::Return {
-                        value: Some(expressions::lowest_precedence(state)?),
+                        value: Some(expressions::create(state)?),
                     };
                     utils::skip_semicolon(state)?;
                     ret
@@ -442,7 +442,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Try => try_block::try_block(state)?,
             TokenKind::LeftBrace => blocks::block_statement(state)?,
             _ => {
-                let expression = expressions::lowest_precedence(state)?;
+                let expression = expressions::create(state)?;
                 let end = utils::skip_semicolon(state)?;
 
                 Statement::Expression { expression, end }

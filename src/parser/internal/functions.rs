@@ -59,7 +59,7 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
 
             // TODO(azjezz): this shouldn't call expr, we should have a function
             // just for variables, so we don't have to go through the whole `match` in `expression(...)`
-            let var = match expressions::lowest_precedence(state)? {
+            let var = match expressions::create(state)? {
                 s @ Expression::Variable { .. } => ClosureUse { var: s, by_ref },
                 _ => {
                     return Err(ParseError::UnexpectedToken(
@@ -143,7 +143,7 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
     utils::skip(state, TokenKind::DoubleArrow)?;
 
     let body = scoped!(state, Scope::ArrowFunction(is_static), {
-        Box::new(expressions::lowest_precedence(state)?)
+        Box::new(expressions::create(state)?)
     });
 
     let end = state.stream.current().span;

@@ -49,7 +49,7 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
         let mut default = None;
         if state.stream.current().kind == TokenKind::Equals {
             state.stream.next();
-            default = Some(expressions::lowest_precedence(state)?);
+            default = Some(expressions::create(state)?);
         }
 
         let end = state.stream.current().span;
@@ -197,7 +197,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
         let mut default = None;
         if state.stream.current().kind == TokenKind::Equals {
             state.stream.next();
-            default = Some(expressions::lowest_precedence(state)?);
+            default = Some(expressions::create(state)?);
         }
 
         let end = state.stream.current().span;
@@ -278,7 +278,7 @@ fn argument(state: &mut State) -> ParseResult<(bool, Argument)> {
         } else {
             None
         };
-        let value = expressions::lowest_precedence(state)?;
+        let value = expressions::create(state)?;
 
         return Ok((
             true,
@@ -296,7 +296,7 @@ fn argument(state: &mut State) -> ParseResult<(bool, Argument)> {
     } else {
         None
     };
-    let value = expressions::lowest_precedence(state)?;
+    let value = expressions::create(state)?;
 
     Ok((
         false,
