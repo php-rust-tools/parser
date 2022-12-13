@@ -443,46 +443,73 @@ pub enum Expression {
         method: Box<Self>,                // `bar`
         placeholder: ArgumentPlaceholder, // `(...)`
     },
+    // `static`
     Static,
+    // `self`
     Self_,
+    // `parent`
     Parent,
+    // `[1, 2, 3]`
+    ShortArray {
+        start: Span,           // `[`
+        items: Vec<ArrayItem>, // `1, 2, 3`
+        end: Span,             // `]`
+    },
+    // `array(1, 2, 3)`
     Array {
-        items: Vec<ArrayItem>,
+        span: Span,            // `array`
+        start: Span,           // `(`
+        items: Vec<ArrayItem>, // `1, 2, 3`
+        end: Span,             // `)`
     },
+    // `function() {}`
     Closure(Closure),
+    // `fn() => $foo`
     ArrowFunction(ArrowFunction),
+    // `new Foo(1, 2, 3)`
     New {
-        span: Span,
-        target: Box<Self>,
-        arguments: Option<ArgumentList>,
+        span: Span,                      // `new`
+        target: Box<Self>,               // `Foo`
+        arguments: Option<ArgumentList>, // `(1, 2, 3)`
     },
+    // `'foo'`
     LiteralString {
         span: Span,
         value: ByteString,
     },
+    // `"foo $bar foo"`
     InterpolatedString {
         parts: Vec<StringPart>,
     },
+    // `<<<"EOT"` / `<<<EOT`
     Heredoc {
         parts: Vec<StringPart>,
     },
+    // `<<<'EOT'`
     Nowdoc {
         value: ByteString,
     },
+    // ``foo``
     ShellExec {
         parts: Vec<StringPart>,
     },
+    // `foo()->bar`
     PropertyFetch {
-        target: Box<Self>,
-        property: Box<Self>,
+        target: Box<Self>,   // `foo()`
+        span: Span,          // `->`
+        property: Box<Self>, // `bar`
     },
+    // `foo()?->bar`
     NullsafePropertyFetch {
-        target: Box<Self>,
-        property: Box<Self>,
+        target: Box<Self>,   // `foo()`
+        span: Span,          // `?->`
+        property: Box<Self>, // `bar`
     },
+    // `foo()::bar`
     StaticPropertyFetch {
-        target: Box<Self>,
-        property: Box<Self>,
+        target: Box<Self>,   // `foo()`
+        span: Span,          // `::`
+        property: Box<Self>, // `bar`
     },
     ConstFetch {
         target: Box<Self>,

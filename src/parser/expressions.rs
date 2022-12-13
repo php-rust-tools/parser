@@ -835,12 +835,12 @@ expressions! {
 
     #[before(left_bracket), current(TokenKind::Array)]
     array(|state: &mut State| {
-        arrays::legacy_array_expression(state)
+        arrays::array_expression(state)
     })
 
     #[before(new), current(TokenKind::LeftBracket)]
     left_bracket(|state: &mut State| {
-        arrays::array_expression(state)
+        arrays::short_array_expression(state)
     })
 
     #[before(directory_magic_constant), current(TokenKind::New)]
@@ -1255,6 +1255,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                 //    that we're parsing a static property fetch.
                 _ => Expression::StaticPropertyFetch {
                     target: lhs,
+                    span,
                     property: Box::new(property),
                 },
             }
@@ -1332,11 +1333,13 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             } else if op == &TokenKind::NullsafeArrow {
                 Expression::NullsafePropertyFetch {
                     target: Box::new(lhs),
+                    span,
                     property: Box::new(property),
                 }
             } else {
                 Expression::PropertyFetch {
                     target: Box::new(lhs),
+                    span,
                     property: Box::new(property),
                 }
             }

@@ -85,8 +85,8 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
     Ok(Expression::List { items })
 }
 
-pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
-    utils::skip(state, TokenKind::LeftBracket)?;
+pub fn short_array_expression(state: &mut State) -> ParseResult<Expression> {
+    let start = utils::skip(state, TokenKind::LeftBracket)?;
 
     let mut items = Vec::new();
 
@@ -115,14 +115,14 @@ pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
         state.stream.next();
     }
 
-    utils::skip_right_bracket(state)?;
+    let end = utils::skip_right_bracket(state)?;
 
-    Ok(Expression::Array { items })
+    Ok(Expression::ShortArray { start, items, end })
 }
 
-pub fn legacy_array_expression(state: &mut State) -> ParseResult<Expression> {
-    utils::skip(state, TokenKind::Array)?;
-    utils::skip_left_parenthesis(state)?;
+pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
+    let span = utils::skip(state, TokenKind::Array)?;
+    let start = utils::skip_left_parenthesis(state)?;
 
     let mut items = vec![];
 
@@ -182,9 +182,14 @@ pub fn legacy_array_expression(state: &mut State) -> ParseResult<Expression> {
         }
     }
 
-    utils::skip_right_parenthesis(state)?;
+    let end = utils::skip_right_parenthesis(state)?;
 
-    Ok(Expression::Array { items })
+    Ok(Expression::Array {
+        span,
+        start,
+        items,
+        end,
+    })
 }
 
 fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
