@@ -492,14 +492,19 @@ fn create(state: &mut State) -> ParseResult<Expression> {
 }
 
 macro_rules! expressions {
-    ($(#[before($else:ident), current($(|)? $( $current:pat_param )|+) $(, peek($(|)? $( $peek:pat_param )|+))?] $expr:ident($out:expr))+) => {
+    (
+        $(
+            #[before($else:ident), current($(|)? $( $current:pat_param )|+) $(, peek($(|)? $( $peek:pat_param )|+))?]
+            $expr:ident($out:expr)
+        )+
+    ) => {
         $(
             #[inline(never)]
             pub(in crate::parser) fn $expr(state: &mut State) -> ParseResult<Expression> {
                 match &state.stream.current().kind {
                     $( $current )|+ $( if matches!(&state.stream.peek().kind, $( $peek )|+ ))? => $out(state),
                     _ => $else(state),
-                }
+                        }
             }
         )+
     };

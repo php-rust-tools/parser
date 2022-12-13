@@ -1,3 +1,4 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -11,7 +12,7 @@ use crate::parser::ast::Block;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Type;
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct FunctionParameter {
     pub start: Span,
@@ -24,7 +25,7 @@ pub struct FunctionParameter {
     pub by_ref: bool,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct FunctionParameterList {
     pub start: Span,
@@ -32,7 +33,7 @@ pub struct FunctionParameterList {
     pub members: Vec<FunctionParameter>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Function {
     pub start: Span,
@@ -45,14 +46,14 @@ pub struct Function {
     pub body: Block,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ClosureUse {
     pub var: Expression,
     pub by_ref: bool,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Closure {
     pub start: Span,
@@ -66,7 +67,7 @@ pub struct Closure {
     pub r#static: bool,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ArrowFunction {
     pub start: Span,
@@ -79,7 +80,7 @@ pub struct ArrowFunction {
     pub r#static: bool,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct MethodParameter {
     pub start: Span,
@@ -94,7 +95,7 @@ pub struct MethodParameter {
     pub by_ref: bool,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct MethodParameterList {
     pub start: Span,
@@ -102,7 +103,7 @@ pub struct MethodParameterList {
     pub members: Vec<MethodParameter>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Method {
     pub start: Span,

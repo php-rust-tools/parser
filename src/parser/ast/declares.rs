@@ -1,3 +1,4 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -6,7 +7,7 @@ use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct DeclareEntry {
     pub key: SimpleIdentifier,
@@ -14,7 +15,7 @@ pub struct DeclareEntry {
     pub value: Expression,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct DeclareEntryGroup {
     pub start: Span,
@@ -22,7 +23,7 @@ pub struct DeclareEntryGroup {
     pub entries: Vec<DeclareEntry>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum DeclareBody {
     // declaration is terminated with `;`
@@ -48,7 +49,7 @@ pub enum DeclareBody {
     },
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Declare {
     pub span: Span,

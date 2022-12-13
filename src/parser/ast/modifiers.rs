@@ -1,9 +1,10 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub enum Visibility {
     Public,
@@ -11,7 +12,7 @@ pub enum Visibility {
     Private,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum VisibilityModifier {
     Public { start: Span, end: Span },
@@ -19,7 +20,7 @@ pub enum VisibilityModifier {
     Private { start: Span, end: Span },
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum PromotedPropertyModifier {
     Public { start: Span, end: Span },
@@ -28,7 +29,7 @@ pub enum PromotedPropertyModifier {
     Readonly { start: Span, end: Span },
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 #[repr(transparent)]
 pub struct PromotedPropertyModifierGroup {
@@ -65,7 +66,7 @@ impl PromotedPropertyModifierGroup {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum PropertyModifier {
     Public { start: Span, end: Span },
@@ -75,7 +76,7 @@ pub enum PropertyModifier {
     Readonly { start: Span, end: Span },
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 #[repr(transparent)]
 pub struct PropertyModifierGroup {
@@ -122,7 +123,7 @@ impl PropertyModifierGroup {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum MethodModifier {
     Final { start: Span, end: Span },
@@ -133,7 +134,7 @@ pub enum MethodModifier {
     Private { start: Span, end: Span },
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 #[repr(transparent)]
 pub struct MethodModifierGroup {
@@ -190,7 +191,7 @@ impl MethodModifierGroup {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ClassModifier {
     Final { start: Span, end: Span },
@@ -198,7 +199,7 @@ pub enum ClassModifier {
     Readonly { start: Span, end: Span },
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 #[repr(transparent)]
 pub struct ClassModifierGroup {
@@ -241,7 +242,7 @@ impl ClassModifierGroup {
     }
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ConstantModifier {
     Final { start: Span, end: Span },
@@ -250,7 +251,7 @@ pub enum ConstantModifier {
     Private { start: Span, end: Span },
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 #[repr(transparent)]
 pub struct ConstantModifierGroup {

@@ -1,3 +1,4 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -79,6 +80,21 @@ impl<'de> Deserialize<'de> for ByteString {
     {
         let s = String::deserialize(deserializer)?;
         Ok(ByteString::new(s.into_bytes()))
+    }
+}
+
+impl JsonSchema for ByteString {
+    fn schema_name() -> String {
+        "ByteString".to_string()
+    }
+
+    fn json_schema(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
+        schemars::schema::SchemaObject {
+            instance_type: Some(schemars::schema::InstanceType::String.into()),
+            format: Some("byte-string".to_string()),
+            ..Default::default()
+        }
+        .into()
     }
 }
 

@@ -1,9 +1,11 @@
-use serde::{Deserialize, Serialize};
+use schemars::JsonSchema;
+use serde::Deserialize;
+use serde::Serialize;
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub enum CommentFormat {
     SingleLine,
@@ -12,7 +14,7 @@ pub enum CommentFormat {
     Document,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Comment {
     pub start: Span,
@@ -21,7 +23,7 @@ pub struct Comment {
     pub content: ByteString,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct CommentGroup {
     pub comments: Vec<Comment>,

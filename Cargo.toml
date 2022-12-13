@@ -15,10 +15,15 @@ doctest = false
 pretty_assertions = "1.3.0"
 
 [[bin]]
-name = "snapshot"
+name = "php-parser-snapshot"
 path = "bin/snapshot.rs"
 
+[[bin]]
+name = "php-parser-schema"
+path = "bin/schema.rs"
+
 [dependencies]
+schemars = "0.8.11"
 serde = { version = "1.0.149", features = ["derive"] }
 serde_json = { version = "1.0.89" }
 

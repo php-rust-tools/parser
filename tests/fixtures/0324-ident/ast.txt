@@ -1,0 +1,331 @@
+[
+    Namespace(
+        Braced(
+            BracedNamespace {
+                span: (
+                    3,
+                    1,
+                ),
+                name: None,
+                body: BracedNamespaceBody {
+                    start: (
+                        3,
+                        11,
+                    ),
+                    end: (
+                        7,
+                        1,
+                    ),
+                    statements: [
+                        Function(
+                            Function {
+                                start: (
+                                    4,
+                                    5,
+                                ),
+                                end: (
+                                    6,
+                                    5,
+                                ),
+                                name: SimpleIdentifier {
+                                    span: (
+                                        4,
+                                        14,
+                                    ),
+                                    value: "null",
+                                },
+                                attributes: [],
+                                parameters: FunctionParameterList {
+                                    start: (
+                                        4,
+                                        18,
+                                    ),
+                                    end: (
+                                        4,
+                                        21,
+                                    ),
+                                    members: [],
+                                },
+                                return_type: None,
+                                by_ref: false,
+                                body: [
+                                    Echo {
+                                        values: [
+                                            LiteralString {
+                                                span: (
+                                                    5,
+                                                    14,
+                                                ),
+                                                value: "p\n",
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ),
+                    ],
+                },
+            },
+        ),
+    ),
+    Namespace(
+        Braced(
+            BracedNamespace {
+                span: (
+                    9,
+                    1,
+                ),
+                name: Some(
+                    SimpleIdentifier {
+                        span: (
+                            9,
+                            11,
+                        ),
+                        value: "bar",
+                    },
+                ),
+                body: BracedNamespaceBody {
+                    start: (
+                        9,
+                        15,
+                    ),
+                    end: (
+                        13,
+                        1,
+                    ),
+                    statements: [
+                        Function(
+                            Function {
+                                start: (
+                                    10,
+                                    5,
+                                ),
+                                end: (
+                                    12,
+                                    5,
+                                ),
+                                name: SimpleIdentifier {
+                                    span: (
+                                        10,
+                                        14,
+                                    ),
+                                    value: "null",
+                                },
+                                attributes: [],
+                                parameters: FunctionParameterList {
+                                    start: (
+                                        10,
+                                        18,
+                                    ),
+                                    end: (
+                                        10,
+                                        21,
+                                    ),
+                                    members: [],
+                                },
+                                return_type: None,
+                                by_ref: false,
+                                body: [
+                                    Echo {
+                                        values: [
+                                            LiteralString {
+                                                span: (
+                                                    11,
+                                                    14,
+                                                ),
+                                                value: "n",
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ),
+                    ],
+                },
+            },
+        ),
+    ),
+    Namespace(
+        Braced(
+            BracedNamespace {
+                span: (
+                    15,
+                    1,
+                ),
+                name: Some(
+                    SimpleIdentifier {
+                        span: (
+                            15,
+                            11,
+                        ),
+                        value: "baz",
+                    },
+                ),
+                body: BracedNamespaceBody {
+                    start: (
+                        15,
+                        15,
+                    ),
+                    end: (
+                        23,
+                        1,
+                    ),
+                    statements: [
+                        Use {
+                            uses: [
+                                Use {
+                                    name: SimpleIdentifier {
+                                        span: (
+                                            16,
+                                            9,
+                                        ),
+                                        value: "bar",
+                                    },
+                                    alias: None,
+                                    kind: None,
+                                },
+                            ],
+                            kind: Normal,
+                        },
+                        Use {
+                            uses: [
+                                Use {
+                                    name: SimpleIdentifier {
+                                        span: (
+                                            17,
+                                            18,
+                                        ),
+                                        value: "bar\null",
+                                    },
+                                    alias: Some(
+                                        SimpleIdentifier {
+                                            span: (
+                                                17,
+                                                30,
+                                            ),
+                                            value: "n",
+                                        },
+                                    ),
+                                    kind: None,
+                                },
+                            ],
+                            kind: Function,
+                        },
+                        Echo {
+                            values: [
+                                FunctionCall {
+                                    target: Identifier(
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: (
+                                                    19,
+                                                    10,
+                                                ),
+                                                value: "n",
+                                            },
+                                        ),
+                                    ),
+                                    arguments: ArgumentList {
+                                        start: (
+                                            19,
+                                            11,
+                                        ),
+                                        arguments: [],
+                                        end: (
+                                            19,
+                                            12,
+                                        ),
+                                    },
+                                },
+                            ],
+                        },
+                        Echo {
+                            values: [
+                                FunctionCall {
+                                    target: Identifier(
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: (
+                                                    20,
+                                                    10,
+                                                ),
+                                                value: "bar\null",
+                                            },
+                                        ),
+                                    ),
+                                    arguments: ArgumentList {
+                                        start: (
+                                            20,
+                                            18,
+                                        ),
+                                        arguments: [],
+                                        end: (
+                                            20,
+                                            19,
+                                        ),
+                                    },
+                                },
+                            ],
+                        },
+                        Echo {
+                            values: [
+                                FunctionCall {
+                                    target: Identifier(
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: (
+                                                    21,
+                                                    10,
+                                                ),
+                                                value: "\bar\null",
+                                            },
+                                        ),
+                                    ),
+                                    arguments: ArgumentList {
+                                        start: (
+                                            21,
+                                            19,
+                                        ),
+                                        arguments: [],
+                                        end: (
+                                            21,
+                                            20,
+                                        ),
+                                    },
+                                },
+                            ],
+                        },
+                        Echo {
+                            values: [
+                                FunctionCall {
+                                    target: Identifier(
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: (
+                                                    22,
+                                                    10,
+                                                ),
+                                                value: "\null",
+                                            },
+                                        ),
+                                    ),
+                                    arguments: ArgumentList {
+                                        start: (
+                                            22,
+                                            15,
+                                        ),
+                                        arguments: [],
+                                        end: (
+                                            22,
+                                            16,
+                                        ),
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        ),
+    ),
+]

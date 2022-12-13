@@ -1,19 +1,21 @@
 use std::fmt::Display;
 
-use serde::{Deserialize, Serialize};
+use schemars::JsonSchema;
+use serde::Deserialize;
+use serde::Serialize;
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::parser::ast::Expression;
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Identifier {
     SimpleIdentifier(SimpleIdentifier),
     DynamicIdentifier(DynamicIdentifier),
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct SimpleIdentifier {
     pub span: Span,
@@ -26,7 +28,7 @@ impl Display for SimpleIdentifier {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct DynamicIdentifier {
     pub start: Span,

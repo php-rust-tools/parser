@@ -7,7 +7,11 @@ build:
 
 # regenerate test snapshots
 snapshot:
-    cargo run --bin snapshot
+    cargo run --bin php-parser-snapshot
+
+# regenerate schema
+schema:
+    cargo run --bin php-parser-schema
 
 # detect linting problems.
 lint:
