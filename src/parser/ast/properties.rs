@@ -1,3 +1,4 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -7,7 +8,7 @@ use crate::parser::ast::variables::SimpleVariable;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Type;
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Property {
     pub attributes: Vec<AttributeGroup>,
@@ -17,14 +18,14 @@ pub struct Property {
     pub entries: Vec<PropertyEntry>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct PropertyEntry {
     pub variable: SimpleVariable,
     pub value: Option<Expression>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct VariableProperty {
     pub attributes: Vec<AttributeGroup>,
@@ -32,7 +33,7 @@ pub struct VariableProperty {
     pub entries: Vec<VariablePropertyEntry>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct VariablePropertyEntry {
     pub variable: SimpleVariable,

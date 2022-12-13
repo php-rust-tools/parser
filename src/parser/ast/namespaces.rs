@@ -1,3 +1,4 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -5,7 +6,7 @@ use crate::lexer::token::Span;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Statement;
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct UnbracedNamespace {
     pub start: Span,
@@ -14,7 +15,7 @@ pub struct UnbracedNamespace {
     pub statements: Vec<Statement>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BracedNamespace {
     pub span: Span,
@@ -22,7 +23,7 @@ pub struct BracedNamespace {
     pub body: BracedNamespaceBody,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BracedNamespaceBody {
     pub start: Span,
@@ -30,7 +31,7 @@ pub struct BracedNamespaceBody {
     pub statements: Vec<Statement>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Namespace {
     Unbraced(UnbracedNamespace),

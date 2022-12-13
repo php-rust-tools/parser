@@ -1,3 +1,4 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -5,7 +6,7 @@ use crate::lexer::token::Span;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Argument {
     Positional {
@@ -20,7 +21,7 @@ pub enum Argument {
     },
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ArgumentList {
     pub start: Span,              // `(`
@@ -28,7 +29,7 @@ pub struct ArgumentList {
     pub end: Span,                // `)`
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ArgumentPlaceholder {
     pub start: Span,    // `(`

@@ -1,10 +1,11 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
 use crate::parser::ast::Expression;
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ArithmeticOperation {
     Addition {
@@ -63,7 +64,7 @@ pub enum ArithmeticOperation {
     },
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum AssignmentOperation {
     Assign {
@@ -138,7 +139,7 @@ pub enum AssignmentOperation {
     },
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum BitwiseOperation {
     And {
@@ -172,7 +173,7 @@ pub enum BitwiseOperation {
     },
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ComparisonOperation {
     Equal {
@@ -227,7 +228,7 @@ pub enum ComparisonOperation {
     },
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum LogicalOperation {
     And {
