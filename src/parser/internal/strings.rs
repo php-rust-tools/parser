@@ -307,18 +307,22 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                     }
                 }
                 TokenKind::Arrow => {
+                    let span = state.stream.current().span;
                     state.stream.next();
                     Expression::PropertyFetch {
                         target: Box::new(variable),
+                        span,
                         property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             identifiers::identifier_maybe_reserved(state)?,
                         ))),
                     }
                 }
                 TokenKind::NullsafeArrow => {
+                    let span = state.stream.current().span;
                     state.stream.next();
                     Expression::NullsafePropertyFetch {
                         target: Box::new(variable),
+                        span,
                         property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             identifiers::identifier_maybe_reserved(state)?,
                         ))),
