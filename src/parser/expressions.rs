@@ -493,26 +493,31 @@ fn create(state: &mut State) -> ParseResult<Expression> {
 
 macro_rules! expressions {
     (
+        using($state:ident):
+
         $(
             #[before($else:ident), current($(|)? $( $current:pat_param )|+) $(, peek($(|)? $( $peek:pat_param )|+))?]
-            $expr:ident($out:expr)
+            $expr:ident($out:tt)
         )+
     ) => {
         $(
             #[inline(never)]
-            pub(in crate::parser) fn $expr(state: &mut State) -> ParseResult<Expression> {
-                match &state.stream.current().kind {
-                    $( $current )|+ $( if matches!(&state.stream.peek().kind, $( $peek )|+ ))? => $out(state),
-                    _ => $else(state),
-                        }
+            #[allow(unused_variables)]
+            pub(in crate::parser) fn $expr($state: &mut State) -> ParseResult<Expression> {
+                match &$state.stream.current().kind {
+                    $( $current )|+ $( if matches!(&$state.stream.peek().kind, $( $peek )|+ ))? => $out,
+                    _ => $else($state),
+                }
             }
         )+
     };
 }
 
 expressions! {
+    using(state):
+
     #[before(static_arrow_function), current(TokenKind::Attribute)]
-    attributes(|state: &mut State| {
+    attributes({
         attributes::gather_attributes(state)?;
 
         match &state.stream.current().kind {
@@ -535,27 +540,27 @@ expressions! {
     })
 
     #[before(static_anonymous_function), current(TokenKind::Static), peek(TokenKind::Fn)]
-    static_arrow_function(|state: &mut State| {
+    static_arrow_function({
         functions::arrow_function(state)
     })
 
     #[before(arrow_function), current(TokenKind::Static), peek(TokenKind::Function)]
-    static_anonymous_function(|state: &mut State| {
+    static_anonymous_function({
         functions::anonymous_function(state)
     })
 
     #[before(anonymous_function), current(TokenKind::Fn)]
-    arrow_function(|state: &mut State| {
+    arrow_function({
         functions::arrow_function(state)
     })
 
     #[before(eval), current(TokenKind::Function)]
-    anonymous_function(|state: &mut State| {
+    anonymous_function({
         functions::anonymous_function(state)
     })
 
     #[before(die), current(TokenKind::Eval), peek(TokenKind::LeftParen)]
-    eval(|state: &mut State| {
+    eval({
         state.stream.next();
         utils::skip_left_parenthesis(state)?;
         let value = Box::new(lowest_precedence(state)?);
@@ -564,7 +569,7 @@ expressions! {
     })
 
     #[before(exit), current(TokenKind::Die)]
-    die(|state: &mut State| {
+    die({
         state.stream.next();
         let value = if state.stream.current().kind == TokenKind::LeftParen {
             state.stream.next();
@@ -585,7 +590,7 @@ expressions! {
     })
 
     #[before(reserved_identifier_function_call), current(TokenKind::Exit)]
-    exit(|state: &mut State| {
+    exit({
         state.stream.next();
         let value = if state.stream.current().kind == TokenKind::LeftParen {
             state.stream.next();
@@ -610,7 +615,7 @@ expressions! {
         | TokenKind::Readonly   | TokenKind::Self_ | TokenKind::Parent
         | TokenKind::Enum       | TokenKind::From
     ), peek(TokenKind::LeftParen)]
-    reserved_identifier_function_call(|state: &mut State| {
+    reserved_identifier_function_call({
         let ident = identifiers::identifier_maybe_soft_reserved(state)?;
         let lhs = Expression::Identifier(Identifier::SimpleIdentifier(ident));
 
@@ -618,7 +623,7 @@ expressions! {
     })
 
     #[before(list), current(TokenKind::Enum | TokenKind::From), peek(TokenKind::DoubleColon)]
-    reserved_identifier_static_call(|state: &mut State| {
+    reserved_identifier_static_call({
         let ident = identifiers::type_identifier(state)?;
         let lhs = Expression::Identifier(Identifier::SimpleIdentifier(ident));
 
@@ -626,26 +631,26 @@ expressions! {
     })
 
     #[before(anonymous_class), current(TokenKind::List)]
-    list(|state: &mut State| {
+    list({
         arrays::list_expression(state)
     })
 
     #[before(throw), current(TokenKind::New), peek(TokenKind::Class | TokenKind::Attribute)]
-    anonymous_class(|state: &mut State| {
+    anonymous_class({
         classes::parse_anonymous(state, None)
     })
 
     #[before(r#yield), current(TokenKind::Throw)]
-    throw(|state: &mut State| {
-
+    throw({
         state.stream.next();
-        Ok(Expression::Throw{
+
+        Ok(Expression::Throw {
             value: Box::new(for_precedence(state, Precedence::Lowest)?)
         })
     })
 
     #[before(clone), current(TokenKind::Yield)]
-    r#yield(|state: &mut State| {
+    r#yield({
         state.stream.next();
         if state.stream.current().kind == TokenKind::SemiColon || state.stream.current().kind == TokenKind::RightParen {
             Ok(Expression::Yield {
@@ -688,7 +693,7 @@ expressions! {
     })
 
     #[before(r#true), current(TokenKind::Clone)]
-    clone(|state: &mut State| {
+    clone({
         state.stream.next();
 
         let target = for_precedence(state, Precedence::CloneOrNew)?;
@@ -699,31 +704,33 @@ expressions! {
     })
 
     #[before(r#false), current(TokenKind::True)]
-    r#true(|state: &mut State| {
+    r#true({
         state.stream.next();
 
         Ok(Expression::Bool { value: true })
     })
 
     #[before(null), current(TokenKind::False)]
-    r#false(|state: &mut State| {
+    r#false({
         state.stream.next();
 
         Ok(Expression::Bool { value: false })
     })
 
     #[before(literal_integer), current(TokenKind::Null)]
-    null(|state: &mut State| {
+    null({
         state.stream.next();
 
         Ok(Expression::Null)
     })
 
     #[before(literal_float), current(TokenKind::LiteralInteger(_))]
-    literal_integer(|state: &mut State| {
-        if let TokenKind::LiteralInteger(i) = &state.stream.current().kind {
+    literal_integer({
+        let current = state.stream.current();
+
+        if let TokenKind::LiteralInteger(i) = &current.kind {
             let e = Expression::LiteralInteger {
-                span: state.stream.current().span,
+                span: current.span,
                 value: i.clone()
             };
 
@@ -736,10 +743,12 @@ expressions! {
     })
 
     #[before(literal_string), current(TokenKind::LiteralFloat(_))]
-    literal_float(|state: &mut State| {
-        if let TokenKind::LiteralFloat(f) = &state.stream.current().kind {
+    literal_float({
+        let current = state.stream.current();
+
+        if let TokenKind::LiteralFloat(f) = &current.kind {
             let e = Expression::LiteralFloat {
-                span: state.stream.current().span,
+                span: current.span,
                 value: f.clone()
             };
 
@@ -752,10 +761,12 @@ expressions! {
     })
 
     #[before(string_part), current(TokenKind::LiteralString(_))]
-    literal_string(|state: &mut State| {
-        if let TokenKind::LiteralString(value) = &state.stream.current().kind {
+    literal_string({
+        let current = state.stream.current();
+
+        if let TokenKind::LiteralString(value) = &current.kind {
             let e = Expression::LiteralString {
-                span: state.stream.current().span,
+                span: current.span,
                 value: value.clone()
             };
 
@@ -768,39 +779,39 @@ expressions! {
     })
 
     #[before(heredoc), current(TokenKind::StringPart(_))]
-    string_part(|state: &mut State| {
+    string_part({
         strings::interpolated(state)
     })
 
     #[before(nowdoc), current(TokenKind::StartDocString(_, DocStringKind::Heredoc))]
-    heredoc(|state: &mut State| {
+    heredoc({
         strings::heredoc(state)
     })
 
     #[before(backtick), current(TokenKind::StartDocString(_, DocStringKind::Nowdoc))]
-    nowdoc(|state: &mut State| {
+    nowdoc({
         strings::nowdoc(state)
     })
 
     #[before(identifier), current(TokenKind::Backtick)]
-    backtick(|state: &mut State| {
+    backtick({
         strings::shell_exec(state)
     })
 
     #[before(static_postfix), current(TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_))]
-    identifier(|state: &mut State| {
+    identifier({
         Ok(Expression::Identifier(Identifier::SimpleIdentifier(identifiers::full_name(state)?)))
     })
 
     #[before(self_identifier), current(TokenKind::Static)]
-    static_postfix(|state: &mut State| {
+    static_postfix({
         state.stream.next();
 
         postfix(state, Expression::Static, &TokenKind::DoubleColon)
     })
 
     #[before(parent_identifier), current(TokenKind::Self_)]
-    self_identifier(|state: &mut State| {
+    self_identifier({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -811,7 +822,7 @@ expressions! {
     })
 
     #[before(left_parenthesis), current(TokenKind::Parent)]
-    parent_identifier(|state: &mut State| {
+    parent_identifier({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -822,7 +833,7 @@ expressions! {
     })
 
     #[before(r#match), current(TokenKind::LeftParen)]
-    left_parenthesis(|state: &mut State| {
+    left_parenthesis({
         let start = state.stream.current().span;
         state.stream.next();
 
@@ -834,22 +845,22 @@ expressions! {
     })
 
     #[before(array), current(TokenKind::Match)]
-    r#match(|state: &mut State| {
+    r#match({
         control_flow::match_expression(state)
     })
 
     #[before(left_bracket), current(TokenKind::Array)]
-    array(|state: &mut State| {
+    array({
         arrays::array_expression(state)
     })
 
     #[before(new), current(TokenKind::LeftBracket)]
-    left_bracket(|state: &mut State| {
+    left_bracket({
         arrays::short_array_expression(state)
     })
 
     #[before(directory_magic_constant), current(TokenKind::New)]
-    new(|state: &mut State| {
+    new({
         let span = state.stream.current().span;
 
         state.stream.next();
@@ -905,7 +916,7 @@ expressions! {
     })
 
     #[before(file_magic_constant), current(TokenKind::DirConstant)]
-    directory_magic_constant(|state: &mut State| {
+    directory_magic_constant({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -916,7 +927,7 @@ expressions! {
     })
 
     #[before(line_magic_constant), current(TokenKind::FileConstant)]
-    file_magic_constant(|state: &mut State| {
+    file_magic_constant({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -927,7 +938,7 @@ expressions! {
     })
 
     #[before(function_magic_constant), current(TokenKind::LineConstant)]
-    line_magic_constant(|state: &mut State| {
+    line_magic_constant({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -938,7 +949,7 @@ expressions! {
     })
 
     #[before(class_magic_constant), current(TokenKind::FunctionConstant)]
-    function_magic_constant(|state: &mut State| {
+    function_magic_constant({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -949,7 +960,7 @@ expressions! {
     })
 
     #[before(method_magic_constant), current(TokenKind::ClassConstant)]
-    class_magic_constant(|state: &mut State| {
+    class_magic_constant({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -960,7 +971,7 @@ expressions! {
     })
 
     #[before(namespace_magic_constant), current(TokenKind::MethodConstant)]
-    method_magic_constant(|state: &mut State| {
+    method_magic_constant({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -971,7 +982,7 @@ expressions! {
     })
 
     #[before(trait_magic_constant), current(TokenKind::NamespaceConstant)]
-    namespace_magic_constant(|state: &mut State| {
+    namespace_magic_constant({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -982,7 +993,7 @@ expressions! {
     })
 
     #[before(include), current(TokenKind::TraitConstant)]
-    trait_magic_constant(|state: &mut State| {
+    trait_magic_constant({
         let span = state.stream.current().span;
         state.stream.next();
 
@@ -993,9 +1004,11 @@ expressions! {
     })
 
     #[before(cast_prefix), current(TokenKind::Include | TokenKind::IncludeOnce | TokenKind::Require | TokenKind::RequireOnce)]
-    include(|state: &mut State| {
-        let kind: IncludeKind = (&state.stream.current().kind).into();
-        let span = state.stream.current().span;
+    include({
+        let current = state.stream.current();
+
+        let kind: IncludeKind = (&current.kind).into();
+        let span = current.span;
 
         state.stream.next();
 
@@ -1014,9 +1027,11 @@ expressions! {
         | TokenKind::IntegerCast    | TokenKind::FloatCast      | TokenKind::DoubleCast
         | TokenKind::RealCast       | TokenKind::UnsetCast      | TokenKind::ArrayCast
     )]
-    cast_prefix(|state: &mut State| {
-        let span = state.stream.current().span;
-        let kind = state.stream.current().kind.clone().into();
+    cast_prefix({
+        let current = state.stream.current();
+
+        let span = current.span;
+        let kind = current.kind.clone().into();
 
         state.stream.next();
 
@@ -1030,9 +1045,11 @@ expressions! {
     })
 
     #[before(bang_prefix), current(TokenKind::Decrement | TokenKind::Increment | TokenKind::Minus | TokenKind::Plus)]
-    numeric_prefix(|state: &mut State| {
-        let span = state.stream.current().span;
-        let op = state.stream.current().kind.clone();
+    numeric_prefix({
+        let current = state.stream.current();
+
+        let span = current.span;
+        let op = current.kind.clone();
 
         state.stream.next();
 
@@ -1049,7 +1066,7 @@ expressions! {
     })
 
     #[before(at_prefix), current(TokenKind::Bang)]
-    bang_prefix(|state: &mut State| {
+    bang_prefix({
         let span = state.stream.current().span;
 
         state.stream.next();
@@ -1063,7 +1080,7 @@ expressions! {
     })
 
     #[before(print_prefix), current(TokenKind::At)]
-    at_prefix(|state: &mut State| {
+    at_prefix({
         let span = state.stream.current().span;
 
         state.stream.next();
@@ -1077,7 +1094,7 @@ expressions! {
     })
 
     #[before(bitwise_prefix), current(TokenKind::Print)]
-    print_prefix(|state: &mut State| {
+    print_prefix({
         let span = state.stream.current().span;
 
         state.stream.next();
@@ -1091,7 +1108,7 @@ expressions! {
     })
 
     #[before(variable), current(TokenKind::BitwiseNot)]
-    bitwise_prefix(|state: &mut State| {
+    bitwise_prefix({
         let span = state.stream.current().span;
 
         state.stream.next();
@@ -1102,7 +1119,7 @@ expressions! {
     })
 
     #[before(unexpected_token), current(TokenKind::Dollar | TokenKind::DollarLeftBrace | TokenKind::Variable(_))]
-    variable(|state: &mut State| {
+    variable({
         Ok(Expression::Variable(variables::dynamic_variable(state)?))
     })
 }
