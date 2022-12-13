@@ -14,7 +14,7 @@ Add `php-parser-rs` in your `Cargo.toml`'s `dependencies` section
 
 ```toml
 [dependencies]
-php-parser-rs = "0.0.0-b1"
+php-parser-rs = "0.0.0-b2"
 ```
 
 or use `cargo add`
