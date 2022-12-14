@@ -1,4 +1,5 @@
 use crate::expect_token;
+use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::VisibilityModifier;
@@ -67,22 +68,14 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
 
             expect_token!([
                     TokenKind::As => {
-                        match state.stream.current().kind {
-                            TokenKind::Public | TokenKind::Protected | TokenKind::Private => {
+                        match state.stream.current() {
+                            Token { kind: TokenKind::Public | TokenKind::Protected | TokenKind::Private, span }=> {
                                 let visibility = peek_token!([
-                                    TokenKind::Public => VisibilityModifier::Public {
-                                        start: state.stream.current().span,
-                                        end: state.stream.peek().span
-                                    },
-                                    TokenKind::Protected => VisibilityModifier::Protected {
-                                        start: state.stream.current().span,
-                                        end: state.stream.peek().span
-                                    },
-                                    TokenKind::Private => VisibilityModifier::Private {
-                                        start: state.stream.current().span,
-                                        end: state.stream.peek().span
-                                    },
+                                    TokenKind::Public => VisibilityModifier::Public(*span),
+                                    TokenKind::Protected => VisibilityModifier::Protected(*span),
+                                    TokenKind::Private => VisibilityModifier::Private(*span),
                                 ], state, ["`private`", "`protected`", "`public`"]);
+
                                 state.stream.next();
 
                                 if state.stream.current().kind == TokenKind::SemiColon {

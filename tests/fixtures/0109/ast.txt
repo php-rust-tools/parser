@@ -85,16 +85,12 @@
                                         default: None,
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [
-                                                Public {
-                                                    start: Span(
+                                                Public(
+                                                    Span(
                                                         5,
                                                         9,
                                                     ),
-                                                    end: Span(
-                                                        5,
-                                                        16,
-                                                    ),
-                                                },
+                                                ),
                                             ],
                                         },
                                         by_ref: false,
@@ -128,26 +124,18 @@
                                         default: None,
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [
-                                                Public {
-                                                    start: Span(
+                                                Public(
+                                                    Span(
                                                         6,
                                                         9,
                                                     ),
-                                                    end: Span(
+                                                ),
+                                                Readonly(
+                                                    Span(
                                                         6,
                                                         16,
                                                     ),
-                                                },
-                                                Readonly {
-                                                    start: Span(
-                                                        6,
-                                                        16,
-                                                    ),
-                                                    end: Span(
-                                                        6,
-                                                        25,
-                                                    ),
-                                                },
+                                                ),
                                             ],
                                         },
                                         by_ref: false,
@@ -181,26 +169,18 @@
                                         default: None,
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [
-                                                Public {
-                                                    start: Span(
+                                                Public(
+                                                    Span(
                                                         7,
                                                         9,
                                                     ),
-                                                    end: Span(
+                                                ),
+                                                Readonly(
+                                                    Span(
                                                         7,
                                                         16,
                                                     ),
-                                                },
-                                                Readonly {
-                                                    start: Span(
-                                                        7,
-                                                        16,
-                                                    ),
-                                                    end: Span(
-                                                        7,
-                                                        25,
-                                                    ),
-                                                },
+                                                ),
                                             ],
                                         },
                                         by_ref: true,
@@ -237,16 +217,12 @@
                             ),
                             modifiers: MethodModifierGroup {
                                 modifiers: [
-                                    Public {
-                                        start: Span(
+                                    Public(
+                                        Span(
                                             4,
                                             5,
                                         ),
-                                        end: Span(
-                                            4,
-                                            12,
-                                        ),
-                                    },
+                                    ),
                                 ],
                             },
                             return_type: None,
