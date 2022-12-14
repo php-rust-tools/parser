@@ -9,31 +9,31 @@ use crate::parser::ast::Statement;
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct UnbracedNamespace {
-    pub start: Span,
-    pub end: Span,
-    pub name: SimpleIdentifier,
-    pub statements: Vec<Statement>,
+    pub start: Span,                // `namespace`
+    pub name: SimpleIdentifier,     // `Foo`
+    pub end: Span,                  // `;`
+    pub statements: Vec<Statement>, // `*statements*`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BracedNamespace {
-    pub span: Span,
-    pub name: Option<SimpleIdentifier>,
-    pub body: BracedNamespaceBody,
+    pub span: Span,                     // `namespace`
+    pub name: Option<SimpleIdentifier>, // `Foo`
+    pub body: BracedNamespaceBody,      // `{ *statements* }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BracedNamespaceBody {
-    pub start: Span,
-    pub end: Span,
-    pub statements: Vec<Statement>,
+    pub start: Span,                // `{`
+    pub end: Span,                  // `}`
+    pub statements: Vec<Statement>, // `*statements*`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Namespace {
-    Unbraced(UnbracedNamespace),
-    Braced(BracedNamespace),
+    Unbraced(UnbracedNamespace), // `namespace Foo; *statements*`
+    Braced(BracedNamespace),     // `namespace Foo { *statements* }`
 }

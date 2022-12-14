@@ -30,12 +30,12 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let name = identifiers::type_identifier(state)?;
 
     let backed_type: Option<BackedEnumType> = if state.stream.current().kind == TokenKind::Colon {
-        utils::skip_colon(state)?;
+        let span = utils::skip_colon(state)?;
 
         let identifier = identifiers::identifier_of(state, &["string", "int"])?;
         Some(match &identifier.value[..] {
-            b"string" => BackedEnumType::String(identifier.span),
-            b"int" => BackedEnumType::Int(identifier.span),
+            b"string" => BackedEnumType::String(span, identifier.span),
+            b"int" => BackedEnumType::Int(span, identifier.span),
             _ => unreachable!(),
         })
     } else {
@@ -170,18 +170,19 @@ fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnum
             ));
         }
 
-        utils::skip(state, TokenKind::Equals)?;
+        let span = utils::skip(state, TokenKind::Equals)?;
 
         let value = expressions::create(state)?;
 
         let end = utils::skip_semicolon(state)?;
 
         return Ok(BackedEnumMember::Case(BackedEnumCase {
-            start,
-            end,
-            name,
-            value,
             attributes,
+            start,
+            name,
+            span,
+            value,
+            end,
         }));
     }
 

@@ -3,10 +3,10 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::parser::ast::attributes::AttributeGroup;
+use crate::parser::ast::data_type::Type;
 use crate::parser::ast::modifiers::PropertyModifierGroup;
 use crate::parser::ast::variables::SimpleVariable;
 use crate::parser::ast::Expression;
-use crate::parser::ast::Type;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]

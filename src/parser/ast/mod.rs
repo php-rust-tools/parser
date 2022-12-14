@@ -2,8 +2,6 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
 
-use std::fmt::Display;
-
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
@@ -37,6 +35,7 @@ pub mod attributes;
 pub mod classes;
 pub mod comments;
 pub mod constant;
+pub mod data_type;
 pub mod declares;
 pub mod enums;
 pub mod functions;
@@ -52,111 +51,6 @@ pub mod variables;
 
 pub type Block = Vec<Statement>;
 pub type Program = Block;
-
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum Type {
-    Identifier(SimpleIdentifier),
-    // TODO: add `start` and `end` for all types.
-    Nullable(Box<Type>),
-    Union(Vec<Type>),
-    Intersection(Vec<Type>),
-    Void,
-    Null,
-    True,
-    False,
-    Never,
-    Float,
-    Boolean,
-    Integer,
-    String,
-    Array,
-    Object,
-    Mixed,
-    Callable,
-    Iterable,
-    StaticReference,
-    SelfReference,
-    ParentReference,
-}
-
-impl Type {
-    pub fn standalone(&self) -> bool {
-        matches!(self, Type::Mixed | Type::Never | Type::Void)
-    }
-
-    pub fn nullable(&self) -> bool {
-        matches!(self, Type::Nullable(_))
-    }
-
-    pub fn includes_callable(&self) -> bool {
-        match &self {
-            Self::Callable => true,
-            Self::Union(types) | Self::Intersection(types) => {
-                types.iter().any(|x| x.includes_callable())
-            }
-            _ => false,
-        }
-    }
-
-    pub fn includes_class_scoped(&self) -> bool {
-        match &self {
-            Self::StaticReference | Self::SelfReference | Self::ParentReference => true,
-            Self::Union(types) | Self::Intersection(types) => {
-                types.iter().any(|x| x.includes_class_scoped())
-            }
-            _ => false,
-        }
-    }
-
-    pub fn is_bottom(&self) -> bool {
-        matches!(self, Type::Never | Type::Void)
-    }
-}
-
-impl Display for Type {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match &self {
-            Type::Identifier(inner) => write!(f, "{}", inner),
-            Type::Nullable(inner) => write!(f, "{}", inner),
-            Type::Union(inner) => write!(
-                f,
-                "{}",
-                inner
-                    .iter()
-                    .map(|t| t.to_string())
-                    .collect::<Vec<String>>()
-                    .join("|")
-            ),
-            Type::Intersection(inner) => write!(
-                f,
-                "{}",
-                inner
-                    .iter()
-                    .map(|t| t.to_string())
-                    .collect::<Vec<String>>()
-                    .join("&")
-            ),
-            Type::Void => write!(f, "void"),
-            Type::Null => write!(f, "null"),
-            Type::True => write!(f, "true"),
-            Type::False => write!(f, "false"),
-            Type::Never => write!(f, "never"),
-            Type::Float => write!(f, "float"),
-            Type::Boolean => write!(f, "bool"),
-            Type::Integer => write!(f, "int"),
-            Type::String => write!(f, "string"),
-            Type::Array => write!(f, "array"),
-            Type::Object => write!(f, "object"),
-            Type::Mixed => write!(f, "mixed"),
-            Type::Callable => write!(f, "callable"),
-            Type::Iterable => write!(f, "iterable"),
-            Type::StaticReference => write!(f, "static"),
-            Type::SelfReference => write!(f, "self"),
-            Type::ParentReference => write!(f, "parent"),
-        }
-    }
-}
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]

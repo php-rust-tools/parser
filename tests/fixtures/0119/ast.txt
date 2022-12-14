@@ -1,6 +1,7 @@
 [
     BackedEnum(
         BackedEnum {
+            attributes: [],
             span: Span(
                 3,
                 1,
@@ -12,33 +13,29 @@
                 ),
                 value: "Foo",
             },
-            attributes: [],
-            implements: [],
             backed_type: String(
+                Span(
+                    3,
+                    9,
+                ),
                 Span(
                     3,
                     11,
                 ),
             ),
+            implements: [],
             body: BackedEnumBody {
                 start: Span(
                     3,
                     18,
                 ),
-                end: Span(
-                    6,
-                    1,
-                ),
                 members: [
                     Case(
                         BackedEnumCase {
+                            attributes: [],
                             start: Span(
                                 4,
                                 5,
-                            ),
-                            end: Span(
-                                4,
-                                19,
                             ),
                             name: SimpleIdentifier {
                                 span: Span(
@@ -47,7 +44,10 @@
                                 ),
                                 value: "Bar",
                             },
-                            attributes: [],
+                            span: Span(
+                                4,
+                                14,
+                            ),
                             value: LiteralString {
                                 span: Span(
                                     4,
@@ -55,17 +55,18 @@
                                 ),
                                 value: "3",
                             },
+                            end: Span(
+                                4,
+                                19,
+                            ),
                         },
                     ),
                     Case(
                         BackedEnumCase {
+                            attributes: [],
                             start: Span(
                                 5,
                                 5,
-                            ),
-                            end: Span(
-                                5,
-                                19,
                             ),
                             name: SimpleIdentifier {
                                 span: Span(
@@ -74,7 +75,10 @@
                                 ),
                                 value: "Baz",
                             },
-                            attributes: [],
+                            span: Span(
+                                5,
+                                14,
+                            ),
                             value: LiteralString {
                                 span: Span(
                                     5,
@@ -82,9 +86,17 @@
                                 ),
                                 value: "g",
                             },
+                            end: Span(
+                                5,
+                                19,
+                            ),
                         },
                     ),
                 ],
+                end: Span(
+                    6,
+                    1,
+                ),
             },
         },
     ),

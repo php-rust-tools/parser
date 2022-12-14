@@ -232,8 +232,18 @@
                         type: Some(
                             Union(
                                 [
-                                    Integer,
-                                    Float,
+                                    Integer(
+                                        Span(
+                                            11,
+                                            5,
+                                        ),
+                                    ),
+                                    Float(
+                                        Span(
+                                            11,
+                                            9,
+                                        ),
+                                    ),
                                 ],
                             ),
                         ),
@@ -343,7 +353,12 @@
                             },
                         ],
                         type: Some(
-                            String,
+                            String(
+                                Span(
+                                    14,
+                                    11,
+                                ),
+                            ),
                         ),
                         variadic: false,
                         default: None,
@@ -610,7 +625,12 @@
                                             },
                                         ],
                                         type: Some(
-                                            String,
+                                            String(
+                                                Span(
+                                                    24,
+                                                    25,
+                                                ),
+                                            ),
                                         ),
                                         variadic: false,
                                         default: None,
@@ -928,17 +948,6 @@
     ),
     UnitEnum(
         UnitEnum {
-            span: Span(
-                40,
-                1,
-            ),
-            name: SimpleIdentifier {
-                span: Span(
-                    40,
-                    6,
-                ),
-                value: "P",
-            },
             attributes: [
                 AttributeGroup {
                     start: Span(
@@ -971,6 +980,17 @@
                     ],
                 },
             ],
+            span: Span(
+                40,
+                1,
+            ),
+            name: SimpleIdentifier {
+                span: Span(
+                    40,
+                    6,
+                ),
+                value: "P",
+            },
             implements: [],
             body: UnitEnumBody {
                 start: Span(
@@ -987,17 +1007,6 @@
     ),
     BackedEnum(
         BackedEnum {
-            span: Span(
-                43,
-                1,
-            ),
-            name: SimpleIdentifier {
-                span: Span(
-                    43,
-                    6,
-                ),
-                value: "B",
-            },
             attributes: [
                 AttributeGroup {
                     start: Span(
@@ -1030,23 +1039,38 @@
                     ],
                 },
             ],
-            implements: [],
+            span: Span(
+                43,
+                1,
+            ),
+            name: SimpleIdentifier {
+                span: Span(
+                    43,
+                    6,
+                ),
+                value: "B",
+            },
             backed_type: Int(
+                Span(
+                    43,
+                    7,
+                ),
                 Span(
                     43,
                     9,
                 ),
             ),
+            implements: [],
             body: BackedEnumBody {
                 start: Span(
                     43,
                     13,
                 ),
+                members: [],
                 end: Span(
                     43,
                     14,
                 ),
-                members: [],
             },
         },
     ),

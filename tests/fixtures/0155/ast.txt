@@ -6,10 +6,6 @@
                     3,
                     1,
                 ),
-                end: Span(
-                    3,
-                    18,
-                ),
                 name: SimpleIdentifier {
                     span: Span(
                         3,
@@ -17,6 +13,10 @@
                     ),
                     value: "Foo\Bar",
                 },
+                end: Span(
+                    3,
+                    18,
+                ),
                 statements: [
                     Class(
                         Class {
@@ -62,7 +62,12 @@
                                         Property {
                                             attributes: [],
                                             type: Some(
-                                                String,
+                                                String(
+                                                    Span(
+                                                        6,
+                                                        22,
+                                                    ),
+                                                ),
                                             ),
                                             modifiers: PropertyModifierGroup {
                                                 modifiers: [

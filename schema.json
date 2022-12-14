@@ -1234,6 +1234,7 @@
         "attributes",
         "end",
         "name",
+        "span",
         "start",
         "value"
       ],
@@ -1249,6 +1250,9 @@
         },
         "name": {
           "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "span": {
+          "$ref": "#/definitions/Span"
         },
         "start": {
           "$ref": "#/definitions/Span"
@@ -1326,7 +1330,17 @@
           ],
           "properties": {
             "span": {
-              "$ref": "#/definitions/Span"
+              "type": "array",
+              "items": [
+                {
+                  "$ref": "#/definitions/Span"
+                },
+                {
+                  "$ref": "#/definitions/Span"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2
             },
             "type": {
               "type": "string",
@@ -1344,7 +1358,17 @@
           ],
           "properties": {
             "span": {
-              "$ref": "#/definitions/Span"
+              "type": "array",
+              "items": [
+                {
+                  "$ref": "#/definitions/Span"
+                },
+                {
+                  "$ref": "#/definitions/Span"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2
             },
             "type": {
               "type": "string",
@@ -2693,11 +2717,15 @@
       "type": "object",
       "required": [
         "name",
+        "span",
         "value"
       ],
       "properties": {
         "name": {
           "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "span": {
+          "$ref": "#/definitions/Span"
         },
         "value": {
           "$ref": "#/definitions/Expression"
@@ -7572,11 +7600,21 @@
             "type": {
               "type": "string",
               "enum": [
-                "identifier"
+                "named"
               ]
             },
             "value": {
-              "$ref": "#/definitions/SimpleIdentifier"
+              "type": "array",
+              "items": [
+                {
+                  "$ref": "#/definitions/Span"
+                },
+                {
+                  "$ref": "#/definitions/ByteString"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2
             }
           }
         },
@@ -7643,7 +7681,8 @@
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7651,13 +7690,17 @@
               "enum": [
                 "void"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7665,13 +7708,17 @@
               "enum": [
                 "null"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7679,13 +7726,17 @@
               "enum": [
                 "true"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7693,13 +7744,17 @@
               "enum": [
                 "false"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7707,13 +7762,17 @@
               "enum": [
                 "never"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7721,13 +7780,17 @@
               "enum": [
                 "float"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7735,13 +7798,17 @@
               "enum": [
                 "boolean"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7749,13 +7816,17 @@
               "enum": [
                 "integer"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7763,13 +7834,17 @@
               "enum": [
                 "string"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7777,13 +7852,17 @@
               "enum": [
                 "array"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7791,13 +7870,17 @@
               "enum": [
                 "object"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7805,13 +7888,17 @@
               "enum": [
                 "mixed"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7819,13 +7906,17 @@
               "enum": [
                 "callable"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7833,13 +7924,17 @@
               "enum": [
                 "iterable"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7847,13 +7942,17 @@
               "enum": [
                 "static_reference"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7861,13 +7960,17 @@
               "enum": [
                 "self_reference"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
             "type": {
@@ -7875,6 +7978,9 @@
               "enum": [
                 "parent_reference"
               ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
             }
           }
         }

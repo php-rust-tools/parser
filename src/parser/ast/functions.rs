@@ -4,13 +4,13 @@ use serde::Serialize;
 
 use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
+use crate::parser::ast::data_type::Type;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::ast::modifiers::PromotedPropertyModifierGroup;
 use crate::parser::ast::variables::SimpleVariable;
 use crate::parser::ast::Block;
 use crate::parser::ast::Expression;
-use crate::parser::ast::Type;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]

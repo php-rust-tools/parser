@@ -6,10 +6,6 @@
                     3,
                     1,
                 ),
-                end: Span(
-                    3,
-                    18,
-                ),
                 name: SimpleIdentifier {
                     span: Span(
                         3,
@@ -17,6 +13,10 @@
                     ),
                     value: "Foo\Bar",
                 },
+                end: Span(
+                    3,
+                    18,
+                ),
                 statements: [
                     Class(
                         Class {
@@ -104,7 +104,12 @@
                                                         },
                                                         attributes: [],
                                                         type: Some(
-                                                            String,
+                                                            String(
+                                                                Span(
+                                                                    7,
+                                                                    27,
+                                                                ),
+                                                            ),
                                                         ),
                                                         variadic: false,
                                                         default: Some(

@@ -2,7 +2,7 @@ use std::fmt::Display;
 
 use crate::lexer::error::SyntaxError;
 use crate::lexer::token::Span;
-use crate::parser::ast::Type;
+use crate::parser::ast::data_type::Type;
 
 pub type ParseResult<T> = Result<T, ParseError>;
 

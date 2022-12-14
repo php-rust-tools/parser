@@ -16,12 +16,10 @@ pub fn parse(state: &mut State) -> ParseResult<Constant> {
 
     loop {
         let name = identifiers::constant_identifier(state)?;
-
-        utils::skip(state, TokenKind::Equals)?;
-
+        let span = utils::skip(state, TokenKind::Equals)?;
         let value = expressions::create(state)?;
 
-        entries.push(ConstantEntry { name, value });
+        entries.push(ConstantEntry { name, span, value });
 
         if state.stream.current().kind == TokenKind::Comma {
             state.stream.next();
@@ -51,12 +49,10 @@ pub fn classish(
 
     loop {
         let name = identifiers::identifier_maybe_reserved(state)?;
-
-        utils::skip(state, TokenKind::Equals)?;
-
+        let span = utils::skip(state, TokenKind::Equals)?;
         let value = expressions::create(state)?;
 
-        entries.push(ConstantEntry { name, value });
+        entries.push(ConstantEntry { name, span, value });
 
         if state.stream.current().kind == TokenKind::Comma {
             state.stream.next();

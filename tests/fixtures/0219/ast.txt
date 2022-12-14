@@ -1,6 +1,7 @@
 [
     UnitEnum(
         UnitEnum {
+            attributes: [],
             span: Span(
                 3,
                 1,
@@ -12,7 +13,6 @@
                 ),
                 value: "foo",
             },
-            attributes: [],
             implements: [],
             body: UnitEnumBody {
                 start: Span(
@@ -89,7 +89,12 @@
                                 ],
                             },
                             return_type: Some(
-                                ParentReference,
+                                ParentReference(
+                                    Span(
+                                        4,
+                                        28,
+                                    ),
+                                ),
                             ),
                             by_ref: false,
                         },

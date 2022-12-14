@@ -52,10 +52,6 @@
                     13,
                     1,
                 ),
-                end: Span(
-                    13,
-                    23,
-                ),
                 name: SimpleIdentifier {
                     span: Span(
                         13,
@@ -63,6 +59,10 @@
                     ),
                     value: "Psl\Internal",
                 },
+                end: Span(
+                    13,
+                    23,
+                ),
                 statements: [
                     Use {
                         uses: [
@@ -174,14 +174,12 @@
                                         },
                                         attributes: [],
                                         type: Some(
-                                            Identifier(
-                                                SimpleIdentifier {
-                                                    span: Span(
-                                                        32,
-                                                        14,
-                                                    ),
-                                                    value: "Closure",
-                                                },
+                                            Named(
+                                                Span(
+                                                    32,
+                                                    14,
+                                                ),
+                                                "Closure",
                                             ),
                                         ),
                                         variadic: false,
@@ -191,7 +189,12 @@
                                 ],
                             },
                             return_type: Some(
-                                Array,
+                                Array(
+                                    Span(
+                                        32,
+                                        29,
+                                    ),
+                                ),
                             ),
                             by_ref: false,
                             body: [
@@ -281,7 +284,12 @@
                                                                         },
                                                                         attributes: [],
                                                                         type: Some(
-                                                                            Integer,
+                                                                            Integer(
+                                                                                Span(
+                                                                                    36,
+                                                                                    40,
+                                                                                ),
+                                                                            ),
                                                                         ),
                                                                         variadic: false,
                                                                         default: None,
@@ -305,7 +313,12 @@
                                                                         },
                                                                         attributes: [],
                                                                         type: Some(
-                                                                            String,
+                                                                            String(
+                                                                                Span(
+                                                                                    36,
+                                                                                    52,
+                                                                                ),
+                                                                            ),
                                                                         ),
                                                                         variadic: false,
                                                                         default: None,

@@ -88,6 +88,7 @@
     ),
     UnitEnum(
         UnitEnum {
+            attributes: [],
             span: Span(
                 7,
                 1,
@@ -99,7 +100,6 @@
                 ),
                 value: "enum",
             },
-            attributes: [],
             implements: [],
             body: UnitEnumBody {
                 start: Span(
@@ -144,14 +144,12 @@
                 members: [],
             },
             return_type: Some(
-                Identifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            8,
-                            18,
-                        ),
-                        value: "enum",
-                    },
+                Named(
+                    Span(
+                        8,
+                        18,
+                    ),
+                    "enum",
                 ),
             ),
             by_ref: false,
@@ -247,6 +245,7 @@
     ),
     UnitEnum(
         UnitEnum {
+            attributes: [],
             span: Span(
                 13,
                 1,
@@ -258,7 +257,6 @@
                 ),
                 value: "from",
             },
-            attributes: [],
             implements: [],
             body: UnitEnumBody {
                 start: Span(
@@ -303,14 +301,12 @@
                 members: [],
             },
             return_type: Some(
-                Identifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            14,
-                            18,
-                        ),
-                        value: "from",
-                    },
+                Named(
+                    Span(
+                        14,
+                        18,
+                    ),
+                    "from",
                 ),
             ),
             by_ref: false,

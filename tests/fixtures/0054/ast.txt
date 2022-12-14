@@ -47,8 +47,18 @@
                         type: Some(
                             Union(
                                 [
-                                    Integer,
-                                    Float,
+                                    Integer(
+                                        Span(
+                                            1,
+                                            20,
+                                        ),
+                                    ),
+                                    Float(
+                                        Span(
+                                            1,
+                                            24,
+                                        ),
+                                    ),
                                 ],
                             ),
                         ),

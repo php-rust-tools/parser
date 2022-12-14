@@ -12,53 +12,54 @@ use crate::parser::ast::Expression;
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct UnitEnumCase {
-    pub start: Span,
-    pub end: Span,
-    pub attributes: Vec<AttributeGroup>,
-    pub name: SimpleIdentifier,
+    pub attributes: Vec<AttributeGroup>, // `#[Foo]`
+    pub start: Span,                     // `case`
+    pub name: SimpleIdentifier,          // `Bar`
+    pub end: Span,                       // `;`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum UnitEnumMember {
-    Case(UnitEnumCase),
-    Method(Method),
-    Constant(ClassishConstant),
+    Case(UnitEnumCase),         // `case Bar;`
+    Method(Method),             // `public function foo(): void { ... }`
+    Constant(ClassishConstant), // `public const FOO = 123;`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct UnitEnumBody {
-    pub start: Span,
-    pub end: Span,
-    pub members: Vec<UnitEnumMember>,
+    pub start: Span,                  // `{`
+    pub end: Span,                    // `}`
+    pub members: Vec<UnitEnumMember>, // `...`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct UnitEnum {
-    pub span: Span,
-    pub name: SimpleIdentifier,
-    pub attributes: Vec<AttributeGroup>,
-    pub implements: Vec<SimpleIdentifier>,
-    pub body: UnitEnumBody,
+    pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
+    pub span: Span,                        // `enum`
+    pub name: SimpleIdentifier,            // `Foo`
+    pub implements: Vec<SimpleIdentifier>, // `implements Bar`
+    pub body: UnitEnumBody,                // `{ ... }`
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(tag = "type", content = "span")]
 pub enum BackedEnumType {
-    String(Span),
-    Int(Span),
+    String(Span, Span), // `:` + `string`
+    Int(Span, Span),    // `:` + `int`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BackedEnumCase {
-    pub start: Span,
-    pub end: Span,
-    pub name: SimpleIdentifier,
-    pub attributes: Vec<AttributeGroup>,
-    pub value: Expression,
+    pub attributes: Vec<AttributeGroup>, // `#[Foo]`
+    pub start: Span,                     // `case`
+    pub name: SimpleIdentifier,          // `Bar`
+    pub span: Span,                      // `=`
+    pub value: Expression,               // `123`
+    pub end: Span,                       // `;`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -72,18 +73,18 @@ pub enum BackedEnumMember {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BackedEnumBody {
-    pub start: Span,
-    pub end: Span,
-    pub members: Vec<BackedEnumMember>,
+    pub start: Span,                    // `{`
+    pub members: Vec<BackedEnumMember>, // `...`
+    pub end: Span,                      // `}`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BackedEnum {
-    pub span: Span,
-    pub name: SimpleIdentifier,
-    pub attributes: Vec<AttributeGroup>,
-    pub implements: Vec<SimpleIdentifier>,
-    pub backed_type: BackedEnumType,
-    pub body: BackedEnumBody,
+    pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
+    pub span: Span,                        // `enum`
+    pub name: SimpleIdentifier,            // `Foo`
+    pub backed_type: BackedEnumType,       // `: string`
+    pub implements: Vec<SimpleIdentifier>, // `implements Bar`
+    pub body: BackedEnumBody,              // `{ ... }`
 }

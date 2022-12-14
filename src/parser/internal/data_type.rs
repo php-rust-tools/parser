@@ -1,7 +1,6 @@
 use crate::expected_token;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::identifiers::SimpleIdentifier;
-use crate::parser::ast::Type;
+use crate::parser::ast::data_type::Type;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::utils;
@@ -94,31 +93,37 @@ fn dnf(state: &mut State) -> ParseResult<Type> {
 fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
     match state.stream.current().kind.clone() {
         TokenKind::Array => {
+            let span = state.stream.current().span;
             state.stream.next();
 
-            Ok(Some(Type::Array))
+            Ok(Some(Type::Array(span)))
         }
         TokenKind::Callable => {
+            let span = state.stream.current().span;
             state.stream.next();
 
-            Ok(Some(Type::Callable))
+            Ok(Some(Type::Callable(span)))
         }
         TokenKind::Null => {
+            let span = state.stream.current().span;
             state.stream.next();
 
-            Ok(Some(Type::Null))
+            Ok(Some(Type::Null(span)))
         }
         TokenKind::True => {
+            let span = state.stream.current().span;
             state.stream.next();
 
-            Ok(Some(Type::True))
+            Ok(Some(Type::True(span)))
         }
         TokenKind::False => {
+            let span = state.stream.current().span;
             state.stream.next();
 
-            Ok(Some(Type::False))
+            Ok(Some(Type::False(span)))
         }
         TokenKind::Static => {
+            let span = state.stream.current().span;
             state.stream.next();
 
             if !state.has_class_scope {
@@ -128,9 +133,10 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
                 ));
             }
 
-            Ok(Some(Type::StaticReference))
+            Ok(Some(Type::StaticReference(span)))
         }
         TokenKind::Self_ => {
+            let span = state.stream.current().span;
             state.stream.next();
 
             if !state.has_class_scope {
@@ -140,9 +146,10 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
                 ));
             }
 
-            Ok(Some(Type::SelfReference))
+            Ok(Some(Type::SelfReference(span)))
         }
         TokenKind::Parent => {
+            let span = state.stream.current().span;
             state.stream.next();
 
             if !state.has_class_scope {
@@ -152,17 +159,15 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
                 ));
             }
 
-            Ok(Some(Type::ParentReference))
+            Ok(Some(Type::ParentReference(span)))
         }
         TokenKind::Enum | TokenKind::From => {
             let span = state.stream.current().span;
             let name = state.stream.current().kind.to_string().into();
+
             state.stream.next();
 
-            Ok(Some(Type::Identifier(SimpleIdentifier {
-                span,
-                value: name,
-            })))
+            Ok(Some(Type::Named(span, name)))
         }
         TokenKind::Identifier(id) => {
             let span = state.stream.current().span;
@@ -171,31 +176,28 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
             let name = &id[..];
             let lowered_name = name.to_ascii_lowercase();
             match lowered_name.as_slice() {
-                b"void" => Ok(Some(Type::Void)),
-                b"never" => Ok(Some(Type::Never)),
-                b"float" => Ok(Some(Type::Float)),
-                b"bool" => Ok(Some(Type::Boolean)),
-                b"int" => Ok(Some(Type::Integer)),
-                b"string" => Ok(Some(Type::String)),
-                b"object" => Ok(Some(Type::Object)),
-                b"mixed" => Ok(Some(Type::Mixed)),
-                b"iterable" => Ok(Some(Type::Iterable)),
-                b"null" => Ok(Some(Type::Null)),
-                b"true" => Ok(Some(Type::True)),
-                b"false" => Ok(Some(Type::False)),
-                b"array" => Ok(Some(Type::Array)),
-                b"callable" => Ok(Some(Type::Callable)),
-                _ => Ok(Some(Type::Identifier(SimpleIdentifier { span, value: id }))),
+                b"void" => Ok(Some(Type::Void(span))),
+                b"never" => Ok(Some(Type::Never(span))),
+                b"float" => Ok(Some(Type::Float(span))),
+                b"bool" => Ok(Some(Type::Boolean(span))),
+                b"int" => Ok(Some(Type::Integer(span))),
+                b"string" => Ok(Some(Type::String(span))),
+                b"object" => Ok(Some(Type::Object(span))),
+                b"mixed" => Ok(Some(Type::Mixed(span))),
+                b"iterable" => Ok(Some(Type::Iterable(span))),
+                b"null" => Ok(Some(Type::Null(span))),
+                b"true" => Ok(Some(Type::True(span))),
+                b"false" => Ok(Some(Type::False(span))),
+                b"array" => Ok(Some(Type::Array(span))),
+                b"callable" => Ok(Some(Type::Callable(span))),
+                _ => Ok(Some(Type::Named(span, name.into()))),
             }
         }
         TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
             let span = state.stream.current().span;
             state.stream.next();
 
-            Ok(Some(Type::Identifier(SimpleIdentifier {
-                span,
-                value: name,
-            })))
+            Ok(Some(Type::Named(span, name)))
         }
         _ => Ok(None),
     }
