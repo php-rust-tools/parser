@@ -15,18 +15,18 @@ pub enum Visibility {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum VisibilityModifier {
-    Public { start: Span, end: Span },
-    Protected { start: Span, end: Span },
-    Private { start: Span, end: Span },
+    Public(Span),
+    Protected(Span),
+    Private(Span),
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum PromotedPropertyModifier {
-    Public { start: Span, end: Span },
-    Protected { start: Span, end: Span },
-    Private { start: Span, end: Span },
-    Readonly { start: Span, end: Span },
+    Public(Span),
+    Protected(Span),
+    Private(Span),
+    Readonly(Span),
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
@@ -69,11 +69,11 @@ impl PromotedPropertyModifierGroup {
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum PropertyModifier {
-    Public { start: Span, end: Span },
-    Protected { start: Span, end: Span },
-    Private { start: Span, end: Span },
-    Static { start: Span, end: Span },
-    Readonly { start: Span, end: Span },
+    Public(Span),
+    Protected(Span),
+    Private(Span),
+    Static(Span),
+    Readonly(Span),
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
@@ -126,12 +126,12 @@ impl PropertyModifierGroup {
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum MethodModifier {
-    Final { start: Span, end: Span },
-    Static { start: Span, end: Span },
-    Abstract { start: Span, end: Span },
-    Public { start: Span, end: Span },
-    Protected { start: Span, end: Span },
-    Private { start: Span, end: Span },
+    Final(Span),
+    Static(Span),
+    Abstract(Span),
+    Public(Span),
+    Protected(Span),
+    Private(Span),
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
@@ -194,9 +194,9 @@ impl MethodModifierGroup {
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ClassModifier {
-    Final { start: Span, end: Span },
-    Abstract { start: Span, end: Span },
-    Readonly { start: Span, end: Span },
+    Final(Span),
+    Abstract(Span),
+    Readonly(Span),
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
@@ -245,10 +245,10 @@ impl ClassModifierGroup {
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ConstantModifier {
-    Final { start: Span, end: Span },
-    Public { start: Span, end: Span },
-    Protected { start: Span, end: Span },
-    Private { start: Span, end: Span },
+    Final(Span),
+    Public(Span),
+    Protected(Span),
+    Private(Span),
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]

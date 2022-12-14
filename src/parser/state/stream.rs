@@ -55,9 +55,8 @@ use crate::lexer::token::TokenKind;
 pub struct TokenStream<'a> {
     tokens: &'a [Token],
     length: usize,
-    comments: Vec<Token>,
+    comments: Vec<&'a Token>,
     cursor: usize,
-    default: Token,
 }
 
 /// Token stream.
@@ -70,7 +69,6 @@ impl<'a> TokenStream<'a> {
             length,
             comments: vec![],
             cursor: 0,
-            default: Token::default(),
         };
 
         stream.collect_comments();
@@ -87,25 +85,27 @@ impl<'a> TokenStream<'a> {
     }
 
     /// Get current token.
-    pub const fn current(&self) -> &Token {
-        if self.cursor >= self.length {
-            return &self.default;
-        }
+    pub const fn current(&self) -> &'a Token {
+        let position = if self.cursor >= self.length {
+            self.length - 1
+        } else {
+            self.cursor
+        };
 
-        &self.tokens[self.cursor]
+        &self.tokens[position]
     }
 
     /// Peek next token.
     ///
     /// All comments are skipped.
-    pub const fn peek(&self) -> &Token {
+    pub const fn peek(&self) -> &'a Token {
         self.peek_nth(1)
     }
 
     /// Peek nth+1 token.
     ///
     /// All comments are skipped.
-    pub const fn lookahead(&self, n: usize) -> &Token {
+    pub const fn lookahead(&self, n: usize) -> &'a Token {
         self.peek_nth(n + 1)
     }
 
@@ -113,12 +113,12 @@ impl<'a> TokenStream<'a> {
     ///
     /// All comments are skipped.
     #[inline(always)]
-    const fn peek_nth(&self, n: usize) -> &Token {
+    const fn peek_nth(&self, n: usize) -> &'a Token {
         let mut cursor = self.cursor + 1;
         let mut target = 1;
         loop {
             if cursor >= self.length {
-                return &self.default;
+                return &self.tokens[self.length - 1];
             }
 
             let current = &self.tokens[cursor];
@@ -154,7 +154,7 @@ impl<'a> TokenStream<'a> {
 
     /// Get all comments.
     #[allow(dead_code)]
-    pub fn comments(&mut self) -> Vec<Token> {
+    pub fn comments(&mut self) -> Vec<&'a Token> {
         let mut comments = vec![];
 
         std::mem::swap(&mut self.comments, &mut comments);
@@ -180,7 +180,7 @@ impl<'a> TokenStream<'a> {
                 break;
             }
 
-            self.comments.push(current.clone());
+            self.comments.push(current);
             self.cursor += 1;
         }
     }

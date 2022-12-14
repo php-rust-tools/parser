@@ -198,7 +198,7 @@ fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnum
 
 fn method(
     state: &mut State,
-    modifiers: Vec<(Span, TokenKind, Span)>,
+    modifiers: Vec<(Span, TokenKind)>,
     enum_name: String,
 ) -> ParseResult<Method> {
     let method = functions::method(state, modifiers::enum_method_group(modifiers)?)?;

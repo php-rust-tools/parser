@@ -98,6 +98,11 @@ impl Lexer {
             }
         }
 
+        tokens.push(Token {
+            kind: TokenKind::Eof,
+            span: state.source.span(),
+        });
+
         Ok(tokens)
     }
 

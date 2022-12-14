@@ -93,26 +93,18 @@
                                         ),
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [
-                                                Readonly {
-                                                    start: Span(
+                                                Readonly(
+                                                    Span(
                                                         5,
                                                         9,
                                                     ),
-                                                    end: Span(
+                                                ),
+                                                Public(
+                                                    Span(
                                                         5,
                                                         18,
                                                     ),
-                                                },
-                                                Public {
-                                                    start: Span(
-                                                        5,
-                                                        18,
-                                                    ),
-                                                    end: Span(
-                                                        5,
-                                                        25,
-                                                    ),
-                                                },
+                                                ),
                                             ],
                                         },
                                         by_ref: false,
@@ -124,16 +116,12 @@
                             ),
                             modifiers: MethodModifierGroup {
                                 modifiers: [
-                                    Public {
-                                        start: Span(
+                                    Public(
+                                        Span(
                                             4,
                                             5,
                                         ),
-                                        end: Span(
-                                            4,
-                                            12,
-                                        ),
-                                    },
+                                    ),
                                 ],
                             },
                             return_type: None,

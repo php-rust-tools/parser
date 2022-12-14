@@ -82,21 +82,15 @@ fn member(state: &mut State) -> ParseResult<InterfaceMember> {
 }
 
 #[inline(always)]
-fn method_modifiers(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<MethodModifierGroup> {
+fn method_modifiers(input: Vec<(Span, TokenKind)>) -> ParseResult<MethodModifierGroup> {
     let modifiers = input
         .iter()
-        .map(|(start, token, end)| match token {
-            TokenKind::Public => Ok(MethodModifier::Public {
-                start: *start,
-                end: *end,
-            }),
-            TokenKind::Static => Ok(MethodModifier::Static {
-                start: *start,
-                end: *end,
-            }),
+        .map(|(span, token)| match token {
+            TokenKind::Public => Ok(MethodModifier::Public(*span)),
+            TokenKind::Static => Ok(MethodModifier::Static(*span)),
             _ => Err(ParseError::CannotUseModifierOnInterfaceMethod(
                 token.to_string(),
-                *start,
+                *span,
             )),
         })
         .collect::<ParseResult<Vec<MethodModifier>>>()?;
@@ -105,21 +99,15 @@ fn method_modifiers(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<MethodMo
 }
 
 #[inline(always)]
-fn constant_modifiers(input: Vec<(Span, TokenKind, Span)>) -> ParseResult<ConstantModifierGroup> {
+fn constant_modifiers(input: Vec<(Span, TokenKind)>) -> ParseResult<ConstantModifierGroup> {
     let modifiers = input
         .iter()
-        .map(|(start, token, end)| match token {
-            TokenKind::Public => Ok(ConstantModifier::Public {
-                start: *start,
-                end: *end,
-            }),
-            TokenKind::Final => Ok(ConstantModifier::Final {
-                start: *start,
-                end: *end,
-            }),
+        .map(|(span, token)| match token {
+            TokenKind::Public => Ok(ConstantModifier::Public(*span)),
+            TokenKind::Final => Ok(ConstantModifier::Final(*span)),
             _ => Err(ParseError::CannotUseModifierOnInterfaceConstant(
                 token.to_string(),
-                *start,
+                *span,
             )),
         })
         .collect::<ParseResult<Vec<ConstantModifier>>>()?;
