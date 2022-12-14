@@ -4368,40 +4368,6 @@
             "type": {
               "type": "string",
               "enum": [
-                "ternary"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "condition",
-                "else",
-                "then"
-              ],
-              "properties": {
-                "condition": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "else": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "then": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
                 "short_ternary"
               ]
             },
@@ -4421,6 +4387,48 @@
                 },
                 "span": {
                   "$ref": "#/definitions/Span"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "ternary"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "colon",
+                "condition",
+                "else",
+                "span",
+                "then"
+              ],
+              "properties": {
+                "colon": {
+                  "$ref": "#/definitions/Span"
+                },
+                "condition": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "else": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "span": {
+                  "$ref": "#/definitions/Span"
+                },
+                "then": {
+                  "$ref": "#/definitions/Expression"
                 }
               }
             }
@@ -4708,6 +4716,20 @@
                   "$ref": "#/definitions/Expression"
                 }
               }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "noop"
+              ]
             }
           }
         }
@@ -5812,6 +5834,7 @@
       "type": "object",
       "required": [
         "attributes",
+        "end",
         "entries",
         "modifiers"
       ],
@@ -5821,6 +5844,9 @@
           "items": {
             "$ref": "#/definitions/AttributeGroup"
           }
+        },
+        "end": {
+          "$ref": "#/definitions/Span"
         },
         "entries": {
           "type": "array",
@@ -5847,25 +5873,68 @@
       }
     },
     "PropertyEntry": {
-      "type": "object",
-      "required": [
-        "variable"
-      ],
-      "properties": {
-        "value": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Expression"
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "uninitialized"
+              ]
             },
-            {
-              "type": "null"
+            "value": {
+              "type": "object",
+              "required": [
+                "variable"
+              ],
+              "properties": {
+                "variable": {
+                  "$ref": "#/definitions/SimpleVariable"
+                }
+              }
             }
-          ]
+          }
         },
-        "variable": {
-          "$ref": "#/definitions/SimpleVariable"
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "initialized"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "span",
+                "value",
+                "variable"
+              ],
+              "properties": {
+                "span": {
+                  "$ref": "#/definitions/Span"
+                },
+                "value": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "variable": {
+                  "$ref": "#/definitions/SimpleVariable"
+                }
+              }
+            }
+          }
         }
-      }
+      ]
     },
     "PropertyModifier": {
       "oneOf": [
@@ -8026,6 +8095,7 @@
       "type": "object",
       "required": [
         "attributes",
+        "end",
         "entries"
       ],
       "properties": {
@@ -8035,10 +8105,13 @@
             "$ref": "#/definitions/AttributeGroup"
           }
         },
+        "end": {
+          "$ref": "#/definitions/Span"
+        },
         "entries": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/VariablePropertyEntry"
+            "$ref": "#/definitions/PropertyEntry"
           }
         },
         "type": {
@@ -8050,27 +8123,6 @@
               "type": "null"
             }
           ]
-        }
-      }
-    },
-    "VariablePropertyEntry": {
-      "type": "object",
-      "required": [
-        "variable"
-      ],
-      "properties": {
-        "value": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Expression"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "variable": {
-          "$ref": "#/definitions/SimpleVariable"
         }
       }
     },

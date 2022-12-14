@@ -21,11 +21,13 @@ pub fn namespace(state: &mut State) -> ParseResult<Statement> {
     let start = utils::skip(state, TokenKind::Namespace)?;
     let name = identifiers::optional_name(state);
 
+    let current = state.stream.current();
+
     if let Some(name) = &name {
-        if state.stream.current().kind != TokenKind::LeftBrace {
+        if current.kind != TokenKind::LeftBrace {
             if let Some(NamespaceType::Braced) = state.namespace_type() {
                 return Err(ParseError::MixingBracedAndUnBracedNamespaceDeclarations(
-                    state.stream.current().span,
+                    current.span,
                 ));
             }
 
@@ -35,11 +37,11 @@ pub fn namespace(state: &mut State) -> ParseResult<Statement> {
 
     match state.namespace_type() {
         Some(NamespaceType::Unbraced) => Err(
-            ParseError::MixingBracedAndUnBracedNamespaceDeclarations(state.stream.current().span),
+            ParseError::MixingBracedAndUnBracedNamespaceDeclarations(current.span),
         ),
-        Some(NamespaceType::Braced) if state.namespace().is_some() => Err(
-            ParseError::NestedNamespaceDeclarations(state.stream.current().span),
-        ),
+        Some(NamespaceType::Braced) if state.namespace().is_some() => {
+            Err(ParseError::NestedNamespaceDeclarations(current.span))
+        }
         _ => braced_namespace(state, start, name),
     }
 }

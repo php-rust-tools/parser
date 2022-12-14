@@ -31,7 +31,6 @@
                     Property(
                         Property {
                             attributes: [],
-                            type: None,
                             modifiers: PropertyModifierGroup {
                                 modifiers: [
                                     Protected(
@@ -42,8 +41,9 @@
                                     ),
                                 ],
                             },
+                            type: None,
                             entries: [
-                                PropertyEntry {
+                                Uninitialized {
                                     variable: SimpleVariable {
                                         span: Span(
                                             3,
@@ -51,9 +51,12 @@
                                         ),
                                         name: "a",
                                     },
-                                    value: None,
                                 },
                             ],
+                            end: Span(
+                                3,
+                                17,
+                            ),
                         },
                     ),
                 ],

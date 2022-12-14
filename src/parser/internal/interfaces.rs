@@ -27,8 +27,9 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
     let name = identifiers::type_identifier(state)?;
 
-    let extends = if state.stream.current().kind == TokenKind::Extends {
-        let span = state.stream.current().span;
+    let current = state.stream.current();
+    let extends = if current.kind == TokenKind::Extends {
+        let span = current.span;
 
         state.stream.next();
 

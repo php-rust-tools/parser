@@ -2,8 +2,6 @@ use crate::expect_literal;
 use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::comments::Comment;
-use crate::parser::ast::comments::CommentFormat;
 use crate::parser::ast::declares::Declare;
 use crate::parser::ast::declares::DeclareBody;
 use crate::parser::ast::declares::DeclareEntry;
@@ -104,28 +102,29 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
     // FIXME: There's a better place to put this but night-time brain doesn't know where.
     utils::skip_open_tag(state)?;
 
+    let current = state.stream.current();
+    let peek = state.stream.peek();
     let statement = if has_attributes {
-        match &state.stream.current().kind {
+        match &current.kind {
             TokenKind::Abstract => classes::parse(state)?,
-            TokenKind::Readonly if state.stream.peek().kind != TokenKind::LeftParen => {
-                classes::parse(state)?
-            }
+            TokenKind::Readonly if peek.kind != TokenKind::LeftParen => classes::parse(state)?,
             TokenKind::Final => classes::parse(state)?,
             TokenKind::Class => classes::parse(state)?,
             TokenKind::Interface => interfaces::parse(state)?,
             TokenKind::Trait => traits::parse(state)?,
             TokenKind::Enum
-                if state.stream.peek().kind != TokenKind::LeftParen
-                    && state.stream.peek().kind != TokenKind::DoubleColon
-                    && state.stream.peek().kind != TokenKind::Colon =>
+                if !matches!(
+                    peek.kind,
+                    TokenKind::LeftParen | TokenKind::DoubleColon | TokenKind::Colon,
+                ) =>
             {
                 enums::parse(state)?
             }
             TokenKind::Function
-                if identifiers::is_identifier_maybe_soft_reserved(&state.stream.peek().kind)
-                    || state.stream.peek().kind == TokenKind::Ampersand =>
+                if identifiers::is_identifier_maybe_soft_reserved(&peek.kind)
+                    || peek.kind == TokenKind::Ampersand =>
             {
-                if state.stream.peek().kind == TokenKind::Ampersand {
+                if peek.kind == TokenKind::Ampersand {
                     if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
                         let expression = expressions::create(state)?;
                         let end = utils::skip_semicolon(state)?;
@@ -146,9 +145,9 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             }
         }
     } else {
-        match &state.stream.current().kind {
+        match &current.kind {
             TokenKind::OpenTag(OpenTagKind::Echo) => {
-                let span = state.stream.current().span;
+                let span = current.span;
                 state.stream.next();
 
                 let mut values = Vec::new();
@@ -167,25 +166,24 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 Statement::ShortEcho { span, values }
             }
             TokenKind::Abstract => classes::parse(state)?,
-            TokenKind::Readonly if state.stream.peek().kind != TokenKind::LeftParen => {
-                classes::parse(state)?
-            }
+            TokenKind::Readonly if peek.kind != TokenKind::LeftParen => classes::parse(state)?,
             TokenKind::Final => classes::parse(state)?,
             TokenKind::Class => classes::parse(state)?,
             TokenKind::Interface => interfaces::parse(state)?,
             TokenKind::Trait => traits::parse(state)?,
             TokenKind::Enum
-                if state.stream.peek().kind != TokenKind::LeftParen
-                    && state.stream.peek().kind != TokenKind::DoubleColon
-                    && state.stream.peek().kind != TokenKind::Colon =>
+                if !matches!(
+                    peek.kind,
+                    TokenKind::LeftParen | TokenKind::DoubleColon | TokenKind::Colon,
+                ) =>
             {
                 enums::parse(state)?
             }
             TokenKind::Function
-                if identifiers::is_identifier_maybe_soft_reserved(&state.stream.peek().kind)
-                    || state.stream.peek().kind == TokenKind::Ampersand =>
+                if identifiers::is_identifier_maybe_soft_reserved(&peek.kind)
+                    || peek.kind == TokenKind::Ampersand =>
             {
-                if state.stream.peek().kind == TokenKind::Ampersand {
+                if peek.kind == TokenKind::Ampersand {
                     if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
                         let expression = expressions::create(state)?;
                         let end = utils::skip_semicolon(state)?;
@@ -201,7 +199,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             TokenKind::Goto => goto::goto_statement(state)?,
             token
                 if identifiers::is_identifier_maybe_reserved(token)
-                    && state.stream.peek().kind == TokenKind::Colon =>
+                    && peek.kind == TokenKind::Colon =>
             {
                 goto::label_statement(state)?
             }
@@ -279,7 +277,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 })
             }
             TokenKind::Global => {
-                let span = state.stream.current().span;
+                let span = current.span;
                 state.stream.next();
 
                 let mut variables = vec![];
@@ -297,7 +295,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 utils::skip_semicolon(state)?;
                 Statement::Global { span, variables }
             }
-            TokenKind::Static if matches!(state.stream.peek().kind, TokenKind::Variable(_)) => {
+            TokenKind::Static if matches!(peek.kind, TokenKind::Variable(_)) => {
                 state.stream.next();
 
                 let mut vars = vec![];
@@ -335,62 +333,6 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 state.stream.next();
                 utils::skip_open_tag(state)?;
                 s
-            }
-            TokenKind::SingleLineComment(comment) => {
-                let start = state.stream.current().span;
-                let content = comment.clone();
-                state.stream.next();
-                let end = state.stream.current().span;
-                let format = CommentFormat::SingleLine;
-
-                Statement::Comment(Comment {
-                    start,
-                    end,
-                    format,
-                    content,
-                })
-            }
-            TokenKind::MultiLineComment(comment) => {
-                let start = state.stream.current().span;
-                let content = comment.clone();
-                state.stream.next();
-                let end = state.stream.current().span;
-                let format = CommentFormat::MultiLine;
-
-                Statement::Comment(Comment {
-                    start,
-                    end,
-                    format,
-                    content,
-                })
-            }
-            TokenKind::HashMarkComment(comment) => {
-                let start = state.stream.current().span;
-                let content = comment.clone();
-                state.stream.next();
-                let end = state.stream.current().span;
-                let format = CommentFormat::HashMark;
-
-                Statement::Comment(Comment {
-                    start,
-                    end,
-                    format,
-                    content,
-                })
-            }
-            TokenKind::DocumentComment(comment) => {
-                let start = state.stream.current().span;
-                let content = comment.clone();
-                state.stream.next();
-                let end = state.stream.current().span;
-                let format = CommentFormat::Document;
-
-                Statement::Comment(Comment {
-                    start,
-                    end,
-                    format,
-                    content,
-                })
             }
             TokenKind::Do => loops::do_loop(state)?,
             TokenKind::While => loops::while_loop(state)?,
@@ -433,7 +375,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 }
             }
             TokenKind::SemiColon => {
-                let start = state.stream.current().span;
+                let start = current.span;
 
                 state.stream.next();
 

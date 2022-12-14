@@ -30,8 +30,9 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
     let name = identifiers::type_identifier(state)?;
 
-    let extends = if state.stream.current().kind == TokenKind::Extends {
-        let span = state.stream.current().span;
+    let current = state.stream.current();
+    let extends = if current.kind == TokenKind::Extends {
+        let span = current.span;
 
         state.stream.next();
         let parent = identifiers::full_type_name(state)?;
@@ -41,8 +42,9 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         None
     };
 
-    let implements = if state.stream.current().kind == TokenKind::Implements {
-        let span = state.stream.current().span;
+    let current = state.stream.current();
+    let implements = if current.kind == TokenKind::Implements {
+        let span = current.span;
 
         state.stream.next();
 
@@ -107,8 +109,9 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
         None
     };
 
-    let extends = if state.stream.current().kind == TokenKind::Extends {
-        let span = state.stream.current().span;
+    let current = state.stream.current();
+    let extends = if current.kind == TokenKind::Extends {
+        let span = current.span;
 
         state.stream.next();
         let parent = identifiers::full_name(state)?;
@@ -118,8 +121,9 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
         None
     };
 
-    let implements = if state.stream.current().kind == TokenKind::Implements {
-        let span = state.stream.current().span;
+    let current = state.stream.current();
+    let implements = if current.kind == TokenKind::Implements {
+        let span = current.span;
 
         state.stream.next();
 

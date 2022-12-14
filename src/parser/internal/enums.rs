@@ -115,19 +115,21 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMember> {
     attributes::gather_attributes(state)?;
 
-    if state.stream.current().kind == TokenKind::Case {
+    let current = state.stream.current();
+    if current.kind == TokenKind::Case {
         let attributes = state.get_attributes();
 
-        let start = state.stream.current().span;
+        let start = current.span;
         state.stream.next();
 
         let name = identifiers::identifier_maybe_reserved(state)?;
 
-        if state.stream.current().kind == TokenKind::Equals {
+        let current = state.stream.current();
+        if current.kind == TokenKind::Equals {
             return Err(ParseError::CaseValueForUnitEnum(
                 name.to_string(),
                 state.named(&enum_name),
-                state.stream.current().span,
+                current.span,
             ));
         }
 
@@ -154,19 +156,21 @@ fn unit_member(state: &mut State, enum_name: String) -> ParseResult<UnitEnumMemb
 fn backed_member(state: &mut State, enum_name: String) -> ParseResult<BackedEnumMember> {
     attributes::gather_attributes(state)?;
 
-    if state.stream.current().kind == TokenKind::Case {
+    let current = state.stream.current();
+    if current.kind == TokenKind::Case {
         let attributes = state.get_attributes();
 
-        let start = state.stream.current().span;
+        let start = current.span;
         state.stream.next();
 
         let name = identifiers::identifier_maybe_reserved(state)?;
 
-        if state.stream.current().kind == TokenKind::SemiColon {
+        let current = state.stream.current();
+        if current.kind == TokenKind::SemiColon {
             return Err(ParseError::MissingCaseValueForBackedEnum(
                 name.to_string(),
                 state.named(&enum_name),
-                state.stream.current().span,
+                current.span,
             ));
         }
 
