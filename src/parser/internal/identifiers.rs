@@ -24,109 +24,123 @@ pub fn identifier_of(state: &mut State, kinds: &[&str]) -> ParseResult<SimpleIde
 
 /// Expect an unqualified identifier such as Foo or Bar for a class, interface, trait, or an enum name.
 pub fn type_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
-    match state.stream.current().kind.clone() {
+    let current = state.stream.current();
+    match &current.kind {
         TokenKind::Identifier(name) => {
-            let span = state.stream.current().span;
+            let span = current.span;
 
             state.stream.next();
 
-            Ok(SimpleIdentifier { span, value: name })
+            Ok(SimpleIdentifier {
+                span,
+                value: name.clone(),
+            })
         }
         TokenKind::Enum | TokenKind::From => {
-            let span = state.stream.current().span;
-            let name = state.stream.current().kind.to_string().into();
+            let span = current.span;
+            let name = current.kind.to_string().into();
 
             state.stream.next();
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(&t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
-            state.stream.current().kind.to_string(),
-            state.stream.current().span,
+        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
+            current.kind.to_string(),
+            current.span,
         )),
         _ => Err(ParseError::ExpectedToken(
             vec!["an identifier".to_owned()],
-            Some(state.stream.current().kind.to_string()),
-            state.stream.current().span,
+            Some(current.kind.to_string()),
+            current.span,
         )),
     }
 }
 
 /// Expect an unqualified identifier such as foo or bar for a goto label name.
 pub fn label_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
-    match state.stream.current().kind.clone() {
+    let current = state.stream.current();
+    match &current.kind {
         TokenKind::Identifier(name) => {
-            let span = state.stream.current().span;
+            let span = current.span;
 
             state.stream.next();
 
-            Ok(SimpleIdentifier { span, value: name })
+            Ok(SimpleIdentifier {
+                span,
+                value: name.clone(),
+            })
         }
         TokenKind::Enum | TokenKind::From => {
-            let span = state.stream.current().span;
-            let name = state.stream.current().kind.to_string().into();
+            let span = current.span;
+            let name = current.kind.to_string().into();
 
             state.stream.next();
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(&t) => Err(ParseError::CannotUseReservedKeywordAsAGoToLabel(
-            state.stream.current().kind.to_string(),
-            state.stream.current().span,
+        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsAGoToLabel(
+            current.kind.to_string(),
+            current.span,
         )),
         _ => Err(ParseError::ExpectedToken(
             vec!["an identifier".to_owned()],
-            Some(state.stream.current().kind.to_string()),
-            state.stream.current().span,
+            Some(current.kind.to_string()),
+            current.span,
         )),
     }
 }
 
 /// Expect an unqualified identifier such as FOO or BAR for a constant name.
 pub fn constant_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
-    match state.stream.current().kind.clone() {
+    let current = state.stream.current();
+    match &current.kind {
         TokenKind::Identifier(name) => {
-            let span = state.stream.current().span;
+            let span = current.span;
 
             state.stream.next();
 
-            Ok(SimpleIdentifier { span, value: name })
+            Ok(SimpleIdentifier {
+                span,
+                value: name.clone(),
+            })
         }
         TokenKind::Enum | TokenKind::From | TokenKind::Self_ | TokenKind::Parent => {
-            let span = state.stream.current().span;
-            let name = state.stream.current().kind.to_string().into();
+            let span = current.span;
+            let name = current.kind.to_string().into();
 
             state.stream.next();
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(&t) => {
-            Err(ParseError::CannotUseReservedKeywordAsAConstantName(
-                state.stream.current().kind.to_string(),
-                state.stream.current().span,
-            ))
-        }
+        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsAConstantName(
+            current.kind.to_string(),
+            current.span,
+        )),
         _ => Err(ParseError::ExpectedToken(
             vec!["an identifier".to_owned()],
-            Some(state.stream.current().kind.to_string()),
-            state.stream.current().span,
+            Some(current.kind.to_string()),
+            current.span,
         )),
     }
 }
 
 /// Expect an unqualified identifier such as Foo or Bar.
 pub fn identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
-    if let TokenKind::Identifier(name) = state.stream.current().kind.clone() {
-        let span = state.stream.current().span;
+    let current = state.stream.current();
+    if let TokenKind::Identifier(name) = &current.kind {
+        let span = current.span;
 
         state.stream.next();
 
-        Ok(SimpleIdentifier { span, value: name })
+        Ok(SimpleIdentifier {
+            span,
+            value: name.clone(),
+        })
     } else {
         Err(ParseError::ExpectedToken(
             vec!["an identifier".to_owned()],
-            Some(state.stream.current().kind.to_string()),
-            state.stream.current().span,
+            Some(current.kind.to_string()),
+            current.span,
         ))
     }
 }
@@ -147,10 +161,12 @@ pub fn name(state: &mut State) -> ParseResult<SimpleIdentifier> {
 
 /// Expect an optional unqualified or qualified identifier such as Foo, Bar or Foo\Bar.
 pub fn optional_name(state: &mut State) -> Option<SimpleIdentifier> {
-    let ident = match &state.stream.current().kind {
+    let current = state.stream.current();
+
+    let ident = match &current.kind {
         TokenKind::Identifier(name) | TokenKind::QualifiedIdentifier(name) => {
             Some(SimpleIdentifier {
-                span: state.stream.current().span,
+                span: current.span,
                 value: name.clone(),
             })
         }
@@ -166,116 +182,129 @@ pub fn optional_name(state: &mut State) -> Option<SimpleIdentifier> {
 
 /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
 pub fn full_name(state: &mut State) -> ParseResult<SimpleIdentifier> {
-    match state.stream.current().kind.clone() {
+    let current = state.stream.current();
+    match &current.kind {
         TokenKind::Identifier(name)
         | TokenKind::QualifiedIdentifier(name)
         | TokenKind::FullyQualifiedIdentifier(name) => {
-            let span = state.stream.current().span;
+            let span = current.span;
 
             state.stream.next();
 
-            Ok(SimpleIdentifier { span, value: name })
+            Ok(SimpleIdentifier {
+                span,
+                value: name.clone(),
+            })
         }
         _ => Err(ParseError::ExpectedToken(
             vec!["an identifier".to_owned()],
-            Some(state.stream.current().kind.to_string()),
-            state.stream.current().span,
+            Some(current.kind.to_string()),
+            current.span,
         )),
     }
 }
 
 /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
 pub fn full_type_name(state: &mut State) -> ParseResult<SimpleIdentifier> {
-    match state.stream.current().kind.clone() {
+    let current = state.stream.current();
+    match &current.kind {
         TokenKind::Identifier(name)
         | TokenKind::QualifiedIdentifier(name)
         | TokenKind::FullyQualifiedIdentifier(name) => {
-            let span = state.stream.current().span;
+            let span = current.span;
 
             state.stream.next();
 
-            Ok(SimpleIdentifier { span, value: name })
+            Ok(SimpleIdentifier {
+                span,
+                value: name.clone(),
+            })
         }
         TokenKind::Enum | TokenKind::From => {
-            let span = state.stream.current().span;
-            let name = state.stream.current().kind.to_string().into();
+            let span = current.span;
+            let name = current.kind.to_string().into();
 
             state.stream.next();
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(&t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
-            state.stream.current().kind.to_string(),
-            state.stream.current().span,
+        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
+            current.kind.to_string(),
+            current.span,
         )),
         _ => Err(ParseError::ExpectedToken(
             vec!["an identifier".to_owned()],
-            Some(state.stream.current().kind.to_string()),
-            state.stream.current().span,
+            Some(current.kind.to_string()),
+            current.span,
         )),
     }
 }
 
 /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
 pub fn full_type_name_including_self(state: &mut State) -> ParseResult<SimpleIdentifier> {
-    match state.stream.current().kind.clone() {
+    let current = state.stream.current();
+    match &current.kind {
         TokenKind::Identifier(name)
         | TokenKind::QualifiedIdentifier(name)
         | TokenKind::FullyQualifiedIdentifier(name) => {
-            let span = state.stream.current().span;
+            let span = current.span;
 
             state.stream.next();
 
-            Ok(SimpleIdentifier { span, value: name })
+            Ok(SimpleIdentifier {
+                span,
+                value: name.clone(),
+            })
         }
         TokenKind::Enum
         | TokenKind::From
         | TokenKind::Self_
         | TokenKind::Static
         | TokenKind::Parent => {
-            let span = state.stream.current().span;
-            let name = state.stream.current().kind.to_string().into();
+            let span = current.span;
+            let name = current.kind.to_string().into();
 
             state.stream.next();
 
             Ok(SimpleIdentifier { span, value: name })
         }
         t if is_reserved_identifier(&t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
-            state.stream.current().kind.to_string(),
-            state.stream.current().span,
+            current.kind.to_string(),
+            current.span,
         )),
         _ => Err(ParseError::ExpectedToken(
             vec!["an identifier".to_owned()],
-            Some(state.stream.current().kind.to_string()),
-            state.stream.current().span,
+            Some(current.kind.to_string()),
+            current.span,
         )),
     }
 }
 
 pub fn identifier_maybe_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> {
-    match state.stream.current().kind {
-        _ if is_reserved_identifier(&state.stream.current().kind) => {
-            let name = state.stream.current().kind.to_string().into();
+    let current = state.stream.current();
 
-            let span = state.stream.current().span;
-            state.stream.next();
+    if is_reserved_identifier(&current.kind) {
+        let name = current.kind.to_string().into();
+        let span = current.span;
+        state.stream.next();
 
-            Ok(SimpleIdentifier { span, value: name })
-        }
-        _ => identifier(state),
+        Ok(SimpleIdentifier { span, value: name })
+    } else {
+        identifier(state)
     }
 }
 
 pub fn identifier_maybe_soft_reserved(state: &mut State) -> ParseResult<SimpleIdentifier> {
-    match state.stream.current().kind {
-        _ if is_soft_reserved_identifier(&state.stream.current().kind) => {
-            let name = state.stream.current().kind.to_string().into();
-            let span = state.stream.current().span;
-            state.stream.next();
+    let current = state.stream.current();
 
-            Ok(SimpleIdentifier { span, value: name })
-        }
-        _ => identifier(state),
+    if is_soft_reserved_identifier(&current.kind) {
+        let name = current.kind.to_string().into();
+        let span = current.span;
+        state.stream.next();
+
+        Ok(SimpleIdentifier { span, value: name })
+    } else {
+        identifier(state)
     }
 }
 

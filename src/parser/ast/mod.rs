@@ -423,15 +423,19 @@ pub enum Expression {
         span: Span,
         constant: MagicConst,
     },
-    Ternary {
-        condition: Box<Self>,
-        then: Box<Self>,
-        r#else: Box<Self>,
-    },
+    // `foo() ?: bar()`
     ShortTernary {
-        condition: Box<Self>,
-        span: Span,
-        r#else: Box<Self>,
+        condition: Box<Self>, // `foo()`
+        span: Span,           // `?:`
+        r#else: Box<Self>,    // `bar()`
+    },
+    // `foo() ? bar() : baz()`
+    Ternary {
+        condition: Box<Self>, // `foo()`
+        span: Span,           // `?`
+        then: Box<Self>,      // `bar()`
+        colon: Span,          // `:`
+        r#else: Box<Self>,    // `baz()`
     },
     Coalesce {
         lhs: Box<Self>,
@@ -468,6 +472,7 @@ pub enum Expression {
         kind: CastKind,
         value: Box<Self>,
     },
+    Noop,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

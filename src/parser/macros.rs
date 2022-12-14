@@ -58,26 +58,37 @@ macro_rules! expect_token {
 #[macro_export]
 macro_rules! expect_literal {
     ($state:expr) => {{
-        match $state.stream.current().kind.clone() {
+        let current = $state.stream.current();
+
+        match &current.kind {
             TokenKind::LiteralInteger(value) => {
-                let span = $state.stream.current().span;
-                let e = Expression::LiteralInteger { span, value };
+                let e = Expression::LiteralInteger {
+                    span: current.span,
+                    value: value.clone(),
+                };
+
                 $state.stream.next();
+
                 e
             }
             TokenKind::LiteralFloat(value) => {
-                let span = $state.stream.current().span;
-                let e = Expression::LiteralFloat { span, value };
+                let e = Expression::LiteralFloat {
+                    span: current.span,
+                    value: value.clone(),
+                };
+
                 $state.stream.next();
+
                 e
             }
             TokenKind::LiteralString(value) => {
-                let span = $state.stream.current().span;
                 let e = Expression::LiteralString {
-                    span,
+                    span: current.span,
                     value: value.clone(),
                 };
+
                 $state.stream.next();
+
                 e
             }
             _ => {
@@ -101,19 +112,21 @@ macro_rules! expected_token_err {
 #[macro_export]
 macro_rules! expected_token {
     ([ $($expected:literal),+ $(,)? ], $state:expr $(,)?) => {{
-        match &$state.stream.current().kind {
+        let current = $state.stream.current();
+
+        match &current.kind {
             TokenKind::Eof => {
                 $crate::parser::error::ParseError::ExpectedToken(
                     vec![$($expected.into()),+],
                     None,
-                    $state.stream.current().span,
+                    current.span,
                 )
             },
             _ => {
                 $crate::parser::error::ParseError::ExpectedToken(
                     vec![$($expected.into()),+],
-                    Some($state.stream.current().kind.to_string()),
-                    $state.stream.current().span,
+                    Some(current.kind.to_string()),
+                    current.span,
                 )
             }
         }

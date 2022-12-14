@@ -247,22 +247,24 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
         TokenKind::Variable(_) => {
             // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
             let variable = Expression::Variable(variables::dynamic_variable(state)?);
-            let e = match state.stream.current().kind {
+            let current = state.stream.current();
+            let e = match &current.kind {
                 TokenKind::LeftBracket => {
                     state.stream.next();
                     // Full expression syntax is not allowed here,
                     // so we can't call expression.
-                    let index = match &state.stream.current().kind {
+                    let current = state.stream.current();
+                    let index = match &current.kind {
                         TokenKind::LiteralInteger(value) => {
                             let e = Expression::LiteralInteger {
-                                span: state.stream.current().span,
+                                span: current.span,
                                 value: value.clone(),
                             };
                             state.stream.next();
                             e
                         }
                         TokenKind::Minus => {
-                            let span = state.stream.current().span;
+                            let span = current.span;
                             state.stream.next();
                             if let TokenKind::LiteralInteger(value) = &state.stream.current().kind {
                                 let e = Expression::ArithmeticOperation(
@@ -282,7 +284,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                         }
                         TokenKind::Identifier(ident) => {
                             let e = Expression::LiteralString {
-                                span: state.stream.current().span,
+                                span: current.span,
                                 value: ident.clone(),
                             };
                             state.stream.next();
@@ -307,7 +309,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                     }
                 }
                 TokenKind::Arrow => {
-                    let span = state.stream.current().span;
+                    let span = current.span;
                     state.stream.next();
                     Expression::PropertyFetch {
                         target: Box::new(variable),
@@ -318,7 +320,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                     }
                 }
                 TokenKind::NullsafeArrow => {
-                    let span = state.stream.current().span;
+                    let span = current.span;
                     state.stream.next();
                     Expression::NullsafePropertyFetch {
                         target: Box::new(variable),

@@ -20,8 +20,7 @@ use crate::parser::state::State;
 pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterList, ParseError> {
     let mut members = Vec::new();
 
-    let list_start = state.stream.current().span;
-    utils::skip_left_parenthesis(state)?;
+    let list_start = utils::skip_left_parenthesis(state)?;
 
     while !state.stream.is_eof() && state.stream.current().kind != TokenKind::RightParen {
         let start = state.stream.current().span;
@@ -72,9 +71,7 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
         }
     }
 
-    utils::skip_right_parenthesis(state)?;
-
-    let list_end = state.stream.current().span;
+    let list_end = utils::skip_right_parenthesis(state)?;
 
     Ok(FunctionParameterList {
         start: list_start,
@@ -122,8 +119,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
 
     let mut members = Vec::new();
 
-    let list_start = state.stream.current().span;
-    utils::skip_left_parenthesis(state)?;
+    let list_start = utils::skip_left_parenthesis(state)?;
 
     while !state.stream.is_eof() && state.stream.current().kind != TokenKind::RightParen {
         let start = state.stream.current().span;
@@ -221,9 +217,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
         }
     }
 
-    utils::skip_right_parenthesis(state)?;
-
-    let list_end = state.stream.current().span;
+    let list_end = utils::skip_right_parenthesis(state)?;
 
     Ok(MethodParameterList {
         start: list_start,

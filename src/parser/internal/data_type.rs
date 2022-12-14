@@ -91,86 +91,88 @@ fn dnf(state: &mut State) -> ParseResult<Type> {
 }
 
 fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
-    match state.stream.current().kind.clone() {
+    let current = state.stream.current();
+
+    match &current.kind {
         TokenKind::Array => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             Ok(Some(Type::Array(span)))
         }
         TokenKind::Callable => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             Ok(Some(Type::Callable(span)))
         }
         TokenKind::Null => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             Ok(Some(Type::Null(span)))
         }
         TokenKind::True => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             Ok(Some(Type::True(span)))
         }
         TokenKind::False => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             Ok(Some(Type::False(span)))
         }
         TokenKind::Static => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             if !state.has_class_scope {
                 return Err(ParseError::CannotFindTypeInCurrentScope(
                     "static".to_owned(),
-                    state.stream.current().span,
+                    span,
                 ));
             }
 
             Ok(Some(Type::StaticReference(span)))
         }
         TokenKind::Self_ => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             if !state.has_class_scope {
                 return Err(ParseError::CannotFindTypeInCurrentScope(
                     "self".to_owned(),
-                    state.stream.current().span,
+                    span,
                 ));
             }
 
             Ok(Some(Type::SelfReference(span)))
         }
         TokenKind::Parent => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             if !state.has_class_scope {
                 return Err(ParseError::CannotFindTypeInCurrentScope(
                     "parent".to_owned(),
-                    state.stream.current().span,
+                    span,
                 ));
             }
 
             Ok(Some(Type::ParentReference(span)))
         }
         TokenKind::Enum | TokenKind::From => {
-            let span = state.stream.current().span;
-            let name = state.stream.current().kind.to_string().into();
+            let span = current.span;
+            let name = current.kind.to_string().into();
 
             state.stream.next();
 
             Ok(Some(Type::Named(span, name)))
         }
         TokenKind::Identifier(id) => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             let name = &id[..];
@@ -194,10 +196,10 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
             }
         }
         TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
-            Ok(Some(Type::Named(span, name)))
+            Ok(Some(Type::Named(span, name.clone())))
         }
         _ => Ok(None),
     }
@@ -235,7 +237,8 @@ fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> 
     utils::skip(state, TokenKind::Pipe)?;
 
     loop {
-        let ty = if state.stream.current().kind == TokenKind::LeftParen {
+        let current = state.stream.current();
+        let ty = if current.kind == TokenKind::LeftParen {
             if within_dnf {
                 // don't allow nesting.
                 //
@@ -250,9 +253,7 @@ fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> 
                 //     v-- get_union_type: within_dnf = true
                 //        v-- error
                 // F&(A|B|(D&S))
-                return Err(ParseError::NestedDisjunctiveNormalFormTypes(
-                    state.stream.current().span,
-                ));
+                return Err(ParseError::NestedDisjunctiveNormalFormTypes(current.span));
             }
 
             state.stream.next();
@@ -300,7 +301,8 @@ fn instersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResul
     utils::skip(state, TokenKind::Ampersand)?;
 
     loop {
-        let ty = if state.stream.current().kind == TokenKind::LeftParen {
+        let current = state.stream.current();
+        let ty = if current.kind == TokenKind::LeftParen {
             if within_dnf {
                 // don't allow nesting.
                 //
@@ -315,9 +317,7 @@ fn instersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResul
                 //     v-- get_intersection_type: within_dnf = true
                 //        v-- error
                 // F|(A&B&(D|S))
-                return Err(ParseError::NestedDisjunctiveNormalFormTypes(
-                    state.stream.current().span,
-                ));
+                return Err(ParseError::NestedDisjunctiveNormalFormTypes(current.span));
             }
 
             state.stream.next();
