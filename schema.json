@@ -1325,11 +1325,17 @@
         {
           "type": "object",
           "required": [
-            "span",
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
-            "span": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "String"
+              ]
+            },
+            "value": {
               "type": "array",
               "items": [
                 {
@@ -1341,23 +1347,23 @@
               ],
               "maxItems": 2,
               "minItems": 2
-            },
-            "type": {
-              "type": "string",
-              "enum": [
-                "String"
-              ]
             }
           }
         },
         {
           "type": "object",
           "required": [
-            "span",
-            "type"
+            "type",
+            "value"
           ],
           "properties": {
-            "span": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Int"
+              ]
+            },
+            "value": {
               "type": "array",
               "items": [
                 {
@@ -1369,12 +1375,6 @@
               ],
               "maxItems": 2,
               "minItems": 2
-            },
-            "type": {
-              "type": "string",
-              "enum": [
-                "Int"
-              ]
             }
           }
         }

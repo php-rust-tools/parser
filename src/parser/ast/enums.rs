@@ -45,7 +45,7 @@ pub struct UnitEnum {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(tag = "type", content = "span")]
+#[serde(tag = "type", content = "value")]
 pub enum BackedEnumType {
     String(Span, Span), // `:` + `string`
     Int(Span, Span),    // `:` + `int`
