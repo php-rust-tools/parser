@@ -46,10 +46,6 @@ jobs:
               target/
             key: rust-${{ inputs.rust }}-os-${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: install hyperfine
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: cargo install hyperfine
-
       - name: check
         uses: actions-rs/cargo@v1
         with:
@@ -73,6 +69,3 @@ jobs:
         with:
           command: test
           args: -r --all
-
-      - name: bench
-        run: hyperfine --prepare "cargo build -r" --runs 10 --warmup 2 -i "cargo test -r php_standard"
