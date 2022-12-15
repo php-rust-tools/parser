@@ -1,6 +1,9 @@
 [
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 3,
                 1,
@@ -18,24 +21,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     3,
                     13,
                 ),
-                end: Span(
-                    3,
-                    43,
-                ),
                 members: [
                     FunctionParameter {
-                        start: Span(
-                            3,
-                            14,
-                        ),
-                        end: Span(
-                            3,
-                            28,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 3,
@@ -52,7 +49,7 @@
                                 ),
                             ),
                         ),
-                        variadic: false,
+                        ellipsis: None,
                         default: Some(
                             LiteralString {
                                 span: Span(
@@ -62,17 +59,12 @@
                                 value: "",
                             },
                         ),
-                        by_ref: false,
+                        ampersand: None,
                     },
                     FunctionParameter {
-                        start: Span(
-                            3,
-                            30,
-                        ),
-                        end: Span(
-                            3,
-                            43,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 3,
@@ -89,7 +81,7 @@
                                 ),
                             ),
                         ),
-                        variadic: false,
+                        ellipsis: None,
                         default: Some(
                             ShortArray {
                                 start: Span(
@@ -103,9 +95,13 @@
                                 ),
                             },
                         ),
-                        by_ref: false,
+                        ampersand: None,
                     },
                 ],
+                right_parenthesis: Span(
+                    3,
+                    43,
+                ),
             },
             return_type: Some(
                 Never(
@@ -115,7 +111,7 @@
                     ),
                 ),
             ),
-            by_ref: false,
+            ampersand: None,
             body: [
                 Expression {
                     expression: Exit {
@@ -139,6 +135,9 @@
     ),
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 7,
                 1,
@@ -156,24 +155,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     7,
                     13,
                 ),
-                end: Span(
-                    7,
-                    69,
-                ),
                 members: [
                     FunctionParameter {
-                        start: Span(
-                            7,
-                            14,
-                        ),
-                        end: Span(
-                            7,
-                            20,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 7,
@@ -190,19 +183,14 @@
                                 ),
                             ),
                         ),
-                        variadic: false,
+                        ellipsis: None,
                         default: None,
-                        by_ref: false,
+                        ampersand: None,
                     },
                     FunctionParameter {
-                        start: Span(
-                            7,
-                            22,
-                        ),
-                        end: Span(
-                            7,
-                            30,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 7,
@@ -219,19 +207,14 @@
                                 ),
                             ),
                         ),
-                        variadic: false,
+                        ellipsis: None,
                         default: None,
-                        by_ref: false,
+                        ampersand: None,
                     },
                     FunctionParameter {
-                        start: Span(
-                            7,
-                            32,
-                        ),
-                        end: Span(
-                            7,
-                            41,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 7,
@@ -248,19 +231,14 @@
                                 ),
                             ),
                         ),
-                        variadic: false,
+                        ellipsis: None,
                         default: None,
-                        by_ref: false,
+                        ampersand: None,
                     },
                     FunctionParameter {
-                        start: Span(
-                            7,
-                            43,
-                        ),
-                        end: Span(
-                            7,
-                            50,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 7,
@@ -277,19 +255,14 @@
                                 ),
                             ),
                         ),
-                        variadic: false,
+                        ellipsis: None,
                         default: None,
-                        by_ref: false,
+                        ampersand: None,
                     },
                     FunctionParameter {
-                        start: Span(
-                            7,
-                            52,
-                        ),
-                        end: Span(
-                            7,
-                            60,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 7,
@@ -306,19 +279,14 @@
                                 ),
                             ),
                         ),
-                        variadic: false,
+                        ellipsis: None,
                         default: None,
-                        by_ref: false,
+                        ampersand: None,
                     },
                     FunctionParameter {
-                        start: Span(
-                            7,
-                            62,
-                        ),
-                        end: Span(
-                            7,
-                            69,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 7,
@@ -335,11 +303,15 @@
                                 ),
                             ),
                         ),
-                        variadic: false,
+                        ellipsis: None,
                         default: None,
-                        by_ref: false,
+                        ampersand: None,
                     },
                 ],
+                right_parenthesis: Span(
+                    7,
+                    69,
+                ),
             },
             return_type: Some(
                 Union(
@@ -371,7 +343,7 @@
                     ],
                 ),
             ),
-            by_ref: false,
+            ampersand: None,
             body: [
                 Return {
                     value: Some(

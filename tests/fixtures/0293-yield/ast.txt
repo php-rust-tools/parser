@@ -1,6 +1,9 @@
 [
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 3,
                 1,
@@ -18,15 +21,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     3,
                     13,
                 ),
-                end: Span(
+                members: [],
+                right_parenthesis: Span(
                     3,
                     14,
                 ),
-                members: [],
             },
             return_type: Some(
                 Iterable(
@@ -36,7 +42,7 @@
                     ),
                 ),
             ),
-            by_ref: false,
+            ampersand: None,
             body: [
                 Expression {
                     expression: Yield {

@@ -20,27 +20,30 @@ use crate::parser::state::State;
 pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterList, ParseError> {
     let mut members = Vec::new();
 
-    let list_start = utils::skip_left_parenthesis(state)?;
+    let comments = state.stream.comments();
+    let left_parenthesis = utils::skip_left_parenthesis(state)?;
 
     while !state.stream.is_eof() && state.stream.current().kind != TokenKind::RightParen {
-        let start = state.stream.current().span;
-
         attributes::gather_attributes(state)?;
 
         let ty = data_type::optional_data_type(state)?;
 
-        let mut variadic = false;
-        let mut by_ref = false;
-
-        if state.stream.current().kind == TokenKind::Ampersand {
+        let mut current = state.stream.current();
+        let ampersand = if current.kind == TokenKind::Ampersand {
             state.stream.next();
-            by_ref = true;
-        }
+            current = state.stream.current();
+            Some(current.span)
+        } else {
+            None
+        };
 
-        if state.stream.current().kind == TokenKind::Ellipsis {
+        let ellipsis = if current.kind == TokenKind::Ellipsis {
             state.stream.next();
-            variadic = true;
-        }
+
+            Some(current.span)
+        } else {
+            None
+        };
 
         // 2. Then expect a variable.
         let var = variables::simple_variable(state)?;
@@ -51,17 +54,14 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
             default = Some(expressions::create(state)?);
         }
 
-        let end = state.stream.current().span;
-
         members.push(FunctionParameter {
-            start,
-            end,
+            comments: state.stream.comments(),
             name: var,
             attributes: state.get_attributes(),
             r#type: ty,
-            variadic,
+            ellipsis,
             default,
-            by_ref,
+            ampersand,
         });
 
         if state.stream.current().kind == TokenKind::Comma {
@@ -71,12 +71,13 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
         }
     }
 
-    let list_end = utils::skip_right_parenthesis(state)?;
+    let right_parenthesis = utils::skip_right_parenthesis(state)?;
 
     Ok(FunctionParameterList {
-        start: list_start,
-        end: list_end,
+        comments,
+        left_parenthesis,
         members,
+        right_parenthesis,
     })
 }
 
@@ -84,6 +85,8 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
 ///               abstract method parameter list won't have a promoted property, so some of the logic
 ///               here can be avoided for performance.
 pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, ParseError> {
+    let comments = state.stream.comments();
+
     let mut class_name = String::new();
     let construct: i8 = match state.scope()? {
         Scope::Method(name, modifiers) => {
@@ -122,32 +125,33 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
     let list_start = utils::skip_left_parenthesis(state)?;
 
     while !state.stream.is_eof() && state.stream.current().kind != TokenKind::RightParen {
-        let start = state.stream.current().span;
-
         attributes::gather_attributes(state)?;
 
         let modifiers = modifiers::promoted_property_group(modifiers::collect(state)?)?;
 
         let ty = data_type::optional_data_type(state)?;
 
-        let mut variadic = false;
-        let mut by_ref = false;
-
-        if matches!(state.stream.current().kind, TokenKind::Ampersand) {
+        let mut current = state.stream.current();
+        let ampersand = if matches!(current.kind, TokenKind::Ampersand) {
             state.stream.next();
-            by_ref = true;
-        }
 
-        if matches!(state.stream.current().kind, TokenKind::Ellipsis) {
+            current = state.stream.current();
+
+            Some(current.span)
+        } else {
+            None
+        };
+
+        let ellipsis = if matches!(current.kind, TokenKind::Ellipsis) {
             state.stream.next();
             if !modifiers.is_empty() {
-                return Err(ParseError::VariadicPromotedProperty(
-                    state.stream.current().span,
-                ));
+                return Err(ParseError::VariadicPromotedProperty(current.span));
             }
 
-            variadic = true;
-        }
+            Some(current.span)
+        } else {
+            None
+        };
 
         // 2. Then expect a variable.
         let var = variables::simple_variable(state)?;
@@ -196,18 +200,15 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
             default = Some(expressions::create(state)?);
         }
 
-        let end = state.stream.current().span;
-
         members.push(MethodParameter {
-            start,
-            end,
+            comments: state.stream.comments(),
             name: var,
             attributes: state.get_attributes(),
             r#type: ty,
-            variadic,
+            ellipsis,
             default,
             modifiers,
-            by_ref,
+            ampersand,
         });
 
         if state.stream.current().kind == TokenKind::Comma {
@@ -220,6 +221,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
     let list_end = utils::skip_right_parenthesis(state)?;
 
     Ok(MethodParameterList {
+        comments,
         start: list_start,
         end: list_end,
         members,
@@ -227,6 +229,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
 }
 
 pub fn argument_list(state: &mut State) -> ParseResult<ArgumentList> {
+    let comments = state.stream.comments();
     let start = utils::skip_left_parenthesis(state)?;
 
     let mut arguments = Vec::new();
@@ -255,6 +258,7 @@ pub fn argument_list(state: &mut State) -> ParseResult<ArgumentList> {
     let end = utils::skip_right_parenthesis(state)?;
 
     Ok(ArgumentList {
+        comments,
         start,
         end,
         arguments,
@@ -266,8 +270,8 @@ fn argument(state: &mut State) -> ParseResult<(bool, Argument)> {
         && state.stream.peek().kind == TokenKind::Colon
     {
         let name = identifiers::identifier_maybe_reserved(state)?;
-        let span = utils::skip(state, TokenKind::Colon)?;
-        let unpack = if state.stream.current().kind == TokenKind::Ellipsis {
+        let colon = utils::skip(state, TokenKind::Colon)?;
+        let ellipsis = if state.stream.current().kind == TokenKind::Ellipsis {
             Some(utils::skip(state, TokenKind::Ellipsis)?)
         } else {
             None
@@ -277,25 +281,28 @@ fn argument(state: &mut State) -> ParseResult<(bool, Argument)> {
         return Ok((
             true,
             Argument::Named {
+                comments: state.stream.comments(),
                 name,
-                span,
-                ellipsis: unpack,
+                colon,
+                ellipsis,
                 value,
             },
         ));
     }
 
-    let unpack = if state.stream.current().kind == TokenKind::Ellipsis {
+    let ellipsis = if state.stream.current().kind == TokenKind::Ellipsis {
         Some(utils::skip(state, TokenKind::Ellipsis)?)
     } else {
         None
     };
+
     let value = expressions::create(state)?;
 
     Ok((
         false,
         Argument::Positional {
-            ellipsis: unpack,
+            comments: state.stream.comments(),
+            ellipsis,
             value,
         },
     ))

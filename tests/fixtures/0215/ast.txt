@@ -25,6 +25,34 @@
                 members: [
                     Method(
                         Method {
+                            comments: CommentGroup {
+                                comments: [
+                                    Comment {
+                                        span: Span(
+                                            4,
+                                            5,
+                                        ),
+                                        format: SingleLine,
+                                        content: "// it's okay to have `parent` type",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            5,
+                                            5,
+                                        ),
+                                        format: SingleLine,
+                                        content: "// since it's not known at this time if",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            6,
+                                            5,
+                                        ),
+                                        format: SingleLine,
+                                        content: "// `foo` will have a parent.",
+                                    },
+                                ],
+                            },
                             start: Span(
                                 7,
                                 12,
@@ -42,15 +70,18 @@
                             },
                             attributes: [],
                             parameters: MethodParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 start: Span(
                                     7,
                                     24,
                                 ),
+                                members: [],
                                 end: Span(
                                     7,
                                     25,
                                 ),
-                                members: [],
                             },
                             body: Some(
                                 [
@@ -91,7 +122,7 @@
                                     ),
                                 ),
                             ),
-                            by_ref: false,
+                            ampersand: None,
                         },
                     ),
                 ],

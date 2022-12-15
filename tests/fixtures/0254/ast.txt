@@ -30,6 +30,9 @@
                 members: [
                     Method(
                         Method {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
                             start: Span(
                                 5,
                                 5,
@@ -47,21 +50,27 @@
                             },
                             attributes: [],
                             parameters: MethodParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 start: Span(
                                     5,
                                     17,
                                 ),
+                                members: [],
                                 end: Span(
                                     5,
                                     18,
                                 ),
-                                members: [],
                             },
                             body: Some(
                                 [
                                     Expression {
                                         expression: Closure(
                                             Closure {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
                                                 start: Span(
                                                     7,
                                                     9,
@@ -72,24 +81,18 @@
                                                 ),
                                                 attributes: [],
                                                 parameters: FunctionParameterList {
-                                                    start: Span(
+                                                    comments: CommentGroup {
+                                                        comments: [],
+                                                    },
+                                                    left_parenthesis: Span(
                                                         7,
                                                         25,
                                                     ),
-                                                    end: Span(
-                                                        7,
-                                                        35,
-                                                    ),
                                                     members: [
                                                         FunctionParameter {
-                                                            start: Span(
-                                                                7,
-                                                                26,
-                                                            ),
-                                                            end: Span(
-                                                                7,
-                                                                35,
-                                                            ),
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
                                                             name: SimpleVariable {
                                                                 span: Span(
                                                                     7,
@@ -106,17 +109,26 @@
                                                                     ),
                                                                 ),
                                                             ),
-                                                            variadic: false,
+                                                            ellipsis: None,
                                                             default: None,
-                                                            by_ref: false,
+                                                            ampersand: None,
                                                         },
                                                     ],
+                                                    right_parenthesis: Span(
+                                                        7,
+                                                        35,
+                                                    ),
                                                 },
                                                 return_ty: None,
                                                 uses: [],
-                                                by_ref: false,
+                                                ampersand: None,
                                                 body: [],
-                                                static: true,
+                                                static: Some(
+                                                    Span(
+                                                        7,
+                                                        9,
+                                                    ),
+                                                ),
                                             },
                                         ),
                                         end: Span(
@@ -130,7 +142,7 @@
                                 modifiers: [],
                             },
                             return_type: None,
-                            by_ref: false,
+                            ampersand: None,
                         },
                     ),
                 ],

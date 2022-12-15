@@ -30,6 +30,9 @@
                 members: [
                     Method(
                         Method {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
                             start: Span(
                                 4,
                                 12,
@@ -47,24 +50,20 @@
                             },
                             attributes: [],
                             parameters: MethodParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 start: Span(
                                     4,
                                     32,
                                 ),
-                                end: Span(
-                                    9,
-                                    5,
-                                ),
                                 members: [
                                     MethodParameter {
-                                        start: Span(
-                                            5,
-                                            9,
-                                        ),
-                                        end: Span(
-                                            5,
-                                            25,
-                                        ),
+                                        attributes: [],
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        ampersand: None,
                                         name: SimpleVariable {
                                             span: Span(
                                                 5,
@@ -72,7 +71,6 @@
                                             ),
                                             name: "a",
                                         },
-                                        attributes: [],
                                         type: Some(
                                             String(
                                                 Span(
@@ -81,7 +79,7 @@
                                                 ),
                                             ),
                                         ),
-                                        variadic: false,
+                                        ellipsis: None,
                                         default: None,
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [
@@ -93,17 +91,13 @@
                                                 ),
                                             ],
                                         },
-                                        by_ref: false,
                                     },
                                     MethodParameter {
-                                        start: Span(
-                                            6,
-                                            9,
-                                        ),
-                                        end: Span(
-                                            6,
-                                            31,
-                                        ),
+                                        attributes: [],
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        ampersand: None,
                                         name: SimpleVariable {
                                             span: Span(
                                                 6,
@@ -111,7 +105,6 @@
                                             ),
                                             name: "b",
                                         },
-                                        attributes: [],
                                         type: Some(
                                             Integer(
                                                 Span(
@@ -120,7 +113,7 @@
                                                 ),
                                             ),
                                         ),
-                                        variadic: false,
+                                        ellipsis: None,
                                         default: None,
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [
@@ -138,16 +131,17 @@
                                                 ),
                                             ],
                                         },
-                                        by_ref: false,
                                     },
                                     MethodParameter {
-                                        start: Span(
-                                            7,
-                                            9,
-                                        ),
-                                        end: Span(
-                                            7,
-                                            34,
+                                        attributes: [],
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        ampersand: Some(
+                                            Span(
+                                                7,
+                                                32,
+                                            ),
                                         ),
                                         name: SimpleVariable {
                                             span: Span(
@@ -156,7 +150,6 @@
                                             ),
                                             name: "c",
                                         },
-                                        attributes: [],
                                         type: Some(
                                             Float(
                                                 Span(
@@ -165,7 +158,7 @@
                                                 ),
                                             ),
                                         ),
-                                        variadic: false,
+                                        ellipsis: None,
                                         default: None,
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [
@@ -183,16 +176,17 @@
                                                 ),
                                             ],
                                         },
-                                        by_ref: true,
                                     },
                                     MethodParameter {
-                                        start: Span(
-                                            8,
-                                            9,
-                                        ),
-                                        end: Span(
-                                            8,
-                                            15,
+                                        attributes: [],
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        ampersand: Some(
+                                            Span(
+                                                8,
+                                                10,
+                                            ),
                                         ),
                                         name: SimpleVariable {
                                             span: Span(
@@ -201,16 +195,23 @@
                                             ),
                                             name: "e",
                                         },
-                                        attributes: [],
                                         type: None,
-                                        variadic: true,
+                                        ellipsis: Some(
+                                            Span(
+                                                8,
+                                                10,
+                                            ),
+                                        ),
                                         default: None,
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [],
                                         },
-                                        by_ref: true,
                                     },
                                 ],
+                                end: Span(
+                                    9,
+                                    5,
+                                ),
                             },
                             body: Some(
                                 [],
@@ -226,7 +227,7 @@
                                 ],
                             },
                             return_type: None,
-                            by_ref: false,
+                            ampersand: None,
                         },
                     ),
                 ],

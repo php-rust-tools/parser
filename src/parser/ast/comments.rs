@@ -17,8 +17,7 @@ pub enum CommentFormat {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Comment {
-    pub start: Span,
-    pub end: Span,
+    pub span: Span,
     pub format: CommentFormat,
     pub content: ByteString,
 }

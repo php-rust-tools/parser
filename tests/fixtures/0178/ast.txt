@@ -130,6 +130,74 @@
                     },
                     Function(
                         Function {
+                            comments: CommentGroup {
+                                comments: [
+                                    Comment {
+                                        span: Span(
+                                            3,
+                                            1,
+                                        ),
+                                        format: SingleLine,
+                                        content: "// The following code was taken from of PSL.",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            4,
+                                            1,
+                                        ),
+                                        format: SingleLine,
+                                        content: "//",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            5,
+                                            1,
+                                        ),
+                                        format: SingleLine,
+                                        content: "// https://github.com/azjezz/psl/blob/657ce9888be47cee49418989420b83661f7cf1c4/src/Psl/Internal/box.php",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            6,
+                                            1,
+                                        ),
+                                        format: SingleLine,
+                                        content: "//",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            7,
+                                            1,
+                                        ),
+                                        format: SingleLine,
+                                        content: "// Code subject to the MIT license (https://github.com/azjezz/psl/blob/657ce9888be47cee49418989420b83661f7cf1c4/LICENSE).",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            8,
+                                            1,
+                                        ),
+                                        format: SingleLine,
+                                        content: "//",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            9,
+                                            1,
+                                        ),
+                                        format: SingleLine,
+                                        content: "// Copyright (c) 2019-2022 Saif Eddin Gmati <azjezz@protonmail.com>",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            21,
+                                            1,
+                                        ),
+                                        format: Document,
+                                        content: "/**\n * @template T\n *\n * @param (Closure(): T) $fun\n *\n * @return array{0: T, 1: ?string}\n *\n * @internal\n *\n * @psalm-suppress MissingThrowsDocblock\n */",
+                                    },
+                                ],
+                            },
                             start: Span(
                                 32,
                                 1,
@@ -147,24 +215,18 @@
                             },
                             attributes: [],
                             parameters: FunctionParameterList {
-                                start: Span(
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span(
                                     32,
                                     13,
                                 ),
-                                end: Span(
-                                    32,
-                                    26,
-                                ),
                                 members: [
                                     FunctionParameter {
-                                        start: Span(
-                                            32,
-                                            14,
-                                        ),
-                                        end: Span(
-                                            32,
-                                            26,
-                                        ),
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
                                         name: SimpleVariable {
                                             span: Span(
                                                 32,
@@ -182,11 +244,15 @@
                                                 "Closure",
                                             ),
                                         ),
-                                        variadic: false,
+                                        ellipsis: None,
                                         default: None,
-                                        by_ref: false,
+                                        ampersand: None,
                                     },
                                 ],
+                                right_parenthesis: Span(
+                                    32,
+                                    26,
+                                ),
                             },
                             return_type: Some(
                                 Array(
@@ -196,7 +262,7 @@
                                     ),
                                 ),
                             ),
-                            by_ref: false,
+                            ampersand: None,
                             body: [
                                 Expression {
                                     expression: AssignmentOperation(
@@ -238,15 +304,33 @@
                                             ),
                                         ),
                                         arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [
+                                                    Comment {
+                                                        span: Span(
+                                                            35,
+                                                            5,
+                                                        ),
+                                                        format: Document,
+                                                        content: "/** @psalm-suppress InvalidArgument */",
+                                                    },
+                                                ],
+                                            },
                                             start: Span(
                                                 36,
                                                 22,
                                             ),
                                             arguments: [
                                                 Positional {
+                                                    comments: CommentGroup {
+                                                        comments: [],
+                                                    },
                                                     ellipsis: None,
                                                     value: Closure(
                                                         Closure {
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
                                                             start: Span(
                                                                 36,
                                                                 23,
@@ -257,24 +341,18 @@
                                                             ),
                                                             attributes: [],
                                                             parameters: FunctionParameterList {
-                                                                start: Span(
+                                                                comments: CommentGroup {
+                                                                    comments: [],
+                                                                },
+                                                                left_parenthesis: Span(
                                                                     36,
                                                                     39,
                                                                 ),
-                                                                end: Span(
-                                                                    36,
-                                                                    67,
-                                                                ),
                                                                 members: [
                                                                     FunctionParameter {
-                                                                        start: Span(
-                                                                            36,
-                                                                            40,
-                                                                        ),
-                                                                        end: Span(
-                                                                            36,
-                                                                            50,
-                                                                        ),
+                                                                        comments: CommentGroup {
+                                                                            comments: [],
+                                                                        },
                                                                         name: SimpleVariable {
                                                                             span: Span(
                                                                                 36,
@@ -291,19 +369,14 @@
                                                                                 ),
                                                                             ),
                                                                         ),
-                                                                        variadic: false,
+                                                                        ellipsis: None,
                                                                         default: None,
-                                                                        by_ref: false,
+                                                                        ampersand: None,
                                                                     },
                                                                     FunctionParameter {
-                                                                        start: Span(
-                                                                            36,
-                                                                            52,
-                                                                        ),
-                                                                        end: Span(
-                                                                            36,
-                                                                            67,
-                                                                        ),
+                                                                        comments: CommentGroup {
+                                                                            comments: [],
+                                                                        },
                                                                         name: SimpleVariable {
                                                                             span: Span(
                                                                                 36,
@@ -320,30 +393,38 @@
                                                                                 ),
                                                                             ),
                                                                         ),
-                                                                        variadic: false,
+                                                                        ellipsis: None,
                                                                         default: None,
-                                                                        by_ref: false,
+                                                                        ampersand: None,
                                                                     },
                                                                 ],
+                                                                right_parenthesis: Span(
+                                                                    36,
+                                                                    67,
+                                                                ),
                                                             },
                                                             return_ty: None,
                                                             uses: [
                                                                 ClosureUse {
-                                                                    var: Variable(
-                                                                        SimpleVariable(
-                                                                            SimpleVariable {
-                                                                                span: Span(
-                                                                                    36,
-                                                                                    75,
-                                                                                ),
-                                                                                name: "last_message",
-                                                                            },
+                                                                    comments: CommentGroup {
+                                                                        comments: [],
+                                                                    },
+                                                                    variable: SimpleVariable {
+                                                                        span: Span(
+                                                                            36,
+                                                                            75,
+                                                                        ),
+                                                                        name: "last_message",
+                                                                    },
+                                                                    ampersand: Some(
+                                                                        Span(
+                                                                            36,
+                                                                            74,
                                                                         ),
                                                                     ),
-                                                                    by_ref: true,
                                                                 },
                                                             ],
-                                                            by_ref: false,
+                                                            ampersand: None,
                                                             body: [
                                                                 Expression {
                                                                     expression: AssignmentOperation(
@@ -382,7 +463,12 @@
                                                                     ),
                                                                 },
                                                             ],
-                                                            static: true,
+                                                            static: Some(
+                                                                Span(
+                                                                    36,
+                                                                    23,
+                                                                ),
+                                                            ),
                                                         },
                                                     ),
                                                 },
@@ -438,12 +524,27 @@
                                                     ),
                                                 ),
                                                 arguments: ArgumentList {
+                                                    comments: CommentGroup {
+                                                        comments: [
+                                                            Comment {
+                                                                span: Span(
+                                                                    40,
+                                                                    5,
+                                                                ),
+                                                                format: Document,
+                                                                content: "/**\n     * @var string|null $last_message\n     */",
+                                                            },
+                                                        ],
+                                                    },
                                                     start: Span(
                                                         43,
                                                         47,
                                                     ),
                                                     arguments: [
                                                         Positional {
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
                                                             ellipsis: None,
                                                             value: Variable(
                                                                 SimpleVariable(
@@ -458,6 +559,9 @@
                                                             ),
                                                         },
                                                         Positional {
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
                                                             ellipsis: None,
                                                             value: LiteralString {
                                                                 span: Span(
@@ -508,12 +612,18 @@
                                                             ),
                                                         ),
                                                         arguments: ArgumentList {
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
                                                             start: Span(
                                                                 44,
                                                                 34,
                                                             ),
                                                             arguments: [
                                                                 Positional {
+                                                                    comments: CommentGroup {
+                                                                        comments: [],
+                                                                    },
                                                                     ellipsis: None,
                                                                     value: FunctionCall {
                                                                         target: Identifier(
@@ -528,12 +638,18 @@
                                                                             ),
                                                                         ),
                                                                         arguments: ArgumentList {
+                                                                            comments: CommentGroup {
+                                                                                comments: [],
+                                                                            },
                                                                             start: Span(
                                                                                 45,
                                                                                 26,
                                                                             ),
                                                                             arguments: [
                                                                                 Positional {
+                                                                                    comments: CommentGroup {
+                                                                                        comments: [],
+                                                                                    },
                                                                                     ellipsis: None,
                                                                                     value: Variable(
                                                                                         SimpleVariable(
@@ -556,6 +672,18 @@
                                                                     },
                                                                 },
                                                                 Positional {
+                                                                    comments: CommentGroup {
+                                                                        comments: [
+                                                                            Comment {
+                                                                                span: Span(
+                                                                                    46,
+                                                                                    13,
+                                                                                ),
+                                                                                format: SingleLine,
+                                                                                content: "// how i feel toward PHP error handling:",
+                                                                            },
+                                                                        ],
+                                                                    },
                                                                     ellipsis: None,
                                                                     value: LiteralString {
                                                                         span: Span(
@@ -625,6 +753,9 @@
                                                                 ),
                                                             ),
                                                             arguments: ArgumentList {
+                                                                comments: CommentGroup {
+                                                                    comments: [],
+                                                                },
                                                                 start: Span(
                                                                     52,
                                                                     22,
@@ -754,6 +885,18 @@
                                                                 ),
                                                             ),
                                                             arguments: ArgumentList {
+                                                                comments: CommentGroup {
+                                                                    comments: [
+                                                                        Comment {
+                                                                            span: Span(
+                                                                                54,
+                                                                                9,
+                                                                            ),
+                                                                            format: Document,
+                                                                            content: "/** @var array{0: T, 1: ?string} $result */",
+                                                                        },
+                                                                    ],
+                                                                },
                                                                 start: Span(
                                                                     59,
                                                                     30,

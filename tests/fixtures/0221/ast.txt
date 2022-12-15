@@ -113,6 +113,9 @@
     ),
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 8,
                 1,
@@ -130,24 +133,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     8,
                     13,
                 ),
-                end: Span(
-                    8,
-                    26,
-                ),
                 members: [
                     FunctionParameter {
-                        start: Span(
-                            8,
-                            14,
-                        ),
-                        end: Span(
-                            8,
-                            26,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 8,
@@ -194,11 +191,15 @@
                                 ],
                             ),
                         ),
-                        variadic: false,
+                        ellipsis: None,
                         default: None,
-                        by_ref: false,
+                        ampersand: None,
                     },
                 ],
+                right_parenthesis: Span(
+                    8,
+                    26,
+                ),
             },
             return_type: Some(
                 Intersection(
@@ -238,7 +239,7 @@
                     ],
                 ),
             ),
-            by_ref: false,
+            ampersand: None,
             body: [
                 Expression {
                     expression: Exit {

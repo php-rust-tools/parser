@@ -10,6 +10,7 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn parse(state: &mut State) -> ParseResult<Constant> {
+    let comments = state.stream.comments();
     let start = utils::skip(state, TokenKind::Const)?;
 
     let mut entries = vec![];
@@ -31,9 +32,10 @@ pub fn parse(state: &mut State) -> ParseResult<Constant> {
     let end = utils::skip_semicolon(state)?;
 
     Ok(Constant {
+        comments,
         start,
-        end,
         entries,
+        end,
     })
 }
 
@@ -43,6 +45,7 @@ pub fn classish(
 ) -> ParseResult<ClassishConstant> {
     let attributes = state.get_attributes();
 
+    let comments = state.stream.comments();
     let start = utils::skip(state, TokenKind::Const)?;
 
     let mut entries = vec![];
@@ -64,10 +67,11 @@ pub fn classish(
     let end = utils::skip_semicolon(state)?;
 
     Ok(ClassishConstant {
-        start,
-        end,
+        comments,
         attributes,
         modifiers,
+        start,
         entries,
+        end,
     })
 }

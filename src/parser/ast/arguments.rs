@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::parser::ast::comments::CommentGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 
@@ -10,12 +11,14 @@ use crate::parser::ast::Expression;
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Argument {
     Positional {
+        comments: CommentGroup,
         ellipsis: Option<Span>, // `...`
         value: Expression,      // `$var`
     },
     Named {
+        comments: CommentGroup,
         name: SimpleIdentifier, // `foo`
-        span: Span,             // `:`
+        colon: Span,            // `:`
         ellipsis: Option<Span>, // `...`
         value: Expression,      // `$var`
     },
@@ -24,6 +27,7 @@ pub enum Argument {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ArgumentList {
+    pub comments: CommentGroup,
     pub start: Span,              // `(`
     pub arguments: Vec<Argument>, // `$var`, `...$var`, `foo: $var`, `foo: ...$var`
     pub end: Span,                // `)`
@@ -32,6 +36,7 @@ pub struct ArgumentList {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ArgumentPlaceholder {
+    pub comments: CommentGroup,
     pub start: Span,    // `(`
     pub ellipsis: Span, // `...`
     pub end: Span,      // `)`

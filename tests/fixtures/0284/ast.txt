@@ -46,12 +46,43 @@
                             },
                             arguments: Some(
                                 ArgumentList {
+                                    comments: CommentGroup {
+                                        comments: [
+                                            Comment {
+                                                span: Span(
+                                                    3,
+                                                    1,
+                                                ),
+                                                format: SingleLine,
+                                                content: "//                                                    |- TODO: static in constant expression is not allowed.",
+                                            },
+                                            Comment {
+                                                span: Span(
+                                                    4,
+                                                    1,
+                                                ),
+                                                format: SingleLine,
+                                                content: "//                                                    |",
+                                            },
+                                            Comment {
+                                                span: Span(
+                                                    5,
+                                                    1,
+                                                ),
+                                                format: SingleLine,
+                                                content: "//                                                    v",
+                                            },
+                                        ],
+                                    },
                                     start: Span(
                                         6,
                                         6,
                                     ),
                                     arguments: [
                                         Positional {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
                                             ellipsis: None,
                                             value: ConstFetch {
                                                 target: Identifier(
@@ -100,12 +131,18 @@
                             },
                             arguments: Some(
                                 ArgumentList {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
                                     start: Span(
                                         6,
                                         24,
                                     ),
                                     arguments: [
                                         Positional {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
                                             ellipsis: None,
                                             value: New {
                                                 span: Span(
@@ -115,6 +152,9 @@
                                                 target: Self_,
                                                 arguments: Some(
                                                     ArgumentList {
+                                                        comments: CommentGroup {
+                                                            comments: [],
+                                                        },
                                                         start: Span(
                                                             6,
                                                             33,
@@ -129,6 +169,9 @@
                                             },
                                         },
                                         Positional {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
                                             ellipsis: None,
                                             value: New {
                                                 span: Span(
@@ -138,6 +181,9 @@
                                                 target: Parent,
                                                 arguments: Some(
                                                     ArgumentList {
+                                                        comments: CommentGroup {
+                                                            comments: [],
+                                                        },
                                                         start: Span(
                                                             6,
                                                             47,
@@ -152,6 +198,9 @@
                                             },
                                         },
                                         Positional {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
                                             ellipsis: None,
                                             value: New {
                                                 span: Span(
@@ -161,6 +210,9 @@
                                                 target: Static,
                                                 arguments: Some(
                                                     ArgumentList {
+                                                        comments: CommentGroup {
+                                                            comments: [],
+                                                        },
                                                         start: Span(
                                                             6,
                                                             61,

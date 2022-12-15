@@ -30,6 +30,9 @@
                 members: [
                     Method(
                         Method {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
                             start: Span(
                                 4,
                                 12,
@@ -47,24 +50,20 @@
                             },
                             attributes: [],
                             parameters: MethodParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 start: Span(
                                     4,
                                     32,
                                 ),
-                                end: Span(
-                                    6,
-                                    5,
-                                ),
                                 members: [
                                     MethodParameter {
-                                        start: Span(
-                                            5,
-                                            9,
-                                        ),
-                                        end: Span(
-                                            5,
-                                            40,
-                                        ),
+                                        attributes: [],
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        ampersand: None,
                                         name: SimpleVariable {
                                             span: Span(
                                                 5,
@@ -72,7 +71,6 @@
                                             ),
                                             name: "s",
                                         },
-                                        attributes: [],
                                         type: Some(
                                             String(
                                                 Span(
@@ -81,7 +79,7 @@
                                                 ),
                                             ),
                                         ),
-                                        variadic: false,
+                                        ellipsis: None,
                                         default: Some(
                                             LiteralString {
                                                 span: Span(
@@ -107,9 +105,12 @@
                                                 ),
                                             ],
                                         },
-                                        by_ref: false,
                                     },
                                 ],
+                                end: Span(
+                                    6,
+                                    5,
+                                ),
                             },
                             body: Some(
                                 [],
@@ -125,7 +126,7 @@
                                 ],
                             },
                             return_type: None,
-                            by_ref: false,
+                            ampersand: None,
                         },
                     ),
                 ],

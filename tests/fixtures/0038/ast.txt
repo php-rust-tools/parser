@@ -1,6 +1,9 @@
 [
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 3,
                 1,
@@ -18,24 +21,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     3,
                     13,
                 ),
-                end: Span(
-                    3,
-                    16,
-                ),
                 members: [
                     FunctionParameter {
-                        start: Span(
-                            3,
-                            14,
-                        ),
-                        end: Span(
-                            3,
-                            16,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 3,
@@ -45,14 +42,18 @@
                         },
                         attributes: [],
                         type: None,
-                        variadic: false,
+                        ellipsis: None,
                         default: None,
-                        by_ref: false,
+                        ampersand: None,
                     },
                 ],
+                right_parenthesis: Span(
+                    3,
+                    16,
+                ),
             },
             return_type: None,
-            by_ref: false,
+            ampersand: None,
             body: [
                 If {
                     condition: ComparisonOperation(
@@ -118,12 +119,18 @@
                                         ),
                                     ),
                                     arguments: ArgumentList {
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
                                         start: Span(
                                             8,
                                             15,
                                         ),
                                         arguments: [
                                             Positional {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
                                                 ellipsis: None,
                                                 value: ArithmeticOperation(
                                                     Subtraction {
@@ -176,12 +183,18 @@
                                         ),
                                     ),
                                     arguments: ArgumentList {
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
                                         start: Span(
                                             8,
                                             29,
                                         ),
                                         arguments: [
                                             Positional {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
                                                 ellipsis: None,
                                                 value: ArithmeticOperation(
                                                     Subtraction {

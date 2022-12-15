@@ -25,25 +25,29 @@
                         ),
                         expr: ArrowFunction(
                             ArrowFunction {
-                                start: Span(
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                static: None,
+                                ampersand: None,
+                                fn: Span(
                                     3,
                                     7,
                                 ),
-                                end: Span(
-                                    3,
-                                    33,
-                                ),
                                 attributes: [],
                                 parameters: FunctionParameterList {
-                                    start: Span(
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    left_parenthesis: Span(
                                         3,
                                         10,
                                     ),
-                                    end: Span(
+                                    members: [],
+                                    right_parenthesis: Span(
                                         3,
                                         11,
                                     ),
-                                    members: [],
                                 },
                                 return_type: Some(
                                     Named(
@@ -54,12 +58,10 @@
                                         "\Generator",
                                     ),
                                 ),
-                                by_ref: false,
                                 body: Yield {
                                     key: None,
                                     value: None,
                                 },
-                                static: false,
                             },
                         ),
                         end: Span(
@@ -68,6 +70,9 @@
                         ),
                     },
                     arguments: ArgumentList {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         start: Span(
                             3,
                             34,

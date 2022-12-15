@@ -36,11 +36,11 @@ pub struct Class {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct AnonymousClass {
-    pub span: Span,
-    pub extends: Option<ClassExtends>,
-    pub implements: Option<ClassImplements>,
-    pub attributes: Vec<AttributeGroup>,
-    pub body: ClassBody,
+    pub attributes: Vec<AttributeGroup>,     // `#[Foo]`
+    pub span: Span,                          // `class`
+    pub extends: Option<ClassExtends>,       // `extends Foo, Bar`
+    pub implements: Option<ClassImplements>, // `implements Foo, Bar`
+    pub body: ClassBody,                     // `{ ... }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
