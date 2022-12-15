@@ -10,26 +10,34 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn simple_variable(state: &mut State) -> ParseResult<SimpleVariable> {
-    if let TokenKind::Variable(name) = state.stream.current().kind.clone() {
-        let span = state.stream.current().span;
+    let current = state.stream.current();
+    if let TokenKind::Variable(name) = &current.kind {
+        let span = current.span;
         state.stream.next();
 
-        return Ok(SimpleVariable { span, name });
+        return Ok(SimpleVariable {
+            span,
+            name: name.clone(),
+        });
     }
 
     expected_token_err!("a variable", state)
 }
 
 pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
-    match state.stream.current().kind.clone() {
+    let current = state.stream.current();
+    match &current.kind {
         TokenKind::Variable(name) => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
-            Ok(Variable::SimpleVariable(SimpleVariable { span, name }))
+            Ok(Variable::SimpleVariable(SimpleVariable {
+                span,
+                name: name.clone(),
+            }))
         }
         TokenKind::DollarLeftBrace => {
-            let start = state.stream.current().span;
+            let start = current.span;
             state.stream.next();
 
             let expr = expressions::create(state)?;
@@ -44,7 +52,7 @@ pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
         }
         // todo(azjezz): figure out why the lexer does this.
         TokenKind::Dollar if state.stream.peek().kind == TokenKind::LeftBrace => {
-            let start = state.stream.current().span;
+            let start = current.span;
             state.stream.next();
             state.stream.next();
 
@@ -59,7 +67,7 @@ pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
             }))
         }
         TokenKind::Dollar => {
-            let span = state.stream.current().span;
+            let span = current.span;
             state.stream.next();
 
             let variable = dynamic_variable(state)?;

@@ -444,13 +444,19 @@ pub enum Expression {
     Clone {
         target: Box<Self>,
     },
+
+    // TODO(azjezz): create a separate structure for `Match`
     Match {
+        keyword: Span,
+        // TODO(azjezz): create a separate structure for `condition` to hold `(` and `)` spans
+        // this can be re-used for all control-flow statements/expressions.
         condition: Box<Self>,
+        // TODO(azjezz): create a separate structure for `default` and `arms` to hold `{` and `}` spans.
         default: Option<Box<DefaultMatchArm>>,
         arms: Vec<MatchArm>,
     },
     Throw {
-        value: Box<Expression>,
+        value: Box<Self>,
     },
     Yield {
         key: Option<Box<Self>>,
@@ -475,16 +481,21 @@ pub enum Expression {
     Noop,
 }
 
+// TODO(azjezz): create a separate enum for MatchArm and DefaultMatchArm
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct DefaultMatchArm {
-    pub body: Expression,
+    pub keyword: Span,    // `default`
+    pub arrow: Span,      // `=>`
+    pub body: Expression, // `foo()`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct MatchArm {
     pub conditions: Vec<Expression>,
+    pub arrow: Span,
     pub body: Expression,
 }
 

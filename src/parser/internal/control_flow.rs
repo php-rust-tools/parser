@@ -17,7 +17,7 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
-    utils::skip(state, TokenKind::Match)?;
+    let keyword = utils::skip(state, TokenKind::Match)?;
 
     utils::skip_left_parenthesis(state)?;
 
@@ -29,10 +29,11 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
     let mut default = None;
     let mut arms = Vec::new();
     while state.stream.current().kind != TokenKind::RightBrace {
-        if state.stream.current().kind == TokenKind::Default {
+        let current = state.stream.current();
+        if current.kind == TokenKind::Default {
             if default.is_some() {
                 return Err(ParseError::MatchExpressionWithMultipleDefaultArms(
-                    state.stream.current().span,
+                    current.span,
                 ));
             }
 
@@ -43,11 +44,15 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
                 state.stream.next();
             }
 
-            utils::skip_double_arrow(state)?;
+            let arrow = utils::skip_double_arrow(state)?;
 
             let body = expressions::create(state)?;
 
-            default = Some(Box::new(DefaultMatchArm { body }));
+            default = Some(Box::new(DefaultMatchArm {
+                keyword: current.span,
+                arrow,
+                body,
+            }));
         } else {
             let mut conditions = Vec::new();
             while state.stream.current().kind != TokenKind::DoubleArrow {
@@ -60,15 +65,19 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
                 }
             }
 
-            if !conditions.is_empty() {
-                utils::skip_double_arrow(state)?;
-            } else {
+            if conditions.is_empty() {
                 break;
             }
 
+            let arrow = utils::skip_double_arrow(state)?;
+
             let body = expressions::create(state)?;
 
-            arms.push(MatchArm { conditions, body });
+            arms.push(MatchArm {
+                conditions,
+                arrow,
+                body,
+            });
         }
 
         if state.stream.current().kind == TokenKind::Comma {
@@ -81,6 +90,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
     utils::skip_right_brace(state)?;
 
     Ok(Expression::Match {
+        keyword,
         condition,
         default,
         arms,

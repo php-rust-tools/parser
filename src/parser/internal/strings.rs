@@ -266,12 +266,13 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                         TokenKind::Minus => {
                             let span = current.span;
                             state.stream.next();
-                            if let TokenKind::LiteralInteger(value) = &state.stream.current().kind {
+                            let literal = state.stream.current();
+                            if let TokenKind::LiteralInteger(value) = &literal.kind {
                                 let e = Expression::ArithmeticOperation(
                                     ArithmeticOperation::Negative {
                                         span,
                                         right: Box::new(Expression::LiteralInteger {
-                                            span: state.stream.current().span,
+                                            span: literal.span,
                                             value: value.clone(),
                                         }),
                                     },
