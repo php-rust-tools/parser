@@ -42,12 +42,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: cargo install hyperfine
 
-      - name: bench ( pull-request-base )
-        run: |
-          cd pull-request-base
-          hyperfine --runs 30 --warmup 5 -i "cargo test -r symfony"
-
-      - name: bench ( pull-request )
+      - name: benchmark
         run: |
           cd pull-request
-          hyperfine --runs 30 --warmup 5 -i "cargo test -r symfony"
+          hyperfine --runs 20 --warmup 2 -i "cd pull-request && cargo test -r symfony" "cd pull-request-base && cargo test -r symfony"
