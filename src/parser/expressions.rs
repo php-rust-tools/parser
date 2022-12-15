@@ -1153,10 +1153,15 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             if state.stream.lookahead(0).kind == TokenKind::Ellipsis
                 && state.stream.lookahead(1).kind == TokenKind::RightParen
             {
+                let start = utils::skip(state, TokenKind::LeftParen)?;
+                let ellipsis = utils::skip(state, TokenKind::Ellipsis)?;
+                let end = utils::skip(state, TokenKind::RightParen)?;
+
                 let placeholder = ArgumentPlaceholder {
-                    start: utils::skip(state, TokenKind::LeftParen)?,
-                    ellipsis: utils::skip(state, TokenKind::Ellipsis)?,
-                    end: utils::skip(state, TokenKind::RightParen)?,
+                    comments: state.stream.comments(),
+                    start,
+                    ellipsis,
+                    end,
                 };
 
                 Expression::FunctionClosureCreation {
@@ -1249,10 +1254,15 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                     if state.stream.lookahead(0).kind == TokenKind::Ellipsis
                         && state.stream.lookahead(1).kind == TokenKind::RightParen
                     {
+                        let start = utils::skip(state, TokenKind::LeftParen)?;
+                        let ellipsis = utils::skip(state, TokenKind::Ellipsis)?;
+                        let end = utils::skip(state, TokenKind::RightParen)?;
+
                         let placeholder = ArgumentPlaceholder {
-                            start: utils::skip(state, TokenKind::LeftParen)?,
-                            ellipsis: utils::skip(state, TokenKind::Ellipsis)?,
-                            end: utils::skip(state, TokenKind::RightParen)?,
+                            comments: state.stream.comments(),
+                            start,
+                            ellipsis,
+                            end,
                         };
 
                         Expression::StaticMethodClosureCreation {
@@ -1336,10 +1346,15 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                     if state.stream.lookahead(0).kind == TokenKind::Ellipsis
                         && state.stream.lookahead(1).kind == TokenKind::RightParen
                     {
+                        let start = utils::skip(state, TokenKind::LeftParen)?;
+                        let ellipsis = utils::skip(state, TokenKind::Ellipsis)?;
+                        let end = utils::skip(state, TokenKind::RightParen)?;
+
                         let placeholder = ArgumentPlaceholder {
-                            start: utils::skip(state, TokenKind::LeftParen)?,
-                            ellipsis: utils::skip(state, TokenKind::Ellipsis)?,
-                            end: utils::skip(state, TokenKind::RightParen)?,
+                            comments: state.stream.comments(),
+                            start,
+                            ellipsis,
+                            end,
                         };
 
                         Expression::MethodClosureCreation {

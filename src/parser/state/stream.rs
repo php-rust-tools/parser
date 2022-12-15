@@ -1,6 +1,10 @@
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 
+use crate::parser::ast::comments::Comment;
+use crate::parser::ast::comments::CommentFormat;
+use crate::parser::ast::comments::CommentGroup;
+
 /// Token stream.
 ///
 /// # Examples
@@ -154,12 +158,51 @@ impl<'a> TokenStream<'a> {
 
     /// Get all comments.
     #[allow(dead_code)]
-    pub fn comments(&mut self) -> Vec<&'a Token> {
+    pub fn comments(&mut self) -> CommentGroup {
         let mut comments = vec![];
 
         std::mem::swap(&mut self.comments, &mut comments);
 
-        comments
+        CommentGroup {
+            comments: comments
+                .iter()
+                .map(|token| match token {
+                    Token {
+                        kind: TokenKind::SingleLineComment(content),
+                        span,
+                    } => Comment {
+                        span: *span,
+                        format: CommentFormat::SingleLine,
+                        content: content.clone(),
+                    },
+                    Token {
+                        kind: TokenKind::MultiLineComment(content),
+                        span,
+                    } => Comment {
+                        span: *span,
+                        format: CommentFormat::MultiLine,
+                        content: content.clone(),
+                    },
+                    Token {
+                        kind: TokenKind::HashMarkComment(content),
+                        span,
+                    } => Comment {
+                        span: *span,
+                        format: CommentFormat::HashMark,
+                        content: content.clone(),
+                    },
+                    Token {
+                        kind: TokenKind::DocumentComment(content),
+                        span,
+                    } => Comment {
+                        span: *span,
+                        format: CommentFormat::Document,
+                        content: content.clone(),
+                    },
+                    _ => unreachable!(),
+                })
+                .collect(),
+        }
     }
 
     fn collect_comments(&mut self) {

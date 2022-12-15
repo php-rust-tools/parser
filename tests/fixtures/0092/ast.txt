@@ -1,6 +1,9 @@
 [
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 1,
                 7,
@@ -18,15 +21,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     1,
                     17,
                 ),
-                end: Span(
+                members: [],
+                right_parenthesis: Span(
                     1,
                     18,
                 ),
-                members: [],
             },
             return_type: Some(
                 False(
@@ -36,7 +42,7 @@
                     ),
                 ),
             ),
-            by_ref: false,
+            ampersand: None,
             body: [],
         },
     ),

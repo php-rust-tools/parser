@@ -16,31 +16,36 @@ use crate::parser::internal::data_type;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::parameters;
 use crate::parser::internal::utils;
+use crate::parser::internal::variables;
 use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::scoped;
 
 pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
+    let comments = state.stream.comments();
+    let attributes = state.get_attributes();
     let start = state.stream.current().span;
 
-    let is_static = if state.stream.current().kind == TokenKind::Static {
+    let current = state.stream.current();
+    let r#static = if current.kind == TokenKind::Static {
         state.stream.next();
 
-        true
+        Some(current.span)
     } else {
-        false
+        None
     };
 
     utils::skip(state, TokenKind::Function)?;
 
-    let by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+    let current = state.stream.current();
+    let ampersand = if current.kind == TokenKind::Ampersand {
         state.stream.next();
-        true
+
+        Some(current.span)
     } else {
-        false
+        None
     };
 
-    let attributes = state.get_attributes();
     let parameters = parameters::function_parameter_list(state)?;
 
     let mut uses = vec![];
@@ -50,26 +55,23 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
         utils::skip_left_parenthesis(state)?;
 
         while state.stream.current().kind != TokenKind::RightParen {
-            let mut by_ref = false;
-            if state.stream.current().kind == TokenKind::Ampersand {
+            let use_comments = state.stream.comments();
+            let current = state.stream.current();
+            let use_ampersand = if current.kind == TokenKind::Ampersand {
                 state.stream.next();
 
-                by_ref = true;
-            }
-
-            // TODO(azjezz): this shouldn't call expr, we should have a function
-            // just for variables, so we don't have to go through the whole `match` in `expression(...)`
-            let var = match expressions::create(state)? {
-                s @ Expression::Variable { .. } => ClosureUse { var: s, by_ref },
-                _ => {
-                    return Err(ParseError::UnexpectedToken(
-                        "expected variable".into(),
-                        state.stream.current().span,
-                    ))
-                }
+                Some(current.span)
+            } else {
+                None
             };
 
-            uses.push(var);
+            let var = variables::simple_variable(state)?;
+
+            uses.push(ClosureUse {
+                comments: use_comments,
+                variable: var,
+                ampersand: use_ampersand,
+            });
 
             if state.stream.current().kind == TokenKind::Comma {
                 state.stream.next();
@@ -88,7 +90,7 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
         return_ty = Some(data_type::data_type(state)?);
     }
 
-    let (body, end) = scoped!(state, Scope::AnonymousFunction(is_static), {
+    let (body, end) = scoped!(state, Scope::AnonymousFunction(r#static.is_some()), {
         utils::skip_left_brace(state)?;
 
         let body = blocks::body(state, &TokenKind::RightBrace)?;
@@ -98,6 +100,7 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
     });
 
     Ok(Expression::Closure(Closure {
+        comments,
         start,
         end,
         attributes,
@@ -105,29 +108,31 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
         uses,
         return_ty,
         body,
-        r#static: is_static,
-        by_ref,
+        r#static,
+        ampersand,
     }))
 }
 
 pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
-    let start = state.stream.current().span;
-
-    let is_static = if state.stream.current().kind == TokenKind::Static {
+    let comments = state.stream.comments();
+    let current = state.stream.current();
+    let r#static = if current.kind == TokenKind::Static {
         state.stream.next();
 
-        true
+        Some(current.span)
     } else {
-        false
+        None
     };
 
-    utils::skip(state, TokenKind::Fn)?;
+    let r#fn = utils::skip(state, TokenKind::Fn)?;
 
-    let by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+    let current = state.stream.current();
+    let ampersand = if state.stream.current().kind == TokenKind::Ampersand {
         state.stream.next();
-        true
+
+        Some(current.span)
     } else {
-        false
+        None
     };
 
     let attributes = state.get_attributes();
@@ -142,34 +147,35 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
 
     utils::skip(state, TokenKind::DoubleArrow)?;
 
-    let body = scoped!(state, Scope::ArrowFunction(is_static), {
+    let body = scoped!(state, Scope::ArrowFunction(r#static.is_some()), {
         Box::new(expressions::create(state)?)
     });
 
-    let end = state.stream.current().span;
-
     Ok(Expression::ArrowFunction(ArrowFunction {
-        start,
-        end,
+        comments,
         attributes,
+        r#static,
+        r#fn,
+        ampersand,
         parameters,
         return_type,
         body,
-        by_ref,
-        r#static: is_static,
     }))
 }
 
 pub fn function(state: &mut State) -> ParseResult<Statement> {
+    let comments = state.stream.comments();
     let start = state.stream.current().span;
 
     utils::skip(state, TokenKind::Function)?;
 
-    let by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+    let current = state.stream.current();
+    let ampersand = if current.kind == TokenKind::Ampersand {
         state.stream.next();
-        true
+
+        Some(current.span)
     } else {
-        false
+        None
     };
 
     let name = identifiers::identifier_maybe_soft_reserved(state)?;
@@ -198,6 +204,7 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
     });
 
     Ok(Statement::Function(Function {
+        comments,
         start,
         end,
         name,
@@ -205,18 +212,23 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
         parameters,
         return_type,
         body,
-        by_ref,
+        ampersand,
     }))
 }
 
 pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<Method> {
+    let attributes = state.get_attributes();
+    let comments = state.stream.comments();
+
     let start = utils::skip(state, TokenKind::Function)?;
 
-    let by_ref = if state.stream.current().kind == TokenKind::Ampersand {
+    let current = state.stream.current();
+    let ampersand = if current.kind == TokenKind::Ampersand {
         state.stream.next();
-        true
+
+        Some(current.span)
     } else {
-        false
+        None
     };
 
     let name = identifiers::identifier_maybe_reserved(state)?;
@@ -246,10 +258,6 @@ pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<
             Scope::AnonymousClass(_) => true,
         ], state);
 
-    // get attributes before processing parameters, otherwise
-    // parameters will steal attributes of this method.
-    let attributes = state.get_attributes();
-
     let (parameters, body, return_type, end) =
         scoped!(state, Scope::Method(name.clone(), modifiers.clone()), {
             let parameters = parameters::method_parameter_list(state)?;
@@ -278,6 +286,7 @@ pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<
         });
 
     Ok(Method {
+        comments,
         start,
         end,
         attributes,
@@ -285,7 +294,7 @@ pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<
         parameters,
         body,
         return_type,
-        by_ref,
+        ampersand,
         modifiers,
     })
 }

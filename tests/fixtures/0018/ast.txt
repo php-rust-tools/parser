@@ -1,6 +1,9 @@
 [
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 3,
                 1,
@@ -18,15 +21,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     3,
                     11,
                 ),
-                end: Span(
+                members: [],
+                right_parenthesis: Span(
                     3,
                     12,
                 ),
-                members: [],
             },
             return_type: Some(
                 Null(
@@ -36,7 +42,7 @@
                     ),
                 ),
             ),
-            by_ref: false,
+            ampersand: None,
             body: [
                 Echo {
                     values: [
@@ -88,6 +94,9 @@
                         ),
                     ),
                     placeholder: ArgumentPlaceholder {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         start: Span(
                             9,
                             9,
@@ -109,15 +118,24 @@
             14,
         ),
     },
-    Label {
-        label: SimpleIdentifier {
-            span: Span(
+    GotoLabel(
+        GotoLabel {
+            comments: CommentGroup {
+                comments: [],
+            },
+            label: SimpleIdentifier {
+                span: Span(
+                    11,
+                    1,
+                ),
+                value: "foo",
+            },
+            colon: Span(
                 11,
-                1,
+                4,
             ),
-            value: "foo",
         },
-    },
+    ),
     Expression {
         expression: FunctionCall {
             target: Variable(
@@ -132,6 +150,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     12,
                     9,
@@ -148,13 +169,26 @@
             11,
         ),
     },
-    Goto {
-        label: SimpleIdentifier {
-            span: Span(
+    Goto(
+        GotoStatement {
+            comments: CommentGroup {
+                comments: [],
+            },
+            keyword: Span(
                 13,
-                10,
+                5,
             ),
-            value: "foo",
+            label: SimpleIdentifier {
+                span: Span(
+                    13,
+                    10,
+                ),
+                value: "foo",
+            },
+            semicolon: Span(
+                13,
+                13,
+            ),
         },
-    },
+    ),
 ]

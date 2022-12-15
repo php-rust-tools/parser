@@ -36,7 +36,7 @@ jobs:
               ~/.cargo/git/db/
               pull-request/target/
               pull-request-base/target/
-            key: bench-cargo-${{ hashFiles('**/Cargo.lock') }}
+            key: cargo-${{ hashFiles('pull-request-base/Cargo.lock') }}
 
       - name: install hyperfine
         if: steps.cache.outputs.cache-hit != 'true'
@@ -44,5 +44,4 @@ jobs:
 
       - name: benchmark
         run: |
-          cd pull-request
-          hyperfine --runs 20 --warmup 2 -i "cd pull-request && cargo test -r symfony" "cd pull-request-base && cargo test -r symfony"
+          hyperfine --runs 20 --warmup 2 --show-output "cd pull-request && cargo test -r symfony" "cd pull-request-base && cargo test -r symfony"

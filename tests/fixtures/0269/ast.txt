@@ -1,13 +1,12 @@
 [
     Constant(
         Constant {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 3,
                 1,
-            ),
-            end: Span(
-                3,
-                17,
             ),
             entries: [
                 ConstantEntry {
@@ -31,6 +30,10 @@
                     },
                 },
             ],
+            end: Span(
+                3,
+                17,
+            ),
         },
     ),
     Interface(
@@ -60,6 +63,9 @@
                 members: [
                     Method(
                         Method {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
                             start: Span(
                                 6,
                                 10,
@@ -77,24 +83,20 @@
                             },
                             attributes: [],
                             parameters: MethodParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 start: Span(
                                     6,
                                     23,
                                 ),
-                                end: Span(
-                                    6,
-                                    36,
-                                ),
                                 members: [
                                     MethodParameter {
-                                        start: Span(
-                                            6,
-                                            24,
-                                        ),
-                                        end: Span(
-                                            6,
-                                            36,
-                                        ),
+                                        attributes: [],
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        ampersand: None,
                                         name: SimpleVariable {
                                             span: Span(
                                                 6,
@@ -102,7 +104,6 @@
                                             ),
                                             name: "\xf0\x9f\x93\x83",
                                         },
-                                        attributes: [],
                                         type: Some(
                                             String(
                                                 Span(
@@ -111,14 +112,17 @@
                                                 ),
                                             ),
                                         ),
-                                        variadic: false,
+                                        ellipsis: None,
                                         default: None,
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [],
                                         },
-                                        by_ref: false,
                                     },
                                 ],
+                                end: Span(
+                                    6,
+                                    36,
+                                ),
                             },
                             body: None,
                             modifiers: MethodModifierGroup {
@@ -139,7 +143,7 @@
                                     ),
                                 ),
                             ),
-                            by_ref: false,
+                            ampersand: None,
                         },
                     ),
                 ],
@@ -200,6 +204,9 @@
                 members: [
                     Method(
                         Method {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
                             start: Span(
                                 10,
                                 10,
@@ -217,24 +224,20 @@
                             },
                             attributes: [],
                             parameters: MethodParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 start: Span(
                                     10,
                                     23,
                                 ),
-                                end: Span(
-                                    10,
-                                    36,
-                                ),
                                 members: [
                                     MethodParameter {
-                                        start: Span(
-                                            10,
-                                            24,
-                                        ),
-                                        end: Span(
-                                            10,
-                                            36,
-                                        ),
+                                        attributes: [],
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        ampersand: None,
                                         name: SimpleVariable {
                                             span: Span(
                                                 10,
@@ -242,7 +245,6 @@
                                             ),
                                             name: "\xf0\x9f\x93\x83",
                                         },
-                                        attributes: [],
                                         type: Some(
                                             String(
                                                 Span(
@@ -251,14 +253,17 @@
                                                 ),
                                             ),
                                         ),
-                                        variadic: false,
+                                        ellipsis: None,
                                         default: None,
                                         modifiers: PromotedPropertyModifierGroup {
                                             modifiers: [],
                                         },
-                                        by_ref: false,
                                     },
                                 ],
+                                end: Span(
+                                    10,
+                                    36,
+                                ),
                             },
                             body: Some(
                                 [
@@ -332,7 +337,7 @@
                                     ),
                                 ),
                             ),
-                            by_ref: false,
+                            ampersand: None,
                         },
                     ),
                 ],
@@ -341,6 +346,9 @@
     ),
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 15,
                 1,
@@ -358,15 +366,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     15,
                     14,
                 ),
-                end: Span(
+                members: [],
+                right_parenthesis: Span(
                     15,
                     15,
                 ),
-                members: [],
             },
             return_type: Some(
                 Void(
@@ -376,7 +387,7 @@
                     ),
                 ),
             ),
-            by_ref: false,
+            ampersand: None,
             body: [
                 Expression {
                     expression: AssignmentOperation(
@@ -414,6 +425,9 @@
                                 ),
                                 arguments: Some(
                                     ArgumentList {
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
                                         start: Span(
                                             16,
                                             19,
@@ -494,12 +508,18 @@
                             ),
                         ),
                         arguments: ArgumentList {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
                             start: Span(
                                 18,
                                 14,
                             ),
                             arguments: [
                                 Named {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
                                     name: SimpleIdentifier {
                                         span: Span(
                                             18,
@@ -507,7 +527,7 @@
                                         ),
                                         value: "\xf0\x9f\x93\x83",
                                     },
-                                    span: Span(
+                                    colon: Span(
                                         18,
                                         19,
                                     ),
@@ -553,6 +573,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     21,
                     5,

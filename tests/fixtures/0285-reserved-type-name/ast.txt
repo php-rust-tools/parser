@@ -116,6 +116,9 @@
     ),
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 8,
                 1,
@@ -133,15 +136,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     8,
                     14,
                 ),
-                end: Span(
+                members: [],
+                right_parenthesis: Span(
                     8,
                     15,
                 ),
-                members: [],
             },
             return_type: Some(
                 Named(
@@ -152,7 +158,7 @@
                     "enum",
                 ),
             ),
-            by_ref: false,
+            ampersand: None,
             body: [],
         },
     ),
@@ -273,6 +279,9 @@
     ),
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 14,
                 1,
@@ -290,15 +299,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     14,
                     14,
                 ),
-                end: Span(
+                members: [],
+                right_parenthesis: Span(
                     14,
                     15,
                 ),
-                members: [],
             },
             return_type: Some(
                 Named(
@@ -309,7 +321,7 @@
                     "from",
                 ),
             ),
-            by_ref: false,
+            ampersand: None,
             body: [],
         },
     ),
@@ -327,6 +339,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     16,
                     5,
@@ -357,6 +372,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     17,
                     5,
@@ -387,6 +405,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     19,
                     5,
@@ -417,6 +438,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     20,
                     5,
@@ -462,6 +486,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     22,
                     10,
@@ -507,6 +534,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     23,
                     10,
@@ -552,6 +582,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     25,
                     10,
@@ -597,6 +630,9 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     26,
                     10,
@@ -853,15 +889,24 @@
             12,
         ),
     },
-    Label {
-        label: SimpleIdentifier {
-            span: Span(
+    GotoLabel(
+        GotoLabel {
+            comments: CommentGroup {
+                comments: [],
+            },
+            label: SimpleIdentifier {
+                span: Span(
+                    39,
+                    1,
+                ),
+                value: "from",
+            },
+            colon: Span(
                 39,
-                1,
+                5,
             ),
-            value: "from",
         },
-    },
+    ),
     Expression {
         expression: LiteralInteger {
             span: Span(
@@ -875,24 +920,46 @@
             9,
         ),
     },
-    Goto {
-        label: SimpleIdentifier {
-            span: Span(
+    Goto(
+        GotoStatement {
+            comments: CommentGroup {
+                comments: [],
+            },
+            keyword: Span(
                 41,
-                6,
-            ),
-            value: "from",
-        },
-    },
-    Label {
-        label: SimpleIdentifier {
-            span: Span(
-                43,
                 1,
             ),
-            value: "enum",
+            label: SimpleIdentifier {
+                span: Span(
+                    41,
+                    6,
+                ),
+                value: "from",
+            },
+            semicolon: Span(
+                41,
+                10,
+            ),
         },
-    },
+    ),
+    GotoLabel(
+        GotoLabel {
+            comments: CommentGroup {
+                comments: [],
+            },
+            label: SimpleIdentifier {
+                span: Span(
+                    43,
+                    1,
+                ),
+                value: "enum",
+            },
+            colon: Span(
+                43,
+                5,
+            ),
+        },
+    ),
     Expression {
         expression: LiteralInteger {
             span: Span(
@@ -906,13 +973,26 @@
             10,
         ),
     },
-    Goto {
-        label: SimpleIdentifier {
-            span: Span(
+    Goto(
+        GotoStatement {
+            comments: CommentGroup {
+                comments: [],
+            },
+            keyword: Span(
                 45,
-                6,
+                1,
             ),
-            value: "enum",
+            label: SimpleIdentifier {
+                span: Span(
+                    45,
+                    6,
+                ),
+                value: "enum",
+            },
+            semicolon: Span(
+                45,
+                10,
+            ),
         },
-    },
+    ),
 ]

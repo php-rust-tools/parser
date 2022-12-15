@@ -56,6 +56,9 @@
                                 members: [
                                     Method(
                                         Method {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
                                             start: Span(
                                                 6,
                                                 13,
@@ -73,24 +76,20 @@
                                             },
                                             attributes: [],
                                             parameters: MethodParameterList {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
                                                 start: Span(
                                                     6,
                                                     33,
                                                 ),
-                                                end: Span(
-                                                    8,
-                                                    6,
-                                                ),
                                                 members: [
                                                     MethodParameter {
-                                                        start: Span(
-                                                            7,
-                                                            11,
-                                                        ),
-                                                        end: Span(
-                                                            7,
-                                                            47,
-                                                        ),
+                                                        attributes: [],
+                                                        comments: CommentGroup {
+                                                            comments: [],
+                                                        },
+                                                        ampersand: None,
                                                         name: SimpleVariable {
                                                             span: Span(
                                                                 7,
@@ -98,7 +97,6 @@
                                                             ),
                                                             name: "name",
                                                         },
-                                                        attributes: [],
                                                         type: Some(
                                                             String(
                                                                 Span(
@@ -107,7 +105,7 @@
                                                                 ),
                                                             ),
                                                         ),
-                                                        variadic: false,
+                                                        ellipsis: None,
                                                         default: Some(
                                                             LiteralString {
                                                                 span: Span(
@@ -133,9 +131,12 @@
                                                                 ),
                                                             ],
                                                         },
-                                                        by_ref: false,
                                                     },
                                                 ],
+                                                end: Span(
+                                                    8,
+                                                    6,
+                                                ),
                                             },
                                             body: Some(
                                                 [],
@@ -151,7 +152,7 @@
                                                 ],
                                             },
                                             return_type: None,
-                                            by_ref: false,
+                                            ampersand: None,
                                         },
                                     ),
                                 ],

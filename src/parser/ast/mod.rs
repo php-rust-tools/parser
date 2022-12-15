@@ -17,6 +17,8 @@ use crate::parser::ast::enums::UnitEnum;
 use crate::parser::ast::functions::ArrowFunction;
 use crate::parser::ast::functions::Closure;
 use crate::parser::ast::functions::Function;
+use crate::parser::ast::goto::GotoLabel;
+use crate::parser::ast::goto::GotoStatement;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
@@ -39,6 +41,7 @@ pub mod data_type;
 pub mod declares;
 pub mod enums;
 pub mod functions;
+pub mod goto;
 pub mod identifiers;
 pub mod interfaces;
 pub mod modifiers;
@@ -92,12 +95,8 @@ impl From<&TokenKind> for IncludeKind {
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Statement {
     InlineHtml(ByteString),
-    Goto {
-        label: SimpleIdentifier,
-    },
-    Label {
-        label: SimpleIdentifier,
-    },
+    GotoLabel(GotoLabel),
+    Goto(GotoStatement),
     HaltCompiler {
         content: Option<ByteString>,
     },

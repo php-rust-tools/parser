@@ -2,6 +2,9 @@
     Expression {
         expression: Closure(
             Closure {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     3,
                     1,
@@ -12,19 +15,22 @@
                 ),
                 attributes: [],
                 parameters: FunctionParameterList {
-                    start: Span(
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span(
                         3,
                         10,
                     ),
-                    end: Span(
+                    members: [],
+                    right_parenthesis: Span(
                         3,
                         11,
                     ),
-                    members: [],
                 },
                 return_ty: None,
                 uses: [],
-                by_ref: false,
+                ampersand: None,
                 body: [
                     If {
                         condition: Variable(
@@ -61,7 +67,7 @@
                         else: None,
                     },
                 ],
-                static: false,
+                static: None,
             },
         ),
         end: Span(

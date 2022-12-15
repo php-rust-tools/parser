@@ -1,6 +1,9 @@
 [
     Function(
         Function {
+            comments: CommentGroup {
+                comments: [],
+            },
             start: Span(
                 3,
                 1,
@@ -18,24 +21,18 @@
             },
             attributes: [],
             parameters: FunctionParameterList {
-                start: Span(
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span(
                     3,
                     13,
                 ),
-                end: Span(
-                    3,
-                    16,
-                ),
                 members: [
                     FunctionParameter {
-                        start: Span(
-                            3,
-                            14,
-                        ),
-                        end: Span(
-                            3,
-                            16,
-                        ),
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         name: SimpleVariable {
                             span: Span(
                                 3,
@@ -45,14 +42,18 @@
                         },
                         attributes: [],
                         type: None,
-                        variadic: false,
+                        ellipsis: None,
                         default: None,
-                        by_ref: false,
+                        ampersand: None,
                     },
                 ],
+                right_parenthesis: Span(
+                    3,
+                    16,
+                ),
             },
             return_type: None,
-            by_ref: false,
+            ampersand: None,
             body: [
                 Global {
                     span: Span(
@@ -73,13 +74,13 @@
                                     ),
                                     target: AnonymousClass(
                                         AnonymousClass {
+                                            attributes: [],
                                             span: Span(
                                                 4,
                                                 18,
                                             ),
                                             extends: None,
                                             implements: None,
-                                            attributes: [],
                                             body: ClassBody {
                                                 start: Span(
                                                     4,
@@ -92,6 +93,9 @@
                                                 members: [
                                                     Method(
                                                         Method {
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
                                                             start: Span(
                                                                 5,
                                                                 16,
@@ -109,15 +113,18 @@
                                                             },
                                                             attributes: [],
                                                             parameters: MethodParameterList {
+                                                                comments: CommentGroup {
+                                                                    comments: [],
+                                                                },
                                                                 start: Span(
                                                                     5,
                                                                     35,
                                                                 ),
+                                                                members: [],
                                                                 end: Span(
                                                                     5,
                                                                     36,
                                                                 ),
-                                                                members: [],
                                                             },
                                                             body: Some(
                                                                 [
@@ -145,7 +152,7 @@
                                                                 ],
                                                             },
                                                             return_type: None,
-                                                            by_ref: false,
+                                                            ampersand: None,
                                                         },
                                                     ),
                                                 ],
@@ -154,6 +161,9 @@
                                     ),
                                     arguments: Some(
                                         ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
                                             start: Span(
                                                 4,
                                                 23,
@@ -273,6 +283,9 @@
                                 ),
                                 expr: Closure(
                                     Closure {
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
                                         start: Span(
                                             16,
                                             4,
@@ -283,19 +296,22 @@
                                         ),
                                         attributes: [],
                                         parameters: FunctionParameterList {
-                                            start: Span(
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span(
                                                 16,
                                                 12,
                                             ),
-                                            end: Span(
+                                            members: [],
+                                            right_parenthesis: Span(
                                                 16,
                                                 13,
                                             ),
-                                            members: [],
                                         },
                                         return_ty: None,
                                         uses: [],
-                                        by_ref: false,
+                                        ampersand: None,
                                         body: [
                                             Return {
                                                 value: Some(
@@ -309,7 +325,7 @@
                                                 ),
                                             },
                                         ],
-                                        static: false,
+                                        static: None,
                                     },
                                 ),
                                 end: Span(
@@ -318,6 +334,9 @@
                                 ),
                             },
                             arguments: ArgumentList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 start: Span(
                                     18,
                                     3,
@@ -337,12 +356,18 @@
                 ),
             ),
             arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
                 start: Span(
                     18,
                     6,
                 ),
                 arguments: [
                     Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
                         ellipsis: None,
                         value: ShortArray {
                             start: Span(
