@@ -87,38 +87,27 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
 }
 
 pub fn short_array_expression(state: &mut State) -> ParseResult<Expression> {
-    let start = utils::skip(state, TokenKind::LeftBracket)?;
-
-    let mut items = Vec::new();
-
-    while state.stream.current().kind != TokenKind::RightBracket {
-        // TODO: return an error here instead of
-        // an empty array element
-        // see: https://3v4l.org/uLTVA
-        if state.stream.current().kind == TokenKind::Comma {
-            items.push(ArrayItem {
-                key: None,
-                value: Expression::Empty,
-                unpack: false,
-                by_ref: false,
-            });
-            state.stream.next();
-
-            continue;
-        }
-
-        items.push(array_pair(state)?);
-
-        if state.stream.current().kind != TokenKind::Comma {
-            break;
-        }
-
-        state.stream.next();
-    }
-
-    let end = utils::skip_right_bracket(state)?;
-
-    Ok(Expression::ShortArray { start, items, end })
+    Ok(Expression::ShortArray(utils::bracketed(state, &|state| {
+        utils::comma_separated(
+            state,
+            &|state| {
+                // TODO: return an error here instead of
+                // an empty array element
+                // see: https://3v4l.org/uLTVA
+                if state.stream.current().kind == TokenKind::Comma {
+                    Ok(ArrayItem {
+                        key: None,
+                        value: Expression::Empty,
+                        unpack: false,
+                        by_ref: false,
+                    })
+                } else {
+                    array_pair(state)
+                }
+            },
+            TokenKind::RightBracket,
+        )
+    })?))
 }
 
 pub fn array_expression(state: &mut State) -> ParseResult<Expression> {

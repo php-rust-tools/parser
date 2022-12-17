@@ -1,350 +1,362 @@
 [
-    Expression {
-        expression: FunctionClosureCreation {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            3,
-                            1,
-                        ),
-                        value: "foo",
-                    },
-                ),
-            ),
-            placeholder: ArgumentPlaceholder {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                start: Span(
-                    3,
-                    4,
-                ),
-                ellipsis: Span(
-                    3,
-                    5,
-                ),
-                end: Span(
-                    3,
-                    8,
-                ),
-            },
-        },
-        end: Span(
-            3,
-            9,
-        ),
-    },
-    Expression {
-        expression: MethodClosureCreation {
-            target: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            5,
-                            1,
-                        ),
-                        name: "foo",
-                    },
-                ),
-            ),
-            span: Span(
-                5,
-                5,
-            ),
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            5,
-                            7,
-                        ),
-                        value: "bar",
-                    },
-                ),
-            ),
-            placeholder: ArgumentPlaceholder {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                start: Span(
-                    5,
-                    10,
-                ),
-                ellipsis: Span(
-                    5,
-                    11,
-                ),
-                end: Span(
-                    5,
-                    14,
-                ),
-            },
-        },
-        end: Span(
-            5,
-            15,
-        ),
-    },
-    Expression {
-        expression: StaticMethodClosureCreation {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            7,
-                            1,
-                        ),
-                        value: "Foo",
-                    },
-                ),
-            ),
-            span: Span(
-                7,
-                4,
-            ),
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            7,
-                            6,
-                        ),
-                        value: "bar",
-                    },
-                ),
-            ),
-            placeholder: ArgumentPlaceholder {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                start: Span(
-                    7,
-                    9,
-                ),
-                ellipsis: Span(
-                    7,
-                    10,
-                ),
-                end: Span(
-                    7,
-                    13,
-                ),
-            },
-        },
-        end: Span(
-            7,
-            14,
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            9,
-                            1,
-                        ),
-                        value: "foo",
-                    },
-                ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                start: Span(
-                    9,
-                    4,
-                ),
-                arguments: [
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: LiteralInteger {
+    Expression(
+        SemicolonTerminated {
+            inner: FunctionClosureCreation {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
                             span: Span(
-                                9,
+                                3,
+                                1,
+                            ),
+                            value: "foo",
+                        },
+                    ),
+                ),
+                placeholder: ArgumentPlaceholder {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        3,
+                        4,
+                    ),
+                    ellipsis: Span(
+                        3,
+                        5,
+                    ),
+                    end: Span(
+                        3,
+                        8,
+                    ),
+                },
+            },
+            semicolon: Span(
+                3,
+                9,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: MethodClosureCreation {
+                target: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
                                 5,
+                                1,
                             ),
-                            value: "1",
+                            name: "foo",
                         },
+                    ),
+                ),
+                span: Span(
+                    5,
+                    5,
+                ),
+                method: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                5,
+                                7,
+                            ),
+                            value: "bar",
+                        },
+                    ),
+                ),
+                placeholder: ArgumentPlaceholder {
+                    comments: CommentGroup {
+                        comments: [],
                     },
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
+                    start: Span(
+                        5,
+                        10,
+                    ),
+                    ellipsis: Span(
+                        5,
+                        11,
+                    ),
+                    end: Span(
+                        5,
+                        14,
+                    ),
+                },
+            },
+            semicolon: Span(
+                5,
+                15,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: StaticMethodClosureCreation {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                7,
+                                1,
+                            ),
+                            value: "Foo",
                         },
-                        ellipsis: None,
-                        value: LiteralInteger {
+                    ),
+                ),
+                span: Span(
+                    7,
+                    4,
+                ),
+                method: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                7,
+                                6,
+                            ),
+                            value: "bar",
+                        },
+                    ),
+                ),
+                placeholder: ArgumentPlaceholder {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        7,
+                        9,
+                    ),
+                    ellipsis: Span(
+                        7,
+                        10,
+                    ),
+                    end: Span(
+                        7,
+                        13,
+                    ),
+                },
+            },
+            semicolon: Span(
+                7,
+                14,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
                             span: Span(
                                 9,
-                                8,
+                                1,
                             ),
-                            value: "2",
+                            value: "foo",
                         },
-                    },
-                ],
-                end: Span(
-                    9,
-                    9,
+                    ),
                 ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        9,
+                        4,
+                    ),
+                    arguments: [
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: Span(
+                                    9,
+                                    5,
+                                ),
+                                value: "1",
+                            },
+                        },
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: Span(
+                                    9,
+                                    8,
+                                ),
+                                value: "2",
+                            },
+                        },
+                    ],
+                    end: Span(
+                        9,
+                        9,
+                    ),
+                },
             },
-        },
-        end: Span(
-            9,
-            10,
-        ),
-    },
-    Expression {
-        expression: MethodCall {
-            target: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            11,
-                            1,
-                        ),
-                        name: "foo",
-                    },
-                ),
+            semicolon: Span(
+                9,
+                10,
             ),
-            span: Span(
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: MethodCall {
+                target: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                11,
+                                1,
+                            ),
+                            name: "foo",
+                        },
+                    ),
+                ),
+                span: Span(
+                    11,
+                    5,
+                ),
+                method: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                11,
+                                7,
+                            ),
+                            value: "bar",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        11,
+                        10,
+                    ),
+                    arguments: [
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: Span(
+                                    11,
+                                    11,
+                                ),
+                                value: "1",
+                            },
+                        },
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: Span(
+                                    11,
+                                    14,
+                                ),
+                                value: "2",
+                            },
+                        },
+                    ],
+                    end: Span(
+                        11,
+                        15,
+                    ),
+                },
+            },
+            semicolon: Span(
                 11,
-                5,
+                16,
             ),
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            11,
-                            7,
-                        ),
-                        value: "bar",
-                    },
-                ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                start: Span(
-                    11,
-                    10,
-                ),
-                arguments: [
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: LiteralInteger {
-                            span: Span(
-                                11,
-                                11,
-                            ),
-                            value: "1",
-                        },
-                    },
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: LiteralInteger {
-                            span: Span(
-                                11,
-                                14,
-                            ),
-                            value: "2",
-                        },
-                    },
-                ],
-                end: Span(
-                    11,
-                    15,
-                ),
-            },
         },
-        end: Span(
-            11,
-            16,
-        ),
-    },
-    Expression {
-        expression: StaticMethodCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            13,
-                            1,
-                        ),
-                        value: "Foo",
-                    },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: StaticMethodCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                13,
+                                1,
+                            ),
+                            value: "Foo",
+                        },
+                    ),
                 ),
-            ),
-            span: Span(
+                span: Span(
+                    13,
+                    4,
+                ),
+                method: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                13,
+                                6,
+                            ),
+                            value: "bar",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        13,
+                        9,
+                    ),
+                    arguments: [
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: Span(
+                                    13,
+                                    10,
+                                ),
+                                value: "1",
+                            },
+                        },
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: Span(
+                                    13,
+                                    13,
+                                ),
+                                value: "2",
+                            },
+                        },
+                    ],
+                    end: Span(
+                        13,
+                        14,
+                    ),
+                },
+            },
+            semicolon: Span(
                 13,
-                4,
+                15,
             ),
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            13,
-                            6,
-                        ),
-                        value: "bar",
-                    },
-                ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                start: Span(
-                    13,
-                    9,
-                ),
-                arguments: [
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: LiteralInteger {
-                            span: Span(
-                                13,
-                                10,
-                            ),
-                            value: "1",
-                        },
-                    },
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: LiteralInteger {
-                            span: Span(
-                                13,
-                                13,
-                            ),
-                            value: "2",
-                        },
-                    },
-                ],
-                end: Span(
-                    13,
-                    14,
-                ),
-            },
         },
-        end: Span(
-            13,
-            15,
-        ),
-    },
+    ),
 ]

@@ -1,482 +1,522 @@
 [
-    Expression {
-        expression: Cast {
-            span: Span(
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    3,
+                    1,
+                ),
+                kind: String,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                3,
+                                10,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 3,
-                1,
-            ),
-            kind: String,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            3,
-                            10,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-        },
-        end: Span(
-            3,
-            12,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
-                4,
-                1,
-            ),
-            kind: Int,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            4,
-                            7,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-        },
-        end: Span(
-            4,
-            9,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
-                5,
-                1,
-            ),
-            kind: Float,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            5,
-                            10,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-        },
-        end: Span(
-            5,
-            12,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
-                6,
-                1,
-            ),
-            kind: Bool,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            6,
-                            11,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-        },
-        end: Span(
-            6,
-            13,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
-                7,
-                1,
-            ),
-            kind: Bool,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            7,
-                            8,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-        },
-        end: Span(
-            7,
-            10,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
-                8,
-                1,
-            ),
-            kind: Unset,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            8,
-                            9,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-        },
-        end: Span(
-            8,
-            11,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
-                9,
-                1,
-            ),
-            kind: Object,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            9,
-                            10,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-        },
-        end: Span(
-            9,
-            12,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
-                10,
-                1,
-            ),
-            kind: Array,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            10,
-                            9,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-        },
-        end: Span(
-            10,
-            11,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
-                11,
-                1,
-            ),
-            kind: Float,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            11,
-                            9,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-        },
-        end: Span(
-            11,
-            11,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
                 12,
-                1,
-            ),
-            kind: Float,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            12,
-                            8,
-                        ),
-                        name: "a",
-                    },
-                ),
             ),
         },
-        end: Span(
-            12,
-            10,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    4,
+                    1,
+                ),
+                kind: Int,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                4,
+                                7,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                4,
+                9,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    5,
+                    1,
+                ),
+                kind: Float,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                5,
+                                10,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                5,
+                12,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    6,
+                    1,
+                ),
+                kind: Bool,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                6,
+                                11,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                6,
+                13,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    7,
+                    1,
+                ),
+                kind: Bool,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                7,
+                                8,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                7,
+                10,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    8,
+                    1,
+                ),
+                kind: Unset,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                8,
+                                9,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                8,
+                11,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    9,
+                    1,
+                ),
+                kind: Object,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                9,
+                                10,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                9,
+                12,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    10,
+                    1,
+                ),
+                kind: Array,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                10,
+                                9,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                10,
+                11,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    11,
+                    1,
+                ),
+                kind: Float,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                11,
+                                9,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                11,
+                11,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    12,
+                    1,
+                ),
+                kind: Float,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                12,
+                                8,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                12,
+                10,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    14,
+                    1,
+                ),
+                kind: String,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                14,
+                                60,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 14,
-                1,
-            ),
-            kind: String,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            14,
-                            60,
-                        ),
-                        name: "a",
-                    },
-                ),
+                62,
             ),
         },
-        end: Span(
-            14,
-            62,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    15,
+                    1,
+                ),
+                kind: Int,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                15,
+                                57,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 15,
-                1,
-            ),
-            kind: Int,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            15,
-                            57,
-                        ),
-                        name: "a",
-                    },
-                ),
+                59,
             ),
         },
-        end: Span(
-            15,
-            59,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    16,
+                    1,
+                ),
+                kind: Float,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                16,
+                                60,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 16,
-                1,
-            ),
-            kind: Float,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            16,
-                            60,
-                        ),
-                        name: "a",
-                    },
-                ),
+                62,
             ),
         },
-        end: Span(
-            16,
-            62,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    17,
+                    1,
+                ),
+                kind: Bool,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                17,
+                                61,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 17,
-                1,
-            ),
-            kind: Bool,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            17,
-                            61,
-                        ),
-                        name: "a",
-                    },
-                ),
+                63,
             ),
         },
-        end: Span(
-            17,
-            63,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    18,
+                    1,
+                ),
+                kind: Bool,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                18,
+                                58,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 18,
-                1,
-            ),
-            kind: Bool,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            18,
-                            58,
-                        ),
-                        name: "a",
-                    },
-                ),
+                60,
             ),
         },
-        end: Span(
-            18,
-            60,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    19,
+                    1,
+                ),
+                kind: Unset,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                19,
+                                59,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 19,
-                1,
-            ),
-            kind: Unset,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            19,
-                            59,
-                        ),
-                        name: "a",
-                    },
-                ),
+                61,
             ),
         },
-        end: Span(
-            19,
-            61,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    20,
+                    1,
+                ),
+                kind: Object,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                20,
+                                60,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 20,
-                1,
-            ),
-            kind: Object,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            20,
-                            60,
-                        ),
-                        name: "a",
-                    },
-                ),
+                62,
             ),
         },
-        end: Span(
-            20,
-            62,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    21,
+                    1,
+                ),
+                kind: Array,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                21,
+                                59,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 21,
-                1,
-            ),
-            kind: Array,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            21,
-                            59,
-                        ),
-                        name: "a",
-                    },
-                ),
+                61,
             ),
         },
-        end: Span(
-            21,
-            61,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    22,
+                    1,
+                ),
+                kind: Float,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                22,
+                                59,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 22,
-                1,
-            ),
-            kind: Float,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            22,
-                            59,
-                        ),
-                        name: "a",
-                    },
-                ),
+                61,
             ),
         },
-        end: Span(
-            22,
-            61,
-        ),
-    },
-    Expression {
-        expression: Cast {
-            span: Span(
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Cast {
+                span: Span(
+                    23,
+                    1,
+                ),
+                kind: Float,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                23,
+                                58,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 23,
-                1,
-            ),
-            kind: Float,
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            23,
-                            58,
-                        ),
-                        name: "a",
-                    },
-                ),
+                60,
             ),
         },
-        end: Span(
-            23,
-            60,
-        ),
-    },
+    ),
 ]

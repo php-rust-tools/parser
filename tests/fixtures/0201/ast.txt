@@ -22,22 +22,30 @@
                         3,
                         9,
                     ),
-                    interfaces: [
-                        SimpleIdentifier {
-                            span: Span(
+                    interfaces: CommaSeparated {
+                        inner: [
+                            SimpleIdentifier {
+                                span: Span(
+                                    3,
+                                    20,
+                                ),
+                                value: "B",
+                            },
+                            SimpleIdentifier {
+                                span: Span(
+                                    3,
+                                    23,
+                                ),
+                                value: "C",
+                            },
+                        ],
+                        commas: [
+                            Span(
                                 3,
-                                20,
+                                21,
                             ),
-                            value: "B",
-                        },
-                        SimpleIdentifier {
-                            span: Span(
-                                3,
-                                23,
-                            ),
-                            value: "C",
-                        },
-                    ],
+                        ],
+                    },
                 },
             ),
             attributes: [],

@@ -1,20 +1,58 @@
 [
-    DoWhile {
-        condition: Bool {
-            value: true,
-        },
-        body: [
-            Echo {
-                values: [
-                    LiteralString {
-                        span: Span(
-                            3,
-                            10,
-                        ),
-                        value: "Hi!",
+    DoWhile(
+        DoWhileLoop {
+            do: Span(
+                2,
+                1,
+            ),
+            body: Braced(
+                Braced {
+                    left_brace: Span(
+                        2,
+                        4,
+                    ),
+                    inner: [
+                        Echo {
+                            values: [
+                                LiteralString {
+                                    span: Span(
+                                        3,
+                                        10,
+                                    ),
+                                    value: "Hi!",
+                                },
+                            ],
+                        },
+                    ],
+                    right_brace: Span(
+                        4,
+                        1,
+                    ),
+                },
+            ),
+            while: Span(
+                4,
+                3,
+            ),
+            condition: SemicolonTerminated {
+                inner: Parenthesized {
+                    left_parenthesis: Span(
+                        4,
+                        9,
+                    ),
+                    inner: Bool {
+                        value: true,
                     },
-                ],
+                    right_parenthesis: Span(
+                        4,
+                        14,
+                    ),
+                },
+                semicolon: Span(
+                    4,
+                    15,
+                ),
             },
-        ],
-    },
+        },
+    ),
 ]

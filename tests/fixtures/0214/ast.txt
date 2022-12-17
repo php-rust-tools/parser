@@ -47,15 +47,18 @@
                         5,
                         15,
                     ),
-                    parents: [
-                        SimpleIdentifier {
-                            span: Span(
-                                5,
-                                23,
-                            ),
-                            value: "s",
-                        },
-                    ],
+                    parents: CommaSeparated {
+                        inner: [
+                            SimpleIdentifier {
+                                span: Span(
+                                    5,
+                                    23,
+                                ),
+                                value: "s",
+                            },
+                        ],
+                        commas: [],
+                    },
                 },
             ),
             body: InterfaceBody {

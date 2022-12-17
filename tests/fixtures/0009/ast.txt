@@ -1,40 +1,12 @@
 [
-    Expression {
-        expression: ArrayIndex {
-            array: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            3,
-                            1,
-                        ),
-                        name: "foo",
-                    },
-                ),
-            ),
-            index: Some(
-                LiteralString {
-                    span: Span(
-                        3,
-                        6,
-                    ),
-                    value: "bar",
-                },
-            ),
-        },
-        end: Span(
-            3,
-            12,
-        ),
-    },
-    Expression {
-        expression: ArrayIndex {
-            array: ArrayIndex {
+    Expression(
+        SemicolonTerminated {
+            inner: ArrayIndex {
                 array: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: Span(
-                                5,
+                                3,
                                 1,
                             ),
                             name: "foo",
@@ -44,37 +16,28 @@
                 index: Some(
                     LiteralString {
                         span: Span(
-                            5,
+                            3,
                             6,
                         ),
                         value: "bar",
                     },
                 ),
             },
-            index: Some(
-                LiteralString {
-                    span: Span(
-                        5,
-                        13,
-                    ),
-                    value: "baz",
-                },
+            semicolon: Span(
+                3,
+                12,
             ),
         },
-        end: Span(
-            5,
-            19,
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: ArrayIndex {
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: ArrayIndex {
+                array: ArrayIndex {
                     array: Variable(
                         SimpleVariable(
                             SimpleVariable {
                                 span: Span(
-                                    7,
+                                    5,
                                     1,
                                 ),
                                 name: "foo",
@@ -84,29 +47,72 @@
                     index: Some(
                         LiteralString {
                             span: Span(
-                                7,
+                                5,
                                 6,
                             ),
                             value: "bar",
                         },
                     ),
                 },
-                span: Span(
-                    7,
-                    13,
+                index: Some(
+                    LiteralString {
+                        span: Span(
+                            5,
+                            13,
+                        ),
+                        value: "baz",
+                    },
                 ),
-                right: LiteralString {
+            },
+            semicolon: Span(
+                5,
+                19,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: ArrayIndex {
+                        array: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        7,
+                                        1,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
+                        ),
+                        index: Some(
+                            LiteralString {
+                                span: Span(
+                                    7,
+                                    6,
+                                ),
+                                value: "bar",
+                            },
+                        ),
+                    },
                     span: Span(
                         7,
-                        15,
+                        13,
                     ),
-                    value: "baz",
+                    right: LiteralString {
+                        span: Span(
+                            7,
+                            15,
+                        ),
+                        value: "baz",
+                    },
                 },
-            },
-        ),
-        end: Span(
-            7,
-            20,
-        ),
-    },
+            ),
+            semicolon: Span(
+                7,
+                20,
+            ),
+        },
+    ),
 ]

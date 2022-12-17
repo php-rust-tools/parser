@@ -1,29 +1,31 @@
 [
-    Expression {
-        expression: Variable(
-            BracedVariableVariable(
-                BracedVariableVariable {
-                    start: Span(
-                        1,
-                        7,
-                    ),
-                    variable: LiteralString {
-                        span: Span(
+    Expression(
+        SemicolonTerminated {
+            inner: Variable(
+                BracedVariableVariable(
+                    BracedVariableVariable {
+                        start: Span(
                             1,
-                            9,
+                            7,
                         ),
-                        value: "foo",
+                        variable: LiteralString {
+                            span: Span(
+                                1,
+                                9,
+                            ),
+                            value: "foo",
+                        },
+                        end: Span(
+                            1,
+                            14,
+                        ),
                     },
-                    end: Span(
-                        1,
-                        14,
-                    ),
-                },
+                ),
             ),
-        ),
-        end: Span(
-            1,
-            15,
-        ),
-    },
+            semicolon: Span(
+                1,
+                15,
+            ),
+        },
+    ),
 ]

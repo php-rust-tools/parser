@@ -1,44 +1,46 @@
 [
-    Expression {
-        expression: StaticPropertyFetch {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            1,
-                            7,
-                        ),
-                        value: "Foo",
-                    },
+    Expression(
+        SemicolonTerminated {
+            inner: StaticPropertyFetch {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                1,
+                                7,
+                            ),
+                            value: "Foo",
+                        },
+                    ),
                 ),
-            ),
-            span: Span(
+                span: Span(
+                    1,
+                    10,
+                ),
+                property: Variable(
+                    VariableVariable(
+                        VariableVariable {
+                            span: Span(
+                                1,
+                                12,
+                            ),
+                            variable: SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        1,
+                                        13,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
                 1,
-                10,
-            ),
-            property: Variable(
-                VariableVariable(
-                    VariableVariable {
-                        span: Span(
-                            1,
-                            12,
-                        ),
-                        variable: SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    1,
-                                    13,
-                                ),
-                                name: "a",
-                            },
-                        ),
-                    },
-                ),
+                15,
             ),
         },
-        end: Span(
-            1,
-            15,
-        ),
-    },
+    ),
 ]

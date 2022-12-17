@@ -1,103 +1,123 @@
 [
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    3,
+                                    1,
+                                ),
+                                name: "a",
+                            },
+                        ),
+                    ),
+                    span: Span(
+                        3,
+                        4,
+                    ),
+                    right: ShortArray(
+                        Bracketed {
+                            left_bracket: Span(
                                 3,
-                                1,
+                                6,
                             ),
-                            name: "a",
-                        },
-                    ),
-                ),
-                span: Span(
-                    3,
-                    4,
-                ),
-                right: ShortArray {
-                    start: Span(
-                        3,
-                        6,
-                    ),
-                    items: [
-                        ArrayItem {
-                            key: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            7,
+                            inner: CommaSeparated {
+                                inner: [
+                                    ArrayItem {
+                                        key: None,
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        3,
+                                                        7,
+                                                    ),
+                                                    name: "a",
+                                                },
+                                            ),
                                         ),
-                                        name: "a",
+                                        unpack: false,
+                                        by_ref: false,
                                     },
-                                ),
-                            ),
-                            unpack: false,
-                            by_ref: false,
-                        },
-                        ArrayItem {
-                            key: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            11,
+                                    ArrayItem {
+                                        key: None,
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        3,
+                                                        11,
+                                                    ),
+                                                    name: "b",
+                                                },
+                                            ),
                                         ),
-                                        name: "b",
+                                        unpack: false,
+                                        by_ref: false,
                                     },
-                                ),
-                            ),
-                            unpack: false,
-                            by_ref: false,
-                        },
-                        ArrayItem {
-                            key: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            15,
+                                    ArrayItem {
+                                        key: None,
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        3,
+                                                        15,
+                                                    ),
+                                                    name: "c",
+                                                },
+                                            ),
                                         ),
-                                        name: "c",
+                                        unpack: false,
+                                        by_ref: false,
                                     },
-                                ),
-                            ),
-                            unpack: false,
-                            by_ref: false,
-                        },
-                        ArrayItem {
-                            key: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            19,
+                                    ArrayItem {
+                                        key: None,
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        3,
+                                                        19,
+                                                    ),
+                                                    name: "d",
+                                                },
+                                            ),
                                         ),
-                                        name: "d",
+                                        unpack: false,
+                                        by_ref: false,
                                     },
-                                ),
+                                ],
+                                commas: [
+                                    Span(
+                                        3,
+                                        9,
+                                    ),
+                                    Span(
+                                        3,
+                                        13,
+                                    ),
+                                    Span(
+                                        3,
+                                        17,
+                                    ),
+                                ],
+                            },
+                            right_bracket: Span(
+                                3,
+                                21,
                             ),
-                            unpack: false,
-                            by_ref: false,
                         },
-                    ],
-                    end: Span(
-                        3,
-                        21,
                     ),
                 },
-            },
-        ),
-        end: Span(
-            3,
-            22,
-        ),
-    },
+            ),
+            semicolon: Span(
+                3,
+                22,
+            ),
+        },
+    ),
 ]

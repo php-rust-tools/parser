@@ -1,53 +1,55 @@
 [
-    Expression {
-        expression: StaticMethodClosureCreation {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            1,
-                            7,
-                        ),
-                        value: "A",
-                    },
+    Expression(
+        SemicolonTerminated {
+            inner: StaticMethodClosureCreation {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                1,
+                                7,
+                            ),
+                            value: "A",
+                        },
+                    ),
                 ),
-            ),
-            span: Span(
-                1,
-                8,
-            ),
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            1,
-                            10,
-                        ),
-                        value: "foo",
-                    },
+                span: Span(
+                    1,
+                    8,
                 ),
-            ),
-            placeholder: ArgumentPlaceholder {
-                comments: CommentGroup {
-                    comments: [],
+                method: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                1,
+                                10,
+                            ),
+                            value: "foo",
+                        },
+                    ),
+                ),
+                placeholder: ArgumentPlaceholder {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        1,
+                        13,
+                    ),
+                    ellipsis: Span(
+                        1,
+                        14,
+                    ),
+                    end: Span(
+                        1,
+                        17,
+                    ),
                 },
-                start: Span(
-                    1,
-                    13,
-                ),
-                ellipsis: Span(
-                    1,
-                    14,
-                ),
-                end: Span(
-                    1,
-                    17,
-                ),
             },
+            semicolon: Span(
+                1,
+                18,
+            ),
         },
-        end: Span(
-            1,
-            18,
-        ),
-    },
+    ),
 ]

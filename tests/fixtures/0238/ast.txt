@@ -1,54 +1,56 @@
 [
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                3,
-                                1,
-                            ),
-                            name: "foo",
-                        },
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    3,
+                                    1,
+                                ),
+                                name: "foo",
+                            },
+                        ),
                     ),
-                ),
-                span: Span(
-                    3,
-                    6,
-                ),
-                right: Include {
                     span: Span(
                         3,
-                        8,
+                        6,
                     ),
-                    kind: Require,
-                    path: Concat {
-                        left: MagicConst {
-                            span: Span(
-                                3,
-                                16,
-                            ),
-                            constant: Directory,
-                        },
+                    right: Include {
                         span: Span(
                             3,
-                            24,
+                            8,
                         ),
-                        right: LiteralString {
+                        kind: Require,
+                        path: Concat {
+                            left: MagicConst {
+                                span: Span(
+                                    3,
+                                    16,
+                                ),
+                                constant: Directory,
+                            },
                             span: Span(
                                 3,
-                                26,
+                                24,
                             ),
-                            value: "/foo.php",
+                            right: LiteralString {
+                                span: Span(
+                                    3,
+                                    26,
+                                ),
+                                value: "/foo.php",
+                            },
                         },
                     },
                 },
-            },
-        ),
-        end: Span(
-            3,
-            36,
-        ),
-    },
+            ),
+            semicolon: Span(
+                3,
+                36,
+            ),
+        },
+    ),
 ]

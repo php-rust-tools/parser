@@ -26,14 +26,12 @@ pub fn parse(
 
         if !type_checked {
             type_checked = true;
-            if modifiers.has_readonly() {
-                if modifiers.has_static() {
-                    return Err(ParseError::StaticPropertyUsingReadonlyModifier(
-                        class,
-                        variable.to_string(),
-                        current.span,
-                    ));
-                }
+            if modifiers.has_readonly() && modifiers.has_static() {
+                return Err(ParseError::StaticPropertyUsingReadonlyModifier(
+                    class,
+                    variable.to_string(),
+                    current.span,
+                ));
             }
 
             match &ty {

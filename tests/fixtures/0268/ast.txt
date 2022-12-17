@@ -1,16 +1,39 @@
 [
-    While {
-        condition: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        3,
-                        8,
-                    ),
-                    name: "foo",
-                },
+    While(
+        WhileLoop {
+            while: Span(
+                3,
+                1,
             ),
-        ),
-        body: [],
-    },
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    3,
+                    7,
+                ),
+                inner: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                3,
+                                8,
+                            ),
+                            name: "foo",
+                        },
+                    ),
+                ),
+                right_parenthesis: Span(
+                    3,
+                    12,
+                ),
+            },
+            body: Statement(
+                Noop(
+                    Span(
+                        3,
+                        13,
+                    ),
+                ),
+            ),
+        },
+    ),
 ]

@@ -1,134 +1,138 @@
 [
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                3,
-                                1,
-                            ),
-                            name: "e",
-                        },
-                    ),
-                ),
-                span: Span(
-                    3,
-                    4,
-                ),
-                right: New {
-                    span: Span(
-                        3,
-                        6,
-                    ),
-                    target: AnonymousClass(
-                        AnonymousClass {
-                            attributes: [],
-                            span: Span(
-                                3,
-                                10,
-                            ),
-                            extends: None,
-                            implements: None,
-                            body: ClassBody {
-                                start: Span(
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
                                     3,
-                                    16,
-                                ),
-                                end: Span(
-                                    7,
                                     1,
                                 ),
-                                members: [
-                                    Method(
-                                        Method {
-                                            comments: CommentGroup {
-                                                comments: [],
-                                            },
-                                            start: Span(
-                                                4,
-                                                12,
-                                            ),
-                                            end: Span(
-                                                6,
-                                                5,
-                                            ),
-                                            name: SimpleIdentifier {
-                                                span: Span(
-                                                    4,
-                                                    21,
-                                                ),
-                                                value: "bar",
-                                            },
-                                            attributes: [],
-                                            parameters: MethodParameterList {
+                                name: "e",
+                            },
+                        ),
+                    ),
+                    span: Span(
+                        3,
+                        4,
+                    ),
+                    right: New {
+                        span: Span(
+                            3,
+                            6,
+                        ),
+                        target: AnonymousClass(
+                            AnonymousClass {
+                                attributes: [],
+                                span: Span(
+                                    3,
+                                    10,
+                                ),
+                                extends: None,
+                                implements: None,
+                                body: ClassBody {
+                                    start: Span(
+                                        3,
+                                        16,
+                                    ),
+                                    end: Span(
+                                        7,
+                                        1,
+                                    ),
+                                    members: [
+                                        Method(
+                                            Method {
                                                 comments: CommentGroup {
                                                     comments: [],
                                                 },
                                                 start: Span(
                                                     4,
-                                                    24,
+                                                    12,
                                                 ),
-                                                members: [],
                                                 end: Span(
-                                                    4,
-                                                    25,
+                                                    6,
+                                                    5,
                                                 ),
-                                            },
-                                            body: Some(
-                                                [
-                                                    Expression {
-                                                        expression: Exit {
-                                                            value: Some(
-                                                                LiteralInteger {
-                                                                    span: Span(
-                                                                        5,
-                                                                        14,
-                                                                    ),
-                                                                    value: "1",
-                                                                },
-                                                            ),
-                                                        },
-                                                        end: Span(
-                                                            5,
-                                                            16,
-                                                        ),
+                                                name: SimpleIdentifier {
+                                                    span: Span(
+                                                        4,
+                                                        21,
+                                                    ),
+                                                    value: "bar",
+                                                },
+                                                attributes: [],
+                                                parameters: MethodParameterList {
+                                                    comments: CommentGroup {
+                                                        comments: [],
                                                     },
-                                                ],
-                                            ),
-                                            modifiers: MethodModifierGroup {
-                                                modifiers: [
-                                                    Public(
+                                                    start: Span(
+                                                        4,
+                                                        24,
+                                                    ),
+                                                    members: [],
+                                                    end: Span(
+                                                        4,
+                                                        25,
+                                                    ),
+                                                },
+                                                body: Some(
+                                                    [
+                                                        Expression(
+                                                            SemicolonTerminated {
+                                                                inner: Exit {
+                                                                    value: Some(
+                                                                        LiteralInteger {
+                                                                            span: Span(
+                                                                                5,
+                                                                                14,
+                                                                            ),
+                                                                            value: "1",
+                                                                        },
+                                                                    ),
+                                                                },
+                                                                semicolon: Span(
+                                                                    5,
+                                                                    16,
+                                                                ),
+                                                            },
+                                                        ),
+                                                    ],
+                                                ),
+                                                modifiers: MethodModifierGroup {
+                                                    modifiers: [
+                                                        Public(
+                                                            Span(
+                                                                4,
+                                                                5,
+                                                            ),
+                                                        ),
+                                                    ],
+                                                },
+                                                return_type: Some(
+                                                    ParentReference(
                                                         Span(
                                                             4,
-                                                            5,
+                                                            28,
                                                         ),
                                                     ),
-                                                ],
-                                            },
-                                            return_type: Some(
-                                                ParentReference(
-                                                    Span(
-                                                        4,
-                                                        28,
-                                                    ),
                                                 ),
-                                            ),
-                                            ampersand: None,
-                                        },
-                                    ),
-                                ],
+                                                ampersand: None,
+                                            },
+                                        ),
+                                    ],
+                                },
                             },
-                        },
-                    ),
-                    arguments: None,
+                        ),
+                        arguments: None,
+                    },
                 },
-            },
-        ),
-        end: Span(
-            7,
-            2,
-        ),
-    },
+            ),
+            semicolon: Span(
+                7,
+                2,
+            ),
+        },
+    ),
 ]

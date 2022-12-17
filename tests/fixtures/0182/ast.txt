@@ -1,109 +1,111 @@
 [
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            3,
-                            1,
-                        ),
-                        value: "foo",
-                    },
-                ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                start: Span(
-                    3,
-                    4,
-                ),
-                arguments: [
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        3,
-                                        5,
-                                    ),
-                                    name: "a",
-                                },
-                            ),
-                        ),
-                    },
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        3,
-                                        9,
-                                    ),
-                                    name: "b",
-                                },
-                            ),
-                        ),
-                    },
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        3,
-                                        13,
-                                    ),
-                                    name: "c",
-                                },
-                            ),
-                        ),
-                    },
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: Some(
-                            Span(
+    Expression(
+        SemicolonTerminated {
+            inner: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
                                 3,
-                                17,
+                                1,
                             ),
-                        ),
-                        value: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        3,
-                                        20,
-                                    ),
-                                    name: "d",
-                                },
-                            ),
-                        ),
-                    },
-                ],
-                end: Span(
-                    3,
-                    22,
+                            value: "foo",
+                        },
+                    ),
                 ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        3,
+                        4,
+                    ),
+                    arguments: [
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            3,
+                                            5,
+                                        ),
+                                        name: "a",
+                                    },
+                                ),
+                            ),
+                        },
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            3,
+                                            9,
+                                        ),
+                                        name: "b",
+                                    },
+                                ),
+                            ),
+                        },
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            3,
+                                            13,
+                                        ),
+                                        name: "c",
+                                    },
+                                ),
+                            ),
+                        },
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: Some(
+                                Span(
+                                    3,
+                                    17,
+                                ),
+                            ),
+                            value: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            3,
+                                            20,
+                                        ),
+                                        name: "d",
+                                    },
+                                ),
+                            ),
+                        },
+                    ],
+                    end: Span(
+                        3,
+                        22,
+                    ),
+                },
             },
+            semicolon: Span(
+                3,
+                23,
+            ),
         },
-        end: Span(
-            3,
-            23,
-        ),
-    },
+    ),
 ]

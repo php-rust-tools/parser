@@ -1,114 +1,152 @@
 [
     If {
-        condition: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        3,
-                        5,
+        condition: Parenthesized {
+            left_parenthesis: Span(
+                3,
+                4,
+            ),
+            inner: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            3,
+                            5,
+                        ),
+                        name: "a",
+                    },
+                ),
+            ),
+            right_parenthesis: Span(
+                3,
+                7,
+            ),
+        },
+        then: [
+            Expression(
+                SemicolonTerminated {
+                    inner: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    4,
+                                    5,
+                                ),
+                                name: "a",
+                            },
+                        ),
                     ),
-                    name: "a",
+                    semicolon: Span(
+                        4,
+                        7,
+                    ),
                 },
             ),
-        ),
-        then: [
-            Expression {
-                expression: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                4,
-                                5,
-                            ),
-                            name: "a",
-                        },
-                    ),
-                ),
-                end: Span(
-                    4,
-                    7,
-                ),
-            },
         ],
         else_ifs: [],
         else: None,
     },
     If {
-        condition: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        7,
-                        5,
+        condition: Parenthesized {
+            left_parenthesis: Span(
+                7,
+                4,
+            ),
+            inner: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            7,
+                            5,
+                        ),
+                        name: "a",
+                    },
+                ),
+            ),
+            right_parenthesis: Span(
+                7,
+                7,
+            ),
+        },
+        then: [
+            Expression(
+                SemicolonTerminated {
+                    inner: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    8,
+                                    5,
+                                ),
+                                name: "a",
+                            },
+                        ),
                     ),
-                    name: "a",
+                    semicolon: Span(
+                        8,
+                        7,
+                    ),
                 },
             ),
-        ),
-        then: [
-            Expression {
-                expression: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                8,
-                                5,
-                            ),
-                            name: "a",
-                        },
-                    ),
-                ),
-                end: Span(
-                    8,
-                    7,
-                ),
-            },
         ],
         else_ifs: [],
         else: Some(
             [
-                Expression {
-                    expression: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    10,
-                                    5,
-                                ),
-                                name: "b",
-                            },
+                Expression(
+                    SemicolonTerminated {
+                        inner: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        10,
+                                        5,
+                                    ),
+                                    name: "b",
+                                },
+                            ),
                         ),
-                    ),
-                    end: Span(
-                        10,
-                        7,
-                    ),
-                },
+                        semicolon: Span(
+                            10,
+                            7,
+                        ),
+                    },
+                ),
             ],
         ),
     },
     If {
-        condition: Bool {
-            value: true,
+        condition: Parenthesized {
+            left_parenthesis: Span(
+                13,
+                4,
+            ),
+            inner: Bool {
+                value: true,
+            },
+            right_parenthesis: Span(
+                13,
+                9,
+            ),
         },
         then: [
-            Expression {
-                expression: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                14,
-                                5,
-                            ),
-                            name: "a",
-                        },
+            Expression(
+                SemicolonTerminated {
+                    inner: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    14,
+                                    5,
+                                ),
+                                name: "a",
+                            },
+                        ),
                     ),
-                ),
-                end: Span(
-                    14,
-                    7,
-                ),
-            },
+                    semicolon: Span(
+                        14,
+                        7,
+                    ),
+                },
+            ),
         ],
         else_ifs: [
             ElseIf {
@@ -222,50 +260,64 @@
                     },
                 ),
                 body: [
-                    Expression {
-                        expression: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        16,
-                                        5,
-                                    ),
-                                    name: "b",
-                                },
+                    Expression(
+                        SemicolonTerminated {
+                            inner: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            16,
+                                            5,
+                                        ),
+                                        name: "b",
+                                    },
+                                ),
                             ),
-                        ),
-                        end: Span(
-                            16,
-                            7,
-                        ),
-                    },
+                            semicolon: Span(
+                                16,
+                                7,
+                            ),
+                        },
+                    ),
                 ],
             },
         ],
         else: None,
     },
     If {
-        condition: Bool {
-            value: true,
+        condition: Parenthesized {
+            left_parenthesis: Span(
+                19,
+                4,
+            ),
+            inner: Bool {
+                value: true,
+            },
+            right_parenthesis: Span(
+                19,
+                9,
+            ),
         },
         then: [
-            Expression {
-                expression: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                20,
-                                5,
-                            ),
-                            name: "a",
-                        },
+            Expression(
+                SemicolonTerminated {
+                    inner: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    20,
+                                    5,
+                                ),
+                                name: "a",
+                            },
+                        ),
                     ),
-                ),
-                end: Span(
-                    20,
-                    7,
-                ),
-            },
+                    semicolon: Span(
+                        20,
+                        7,
+                    ),
+                },
+            ),
         ],
         else_ifs: [
             ElseIf {
@@ -273,23 +325,25 @@
                     value: true,
                 },
                 body: [
-                    Expression {
-                        expression: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        22,
-                                        5,
-                                    ),
-                                    name: "b",
-                                },
+                    Expression(
+                        SemicolonTerminated {
+                            inner: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            22,
+                                            5,
+                                        ),
+                                        name: "b",
+                                    },
+                                ),
                             ),
-                        ),
-                        end: Span(
-                            22,
-                            7,
-                        ),
-                    },
+                            semicolon: Span(
+                                22,
+                                7,
+                            ),
+                        },
+                    ),
                 ],
             },
             ElseIf {
@@ -297,23 +351,25 @@
                     value: true,
                 },
                 body: [
-                    Expression {
-                        expression: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        24,
-                                        5,
-                                    ),
-                                    name: "c",
-                                },
+                    Expression(
+                        SemicolonTerminated {
+                            inner: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            24,
+                                            5,
+                                        ),
+                                        name: "c",
+                                    },
+                                ),
                             ),
-                        ),
-                        end: Span(
-                            24,
-                            7,
-                        ),
-                    },
+                            semicolon: Span(
+                                24,
+                                7,
+                            ),
+                        },
+                    ),
                 ],
             },
         ],

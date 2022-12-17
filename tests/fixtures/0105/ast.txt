@@ -1,12 +1,14 @@
 [
-    Expression {
-        expression: Yield {
-            key: None,
-            value: None,
+    Expression(
+        SemicolonTerminated {
+            inner: Yield {
+                key: None,
+                value: None,
+            },
+            semicolon: Span(
+                1,
+                12,
+            ),
         },
-        end: Span(
-            1,
-            12,
-        ),
-    },
+    ),
 ]

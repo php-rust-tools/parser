@@ -1,16 +1,26 @@
 [
     If {
-        condition: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        1,
-                        10,
-                    ),
-                    name: "foo",
-                },
+        condition: Parenthesized {
+            left_parenthesis: Span(
+                1,
+                9,
             ),
-        ),
+            inner: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            1,
+                            10,
+                        ),
+                        name: "foo",
+                    },
+                ),
+            ),
+            right_parenthesis: Span(
+                1,
+                14,
+            ),
+        },
         then: [
             Return {
                 value: Some(

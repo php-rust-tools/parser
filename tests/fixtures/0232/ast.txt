@@ -1,11 +1,13 @@
 [
-    Expression {
-        expression: Nowdoc {
-            value: "Hello, world!\nHello, world!",
+    Expression(
+        SemicolonTerminated {
+            inner: Nowdoc {
+                value: "Hello, world!\nHello, world!",
+            },
+            semicolon: Span(
+                6,
+                6,
+            ),
         },
-        end: Span(
-            6,
-            6,
-        ),
-    },
+    ),
 ]

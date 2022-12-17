@@ -44,4 +44,4 @@ jobs:
 
       - name: benchmark
         run: |
-          hyperfine --runs 20 --warmup 2 --show-output "cd pull-request && cargo test -r symfony" "cd pull-request-base && cargo test -r symfony"
+          hyperfine --runs 20 --warmup 2 "cd pull-request && cargo test -r symfony" "cd pull-request-base && cargo test -r symfony"

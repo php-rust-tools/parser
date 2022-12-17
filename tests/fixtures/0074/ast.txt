@@ -1,50 +1,52 @@
 [
-    Expression {
-        expression: NullsafeMethodCall {
-            target: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            1,
-                            7,
-                        ),
-                        name: "a",
-                    },
+    Expression(
+        SemicolonTerminated {
+            inner: NullsafeMethodCall {
+                target: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                1,
+                                7,
+                            ),
+                            name: "a",
+                        },
+                    ),
                 ),
-            ),
-            span: Span(
-                1,
-                9,
-            ),
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            1,
-                            12,
-                        ),
-                        value: "b",
-                    },
+                span: Span(
+                    1,
+                    9,
                 ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
+                method: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                1,
+                                12,
+                            ),
+                            value: "b",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        1,
+                        13,
+                    ),
+                    arguments: [],
+                    end: Span(
+                        1,
+                        14,
+                    ),
                 },
-                start: Span(
-                    1,
-                    13,
-                ),
-                arguments: [],
-                end: Span(
-                    1,
-                    14,
-                ),
             },
+            semicolon: Span(
+                1,
+                15,
+            ),
         },
-        end: Span(
-            1,
-            15,
-        ),
-    },
+    ),
 ]

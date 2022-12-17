@@ -1,15 +1,17 @@
 [
-    Expression {
-        expression: ShellExec {
-            parts: [
-                Literal(
-                    "Hello, world!",
-                ),
-            ],
+    Expression(
+        SemicolonTerminated {
+            inner: ShellExec {
+                parts: [
+                    Literal(
+                        "Hello, world!",
+                    ),
+                ],
+            },
+            semicolon: Span(
+                3,
+                16,
+            ),
         },
-        end: Span(
-            3,
-            16,
-        ),
-    },
+    ),
 ]

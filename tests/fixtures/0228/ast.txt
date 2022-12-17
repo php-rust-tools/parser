@@ -1,15 +1,17 @@
 [
-    Expression {
-        expression: Heredoc {
-            parts: [
-                Literal(
-                    "Hello, world!\n",
-                ),
-            ],
+    Expression(
+        SemicolonTerminated {
+            inner: Heredoc {
+                parts: [
+                    Literal(
+                        "Hello, world!\n",
+                    ),
+                ],
+            },
+            semicolon: Span(
+                6,
+                4,
+            ),
         },
-        end: Span(
-            6,
-            4,
-        ),
-    },
+    ),
 ]

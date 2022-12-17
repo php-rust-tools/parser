@@ -18,7 +18,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
     state.stream.next();
     utils::skip_left_brace(state)?;
 
-    let body = blocks::body(state, &TokenKind::RightBrace)?;
+    let body = blocks::multiple_statements(state, &TokenKind::RightBrace)?;
 
     utils::skip_right_brace(state)?;
 
@@ -44,7 +44,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
         utils::skip_right_parenthesis(state)?;
         utils::skip_left_brace(state)?;
 
-        let catch_body = blocks::body(state, &TokenKind::RightBrace)?;
+        let catch_body = blocks::multiple_statements(state, &TokenKind::RightBrace)?;
 
         utils::skip_right_brace(state)?;
 
@@ -65,7 +65,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
         state.stream.next();
         utils::skip_left_brace(state)?;
 
-        let finally_body = blocks::body(state, &TokenKind::RightBrace)?;
+        let finally_body = blocks::multiple_statements(state, &TokenKind::RightBrace)?;
 
         utils::skip_right_brace(state)?;
         let finally_end = state.stream.current().span;

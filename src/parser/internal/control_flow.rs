@@ -19,11 +19,10 @@ use crate::parser::state::State;
 pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
     let keyword = utils::skip(state, TokenKind::Match)?;
 
-    utils::skip_left_parenthesis(state)?;
+    let condition = utils::parenthesized(state, &|state: &mut State| {
+        expressions::create(state).map(Box::new)
+    })?;
 
-    let condition = Box::new(expressions::create(state)?);
-
-    utils::skip_right_parenthesis(state)?;
     utils::skip_left_brace(state)?;
 
     let mut default = None;
@@ -100,11 +99,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
 pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::Switch)?;
 
-    utils::skip_left_parenthesis(state)?;
-
-    let condition = expressions::create(state)?;
-
-    utils::skip_right_parenthesis(state)?;
+    let condition = utils::parenthesized(state, &expressions::create)?;
 
     let end_token = if state.stream.current().kind == TokenKind::Colon {
         utils::skip_colon(state)?;
@@ -179,11 +174,7 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
 pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
     utils::skip(state, TokenKind::If)?;
 
-    utils::skip_left_parenthesis(state)?;
-
-    let condition = expressions::create(state)?;
-
-    utils::skip_right_parenthesis(state)?;
+    let condition = utils::parenthesized(state, &expressions::create)?;
 
     // FIXME: Tidy up duplication and make the intent a bit clearer.
     match state.stream.current().kind {
@@ -238,7 +229,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
                 state.stream.next();
                 utils::skip_colon(state)?;
 
-                let body = blocks::body(state, &TokenKind::EndIf)?;
+                let body = blocks::multiple_statements(state, &TokenKind::EndIf)?;
 
                 r#else = Some(body);
             }
@@ -257,7 +248,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
         _ => {
             let then = if state.stream.current().kind == TokenKind::LeftBrace {
                 utils::skip_left_brace(state)?;
-                let then = blocks::body(state, &TokenKind::RightBrace)?;
+                let then = blocks::multiple_statements(state, &TokenKind::RightBrace)?;
                 utils::skip_right_brace(state)?;
                 then
             } else {
@@ -277,7 +268,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
 
                     let body = if state.stream.current().kind == TokenKind::LeftBrace {
                         utils::skip_left_brace(state)?;
-                        let then = blocks::body(state, &TokenKind::RightBrace)?;
+                        let then = blocks::multiple_statements(state, &TokenKind::RightBrace)?;
                         utils::skip_right_brace(state)?;
                         then
                     } else {
@@ -305,7 +296,7 @@ pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
             if state.stream.current().kind == TokenKind::LeftBrace {
                 utils::skip_left_brace(state)?;
 
-                r#else = blocks::body(state, &TokenKind::RightBrace)?;
+                r#else = blocks::multiple_statements(state, &TokenKind::RightBrace)?;
 
                 utils::skip_right_brace(state)?;
             } else {

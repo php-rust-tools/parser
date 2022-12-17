@@ -22,6 +22,10 @@ use crate::parser::ast::goto::GotoStatement;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
+use crate::parser::ast::loops::DoWhileLoop;
+use crate::parser::ast::loops::ForLoop;
+use crate::parser::ast::loops::ForeachLoop;
+use crate::parser::ast::loops::WhileLoop;
 use crate::parser::ast::namespaces::Namespace;
 use crate::parser::ast::operators::ArithmeticOperation;
 use crate::parser::ast::operators::AssignmentOperation;
@@ -30,6 +34,11 @@ use crate::parser::ast::operators::ComparisonOperation;
 use crate::parser::ast::operators::LogicalOperation;
 use crate::parser::ast::traits::Trait;
 use crate::parser::ast::try_block::TryBlock;
+use crate::parser::ast::utils::Braced;
+use crate::parser::ast::utils::Bracketed;
+use crate::parser::ast::utils::CommaSeparated;
+use crate::parser::ast::utils::Parenthesized;
+use crate::parser::ast::utils::SemicolonTerminated;
 use crate::parser::ast::variables::Variable;
 
 pub mod arguments;
@@ -44,12 +53,14 @@ pub mod functions;
 pub mod goto;
 pub mod identifiers;
 pub mod interfaces;
+pub mod loops;
 pub mod modifiers;
 pub mod namespaces;
 pub mod operators;
 pub mod properties;
 pub mod traits;
 pub mod try_block;
+pub mod utils;
 pub mod variables;
 
 pub type Block = Vec<Statement>;
@@ -103,34 +114,17 @@ pub enum Statement {
     Static {
         vars: Vec<StaticVar>,
     },
-    DoWhile {
-        condition: Expression,
-        body: Block,
-    },
-    While {
-        condition: Expression,
-        body: Block,
-    },
-    For {
-        init: Vec<Expression>,
-        condition: Vec<Expression>,
-        r#loop: Vec<Expression>,
-        then: Block,
-    },
-    Foreach {
-        expr: Expression,
-        by_ref: bool,
-        key_var: Option<Expression>,
-        value_var: Expression,
-        body: Block,
-    },
+    DoWhile(DoWhileLoop),
+    While(WhileLoop),
+    For(ForLoop),
+    Foreach(ForeachLoop),
     Constant(Constant),
     Function(Function),
     Class(Class),
     Trait(Trait),
     Interface(Interface),
     If {
-        condition: Expression,
+        condition: Parenthesized<Expression>,
         then: Block,
         else_ifs: Vec<ElseIf>,
         r#else: Option<Block>,
@@ -139,14 +133,18 @@ pub enum Statement {
         value: Option<Expression>,
     },
     Switch {
-        condition: Expression,
+        condition: Parenthesized<Expression>,
         cases: Vec<Case>,
     },
     Break {
-        num: Option<Expression>,
+        r#break: Span,
+        expression: Option<Expression>,
+        semicolon: Span,
     },
     Continue {
-        num: Option<Expression>,
+        r#continue: Span,
+        expression: Option<Expression>,
+        semicolon: Span,
     },
     ShortEcho {
         span: Span,
@@ -155,10 +153,7 @@ pub enum Statement {
     Echo {
         values: Vec<Expression>,
     },
-    Expression {
-        expression: Expression,
-        end: Span,
-    },
+    Expression(SemicolonTerminated<Expression>),
     Namespace(Namespace),
     Use {
         uses: Vec<Use>,
@@ -173,9 +168,7 @@ pub enum Statement {
     Try(TryBlock),
     UnitEnum(UnitEnum),
     BackedEnum(BackedEnum),
-    Block {
-        body: Block,
-    },
+    Block(Braced<Vec<Statement>>),
     Global {
         span: Span,
         variables: Vec<Variable>,
@@ -344,11 +337,7 @@ pub enum Expression {
     // `parent`
     Parent,
     // `[1, 2, 3]`
-    ShortArray {
-        start: Span,           // `[`
-        items: Vec<ArrayItem>, // `1, 2, 3`
-        end: Span,             // `]`
-    },
+    ShortArray(Bracketed<CommaSeparated<ArrayItem>>),
     // `array(1, 2, 3)`
     Array {
         span: Span,            // `array`
@@ -449,7 +438,7 @@ pub enum Expression {
         keyword: Span,
         // TODO(azjezz): create a separate structure for `condition` to hold `(` and `)` spans
         // this can be re-used for all control-flow statements/expressions.
-        condition: Box<Self>,
+        condition: Parenthesized<Box<Self>>,
         // TODO(azjezz): create a separate structure for `default` and `arms` to hold `{` and `}` spans.
         default: Option<Box<DefaultMatchArm>>,
         arms: Vec<MatchArm>,

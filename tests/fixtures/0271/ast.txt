@@ -1,37 +1,39 @@
 [
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    3,
+                                    1,
+                                ),
+                                name: "a",
+                            },
+                        ),
+                    ),
+                    span: Span(
+                        3,
+                        4,
+                    ),
+                    right: ConstFetch {
+                        target: Static,
+                        constant: SimpleIdentifier {
                             span: Span(
                                 3,
-                                1,
+                                14,
                             ),
-                            name: "a",
+                            value: "foo",
                         },
-                    ),
-                ),
-                span: Span(
-                    3,
-                    4,
-                ),
-                right: ConstFetch {
-                    target: Static,
-                    constant: SimpleIdentifier {
-                        span: Span(
-                            3,
-                            14,
-                        ),
-                        value: "foo",
                     },
                 },
-            },
-        ),
-        end: Span(
-            3,
-            17,
-        ),
-    },
+            ),
+            semicolon: Span(
+                3,
+                17,
+            ),
+        },
+    ),
 ]

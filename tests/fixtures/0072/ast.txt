@@ -1,41 +1,43 @@
 [
-    Expression {
-        expression: ErrorSuppress {
-            span: Span(
-                1,
-                7,
-            ),
-            expr: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
-                            span: Span(
-                                1,
-                                8,
-                            ),
-                            value: "hello",
-                        },
-                    ),
+    Expression(
+        SemicolonTerminated {
+            inner: ErrorSuppress {
+                span: Span(
+                    1,
+                    7,
                 ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
+                expr: FunctionCall {
+                    target: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span(
+                                    1,
+                                    8,
+                                ),
+                                value: "hello",
+                            },
+                        ),
+                    ),
+                    arguments: ArgumentList {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        start: Span(
+                            1,
+                            13,
+                        ),
+                        arguments: [],
+                        end: Span(
+                            1,
+                            14,
+                        ),
                     },
-                    start: Span(
-                        1,
-                        13,
-                    ),
-                    arguments: [],
-                    end: Span(
-                        1,
-                        14,
-                    ),
                 },
             },
+            semicolon: Span(
+                1,
+                15,
+            ),
         },
-        end: Span(
-            1,
-            15,
-        ),
-    },
+    ),
 ]

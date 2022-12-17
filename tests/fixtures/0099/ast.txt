@@ -1,58 +1,60 @@
 [
-    Expression {
-        expression: StaticMethodCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            1,
-                            7,
-                        ),
-                        value: "Foo",
-                    },
+    Expression(
+        SemicolonTerminated {
+            inner: StaticMethodCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                1,
+                                7,
+                            ),
+                            value: "Foo",
+                        },
+                    ),
                 ),
-            ),
-            span: Span(
-                1,
-                10,
-            ),
-            method: Variable(
-                VariableVariable(
-                    VariableVariable {
-                        span: Span(
-                            1,
-                            12,
-                        ),
-                        variable: SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    1,
-                                    13,
-                                ),
-                                name: "a",
-                            },
-                        ),
-                    },
+                span: Span(
+                    1,
+                    10,
                 ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
+                method: Variable(
+                    VariableVariable(
+                        VariableVariable {
+                            span: Span(
+                                1,
+                                12,
+                            ),
+                            variable: SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        1,
+                                        13,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        1,
+                        15,
+                    ),
+                    arguments: [],
+                    end: Span(
+                        1,
+                        16,
+                    ),
                 },
-                start: Span(
-                    1,
-                    15,
-                ),
-                arguments: [],
-                end: Span(
-                    1,
-                    16,
-                ),
             },
+            semicolon: Span(
+                1,
+                17,
+            ),
         },
-        end: Span(
-            1,
-            17,
-        ),
-    },
+    ),
 ]
