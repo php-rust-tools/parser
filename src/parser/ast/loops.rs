@@ -3,66 +3,65 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
-use crate::parser::ast::utils::Braced;
 use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::utils::Parenthesized;
 use crate::parser::ast::utils::SemicolonTerminated;
+use crate::parser::ast::Ending;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct ForeachLoop {
-    pub foreach: Span,                            // `foreach`
-    pub iterator: Parenthesized<ForeachIterator>, // `( *expression* as & $var => $value )`
-    pub body: ForeachBody,                        // `{ ... }`
+pub struct ForeachStatement {
+    pub foreach: Span,                                     // `foreach`
+    pub iterator: Parenthesized<ForeachStatementIterator>, // `( *expression* as & $var => $value )`
+    pub body: ForeachStatementBody,                        // `{ ... }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum ForeachIterator {
-    // `&` `*` `$` `identifier`
+pub enum ForeachStatementIterator {
+    // `*expression* as &$var`
     Value {
         expression: Expression,  // `*expression*`
         r#as: Span,              // `as`
         ampersand: Option<Span>, // `&`
         value: Expression,       // `$var`
     },
-    // `&` `*` `$` `identifier` `=>` `$` `identifier`
+    // `*expression* as &$key => $value`
     KeyAndValue {
         expression: Expression,  // `*expression*`
         r#as: Span,              // `as`
         ampersand: Option<Span>, // `&`
         key: Expression,         // `$key`
-        arrow: Span,             // `=>`
+        double_arrow: Span,      // `=>`
         value: Expression,       // `$value`
     },
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum ForeachBody {
+pub enum ForeachStatementBody {
     Statement(Box<Statement>),
-    Braced(Braced<Vec<Statement>>),
     Block {
         colon: Span,                // `:`
         statements: Vec<Statement>, // `*statements*`
         endforeach: Span,           // `endforeach`
-        semicolon: Span,            // `;`
+        ending: Ending,             // `;` or `?>`
     },
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct ForLoop {
-    pub r#for: Span,                          // `for`
-    pub iterator: Parenthesized<ForIterator>, // `( *expression*; *expression*; *expression* )`
-    pub body: ForBody,                        // `{ ... }`
+pub struct ForStatement {
+    pub r#for: Span,                                   // `for`
+    pub iterator: Parenthesized<ForStatementIterator>, // `( *expression*; *expression*; *expression* )`
+    pub body: ForStatementBody,                        // `{ ... }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct ForIterator {
+pub struct ForStatementIterator {
     pub initializations: SemicolonTerminated<CommaSeparated<Expression>>, // `*expression*;`
     pub conditions: SemicolonTerminated<CommaSeparated<Expression>>,      // `*expression*;`
     pub r#loop: CommaSeparated<Expression>,                               // `*expression*`
@@ -70,50 +69,57 @@ pub struct ForIterator {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum ForBody {
+pub enum ForStatementBody {
     Statement(Box<Statement>),
-    Braced(Braced<Vec<Statement>>),
     Block {
         colon: Span,                // `:`
         statements: Vec<Statement>, // `*statements*`
         endfor: Span,               // `endfor`
-        semicolon: Span,            // `;`
+        ending: Ending,             // `;` or `?>`
     },
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct DoWhileLoop {
+pub struct DoWhileStatement {
     pub r#do: Span,                                                // `do`
-    pub body: DoWhileBody,                                         // `{ ... }`
+    pub body: Box<Statement>,                                      // `{ ... }`
     pub r#while: Span,                                             // `while`
     pub condition: SemicolonTerminated<Parenthesized<Expression>>, // `( *expression* )`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum DoWhileBody {
-    Statement(Box<Statement>),
-    Braced(Braced<Vec<Statement>>),
-}
-
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct WhileLoop {
+pub struct WhileStatement {
     pub r#while: Span,                        // `while`
     pub condition: Parenthesized<Expression>, // `( *expression* )`
-    pub body: WhileBody,                      // `{ ... }`
+    pub body: WhileStatementBody,             // `{ ... }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum WhileBody {
+pub enum WhileStatementBody {
     Statement(Box<Statement>),
-    Braced(Braced<Vec<Statement>>),
     Block {
         colon: Span,                // `:`
         statements: Vec<Statement>, // `*statements*`
         endwhile: Span,             // `endwhile`
-        semicolon: Span,            // `;`
+        ending: Ending,             // `;` or `?>`
     },
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct BreakStatement {
+    pub r#break: Span,             // `break`
+    pub level: Option<Expression>, // `*expression*`
+    pub ending: Ending,            // `;` or `?>`
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct ContinueStatement {
+    pub r#continue: Span,          // `continue`
+    pub level: Option<Expression>, // `*expression*`
+    pub ending: Ending,            // `;` or `?>`
 }

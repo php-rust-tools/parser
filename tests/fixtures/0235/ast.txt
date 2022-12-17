@@ -1,13 +1,19 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: Nowdoc {
-                value: "Hello, {$name}!",
-            },
-            semicolon: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: Nowdoc {
+            value: "Hello, {$name}!",
+        },
+        ending: Semicolon(
+            Span(
                 5,
                 4,
             ),
-        },
-    ),
+        ),
+    },
 ]

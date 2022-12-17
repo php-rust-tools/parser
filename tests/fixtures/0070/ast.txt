@@ -1,11 +1,17 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     DoWhile(
-        DoWhileLoop {
+        DoWhileStatement {
             do: Span(
                 2,
                 1,
             ),
-            body: Braced(
+            body: Block(
                 Braced {
                     left_brace: Span(
                         2,
@@ -13,6 +19,10 @@
                     ),
                     inner: [
                         Echo {
+                            echo: Span(
+                                3,
+                                5,
+                            ),
                             values: [
                                 LiteralString {
                                     span: Span(
@@ -22,6 +32,12 @@
                                     value: "Hi!",
                                 },
                             ],
+                            ending: Semicolon(
+                                Span(
+                                    3,
+                                    15,
+                                ),
+                            ),
                         },
                     ],
                     right_brace: Span(

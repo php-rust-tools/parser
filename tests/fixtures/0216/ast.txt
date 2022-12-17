@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Class(
         Class {
             span: Span(
@@ -65,25 +71,25 @@
                             },
                             body: Some(
                                 [
-                                    Expression(
-                                        SemicolonTerminated {
-                                            inner: Exit {
-                                                value: Some(
-                                                    LiteralInteger {
-                                                        span: Span(
-                                                            5,
-                                                            14,
-                                                        ),
-                                                        value: "1",
-                                                    },
-                                                ),
-                                            },
-                                            semicolon: Span(
+                                    Expression {
+                                        expression: Exit {
+                                            value: Some(
+                                                LiteralInteger {
+                                                    span: Span(
+                                                        5,
+                                                        14,
+                                                    ),
+                                                    value: "1",
+                                                },
+                                            ),
+                                        },
+                                        ending: Semicolon(
+                                            Span(
                                                 5,
                                                 16,
                                             ),
-                                        },
-                                    ),
+                                        ),
+                                    },
                                 ],
                             ),
                             modifiers: MethodModifierGroup {

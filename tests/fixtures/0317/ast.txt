@@ -1,18 +1,24 @@
 [
-    ShortEcho {
-        span: Span(
+    EchoOpeningTag(
+        Span(
             1,
             1,
         ),
-        values: [
-            LiteralString {
-                span: Span(
-                    1,
-                    5,
-                ),
-                value: "<?php\n",
-            },
-        ],
+    ),
+    Expression {
+        expression: LiteralString {
+            span: Span(
+                1,
+                5,
+            ),
+            value: "<?php\n",
+        },
+        ending: CloseTag(
+            Span(
+                1,
+                15,
+            ),
+        ),
     },
     InlineHtml(
         "\nsome html",

@@ -1,60 +1,108 @@
 [
-    ShortEcho {
-        span: Span(
+    EchoOpeningTag(
+        Span(
             1,
             1,
         ),
-        values: [
-            LiteralString {
-                span: Span(
-                    1,
-                    5,
-                ),
-                value: "<?php\n",
-            },
-        ],
+    ),
+    Expression {
+        expression: LiteralString {
+            span: Span(
+                1,
+                5,
+            ),
+            value: "<?php\n",
+        },
+        ending: CloseTag(
+            Span(
+                1,
+                15,
+            ),
+        ),
     },
     InlineHtml(
         "\nsome html\n",
     ),
-    If {
-        condition: Parenthesized {
-            left_parenthesis: Span(
+    FullOpeningTag(
+        Span(
+            3,
+            1,
+        ),
+    ),
+    If(
+        IfStatement {
+            if: Span(
                 4,
-                8,
+                5,
             ),
-            inner: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    4,
+                    8,
+                ),
+                inner: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                4,
+                                9,
+                            ),
+                            name: "d",
+                        },
+                    ),
+                ),
+                right_parenthesis: Span(
+                    4,
+                    11,
+                ),
+            },
+            body: Statement {
+                statement: Block(
+                    Braced {
+                        left_brace: Span(
                             4,
-                            9,
+                            13,
                         ),
-                        name: "d",
+                        inner: [
+                            Echo {
+                                echo: Span(
+                                    5,
+                                    9,
+                                ),
+                                values: [
+                                    LiteralString {
+                                        span: Span(
+                                            5,
+                                            14,
+                                        ),
+                                        value: "// ",
+                                    },
+                                ],
+                                ending: Semicolon(
+                                    Span(
+                                        5,
+                                        19,
+                                    ),
+                                ),
+                            },
+                        ],
+                        right_brace: Span(
+                            6,
+                            5,
+                        ),
                     },
                 ),
-            ),
-            right_parenthesis: Span(
-                4,
-                11,
-            ),
-        },
-        then: [
-            Echo {
-                values: [
-                    LiteralString {
-                        span: Span(
-                            5,
-                            14,
-                        ),
-                        value: "// ",
-                    },
-                ],
+                elseifs: [],
+                else: None,
             },
-        ],
-        else_ifs: [],
-        else: None,
-    },
+        },
+    ),
+    ClosingTag(
+        Span(
+            7,
+            1,
+        ),
+    ),
     InlineHtml(
         "\n",
     ),

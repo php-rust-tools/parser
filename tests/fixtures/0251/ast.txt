@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Function(
         Function {
             comments: CommentGroup {
@@ -116,6 +122,10 @@
             ampersand: None,
             body: [
                 Return {
+                    return: Span(
+                        6,
+                        5,
+                    ),
                     value: Some(
                         Variable(
                             SimpleVariable(
@@ -127,6 +137,12 @@
                                     name: "i",
                                 },
                             ),
+                        ),
+                    ),
+                    ending: Semicolon(
+                        Span(
+                            6,
+                            14,
                         ),
                     ),
                 },

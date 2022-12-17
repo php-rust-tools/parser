@@ -1,96 +1,102 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    1,
-                                ),
-                                name: "e",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        3,
-                        4,
-                    ),
-                    right: FunctionCall {
-                        target: Parenthesized {
-                            start: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
                                 3,
-                                6,
+                                1,
                             ),
-                            expr: ArrowFunction(
-                                ArrowFunction {
+                            name: "e",
+                        },
+                    ),
+                ),
+                span: Span(
+                    3,
+                    4,
+                ),
+                right: FunctionCall {
+                    target: Parenthesized {
+                        start: Span(
+                            3,
+                            6,
+                        ),
+                        expr: ArrowFunction(
+                            ArrowFunction {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                static: None,
+                                ampersand: None,
+                                fn: Span(
+                                    3,
+                                    7,
+                                ),
+                                attributes: [],
+                                parameters: FunctionParameterList {
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    static: None,
-                                    ampersand: None,
-                                    fn: Span(
+                                    left_parenthesis: Span(
                                         3,
-                                        7,
+                                        10,
                                     ),
-                                    attributes: [],
-                                    parameters: FunctionParameterList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        left_parenthesis: Span(
-                                            3,
-                                            10,
-                                        ),
-                                        members: [],
-                                        right_parenthesis: Span(
-                                            3,
-                                            11,
-                                        ),
-                                    },
-                                    return_type: Some(
-                                        Named(
-                                            Span(
-                                                3,
-                                                14,
-                                            ),
-                                            "\Generator",
-                                        ),
+                                    members: [],
+                                    right_parenthesis: Span(
+                                        3,
+                                        11,
                                     ),
-                                    body: Yield {
-                                        key: None,
-                                        value: None,
-                                    },
                                 },
-                            ),
-                            end: Span(
-                                3,
-                                33,
-                            ),
-                        },
-                        arguments: ArgumentList {
-                            comments: CommentGroup {
-                                comments: [],
+                                return_type: Some(
+                                    Named(
+                                        Span(
+                                            3,
+                                            14,
+                                        ),
+                                        "\Generator",
+                                    ),
+                                ),
+                                body: Yield {
+                                    key: None,
+                                    value: None,
+                                },
                             },
-                            start: Span(
-                                3,
-                                34,
-                            ),
-                            arguments: [],
-                            end: Span(
-                                3,
-                                35,
-                            ),
+                        ),
+                        end: Span(
+                            3,
+                            33,
+                        ),
+                    },
+                    arguments: ArgumentList {
+                        comments: CommentGroup {
+                            comments: [],
                         },
+                        start: Span(
+                            3,
+                            34,
+                        ),
+                        arguments: [],
+                        end: Span(
+                            3,
+                            35,
+                        ),
                     },
                 },
-            ),
-            semicolon: Span(
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 3,
                 36,
             ),
-        },
-    ),
+        ),
+    },
 ]

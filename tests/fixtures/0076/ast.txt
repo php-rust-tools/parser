@@ -1,69 +1,75 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: NullsafeMethodCall {
-                target: NullsafePropertyFetch {
-                    target: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    1,
-                                    7,
-                                ),
-                                name: "a",
-                            },
-                        ),
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: NullsafeMethodCall {
+            target: NullsafePropertyFetch {
+                target: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                1,
+                                7,
+                            ),
+                            name: "a",
+                        },
                     ),
-                    span: Span(
-                        1,
-                        9,
-                    ),
-                    property: Identifier(
-                        SimpleIdentifier(
-                            SimpleIdentifier {
-                                span: Span(
-                                    1,
-                                    12,
-                                ),
-                                value: "b",
-                            },
-                        ),
-                    ),
-                },
+                ),
                 span: Span(
                     1,
-                    13,
+                    9,
                 ),
-                method: Identifier(
+                property: Identifier(
                     SimpleIdentifier(
                         SimpleIdentifier {
                             span: Span(
                                 1,
-                                16,
+                                12,
                             ),
-                            value: "c",
+                            value: "b",
                         },
                     ),
                 ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    start: Span(
-                        1,
-                        17,
-                    ),
-                    arguments: [],
-                    end: Span(
-                        1,
-                        18,
-                    ),
-                },
             },
-            semicolon: Span(
+            span: Span(
+                1,
+                13,
+            ),
+            method: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            1,
+                            16,
+                        ),
+                        value: "c",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    1,
+                    17,
+                ),
+                arguments: [],
+                end: Span(
+                    1,
+                    18,
+                ),
+            },
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 19,
             ),
-        },
-    ),
+        ),
+    },
 ]

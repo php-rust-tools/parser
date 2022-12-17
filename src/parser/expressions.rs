@@ -1267,7 +1267,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
 
                         Expression::StaticMethodClosureCreation {
                             target: lhs,
-                            span,
+                            double_colon: span,
                             method: Box::new(property),
                             placeholder,
                         }
@@ -1276,7 +1276,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
 
                         Expression::StaticMethodCall {
                             target: lhs,
-                            span,
+                            double_colon: span,
                             method: Box::new(property),
                             arguments,
                         }

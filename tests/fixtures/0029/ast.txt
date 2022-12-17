@@ -1,13 +1,55 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: PropertyFetch {
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: PropertyFetch {
+            target: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            1,
+                            7,
+                        ),
+                        name: "foo",
+                    },
+                ),
+            ),
+            span: Span(
+                1,
+                11,
+            ),
+            property: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            1,
+                            13,
+                        ),
+                        value: "bar",
+                    },
+                ),
+            ),
+        },
+        ending: Semicolon(
+            Span(
+                1,
+                16,
+            ),
+        ),
+    },
+    Expression {
+        expression: PropertyFetch {
+            target: PropertyFetch {
                 target: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: Span(
                                 1,
-                                7,
+                                18,
                             ),
                             name: "foo",
                         },
@@ -15,77 +57,41 @@
                 ),
                 span: Span(
                     1,
-                    11,
+                    22,
                 ),
                 property: Identifier(
                     SimpleIdentifier(
                         SimpleIdentifier {
                             span: Span(
                                 1,
-                                13,
+                                24,
                             ),
                             value: "bar",
                         },
                     ),
                 ),
             },
-            semicolon: Span(
+            span: Span(
                 1,
-                16,
+                27,
+            ),
+            property: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            1,
+                            29,
+                        ),
+                        value: "baz",
+                    },
+                ),
             ),
         },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: PropertyFetch {
-                target: PropertyFetch {
-                    target: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    1,
-                                    18,
-                                ),
-                                name: "foo",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        1,
-                        22,
-                    ),
-                    property: Identifier(
-                        SimpleIdentifier(
-                            SimpleIdentifier {
-                                span: Span(
-                                    1,
-                                    24,
-                                ),
-                                value: "bar",
-                            },
-                        ),
-                    ),
-                },
-                span: Span(
-                    1,
-                    27,
-                ),
-                property: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
-                            span: Span(
-                                1,
-                                29,
-                            ),
-                            value: "baz",
-                        },
-                    ),
-                ),
-            },
-            semicolon: Span(
+        ending: Semicolon(
+            Span(
                 1,
                 32,
             ),
-        },
-    ),
+        ),
+    },
 ]

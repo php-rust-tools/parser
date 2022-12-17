@@ -1,13 +1,69 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: MethodCall {
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: MethodCall {
+            target: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            1,
+                            7,
+                        ),
+                        name: "foo",
+                    },
+                ),
+            ),
+            span: Span(
+                1,
+                11,
+            ),
+            method: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            1,
+                            13,
+                        ),
+                        value: "bar",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    1,
+                    16,
+                ),
+                arguments: [],
+                end: Span(
+                    1,
+                    17,
+                ),
+            },
+        },
+        ending: Semicolon(
+            Span(
+                1,
+                18,
+            ),
+        ),
+    },
+    Expression {
+        expression: MethodCall {
+            target: MethodCall {
                 target: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: Span(
                                 1,
-                                7,
+                                20,
                             ),
                             name: "foo",
                         },
@@ -15,14 +71,14 @@
                 ),
                 span: Span(
                     1,
-                    11,
+                    24,
                 ),
                 method: Identifier(
                     SimpleIdentifier(
                         SimpleIdentifier {
                             span: Span(
                                 1,
-                                13,
+                                26,
                             ),
                             value: "bar",
                         },
@@ -34,78 +90,78 @@
                     },
                     start: Span(
                         1,
-                        16,
+                        29,
                     ),
                     arguments: [],
                     end: Span(
                         1,
-                        17,
+                        30,
                     ),
                 },
             },
-            semicolon: Span(
+            span: Span(
                 1,
-                18,
+                31,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: MethodCall {
-                target: MethodCall {
-                    target: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    1,
-                                    20,
-                                ),
-                                name: "foo",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        1,
-                        24,
-                    ),
-                    method: Identifier(
-                        SimpleIdentifier(
-                            SimpleIdentifier {
-                                span: Span(
-                                    1,
-                                    26,
-                                ),
-                                value: "bar",
-                            },
-                        ),
-                    ),
-                    arguments: ArgumentList {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        start: Span(
+            method: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
                             1,
-                            29,
+                            33,
                         ),
-                        arguments: [],
-                        end: Span(
-                            1,
-                            30,
-                        ),
+                        value: "baz",
                     },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
                 },
+                start: Span(
+                    1,
+                    36,
+                ),
+                arguments: [],
+                end: Span(
+                    1,
+                    37,
+                ),
+            },
+        },
+        ending: Semicolon(
+            Span(
+                1,
+                38,
+            ),
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: MethodCall {
+                target: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                1,
+                                40,
+                            ),
+                            name: "foo",
+                        },
+                    ),
+                ),
                 span: Span(
                     1,
-                    31,
+                    44,
                 ),
                 method: Identifier(
                     SimpleIdentifier(
                         SimpleIdentifier {
                             span: Span(
                                 1,
-                                33,
+                                46,
                             ),
-                            value: "baz",
+                            value: "bar",
                         },
                     ),
                 ),
@@ -115,85 +171,35 @@
                     },
                     start: Span(
                         1,
-                        36,
+                        49,
                     ),
                     arguments: [],
                     end: Span(
                         1,
-                        37,
+                        50,
                     ),
                 },
             },
-            semicolon: Span(
-                1,
-                38,
-            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    1,
+                    51,
+                ),
+                arguments: [],
+                end: Span(
+                    1,
+                    52,
+                ),
+            },
         },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: MethodCall {
-                    target: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    1,
-                                    40,
-                                ),
-                                name: "foo",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        1,
-                        44,
-                    ),
-                    method: Identifier(
-                        SimpleIdentifier(
-                            SimpleIdentifier {
-                                span: Span(
-                                    1,
-                                    46,
-                                ),
-                                value: "bar",
-                            },
-                        ),
-                    ),
-                    arguments: ArgumentList {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        start: Span(
-                            1,
-                            49,
-                        ),
-                        arguments: [],
-                        end: Span(
-                            1,
-                            50,
-                        ),
-                    },
-                },
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    start: Span(
-                        1,
-                        51,
-                    ),
-                    arguments: [],
-                    end: Span(
-                        1,
-                        52,
-                    ),
-                },
-            },
-            semicolon: Span(
+        ending: Semicolon(
+            Span(
                 1,
                 53,
             ),
-        },
-    ),
+        ),
+    },
 ]

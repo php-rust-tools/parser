@@ -1,81 +1,87 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: New {
-                span: Span(
-                    1,
-                    7,
-                ),
-                target: AnonymousClass(
-                    AnonymousClass {
-                        attributes: [],
-                        span: Span(
-                            1,
-                            11,
-                        ),
-                        extends: None,
-                        implements: None,
-                        body: ClassBody {
-                            start: Span(
-                                1,
-                                23,
-                            ),
-                            end: Span(
-                                1,
-                                24,
-                            ),
-                            members: [],
-                        },
-                    },
-                ),
-                arguments: Some(
-                    ArgumentList {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: New {
+            span: Span(
+                1,
+                7,
+            ),
+            target: AnonymousClass(
+                AnonymousClass {
+                    attributes: [],
+                    span: Span(
+                        1,
+                        11,
+                    ),
+                    extends: None,
+                    implements: None,
+                    body: ClassBody {
                         start: Span(
                             1,
-                            16,
+                            23,
                         ),
-                        arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: LiteralInteger {
-                                    span: Span(
-                                        1,
-                                        17,
-                                    ),
-                                    value: "1",
-                                },
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: LiteralInteger {
-                                    span: Span(
-                                        1,
-                                        20,
-                                    ),
-                                    value: "2",
-                                },
-                            },
-                        ],
                         end: Span(
                             1,
-                            21,
+                            24,
                         ),
+                        members: [],
                     },
-                ),
-            },
-            semicolon: Span(
+                },
+            ),
+            arguments: Some(
+                ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        1,
+                        16,
+                    ),
+                    arguments: [
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: Span(
+                                    1,
+                                    17,
+                                ),
+                                value: "1",
+                            },
+                        },
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: LiteralInteger {
+                                span: Span(
+                                    1,
+                                    20,
+                                ),
+                                value: "2",
+                            },
+                        },
+                    ],
+                    end: Span(
+                        1,
+                        21,
+                    ),
+                },
+            ),
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 25,
             ),
-        },
-    ),
+        ),
+    },
 ]

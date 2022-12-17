@@ -1,238 +1,244 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    1,
-                                ),
-                                name: "a",
-                            },
-                        ),
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                3,
+                                1,
+                            ),
+                            name: "a",
+                        },
                     ),
+                ),
+                span: Span(
+                    3,
+                    4,
+                ),
+                right: New {
                     span: Span(
                         3,
-                        4,
+                        6,
                     ),
-                    right: New {
-                        span: Span(
-                            3,
-                            6,
-                        ),
-                        target: Identifier(
-                            SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: Span(
-                                        3,
-                                        10,
-                                    ),
-                                    value: "Foo",
-                                },
-                            ),
-                        ),
-                        arguments: Some(
-                            ArgumentList {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                start: Span(
+                    target: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span(
                                     3,
-                                    13,
+                                    10,
                                 ),
-                                arguments: [],
-                                end: Span(
-                                    3,
-                                    14,
-                                ),
+                                value: "Foo",
                             },
                         ),
-                    },
+                    ),
+                    arguments: Some(
+                        ArgumentList {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            start: Span(
+                                3,
+                                13,
+                            ),
+                            arguments: [],
+                            end: Span(
+                                3,
+                                14,
+                            ),
+                        },
+                    ),
                 },
-            ),
-            semicolon: Span(
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 3,
                 15,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    4,
-                                    1,
-                                ),
-                                name: "b",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        4,
-                        4,
-                    ),
-                    right: ArithmeticOperation(
-                        Positive {
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
                                 4,
-                                6,
+                                1,
                             ),
-                            right: LiteralInteger {
-                                span: Span(
-                                    4,
-                                    7,
-                                ),
-                                value: "1",
-                            },
+                            name: "b",
                         },
                     ),
-                },
-            ),
-            semicolon: Span(
+                ),
+                span: Span(
+                    4,
+                    4,
+                ),
+                right: ArithmeticOperation(
+                    Positive {
+                        span: Span(
+                            4,
+                            6,
+                        ),
+                        right: LiteralInteger {
+                            span: Span(
+                                4,
+                                7,
+                            ),
+                            value: "1",
+                        },
+                    },
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 4,
                 8,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    5,
-                                    1,
-                                ),
-                                name: "c",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        5,
-                        4,
-                    ),
-                    right: BitwiseOperation(
-                        Not {
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
                                 5,
-                                6,
+                                1,
                             ),
-                            right: LiteralInteger {
-                                span: Span(
-                                    5,
-                                    7,
-                                ),
-                                value: "2",
-                            },
+                            name: "c",
                         },
                     ),
-                },
-            ),
-            semicolon: Span(
+                ),
+                span: Span(
+                    5,
+                    4,
+                ),
+                right: BitwiseOperation(
+                    Not {
+                        span: Span(
+                            5,
+                            6,
+                        ),
+                        right: LiteralInteger {
+                            span: Span(
+                                5,
+                                7,
+                            ),
+                            value: "2",
+                        },
+                    },
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 5,
                 8,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    6,
-                                    1,
-                                ),
-                                name: "d",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        6,
-                        4,
-                    ),
-                    right: ArithmeticOperation(
-                        PreDecrement {
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
                                 6,
-                                6,
+                                1,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            6,
-                                            8,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
+                            name: "d",
                         },
                     ),
-                },
-            ),
-            semicolon: Span(
+                ),
+                span: Span(
+                    6,
+                    4,
+                ),
+                right: ArithmeticOperation(
+                    PreDecrement {
+                        span: Span(
+                            6,
+                            6,
+                        ),
+                        right: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        6,
+                                        8,
+                                    ),
+                                    name: "b",
+                                },
+                            ),
+                        ),
+                    },
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 6,
                 10,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    7,
-                                    1,
-                                ),
-                                name: "e",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        7,
-                        4,
-                    ),
-                    right: ArithmeticOperation(
-                        PreIncrement {
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
                                 7,
-                                6,
+                                1,
                             ),
-                            right: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            7,
-                                            8,
-                                        ),
-                                        name: "d",
-                                    },
-                                ),
-                            ),
+                            name: "e",
                         },
                     ),
-                },
-            ),
-            semicolon: Span(
+                ),
+                span: Span(
+                    7,
+                    4,
+                ),
+                right: ArithmeticOperation(
+                    PreIncrement {
+                        span: Span(
+                            7,
+                            6,
+                        ),
+                        right: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        7,
+                                        8,
+                                    ),
+                                    name: "d",
+                                },
+                            ),
+                        ),
+                    },
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 7,
                 10,
             ),
-        },
-    ),
+        ),
+    },
 ]

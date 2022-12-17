@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Class(
         Class {
             span: Span(
@@ -65,65 +71,65 @@
                             },
                             body: Some(
                                 [
-                                    Expression(
-                                        SemicolonTerminated {
-                                            inner: AssignmentOperation(
-                                                Assign {
-                                                    left: Variable(
-                                                        SimpleVariable(
-                                                            SimpleVariable {
+                                    Expression {
+                                        expression: AssignmentOperation(
+                                            Assign {
+                                                left: Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span(
+                                                                5,
+                                                                9,
+                                                            ),
+                                                            name: "a",
+                                                        },
+                                                    ),
+                                                ),
+                                                span: Span(
+                                                    5,
+                                                    12,
+                                                ),
+                                                right: StaticMethodCall {
+                                                    target: Static,
+                                                    double_colon: Span(
+                                                        5,
+                                                        20,
+                                                    ),
+                                                    method: Identifier(
+                                                        SimpleIdentifier(
+                                                            SimpleIdentifier {
                                                                 span: Span(
                                                                     5,
-                                                                    9,
+                                                                    22,
                                                                 ),
-                                                                name: "a",
+                                                                value: "bar",
                                                             },
                                                         ),
                                                     ),
-                                                    span: Span(
-                                                        5,
-                                                        12,
-                                                    ),
-                                                    right: StaticMethodCall {
-                                                        target: Static,
-                                                        span: Span(
-                                                            5,
-                                                            20,
-                                                        ),
-                                                        method: Identifier(
-                                                            SimpleIdentifier(
-                                                                SimpleIdentifier {
-                                                                    span: Span(
-                                                                        5,
-                                                                        22,
-                                                                    ),
-                                                                    value: "bar",
-                                                                },
-                                                            ),
-                                                        ),
-                                                        arguments: ArgumentList {
-                                                            comments: CommentGroup {
-                                                                comments: [],
-                                                            },
-                                                            start: Span(
-                                                                5,
-                                                                25,
-                                                            ),
-                                                            arguments: [],
-                                                            end: Span(
-                                                                5,
-                                                                26,
-                                                            ),
+                                                    arguments: ArgumentList {
+                                                        comments: CommentGroup {
+                                                            comments: [],
                                                         },
+                                                        start: Span(
+                                                            5,
+                                                            25,
+                                                        ),
+                                                        arguments: [],
+                                                        end: Span(
+                                                            5,
+                                                            26,
+                                                        ),
                                                     },
                                                 },
-                                            ),
-                                            semicolon: Span(
+                                            },
+                                        ),
+                                        ending: Semicolon(
+                                            Span(
                                                 5,
                                                 27,
                                             ),
-                                        },
-                                    ),
+                                        ),
+                                    },
                                 ],
                             ),
                             modifiers: MethodModifierGroup {

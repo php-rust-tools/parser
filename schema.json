@@ -1719,6 +1719,31 @@
         }
       }
     },
+    "BreakStatement": {
+      "type": "object",
+      "required": [
+        "break",
+        "ending"
+      ],
+      "properties": {
+        "break": {
+          "$ref": "#/definitions/Span"
+        },
+        "ending": {
+          "$ref": "#/definitions/Ending"
+        },
+        "level": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Expression"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
     "ByteString": {
       "type": "string",
       "format": "byte-string"
@@ -2955,6 +2980,31 @@
         }
       }
     },
+    "ContinueStatement": {
+      "type": "object",
+      "required": [
+        "continue",
+        "ending"
+      ],
+      "properties": {
+        "continue": {
+          "$ref": "#/definitions/Span"
+        },
+        "ending": {
+          "$ref": "#/definitions/Ending"
+        },
+        "level": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Expression"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
     "Declare": {
       "type": "object",
       "required": [
@@ -3154,47 +3204,7 @@
         }
       }
     },
-    "DoWhileBody": {
-      "oneOf": [
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "statement"
-              ]
-            },
-            "value": {
-              "$ref": "#/definitions/Statement"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "braced"
-              ]
-            },
-            "value": {
-              "$ref": "#/definitions/Braced_for_Array_of_Statement"
-            }
-          }
-        }
-      ]
-    },
-    "DoWhileLoop": {
+    "DoWhileStatement": {
       "type": "object",
       "required": [
         "body",
@@ -3204,7 +3214,7 @@
       ],
       "properties": {
         "body": {
-          "$ref": "#/definitions/DoWhileBody"
+          "$ref": "#/definitions/Statement"
         },
         "condition": {
           "$ref": "#/definitions/SemicolonTerminated_for_Parenthesized_for_Expression"
@@ -3236,23 +3246,45 @@
         }
       }
     },
-    "ElseIf": {
-      "type": "object",
-      "required": [
-        "body",
-        "condition"
-      ],
-      "properties": {
-        "body": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Statement"
+    "Ending": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "semicolon"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
+            }
           }
         },
-        "condition": {
-          "$ref": "#/definitions/Expression"
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "close_tag"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
+            }
+          }
         }
-      }
+      ]
     },
     "Expression": {
       "oneOf": [
@@ -3337,6 +3369,35 @@
                       "type": "null"
                     }
                   ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "echo"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "values"
+              ],
+              "properties": {
+                "values": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Expression"
+                  }
                 }
               }
             }
@@ -3958,19 +4019,19 @@
               "type": "object",
               "required": [
                 "arguments",
+                "double_colon",
                 "method",
-                "span",
                 "target"
               ],
               "properties": {
                 "arguments": {
                   "$ref": "#/definitions/ArgumentList"
                 },
+                "double_colon": {
+                  "$ref": "#/definitions/Span"
+                },
                 "method": {
                   "$ref": "#/definitions/Expression"
-                },
-                "span": {
-                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -3995,20 +4056,20 @@
             "value": {
               "type": "object",
               "required": [
+                "double_colon",
                 "method",
                 "placeholder",
-                "span",
                 "target"
               ],
               "properties": {
+                "double_colon": {
+                  "$ref": "#/definitions/Span"
+                },
                 "method": {
                   "$ref": "#/definitions/Expression"
                 },
                 "placeholder": {
                   "$ref": "#/definitions/ArgumentPlaceholder"
-                },
-                "span": {
-                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -4996,7 +5057,26 @@
         }
       }
     },
-    "ForBody": {
+    "ForStatement": {
+      "type": "object",
+      "required": [
+        "body",
+        "for",
+        "iterator"
+      ],
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/ForStatementBody"
+        },
+        "for": {
+          "$ref": "#/definitions/Span"
+        },
+        "iterator": {
+          "$ref": "#/definitions/Parenthesized_for_ForStatementIterator"
+        }
+      }
+    },
+    "ForStatementBody": {
       "oneOf": [
         {
           "type": "object",
@@ -5013,24 +5093,6 @@
             },
             "value": {
               "$ref": "#/definitions/Statement"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "braced"
-              ]
-            },
-            "value": {
-              "$ref": "#/definitions/Braced_for_Array_of_Statement"
             }
           }
         },
@@ -5052,7 +5114,7 @@
               "required": [
                 "colon",
                 "endfor",
-                "semicolon",
+                "ending",
                 "statements"
               ],
               "properties": {
@@ -5062,8 +5124,8 @@
                 "endfor": {
                   "$ref": "#/definitions/Span"
                 },
-                "semicolon": {
-                  "$ref": "#/definitions/Span"
+                "ending": {
+                  "$ref": "#/definitions/Ending"
                 },
                 "statements": {
                   "type": "array",
@@ -5077,7 +5139,7 @@
         }
       ]
     },
-    "ForIterator": {
+    "ForStatementIterator": {
       "type": "object",
       "required": [
         "conditions",
@@ -5096,26 +5158,26 @@
         }
       }
     },
-    "ForLoop": {
+    "ForeachStatement": {
       "type": "object",
       "required": [
         "body",
-        "for",
+        "foreach",
         "iterator"
       ],
       "properties": {
         "body": {
-          "$ref": "#/definitions/ForBody"
+          "$ref": "#/definitions/ForeachStatementBody"
         },
-        "for": {
+        "foreach": {
           "$ref": "#/definitions/Span"
         },
         "iterator": {
-          "$ref": "#/definitions/Parenthesized_for_ForIterator"
+          "$ref": "#/definitions/Parenthesized_for_ForeachStatementIterator"
         }
       }
     },
-    "ForeachBody": {
+    "ForeachStatementBody": {
       "oneOf": [
         {
           "type": "object",
@@ -5145,24 +5207,6 @@
             "type": {
               "type": "string",
               "enum": [
-                "braced"
-              ]
-            },
-            "value": {
-              "$ref": "#/definitions/Braced_for_Array_of_Statement"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
                 "block"
               ]
             },
@@ -5171,7 +5215,7 @@
               "required": [
                 "colon",
                 "endforeach",
-                "semicolon",
+                "ending",
                 "statements"
               ],
               "properties": {
@@ -5181,8 +5225,8 @@
                 "endforeach": {
                   "$ref": "#/definitions/Span"
                 },
-                "semicolon": {
-                  "$ref": "#/definitions/Span"
+                "ending": {
+                  "$ref": "#/definitions/Ending"
                 },
                 "statements": {
                   "type": "array",
@@ -5196,7 +5240,7 @@
         }
       ]
     },
-    "ForeachIterator": {
+    "ForeachStatementIterator": {
       "oneOf": [
         {
           "type": "object",
@@ -5245,8 +5289,8 @@
             "key_and_value": {
               "type": "object",
               "required": [
-                "arrow",
                 "as",
+                "double_arrow",
                 "expression",
                 "key",
                 "value"
@@ -5262,10 +5306,10 @@
                     }
                   ]
                 },
-                "arrow": {
+                "as": {
                   "$ref": "#/definitions/Span"
                 },
-                "as": {
+                "double_arrow": {
                   "$ref": "#/definitions/Span"
                 },
                 "expression": {
@@ -5283,25 +5327,6 @@
           "additionalProperties": false
         }
       ]
-    },
-    "ForeachLoop": {
-      "type": "object",
-      "required": [
-        "body",
-        "foreach",
-        "iterator"
-      ],
-      "properties": {
-        "body": {
-          "$ref": "#/definitions/ForeachBody"
-        },
-        "foreach": {
-          "$ref": "#/definitions/Span"
-        },
-        "iterator": {
-          "$ref": "#/definitions/Parenthesized_for_ForeachIterator"
-        }
-      }
     },
     "Function": {
       "type": "object",
@@ -5533,6 +5558,212 @@
           }
         }
       ]
+    },
+    "IfStatement": {
+      "type": "object",
+      "required": [
+        "body",
+        "condition",
+        "if"
+      ],
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/IfStatementBody"
+        },
+        "condition": {
+          "$ref": "#/definitions/Parenthesized_for_Expression"
+        },
+        "if": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "IfStatementBody": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "statement"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "elseifs",
+                "statement"
+              ],
+              "properties": {
+                "else": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/IfStatementElse"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "elseifs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/IfStatementElseIf"
+                  }
+                },
+                "statement": {
+                  "$ref": "#/definitions/Statement"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "block"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "colon",
+                "elseifs",
+                "endif",
+                "ending",
+                "statements"
+              ],
+              "properties": {
+                "colon": {
+                  "$ref": "#/definitions/Span"
+                },
+                "else": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/IfStatementElseBlock"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "elseifs": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/IfStatementElseIfBlock"
+                  }
+                },
+                "endif": {
+                  "$ref": "#/definitions/Span"
+                },
+                "ending": {
+                  "$ref": "#/definitions/Ending"
+                },
+                "statements": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Statement"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "IfStatementElse": {
+      "type": "object",
+      "required": [
+        "else",
+        "statement"
+      ],
+      "properties": {
+        "else": {
+          "$ref": "#/definitions/Span"
+        },
+        "statement": {
+          "$ref": "#/definitions/Statement"
+        }
+      }
+    },
+    "IfStatementElseBlock": {
+      "type": "object",
+      "required": [
+        "colon",
+        "else",
+        "statements"
+      ],
+      "properties": {
+        "colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "else": {
+          "$ref": "#/definitions/Span"
+        },
+        "statements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        }
+      }
+    },
+    "IfStatementElseIf": {
+      "type": "object",
+      "required": [
+        "condition",
+        "elseif",
+        "statement"
+      ],
+      "properties": {
+        "condition": {
+          "$ref": "#/definitions/Parenthesized_for_Expression"
+        },
+        "elseif": {
+          "$ref": "#/definitions/Span"
+        },
+        "statement": {
+          "$ref": "#/definitions/Statement"
+        }
+      }
+    },
+    "IfStatementElseIfBlock": {
+      "type": "object",
+      "required": [
+        "colon",
+        "condition",
+        "elseif",
+        "statements"
+      ],
+      "properties": {
+        "colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "condition": {
+          "$ref": "#/definitions/Parenthesized_for_Expression"
+        },
+        "elseif": {
+          "$ref": "#/definitions/Span"
+        },
+        "statements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        }
+      }
     },
     "IncludeKind": {
       "oneOf": [
@@ -6406,7 +6637,7 @@
         }
       }
     },
-    "Parenthesized_for_ForIterator": {
+    "Parenthesized_for_ForStatementIterator": {
       "type": "object",
       "required": [
         "inner",
@@ -6415,7 +6646,7 @@
       ],
       "properties": {
         "inner": {
-          "$ref": "#/definitions/ForIterator"
+          "$ref": "#/definitions/ForStatementIterator"
         },
         "left_parenthesis": {
           "$ref": "#/definitions/Span"
@@ -6425,7 +6656,7 @@
         }
       }
     },
-    "Parenthesized_for_ForeachIterator": {
+    "Parenthesized_for_ForeachStatementIterator": {
       "type": "object",
       "required": [
         "inner",
@@ -6434,7 +6665,7 @@
       ],
       "properties": {
         "inner": {
-          "$ref": "#/definitions/ForeachIterator"
+          "$ref": "#/definitions/ForeachStatementIterator"
         },
         "left_parenthesis": {
           "$ref": "#/definitions/Span"
@@ -6735,21 +6966,6 @@
         }
       }
     },
-    "SemicolonTerminated_for_Expression": {
-      "type": "object",
-      "required": [
-        "inner",
-        "semicolon"
-      ],
-      "properties": {
-        "inner": {
-          "$ref": "#/definitions/Expression"
-        },
-        "semicolon": {
-          "$ref": "#/definitions/Span"
-        }
-      }
-    },
     "SemicolonTerminated_for_Parenthesized_for_Expression": {
       "type": "object",
       "required": [
@@ -6814,6 +7030,78 @@
     },
     "Statement": {
       "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "full_opening_tag"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "short_opening_tag"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "echo_opening_tag"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "closing_tag"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
+            }
+          }
+        },
         {
           "type": "object",
           "required": [
@@ -6941,7 +7229,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/DoWhileLoop"
+              "$ref": "#/definitions/DoWhileStatement"
             }
           }
         },
@@ -6959,7 +7247,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/WhileLoop"
+              "$ref": "#/definitions/WhileStatement"
             }
           }
         },
@@ -6977,7 +7265,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/ForLoop"
+              "$ref": "#/definitions/ForStatement"
             }
           }
         },
@@ -6995,7 +7283,43 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/ForeachLoop"
+              "$ref": "#/definitions/ForeachStatement"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "break"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/BreakStatement"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "continue"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/ContinueStatement"
             }
           }
         },
@@ -7103,68 +7427,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "condition",
-                "else_ifs",
-                "then"
-              ],
-              "properties": {
-                "condition": {
-                  "$ref": "#/definitions/Parenthesized_for_Expression"
-                },
-                "else": {
-                  "type": [
-                    "array",
-                    "null"
-                  ],
-                  "items": {
-                    "$ref": "#/definitions/Statement"
-                  }
-                },
-                "else_ifs": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/ElseIf"
-                  }
-                },
-                "then": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Statement"
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "return"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "properties": {
-                "value": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Expression"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                }
-              }
+              "$ref": "#/definitions/IfStatement"
             }
           }
         },
@@ -7185,7 +7448,9 @@
               "type": "object",
               "required": [
                 "cases",
-                "condition"
+                "inner",
+                "left_parenthesis",
+                "right_parenthesis"
               ],
               "properties": {
                 "cases": {
@@ -7194,121 +7459,14 @@
                     "$ref": "#/definitions/Case"
                   }
                 },
-                "condition": {
-                  "$ref": "#/definitions/Parenthesized_for_Expression"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "break"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "break",
-                "semicolon"
-              ],
-              "properties": {
-                "break": {
+                "inner": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "left_parenthesis": {
                   "$ref": "#/definitions/Span"
                 },
-                "expression": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Expression"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "semicolon": {
+                "right_parenthesis": {
                   "$ref": "#/definitions/Span"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "continue"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "continue",
-                "semicolon"
-              ],
-              "properties": {
-                "continue": {
-                  "$ref": "#/definitions/Span"
-                },
-                "expression": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Expression"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "semicolon": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "short_echo"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "span",
-                "values"
-              ],
-              "properties": {
-                "span": {
-                  "$ref": "#/definitions/Span"
-                },
-                "values": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Expression"
-                  }
                 }
               }
             }
@@ -7330,9 +7488,17 @@
             "value": {
               "type": "object",
               "required": [
+                "echo",
+                "ending",
                 "values"
               ],
               "properties": {
+                "echo": {
+                  "$ref": "#/definitions/Span"
+                },
+                "ending": {
+                  "$ref": "#/definitions/Ending"
+                },
                 "values": {
                   "type": "array",
                   "items": {
@@ -7357,7 +7523,59 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/SemicolonTerminated_for_Expression"
+              "type": "object",
+              "required": [
+                "ending",
+                "expression"
+              ],
+              "properties": {
+                "ending": {
+                  "$ref": "#/definitions/Ending"
+                },
+                "expression": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "return"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "ending",
+                "return"
+              ],
+              "properties": {
+                "ending": {
+                  "$ref": "#/definitions/Ending"
+                },
+                "return": {
+                  "$ref": "#/definitions/Span"
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/Expression"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
             }
           }
         },
@@ -8820,7 +9038,26 @@
         }
       ]
     },
-    "WhileBody": {
+    "WhileStatement": {
+      "type": "object",
+      "required": [
+        "body",
+        "condition",
+        "while"
+      ],
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/WhileStatementBody"
+        },
+        "condition": {
+          "$ref": "#/definitions/Parenthesized_for_Expression"
+        },
+        "while": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "WhileStatementBody": {
       "oneOf": [
         {
           "type": "object",
@@ -8850,24 +9087,6 @@
             "type": {
               "type": "string",
               "enum": [
-                "braced"
-              ]
-            },
-            "value": {
-              "$ref": "#/definitions/Braced_for_Array_of_Statement"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
                 "block"
               ]
             },
@@ -8875,18 +9094,18 @@
               "type": "object",
               "required": [
                 "colon",
+                "ending",
                 "endwhile",
-                "semicolon",
                 "statements"
               ],
               "properties": {
                 "colon": {
                   "$ref": "#/definitions/Span"
                 },
-                "endwhile": {
-                  "$ref": "#/definitions/Span"
+                "ending": {
+                  "$ref": "#/definitions/Ending"
                 },
-                "semicolon": {
+                "endwhile": {
                   "$ref": "#/definitions/Span"
                 },
                 "statements": {
@@ -8900,25 +9119,6 @@
           }
         }
       ]
-    },
-    "WhileLoop": {
-      "type": "object",
-      "required": [
-        "body",
-        "condition",
-        "while"
-      ],
-      "properties": {
-        "body": {
-          "$ref": "#/definitions/WhileBody"
-        },
-        "condition": {
-          "$ref": "#/definitions/Parenthesized_for_Expression"
-        },
-        "while": {
-          "$ref": "#/definitions/Span"
-        }
-      }
     }
   }
 }

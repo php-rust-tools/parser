@@ -1,51 +1,57 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: Variable(
-                BracedVariableVariable(
-                    BracedVariableVariable {
-                        start: Span(
-                            1,
-                            7,
-                        ),
-                        variable: FunctionCall {
-                            target: Identifier(
-                                SimpleIdentifier(
-                                    SimpleIdentifier {
-                                        span: Span(
-                                            1,
-                                            9,
-                                        ),
-                                        value: "foo",
-                                    },
-                                ),
-                            ),
-                            arguments: ArgumentList {
-                                comments: CommentGroup {
-                                    comments: [],
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: Variable(
+            BracedVariableVariable(
+                BracedVariableVariable {
+                    start: Span(
+                        1,
+                        7,
+                    ),
+                    variable: FunctionCall {
+                        target: Identifier(
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: Span(
+                                        1,
+                                        9,
+                                    ),
+                                    value: "foo",
                                 },
-                                start: Span(
-                                    1,
-                                    12,
-                                ),
-                                arguments: [],
-                                end: Span(
-                                    1,
-                                    13,
-                                ),
-                            },
-                        },
-                        end: Span(
-                            1,
-                            14,
+                            ),
                         ),
+                        arguments: ArgumentList {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            start: Span(
+                                1,
+                                12,
+                            ),
+                            arguments: [],
+                            end: Span(
+                                1,
+                                13,
+                            ),
+                        },
                     },
-                ),
+                    end: Span(
+                        1,
+                        14,
+                    ),
+                },
             ),
-            semicolon: Span(
+        ),
+        ending: Semicolon(
+            Span(
                 1,
                 15,
             ),
-        },
-    ),
+        ),
+    },
 ]

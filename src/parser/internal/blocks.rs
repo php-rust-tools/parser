@@ -1,7 +1,6 @@
 use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::TokenKind;
 use crate::parser;
-use crate::parser::ast::Block;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::utils;
@@ -10,21 +9,50 @@ use crate::parser::state::State;
 pub fn block_statement(state: &mut State) -> ParseResult<Statement> {
     Ok(Statement::Block(utils::braced(
         state,
-        &|state: &mut State| multiple_statements(state, &TokenKind::RightBrace),
+        &|state: &mut State| multiple_statements_until(state, &TokenKind::RightBrace),
     )?))
 }
 
-pub fn multiple_statements(state: &mut State, until: &TokenKind) -> ParseResult<Block> {
-    let mut block = Block::new();
+pub fn multiple_statements_until(
+    state: &mut State,
+    until: &TokenKind,
+) -> ParseResult<Vec<Statement>> {
+    let mut statements = Vec::new();
 
-    while !state.stream.is_eof() && &state.stream.current().kind != until {
-        if let TokenKind::OpenTag(OpenTagKind::Full) = state.stream.current().kind {
+    let mut current = state.stream.current();
+    while &current.kind != until {
+        if let TokenKind::OpenTag(OpenTagKind::Full) = current.kind {
             state.stream.next();
+
+            current = state.stream.current();
             continue;
         }
 
-        block.push(parser::statement(state)?);
+        statements.push(parser::statement(state)?);
+        current = state.stream.current();
     }
 
-    Ok(block)
+    Ok(statements)
+}
+
+pub fn multiple_statements_until_any(
+    state: &mut State,
+    until: &[TokenKind],
+) -> ParseResult<Vec<Statement>> {
+    let mut statements = Vec::new();
+
+    let mut current = state.stream.current();
+    while !until.contains(&current.kind) {
+        if let TokenKind::OpenTag(OpenTagKind::Full) = current.kind {
+            state.stream.next();
+
+            current = state.stream.current();
+            continue;
+        }
+
+        statements.push(parser::statement(state)?);
+        current = state.stream.current();
+    }
+
+    Ok(statements)
 }

@@ -1,43 +1,49 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: Concat {
-                left: Concat {
-                    left: LiteralString {
-                        span: Span(
-                            1,
-                            7,
-                        ),
-                        value: "foo",
-                    },
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: Concat {
+            left: Concat {
+                left: LiteralString {
                     span: Span(
                         1,
-                        13,
+                        7,
                     ),
-                    right: LiteralString {
-                        span: Span(
-                            1,
-                            15,
-                        ),
-                        value: "bar",
-                    },
+                    value: "foo",
                 },
                 span: Span(
                     1,
-                    21,
+                    13,
                 ),
                 right: LiteralString {
                     span: Span(
                         1,
-                        23,
+                        15,
                     ),
-                    value: "baz",
+                    value: "bar",
                 },
             },
-            semicolon: Span(
+            span: Span(
+                1,
+                21,
+            ),
+            right: LiteralString {
+                span: Span(
+                    1,
+                    23,
+                ),
+                value: "baz",
+            },
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 28,
             ),
-        },
-    ),
+        ),
+    },
 ]

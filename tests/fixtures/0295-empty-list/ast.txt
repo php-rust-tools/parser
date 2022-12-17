@@ -1,59 +1,65 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: List {
-                        items: [
-                            ListItem {
-                                key: None,
-                                value: Empty,
-                            },
-                            ListItem {
-                                key: None,
-                                value: Empty,
-                            },
-                            ListItem {
-                                key: None,
-                                value: Empty,
-                            },
-                            ListItem {
-                                key: None,
-                                value: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                7,
-                                                5,
-                                            ),
-                                            name: "a",
-                                        },
-                                    ),
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: List {
+                    items: [
+                        ListItem {
+                            key: None,
+                            value: Empty,
+                        },
+                        ListItem {
+                            key: None,
+                            value: Empty,
+                        },
+                        ListItem {
+                            key: None,
+                            value: Empty,
+                        },
+                        ListItem {
+                            key: None,
+                            value: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            7,
+                                            5,
+                                        ),
+                                        name: "a",
+                                    },
                                 ),
-                            },
-                        ],
-                    },
-                    span: Span(
-                        8,
-                        3,
-                    ),
-                    right: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    8,
-                                    5,
-                                ),
-                                name: "b",
-                            },
-                        ),
-                    ),
+                            ),
+                        },
+                    ],
                 },
-            ),
-            semicolon: Span(
+                span: Span(
+                    8,
+                    3,
+                ),
+                right: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                8,
+                                5,
+                            ),
+                            name: "b",
+                        },
+                    ),
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 8,
                 7,
             ),
-        },
-    ),
+        ),
+    },
 ]

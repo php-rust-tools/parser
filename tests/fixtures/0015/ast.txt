@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Declare(
         Declare {
             span: Span(
@@ -43,25 +49,25 @@
                     13,
                 ),
                 statements: [
-                    Expression(
-                        SemicolonTerminated {
-                            inner: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            4,
-                                            5,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
+                    Expression {
+                        expression: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        4,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
                             ),
-                            semicolon: Span(
+                        ),
+                        ending: Semicolon(
+                            Span(
                                 4,
                                 7,
                             ),
-                        },
-                    ),
+                        ),
+                    },
                 ],
                 end: (
                     Span(
@@ -120,25 +126,25 @@
                     15,
                 ),
                 statements: [
-                    Expression(
-                        SemicolonTerminated {
-                            inner: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            8,
-                                            5,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
+                    Expression {
+                        expression: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        8,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
                             ),
-                            semicolon: Span(
+                        ),
+                        ending: Semicolon(
+                            Span(
                                 8,
                                 7,
                             ),
-                        },
-                    ),
+                        ),
+                    },
                 ],
                 end: (
                     Span(

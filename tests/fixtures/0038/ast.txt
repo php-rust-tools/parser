@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Function(
         Function {
             comments: CommentGroup {
@@ -55,64 +61,98 @@
             return_type: None,
             ampersand: None,
             body: [
-                If {
-                    condition: Parenthesized {
-                        left_parenthesis: Span(
+                If(
+                    IfStatement {
+                        if: Span(
                             4,
-                            8,
+                            5,
                         ),
-                        inner: ComparisonOperation(
-                            LessThan {
-                                left: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                4,
-                                                9,
-                                            ),
-                                            name: "n",
-                                        },
+                        condition: Parenthesized {
+                            left_parenthesis: Span(
+                                4,
+                                8,
+                            ),
+                            inner: ComparisonOperation(
+                                LessThan {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    4,
+                                                    9,
+                                                ),
+                                                name: "n",
+                                            },
+                                        ),
                                     ),
-                                ),
-                                span: Span(
-                                    4,
-                                    12,
-                                ),
-                                right: LiteralInteger {
                                     span: Span(
                                         4,
-                                        14,
+                                        12,
                                     ),
-                                    value: "2",
+                                    right: LiteralInteger {
+                                        span: Span(
+                                            4,
+                                            14,
+                                        ),
+                                        value: "2",
+                                    },
                                 },
-                            },
-                        ),
-                        right_parenthesis: Span(
-                            4,
-                            15,
-                        ),
-                    },
-                    then: [
-                        Return {
-                            value: Some(
-                                Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                5,
-                                                16,
-                                            ),
-                                            name: "n",
-                                        },
-                                    ),
-                                ),
+                            ),
+                            right_parenthesis: Span(
+                                4,
+                                15,
                             ),
                         },
-                    ],
-                    else_ifs: [],
-                    else: None,
-                },
+                        body: Statement {
+                            statement: Block(
+                                Braced {
+                                    left_brace: Span(
+                                        4,
+                                        17,
+                                    ),
+                                    inner: [
+                                        Return {
+                                            return: Span(
+                                                5,
+                                                9,
+                                            ),
+                                            value: Some(
+                                                Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span(
+                                                                5,
+                                                                16,
+                                                            ),
+                                                            name: "n",
+                                                        },
+                                                    ),
+                                                ),
+                                            ),
+                                            ending: Semicolon(
+                                                Span(
+                                                    5,
+                                                    18,
+                                                ),
+                                            ),
+                                        },
+                                    ],
+                                    right_brace: Span(
+                                        6,
+                                        5,
+                                    ),
+                                },
+                            ),
+                            elseifs: [],
+                            else: None,
+                        },
+                    },
+                ),
                 Return {
+                    return: Span(
+                        8,
+                        5,
+                    ),
                     value: Some(
                         ArithmeticOperation(
                             Addition {
@@ -241,6 +281,12 @@
                                     },
                                 },
                             },
+                        ),
+                    ),
+                    ending: Semicolon(
+                        Span(
+                            8,
+                            37,
                         ),
                     ),
                 },

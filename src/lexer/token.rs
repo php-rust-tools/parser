@@ -25,8 +25,9 @@ impl Into<(usize, usize)> for Span {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum OpenTagKind {
-    Full,
-    Echo,
+    Full,  // `<?php`
+    Short, // `<?`
+    Echo,  // `<?=`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -399,6 +400,7 @@ impl Display for TokenKind {
             Self::Null => "null",
             Self::OpenTag(kind) => match kind {
                 OpenTagKind::Full => "<?php",
+                OpenTagKind::Short => "<?",
                 OpenTagKind::Echo => "<?=",
             },
             Self::Percent => "%",

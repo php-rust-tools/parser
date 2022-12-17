@@ -1,6 +1,12 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Foreach(
-        ForeachLoop {
+        ForeachStatement {
             foreach: Span(
                 3,
                 1,
@@ -49,23 +55,25 @@
                     19,
                 ),
             },
-            body: Braced(
-                Braced {
-                    left_brace: Span(
-                        3,
-                        21,
-                    ),
-                    inner: [],
-                    right_brace: Span(
-                        3,
-                        22,
-                    ),
-                },
+            body: Statement(
+                Block(
+                    Braced {
+                        left_brace: Span(
+                            3,
+                            21,
+                        ),
+                        inner: [],
+                        right_brace: Span(
+                            3,
+                            22,
+                        ),
+                    },
+                ),
             ),
         },
     ),
     Foreach(
-        ForeachLoop {
+        ForeachStatement {
             foreach: Span(
                 5,
                 1,
@@ -108,7 +116,7 @@
                             },
                         ),
                     ),
-                    arrow: Span(
+                    double_arrow: Span(
                         5,
                         19,
                     ),
@@ -129,18 +137,20 @@
                     25,
                 ),
             },
-            body: Braced(
-                Braced {
-                    left_brace: Span(
-                        5,
-                        27,
-                    ),
-                    inner: [],
-                    right_brace: Span(
-                        5,
-                        28,
-                    ),
-                },
+            body: Statement(
+                Block(
+                    Braced {
+                        left_brace: Span(
+                            5,
+                            27,
+                        ),
+                        inner: [],
+                        right_brace: Span(
+                            5,
+                            28,
+                        ),
+                    },
+                ),
             ),
         },
     ),
@@ -178,17 +188,21 @@
                     },
                 ),
                 body: [
-                    Break {
-                        break: Span(
-                            9,
-                            9,
-                        ),
-                        expression: None,
-                        semicolon: Span(
-                            9,
-                            14,
-                        ),
-                    },
+                    Break(
+                        BreakStatement {
+                            break: Span(
+                                9,
+                                9,
+                            ),
+                            level: None,
+                            ending: Semicolon(
+                                Span(
+                                    9,
+                                    14,
+                                ),
+                            ),
+                        },
+                    ),
                 ],
             },
             Case {
@@ -210,7 +224,7 @@
         ],
     },
     Foreach(
-        ForeachLoop {
+        ForeachStatement {
             foreach: Span(
                 14,
                 1,
@@ -297,23 +311,25 @@
                     30,
                 ),
             },
-            body: Braced(
-                Braced {
-                    left_brace: Span(
-                        14,
-                        32,
-                    ),
-                    inner: [],
-                    right_brace: Span(
-                        14,
-                        33,
-                    ),
-                },
+            body: Statement(
+                Block(
+                    Braced {
+                        left_brace: Span(
+                            14,
+                            32,
+                        ),
+                        inner: [],
+                        right_brace: Span(
+                            14,
+                            33,
+                        ),
+                    },
+                ),
             ),
         },
     ),
     Foreach(
-        ForeachLoop {
+        ForeachStatement {
             foreach: Span(
                 16,
                 1,
@@ -351,7 +367,7 @@
                             },
                         ),
                     ),
-                    arrow: Span(
+                    double_arrow: Span(
                         16,
                         23,
                     ),
@@ -372,23 +388,25 @@
                     30,
                 ),
             },
-            body: Braced(
-                Braced {
-                    left_brace: Span(
-                        16,
-                        32,
-                    ),
-                    inner: [],
-                    right_brace: Span(
-                        16,
-                        33,
-                    ),
-                },
+            body: Statement(
+                Block(
+                    Braced {
+                        left_brace: Span(
+                            16,
+                            32,
+                        ),
+                        inner: [],
+                        right_brace: Span(
+                            16,
+                            33,
+                        ),
+                    },
+                ),
             ),
         },
     ),
     Foreach(
-        ForeachLoop {
+        ForeachStatement {
             foreach: Span(
                 18,
                 1,
@@ -432,18 +450,20 @@
                     22,
                 ),
             },
-            body: Braced(
-                Braced {
-                    left_brace: Span(
-                        18,
-                        24,
-                    ),
-                    inner: [],
-                    right_brace: Span(
-                        18,
-                        25,
-                    ),
-                },
+            body: Statement(
+                Block(
+                    Braced {
+                        left_brace: Span(
+                            18,
+                            24,
+                        ),
+                        inner: [],
+                        right_brace: Span(
+                            18,
+                            25,
+                        ),
+                    },
+                ),
             ),
         },
     ),

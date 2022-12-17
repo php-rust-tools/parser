@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Class(
         Class {
             span: Span(
@@ -65,79 +71,79 @@
                             },
                             body: Some(
                                 [
-                                    Expression(
-                                        SemicolonTerminated {
-                                            inner: Closure(
-                                                Closure {
+                                    Expression {
+                                        expression: Closure(
+                                            Closure {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
+                                                start: Span(
+                                                    7,
+                                                    9,
+                                                ),
+                                                end: Span(
+                                                    7,
+                                                    38,
+                                                ),
+                                                attributes: [],
+                                                parameters: FunctionParameterList {
                                                     comments: CommentGroup {
                                                         comments: [],
                                                     },
-                                                    start: Span(
+                                                    left_parenthesis: Span(
+                                                        7,
+                                                        25,
+                                                    ),
+                                                    members: [
+                                                        FunctionParameter {
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
+                                                            name: SimpleVariable {
+                                                                span: Span(
+                                                                    7,
+                                                                    31,
+                                                                ),
+                                                                name: "foo",
+                                                            },
+                                                            attributes: [],
+                                                            type: Some(
+                                                                SelfReference(
+                                                                    Span(
+                                                                        7,
+                                                                        26,
+                                                                    ),
+                                                                ),
+                                                            ),
+                                                            ellipsis: None,
+                                                            default: None,
+                                                            ampersand: None,
+                                                        },
+                                                    ],
+                                                    right_parenthesis: Span(
+                                                        7,
+                                                        35,
+                                                    ),
+                                                },
+                                                return_ty: None,
+                                                uses: [],
+                                                ampersand: None,
+                                                body: [],
+                                                static: Some(
+                                                    Span(
                                                         7,
                                                         9,
                                                     ),
-                                                    end: Span(
-                                                        7,
-                                                        38,
-                                                    ),
-                                                    attributes: [],
-                                                    parameters: FunctionParameterList {
-                                                        comments: CommentGroup {
-                                                            comments: [],
-                                                        },
-                                                        left_parenthesis: Span(
-                                                            7,
-                                                            25,
-                                                        ),
-                                                        members: [
-                                                            FunctionParameter {
-                                                                comments: CommentGroup {
-                                                                    comments: [],
-                                                                },
-                                                                name: SimpleVariable {
-                                                                    span: Span(
-                                                                        7,
-                                                                        31,
-                                                                    ),
-                                                                    name: "foo",
-                                                                },
-                                                                attributes: [],
-                                                                type: Some(
-                                                                    SelfReference(
-                                                                        Span(
-                                                                            7,
-                                                                            26,
-                                                                        ),
-                                                                    ),
-                                                                ),
-                                                                ellipsis: None,
-                                                                default: None,
-                                                                ampersand: None,
-                                                            },
-                                                        ],
-                                                        right_parenthesis: Span(
-                                                            7,
-                                                            35,
-                                                        ),
-                                                    },
-                                                    return_ty: None,
-                                                    uses: [],
-                                                    ampersand: None,
-                                                    body: [],
-                                                    static: Some(
-                                                        Span(
-                                                            7,
-                                                            9,
-                                                        ),
-                                                    ),
-                                                },
-                                            ),
-                                            semicolon: Span(
+                                                ),
+                                            },
+                                        ),
+                                        ending: Semicolon(
+                                            Span(
                                                 7,
                                                 39,
                                             ),
-                                        },
-                                    ),
+                                        ),
+                                    },
                                 ],
                             ),
                             modifiers: MethodModifierGroup {

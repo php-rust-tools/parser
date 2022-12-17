@@ -1,43 +1,49 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: ErrorSuppress {
-                span: Span(
-                    1,
-                    7,
-                ),
-                expr: FunctionCall {
-                    target: Identifier(
-                        SimpleIdentifier(
-                            SimpleIdentifier {
-                                span: Span(
-                                    1,
-                                    8,
-                                ),
-                                value: "hello",
-                            },
-                        ),
-                    ),
-                    arguments: ArgumentList {
-                        comments: CommentGroup {
-                            comments: [],
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: ErrorSuppress {
+            span: Span(
+                1,
+                7,
+            ),
+            expr: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                1,
+                                8,
+                            ),
+                            value: "hello",
                         },
-                        start: Span(
-                            1,
-                            13,
-                        ),
-                        arguments: [],
-                        end: Span(
-                            1,
-                            14,
-                        ),
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
                     },
+                    start: Span(
+                        1,
+                        13,
+                    ),
+                    arguments: [],
+                    end: Span(
+                        1,
+                        14,
+                    ),
                 },
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 15,
             ),
-        },
-    ),
+        ),
+    },
 ]

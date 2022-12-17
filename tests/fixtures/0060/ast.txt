@@ -1,39 +1,45 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: New {
-                span: Span(
-                    1,
-                    7,
-                ),
-                target: AnonymousClass(
-                    AnonymousClass {
-                        attributes: [],
-                        span: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: New {
+            span: Span(
+                1,
+                7,
+            ),
+            target: AnonymousClass(
+                AnonymousClass {
+                    attributes: [],
+                    span: Span(
+                        1,
+                        11,
+                    ),
+                    extends: None,
+                    implements: None,
+                    body: ClassBody {
+                        start: Span(
                             1,
-                            11,
+                            16,
                         ),
-                        extends: None,
-                        implements: None,
-                        body: ClassBody {
-                            start: Span(
-                                1,
-                                16,
-                            ),
-                            end: Span(
-                                1,
-                                17,
-                            ),
-                            members: [],
-                        },
+                        end: Span(
+                            1,
+                            17,
+                        ),
+                        members: [],
                     },
-                ),
-                arguments: None,
-            },
-            semicolon: Span(
+                },
+            ),
+            arguments: None,
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 18,
             ),
-        },
-    ),
+        ),
+    },
 ]

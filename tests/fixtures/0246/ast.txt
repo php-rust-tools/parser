@@ -1,43 +1,49 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: ShortArray(
-                Bracketed {
-                    left_bracket: Span(
-                        3,
-                        1,
-                    ),
-                    inner: CommaSeparated {
-                        inner: [
-                            ArrayItem {
-                                key: None,
-                                value: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                3,
-                                                3,
-                                            ),
-                                            name: "foo",
-                                        },
-                                    ),
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: ShortArray(
+            Bracketed {
+                left_bracket: Span(
+                    3,
+                    1,
+                ),
+                inner: CommaSeparated {
+                    inner: [
+                        ArrayItem {
+                            key: None,
+                            value: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            3,
+                                            3,
+                                        ),
+                                        name: "foo",
+                                    },
                                 ),
-                                unpack: false,
-                                by_ref: true,
-                            },
-                        ],
-                        commas: [],
-                    },
-                    right_bracket: Span(
-                        3,
-                        7,
-                    ),
+                            ),
+                            unpack: false,
+                            by_ref: true,
+                        },
+                    ],
+                    commas: [],
                 },
-            ),
-            semicolon: Span(
+                right_bracket: Span(
+                    3,
+                    7,
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 3,
                 8,
             ),
-        },
-    ),
+        ),
+    },
 ]

@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Declare(
         Declare {
             span: Span(
@@ -44,6 +50,10 @@
                 ),
                 statements: [
                     Echo {
+                        echo: Span(
+                            1,
+                            24,
+                        ),
                         values: [
                             LiteralString {
                                 span: Span(
@@ -53,6 +63,12 @@
                                 value: "Hello, world!",
                             },
                         ],
+                        ending: Semicolon(
+                            Span(
+                                1,
+                                44,
+                            ),
+                        ),
                     },
                 ],
                 end: Span(

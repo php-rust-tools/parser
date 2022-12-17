@@ -44,23 +44,6 @@ pub fn parse(tokens: &[Token]) -> ParseResult<Program> {
     let mut ast = Program::new();
 
     while !state.stream.is_eof() {
-        if matches!(
-            state.stream.current().kind,
-            TokenKind::OpenTag(OpenTagKind::Full) | TokenKind::CloseTag
-        ) {
-            state.stream.next();
-            continue;
-        }
-
-        if state.stream.is_eof() {
-            break;
-        }
-
-        if state.stream.current().kind == TokenKind::CloseTag {
-            state.stream.next();
-            continue;
-        }
-
         ast.push(top_level_statement(&mut state)?);
     }
 
@@ -88,19 +71,11 @@ fn top_level_statement(state: &mut State) -> ParseResult<Statement> {
         _ => statement(state)?,
     };
 
-    // A closing PHP tag is valid after the end of any top-level statement.
-    if state.stream.current().kind == TokenKind::CloseTag {
-        state.stream.next();
-    }
-
     Ok(statement)
 }
 
 fn statement(state: &mut State) -> ParseResult<Statement> {
     let has_attributes = attributes::gather_attributes(state)?;
-
-    // FIXME: There's a better place to put this but night-time brain doesn't know where.
-    utils::skip_open_tag(state)?;
 
     let current = state.stream.current();
     let peek = state.stream.peek();
@@ -128,10 +103,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     if !identifiers::is_identifier_maybe_soft_reserved(
                         &state.stream.lookahead(1).kind,
                     ) {
-                        return Ok(Statement::Expression(utils::semicolon_terminated(
-                            state,
-                            &expressions::attributes,
-                        )?));
+                        return Ok(Statement::Expression {
+                            expression: expressions::attributes(state)?,
+                            ending: utils::skip_ending(state)?,
+                        });
                     }
 
                     functions::function(state)?
@@ -139,10 +114,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     functions::function(state)?
                 }
             }
-            _ => Statement::Expression(utils::semicolon_terminated(
-                state,
-                &expressions::attributes,
-            )?),
+            _ => Statement::Expression {
+                expression: expressions::attributes(state)?,
+                ending: utils::skip_ending(state)?,
+            },
         }
     } else {
         match &current.kind {
@@ -150,20 +125,25 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 let span = current.span;
                 state.stream.next();
 
-                let mut values = Vec::new();
-                loop {
-                    values.push(expressions::create(state)?);
+                Statement::EchoOpeningTag(span)
+            }
+            TokenKind::OpenTag(OpenTagKind::Full) => {
+                let span = current.span;
+                state.stream.next();
 
-                    if state.stream.current().kind == TokenKind::Comma {
-                        state.stream.next();
-                    } else {
-                        break;
-                    }
-                }
+                Statement::FullOpeningTag(span)
+            }
+            TokenKind::OpenTag(OpenTagKind::Short) => {
+                let span = current.span;
+                state.stream.next();
 
-                utils::skip_semicolon(state)?;
+                Statement::ShortOpeningTag(span)
+            }
+            TokenKind::CloseTag => {
+                let span = current.span;
+                state.stream.next();
 
-                Statement::ShortEcho { span, values }
+                Statement::ClosingTag(span)
             }
             TokenKind::Abstract => classes::parse(state)?,
             TokenKind::Readonly if peek.kind != TokenKind::LeftParen => classes::parse(state)?,
@@ -187,10 +167,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     if !identifiers::is_identifier_maybe_soft_reserved(
                         &state.stream.lookahead(1).kind,
                     ) {
-                        return Ok(Statement::Expression(utils::semicolon_terminated(
-                            state,
-                            &expressions::attributes,
-                        )?));
+                        return Ok(Statement::Expression {
+                            expression: expressions::attributes(state)?,
+                            ending: utils::skip_ending(state)?,
+                        });
                     }
 
                     functions::function(state)?
@@ -242,7 +222,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     TokenKind::LeftBrace => {
                         let start = utils::skip_left_brace(state)?;
                         let statements =
-                            blocks::multiple_statements(state, &TokenKind::RightBrace)?;
+                            blocks::multiple_statements_until(state, &TokenKind::RightBrace)?;
                         let end = utils::skip_right_brace(state)?;
 
                         DeclareBody::Braced {
@@ -254,7 +234,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     TokenKind::Colon => {
                         let start = utils::skip_colon(state)?;
                         let statements =
-                            blocks::multiple_statements(state, &TokenKind::EndDeclare)?;
+                            blocks::multiple_statements_until(state, &TokenKind::EndDeclare)?;
                         let end = (
                             utils::skip(state, TokenKind::EndDeclare)?,
                             utils::skip_semicolon(state)?,
@@ -333,19 +313,27 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 Statement::Static { vars }
             }
             TokenKind::InlineHtml(html) => {
-                let s = Statement::InlineHtml(html.clone());
                 state.stream.next();
-                utils::skip_open_tag(state)?;
-                s
+
+                Statement::InlineHtml(html.clone())
             }
-            TokenKind::Do => loops::do_loop(state)?,
-            TokenKind::While => loops::while_loop(state)?,
-            TokenKind::For => loops::for_loop(state)?,
-            TokenKind::Foreach => loops::foreach_loop(state)?,
+            TokenKind::Do => loops::do_while_statement(state)?,
+            TokenKind::While => loops::while_statement(state)?,
+            TokenKind::For => loops::for_statement(state)?,
+            TokenKind::Foreach => loops::foreach_statement(state)?,
             TokenKind::Continue => loops::continue_statement(state)?,
             TokenKind::Break => loops::break_statement(state)?,
             TokenKind::Switch => control_flow::switch_statement(state)?,
             TokenKind::If => control_flow::if_statement(state)?,
+            TokenKind::Try => try_block::try_block(state)?,
+            TokenKind::LeftBrace => blocks::block_statement(state)?,
+            TokenKind::SemiColon => {
+                let start = current.span;
+
+                state.stream.next();
+
+                Statement::Noop(start)
+            }
             TokenKind::Echo => {
                 state.stream.next();
 
@@ -360,41 +348,36 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     }
                 }
 
-                utils::skip_semicolon(state)?;
-                Statement::Echo { values }
+                Statement::Echo {
+                    echo: current.span,
+                    values,
+                    ending: utils::skip_ending(state)?,
+                }
             }
             TokenKind::Return => {
                 state.stream.next();
 
-                if TokenKind::SemiColon == state.stream.current().kind {
-                    let ret = Statement::Return { value: None };
-                    utils::skip_semicolon(state)?;
-                    ret
+                let value = if matches!(
+                    state.stream.current().kind,
+                    TokenKind::SemiColon | TokenKind::CloseTag
+                ) {
+                    None
                 } else {
-                    let ret = Statement::Return {
-                        value: Some(expressions::create(state)?),
-                    };
-                    utils::skip_semicolon(state)?;
-                    ret
+                    expressions::create(state).map(Some)?
+                };
+
+                Statement::Return {
+                    r#return: current.span,
+                    value,
+                    ending: utils::skip_ending(state)?,
                 }
             }
-            TokenKind::SemiColon => {
-                let start = current.span;
-
-                state.stream.next();
-
-                Statement::Noop(start)
-            }
-            TokenKind::Try => try_block::try_block(state)?,
-            TokenKind::LeftBrace => blocks::block_statement(state)?,
-            _ => Statement::Expression(utils::semicolon_terminated(state, &expressions::create)?),
+            _ => Statement::Expression {
+                expression: expressions::create(state)?,
+                ending: utils::skip_ending(state)?,
+            },
         }
     };
-
-    // A closing PHP tag is valid after the end of any top-level statement.
-    if state.stream.current().kind == TokenKind::CloseTag {
-        state.stream.next();
-    }
 
     Ok(statement)
 }

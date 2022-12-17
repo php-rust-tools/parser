@@ -1,92 +1,98 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: New {
-                span: Span(
-                    3,
-                    1,
-                ),
-                target: AnonymousClass(
-                    AnonymousClass {
-                        attributes: [],
-                        span: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: New {
+            span: Span(
+                3,
+                1,
+            ),
+            target: AnonymousClass(
+                AnonymousClass {
+                    attributes: [],
+                    span: Span(
+                        3,
+                        5,
+                    ),
+                    extends: None,
+                    implements: None,
+                    body: ClassBody {
+                        start: Span(
                             3,
-                            5,
+                            11,
                         ),
-                        extends: None,
-                        implements: None,
-                        body: ClassBody {
-                            start: Span(
-                                3,
-                                11,
-                            ),
-                            end: Span(
-                                5,
-                                1,
-                            ),
-                            members: [
-                                Method(
-                                    Method {
+                        end: Span(
+                            5,
+                            1,
+                        ),
+                        members: [
+                            Method(
+                                Method {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    start: Span(
+                                        4,
+                                        12,
+                                    ),
+                                    end: Span(
+                                        4,
+                                        28,
+                                    ),
+                                    name: SimpleIdentifier {
+                                        span: Span(
+                                            4,
+                                            21,
+                                        ),
+                                        value: "foo",
+                                    },
+                                    attributes: [],
+                                    parameters: MethodParameterList {
                                         comments: CommentGroup {
                                             comments: [],
                                         },
                                         start: Span(
                                             4,
-                                            12,
+                                            24,
                                         ),
+                                        members: [],
                                         end: Span(
                                             4,
-                                            28,
+                                            25,
                                         ),
-                                        name: SimpleIdentifier {
-                                            span: Span(
-                                                4,
-                                                21,
-                                            ),
-                                            value: "foo",
-                                        },
-                                        attributes: [],
-                                        parameters: MethodParameterList {
-                                            comments: CommentGroup {
-                                                comments: [],
-                                            },
-                                            start: Span(
-                                                4,
-                                                24,
-                                            ),
-                                            members: [],
-                                            end: Span(
-                                                4,
-                                                25,
-                                            ),
-                                        },
-                                        body: Some(
-                                            [],
-                                        ),
-                                        modifiers: MethodModifierGroup {
-                                            modifiers: [
-                                                Public(
-                                                    Span(
-                                                        4,
-                                                        5,
-                                                    ),
-                                                ),
-                                            ],
-                                        },
-                                        return_type: None,
-                                        ampersand: None,
                                     },
-                                ),
-                            ],
-                        },
+                                    body: Some(
+                                        [],
+                                    ),
+                                    modifiers: MethodModifierGroup {
+                                        modifiers: [
+                                            Public(
+                                                Span(
+                                                    4,
+                                                    5,
+                                                ),
+                                            ),
+                                        ],
+                                    },
+                                    return_type: None,
+                                    ampersand: None,
+                                },
+                            ),
+                        ],
                     },
-                ),
-                arguments: None,
-            },
-            semicolon: Span(
+                },
+            ),
+            arguments: None,
+        },
+        ending: Semicolon(
+            Span(
                 5,
                 2,
             ),
-        },
-    ),
+        ),
+    },
 ]

@@ -1,38 +1,44 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: NullsafePropertyFetch {
-                target: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                1,
-                                7,
-                            ),
-                            name: "a",
-                        },
-                    ),
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: NullsafePropertyFetch {
+            target: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            1,
+                            7,
+                        ),
+                        name: "a",
+                    },
                 ),
-                span: Span(
-                    1,
-                    9,
+            ),
+            span: Span(
+                1,
+                9,
+            ),
+            property: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            1,
+                            12,
+                        ),
+                        value: "b",
+                    },
                 ),
-                property: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
-                            span: Span(
-                                1,
-                                12,
-                            ),
-                            value: "b",
-                        },
-                    ),
-                ),
-            },
-            semicolon: Span(
+            ),
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 13,
             ),
-        },
-    ),
+        ),
+    },
 ]

@@ -1,39 +1,45 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    1,
-                                ),
-                                name: "a",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        3,
-                        4,
-                    ),
-                    right: ConstFetch {
-                        target: Static,
-                        constant: SimpleIdentifier {
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
                                 3,
-                                14,
+                                1,
                             ),
-                            value: "foo",
+                            name: "a",
                         },
+                    ),
+                ),
+                span: Span(
+                    3,
+                    4,
+                ),
+                right: ConstFetch {
+                    target: Static,
+                    constant: SimpleIdentifier {
+                        span: Span(
+                            3,
+                            14,
+                        ),
+                        value: "foo",
                     },
                 },
-            ),
-            semicolon: Span(
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 3,
                 17,
             ),
-        },
-    ),
+        ),
+    },
 ]

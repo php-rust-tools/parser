@@ -1,39 +1,49 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: Closure(
-                Closure {
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: Closure(
+            Closure {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    3,
+                    1,
+                ),
+                end: Span(
+                    5,
+                    1,
+                ),
+                attributes: [],
+                parameters: FunctionParameterList {
                     comments: CommentGroup {
                         comments: [],
                     },
-                    start: Span(
+                    left_parenthesis: Span(
                         3,
-                        1,
+                        10,
                     ),
-                    end: Span(
-                        5,
-                        1,
+                    members: [],
+                    right_parenthesis: Span(
+                        3,
+                        11,
                     ),
-                    attributes: [],
-                    parameters: FunctionParameterList {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        left_parenthesis: Span(
-                            3,
-                            10,
-                        ),
-                        members: [],
-                        right_parenthesis: Span(
-                            3,
-                            11,
-                        ),
-                    },
-                    return_ty: None,
-                    uses: [],
-                    ampersand: None,
-                    body: [
-                        If {
+                },
+                return_ty: None,
+                uses: [],
+                ampersand: None,
+                body: [
+                    If(
+                        IfStatement {
+                            if: Span(
+                                4,
+                                5,
+                            ),
                             condition: Parenthesized {
                                 left_parenthesis: Span(
                                     4,
@@ -55,38 +65,40 @@
                                     13,
                                 ),
                             },
-                            then: [
-                                Expression(
-                                    SemicolonTerminated {
-                                        inner: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span(
-                                                        4,
-                                                        15,
-                                                    ),
-                                                    name: "bar",
-                                                },
-                                            ),
+                            body: Statement {
+                                statement: Expression {
+                                    expression: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    4,
+                                                    15,
+                                                ),
+                                                name: "bar",
+                                            },
                                         ),
-                                        semicolon: Span(
+                                    ),
+                                    ending: Semicolon(
+                                        Span(
                                             4,
                                             19,
                                         ),
-                                    },
-                                ),
-                            ],
-                            else_ifs: [],
-                            else: None,
+                                    ),
+                                },
+                                elseifs: [],
+                                else: None,
+                            },
                         },
-                    ],
-                    static: None,
-                },
-            ),
-            semicolon: Span(
+                    ),
+                ],
+                static: None,
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 5,
                 2,
             ),
-        },
-    ),
+        ),
+    },
 ]

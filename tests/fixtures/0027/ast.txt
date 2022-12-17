@@ -1,13 +1,23 @@
 [
-    Continue {
-        continue: Span(
+    FullOpeningTag(
+        Span(
             1,
-            7,
-        ),
-        expression: None,
-        semicolon: Span(
             1,
-            15,
         ),
-    },
+    ),
+    Continue(
+        ContinueStatement {
+            continue: Span(
+                1,
+                7,
+            ),
+            level: None,
+            ending: Semicolon(
+                Span(
+                    1,
+                    15,
+                ),
+            ),
+        },
+    ),
 ]
