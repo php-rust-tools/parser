@@ -85,23 +85,25 @@
                             },
                             body: Some(
                                 [
-                                    Expression {
-                                        expression: Exit {
-                                            value: Some(
-                                                LiteralInteger {
-                                                    span: Span(
-                                                        8,
-                                                        14,
-                                                    ),
-                                                    value: "1",
-                                                },
+                                    Expression(
+                                        SemicolonTerminated {
+                                            inner: Exit {
+                                                value: Some(
+                                                    LiteralInteger {
+                                                        span: Span(
+                                                            8,
+                                                            14,
+                                                        ),
+                                                        value: "1",
+                                                    },
+                                                ),
+                                            },
+                                            semicolon: Span(
+                                                8,
+                                                16,
                                             ),
                                         },
-                                        end: Span(
-                                            8,
-                                            16,
-                                        ),
-                                    },
+                                    ),
                                 ],
                             ),
                             modifiers: MethodModifierGroup {

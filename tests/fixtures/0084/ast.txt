@@ -1,62 +1,82 @@
 [
-    Expression {
-        expression: ShortArray {
-            start: Span(
-                1,
-                7,
+    Expression(
+        SemicolonTerminated {
+            inner: ShortArray(
+                Bracketed {
+                    left_bracket: Span(
+                        1,
+                        7,
+                    ),
+                    inner: CommaSeparated {
+                        inner: [
+                            ArrayItem {
+                                key: None,
+                                value: LiteralInteger {
+                                    span: Span(
+                                        1,
+                                        8,
+                                    ),
+                                    value: "1",
+                                },
+                                unpack: false,
+                                by_ref: false,
+                            },
+                            ArrayItem {
+                                key: None,
+                                value: LiteralInteger {
+                                    span: Span(
+                                        1,
+                                        11,
+                                    ),
+                                    value: "2",
+                                },
+                                unpack: false,
+                                by_ref: false,
+                            },
+                            ArrayItem {
+                                key: None,
+                                value: Empty,
+                                unpack: false,
+                                by_ref: false,
+                            },
+                            ArrayItem {
+                                key: None,
+                                value: LiteralInteger {
+                                    span: Span(
+                                        1,
+                                        16,
+                                    ),
+                                    value: "4",
+                                },
+                                unpack: false,
+                                by_ref: false,
+                            },
+                        ],
+                        commas: [
+                            Span(
+                                1,
+                                9,
+                            ),
+                            Span(
+                                1,
+                                12,
+                            ),
+                            Span(
+                                1,
+                                14,
+                            ),
+                        ],
+                    },
+                    right_bracket: Span(
+                        1,
+                        17,
+                    ),
+                },
             ),
-            items: [
-                ArrayItem {
-                    key: None,
-                    value: LiteralInteger {
-                        span: Span(
-                            1,
-                            8,
-                        ),
-                        value: "1",
-                    },
-                    unpack: false,
-                    by_ref: false,
-                },
-                ArrayItem {
-                    key: None,
-                    value: LiteralInteger {
-                        span: Span(
-                            1,
-                            11,
-                        ),
-                        value: "2",
-                    },
-                    unpack: false,
-                    by_ref: false,
-                },
-                ArrayItem {
-                    key: None,
-                    value: Empty,
-                    unpack: false,
-                    by_ref: false,
-                },
-                ArrayItem {
-                    key: None,
-                    value: LiteralInteger {
-                        span: Span(
-                            1,
-                            16,
-                        ),
-                        value: "4",
-                    },
-                    unpack: false,
-                    by_ref: false,
-                },
-            ],
-            end: Span(
+            semicolon: Span(
                 1,
-                17,
+                18,
             ),
         },
-        end: Span(
-            1,
-            18,
-        ),
-    },
+    ),
 ]

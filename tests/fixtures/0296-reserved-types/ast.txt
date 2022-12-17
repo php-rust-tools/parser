@@ -19,22 +19,30 @@
                         3,
                         16,
                     ),
-                    parents: [
-                        SimpleIdentifier {
-                            span: Span(
+                    parents: CommaSeparated {
+                        inner: [
+                            SimpleIdentifier {
+                                span: Span(
+                                    3,
+                                    24,
+                                ),
+                                value: "enum",
+                            },
+                            SimpleIdentifier {
+                                span: Span(
+                                    3,
+                                    30,
+                                ),
+                                value: "from",
+                            },
+                        ],
+                        commas: [
+                            Span(
                                 3,
-                                24,
+                                28,
                             ),
-                            value: "enum",
-                        },
-                        SimpleIdentifier {
-                            span: Span(
-                                3,
-                                30,
-                            ),
-                            value: "from",
-                        },
-                    ],
+                        ],
+                    },
                 },
             ),
             body: InterfaceBody {
@@ -87,22 +95,30 @@
                         5,
                         25,
                     ),
-                    interfaces: [
-                        SimpleIdentifier {
-                            span: Span(
+                    interfaces: CommaSeparated {
+                        inner: [
+                            SimpleIdentifier {
+                                span: Span(
+                                    5,
+                                    36,
+                                ),
+                                value: "enum",
+                            },
+                            SimpleIdentifier {
+                                span: Span(
+                                    5,
+                                    42,
+                                ),
+                                value: "from",
+                            },
+                        ],
+                        commas: [
+                            Span(
                                 5,
-                                36,
+                                40,
                             ),
-                            value: "enum",
-                        },
-                        SimpleIdentifier {
-                            span: Span(
-                                5,
-                                42,
-                            ),
-                            value: "from",
-                        },
-                    ],
+                        ],
+                    },
                 },
             ),
             attributes: [],
@@ -156,22 +172,30 @@
                         6,
                         25,
                     ),
-                    interfaces: [
-                        SimpleIdentifier {
-                            span: Span(
+                    interfaces: CommaSeparated {
+                        inner: [
+                            SimpleIdentifier {
+                                span: Span(
+                                    6,
+                                    36,
+                                ),
+                                value: "Foo\enum",
+                            },
+                            SimpleIdentifier {
+                                span: Span(
+                                    6,
+                                    46,
+                                ),
+                                value: "\Bar\Baz\from",
+                            },
+                        ],
+                        commas: [
+                            Span(
                                 6,
-                                36,
+                                44,
                             ),
-                            value: "Foo\enum",
-                        },
-                        SimpleIdentifier {
-                            span: Span(
-                                6,
-                                46,
-                            ),
-                            value: "\Bar\Baz\from",
-                        },
-                    ],
+                        ],
+                    },
                 },
             ),
             attributes: [],

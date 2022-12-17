@@ -93,7 +93,7 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
     let (body, end) = scoped!(state, Scope::AnonymousFunction(r#static.is_some()), {
         utils::skip_left_brace(state)?;
 
-        let body = blocks::body(state, &TokenKind::RightBrace)?;
+        let body = blocks::multiple_statements(state, &TokenKind::RightBrace)?;
         let end = utils::skip_right_brace(state)?;
 
         (body, end)
@@ -197,7 +197,7 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
     let (body, end) = scoped!(state, Scope::Function(name.clone()), {
         utils::skip_left_brace(state)?;
 
-        let body = blocks::body(state, &TokenKind::RightBrace)?;
+        let body = blocks::multiple_statements(state, &TokenKind::RightBrace)?;
         let end = utils::skip_right_brace(state)?;
 
         (body, end)
@@ -277,7 +277,7 @@ pub fn method(state: &mut State, modifiers: MethodModifierGroup) -> ParseResult<
             } else {
                 utils::skip_left_brace(state)?;
 
-                let body = blocks::body(state, &TokenKind::RightBrace)?;
+                let body = blocks::multiple_statements(state, &TokenKind::RightBrace)?;
 
                 let end = utils::skip_right_brace(state)?;
 

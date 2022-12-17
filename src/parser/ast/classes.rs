@@ -11,6 +11,7 @@ use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::properties::Property;
 use crate::parser::ast::properties::VariableProperty;
 use crate::parser::ast::traits::TraitUsage;
+use crate::parser::ast::utils::CommaSeparated;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -54,7 +55,7 @@ pub struct ClassExtends {
 #[serde(rename_all = "snake_case")]
 pub struct ClassImplements {
     pub span: Span,
-    pub interfaces: Vec<SimpleIdentifier>,
+    pub interfaces: CommaSeparated<SimpleIdentifier>,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

@@ -1,68 +1,70 @@
 [
-    Expression {
-        expression: NullsafeMethodCall {
-            target: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            1,
-                            7,
-                        ),
-                        name: "a",
-                    },
-                ),
-            ),
-            span: Span(
-                1,
-                9,
-            ),
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span(
-                            1,
-                            12,
-                        ),
-                        value: "b",
-                    },
-                ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                start: Span(
-                    1,
-                    13,
-                ),
-                arguments: [
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        1,
-                                        14,
-                                    ),
-                                    name: "c",
-                                },
+    Expression(
+        SemicolonTerminated {
+            inner: NullsafeMethodCall {
+                target: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                1,
+                                7,
                             ),
-                        ),
-                    },
-                ],
-                end: Span(
-                    1,
-                    16,
+                            name: "a",
+                        },
+                    ),
                 ),
+                span: Span(
+                    1,
+                    9,
+                ),
+                method: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span(
+                                1,
+                                12,
+                            ),
+                            value: "b",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        1,
+                        13,
+                    ),
+                    arguments: [
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            1,
+                                            14,
+                                        ),
+                                        name: "c",
+                                    },
+                                ),
+                            ),
+                        },
+                    ],
+                    end: Span(
+                        1,
+                        16,
+                    ),
+                },
             },
+            semicolon: Span(
+                1,
+                17,
+            ),
         },
-        end: Span(
-            1,
-            17,
-        ),
-    },
+    ),
 ]

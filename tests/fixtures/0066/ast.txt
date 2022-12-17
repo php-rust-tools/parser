@@ -1,23 +1,35 @@
 [
-    Block {
-        body: [
-            Expression {
-                expression: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                1,
-                                9,
+    Block(
+        Braced {
+            left_brace: Span(
+                1,
+                7,
+            ),
+            inner: [
+                Expression(
+                    SemicolonTerminated {
+                        inner: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        1,
+                                        9,
+                                    ),
+                                    name: "a",
+                                },
                             ),
-                            name: "a",
-                        },
-                    ),
+                        ),
+                        semicolon: Span(
+                            1,
+                            11,
+                        ),
+                    },
                 ),
-                end: Span(
-                    1,
-                    11,
-                ),
-            },
-        ],
-    },
+            ],
+            right_brace: Span(
+                1,
+                13,
+            ),
+        },
+    ),
 ]

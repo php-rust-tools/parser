@@ -18,17 +18,27 @@
         "\nsome html\n",
     ),
     If {
-        condition: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        4,
-                        9,
-                    ),
-                    name: "d",
-                },
+        condition: Parenthesized {
+            left_parenthesis: Span(
+                4,
+                8,
             ),
-        ),
+            inner: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            4,
+                            9,
+                        ),
+                        name: "d",
+                    },
+                ),
+            ),
+            right_parenthesis: Span(
+                4,
+                11,
+            ),
+        },
         then: [
             Echo {
                 values: [

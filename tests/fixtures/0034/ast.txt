@@ -1,41 +1,43 @@
 [
-    Expression {
-        expression: Concat {
-            left: Concat {
-                left: LiteralString {
+    Expression(
+        SemicolonTerminated {
+            inner: Concat {
+                left: Concat {
+                    left: LiteralString {
+                        span: Span(
+                            1,
+                            7,
+                        ),
+                        value: "foo",
+                    },
                     span: Span(
                         1,
-                        7,
+                        13,
                     ),
-                    value: "foo",
+                    right: LiteralString {
+                        span: Span(
+                            1,
+                            15,
+                        ),
+                        value: "bar",
+                    },
                 },
                 span: Span(
                     1,
-                    13,
+                    21,
                 ),
                 right: LiteralString {
                     span: Span(
                         1,
-                        15,
+                        23,
                     ),
-                    value: "bar",
+                    value: "baz",
                 },
             },
-            span: Span(
+            semicolon: Span(
                 1,
-                21,
+                28,
             ),
-            right: LiteralString {
-                span: Span(
-                    1,
-                    23,
-                ),
-                value: "baz",
-            },
         },
-        end: Span(
-            1,
-            28,
-        ),
-    },
+    ),
 ]

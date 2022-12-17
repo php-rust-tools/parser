@@ -202,195 +202,206 @@
             ],
         },
     ),
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                13,
-                                1,
-                            ),
-                            name: "p",
-                        },
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    13,
+                                    1,
+                                ),
+                                name: "p",
+                            },
+                        ),
                     ),
-                ),
-                span: Span(
-                    13,
-                    4,
-                ),
-                right: LiteralString {
                     span: Span(
                         13,
-                        6,
+                        4,
                     ),
-                    value: "why!",
+                    right: LiteralString {
+                        span: Span(
+                            13,
+                            6,
+                        ),
+                        value: "why!",
+                    },
                 },
-            },
-        ),
-        end: Span(
-            13,
-            12,
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                14,
-                                1,
-                            ),
-                            name: "m",
-                        },
+            ),
+            semicolon: Span(
+                13,
+                12,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    14,
+                                    1,
+                                ),
+                                name: "m",
+                            },
+                        ),
                     ),
-                ),
-                span: Span(
-                    14,
-                    4,
-                ),
-                right: LiteralString {
                     span: Span(
                         14,
-                        6,
+                        4,
                     ),
-                    value: "foo",
-                },
-            },
-        ),
-        end: Span(
-            14,
-            11,
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Variable(
-                BracedVariableVariable(
-                    BracedVariableVariable {
-                        start: Span(
-                            16,
-                            1,
+                    right: LiteralString {
+                        span: Span(
+                            14,
+                            6,
                         ),
-                        variable: FunctionCall {
-                            target: Parenthesized {
-                                start: Span(
-                                    16,
-                                    3,
-                                ),
-                                expr: Closure(
-                                    Closure {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        start: Span(
-                                            16,
-                                            4,
-                                        ),
-                                        end: Span(
-                                            18,
-                                            1,
-                                        ),
-                                        attributes: [],
-                                        parameters: FunctionParameterList {
+                        value: "foo",
+                    },
+                },
+            ),
+            semicolon: Span(
+                14,
+                11,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: FunctionCall {
+                target: Variable(
+                    BracedVariableVariable(
+                        BracedVariableVariable {
+                            start: Span(
+                                16,
+                                1,
+                            ),
+                            variable: FunctionCall {
+                                target: Parenthesized {
+                                    start: Span(
+                                        16,
+                                        3,
+                                    ),
+                                    expr: Closure(
+                                        Closure {
                                             comments: CommentGroup {
                                                 comments: [],
                                             },
-                                            left_parenthesis: Span(
+                                            start: Span(
                                                 16,
-                                                12,
+                                                4,
                                             ),
-                                            members: [],
-                                            right_parenthesis: Span(
-                                                16,
-                                                13,
+                                            end: Span(
+                                                18,
+                                                1,
                                             ),
-                                        },
-                                        return_ty: None,
-                                        uses: [],
-                                        ampersand: None,
-                                        body: [
-                                            Return {
-                                                value: Some(
-                                                    LiteralString {
-                                                        span: Span(
-                                                            17,
-                                                            12,
-                                                        ),
-                                                        value: "m",
-                                                    },
+                                            attributes: [],
+                                            parameters: FunctionParameterList {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
+                                                left_parenthesis: Span(
+                                                    16,
+                                                    12,
+                                                ),
+                                                members: [],
+                                                right_parenthesis: Span(
+                                                    16,
+                                                    13,
                                                 ),
                                             },
-                                        ],
-                                        static: None,
-                                    },
-                                ),
-                                end: Span(
-                                    18,
-                                    2,
-                                ),
-                            },
-                            arguments: ArgumentList {
-                                comments: CommentGroup {
-                                    comments: [],
+                                            return_ty: None,
+                                            uses: [],
+                                            ampersand: None,
+                                            body: [
+                                                Return {
+                                                    value: Some(
+                                                        LiteralString {
+                                                            span: Span(
+                                                                17,
+                                                                12,
+                                                            ),
+                                                            value: "m",
+                                                        },
+                                                    ),
+                                                },
+                                            ],
+                                            static: None,
+                                        },
+                                    ),
+                                    end: Span(
+                                        18,
+                                        2,
+                                    ),
                                 },
-                                start: Span(
-                                    18,
-                                    3,
-                                ),
-                                arguments: [],
-                                end: Span(
-                                    18,
-                                    4,
-                                ),
+                                arguments: ArgumentList {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    start: Span(
+                                        18,
+                                        3,
+                                    ),
+                                    arguments: [],
+                                    end: Span(
+                                        18,
+                                        4,
+                                    ),
+                                },
                             },
-                        },
-                        end: Span(
-                            18,
-                            5,
-                        ),
-                    },
-                ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                start: Span(
-                    18,
-                    6,
-                ),
-                arguments: [
-                    Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: ShortArray {
-                            start: Span(
-                                18,
-                                7,
-                            ),
-                            items: [],
                             end: Span(
                                 18,
-                                8,
+                                5,
                             ),
                         },
-                    },
-                ],
-                end: Span(
-                    18,
-                    9,
+                    ),
                 ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    start: Span(
+                        18,
+                        6,
+                    ),
+                    arguments: [
+                        Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: ShortArray(
+                                Bracketed {
+                                    left_bracket: Span(
+                                        18,
+                                        7,
+                                    ),
+                                    inner: CommaSeparated {
+                                        inner: [],
+                                        commas: [],
+                                    },
+                                    right_bracket: Span(
+                                        18,
+                                        8,
+                                    ),
+                                },
+                            ),
+                        },
+                    ],
+                    end: Span(
+                        18,
+                        9,
+                    ),
+                },
             },
+            semicolon: Span(
+                18,
+                10,
+            ),
         },
-        end: Span(
-            18,
-            10,
-        ),
-    },
+    ),
 ]

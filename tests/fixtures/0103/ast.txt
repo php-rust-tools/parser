@@ -1,25 +1,27 @@
 [
-    Expression {
-        expression: Print {
-            span: Span(
-                1,
-                7,
-            ),
-            value: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            1,
-                            13,
-                        ),
-                        name: "foo",
-                    },
+    Expression(
+        SemicolonTerminated {
+            inner: Print {
+                span: Span(
+                    1,
+                    7,
                 ),
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                1,
+                                13,
+                            ),
+                            name: "foo",
+                        },
+                    ),
+                ),
+            },
+            semicolon: Span(
+                1,
+                17,
             ),
         },
-        end: Span(
-            1,
-            17,
-        ),
-    },
+    ),
 ]

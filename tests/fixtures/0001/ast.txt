@@ -83,17 +83,22 @@
                         ),
                         ellipsis: None,
                         default: Some(
-                            ShortArray {
-                                start: Span(
-                                    3,
-                                    41,
-                                ),
-                                items: [],
-                                end: Span(
-                                    3,
-                                    42,
-                                ),
-                            },
+                            ShortArray(
+                                Bracketed {
+                                    left_bracket: Span(
+                                        3,
+                                        41,
+                                    ),
+                                    inner: CommaSeparated {
+                                        inner: [],
+                                        commas: [],
+                                    },
+                                    right_bracket: Span(
+                                        3,
+                                        42,
+                                    ),
+                                },
+                            ),
                         ),
                         ampersand: None,
                     },
@@ -113,23 +118,25 @@
             ),
             ampersand: None,
             body: [
-                Expression {
-                    expression: Exit {
-                        value: Some(
-                            LiteralInteger {
-                                span: Span(
-                                    4,
-                                    10,
-                                ),
-                                value: "1",
-                            },
+                Expression(
+                    SemicolonTerminated {
+                        inner: Exit {
+                            value: Some(
+                                LiteralInteger {
+                                    span: Span(
+                                        4,
+                                        10,
+                                    ),
+                                    value: "1",
+                                },
+                            ),
+                        },
+                        semicolon: Span(
+                            4,
+                            12,
                         ),
                     },
-                    end: Span(
-                        4,
-                        12,
-                    ),
-                },
+                ),
             ],
         },
     ),

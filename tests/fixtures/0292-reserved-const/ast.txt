@@ -353,272 +353,282 @@
                                             },
                                             body: Some(
                                                 [
-                                                    Expression {
-                                                        expression: FunctionCall {
-                                                            target: Identifier(
-                                                                SimpleIdentifier(
-                                                                    SimpleIdentifier {
-                                                                        span: Span(
-                                                                            20,
-                                                                            9,
-                                                                        ),
-                                                                        value: "var_dump",
-                                                                    },
-                                                                ),
-                                                            ),
-                                                            arguments: ArgumentList {
-                                                                comments: CommentGroup {
-                                                                    comments: [],
-                                                                },
-                                                                start: Span(
-                                                                    20,
-                                                                    17,
-                                                                ),
-                                                                arguments: [
-                                                                    Positional {
-                                                                        comments: CommentGroup {
-                                                                            comments: [],
-                                                                        },
-                                                                        ellipsis: None,
-                                                                        value: Identifier(
-                                                                            SimpleIdentifier(
-                                                                                SimpleIdentifier {
-                                                                                    span: Span(
-                                                                                        20,
-                                                                                        18,
-                                                                                    ),
-                                                                                    value: "self",
-                                                                                },
-                                                                            ),
-                                                                        ),
-                                                                    },
-                                                                ],
-                                                                end: Span(
-                                                                    20,
-                                                                    22,
-                                                                ),
-                                                            },
-                                                        },
-                                                        end: Span(
-                                                            20,
-                                                            23,
-                                                        ),
-                                                    },
-                                                    Expression {
-                                                        expression: FunctionCall {
-                                                            target: Identifier(
-                                                                SimpleIdentifier(
-                                                                    SimpleIdentifier {
-                                                                        span: Span(
-                                                                            21,
-                                                                            9,
-                                                                        ),
-                                                                        value: "var_dump",
-                                                                    },
-                                                                ),
-                                                            ),
-                                                            arguments: ArgumentList {
-                                                                comments: CommentGroup {
-                                                                    comments: [],
-                                                                },
-                                                                start: Span(
-                                                                    21,
-                                                                    17,
-                                                                ),
-                                                                arguments: [
-                                                                    Positional {
-                                                                        comments: CommentGroup {
-                                                                            comments: [],
-                                                                        },
-                                                                        ellipsis: None,
-                                                                        value: Identifier(
-                                                                            SimpleIdentifier(
-                                                                                SimpleIdentifier {
-                                                                                    span: Span(
-                                                                                        21,
-                                                                                        18,
-                                                                                    ),
-                                                                                    value: "parent",
-                                                                                },
-                                                                            ),
-                                                                        ),
-                                                                    },
-                                                                ],
-                                                                end: Span(
-                                                                    21,
-                                                                    24,
-                                                                ),
-                                                            },
-                                                        },
-                                                        end: Span(
-                                                            21,
-                                                            25,
-                                                        ),
-                                                    },
-                                                    Expression {
-                                                        expression: StaticMethodCall {
-                                                            target: Identifier(
-                                                                SimpleIdentifier(
-                                                                    SimpleIdentifier {
-                                                                        span: Span(
-                                                                            23,
-                                                                            9,
-                                                                        ),
-                                                                        value: "self",
-                                                                    },
-                                                                ),
-                                                            ),
-                                                            span: Span(
-                                                                23,
-                                                                13,
-                                                            ),
-                                                            method: Identifier(
-                                                                SimpleIdentifier(
-                                                                    SimpleIdentifier {
-                                                                        span: Span(
-                                                                            23,
-                                                                            15,
-                                                                        ),
-                                                                        value: "foo",
-                                                                    },
-                                                                ),
-                                                            ),
-                                                            arguments: ArgumentList {
-                                                                comments: CommentGroup {
-                                                                    comments: [],
-                                                                },
-                                                                start: Span(
-                                                                    23,
-                                                                    18,
-                                                                ),
-                                                                arguments: [],
-                                                                end: Span(
-                                                                    23,
-                                                                    19,
-                                                                ),
-                                                            },
-                                                        },
-                                                        end: Span(
-                                                            23,
-                                                            20,
-                                                        ),
-                                                    },
-                                                    Expression {
-                                                        expression: StaticMethodCall {
-                                                            target: Parenthesized {
-                                                                start: Span(
-                                                                    24,
-                                                                    9,
-                                                                ),
-                                                                expr: Identifier(
+                                                    Expression(
+                                                        SemicolonTerminated {
+                                                            inner: FunctionCall {
+                                                                target: Identifier(
                                                                     SimpleIdentifier(
                                                                         SimpleIdentifier {
                                                                             span: Span(
-                                                                                24,
-                                                                                10,
+                                                                                20,
+                                                                                9,
+                                                                            ),
+                                                                            value: "var_dump",
+                                                                        },
+                                                                    ),
+                                                                ),
+                                                                arguments: ArgumentList {
+                                                                    comments: CommentGroup {
+                                                                        comments: [],
+                                                                    },
+                                                                    start: Span(
+                                                                        20,
+                                                                        17,
+                                                                    ),
+                                                                    arguments: [
+                                                                        Positional {
+                                                                            comments: CommentGroup {
+                                                                                comments: [],
+                                                                            },
+                                                                            ellipsis: None,
+                                                                            value: Identifier(
+                                                                                SimpleIdentifier(
+                                                                                    SimpleIdentifier {
+                                                                                        span: Span(
+                                                                                            20,
+                                                                                            18,
+                                                                                        ),
+                                                                                        value: "self",
+                                                                                    },
+                                                                                ),
+                                                                            ),
+                                                                        },
+                                                                    ],
+                                                                    end: Span(
+                                                                        20,
+                                                                        22,
+                                                                    ),
+                                                                },
+                                                            },
+                                                            semicolon: Span(
+                                                                20,
+                                                                23,
+                                                            ),
+                                                        },
+                                                    ),
+                                                    Expression(
+                                                        SemicolonTerminated {
+                                                            inner: FunctionCall {
+                                                                target: Identifier(
+                                                                    SimpleIdentifier(
+                                                                        SimpleIdentifier {
+                                                                            span: Span(
+                                                                                21,
+                                                                                9,
+                                                                            ),
+                                                                            value: "var_dump",
+                                                                        },
+                                                                    ),
+                                                                ),
+                                                                arguments: ArgumentList {
+                                                                    comments: CommentGroup {
+                                                                        comments: [],
+                                                                    },
+                                                                    start: Span(
+                                                                        21,
+                                                                        17,
+                                                                    ),
+                                                                    arguments: [
+                                                                        Positional {
+                                                                            comments: CommentGroup {
+                                                                                comments: [],
+                                                                            },
+                                                                            ellipsis: None,
+                                                                            value: Identifier(
+                                                                                SimpleIdentifier(
+                                                                                    SimpleIdentifier {
+                                                                                        span: Span(
+                                                                                            21,
+                                                                                            18,
+                                                                                        ),
+                                                                                        value: "parent",
+                                                                                    },
+                                                                                ),
+                                                                            ),
+                                                                        },
+                                                                    ],
+                                                                    end: Span(
+                                                                        21,
+                                                                        24,
+                                                                    ),
+                                                                },
+                                                            },
+                                                            semicolon: Span(
+                                                                21,
+                                                                25,
+                                                            ),
+                                                        },
+                                                    ),
+                                                    Expression(
+                                                        SemicolonTerminated {
+                                                            inner: StaticMethodCall {
+                                                                target: Identifier(
+                                                                    SimpleIdentifier(
+                                                                        SimpleIdentifier {
+                                                                            span: Span(
+                                                                                23,
+                                                                                9,
                                                                             ),
                                                                             value: "self",
                                                                         },
                                                                     ),
                                                                 ),
-                                                                end: Span(
-                                                                    24,
-                                                                    14,
+                                                                span: Span(
+                                                                    23,
+                                                                    13,
                                                                 ),
-                                                            },
-                                                            span: Span(
-                                                                24,
-                                                                15,
-                                                            ),
-                                                            method: Identifier(
-                                                                SimpleIdentifier(
-                                                                    SimpleIdentifier {
-                                                                        span: Span(
-                                                                            24,
-                                                                            17,
-                                                                        ),
-                                                                        value: "foo",
+                                                                method: Identifier(
+                                                                    SimpleIdentifier(
+                                                                        SimpleIdentifier {
+                                                                            span: Span(
+                                                                                23,
+                                                                                15,
+                                                                            ),
+                                                                            value: "foo",
+                                                                        },
+                                                                    ),
+                                                                ),
+                                                                arguments: ArgumentList {
+                                                                    comments: CommentGroup {
+                                                                        comments: [],
                                                                     },
-                                                                ),
-                                                            ),
-                                                            arguments: ArgumentList {
-                                                                comments: CommentGroup {
-                                                                    comments: [],
+                                                                    start: Span(
+                                                                        23,
+                                                                        18,
+                                                                    ),
+                                                                    arguments: [],
+                                                                    end: Span(
+                                                                        23,
+                                                                        19,
+                                                                    ),
                                                                 },
-                                                                start: Span(
-                                                                    24,
-                                                                    20,
-                                                                ),
-                                                                arguments: [],
-                                                                end: Span(
-                                                                    24,
-                                                                    21,
-                                                                ),
                                                             },
+                                                            semicolon: Span(
+                                                                23,
+                                                                20,
+                                                            ),
                                                         },
-                                                        end: Span(
-                                                            24,
-                                                            22,
-                                                        ),
-                                                    },
-                                                    Expression {
-                                                        expression: StaticMethodCall {
-                                                            target: Parenthesized {
-                                                                start: Span(
-                                                                    25,
-                                                                    9,
+                                                    ),
+                                                    Expression(
+                                                        SemicolonTerminated {
+                                                            inner: StaticMethodCall {
+                                                                target: Parenthesized {
+                                                                    start: Span(
+                                                                        24,
+                                                                        9,
+                                                                    ),
+                                                                    expr: Identifier(
+                                                                        SimpleIdentifier(
+                                                                            SimpleIdentifier {
+                                                                                span: Span(
+                                                                                    24,
+                                                                                    10,
+                                                                                ),
+                                                                                value: "self",
+                                                                            },
+                                                                        ),
+                                                                    ),
+                                                                    end: Span(
+                                                                        24,
+                                                                        14,
+                                                                    ),
+                                                                },
+                                                                span: Span(
+                                                                    24,
+                                                                    15,
                                                                 ),
-                                                                expr: Identifier(
+                                                                method: Identifier(
+                                                                    SimpleIdentifier(
+                                                                        SimpleIdentifier {
+                                                                            span: Span(
+                                                                                24,
+                                                                                17,
+                                                                            ),
+                                                                            value: "foo",
+                                                                        },
+                                                                    ),
+                                                                ),
+                                                                arguments: ArgumentList {
+                                                                    comments: CommentGroup {
+                                                                        comments: [],
+                                                                    },
+                                                                    start: Span(
+                                                                        24,
+                                                                        20,
+                                                                    ),
+                                                                    arguments: [],
+                                                                    end: Span(
+                                                                        24,
+                                                                        21,
+                                                                    ),
+                                                                },
+                                                            },
+                                                            semicolon: Span(
+                                                                24,
+                                                                22,
+                                                            ),
+                                                        },
+                                                    ),
+                                                    Expression(
+                                                        SemicolonTerminated {
+                                                            inner: StaticMethodCall {
+                                                                target: Parenthesized {
+                                                                    start: Span(
+                                                                        25,
+                                                                        9,
+                                                                    ),
+                                                                    expr: Identifier(
+                                                                        SimpleIdentifier(
+                                                                            SimpleIdentifier {
+                                                                                span: Span(
+                                                                                    25,
+                                                                                    10,
+                                                                                ),
+                                                                                value: "parent",
+                                                                            },
+                                                                        ),
+                                                                    ),
+                                                                    end: Span(
+                                                                        25,
+                                                                        16,
+                                                                    ),
+                                                                },
+                                                                span: Span(
+                                                                    25,
+                                                                    17,
+                                                                ),
+                                                                method: Identifier(
                                                                     SimpleIdentifier(
                                                                         SimpleIdentifier {
                                                                             span: Span(
                                                                                 25,
-                                                                                10,
+                                                                                19,
                                                                             ),
-                                                                            value: "parent",
+                                                                            value: "foo",
                                                                         },
                                                                     ),
                                                                 ),
-                                                                end: Span(
-                                                                    25,
-                                                                    16,
-                                                                ),
-                                                            },
-                                                            span: Span(
-                                                                25,
-                                                                17,
-                                                            ),
-                                                            method: Identifier(
-                                                                SimpleIdentifier(
-                                                                    SimpleIdentifier {
-                                                                        span: Span(
-                                                                            25,
-                                                                            19,
-                                                                        ),
-                                                                        value: "foo",
+                                                                arguments: ArgumentList {
+                                                                    comments: CommentGroup {
+                                                                        comments: [],
                                                                     },
-                                                                ),
-                                                            ),
-                                                            arguments: ArgumentList {
-                                                                comments: CommentGroup {
-                                                                    comments: [],
+                                                                    start: Span(
+                                                                        25,
+                                                                        22,
+                                                                    ),
+                                                                    arguments: [],
+                                                                    end: Span(
+                                                                        25,
+                                                                        23,
+                                                                    ),
                                                                 },
-                                                                start: Span(
-                                                                    25,
-                                                                    22,
-                                                                ),
-                                                                arguments: [],
-                                                                end: Span(
-                                                                    25,
-                                                                    23,
-                                                                ),
                                                             },
+                                                            semicolon: Span(
+                                                                25,
+                                                                24,
+                                                            ),
                                                         },
-                                                        end: Span(
-                                                            25,
-                                                            24,
-                                                        ),
-                                                    },
+                                                    ),
                                                 ],
                                             ),
                                             modifiers: MethodModifierGroup {
@@ -639,71 +649,73 @@
                             },
                         },
                     ),
-                    Expression {
-                        expression: MethodCall {
-                            target: Parenthesized {
-                                start: Span(
-                                    29,
-                                    1,
-                                ),
-                                expr: New {
-                                    span: Span(
+                    Expression(
+                        SemicolonTerminated {
+                            inner: MethodCall {
+                                target: Parenthesized {
+                                    start: Span(
                                         29,
-                                        2,
+                                        1,
                                     ),
-                                    target: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span(
-                                                    29,
-                                                    6,
-                                                ),
-                                                value: "a",
-                                            },
-                                        ),
-                                    ),
-                                    arguments: None,
-                                },
-                                end: Span(
-                                    29,
-                                    7,
-                                ),
-                            },
-                            span: Span(
-                                29,
-                                8,
-                            ),
-                            method: Identifier(
-                                SimpleIdentifier(
-                                    SimpleIdentifier {
+                                    expr: New {
                                         span: Span(
                                             29,
-                                            10,
+                                            2,
                                         ),
-                                        value: "f",
+                                        target: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span(
+                                                        29,
+                                                        6,
+                                                    ),
+                                                    value: "a",
+                                                },
+                                            ),
+                                        ),
+                                        arguments: None,
                                     },
-                                ),
-                            ),
-                            arguments: ArgumentList {
-                                comments: CommentGroup {
-                                    comments: [],
+                                    end: Span(
+                                        29,
+                                        7,
+                                    ),
                                 },
-                                start: Span(
+                                span: Span(
                                     29,
-                                    11,
+                                    8,
                                 ),
-                                arguments: [],
-                                end: Span(
-                                    29,
-                                    12,
+                                method: Identifier(
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: Span(
+                                                29,
+                                                10,
+                                            ),
+                                            value: "f",
+                                        },
+                                    ),
                                 ),
+                                arguments: ArgumentList {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    start: Span(
+                                        29,
+                                        11,
+                                    ),
+                                    arguments: [],
+                                    end: Span(
+                                        29,
+                                        12,
+                                    ),
+                                },
                             },
+                            semicolon: Span(
+                                29,
+                                13,
+                            ),
                         },
-                        end: Span(
-                            29,
-                            13,
-                        ),
-                    },
+                    ),
                 ],
             },
         ),

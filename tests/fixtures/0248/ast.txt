@@ -1,48 +1,55 @@
 [
-    Expression {
-        expression: ShortArray {
-            start: Span(
-                3,
-                1,
-            ),
-            items: [
-                ArrayItem {
-                    key: Some(
-                        Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        3,
-                                        2,
+    Expression(
+        SemicolonTerminated {
+            inner: ShortArray(
+                Bracketed {
+                    left_bracket: Span(
+                        3,
+                        1,
+                    ),
+                    inner: CommaSeparated {
+                        inner: [
+                            ArrayItem {
+                                key: Some(
+                                    Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    3,
+                                                    2,
+                                                ),
+                                                name: "foo",
+                                            },
+                                        ),
                                     ),
-                                    name: "foo",
-                                },
-                            ),
-                        ),
-                    ),
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    11,
                                 ),
-                                name: "bar",
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                3,
+                                                11,
+                                            ),
+                                            name: "bar",
+                                        },
+                                    ),
+                                ),
+                                unpack: false,
+                                by_ref: true,
                             },
-                        ),
+                        ],
+                        commas: [],
+                    },
+                    right_bracket: Span(
+                        3,
+                        15,
                     ),
-                    unpack: false,
-                    by_ref: true,
                 },
-            ],
-            end: Span(
+            ),
+            semicolon: Span(
                 3,
-                15,
+                16,
             ),
         },
-        end: Span(
-            3,
-            16,
-        ),
-    },
+    ),
 ]

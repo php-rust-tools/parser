@@ -241,23 +241,25 @@
             ),
             ampersand: None,
             body: [
-                Expression {
-                    expression: Exit {
-                        value: Some(
-                            LiteralInteger {
-                                span: Span(
-                                    9,
-                                    10,
-                                ),
-                                value: "0",
-                            },
+                Expression(
+                    SemicolonTerminated {
+                        inner: Exit {
+                            value: Some(
+                                LiteralInteger {
+                                    span: Span(
+                                        9,
+                                        10,
+                                    ),
+                                    value: "0",
+                                },
+                            ),
+                        },
+                        semicolon: Span(
+                            9,
+                            12,
                         ),
                     },
-                    end: Span(
-                        9,
-                        12,
-                    ),
-                },
+                ),
             ],
         },
     ),

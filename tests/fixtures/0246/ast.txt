@@ -1,36 +1,43 @@
 [
-    Expression {
-        expression: ShortArray {
-            start: Span(
-                3,
-                1,
-            ),
-            items: [
-                ArrayItem {
-                    key: None,
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    3,
-                                ),
-                                name: "foo",
-                            },
-                        ),
+    Expression(
+        SemicolonTerminated {
+            inner: ShortArray(
+                Bracketed {
+                    left_bracket: Span(
+                        3,
+                        1,
                     ),
-                    unpack: false,
-                    by_ref: true,
+                    inner: CommaSeparated {
+                        inner: [
+                            ArrayItem {
+                                key: None,
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                3,
+                                                3,
+                                            ),
+                                            name: "foo",
+                                        },
+                                    ),
+                                ),
+                                unpack: false,
+                                by_ref: true,
+                            },
+                        ],
+                        commas: [],
+                    },
+                    right_bracket: Span(
+                        3,
+                        7,
+                    ),
                 },
-            ],
-            end: Span(
+            ),
+            semicolon: Span(
                 3,
-                7,
+                8,
             ),
         },
-        end: Span(
-            3,
-            8,
-        ),
-    },
+    ),
 ]

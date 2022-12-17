@@ -1,152 +1,154 @@
 [
-    Expression {
-        expression: InterpolatedString {
-            parts: [
-                Expression(
-                    Variable(
-                        BracedVariableVariable(
-                            BracedVariableVariable {
-                                start: Span(
-                                    1,
-                                    8,
-                                ),
-                                variable: Identifier(
-                                    SimpleIdentifier(
-                                        SimpleIdentifier {
-                                            span: Span(
-                                                1,
-                                                10,
-                                            ),
-                                            value: "foo",
-                                        },
-                                    ),
-                                ),
-                                end: Span(
-                                    1,
-                                    13,
-                                ),
-                            },
-                        ),
-                    ),
-                ),
-                Expression(
-                    Variable(
-                        BracedVariableVariable(
-                            BracedVariableVariable {
-                                start: Span(
-                                    1,
-                                    14,
-                                ),
-                                variable: ArrayIndex {
-                                    array: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span(
-                                                    1,
-                                                    16,
-                                                ),
-                                                value: "foo",
-                                            },
-                                        ),
-                                    ),
-                                    index: Some(
-                                        LiteralInteger {
-                                            span: Span(
-                                                1,
-                                                20,
-                                            ),
-                                            value: "0",
-                                        },
-                                    ),
-                                },
-                                end: Span(
-                                    1,
-                                    22,
-                                ),
-                            },
-                        ),
-                    ),
-                ),
-                Expression(
-                    Variable(
-                        BracedVariableVariable(
-                            BracedVariableVariable {
-                                start: Span(
-                                    1,
-                                    23,
-                                ),
-                                variable: ArrayIndex {
-                                    array: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span(
-                                                    1,
-                                                    25,
-                                                ),
-                                                value: "foo",
-                                            },
-                                        ),
-                                    ),
-                                    index: Some(
-                                        LiteralString {
-                                            span: Span(
-                                                1,
-                                                29,
-                                            ),
-                                            value: "bar",
-                                        },
-                                    ),
-                                },
-                                end: Span(
-                                    1,
-                                    35,
-                                ),
-                            },
-                        ),
-                    ),
-                ),
-                Expression(
-                    Variable(
-                        BracedVariableVariable(
-                            BracedVariableVariable {
-                                start: Span(
-                                    1,
-                                    36,
-                                ),
-                                variable: Parenthesized {
+    Expression(
+        SemicolonTerminated {
+            inner: InterpolatedString {
+                parts: [
+                    Expression(
+                        Variable(
+                            BracedVariableVariable(
+                                BracedVariableVariable {
                                     start: Span(
                                         1,
-                                        38,
+                                        8,
                                     ),
-                                    expr: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
+                                    variable: Identifier(
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
                                                 span: Span(
                                                     1,
-                                                    39,
+                                                    10,
                                                 ),
-                                                name: "foo",
+                                                value: "foo",
                                             },
                                         ),
                                     ),
                                     end: Span(
                                         1,
-                                        43,
+                                        13,
                                     ),
                                 },
-                                end: Span(
-                                    1,
-                                    44,
-                                ),
-                            },
+                            ),
                         ),
                     ),
-                ),
-            ],
+                    Expression(
+                        Variable(
+                            BracedVariableVariable(
+                                BracedVariableVariable {
+                                    start: Span(
+                                        1,
+                                        14,
+                                    ),
+                                    variable: ArrayIndex {
+                                        array: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span(
+                                                        1,
+                                                        16,
+                                                    ),
+                                                    value: "foo",
+                                                },
+                                            ),
+                                        ),
+                                        index: Some(
+                                            LiteralInteger {
+                                                span: Span(
+                                                    1,
+                                                    20,
+                                                ),
+                                                value: "0",
+                                            },
+                                        ),
+                                    },
+                                    end: Span(
+                                        1,
+                                        22,
+                                    ),
+                                },
+                            ),
+                        ),
+                    ),
+                    Expression(
+                        Variable(
+                            BracedVariableVariable(
+                                BracedVariableVariable {
+                                    start: Span(
+                                        1,
+                                        23,
+                                    ),
+                                    variable: ArrayIndex {
+                                        array: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span(
+                                                        1,
+                                                        25,
+                                                    ),
+                                                    value: "foo",
+                                                },
+                                            ),
+                                        ),
+                                        index: Some(
+                                            LiteralString {
+                                                span: Span(
+                                                    1,
+                                                    29,
+                                                ),
+                                                value: "bar",
+                                            },
+                                        ),
+                                    },
+                                    end: Span(
+                                        1,
+                                        35,
+                                    ),
+                                },
+                            ),
+                        ),
+                    ),
+                    Expression(
+                        Variable(
+                            BracedVariableVariable(
+                                BracedVariableVariable {
+                                    start: Span(
+                                        1,
+                                        36,
+                                    ),
+                                    variable: Parenthesized {
+                                        start: Span(
+                                            1,
+                                            38,
+                                        ),
+                                        expr: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        1,
+                                                        39,
+                                                    ),
+                                                    name: "foo",
+                                                },
+                                            ),
+                                        ),
+                                        end: Span(
+                                            1,
+                                            43,
+                                        ),
+                                    },
+                                    end: Span(
+                                        1,
+                                        44,
+                                    ),
+                                },
+                            ),
+                        ),
+                    ),
+                ],
+            },
+            semicolon: Span(
+                1,
+                46,
+            ),
         },
-        end: Span(
-            1,
-            46,
-        ),
-    },
+    ),
 ]

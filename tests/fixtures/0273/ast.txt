@@ -65,63 +65,65 @@
                             },
                             body: Some(
                                 [
-                                    Expression {
-                                        expression: AssignmentOperation(
-                                            Assign {
-                                                left: Variable(
-                                                    SimpleVariable(
-                                                        SimpleVariable {
-                                                            span: Span(
-                                                                5,
-                                                                9,
-                                                            ),
-                                                            name: "a",
-                                                        },
-                                                    ),
-                                                ),
-                                                span: Span(
-                                                    5,
-                                                    12,
-                                                ),
-                                                right: StaticMethodCall {
-                                                    target: Static,
-                                                    span: Span(
-                                                        5,
-                                                        20,
-                                                    ),
-                                                    method: Identifier(
-                                                        SimpleIdentifier(
-                                                            SimpleIdentifier {
+                                    Expression(
+                                        SemicolonTerminated {
+                                            inner: AssignmentOperation(
+                                                Assign {
+                                                    left: Variable(
+                                                        SimpleVariable(
+                                                            SimpleVariable {
                                                                 span: Span(
                                                                     5,
-                                                                    22,
+                                                                    9,
                                                                 ),
-                                                                value: "bar",
+                                                                name: "a",
                                                             },
                                                         ),
                                                     ),
-                                                    arguments: ArgumentList {
-                                                        comments: CommentGroup {
-                                                            comments: [],
+                                                    span: Span(
+                                                        5,
+                                                        12,
+                                                    ),
+                                                    right: StaticMethodCall {
+                                                        target: Static,
+                                                        span: Span(
+                                                            5,
+                                                            20,
+                                                        ),
+                                                        method: Identifier(
+                                                            SimpleIdentifier(
+                                                                SimpleIdentifier {
+                                                                    span: Span(
+                                                                        5,
+                                                                        22,
+                                                                    ),
+                                                                    value: "bar",
+                                                                },
+                                                            ),
+                                                        ),
+                                                        arguments: ArgumentList {
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
+                                                            start: Span(
+                                                                5,
+                                                                25,
+                                                            ),
+                                                            arguments: [],
+                                                            end: Span(
+                                                                5,
+                                                                26,
+                                                            ),
                                                         },
-                                                        start: Span(
-                                                            5,
-                                                            25,
-                                                        ),
-                                                        arguments: [],
-                                                        end: Span(
-                                                            5,
-                                                            26,
-                                                        ),
                                                     },
                                                 },
-                                            },
-                                        ),
-                                        end: Span(
-                                            5,
-                                            27,
-                                        ),
-                                    },
+                                            ),
+                                            semicolon: Span(
+                                                5,
+                                                27,
+                                            ),
+                                        },
+                                    ),
                                 ],
                             ),
                             modifiers: MethodModifierGroup {

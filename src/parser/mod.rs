@@ -125,11 +125,13 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     || peek.kind == TokenKind::Ampersand =>
             {
                 if peek.kind == TokenKind::Ampersand {
-                    if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
-                        let expression = expressions::create(state)?;
-                        let end = utils::skip_semicolon(state)?;
-
-                        return Ok(Statement::Expression { expression, end });
+                    if !identifiers::is_identifier_maybe_soft_reserved(
+                        &state.stream.lookahead(1).kind,
+                    ) {
+                        return Ok(Statement::Expression(utils::semicolon_terminated(
+                            state,
+                            &expressions::attributes,
+                        )?));
                     }
 
                     functions::function(state)?
@@ -137,12 +139,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     functions::function(state)?
                 }
             }
-            _ => {
-                let expression = expressions::attributes(state)?;
-                let end = utils::skip_semicolon(state)?;
-
-                Statement::Expression { expression, end }
-            }
+            _ => Statement::Expression(utils::semicolon_terminated(
+                state,
+                &expressions::attributes,
+            )?),
         }
     } else {
         match &current.kind {
@@ -184,11 +184,13 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     || peek.kind == TokenKind::Ampersand =>
             {
                 if peek.kind == TokenKind::Ampersand {
-                    if !matches!(state.stream.lookahead(1).kind, TokenKind::Identifier(_),) {
-                        let expression = expressions::create(state)?;
-                        let end = utils::skip_semicolon(state)?;
-
-                        return Ok(Statement::Expression { expression, end });
+                    if !identifiers::is_identifier_maybe_soft_reserved(
+                        &state.stream.lookahead(1).kind,
+                    ) {
+                        return Ok(Statement::Expression(utils::semicolon_terminated(
+                            state,
+                            &expressions::attributes,
+                        )?));
                     }
 
                     functions::function(state)?
@@ -239,7 +241,8 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     }
                     TokenKind::LeftBrace => {
                         let start = utils::skip_left_brace(state)?;
-                        let statements = blocks::body(state, &TokenKind::RightBrace)?;
+                        let statements =
+                            blocks::multiple_statements(state, &TokenKind::RightBrace)?;
                         let end = utils::skip_right_brace(state)?;
 
                         DeclareBody::Braced {
@@ -250,7 +253,8 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     }
                     TokenKind::Colon => {
                         let start = utils::skip_colon(state)?;
-                        let statements = blocks::body(state, &TokenKind::EndDeclare)?;
+                        let statements =
+                            blocks::multiple_statements(state, &TokenKind::EndDeclare)?;
                         let end = (
                             utils::skip(state, TokenKind::EndDeclare)?,
                             utils::skip_semicolon(state)?,
@@ -383,12 +387,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
             }
             TokenKind::Try => try_block::try_block(state)?,
             TokenKind::LeftBrace => blocks::block_statement(state)?,
-            _ => {
-                let expression = expressions::create(state)?;
-                let end = utils::skip_semicolon(state)?;
-
-                Statement::Expression { expression, end }
-            }
+            _ => Statement::Expression(utils::semicolon_terminated(state, &expressions::create)?),
         }
     };
 

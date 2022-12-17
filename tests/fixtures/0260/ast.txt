@@ -1,63 +1,65 @@
 [
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: List {
-                    items: [
-                        ListItem {
-                            key: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            6,
-                                        ),
-                                        name: "a",
-                                    },
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: List {
+                        items: [
+                            ListItem {
+                                key: None,
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                3,
+                                                6,
+                                            ),
+                                            name: "a",
+                                        },
+                                    ),
                                 ),
-                            ),
-                        },
-                        ListItem {
-                            key: None,
-                            value: Empty,
-                        },
-                        ListItem {
-                            key: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            10,
-                                        ),
-                                        name: "c",
-                                    },
+                            },
+                            ListItem {
+                                key: None,
+                                value: Empty,
+                            },
+                            ListItem {
+                                key: None,
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                3,
+                                                10,
+                                            ),
+                                            name: "c",
+                                        },
+                                    ),
                                 ),
-                            ),
-                        },
-                    ],
-                },
-                span: Span(
-                    3,
-                    14,
-                ),
-                right: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                3,
-                                16,
-                            ),
-                            name: "foo",
-                        },
+                            },
+                        ],
+                    },
+                    span: Span(
+                        3,
+                        14,
                     ),
-                ),
-            },
-        ),
-        end: Span(
-            3,
-            20,
-        ),
-    },
+                    right: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    3,
+                                    16,
+                                ),
+                                name: "foo",
+                            },
+                        ),
+                    ),
+                },
+            ),
+            semicolon: Span(
+                3,
+                20,
+            ),
+        },
+    ),
 ]

@@ -1,107 +1,168 @@
 [
-    For {
-        init: [
-            AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    6,
+    For(
+        ForLoop {
+            for: Span(
+                3,
+                1,
+            ),
+            iterator: Parenthesized {
+                left_parenthesis: Span(
+                    3,
+                    5,
+                ),
+                inner: ForIterator {
+                    initializations: SemicolonTerminated {
+                        inner: CommaSeparated {
+                            inner: [
+                                AssignmentOperation(
+                                    Assign {
+                                        left: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        3,
+                                                        6,
+                                                    ),
+                                                    name: "i",
+                                                },
+                                            ),
+                                        ),
+                                        span: Span(
+                                            3,
+                                            9,
+                                        ),
+                                        right: LiteralInteger {
+                                            span: Span(
+                                                3,
+                                                11,
+                                            ),
+                                            value: "0",
+                                        },
+                                    },
                                 ),
-                                name: "i",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        3,
-                        9,
-                    ),
-                    right: LiteralInteger {
-                        span: Span(
+                                AssignmentOperation(
+                                    Assign {
+                                        left: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        3,
+                                                        14,
+                                                    ),
+                                                    name: "i",
+                                                },
+                                            ),
+                                        ),
+                                        span: Span(
+                                            3,
+                                            17,
+                                        ),
+                                        right: LiteralInteger {
+                                            span: Span(
+                                                3,
+                                                19,
+                                            ),
+                                            value: "1",
+                                        },
+                                    },
+                                ),
+                            ],
+                            commas: [
+                                Span(
+                                    3,
+                                    12,
+                                ),
+                            ],
+                        },
+                        semicolon: Span(
                             3,
-                            11,
+                            20,
                         ),
-                        value: "0",
+                    },
+                    conditions: SemicolonTerminated {
+                        inner: CommaSeparated {
+                            inner: [
+                                ComparisonOperation(
+                                    LessThan {
+                                        left: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        3,
+                                                        22,
+                                                    ),
+                                                    name: "j",
+                                                },
+                                            ),
+                                        ),
+                                        span: Span(
+                                            3,
+                                            25,
+                                        ),
+                                        right: LiteralInteger {
+                                            span: Span(
+                                                3,
+                                                27,
+                                            ),
+                                            value: "2",
+                                        },
+                                    },
+                                ),
+                                ArithmeticOperation(
+                                    PostDecrement {
+                                        left: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        3,
+                                                        30,
+                                                    ),
+                                                    name: "j",
+                                                },
+                                            ),
+                                        ),
+                                        span: Span(
+                                            3,
+                                            32,
+                                        ),
+                                    },
+                                ),
+                            ],
+                            commas: [
+                                Span(
+                                    3,
+                                    28,
+                                ),
+                            ],
+                        },
+                        semicolon: Span(
+                            3,
+                            34,
+                        ),
+                    },
+                    loop: CommaSeparated {
+                        inner: [],
+                        commas: [],
                     },
                 },
-            ),
-            AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    14,
-                                ),
-                                name: "i",
-                            },
-                        ),
-                    ),
-                    span: Span(
+                right_parenthesis: Span(
+                    3,
+                    35,
+                ),
+            },
+            body: Braced(
+                Braced {
+                    left_brace: Span(
                         3,
-                        17,
+                        37,
                     ),
-                    right: LiteralInteger {
-                        span: Span(
-                            3,
-                            19,
-                        ),
-                        value: "1",
-                    },
-                },
-            ),
-        ],
-        condition: [
-            ComparisonOperation(
-                LessThan {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    22,
-                                ),
-                                name: "j",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        3,
-                        25,
-                    ),
-                    right: LiteralInteger {
-                        span: Span(
-                            3,
-                            27,
-                        ),
-                        value: "2",
-                    },
-                },
-            ),
-            ArithmeticOperation(
-                PostDecrement {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    30,
-                                ),
-                                name: "j",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        3,
-                        32,
+                    inner: [],
+                    right_brace: Span(
+                        5,
+                        1,
                     ),
                 },
             ),
-        ],
-        loop: [],
-        then: [],
-    },
+        },
+    ),
 ]

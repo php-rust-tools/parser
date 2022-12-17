@@ -1,36 +1,48 @@
 [
-    Expression {
-        expression: ShortArray {
-            start: Span(
-                1,
-                7,
-            ),
-            items: [
-                ArrayItem {
-                    key: None,
-                    value: ShortArray {
-                        start: Span(
-                            1,
-                            11,
-                        ),
-                        items: [],
-                        end: Span(
-                            1,
-                            12,
-                        ),
+    Expression(
+        SemicolonTerminated {
+            inner: ShortArray(
+                Bracketed {
+                    left_bracket: Span(
+                        1,
+                        7,
+                    ),
+                    inner: CommaSeparated {
+                        inner: [
+                            ArrayItem {
+                                key: None,
+                                value: ShortArray(
+                                    Bracketed {
+                                        left_bracket: Span(
+                                            1,
+                                            11,
+                                        ),
+                                        inner: CommaSeparated {
+                                            inner: [],
+                                            commas: [],
+                                        },
+                                        right_bracket: Span(
+                                            1,
+                                            12,
+                                        ),
+                                    },
+                                ),
+                                unpack: true,
+                                by_ref: false,
+                            },
+                        ],
+                        commas: [],
                     },
-                    unpack: true,
-                    by_ref: false,
+                    right_bracket: Span(
+                        1,
+                        13,
+                    ),
                 },
-            ],
-            end: Span(
+            ),
+            semicolon: Span(
                 1,
-                13,
+                14,
             ),
         },
-        end: Span(
-            1,
-            14,
-        ),
-    },
+    ),
 ]

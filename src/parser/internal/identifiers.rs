@@ -268,7 +268,7 @@ pub fn full_type_name_including_self(state: &mut State) -> ParseResult<SimpleIde
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(&t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
+        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
             current.kind.to_string(),
             current.span,
         )),

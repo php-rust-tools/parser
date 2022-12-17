@@ -1,28 +1,30 @@
 [
-    Expression {
-        expression: ShellExec {
-            parts: [
-                Literal(
-                    "Hello, ",
-                ),
-                Expression(
-                    Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    10,
-                                ),
-                                name: "name",
-                            },
+    Expression(
+        SemicolonTerminated {
+            inner: ShellExec {
+                parts: [
+                    Literal(
+                        "Hello, ",
+                    ),
+                    Expression(
+                        Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        3,
+                                        10,
+                                    ),
+                                    name: "name",
+                                },
+                            ),
                         ),
                     ),
-                ),
-            ],
+                ],
+            },
+            semicolon: Span(
+                3,
+                17,
+            ),
         },
-        end: Span(
-            3,
-            17,
-        ),
-    },
+    ),
 ]

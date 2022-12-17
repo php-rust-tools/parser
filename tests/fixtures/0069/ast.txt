@@ -1,16 +1,54 @@
 [
-    DoWhile {
-        condition: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
+    DoWhile(
+        DoWhileLoop {
+            do: Span(
+                1,
+                7,
+            ),
+            body: Braced(
+                Braced {
+                    left_brace: Span(
                         1,
-                        21,
+                        10,
                     ),
-                    name: "a",
+                    inner: [],
+                    right_brace: Span(
+                        1,
+                        12,
+                    ),
                 },
             ),
-        ),
-        body: [],
-    },
+            while: Span(
+                1,
+                14,
+            ),
+            condition: SemicolonTerminated {
+                inner: Parenthesized {
+                    left_parenthesis: Span(
+                        1,
+                        20,
+                    ),
+                    inner: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    1,
+                                    21,
+                                ),
+                                name: "a",
+                            },
+                        ),
+                    ),
+                    right_parenthesis: Span(
+                        1,
+                        23,
+                    ),
+                },
+                semicolon: Span(
+                    1,
+                    24,
+                ),
+            },
+        },
+    ),
 ]

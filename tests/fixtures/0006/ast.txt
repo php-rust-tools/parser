@@ -1,82 +1,90 @@
 [
-    Expression {
-        expression: Include {
-            span: Span(
-                3,
-                1,
-            ),
-            kind: Include,
-            path: LiteralString {
+    Expression(
+        SemicolonTerminated {
+            inner: Include {
                 span: Span(
                     3,
-                    9,
+                    1,
                 ),
-                value: "foo.php",
+                kind: Include,
+                path: LiteralString {
+                    span: Span(
+                        3,
+                        9,
+                    ),
+                    value: "foo.php",
+                },
             },
-        },
-        end: Span(
-            3,
-            18,
-        ),
-    },
-    Expression {
-        expression: Include {
-            span: Span(
-                5,
-                1,
+            semicolon: Span(
+                3,
+                18,
             ),
-            kind: IncludeOnce,
-            path: LiteralString {
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Include {
                 span: Span(
                     5,
-                    14,
+                    1,
                 ),
-                value: "bar.php",
+                kind: IncludeOnce,
+                path: LiteralString {
+                    span: Span(
+                        5,
+                        14,
+                    ),
+                    value: "bar.php",
+                },
             },
-        },
-        end: Span(
-            5,
-            23,
-        ),
-    },
-    Expression {
-        expression: Include {
-            span: Span(
-                7,
-                1,
+            semicolon: Span(
+                5,
+                23,
             ),
-            kind: Require,
-            path: LiteralString {
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Include {
                 span: Span(
                     7,
-                    9,
+                    1,
                 ),
-                value: "baz.php",
+                kind: Require,
+                path: LiteralString {
+                    span: Span(
+                        7,
+                        9,
+                    ),
+                    value: "baz.php",
+                },
             },
-        },
-        end: Span(
-            7,
-            18,
-        ),
-    },
-    Expression {
-        expression: Include {
-            span: Span(
-                9,
-                1,
+            semicolon: Span(
+                7,
+                18,
             ),
-            kind: RequireOnce,
-            path: LiteralString {
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: Include {
                 span: Span(
                     9,
-                    14,
+                    1,
                 ),
-                value: "qux.php",
+                kind: RequireOnce,
+                path: LiteralString {
+                    span: Span(
+                        9,
+                        14,
+                    ),
+                    value: "qux.php",
+                },
             },
+            semicolon: Span(
+                9,
+                23,
+            ),
         },
-        end: Span(
-            9,
-            23,
-        ),
-    },
+    ),
 ]

@@ -24,12 +24,11 @@ use crate::parser::state::State;
 use crate::scoped;
 
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
+    let attributes = state.get_attributes();
+
     let modifiers = modifiers::class_group(modifiers::collect(state)?)?;
-
     let span = utils::skip(state, TokenKind::Class)?;
-
     let name = identifiers::type_identifier(state)?;
-
     let current = state.stream.current();
     let extends = if current.kind == TokenKind::Extends {
         let span = current.span;
@@ -49,7 +48,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         state.stream.next();
 
         let interfaces =
-            utils::at_least_one_comma_separated::<SimpleIdentifier>(state, &|state| {
+            utils::at_least_one_comma_separated_no_trailing::<SimpleIdentifier>(state, &|state| {
                 identifiers::full_type_name(state)
             })?;
 
@@ -57,8 +56,6 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     } else {
         None
     };
-
-    let attributes = state.get_attributes();
 
     let classname = name.value.to_string();
     let body = scoped!(
@@ -128,7 +125,7 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
         state.stream.next();
 
         let interfaces =
-            utils::at_least_one_comma_separated::<SimpleIdentifier>(state, &|state| {
+            utils::at_least_one_comma_separated_no_trailing::<SimpleIdentifier>(state, &|state| {
                 identifiers::full_name(state)
             })?;
 

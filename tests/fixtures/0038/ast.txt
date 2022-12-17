@@ -56,32 +56,42 @@
             ampersand: None,
             body: [
                 If {
-                    condition: ComparisonOperation(
-                        LessThan {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            4,
-                                            9,
-                                        ),
-                                        name: "n",
-                                    },
+                    condition: Parenthesized {
+                        left_parenthesis: Span(
+                            4,
+                            8,
+                        ),
+                        inner: ComparisonOperation(
+                            LessThan {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                4,
+                                                9,
+                                            ),
+                                            name: "n",
+                                        },
+                                    ),
                                 ),
-                            ),
-                            span: Span(
-                                4,
-                                12,
-                            ),
-                            right: LiteralInteger {
                                 span: Span(
                                     4,
-                                    14,
+                                    12,
                                 ),
-                                value: "2",
+                                right: LiteralInteger {
+                                    span: Span(
+                                        4,
+                                        14,
+                                    ),
+                                    value: "2",
+                                },
                             },
-                        },
-                    ),
+                        ),
+                        right_parenthesis: Span(
+                            4,
+                            15,
+                        ),
+                    },
                     then: [
                         Return {
                             value: Some(

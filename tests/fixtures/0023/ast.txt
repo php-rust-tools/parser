@@ -1,82 +1,171 @@
 [
-    Foreach {
-        expr: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        3,
-                        10,
+    Foreach(
+        ForeachLoop {
+            foreach: Span(
+                3,
+                1,
+            ),
+            iterator: Parenthesized {
+                left_parenthesis: Span(
+                    3,
+                    9,
+                ),
+                inner: Value {
+                    expression: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    3,
+                                    10,
+                                ),
+                                name: "a",
+                            },
+                        ),
                     ),
-                    name: "a",
+                    as: Span(
+                        3,
+                        13,
+                    ),
+                    ampersand: Some(
+                        Span(
+                            3,
+                            16,
+                        ),
+                    ),
+                    value: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    3,
+                                    17,
+                                ),
+                                name: "b",
+                            },
+                        ),
+                    ),
+                },
+                right_parenthesis: Span(
+                    3,
+                    19,
+                ),
+            },
+            body: Braced(
+                Braced {
+                    left_brace: Span(
+                        3,
+                        21,
+                    ),
+                    inner: [],
+                    right_brace: Span(
+                        3,
+                        22,
+                    ),
                 },
             ),
-        ),
-        by_ref: true,
-        key_var: None,
-        value_var: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        3,
-                        17,
-                    ),
-                    name: "b",
-                },
+        },
+    ),
+    Foreach(
+        ForeachLoop {
+            foreach: Span(
+                5,
+                1,
             ),
-        ),
-        body: [],
-    },
-    Foreach {
-        expr: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
+            iterator: Parenthesized {
+                left_parenthesis: Span(
+                    5,
+                    9,
+                ),
+                inner: KeyAndValue {
+                    expression: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    5,
+                                    10,
+                                ),
+                                name: "a",
+                            },
+                        ),
+                    ),
+                    as: Span(
                         5,
-                        10,
+                        13,
                     ),
-                    name: "a",
+                    ampersand: Some(
+                        Span(
+                            5,
+                            22,
+                        ),
+                    ),
+                    key: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    5,
+                                    16,
+                                ),
+                                name: "b",
+                            },
+                        ),
+                    ),
+                    arrow: Span(
+                        5,
+                        19,
+                    ),
+                    value: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    5,
+                                    23,
+                                ),
+                                name: "c",
+                            },
+                        ),
+                    ),
+                },
+                right_parenthesis: Span(
+                    5,
+                    25,
+                ),
+            },
+            body: Braced(
+                Braced {
+                    left_brace: Span(
+                        5,
+                        27,
+                    ),
+                    inner: [],
+                    right_brace: Span(
+                        5,
+                        28,
+                    ),
                 },
             ),
-        ),
-        by_ref: true,
-        key_var: Some(
-            Variable(
+        },
+    ),
+    Switch {
+        condition: Parenthesized {
+            left_parenthesis: Span(
+                7,
+                8,
+            ),
+            inner: Variable(
                 SimpleVariable(
                     SimpleVariable {
                         span: Span(
-                            5,
-                            16,
+                            7,
+                            9,
                         ),
-                        name: "b",
+                        name: "a",
                     },
                 ),
             ),
-        ),
-        value_var: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        5,
-                        23,
-                    ),
-                    name: "c",
-                },
+            right_parenthesis: Span(
+                7,
+                11,
             ),
-        ),
-        body: [],
-    },
-    Switch {
-        condition: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        7,
-                        9,
-                    ),
-                    name: "a",
-                },
-            ),
-        ),
+        },
         cases: [
             Case {
                 condition: Some(
@@ -90,7 +179,15 @@
                 ),
                 body: [
                     Break {
-                        num: None,
+                        break: Span(
+                            9,
+                            9,
+                        ),
+                        expression: None,
+                        semicolon: Span(
+                            9,
+                            14,
+                        ),
                     },
                 ],
             },
@@ -112,130 +209,242 @@
             },
         ],
     },
-    Foreach {
-        expr: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        14,
-                        10,
-                    ),
-                    name: "foo",
-                },
-            ),
-        ),
-        by_ref: false,
-        key_var: None,
-        value_var: ShortArray {
-            start: Span(
+    Foreach(
+        ForeachLoop {
+            foreach: Span(
                 14,
-                18,
+                1,
             ),
-            items: [
-                ArrayItem {
-                    key: None,
-                    value: Variable(
+            iterator: Parenthesized {
+                left_parenthesis: Span(
+                    14,
+                    9,
+                ),
+                inner: Value {
+                    expression: Variable(
                         SimpleVariable(
                             SimpleVariable {
                                 span: Span(
                                     14,
-                                    19,
+                                    10,
+                                ),
+                                name: "foo",
+                            },
+                        ),
+                    ),
+                    as: Span(
+                        14,
+                        15,
+                    ),
+                    ampersand: None,
+                    value: ShortArray(
+                        Bracketed {
+                            left_bracket: Span(
+                                14,
+                                18,
+                            ),
+                            inner: CommaSeparated {
+                                inner: [
+                                    ArrayItem {
+                                        key: None,
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        14,
+                                                        19,
+                                                    ),
+                                                    name: "baz",
+                                                },
+                                            ),
+                                        ),
+                                        unpack: false,
+                                        by_ref: false,
+                                    },
+                                    ArrayItem {
+                                        key: None,
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        14,
+                                                        25,
+                                                    ),
+                                                    name: "car",
+                                                },
+                                            ),
+                                        ),
+                                        unpack: false,
+                                        by_ref: false,
+                                    },
+                                ],
+                                commas: [
+                                    Span(
+                                        14,
+                                        23,
+                                    ),
+                                ],
+                            },
+                            right_bracket: Span(
+                                14,
+                                29,
+                            ),
+                        },
+                    ),
+                },
+                right_parenthesis: Span(
+                    14,
+                    30,
+                ),
+            },
+            body: Braced(
+                Braced {
+                    left_brace: Span(
+                        14,
+                        32,
+                    ),
+                    inner: [],
+                    right_brace: Span(
+                        14,
+                        33,
+                    ),
+                },
+            ),
+        },
+    ),
+    Foreach(
+        ForeachLoop {
+            foreach: Span(
+                16,
+                1,
+            ),
+            iterator: Parenthesized {
+                left_parenthesis: Span(
+                    16,
+                    9,
+                ),
+                inner: KeyAndValue {
+                    expression: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    16,
+                                    10,
+                                ),
+                                name: "foo",
+                            },
+                        ),
+                    ),
+                    as: Span(
+                        16,
+                        15,
+                    ),
+                    ampersand: None,
+                    key: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    16,
+                                    18,
+                                ),
+                                name: "bar",
+                            },
+                        ),
+                    ),
+                    arrow: Span(
+                        16,
+                        23,
+                    ),
+                    value: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    16,
+                                    26,
                                 ),
                                 name: "baz",
                             },
                         ),
                     ),
-                    unpack: false,
-                    by_ref: false,
                 },
-                ArrayItem {
-                    key: None,
+                right_parenthesis: Span(
+                    16,
+                    30,
+                ),
+            },
+            body: Braced(
+                Braced {
+                    left_brace: Span(
+                        16,
+                        32,
+                    ),
+                    inner: [],
+                    right_brace: Span(
+                        16,
+                        33,
+                    ),
+                },
+            ),
+        },
+    ),
+    Foreach(
+        ForeachLoop {
+            foreach: Span(
+                18,
+                1,
+            ),
+            iterator: Parenthesized {
+                left_parenthesis: Span(
+                    18,
+                    9,
+                ),
+                inner: Value {
+                    expression: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    18,
+                                    10,
+                                ),
+                                name: "foo",
+                            },
+                        ),
+                    ),
+                    as: Span(
+                        18,
+                        15,
+                    ),
+                    ampersand: None,
                     value: Variable(
                         SimpleVariable(
                             SimpleVariable {
                                 span: Span(
-                                    14,
-                                    25,
+                                    18,
+                                    18,
                                 ),
-                                name: "car",
+                                name: "bar",
                             },
                         ),
                     ),
-                    unpack: false,
-                    by_ref: false,
                 },
-            ],
-            end: Span(
-                14,
-                29,
+                right_parenthesis: Span(
+                    18,
+                    22,
+                ),
+            },
+            body: Braced(
+                Braced {
+                    left_brace: Span(
+                        18,
+                        24,
+                    ),
+                    inner: [],
+                    right_brace: Span(
+                        18,
+                        25,
+                    ),
+                },
             ),
         },
-        body: [],
-    },
-    Foreach {
-        expr: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        16,
-                        10,
-                    ),
-                    name: "foo",
-                },
-            ),
-        ),
-        by_ref: false,
-        key_var: Some(
-            Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            16,
-                            18,
-                        ),
-                        name: "bar",
-                    },
-                ),
-            ),
-        ),
-        value_var: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        16,
-                        26,
-                    ),
-                    name: "baz",
-                },
-            ),
-        ),
-        body: [],
-    },
-    Foreach {
-        expr: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        18,
-                        10,
-                    ),
-                    name: "foo",
-                },
-            ),
-        ),
-        by_ref: false,
-        key_var: None,
-        value_var: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span(
-                        18,
-                        18,
-                    ),
-                    name: "bar",
-                },
-            ),
-        ),
-        body: [],
-    },
+    ),
 ]

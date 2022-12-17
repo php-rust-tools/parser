@@ -1,5 +1,15 @@
 use crate::lexer::token::TokenKind;
 use crate::parser;
+use crate::parser::ast::loops::DoWhileBody;
+use crate::parser::ast::loops::DoWhileLoop;
+use crate::parser::ast::loops::ForBody;
+use crate::parser::ast::loops::ForIterator;
+use crate::parser::ast::loops::ForLoop;
+use crate::parser::ast::loops::ForeachBody;
+use crate::parser::ast::loops::ForeachIterator;
+use crate::parser::ast::loops::ForeachLoop;
+use crate::parser::ast::loops::WhileBody;
+use crate::parser::ast::loops::WhileLoop;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
@@ -8,213 +18,211 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn foreach_loop(state: &mut State) -> ParseResult<Statement> {
-    utils::skip(state, TokenKind::Foreach)?;
+    let foreach = utils::skip(state, TokenKind::Foreach)?;
 
-    utils::skip_left_parenthesis(state)?;
+    let iterator = utils::parenthesized(state, &|state: &mut State| {
+        let expression = expressions::create(state)?;
 
-    let expr = expressions::create(state)?;
+        let r#as = utils::skip(state, TokenKind::As)?;
 
-    utils::skip(state, TokenKind::As)?;
-
-    let mut by_ref = state.stream.current().kind == TokenKind::Ampersand;
-    if by_ref {
-        state.stream.next();
-    }
-
-    let mut key_var = None;
-    let mut value_var = expressions::create(state)?;
-
-    if state.stream.current().kind == TokenKind::DoubleArrow {
-        state.stream.next();
-
-        key_var = Some(value_var.clone());
-
-        by_ref = state.stream.current().kind == TokenKind::Ampersand;
-        if by_ref {
+        let current = state.stream.current();
+        let ampersand = if current.kind == TokenKind::Ampersand {
             state.stream.next();
+            Some(current.span)
+        } else {
+            None
+        };
+
+        let mut value = expressions::create(state)?;
+
+        let current = state.stream.current();
+        if current.kind == TokenKind::DoubleArrow {
+            state.stream.next();
+            let arrow = current.span;
+
+            let current = state.stream.current();
+            let ampersand = if current.kind == TokenKind::Ampersand {
+                state.stream.next();
+                Some(current.span)
+            } else {
+                None
+            };
+
+            let mut key = expressions::create(state)?;
+
+            std::mem::swap(&mut value, &mut key);
+
+            Ok(ForeachIterator::KeyAndValue {
+                expression,
+                r#as,
+                key,
+                arrow,
+                ampersand,
+                value,
+            })
+        } else {
+            Ok(ForeachIterator::Value {
+                expression,
+                r#as,
+                ampersand,
+                value,
+            })
         }
-
-        value_var = expressions::create(state)?;
-    }
-
-    utils::skip_right_parenthesis(state)?;
+    })?;
 
     let body = if state.stream.current().kind == TokenKind::Colon {
-        utils::skip_colon(state)?;
-        let then = blocks::body(state, &TokenKind::EndForeach)?;
-        utils::skip(state, TokenKind::EndForeach)?;
-        utils::skip_semicolon(state)?;
-        then
+        ForeachBody::Block {
+            colon: utils::skip_colon(state)?,
+            statements: blocks::multiple_statements(state, &TokenKind::EndForeach)?,
+            endforeach: utils::skip(state, TokenKind::EndForeach)?,
+            semicolon: utils::skip_semicolon(state)?,
+        }
     } else if state.stream.current().kind == TokenKind::LeftBrace {
-        utils::skip_left_brace(state)?;
-        let then = blocks::body(state, &TokenKind::RightBrace)?;
-        utils::skip_right_brace(state)?;
-        then
+        ForeachBody::Braced(utils::braced(state, &|state| {
+            blocks::multiple_statements(state, &TokenKind::RightBrace)
+        })?)
     } else {
-        vec![parser::statement(state)?]
+        ForeachBody::Statement(parser::statement(state).map(Box::new)?)
     };
 
-    Ok(Statement::Foreach {
-        expr,
-        by_ref,
-        key_var,
-        value_var,
+    Ok(Statement::Foreach(ForeachLoop {
+        foreach,
+        iterator,
         body,
-    })
+    }))
 }
 
 pub fn for_loop(state: &mut State) -> ParseResult<Statement> {
-    utils::skip(state, TokenKind::For)?;
+    let r#for = utils::skip(state, TokenKind::For)?;
 
-    utils::skip_left_parenthesis(state)?;
+    let iterator = utils::parenthesized(state, &|state| {
+        Ok(ForIterator {
+            initializations: utils::semicolon_terminated(state, &|state| {
+                utils::comma_separated_no_trailing(
+                    state,
+                    &expressions::create,
+                    TokenKind::SemiColon,
+                )
+            })?,
+            conditions: utils::semicolon_terminated(state, &|state| {
+                utils::comma_separated_no_trailing(
+                    state,
+                    &expressions::create,
+                    TokenKind::SemiColon,
+                )
+            })?,
+            r#loop: utils::comma_separated_no_trailing(
+                state,
+                &expressions::create,
+                TokenKind::RightParen,
+            )?,
+        })
+    })?;
 
-    let mut init = Vec::new();
-    loop {
-        if state.stream.current().kind == TokenKind::SemiColon {
-            break;
+    let body = if state.stream.current().kind == TokenKind::Colon {
+        ForBody::Block {
+            colon: utils::skip_colon(state)?,
+            statements: blocks::multiple_statements(state, &TokenKind::EndFor)?,
+            endfor: utils::skip(state, TokenKind::EndFor)?,
+            semicolon: utils::skip_semicolon(state)?,
         }
-
-        init.push(expressions::create(state)?);
-
-        if state.stream.current().kind == TokenKind::Comma {
-            state.stream.next();
-        } else {
-            break;
-        }
-    }
-
-    utils::skip_semicolon(state)?;
-
-    let mut condition = Vec::new();
-    loop {
-        if state.stream.current().kind == TokenKind::SemiColon {
-            break;
-        }
-
-        condition.push(expressions::create(state)?);
-
-        if state.stream.current().kind == TokenKind::Comma {
-            state.stream.next();
-        } else {
-            break;
-        }
-    }
-    utils::skip_semicolon(state)?;
-
-    let mut r#loop = Vec::new();
-    loop {
-        if state.stream.current().kind == TokenKind::RightParen {
-            break;
-        }
-
-        r#loop.push(expressions::create(state)?);
-
-        if state.stream.current().kind == TokenKind::Comma {
-            state.stream.next();
-        } else {
-            break;
-        }
-    }
-
-    utils::skip_right_parenthesis(state)?;
-
-    let then = if state.stream.current().kind == TokenKind::Colon {
-        utils::skip_colon(state)?;
-        let then = blocks::body(state, &TokenKind::EndFor)?;
-        utils::skip(state, TokenKind::EndFor)?;
-        utils::skip_semicolon(state)?;
-        then
     } else if state.stream.current().kind == TokenKind::LeftBrace {
-        utils::skip_left_brace(state)?;
-        let then = blocks::body(state, &TokenKind::RightBrace)?;
-        utils::skip_right_brace(state)?;
-        then
+        ForBody::Braced(utils::braced(state, &|state| {
+            blocks::multiple_statements(state, &TokenKind::RightBrace)
+        })?)
     } else {
-        vec![parser::statement(state)?]
+        ForBody::Statement(parser::statement(state).map(Box::new)?)
     };
 
-    Ok(Statement::For {
-        init,
-        condition,
-        r#loop,
-        then,
-    })
+    Ok(Statement::For(ForLoop {
+        r#for,
+        iterator,
+        body,
+    }))
 }
 
 pub fn do_loop(state: &mut State) -> ParseResult<Statement> {
-    utils::skip(state, TokenKind::Do)?;
+    let r#do = utils::skip(state, TokenKind::Do)?;
 
     let body = if state.stream.current().kind == TokenKind::LeftBrace {
-        utils::skip_left_brace(state)?;
-        let body = blocks::body(state, &TokenKind::RightBrace)?;
-        utils::skip_right_brace(state)?;
-        body
+        DoWhileBody::Braced(utils::braced(state, &|state| {
+            blocks::multiple_statements(state, &TokenKind::RightBrace)
+        })?)
     } else {
-        vec![parser::statement(state)?]
+        DoWhileBody::Statement(parser::statement(state).map(Box::new)?)
     };
 
-    utils::skip(state, TokenKind::While)?;
+    let r#while = utils::skip(state, TokenKind::While)?;
 
-    utils::skip_left_parenthesis(state)?;
-    let condition = expressions::create(state)?;
-    utils::skip_right_parenthesis(state)?;
-    utils::skip_semicolon(state)?;
+    let condition = utils::semicolon_terminated(state, &|state| {
+        utils::parenthesized(state, &expressions::create)
+    })?;
 
-    Ok(Statement::DoWhile { condition, body })
+    Ok(Statement::DoWhile(DoWhileLoop {
+        r#do,
+        body,
+        r#while,
+        condition,
+    }))
 }
 
 pub fn while_loop(state: &mut State) -> ParseResult<Statement> {
-    utils::skip(state, TokenKind::While)?;
+    let r#while = utils::skip(state, TokenKind::While)?;
 
-    utils::skip_left_parenthesis(state)?;
+    let condition = utils::parenthesized(state, &expressions::create)?;
 
-    let condition = expressions::create(state)?;
-
-    utils::skip_right_parenthesis(state)?;
-
-    let body = if state.stream.current().kind == TokenKind::SemiColon {
-        utils::skip_semicolon(state)?;
-        vec![]
-    } else if state.stream.current().kind == TokenKind::Colon {
-        utils::skip_colon(state)?;
-        let then = blocks::body(state, &TokenKind::EndWhile)?;
-        utils::skip(state, TokenKind::EndWhile)?;
-        utils::skip_semicolon(state)?;
-        then
+    let body = if state.stream.current().kind == TokenKind::Colon {
+        WhileBody::Block {
+            colon: utils::skip_colon(state)?,
+            statements: blocks::multiple_statements(state, &TokenKind::EndWhile)?,
+            endwhile: utils::skip(state, TokenKind::EndWhile)?,
+            semicolon: utils::skip_semicolon(state)?,
+        }
     } else if state.stream.current().kind == TokenKind::LeftBrace {
-        utils::skip_left_brace(state)?;
-        let then = blocks::body(state, &TokenKind::RightBrace)?;
-        utils::skip_right_brace(state)?;
-        then
+        WhileBody::Braced(utils::braced(state, &|state| {
+            blocks::multiple_statements(state, &TokenKind::RightBrace)
+        })?)
     } else {
-        vec![parser::statement(state)?]
+        WhileBody::Statement(parser::statement(state).map(Box::new)?)
     };
 
-    Ok(Statement::While { condition, body })
+    Ok(Statement::While(WhileLoop {
+        r#while,
+        condition,
+        body,
+    }))
 }
 
 pub fn continue_statement(state: &mut State) -> ParseResult<Statement> {
-    utils::skip(state, TokenKind::Continue)?;
+    let r#continue = utils::skip(state, TokenKind::Continue)?;
 
-    let mut num = None;
+    let mut expression = None;
     if state.stream.current().kind != TokenKind::SemiColon {
-        num = Some(expressions::create(state)?);
+        expression = Some(expressions::create(state)?);
     }
 
-    utils::skip_semicolon(state)?;
+    let semicolon = utils::skip_semicolon(state)?;
 
-    Ok(Statement::Continue { num })
+    Ok(Statement::Continue {
+        r#continue,
+        expression,
+        semicolon,
+    })
 }
 
 pub fn break_statement(state: &mut State) -> ParseResult<Statement> {
-    utils::skip(state, TokenKind::Break)?;
+    let r#break = utils::skip(state, TokenKind::Break)?;
 
-    let mut num = None;
+    let mut expression = None;
     if state.stream.current().kind != TokenKind::SemiColon {
-        num = Some(expressions::create(state)?);
+        expression = Some(expressions::create(state)?);
     }
 
-    utils::skip_semicolon(state)?;
+    let semicolon = utils::skip_semicolon(state)?;
 
-    Ok(Statement::Break { num })
+    Ok(Statement::Break {
+        r#break,
+        expression,
+        semicolon,
+    })
 }

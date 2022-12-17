@@ -1,118 +1,126 @@
 [
-    Expression {
-        expression: LogicalOperation(
-            Not {
-                span: Span(
-                    3,
-                    1,
-                ),
-                right: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
+    Expression(
+        SemicolonTerminated {
+            inner: LogicalOperation(
+                Not {
+                    span: Span(
+                        3,
+                        1,
+                    ),
+                    right: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    3,
+                                    2,
+                                ),
+                                name: "a",
+                            },
+                        ),
+                    ),
+                },
+            ),
+            semicolon: Span(
+                3,
+                4,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: LogicalOperation(
+                Not {
+                    span: Span(
+                        4,
+                        1,
+                    ),
+                    right: LogicalOperation(
+                        Not {
                             span: Span(
-                                3,
+                                4,
                                 2,
                             ),
-                            name: "a",
+                            right: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            4,
+                                            3,
+                                        ),
+                                        name: "b",
+                                    },
+                                ),
+                            ),
                         },
                     ),
-                ),
-            },
-        ),
-        end: Span(
-            3,
-            4,
-        ),
-    },
-    Expression {
-        expression: LogicalOperation(
-            Not {
-                span: Span(
-                    4,
-                    1,
-                ),
-                right: LogicalOperation(
-                    Not {
-                        span: Span(
-                            4,
-                            2,
+                },
+            ),
+            semicolon: Span(
+                4,
+                5,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: LogicalOperation(
+                Not {
+                    span: Span(
+                        5,
+                        1,
+                    ),
+                    right: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    5,
+                                    3,
+                                ),
+                                name: "a",
+                            },
                         ),
-                        right: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        4,
-                                        3,
-                                    ),
-                                    name: "b",
-                                },
-                            ),
-                        ),
-                    },
-                ),
-            },
-        ),
-        end: Span(
-            4,
-            5,
-        ),
-    },
-    Expression {
-        expression: LogicalOperation(
-            Not {
-                span: Span(
-                    5,
-                    1,
-                ),
-                right: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
+                    ),
+                },
+            ),
+            semicolon: Span(
+                5,
+                5,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: LogicalOperation(
+                Not {
+                    span: Span(
+                        6,
+                        1,
+                    ),
+                    right: LogicalOperation(
+                        Not {
                             span: Span(
-                                5,
+                                6,
                                 3,
                             ),
-                            name: "a",
+                            right: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            6,
+                                            5,
+                                        ),
+                                        name: "a",
+                                    },
+                                ),
+                            ),
                         },
                     ),
-                ),
-            },
-        ),
-        end: Span(
-            5,
-            5,
-        ),
-    },
-    Expression {
-        expression: LogicalOperation(
-            Not {
-                span: Span(
-                    6,
-                    1,
-                ),
-                right: LogicalOperation(
-                    Not {
-                        span: Span(
-                            6,
-                            3,
-                        ),
-                        right: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        6,
-                                        5,
-                                    ),
-                                    name: "a",
-                                },
-                            ),
-                        ),
-                    },
-                ),
-            },
-        ),
-        end: Span(
-            6,
-            7,
-        ),
-    },
+                },
+            ),
+            semicolon: Span(
+                6,
+                7,
+            ),
+        },
+    ),
 ]

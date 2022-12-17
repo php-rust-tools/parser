@@ -1,52 +1,59 @@
 [
-    Expression {
-        expression: ShortArray {
-            start: Span(
-                3,
-                1,
-            ),
-            items: [
-                ArrayItem {
-                    key: None,
-                    value: FunctionCall {
-                        target: Identifier(
-                            SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: Span(
-                                        3,
-                                        2,
+    Expression(
+        SemicolonTerminated {
+            inner: ShortArray(
+                Bracketed {
+                    left_bracket: Span(
+                        3,
+                        1,
+                    ),
+                    inner: CommaSeparated {
+                        inner: [
+                            ArrayItem {
+                                key: None,
+                                value: FunctionCall {
+                                    target: Identifier(
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: Span(
+                                                    3,
+                                                    2,
+                                                ),
+                                                value: "foo",
+                                            },
+                                        ),
                                     ),
-                                    value: "foo",
+                                    arguments: ArgumentList {
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        start: Span(
+                                            3,
+                                            5,
+                                        ),
+                                        arguments: [],
+                                        end: Span(
+                                            3,
+                                            24,
+                                        ),
+                                    },
                                 },
-                            ),
-                        ),
-                        arguments: ArgumentList {
-                            comments: CommentGroup {
-                                comments: [],
+                                unpack: false,
+                                by_ref: false,
                             },
-                            start: Span(
-                                3,
-                                5,
-                            ),
-                            arguments: [],
-                            end: Span(
-                                3,
-                                24,
-                            ),
-                        },
+                        ],
+                        commas: [],
                     },
-                    unpack: false,
-                    by_ref: false,
+                    right_bracket: Span(
+                        3,
+                        25,
+                    ),
                 },
-            ],
-            end: Span(
+            ),
+            semicolon: Span(
                 3,
-                25,
+                26,
             ),
         },
-        end: Span(
-            3,
-            26,
-        ),
-    },
+    ),
 ]

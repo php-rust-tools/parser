@@ -1,37 +1,39 @@
 [
-    Expression {
-        expression: New {
-            span: Span(
-                1,
-                7,
-            ),
-            target: AnonymousClass(
-                AnonymousClass {
-                    attributes: [],
-                    span: Span(
-                        1,
-                        11,
-                    ),
-                    extends: None,
-                    implements: None,
-                    body: ClassBody {
-                        start: Span(
+    Expression(
+        SemicolonTerminated {
+            inner: New {
+                span: Span(
+                    1,
+                    7,
+                ),
+                target: AnonymousClass(
+                    AnonymousClass {
+                        attributes: [],
+                        span: Span(
                             1,
-                            16,
+                            11,
                         ),
-                        end: Span(
-                            1,
-                            17,
-                        ),
-                        members: [],
+                        extends: None,
+                        implements: None,
+                        body: ClassBody {
+                            start: Span(
+                                1,
+                                16,
+                            ),
+                            end: Span(
+                                1,
+                                17,
+                            ),
+                            members: [],
+                        },
                     },
-                },
+                ),
+                arguments: None,
+            },
+            semicolon: Span(
+                1,
+                18,
             ),
-            arguments: None,
         },
-        end: Span(
-            1,
-            18,
-        ),
-    },
+    ),
 ]

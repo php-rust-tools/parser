@@ -1,11 +1,13 @@
 [
-    Expression {
-        expression: ShellExec {
-            parts: [],
+    Expression(
+        SemicolonTerminated {
+            inner: ShellExec {
+                parts: [],
+            },
+            semicolon: Span(
+                3,
+                3,
+            ),
         },
-        end: Span(
-            3,
-            3,
-        ),
-    },
+    ),
 ]

@@ -1,209 +1,223 @@
 [
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                3,
-                                1,
-                            ),
-                            name: "foo",
-                        },
-                    ),
-                ),
-                span: Span(
-                    3,
-                    6,
-                ),
-                right: FunctionCall {
-                    target: Identifier(
-                        SimpleIdentifier(
-                            SimpleIdentifier {
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
                                 span: Span(
                                     3,
-                                    8,
+                                    1,
                                 ),
-                                value: "give_me_foo",
+                                name: "foo",
                             },
                         ),
                     ),
-                    arguments: ArgumentList {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        start: Span(
-                            3,
-                            19,
-                        ),
-                        arguments: [],
-                        end: Span(
-                            3,
-                            20,
-                        ),
-                    },
-                },
-            },
-        ),
-        end: Span(
-            3,
-            21,
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                5,
-                                1,
-                            ),
-                            name: "a",
-                        },
-                    ),
-                ),
-                span: Span(
-                    5,
-                    4,
-                ),
-                right: ShortArray {
-                    start: Span(
-                        5,
+                    span: Span(
+                        3,
                         6,
                     ),
-                    items: [
-                        ArrayItem {
-                            key: Some(
-                                LiteralString {
+                    right: FunctionCall {
+                        target: Identifier(
+                            SimpleIdentifier(
+                                SimpleIdentifier {
                                     span: Span(
-                                        6,
-                                        5,
+                                        3,
+                                        8,
                                     ),
-                                    value: "single",
+                                    value: "give_me_foo",
                                 },
                             ),
-                            value: Instanceof {
-                                left: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                6,
-                                                17,
-                                            ),
-                                            name: "foo",
-                                        },
-                                    ),
-                                ),
-                                span: Span(
-                                    6,
-                                    22,
-                                ),
-                                right: Identifier(
-                                    SimpleIdentifier(
-                                        SimpleIdentifier {
-                                            span: Span(
-                                                6,
-                                                33,
-                                            ),
-                                            value: "Foo",
-                                        },
-                                    ),
-                                ),
+                        ),
+                        arguments: ArgumentList {
+                            comments: CommentGroup {
+                                comments: [],
                             },
-                            unpack: false,
-                            by_ref: false,
-                        },
-                        ArrayItem {
-                            key: Some(
-                                LiteralString {
-                                    span: Span(
-                                        7,
-                                        5,
-                                    ),
-                                    value: "multiple",
-                                },
+                            start: Span(
+                                3,
+                                19,
                             ),
-                            value: LogicalOperation(
-                                And {
-                                    left: Instanceof {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span(
-                                                        7,
-                                                        19,
-                                                    ),
-                                                    name: "foo",
-                                                },
-                                            ),
-                                        ),
-                                        span: Span(
-                                            7,
-                                            24,
-                                        ),
-                                        right: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: Span(
-                                                        7,
-                                                        35,
-                                                    ),
-                                                    value: "Bar",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                    span: Span(
-                                        7,
-                                        39,
-                                    ),
-                                    right: Instanceof {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span(
-                                                        7,
-                                                        42,
-                                                    ),
-                                                    name: "foo",
-                                                },
-                                            ),
-                                        ),
-                                        span: Span(
-                                            7,
-                                            47,
-                                        ),
-                                        right: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
-                                                    span: Span(
-                                                        7,
-                                                        58,
-                                                    ),
-                                                    value: "Baz",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                },
+                            arguments: [],
+                            end: Span(
+                                3,
+                                20,
                             ),
-                            unpack: false,
-                            by_ref: false,
                         },
-                    ],
-                    end: Span(
-                        8,
-                        1,
+                    },
+                },
+            ),
+            semicolon: Span(
+                3,
+                21,
+            ),
+        },
+    ),
+    Expression(
+        SemicolonTerminated {
+            inner: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    5,
+                                    1,
+                                ),
+                                name: "a",
+                            },
+                        ),
+                    ),
+                    span: Span(
+                        5,
+                        4,
+                    ),
+                    right: ShortArray(
+                        Bracketed {
+                            left_bracket: Span(
+                                5,
+                                6,
+                            ),
+                            inner: CommaSeparated {
+                                inner: [
+                                    ArrayItem {
+                                        key: Some(
+                                            LiteralString {
+                                                span: Span(
+                                                    6,
+                                                    5,
+                                                ),
+                                                value: "single",
+                                            },
+                                        ),
+                                        value: Instanceof {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span(
+                                                            6,
+                                                            17,
+                                                        ),
+                                                        name: "foo",
+                                                    },
+                                                ),
+                                            ),
+                                            span: Span(
+                                                6,
+                                                22,
+                                            ),
+                                            right: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: Span(
+                                                            6,
+                                                            33,
+                                                        ),
+                                                        value: "Foo",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                        unpack: false,
+                                        by_ref: false,
+                                    },
+                                    ArrayItem {
+                                        key: Some(
+                                            LiteralString {
+                                                span: Span(
+                                                    7,
+                                                    5,
+                                                ),
+                                                value: "multiple",
+                                            },
+                                        ),
+                                        value: LogicalOperation(
+                                            And {
+                                                left: Instanceof {
+                                                    left: Variable(
+                                                        SimpleVariable(
+                                                            SimpleVariable {
+                                                                span: Span(
+                                                                    7,
+                                                                    19,
+                                                                ),
+                                                                name: "foo",
+                                                            },
+                                                        ),
+                                                    ),
+                                                    span: Span(
+                                                        7,
+                                                        24,
+                                                    ),
+                                                    right: Identifier(
+                                                        SimpleIdentifier(
+                                                            SimpleIdentifier {
+                                                                span: Span(
+                                                                    7,
+                                                                    35,
+                                                                ),
+                                                                value: "Bar",
+                                                            },
+                                                        ),
+                                                    ),
+                                                },
+                                                span: Span(
+                                                    7,
+                                                    39,
+                                                ),
+                                                right: Instanceof {
+                                                    left: Variable(
+                                                        SimpleVariable(
+                                                            SimpleVariable {
+                                                                span: Span(
+                                                                    7,
+                                                                    42,
+                                                                ),
+                                                                name: "foo",
+                                                            },
+                                                        ),
+                                                    ),
+                                                    span: Span(
+                                                        7,
+                                                        47,
+                                                    ),
+                                                    right: Identifier(
+                                                        SimpleIdentifier(
+                                                            SimpleIdentifier {
+                                                                span: Span(
+                                                                    7,
+                                                                    58,
+                                                                ),
+                                                                value: "Baz",
+                                                            },
+                                                        ),
+                                                    ),
+                                                },
+                                            },
+                                        ),
+                                        unpack: false,
+                                        by_ref: false,
+                                    },
+                                ],
+                                commas: [
+                                    Span(
+                                        6,
+                                        36,
+                                    ),
+                                ],
+                            },
+                            right_bracket: Span(
+                                8,
+                                1,
+                            ),
+                        },
                     ),
                 },
-            },
-        ),
-        end: Span(
-            8,
-            2,
-        ),
-    },
+            ),
+            semicolon: Span(
+                8,
+                2,
+            ),
+        },
+    ),
 ]
