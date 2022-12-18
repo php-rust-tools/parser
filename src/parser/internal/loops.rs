@@ -180,7 +180,10 @@ pub fn continue_statement(state: &mut State) -> ParseResult<Statement> {
     let r#continue = utils::skip(state, TokenKind::Continue)?;
 
     let mut level = None;
-    if state.stream.current().kind != TokenKind::SemiColon {
+    if !matches!(
+        state.stream.current().kind,
+        TokenKind::SemiColon | TokenKind::CloseTag
+    ) {
         level = Some(expressions::create(state)?);
     }
 
@@ -195,7 +198,10 @@ pub fn break_statement(state: &mut State) -> ParseResult<Statement> {
     let r#break = utils::skip(state, TokenKind::Break)?;
 
     let mut level = None;
-    if state.stream.current().kind != TokenKind::SemiColon {
+    if !matches!(
+        state.stream.current().kind,
+        TokenKind::SemiColon | TokenKind::CloseTag
+    ) {
         level = Some(expressions::create(state)?);
     }
 
