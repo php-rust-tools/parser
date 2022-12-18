@@ -213,15 +213,19 @@ pub struct Use {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Expression {
+    // eval("$a = 1")
     Eval {
         value: Box<Self>,
     },
+    // die, die(1)
     Die {
         value: Option<Box<Self>>,
     },
+    // exit, exit(1)
     Exit {
         value: Option<Box<Self>>,
     },
+    // echo "foo"
     Echo {
         values: Vec<Self>,
     },
@@ -230,41 +234,50 @@ pub enum Expression {
     BitwiseOperation(BitwiseOperation),
     ComparisonOperation(ComparisonOperation),
     LogicalOperation(LogicalOperation),
+    // $a . $b
     Concat {
         left: Box<Self>,
         span: Span,
         right: Box<Self>,
     },
+    // $foo instanceof Bar
     Instanceof {
         left: Box<Self>,
         span: Span,
         right: Box<Self>,
     },
+    // &$foo
     Reference {
         span: Span,
         right: Box<Self>,
     },
+    // ($a && $b)
     Parenthesized {
         start: Span,
         expr: Box<Self>,
         end: Span,
     },
+    // list($a, $b)
     List {
         items: Vec<ListItem>,
     },
     Empty,
+    // @foo()
     ErrorSuppress {
         span: Span,
         expr: Box<Self>,
     },
+    // 1, 1_000, 0123, 0o123, 0x123, 0b1010
     LiteralInteger {
         span: Span,
         value: ByteString,
     },
+    // 1.12345
     LiteralFloat {
         span: Span,
         value: ByteString,
     },
+    // foo | foo_bar | _foo | foo123
     Identifier(Identifier),
     Variable(Variable),
     // include "foo.php"
