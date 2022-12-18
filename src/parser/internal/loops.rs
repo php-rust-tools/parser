@@ -1,5 +1,7 @@
+use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser;
+use crate::parser::ast::literals::LiteralInteger;
 use crate::parser::ast::loops::BreakStatement;
 use crate::parser::ast::loops::ContinueStatement;
 use crate::parser::ast::loops::DoWhileStatement;
@@ -9,6 +11,7 @@ use crate::parser::ast::loops::ForStatementIterator;
 use crate::parser::ast::loops::ForeachStatement;
 use crate::parser::ast::loops::ForeachStatementBody;
 use crate::parser::ast::loops::ForeachStatementIterator;
+use crate::parser::ast::loops::Level;
 use crate::parser::ast::loops::WhileStatement;
 use crate::parser::ast::loops::WhileStatementBody;
 use crate::parser::ast::Statement;
@@ -177,37 +180,49 @@ pub fn while_statement(state: &mut State) -> ParseResult<Statement> {
 }
 
 pub fn continue_statement(state: &mut State) -> ParseResult<Statement> {
-    let r#continue = utils::skip(state, TokenKind::Continue)?;
-
-    let mut level = None;
-    if !matches!(
-        state.stream.current().kind,
-        TokenKind::SemiColon | TokenKind::CloseTag
-    ) {
-        level = Some(expressions::create(state)?);
-    }
-
     Ok(Statement::Continue(ContinueStatement {
-        r#continue,
-        level,
+        r#continue: utils::skip(state, TokenKind::Continue)?,
+        level: maybe_loop_level(state)?,
         ending: utils::skip_ending(state)?,
     }))
 }
 
 pub fn break_statement(state: &mut State) -> ParseResult<Statement> {
-    let r#break = utils::skip(state, TokenKind::Break)?;
-
-    let mut level = None;
-    if !matches!(
-        state.stream.current().kind,
-        TokenKind::SemiColon | TokenKind::CloseTag
-    ) {
-        level = Some(expressions::create(state)?);
-    }
-
     Ok(Statement::Break(BreakStatement {
-        r#break,
-        level,
+        r#break: utils::skip(state, TokenKind::Break)?,
+        level: maybe_loop_level(state)?,
         ending: utils::skip_ending(state)?,
     }))
+}
+
+fn maybe_loop_level(state: &mut State) -> ParseResult<Option<Level>> {
+    let current = &state.stream.current().kind;
+
+    Ok(
+        if current == &TokenKind::SemiColon || current == &TokenKind::CloseTag {
+            None
+        } else {
+            Some(loop_level(state)?)
+        },
+    )
+}
+
+fn loop_level(state: &mut State) -> ParseResult<Level> {
+    if let Token {
+        kind: TokenKind::LiteralInteger(i),
+        span,
+    } = state.stream.current()
+    {
+        state.stream.next();
+
+        return Ok(Level::Literal(LiteralInteger {
+            value: i.clone(),
+            span: *span,
+        }));
+    }
+
+    Ok(Level::Parenthesized(utils::parenthesized(
+        state,
+        &|state| loop_level(state).map(Box::new),
+    )?))
 }

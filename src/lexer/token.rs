@@ -16,9 +16,9 @@ impl From<(usize, usize)> for Span {
     }
 }
 
-impl Into<(usize, usize)> for Span {
-    fn into(self) -> (usize, usize) {
-        (self.0, self.1)
+impl From<Span> for (usize, usize) {
+    fn from(span: Span) -> Self {
+        (span.0, span.1)
     }
 }
 

@@ -250,13 +250,17 @@
                 Expression {
                     expression: Exit {
                         value: Some(
-                            LiteralInteger {
-                                span: Span(
-                                    9,
-                                    10,
+                            Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "0",
+                                        span: Span(
+                                            9,
+                                            10,
+                                        ),
+                                    },
                                 ),
-                                value: "0",
-                            },
+                            ),
                         ),
                     },
                     ending: Semicolon(

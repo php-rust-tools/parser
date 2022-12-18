@@ -71,13 +71,17 @@
                             ),
                         ),
                         index: Some(
-                            LiteralInteger {
-                                span: Span(
-                                    1,
-                                    34,
+                            Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "0",
+                                        span: Span(
+                                            1,
+                                            34,
+                                        ),
+                                    },
                                 ),
-                                value: "0",
-                            },
+                            ),
                         ),
                     },
                 ),
@@ -98,13 +102,17 @@
                             ),
                         ),
                         index: Some(
-                            LiteralString {
-                                span: Span(
-                                    1,
-                                    46,
+                            Literal(
+                                String(
+                                    LiteralString {
+                                        value: "baz",
+                                        span: Span(
+                                            1,
+                                            46,
+                                        ),
+                                    },
                                 ),
-                                value: "baz",
-                            },
+                            ),
                         ),
                     },
                 ),

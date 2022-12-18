@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::parser::ast::literals::LiteralInteger;
 use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::utils::Parenthesized;
 use crate::parser::ast::utils::SemicolonTerminated;
@@ -109,17 +110,24 @@ pub enum WhileStatementBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+pub enum Level {
+    Literal(LiteralInteger),
+    Parenthesized(Parenthesized<Box<Level>>),
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BreakStatement {
-    pub r#break: Span,             // `break`
-    pub level: Option<Expression>, // `*expression*`
-    pub ending: Ending,            // `;` or `?>`
+    pub r#break: Span,        // `break`
+    pub level: Option<Level>, // `3`
+    pub ending: Ending,       // `;` or `?>`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ContinueStatement {
-    pub r#continue: Span,          // `continue`
-    pub level: Option<Expression>, // `*expression*`
-    pub ending: Ending,            // `;` or `?>`
+    pub r#continue: Span,     // `continue`
+    pub level: Option<Level>, // `2`
+    pub ending: Ending,       // `;` or `?>`
 }

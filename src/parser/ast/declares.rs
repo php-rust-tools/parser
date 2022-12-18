@@ -4,6 +4,7 @@ use serde::Serialize;
 
 use crate::lexer::token::Span;
 use crate::parser::ast::identifiers::SimpleIdentifier;
+use crate::parser::ast::literals::Literal;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 
@@ -12,7 +13,7 @@ use crate::parser::ast::Statement;
 pub struct DeclareEntry {
     pub key: SimpleIdentifier, // `strict_types`
     pub span: Span,            // `=`
-    pub value: Expression,     // `1`
+    pub value: Literal,        // `1`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

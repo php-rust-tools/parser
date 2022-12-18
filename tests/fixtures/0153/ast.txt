@@ -113,13 +113,17 @@
                                                         ),
                                                         ellipsis: None,
                                                         default: Some(
-                                                            LiteralString {
-                                                                span: Span(
-                                                                    7,
-                                                                    42,
+                                                            Literal(
+                                                                String(
+                                                                    LiteralString {
+                                                                        value: "foo",
+                                                                        span: Span(
+                                                                            7,
+                                                                            42,
+                                                                        ),
+                                                                    },
                                                                 ),
-                                                                value: "foo",
-                                                            },
+                                                            ),
                                                         ),
                                                         modifiers: PromotedPropertyModifierGroup {
                                                             modifiers: [

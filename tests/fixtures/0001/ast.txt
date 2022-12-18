@@ -57,13 +57,17 @@
                         ),
                         ellipsis: None,
                         default: Some(
-                            LiteralString {
-                                span: Span(
-                                    3,
-                                    26,
+                            Literal(
+                                String(
+                                    LiteralString {
+                                        value: "",
+                                        span: Span(
+                                            3,
+                                            26,
+                                        ),
+                                    },
                                 ),
-                                value: "",
-                            },
+                            ),
                         ),
                         ampersand: None,
                     },
@@ -127,13 +131,17 @@
                 Expression {
                     expression: Exit {
                         value: Some(
-                            LiteralInteger {
-                                span: Span(
-                                    4,
-                                    10,
+                            Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "1",
+                                        span: Span(
+                                            4,
+                                            10,
+                                        ),
+                                    },
                                 ),
-                                value: "1",
-                            },
+                            ),
                         ),
                     },
                     ending: Semicolon(

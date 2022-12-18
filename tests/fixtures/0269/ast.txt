@@ -27,13 +27,17 @@
                         3,
                         11,
                     ),
-                    value: LiteralString {
-                        span: Span(
-                            3,
-                            13,
+                    value: Literal(
+                        String(
+                            LiteralString {
+                                value: "\n",
+                                span: Span(
+                                    3,
+                                    13,
+                                ),
+                            },
                         ),
-                        value: "\n",
-                    },
+                    ),
                 },
             ],
             end: Span(
@@ -478,13 +482,17 @@
                                 17,
                                 9,
                             ),
-                            right: LiteralString {
-                                span: Span(
-                                    17,
-                                    11,
+                            right: Literal(
+                                String(
+                                    LiteralString {
+                                        value: "hello, world",
+                                        span: Span(
+                                            17,
+                                            11,
+                                        ),
+                                    },
                                 ),
-                                value: "hello, world",
-                            },
+                            ),
                         },
                     ),
                     ending: Semicolon(
@@ -629,13 +637,17 @@
                     23,
                     9,
                 ),
-                right: LiteralInteger {
-                    span: Span(
-                        23,
-                        11,
+                right: Literal(
+                    Integer(
+                        LiteralInteger {
+                            value: "1",
+                            span: Span(
+                                23,
+                                11,
+                            ),
+                        },
                     ),
-                    value: "1",
-                },
+                ),
             },
         ),
         ending: Semicolon(

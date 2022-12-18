@@ -9,13 +9,17 @@
         expression: Yield {
             key: None,
             value: Some(
-                LiteralInteger {
-                    span: Span(
-                        1,
-                        13,
+                Literal(
+                    Integer(
+                        LiteralInteger {
+                            value: "1",
+                            span: Span(
+                                1,
+                                13,
+                            ),
+                        },
                     ),
-                    value: "1",
-                },
+                ),
             ),
         },
         ending: Semicolon(

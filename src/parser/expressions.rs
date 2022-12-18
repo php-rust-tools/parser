@@ -5,6 +5,10 @@ use crate::parser::ast::arguments::ArgumentPlaceholder;
 use crate::parser::ast::identifiers::DynamicIdentifier;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
+use crate::parser::ast::literals::Literal;
+use crate::parser::ast::literals::LiteralFloat;
+use crate::parser::ast::literals::LiteralInteger;
+use crate::parser::ast::literals::LiteralString;
 use crate::parser::ast::operators::ArithmeticOperation;
 use crate::parser::ast::operators::AssignmentOperation;
 use crate::parser::ast::operators::BitwiseOperation;
@@ -26,7 +30,6 @@ use crate::parser::internal::strings;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;
 use crate::parser::state::State;
-
 pub fn create(state: &mut State) -> ParseResult<Expression> {
     for_precedence(state, Precedence::Lowest)
 }
@@ -731,15 +734,15 @@ expressions! {
     literal_integer({
         let current = state.stream.current();
 
-        if let TokenKind::LiteralInteger(i) = &current.kind {
-            let e = Expression::LiteralInteger {
-                span: current.span,
-                value: i.clone()
-            };
-
+        if let TokenKind::LiteralInteger(value) = &current.kind {
             state.stream.next();
 
-            Ok(e)
+            Ok(Expression::Literal(Literal::Integer(
+                LiteralInteger {
+                    span: current.span,
+                    value: value.clone()
+                }
+            )))
         } else {
             unreachable!("{}:{}", file!(), line!());
         }
@@ -749,15 +752,15 @@ expressions! {
     literal_float({
         let current = state.stream.current();
 
-        if let TokenKind::LiteralFloat(f) = &current.kind {
-            let e = Expression::LiteralFloat {
-                span: current.span,
-                value: f.clone()
-            };
-
+        if let TokenKind::LiteralFloat(value) = &current.kind {
             state.stream.next();
 
-            Ok(e)
+            Ok(Expression::Literal(
+                Literal::Float(LiteralFloat {
+                    span: current.span,
+                    value: value.clone()
+                })
+            ))
         } else {
             unreachable!("{}:{}", file!(), line!());
         }
@@ -768,14 +771,14 @@ expressions! {
         let current = state.stream.current();
 
         if let TokenKind::LiteralString(value) = &current.kind {
-            let e = Expression::LiteralString {
-                span: current.span,
-                value: value.clone()
-            };
-
             state.stream.next();
 
-            Ok(e)
+            Ok(Expression::Literal(
+                Literal::String(LiteralString {
+                    span: current.span,
+                    value: value.clone()
+                })
+            ))
         } else {
             unreachable!("{}:{}", file!(), line!());
         }

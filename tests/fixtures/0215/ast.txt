@@ -94,13 +94,17 @@
                                     Expression {
                                         expression: Exit {
                                             value: Some(
-                                                LiteralInteger {
-                                                    span: Span(
-                                                        8,
-                                                        14,
+                                                Literal(
+                                                    Integer(
+                                                        LiteralInteger {
+                                                            value: "1",
+                                                            span: Span(
+                                                                8,
+                                                                14,
+                                                            ),
+                                                        },
                                                     ),
-                                                    value: "1",
-                                                },
+                                                ),
                                             ),
                                         },
                                         ending: Semicolon(
