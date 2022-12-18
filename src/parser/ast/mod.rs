@@ -453,10 +453,6 @@ pub enum Expression {
     YieldFrom {
         value: Box<Self>,
     },
-    BitwiseNot {
-        span: Span,
-        value: Box<Self>,
-    },
     Print {
         span: Span,
         value: Box<Self>,
