@@ -214,16 +214,16 @@ pub struct Use {
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Expression {
     Eval {
-        value: Box<Expression>,
+        value: Box<Self>,
     },
     Die {
-        value: Option<Box<Expression>>,
+        value: Option<Box<Self>>,
     },
     Exit {
-        value: Option<Box<Expression>>,
+        value: Option<Box<Self>>,
     },
     Echo {
-        values: Vec<Expression>,
+        values: Vec<Self>,
     },
     ArithmeticOperation(ArithmeticOperation),
     AssignmentOperation(AssignmentOperation),
@@ -231,22 +231,22 @@ pub enum Expression {
     ComparisonOperation(ComparisonOperation),
     LogicalOperation(LogicalOperation),
     Concat {
-        left: Box<Expression>,
+        left: Box<Self>,
         span: Span,
-        right: Box<Expression>,
+        right: Box<Self>,
     },
     Instanceof {
-        left: Box<Expression>,
+        left: Box<Self>,
         span: Span,
-        right: Box<Expression>,
+        right: Box<Self>,
     },
     Reference {
         span: Span,
-        right: Box<Expression>,
+        right: Box<Self>,
     },
     Parenthesized {
         start: Span,
-        expr: Box<Expression>,
+        expr: Box<Self>,
         end: Span,
     },
     List {
@@ -270,22 +270,22 @@ pub enum Expression {
     // include "foo.php"
     Include {
         span: Span,
-        path: Box<Expression>,
+        path: Box<Self>,
     },
     // include_once "foo.php"
     IncludeOnce {
         span: Span,
-        path: Box<Expression>,
+        path: Box<Self>,
     },
     // require "foo.php"
     Require {
         span: Span,
-        path: Box<Expression>,
+        path: Box<Self>,
     },
     // require_once "foo.php"
     RequireOnce {
         span: Span,
-        path: Box<Expression>,
+        path: Box<Self>,
     },
     // `foo(1, 2, 3)`
     FunctionCall {
