@@ -1,30 +1,40 @@
 [
-    If {
-        condition: Parenthesized {
-            left_parenthesis: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    If(
+        IfStatement {
+            if: Span(
                 3,
-                4,
+                1,
             ),
-            inner: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            3,
-                            5,
-                        ),
-                        name: "a",
-                    },
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    3,
+                    4,
                 ),
-            ),
-            right_parenthesis: Span(
-                3,
-                7,
-            ),
-        },
-        then: [
-            Expression(
-                SemicolonTerminated {
-                    inner: Variable(
+                inner: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                3,
+                                5,
+                            ),
+                            name: "a",
+                        },
+                    ),
+                ),
+                right_parenthesis: Span(
+                    3,
+                    7,
+                ),
+            },
+            body: Statement {
+                statement: Expression {
+                    expression: Variable(
                         SimpleVariable(
                             SimpleVariable {
                                 span: Span(
@@ -35,30 +45,42 @@
                             },
                         ),
                     ),
-                    semicolon: Span(
-                        3,
-                        11,
+                    ending: Semicolon(
+                        Span(
+                            3,
+                            11,
+                        ),
                     ),
                 },
-            ),
-        ],
-        else_ifs: [
-            ElseIf {
-                condition: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
+                elseifs: [
+                    IfStatementElseIf {
+                        elseif: Span(
+                            4,
+                            1,
+                        ),
+                        condition: Parenthesized {
+                            left_parenthesis: Span(
                                 4,
-                                9,
+                                8,
                             ),
-                            name: "b",
-                        },
-                    ),
-                ),
-                body: [
-                    Expression(
-                        SemicolonTerminated {
                             inner: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            4,
+                                            9,
+                                        ),
+                                        name: "b",
+                                    },
+                                ),
+                            ),
+                            right_parenthesis: Span(
+                                4,
+                                11,
+                            ),
+                        },
+                        statement: Expression {
+                            expression: Variable(
                                 SimpleVariable(
                                     SimpleVariable {
                                         span: Span(
@@ -69,41 +91,47 @@
                                     },
                                 ),
                             ),
-                            semicolon: Span(
-                                4,
-                                15,
+                            ending: Semicolon(
+                                Span(
+                                    4,
+                                    15,
+                                ),
                             ),
                         },
-                    ),
+                    },
                 ],
-            },
-        ],
-        else: Some(
-            [
-                Expression(
-                    SemicolonTerminated {
-                        inner: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        5,
-                                        6,
-                                    ),
-                                    name: "C",
-                                },
-                            ),
-                        ),
-                        semicolon: Span(
+                else: Some(
+                    IfStatementElse {
+                        else: Span(
                             5,
-                            8,
+                            1,
                         ),
+                        statement: Expression {
+                            expression: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            5,
+                                            6,
+                                        ),
+                                        name: "C",
+                                    },
+                                ),
+                            ),
+                            ending: Semicolon(
+                                Span(
+                                    5,
+                                    8,
+                                ),
+                            ),
+                        },
                     },
                 ),
-            ],
-        ),
-    },
+            },
+        },
+    ),
     For(
-        ForLoop {
+        ForStatement {
             for: Span(
                 7,
                 1,
@@ -113,7 +141,7 @@
                     7,
                     5,
                 ),
-                inner: ForIterator {
+                inner: ForStatementIterator {
                     initializations: SemicolonTerminated {
                         inner: CommaSeparated {
                             inner: [],
@@ -145,30 +173,30 @@
                 ),
             },
             body: Statement(
-                Expression(
-                    SemicolonTerminated {
-                        inner: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        7,
-                                        10,
-                                    ),
-                                    name: "foo",
-                                },
-                            ),
+                Expression {
+                    expression: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    7,
+                                    10,
+                                ),
+                                name: "foo",
+                            },
                         ),
-                        semicolon: Span(
+                    ),
+                    ending: Semicolon(
+                        Span(
                             7,
                             14,
                         ),
-                    },
-                ),
+                    ),
+                },
             ),
         },
     ),
     Foreach(
-        ForeachLoop {
+        ForeachStatement {
             foreach: Span(
                 9,
                 1,
@@ -213,30 +241,30 @@
                 ),
             },
             body: Statement(
-                Expression(
-                    SemicolonTerminated {
-                        inner: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        9,
-                                        20,
-                                    ),
-                                    name: "AB",
-                                },
-                            ),
+                Expression {
+                    expression: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    9,
+                                    20,
+                                ),
+                                name: "AB",
+                            },
                         ),
-                        semicolon: Span(
+                    ),
+                    ending: Semicolon(
+                        Span(
                             9,
                             23,
                         ),
-                    },
-                ),
+                    ),
+                },
             ),
         },
     ),
     While(
-        WhileLoop {
+        WhileStatement {
             while: Span(
                 11,
                 1,
@@ -263,55 +291,53 @@
                 ),
             },
             body: Statement(
-                Expression(
-                    SemicolonTerminated {
-                        inner: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        11,
-                                        12,
-                                    ),
-                                    name: "A",
-                                },
-                            ),
+                Expression {
+                    expression: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    11,
+                                    12,
+                                ),
+                                name: "A",
+                            },
                         ),
-                        semicolon: Span(
+                    ),
+                    ending: Semicolon(
+                        Span(
                             11,
                             14,
                         ),
-                    },
-                ),
+                    ),
+                },
             ),
         },
     ),
     DoWhile(
-        DoWhileLoop {
+        DoWhileStatement {
             do: Span(
                 13,
                 1,
             ),
-            body: Statement(
-                Expression(
-                    SemicolonTerminated {
-                        inner: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        13,
-                                        4,
-                                    ),
-                                    name: "A",
-                                },
+            body: Expression {
+                expression: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                13,
+                                4,
                             ),
-                        ),
-                        semicolon: Span(
-                            13,
-                            6,
-                        ),
-                    },
+                            name: "A",
+                        },
+                    ),
                 ),
-            ),
+                ending: Semicolon(
+                    Span(
+                        13,
+                        6,
+                    ),
+                ),
+            },
             while: Span(
                 13,
                 8,

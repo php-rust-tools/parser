@@ -1,27 +1,33 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: Print {
-                span: Span(
-                    1,
-                    7,
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: Print {
+            span: Span(
+                1,
+                7,
+            ),
+            value: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            1,
+                            13,
+                        ),
+                        name: "foo",
+                    },
                 ),
-                value: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                1,
-                                13,
-                            ),
-                            name: "foo",
-                        },
-                    ),
-                ),
-            },
-            semicolon: Span(
+            ),
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 17,
             ),
-        },
-    ),
+        ),
+    },
 ]

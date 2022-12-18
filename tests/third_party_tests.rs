@@ -44,6 +44,8 @@ fn symfony_framework() {
             "src/Symfony/Component/Config/Tests/Fixtures/ParseError.php",
             // file contains unintentional error upstream, waiting for fix.
             "src/Symfony/Component/VarExporter/LazyProxyTrait.php",
+            // this file contains XML, not PHP.
+            "src/Symfony/Component/DependencyInjection/Tests/Fixtures/xml/xml_with_wrong_ext.php",
         ],
     );
 }
@@ -95,7 +97,16 @@ fn spiral_framework() {
 
 #[test]
 fn mezzio_framework() {
-    test_repository("mezzio-framework", "https://github.com/mezzio/mezzio", &[]);
+    test_repository(
+        "mezzio-framework",
+        "https://github.com/mezzio/mezzio",
+        &[
+            // files are Hack, not PHP.
+            "vendor/nikic/fast-route/test/HackTypechecker/fixtures/all_options.php",
+            "vendor/nikic/fast-route/test/HackTypechecker/fixtures/empty_options.php",
+            "vendor/nikic/fast-route/test/HackTypechecker/fixtures/no_options.php",
+        ],
+    );
 }
 
 #[test]
@@ -247,7 +258,12 @@ fn phpmyadmin_web() {
     test_repository(
         "phpmyadmin",
         "https://github.com/phpmyadmin/phpmyadmin",
-        &[],
+        &[
+            // files are Hack, not PHP.
+            "vendor/nikic/fast-route/test/HackTypechecker/fixtures/all_options.php",
+            "vendor/nikic/fast-route/test/HackTypechecker/fixtures/empty_options.php",
+            "vendor/nikic/fast-route/test/HackTypechecker/fixtures/no_options.php",
+        ],
     );
 }
 

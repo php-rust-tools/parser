@@ -2,7 +2,17 @@
     InlineHtml(
         "<h1>\n    ",
     ),
+    FullOpeningTag(
+        Span(
+            2,
+            5,
+        ),
+    ),
     Echo {
+        echo: Span(
+            2,
+            11,
+        ),
         values: [
             LiteralString {
                 span: Span(
@@ -12,6 +22,12 @@
                 value: "Hello, world!",
             },
         ],
+        ending: CloseTag(
+            Span(
+                2,
+                32,
+            ),
+        ),
     },
     InlineHtml(
         "\n</h1>",

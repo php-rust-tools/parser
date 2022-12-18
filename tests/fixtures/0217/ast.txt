@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Class(
         Class {
             span: Span(
@@ -112,6 +118,10 @@
                             body: Some(
                                 [
                                     Return {
+                                        return: Span(
+                                            7,
+                                            9,
+                                        ),
                                         value: Some(
                                             New {
                                                 span: Span(
@@ -146,6 +156,12 @@
                                                     },
                                                 ),
                                             },
+                                        ),
+                                        ending: Semicolon(
+                                            Span(
+                                                7,
+                                                23,
+                                            ),
                                         ),
                                     },
                                 ],

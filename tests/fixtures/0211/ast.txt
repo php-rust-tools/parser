@@ -1,186 +1,192 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: Match {
-                keyword: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: Match {
+            keyword: Span(
+                4,
+                1,
+            ),
+            condition: Parenthesized {
+                left_parenthesis: Span(
                     4,
-                    1,
+                    7,
                 ),
-                condition: Parenthesized {
-                    left_parenthesis: Span(
-                        4,
-                        7,
-                    ),
-                    inner: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    4,
-                                    8,
-                                ),
-                                name: "s",
-                            },
-                        ),
-                    ),
-                    right_parenthesis: Span(
-                        4,
-                        10,
-                    ),
-                },
-                default: Some(
-                    DefaultMatchArm {
-                        keyword: Span(
-                            10,
-                            5,
-                        ),
-                        arrow: Span(
-                            10,
-                            13,
-                        ),
-                        body: LiteralInteger {
+                inner: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
-                                10,
-                                16,
+                                4,
+                                8,
                             ),
-                            value: "124",
+                            name: "s",
                         },
-                    },
+                    ),
                 ),
-                arms: [
-                    MatchArm {
-                        conditions: [
-                            LiteralInteger {
-                                span: Span(
-                                    5,
-                                    5,
-                                ),
-                                value: "1",
-                            },
-                        ],
-                        arrow: Span(
-                            5,
-                            7,
+                right_parenthesis: Span(
+                    4,
+                    10,
+                ),
+            },
+            default: Some(
+                DefaultMatchArm {
+                    keyword: Span(
+                        10,
+                        5,
+                    ),
+                    arrow: Span(
+                        10,
+                        13,
+                    ),
+                    body: LiteralInteger {
+                        span: Span(
+                            10,
+                            16,
                         ),
-                        body: LiteralInteger {
+                        value: "124",
+                    },
+                },
+            ),
+            arms: [
+                MatchArm {
+                    conditions: [
+                        LiteralInteger {
                             span: Span(
                                 5,
-                                10,
+                                5,
                             ),
-                            value: "2",
+                            value: "1",
                         },
-                    },
-                    MatchArm {
-                        conditions: [
-                            LiteralInteger {
-                                span: Span(
-                                    6,
-                                    5,
-                                ),
-                                value: "3",
-                            },
-                        ],
-                        arrow: Span(
-                            6,
-                            8,
+                    ],
+                    arrow: Span(
+                        5,
+                        7,
+                    ),
+                    body: LiteralInteger {
+                        span: Span(
+                            5,
+                            10,
                         ),
-                        body: LiteralInteger {
+                        value: "2",
+                    },
+                },
+                MatchArm {
+                    conditions: [
+                        LiteralInteger {
                             span: Span(
                                 6,
-                                11,
+                                5,
                             ),
-                            value: "4",
+                            value: "3",
                         },
-                    },
-                    MatchArm {
-                        conditions: [
-                            LiteralInteger {
-                                span: Span(
-                                    7,
-                                    5,
-                                ),
-                                value: "5",
-                            },
-                            LiteralInteger {
-                                span: Span(
-                                    7,
-                                    7,
-                                ),
-                                value: "6",
-                            },
-                        ],
-                        arrow: Span(
-                            7,
-                            9,
+                    ],
+                    arrow: Span(
+                        6,
+                        8,
+                    ),
+                    body: LiteralInteger {
+                        span: Span(
+                            6,
+                            11,
                         ),
-                        body: LiteralInteger {
+                        value: "4",
+                    },
+                },
+                MatchArm {
+                    conditions: [
+                        LiteralInteger {
                             span: Span(
                                 7,
-                                12,
+                                5,
                             ),
-                            value: "4",
+                            value: "5",
                         },
-                    },
-                    MatchArm {
-                        conditions: [
-                            LiteralInteger {
-                                span: Span(
-                                    8,
-                                    5,
-                                ),
-                                value: "9",
-                            },
-                            LiteralInteger {
-                                span: Span(
-                                    8,
-                                    8,
-                                ),
-                                value: "123",
-                            },
-                        ],
-                        arrow: Span(
-                            8,
-                            13,
+                        LiteralInteger {
+                            span: Span(
+                                7,
+                                7,
+                            ),
+                            value: "6",
+                        },
+                    ],
+                    arrow: Span(
+                        7,
+                        9,
+                    ),
+                    body: LiteralInteger {
+                        span: Span(
+                            7,
+                            12,
                         ),
-                        body: LiteralInteger {
+                        value: "4",
+                    },
+                },
+                MatchArm {
+                    conditions: [
+                        LiteralInteger {
                             span: Span(
                                 8,
-                                16,
+                                5,
                             ),
-                            value: "4",
+                            value: "9",
                         },
-                    },
-                    MatchArm {
-                        conditions: [
-                            Identifier(
-                                SimpleIdentifier(
-                                    SimpleIdentifier {
-                                        span: Span(
-                                            9,
-                                            5,
-                                        ),
-                                        value: "_",
-                                    },
-                                ),
-                            ),
-                        ],
-                        arrow: Span(
-                            9,
-                            7,
-                        ),
-                        body: LiteralInteger {
+                        LiteralInteger {
                             span: Span(
-                                9,
-                                10,
+                                8,
+                                8,
                             ),
-                            value: "43",
+                            value: "123",
                         },
+                    ],
+                    arrow: Span(
+                        8,
+                        13,
+                    ),
+                    body: LiteralInteger {
+                        span: Span(
+                            8,
+                            16,
+                        ),
+                        value: "4",
                     },
-                ],
-            },
-            semicolon: Span(
+                },
+                MatchArm {
+                    conditions: [
+                        Identifier(
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: Span(
+                                        9,
+                                        5,
+                                    ),
+                                    value: "_",
+                                },
+                            ),
+                        ),
+                    ],
+                    arrow: Span(
+                        9,
+                        7,
+                    ),
+                    body: LiteralInteger {
+                        span: Span(
+                            9,
+                            10,
+                        ),
+                        value: "43",
+                    },
+                },
+            ],
+        },
+        ending: Semicolon(
+            Span(
                 11,
                 2,
             ),
-        },
-    ),
+        ),
+    },
 ]

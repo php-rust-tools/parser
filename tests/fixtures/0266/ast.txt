@@ -1,57 +1,107 @@
 [
-    If {
-        condition: Parenthesized {
-            left_parenthesis: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    If(
+        IfStatement {
+            if: Span(
                 3,
-                4,
+                1,
             ),
-            inner: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            3,
-                            5,
-                        ),
-                        name: "foo",
-                    },
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    3,
+                    4,
                 ),
-            ),
-            right_parenthesis: Span(
-                3,
-                9,
-            ),
-        },
-        then: [],
-        else_ifs: [],
-        else: Some(
-            [
-                If {
-                    condition: Parenthesized {
-                        left_parenthesis: Span(
-                            5,
+                inner: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                3,
+                                5,
+                            ),
+                            name: "foo",
+                        },
+                    ),
+                ),
+                right_parenthesis: Span(
+                    3,
+                    9,
+                ),
+            },
+            body: Statement {
+                statement: Block(
+                    Braced {
+                        left_brace: Span(
+                            3,
                             11,
                         ),
-                        inner: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        5,
-                                        12,
-                                    ),
-                                    name: "bar",
-                                },
-                            ),
-                        ),
-                        right_parenthesis: Span(
+                        inner: [],
+                        right_brace: Span(
                             5,
-                            16,
+                            1,
                         ),
                     },
-                    then: [],
-                    else_ifs: [],
-                    else: None,
-                },
-            ],
-        ),
-    },
+                ),
+                elseifs: [],
+                else: Some(
+                    IfStatementElse {
+                        else: Span(
+                            5,
+                            3,
+                        ),
+                        statement: If(
+                            IfStatement {
+                                if: Span(
+                                    5,
+                                    8,
+                                ),
+                                condition: Parenthesized {
+                                    left_parenthesis: Span(
+                                        5,
+                                        11,
+                                    ),
+                                    inner: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    5,
+                                                    12,
+                                                ),
+                                                name: "bar",
+                                            },
+                                        ),
+                                    ),
+                                    right_parenthesis: Span(
+                                        5,
+                                        16,
+                                    ),
+                                },
+                                body: Statement {
+                                    statement: Block(
+                                        Braced {
+                                            left_brace: Span(
+                                                5,
+                                                18,
+                                            ),
+                                            inner: [],
+                                            right_brace: Span(
+                                                7,
+                                                1,
+                                            ),
+                                        },
+                                    ),
+                                    elseifs: [],
+                                    else: None,
+                                },
+                            },
+                        ),
+                    },
+                ),
+            },
+        },
+    ),
 ]

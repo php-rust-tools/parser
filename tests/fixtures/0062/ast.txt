@@ -1,53 +1,59 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: New {
-                span: Span(
-                    1,
-                    7,
-                ),
-                target: AnonymousClass(
-                    AnonymousClass {
-                        attributes: [],
-                        span: Span(
-                            1,
-                            11,
-                        ),
-                        extends: Some(
-                            ClassExtends {
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: New {
+            span: Span(
+                1,
+                7,
+            ),
+            target: AnonymousClass(
+                AnonymousClass {
+                    attributes: [],
+                    span: Span(
+                        1,
+                        11,
+                    ),
+                    extends: Some(
+                        ClassExtends {
+                            span: Span(
+                                1,
+                                17,
+                            ),
+                            parent: SimpleIdentifier {
                                 span: Span(
                                     1,
-                                    17,
+                                    25,
                                 ),
-                                parent: SimpleIdentifier {
-                                    span: Span(
-                                        1,
-                                        25,
-                                    ),
-                                    value: "Foo",
-                                },
+                                value: "Foo",
                             },
-                        ),
-                        implements: None,
-                        body: ClassBody {
-                            start: Span(
-                                1,
-                                29,
-                            ),
-                            end: Span(
-                                1,
-                                30,
-                            ),
-                            members: [],
                         },
+                    ),
+                    implements: None,
+                    body: ClassBody {
+                        start: Span(
+                            1,
+                            29,
+                        ),
+                        end: Span(
+                            1,
+                            30,
+                        ),
+                        members: [],
                     },
-                ),
-                arguments: None,
-            },
-            semicolon: Span(
+                },
+            ),
+            arguments: None,
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 31,
             ),
-        },
-    ),
+        ),
+    },
 ]

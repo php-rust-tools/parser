@@ -1,149 +1,155 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: InterpolatedString {
-                parts: [
-                    Expression(
-                        Variable(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: InterpolatedString {
+            parts: [
+                Expression(
+                    Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    1,
+                                    9,
+                                ),
+                                name: "foo",
+                            },
+                        ),
+                    ),
+                ),
+                Expression(
+                    ArrayIndex {
+                        array: Variable(
                             SimpleVariable(
                                 SimpleVariable {
                                     span: Span(
                                         1,
-                                        9,
+                                        15,
                                     ),
                                     name: "foo",
                                 },
                             ),
                         ),
-                    ),
-                    Expression(
-                        ArrayIndex {
-                            array: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            1,
-                                            15,
-                                        ),
-                                        name: "foo",
-                                    },
+                        index: Some(
+                            LiteralInteger {
+                                span: Span(
+                                    1,
+                                    20,
                                 ),
-                            ),
-                            index: Some(
-                                LiteralInteger {
+                                value: "0",
+                            },
+                        ),
+                    },
+                ),
+                Expression(
+                    ArrayIndex {
+                        array: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
                                     span: Span(
                                         1,
-                                        20,
+                                        24,
                                     ),
-                                    value: "0",
+                                    name: "foo",
                                 },
                             ),
-                        },
-                    ),
-                    Expression(
-                        ArrayIndex {
-                            array: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            1,
-                                            24,
-                                        ),
-                                        name: "foo",
-                                    },
+                        ),
+                        index: Some(
+                            LiteralString {
+                                span: Span(
+                                    1,
+                                    29,
                                 ),
-                            ),
-                            index: Some(
-                                LiteralString {
+                                value: "bar",
+                            },
+                        ),
+                    },
+                ),
+                Expression(
+                    PropertyFetch {
+                        target: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
                                     span: Span(
                                         1,
-                                        29,
+                                        37,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
+                        ),
+                        span: Span(
+                            1,
+                            41,
+                        ),
+                        property: Identifier(
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: Span(
+                                        1,
+                                        43,
                                     ),
                                     value: "bar",
                                 },
                             ),
-                        },
-                    ),
-                    Expression(
-                        PropertyFetch {
-                            target: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            1,
-                                            37,
-                                        ),
-                                        name: "foo",
-                                    },
-                                ),
-                            ),
-                            span: Span(
-                                1,
-                                41,
-                            ),
-                            property: Identifier(
-                                SimpleIdentifier(
-                                    SimpleIdentifier {
-                                        span: Span(
-                                            1,
-                                            43,
-                                        ),
-                                        value: "bar",
-                                    },
-                                ),
-                            ),
-                        },
-                    ),
-                    Expression(
-                        MethodCall {
-                            target: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            1,
-                                            48,
-                                        ),
-                                        name: "foo",
-                                    },
-                                ),
-                            ),
-                            span: Span(
-                                1,
-                                52,
-                            ),
-                            method: Identifier(
-                                SimpleIdentifier(
-                                    SimpleIdentifier {
-                                        span: Span(
-                                            1,
-                                            54,
-                                        ),
-                                        value: "bar",
-                                    },
-                                ),
-                            ),
-                            arguments: ArgumentList {
-                                comments: CommentGroup {
-                                    comments: [],
+                        ),
+                    },
+                ),
+                Expression(
+                    MethodCall {
+                        target: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        1,
+                                        48,
+                                    ),
+                                    name: "foo",
                                 },
-                                start: Span(
-                                    1,
-                                    57,
-                                ),
-                                arguments: [],
-                                end: Span(
-                                    1,
-                                    58,
-                                ),
+                            ),
+                        ),
+                        span: Span(
+                            1,
+                            52,
+                        ),
+                        method: Identifier(
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: Span(
+                                        1,
+                                        54,
+                                    ),
+                                    value: "bar",
+                                },
+                            ),
+                        ),
+                        arguments: ArgumentList {
+                            comments: CommentGroup {
+                                comments: [],
                             },
+                            start: Span(
+                                1,
+                                57,
+                            ),
+                            arguments: [],
+                            end: Span(
+                                1,
+                                58,
+                            ),
                         },
-                    ),
-                ],
-            },
-            semicolon: Span(
+                    },
+                ),
+            ],
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 61,
             ),
-        },
-    ),
+        ),
+    },
 ]

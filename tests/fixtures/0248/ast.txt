@@ -1,55 +1,61 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: ShortArray(
-                Bracketed {
-                    left_bracket: Span(
-                        3,
-                        1,
-                    ),
-                    inner: CommaSeparated {
-                        inner: [
-                            ArrayItem {
-                                key: Some(
-                                    Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span(
-                                                    3,
-                                                    2,
-                                                ),
-                                                name: "foo",
-                                            },
-                                        ),
-                                    ),
-                                ),
-                                value: Variable(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: ShortArray(
+            Bracketed {
+                left_bracket: Span(
+                    3,
+                    1,
+                ),
+                inner: CommaSeparated {
+                    inner: [
+                        ArrayItem {
+                            key: Some(
+                                Variable(
                                     SimpleVariable(
                                         SimpleVariable {
                                             span: Span(
                                                 3,
-                                                11,
+                                                2,
                                             ),
-                                            name: "bar",
+                                            name: "foo",
                                         },
                                     ),
                                 ),
-                                unpack: false,
-                                by_ref: true,
-                            },
-                        ],
-                        commas: [],
-                    },
-                    right_bracket: Span(
-                        3,
-                        15,
-                    ),
+                            ),
+                            value: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            3,
+                                            11,
+                                        ),
+                                        name: "bar",
+                                    },
+                                ),
+                            ),
+                            unpack: false,
+                            by_ref: true,
+                        },
+                    ],
+                    commas: [],
                 },
-            ),
-            semicolon: Span(
+                right_bracket: Span(
+                    3,
+                    15,
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 3,
                 16,
             ),
-        },
-    ),
+        ),
+    },
 ]

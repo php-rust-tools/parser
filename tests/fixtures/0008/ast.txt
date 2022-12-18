@@ -1,346 +1,352 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    1,
-                                ),
-                                name: "a",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        3,
-                        4,
-                    ),
-                    right: ArithmeticOperation(
-                        Exponentiation {
-                            left: LiteralInteger {
-                                span: Span(
-                                    3,
-                                    6,
-                                ),
-                                value: "2",
-                            },
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
                                 3,
-                                8,
+                                1,
                             ),
-                            right: LiteralInteger {
-                                span: Span(
-                                    3,
-                                    11,
-                                ),
-                                value: "2",
-                            },
+                            name: "a",
                         },
                     ),
-                },
-            ),
-            semicolon: Span(
+                ),
+                span: Span(
+                    3,
+                    4,
+                ),
+                right: ArithmeticOperation(
+                    Exponentiation {
+                        left: LiteralInteger {
+                            span: Span(
+                                3,
+                                6,
+                            ),
+                            value: "2",
+                        },
+                        span: Span(
+                            3,
+                            8,
+                        ),
+                        right: LiteralInteger {
+                            span: Span(
+                                3,
+                                11,
+                            ),
+                            value: "2",
+                        },
+                    },
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 3,
                 12,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    5,
-                                    1,
-                                ),
-                                name: "b",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        5,
-                        4,
-                    ),
-                    right: Ternary {
-                        condition: LiteralInteger {
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
                                 5,
-                                6,
+                                1,
                             ),
-                            value: "1",
+                            name: "b",
                         },
+                    ),
+                ),
+                span: Span(
+                    5,
+                    4,
+                ),
+                right: Ternary {
+                    condition: LiteralInteger {
                         span: Span(
                             5,
-                            8,
+                            6,
                         ),
-                        then: LiteralInteger {
+                        value: "1",
+                    },
+                    span: Span(
+                        5,
+                        8,
+                    ),
+                    then: LiteralInteger {
+                        span: Span(
+                            5,
+                            10,
+                        ),
+                        value: "2",
+                    },
+                    colon: Span(
+                        5,
+                        12,
+                    ),
+                    else: LiteralInteger {
+                        span: Span(
+                            5,
+                            14,
+                        ),
+                        value: "3",
+                    },
+                },
+            },
+        ),
+        ending: Semicolon(
+            Span(
+                5,
+                15,
+            ),
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
-                                5,
+                                7,
+                                1,
+                            ),
+                            name: "c",
+                        },
+                    ),
+                ),
+                span: Span(
+                    7,
+                    4,
+                ),
+                right: Ternary {
+                    condition: LiteralInteger {
+                        span: Span(
+                            7,
+                            6,
+                        ),
+                        value: "1",
+                    },
+                    span: Span(
+                        7,
+                        8,
+                    ),
+                    then: Ternary {
+                        condition: LiteralInteger {
+                            span: Span(
+                                7,
                                 10,
                             ),
                             value: "2",
                         },
-                        colon: Span(
-                            5,
+                        span: Span(
+                            7,
                             12,
+                        ),
+                        then: LiteralInteger {
+                            span: Span(
+                                7,
+                                14,
+                            ),
+                            value: "3",
+                        },
+                        colon: Span(
+                            7,
+                            16,
                         ),
                         else: LiteralInteger {
                             span: Span(
-                                5,
-                                14,
+                                7,
+                                18,
+                            ),
+                            value: "4",
+                        },
+                    },
+                    colon: Span(
+                        7,
+                        20,
+                    ),
+                    else: LiteralInteger {
+                        span: Span(
+                            7,
+                            22,
+                        ),
+                        value: "5",
+                    },
+                },
+            },
+        ),
+        ending: Semicolon(
+            Span(
+                7,
+                23,
+            ),
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                9,
+                                1,
+                            ),
+                            name: "d",
+                        },
+                    ),
+                ),
+                span: Span(
+                    9,
+                    4,
+                ),
+                right: ShortTernary {
+                    condition: LiteralInteger {
+                        span: Span(
+                            9,
+                            6,
+                        ),
+                        value: "1",
+                    },
+                    span: Span(
+                        9,
+                        8,
+                    ),
+                    else: ShortTernary {
+                        condition: LiteralInteger {
+                            span: Span(
+                                9,
+                                11,
+                            ),
+                            value: "2",
+                        },
+                        span: Span(
+                            9,
+                            13,
+                        ),
+                        else: LiteralInteger {
+                            span: Span(
+                                9,
+                                16,
                             ),
                             value: "3",
                         },
                     },
                 },
-            ),
-            semicolon: Span(
-                5,
-                15,
-            ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    7,
-                                    1,
-                                ),
-                                name: "c",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        7,
-                        4,
-                    ),
-                    right: Ternary {
-                        condition: LiteralInteger {
-                            span: Span(
-                                7,
-                                6,
-                            ),
-                            value: "1",
-                        },
-                        span: Span(
-                            7,
-                            8,
-                        ),
-                        then: Ternary {
-                            condition: LiteralInteger {
-                                span: Span(
-                                    7,
-                                    10,
-                                ),
-                                value: "2",
-                            },
-                            span: Span(
-                                7,
-                                12,
-                            ),
-                            then: LiteralInteger {
-                                span: Span(
-                                    7,
-                                    14,
-                                ),
-                                value: "3",
-                            },
-                            colon: Span(
-                                7,
-                                16,
-                            ),
-                            else: LiteralInteger {
-                                span: Span(
-                                    7,
-                                    18,
-                                ),
-                                value: "4",
-                            },
-                        },
-                        colon: Span(
-                            7,
-                            20,
-                        ),
-                        else: LiteralInteger {
-                            span: Span(
-                                7,
-                                22,
-                            ),
-                            value: "5",
-                        },
-                    },
-                },
-            ),
-            semicolon: Span(
-                7,
-                23,
-            ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    9,
-                                    1,
-                                ),
-                                name: "d",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        9,
-                        4,
-                    ),
-                    right: ShortTernary {
-                        condition: LiteralInteger {
-                            span: Span(
-                                9,
-                                6,
-                            ),
-                            value: "1",
-                        },
-                        span: Span(
-                            9,
-                            8,
-                        ),
-                        else: ShortTernary {
-                            condition: LiteralInteger {
-                                span: Span(
-                                    9,
-                                    11,
-                                ),
-                                value: "2",
-                            },
-                            span: Span(
-                                9,
-                                13,
-                            ),
-                            else: LiteralInteger {
-                                span: Span(
-                                    9,
-                                    16,
-                                ),
-                                value: "3",
-                            },
-                        },
-                    },
-                },
-            ),
-            semicolon: Span(
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 9,
                 17,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    11,
-                                    1,
-                                ),
-                                name: "e",
-                            },
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                11,
+                                1,
+                            ),
+                            name: "e",
+                        },
+                    ),
+                ),
+                span: Span(
+                    11,
+                    4,
+                ),
+                right: Coalesce {
+                    lhs: LiteralInteger {
+                        span: Span(
+                            11,
+                            6,
                         ),
+                        value: "1",
+                    },
+                    rhs: LiteralInteger {
+                        span: Span(
+                            11,
+                            11,
+                        ),
+                        value: "2",
+                    },
+                },
+            },
+        ),
+        ending: Semicolon(
+            Span(
+                11,
+                12,
+            ),
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                13,
+                                1,
+                            ),
+                            name: "f",
+                        },
                     ),
-                    span: Span(
-                        11,
-                        4,
-                    ),
-                    right: Coalesce {
+                ),
+                span: Span(
+                    13,
+                    4,
+                ),
+                right: Coalesce {
+                    lhs: LiteralInteger {
+                        span: Span(
+                            13,
+                            6,
+                        ),
+                        value: "1",
+                    },
+                    rhs: Coalesce {
                         lhs: LiteralInteger {
                             span: Span(
-                                11,
-                                6,
-                            ),
-                            value: "1",
-                        },
-                        rhs: LiteralInteger {
-                            span: Span(
-                                11,
+                                13,
                                 11,
                             ),
                             value: "2",
                         },
-                    },
-                },
-            ),
-            semicolon: Span(
-                11,
-                12,
-            ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    13,
-                                    1,
-                                ),
-                                name: "f",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        13,
-                        4,
-                    ),
-                    right: Coalesce {
-                        lhs: LiteralInteger {
+                        rhs: LiteralInteger {
                             span: Span(
                                 13,
-                                6,
+                                16,
                             ),
-                            value: "1",
-                        },
-                        rhs: Coalesce {
-                            lhs: LiteralInteger {
-                                span: Span(
-                                    13,
-                                    11,
-                                ),
-                                value: "2",
-                            },
-                            rhs: LiteralInteger {
-                                span: Span(
-                                    13,
-                                    16,
-                                ),
-                                value: "3",
-                            },
+                            value: "3",
                         },
                     },
                 },
-            ),
-            semicolon: Span(
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 13,
                 17,
             ),
-        },
-    ),
+        ),
+    },
 ]

@@ -1,100 +1,106 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: ShortArray(
-                Bracketed {
-                    left_bracket: Span(
-                        1,
-                        7,
-                    ),
-                    inner: CommaSeparated {
-                        inner: [
-                            ArrayItem {
-                                key: None,
-                                value: ShortArray(
-                                    Bracketed {
-                                        left_bracket: Span(
-                                            1,
-                                            11,
-                                        ),
-                                        inner: CommaSeparated {
-                                            inner: [
-                                                ArrayItem {
-                                                    key: None,
-                                                    value: LiteralInteger {
-                                                        span: Span(
-                                                            1,
-                                                            12,
-                                                        ),
-                                                        value: "1",
-                                                    },
-                                                    unpack: false,
-                                                    by_ref: false,
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: ShortArray(
+            Bracketed {
+                left_bracket: Span(
+                    1,
+                    7,
+                ),
+                inner: CommaSeparated {
+                    inner: [
+                        ArrayItem {
+                            key: None,
+                            value: ShortArray(
+                                Bracketed {
+                                    left_bracket: Span(
+                                        1,
+                                        11,
+                                    ),
+                                    inner: CommaSeparated {
+                                        inner: [
+                                            ArrayItem {
+                                                key: None,
+                                                value: LiteralInteger {
+                                                    span: Span(
+                                                        1,
+                                                        12,
+                                                    ),
+                                                    value: "1",
                                                 },
-                                            ],
-                                            commas: [],
-                                        },
-                                        right_bracket: Span(
-                                            1,
-                                            13,
-                                        ),
+                                                unpack: false,
+                                                by_ref: false,
+                                            },
+                                        ],
+                                        commas: [],
                                     },
-                                ),
-                                unpack: true,
-                                by_ref: false,
-                            },
-                            ArrayItem {
-                                key: None,
-                                value: ShortArray(
-                                    Bracketed {
-                                        left_bracket: Span(
-                                            1,
-                                            19,
-                                        ),
-                                        inner: CommaSeparated {
-                                            inner: [
-                                                ArrayItem {
-                                                    key: None,
-                                                    value: LiteralInteger {
-                                                        span: Span(
-                                                            1,
-                                                            20,
-                                                        ),
-                                                        value: "2",
-                                                    },
-                                                    unpack: false,
-                                                    by_ref: false,
-                                                },
-                                            ],
-                                            commas: [],
-                                        },
-                                        right_bracket: Span(
-                                            1,
-                                            21,
-                                        ),
-                                    },
-                                ),
-                                unpack: true,
-                                by_ref: false,
-                            },
-                        ],
-                        commas: [
-                            Span(
-                                1,
-                                14,
+                                    right_bracket: Span(
+                                        1,
+                                        13,
+                                    ),
+                                },
                             ),
-                        ],
-                    },
-                    right_bracket: Span(
-                        1,
-                        22,
-                    ),
+                            unpack: true,
+                            by_ref: false,
+                        },
+                        ArrayItem {
+                            key: None,
+                            value: ShortArray(
+                                Bracketed {
+                                    left_bracket: Span(
+                                        1,
+                                        19,
+                                    ),
+                                    inner: CommaSeparated {
+                                        inner: [
+                                            ArrayItem {
+                                                key: None,
+                                                value: LiteralInteger {
+                                                    span: Span(
+                                                        1,
+                                                        20,
+                                                    ),
+                                                    value: "2",
+                                                },
+                                                unpack: false,
+                                                by_ref: false,
+                                            },
+                                        ],
+                                        commas: [],
+                                    },
+                                    right_bracket: Span(
+                                        1,
+                                        21,
+                                    ),
+                                },
+                            ),
+                            unpack: true,
+                            by_ref: false,
+                        },
+                    ],
+                    commas: [
+                        Span(
+                            1,
+                            14,
+                        ),
+                    ],
                 },
-            ),
-            semicolon: Span(
+                right_bracket: Span(
+                    1,
+                    22,
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 1,
                 23,
             ),
-        },
-    ),
+        ),
+    },
 ]

@@ -1,62 +1,68 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: StaticMethodCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: StaticMethodCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            1,
+                            7,
+                        ),
+                        value: "Foo",
+                    },
+                ),
+            ),
+            double_colon: Span(
+                1,
+                10,
+            ),
+            method: Identifier(
+                DynamicIdentifier(
+                    DynamicIdentifier {
+                        start: Span(
+                            1,
+                            12,
+                        ),
+                        expr: LiteralString {
                             span: Span(
                                 1,
-                                7,
+                                13,
                             ),
-                            value: "Foo",
+                            value: "foo",
                         },
-                    ),
-                ),
-                span: Span(
-                    1,
-                    10,
-                ),
-                method: Identifier(
-                    DynamicIdentifier(
-                        DynamicIdentifier {
-                            start: Span(
-                                1,
-                                12,
-                            ),
-                            expr: LiteralString {
-                                span: Span(
-                                    1,
-                                    13,
-                                ),
-                                value: "foo",
-                            },
-                            end: Span(
-                                1,
-                                18,
-                            ),
-                        },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
+                        end: Span(
+                            1,
+                            18,
+                        ),
                     },
-                    start: Span(
-                        1,
-                        19,
-                    ),
-                    arguments: [],
-                    end: Span(
-                        1,
-                        20,
-                    ),
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
                 },
+                start: Span(
+                    1,
+                    19,
+                ),
+                arguments: [],
+                end: Span(
+                    1,
+                    20,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 21,
             ),
-        },
-    ),
+        ),
+    },
 ]

@@ -1,44 +1,66 @@
 [
-    If {
-        condition: Parenthesized {
-            left_parenthesis: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    If(
+        IfStatement {
+            if: Span(
                 1,
-                9,
+                7,
             ),
-            inner: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            1,
-                            10,
-                        ),
-                        name: "foo",
-                    },
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    1,
+                    9,
                 ),
-            ),
-            right_parenthesis: Span(
-                1,
-                14,
-            ),
-        },
-        then: [
-            Return {
-                value: Some(
-                    Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    1,
-                                    23,
-                                ),
-                                name: "foo",
-                            },
-                        ),
+                inner: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                1,
+                                10,
+                            ),
+                            name: "foo",
+                        },
                     ),
                 ),
+                right_parenthesis: Span(
+                    1,
+                    14,
+                ),
             },
-        ],
-        else_ifs: [],
-        else: None,
-    },
+            body: Statement {
+                statement: Return {
+                    return: Span(
+                        1,
+                        16,
+                    ),
+                    value: Some(
+                        Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        1,
+                                        23,
+                                    ),
+                                    name: "foo",
+                                },
+                            ),
+                        ),
+                    ),
+                    ending: Semicolon(
+                        Span(
+                            1,
+                            27,
+                        ),
+                    ),
+                },
+                elseifs: [],
+                else: None,
+            },
+        },
+    ),
 ]

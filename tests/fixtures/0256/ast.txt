@@ -1,47 +1,53 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: List {
-                        items: [
-                            ListItem {
-                                key: None,
-                                value: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                3,
-                                                6,
-                                            ),
-                                            name: "a",
-                                        },
-                                    ),
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: List {
+                    items: [
+                        ListItem {
+                            key: None,
+                            value: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            3,
+                                            6,
+                                        ),
+                                        name: "a",
+                                    },
                                 ),
-                            },
-                        ],
-                    },
-                    span: Span(
-                        3,
-                        10,
-                    ),
-                    right: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    12,
-                                ),
-                                name: "foo",
-                            },
-                        ),
-                    ),
+                            ),
+                        },
+                    ],
                 },
-            ),
-            semicolon: Span(
+                span: Span(
+                    3,
+                    10,
+                ),
+                right: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                3,
+                                12,
+                            ),
+                            name: "foo",
+                        },
+                    ),
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 3,
                 16,
             ),
-        },
-    ),
+        ),
+    },
 ]

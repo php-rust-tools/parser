@@ -1,46 +1,52 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: PropertyFetch {
-                target: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                1,
-                                7,
-                            ),
-                            name: "a",
-                        },
-                    ),
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: PropertyFetch {
+            target: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            1,
+                            7,
+                        ),
+                        name: "a",
+                    },
                 ),
-                span: Span(
-                    1,
-                    9,
+            ),
+            span: Span(
+                1,
+                9,
+            ),
+            property: Variable(
+                VariableVariable(
+                    VariableVariable {
+                        span: Span(
+                            1,
+                            11,
+                        ),
+                        variable: SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    1,
+                                    12,
+                                ),
+                                name: "b",
+                            },
+                        ),
+                    },
                 ),
-                property: Variable(
-                    VariableVariable(
-                        VariableVariable {
-                            span: Span(
-                                1,
-                                11,
-                            ),
-                            variable: SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        1,
-                                        12,
-                                    ),
-                                    name: "b",
-                                },
-                            ),
-                        },
-                    ),
-                ),
-            },
-            semicolon: Span(
+            ),
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 14,
             ),
-        },
-    ),
+        ),
+    },
 ]

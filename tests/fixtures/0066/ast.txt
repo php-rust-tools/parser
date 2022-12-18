@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Block(
         Braced {
             left_brace: Span(
@@ -6,25 +12,25 @@
                 7,
             ),
             inner: [
-                Expression(
-                    SemicolonTerminated {
-                        inner: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        1,
-                                        9,
-                                    ),
-                                    name: "a",
-                                },
-                            ),
+                Expression {
+                    expression: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span(
+                                    1,
+                                    9,
+                                ),
+                                name: "a",
+                            },
                         ),
-                        semicolon: Span(
+                    ),
+                    ending: Semicolon(
+                        Span(
                             1,
                             11,
                         ),
-                    },
-                ),
+                    ),
+                },
             ],
             right_brace: Span(
                 1,

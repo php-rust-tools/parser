@@ -1,4 +1,3 @@
-use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::utils::Braced;
@@ -6,43 +5,61 @@ use crate::parser::ast::utils::Bracketed;
 use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::utils::Parenthesized;
 use crate::parser::ast::utils::SemicolonTerminated;
+use crate::parser::ast::Ending;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 
-pub fn skip_semicolon(state: &mut State) -> ParseResult<Span> {
-    let end = state.stream.current().span;
+pub fn skip_ending(state: &mut State) -> ParseResult<Ending> {
+    let current = state.stream.current();
 
-    if state.stream.current().kind == TokenKind::SemiColon {
+    if current.kind == TokenKind::CloseTag {
         state.stream.next();
-    } else if state.stream.current().kind != TokenKind::CloseTag {
+
+        Ok(Ending::CloseTag(current.span))
+    } else if current.kind == TokenKind::SemiColon {
+        state.stream.next();
+
+        Ok(Ending::Semicolon(current.span))
+    } else {
         let found = if state.stream.current().kind == TokenKind::Eof {
             None
         } else {
             Some(state.stream.current().kind.to_string())
         };
 
-        return Err(ParseError::ExpectedToken(
+        Err(ParseError::ExpectedToken(
             vec!["`;`".to_string()],
             found,
-            end,
-        ));
-    } else {
-        state.stream.next();
+            current.span,
+        ))
     }
+}
 
-    Ok(end)
+pub fn skip_semicolon(state: &mut State) -> ParseResult<Span> {
+    let current = state.stream.current();
+
+    if current.kind == TokenKind::SemiColon {
+        state.stream.next();
+
+        Ok(current.span)
+    } else {
+        let found = if state.stream.current().kind == TokenKind::Eof {
+            None
+        } else {
+            Some(state.stream.current().kind.to_string())
+        };
+
+        Err(ParseError::ExpectedToken(
+            vec!["`;`".to_string()],
+            found,
+            current.span,
+        ))
+    }
 }
 
 pub fn skip_left_brace(state: &mut State) -> ParseResult<Span> {
-    let span = skip(state, TokenKind::LeftBrace)?;
-    // A closing PHP tag is valid after a left brace, since
-    // that typically indicates the start of a block (control structures).
-    if state.stream.current().kind == TokenKind::CloseTag {
-        state.stream.next();
-    }
-
-    Ok(span)
+    skip(state, TokenKind::LeftBrace)
 }
 
 pub fn skip_right_brace(state: &mut State) -> ParseResult<Span> {
@@ -74,13 +91,7 @@ pub fn skip_double_colon(state: &mut State) -> ParseResult<Span> {
 }
 
 pub fn skip_colon(state: &mut State) -> ParseResult<Span> {
-    let span = skip(state, TokenKind::Colon)?;
-    // A closing PHP tag is valid after a colon, since
-    // that typically indicates the start of a block (control structures).
-    if state.stream.current().kind == TokenKind::CloseTag {
-        state.stream.next();
-    }
-    Ok(span)
+    skip(state, TokenKind::Colon)
 }
 
 pub fn skip(state: &mut State, kind: TokenKind) -> ParseResult<Span> {
@@ -129,22 +140,6 @@ pub fn skip_any_of(state: &mut State, kinds: &[TokenKind]) -> ParseResult<Span> 
             current.span,
         ))
     }
-}
-
-pub fn skip_close_tag(state: &mut State) -> ParseResult<()> {
-    if state.stream.current().kind == TokenKind::CloseTag {
-        state.stream.next();
-    }
-
-    Ok(())
-}
-
-pub fn skip_open_tag(state: &mut State) -> ParseResult<()> {
-    if let TokenKind::OpenTag(OpenTagKind::Full) = state.stream.current().kind {
-        state.stream.next();
-    }
-
-    Ok(())
 }
 
 /// Parse an item that is surrounded by parentheses.

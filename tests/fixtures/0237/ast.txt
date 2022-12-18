@@ -1,37 +1,43 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: Include {
-                span: Span(
-                    3,
-                    1,
-                ),
-                kind: Require,
-                path: Concat {
-                    left: MagicConst {
-                        span: Span(
-                            3,
-                            9,
-                        ),
-                        constant: Directory,
-                    },
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: Include {
+            span: Span(
+                3,
+                1,
+            ),
+            kind: Require,
+            path: Concat {
+                left: MagicConst {
                     span: Span(
                         3,
-                        17,
+                        9,
                     ),
-                    right: LiteralString {
-                        span: Span(
-                            3,
-                            19,
-                        ),
-                        value: "/foo.php",
-                    },
+                    constant: Directory,
+                },
+                span: Span(
+                    3,
+                    17,
+                ),
+                right: LiteralString {
+                    span: Span(
+                        3,
+                        19,
+                    ),
+                    value: "/foo.php",
                 },
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 3,
                 29,
             ),
-        },
-    ),
+        ),
+    },
 ]

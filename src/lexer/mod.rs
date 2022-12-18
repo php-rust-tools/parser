@@ -154,6 +154,25 @@ impl Lexer {
                 });
 
                 return Ok(());
+            } else if state.source.at_case_insensitive(b"<?", 2) {
+                let tag_span = state.source.span();
+
+                state.source.skip(2);
+                state.replace(StackFrame::Scripting);
+
+                if !buffer.is_empty() {
+                    tokens.push(Token {
+                        kind: TokenKind::InlineHtml(buffer.into()),
+                        span: inline_span,
+                    });
+                }
+
+                tokens.push(Token {
+                    kind: TokenKind::OpenTag(OpenTagKind::Short),
+                    span: tag_span,
+                });
+
+                return Ok(());
             }
 
             state.source.next();

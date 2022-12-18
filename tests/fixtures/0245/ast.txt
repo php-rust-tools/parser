@@ -1,59 +1,65 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: ShortArray(
-                Bracketed {
-                    left_bracket: Span(
-                        3,
-                        1,
-                    ),
-                    inner: CommaSeparated {
-                        inner: [
-                            ArrayItem {
-                                key: None,
-                                value: FunctionCall {
-                                    target: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span(
-                                                    3,
-                                                    2,
-                                                ),
-                                                value: "foo",
-                                            },
-                                        ),
-                                    ),
-                                    arguments: ArgumentList {
-                                        comments: CommentGroup {
-                                            comments: [],
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: ShortArray(
+            Bracketed {
+                left_bracket: Span(
+                    3,
+                    1,
+                ),
+                inner: CommaSeparated {
+                    inner: [
+                        ArrayItem {
+                            key: None,
+                            value: FunctionCall {
+                                target: Identifier(
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: Span(
+                                                3,
+                                                2,
+                                            ),
+                                            value: "foo",
                                         },
-                                        start: Span(
-                                            3,
-                                            5,
-                                        ),
-                                        arguments: [],
-                                        end: Span(
-                                            3,
-                                            24,
-                                        ),
+                                    ),
+                                ),
+                                arguments: ArgumentList {
+                                    comments: CommentGroup {
+                                        comments: [],
                                     },
+                                    start: Span(
+                                        3,
+                                        5,
+                                    ),
+                                    arguments: [],
+                                    end: Span(
+                                        3,
+                                        24,
+                                    ),
                                 },
-                                unpack: false,
-                                by_ref: false,
                             },
-                        ],
-                        commas: [],
-                    },
-                    right_bracket: Span(
-                        3,
-                        25,
-                    ),
+                            unpack: false,
+                            by_ref: false,
+                        },
+                    ],
+                    commas: [],
                 },
-            ),
-            semicolon: Span(
+                right_bracket: Span(
+                    3,
+                    25,
+                ),
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 3,
                 26,
             ),
-        },
-    ),
+        ),
+    },
 ]

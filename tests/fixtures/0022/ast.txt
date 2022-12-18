@@ -1,6 +1,12 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Foreach(
-        ForeachLoop {
+        ForeachStatement {
             foreach: Span(
                 3,
                 1,
@@ -51,6 +57,10 @@
                 ),
                 statements: [
                     Echo {
+                        echo: Span(
+                            4,
+                            5,
+                        ),
                         values: [
                             Variable(
                                 SimpleVariable(
@@ -64,21 +74,29 @@
                                 ),
                             ),
                         ],
+                        ending: Semicolon(
+                            Span(
+                                4,
+                                12,
+                            ),
+                        ),
                     },
                 ],
                 endforeach: Span(
                     5,
                     1,
                 ),
-                semicolon: Span(
-                    5,
-                    11,
+                ending: Semicolon(
+                    Span(
+                        5,
+                        11,
+                    ),
                 ),
             },
         },
     ),
     While(
-        WhileLoop {
+        WhileStatement {
             while: Span(
                 7,
                 1,
@@ -102,39 +120,41 @@
                     13,
                 ),
                 statements: [
-                    Expression(
-                        SemicolonTerminated {
-                            inner: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            8,
-                                            5,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
+                    Expression {
+                        expression: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        8,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
                             ),
-                            semicolon: Span(
+                        ),
+                        ending: Semicolon(
+                            Span(
                                 8,
                                 7,
                             ),
-                        },
-                    ),
+                        ),
+                    },
                 ],
                 endwhile: Span(
                     9,
                     1,
                 ),
-                semicolon: Span(
-                    9,
-                    9,
+                ending: Semicolon(
+                    Span(
+                        9,
+                        9,
+                    ),
                 ),
             },
         },
     ),
     For(
-        ForLoop {
+        ForStatement {
             for: Span(
                 11,
                 1,
@@ -144,7 +164,7 @@
                     11,
                     5,
                 ),
-                inner: ForIterator {
+                inner: ForStatementIterator {
                     initializations: SemicolonTerminated {
                         inner: CommaSeparated {
                             inner: [
@@ -217,33 +237,35 @@
                     17,
                 ),
                 statements: [
-                    Expression(
-                        SemicolonTerminated {
-                            inner: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            12,
-                                            5,
-                                        ),
-                                        name: "d",
-                                    },
-                                ),
+                    Expression {
+                        expression: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        12,
+                                        5,
+                                    ),
+                                    name: "d",
+                                },
                             ),
-                            semicolon: Span(
+                        ),
+                        ending: Semicolon(
+                            Span(
                                 12,
                                 7,
                             ),
-                        },
-                    ),
+                        ),
+                    },
                 ],
                 endfor: Span(
                     13,
                     1,
                 ),
-                semicolon: Span(
-                    13,
-                    7,
+                ending: Semicolon(
+                    Span(
+                        13,
+                        7,
+                    ),
                 ),
             },
         },

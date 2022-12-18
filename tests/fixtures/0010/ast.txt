@@ -1,1076 +1,1086 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            3,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    3,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 3,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        3,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    3,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: ComparisonOperation(
-                                Equal {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            3,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            Equal {
+                                left: LiteralInteger {
                                     span: Span(
                                         3,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            3,
-                                            18,
-                                        ),
-                                        value: "1",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        3,
-                        19,
-                    ),
-                },
+                                span: Span(
+                                    3,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        3,
+                                        18,
+                                    ),
+                                    value: "1",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    3,
+                    19,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 3,
                 20,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            4,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    4,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 4,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        4,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    4,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: ComparisonOperation(
-                                Identical {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            4,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            Identical {
+                                left: LiteralInteger {
                                     span: Span(
                                         4,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            4,
-                                            19,
-                                        ),
-                                        value: "1",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        4,
-                        20,
-                    ),
-                },
+                                span: Span(
+                                    4,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        4,
+                                        19,
+                                    ),
+                                    value: "1",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    4,
+                    20,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 4,
                 21,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            5,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    5,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 5,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        5,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    5,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: ComparisonOperation(
-                                NotEqual {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            5,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            NotEqual {
+                                left: LiteralInteger {
                                     span: Span(
                                         5,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            5,
-                                            18,
-                                        ),
-                                        value: "1",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        5,
-                        19,
-                    ),
-                },
+                                span: Span(
+                                    5,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        5,
+                                        18,
+                                    ),
+                                    value: "1",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    5,
+                    19,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 5,
                 20,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            6,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    6,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 6,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        6,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    6,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: ComparisonOperation(
-                                NotIdentical {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            6,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: ComparisonOperation(
+                            NotIdentical {
+                                left: LiteralInteger {
                                     span: Span(
                                         6,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            6,
-                                            19,
-                                        ),
-                                        value: "1",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        6,
-                        20,
-                    ),
-                },
+                                span: Span(
+                                    6,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        6,
+                                        19,
+                                    ),
+                                    value: "1",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    6,
+                    20,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 6,
                 21,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            7,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    7,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 7,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        7,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    7,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: ArithmeticOperation(
-                                Addition {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            7,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Addition {
+                                left: LiteralInteger {
                                     span: Span(
                                         7,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            7,
-                                            17,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        7,
-                        18,
-                    ),
-                },
+                                span: Span(
+                                    7,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        7,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    7,
+                    18,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 7,
                 19,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            8,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    8,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 8,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        8,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    8,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: ArithmeticOperation(
-                                Subtraction {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            8,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Subtraction {
+                                left: LiteralInteger {
                                     span: Span(
                                         8,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            8,
-                                            17,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        8,
-                        18,
-                    ),
-                },
+                                span: Span(
+                                    8,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        8,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    8,
+                    18,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 8,
                 19,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            9,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    9,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 9,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        9,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    9,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: ArithmeticOperation(
-                                Division {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            9,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Division {
+                                left: LiteralInteger {
                                     span: Span(
                                         9,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            9,
-                                            17,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        9,
-                        18,
-                    ),
-                },
+                                span: Span(
+                                    9,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        9,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    9,
+                    18,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 9,
                 19,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            10,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    10,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 10,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        10,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    10,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: BitwiseOperation(
-                                Xor {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            10,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            Xor {
+                                left: LiteralInteger {
                                     span: Span(
                                         10,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            10,
-                                            17,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        10,
-                        18,
-                    ),
-                },
+                                span: Span(
+                                    10,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        10,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    10,
+                    18,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 10,
                 19,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            11,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    11,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 11,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        11,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    11,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: ArithmeticOperation(
-                                Multiplication {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            11,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: ArithmeticOperation(
+                            Multiplication {
+                                left: LiteralInteger {
                                     span: Span(
                                         11,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            11,
-                                            17,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        11,
-                        18,
-                    ),
-                },
+                                span: Span(
+                                    11,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        11,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    11,
+                    18,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 11,
                 19,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            12,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    12,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 12,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        12,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    12,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: BitwiseOperation(
-                                RightShift {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            12,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            RightShift {
+                                left: LiteralInteger {
                                     span: Span(
                                         12,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            12,
-                                            18,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        12,
-                        19,
-                    ),
-                },
+                                span: Span(
+                                    12,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        12,
+                                        18,
+                                    ),
+                                    value: "2",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    12,
+                    19,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 12,
                 20,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            13,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    13,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 13,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        13,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    13,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: BitwiseOperation(
-                                LeftShift {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            13,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            LeftShift {
+                                left: LiteralInteger {
                                     span: Span(
                                         13,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            13,
-                                            18,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        13,
-                        19,
-                    ),
-                },
+                                span: Span(
+                                    13,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        13,
+                                        18,
+                                    ),
+                                    value: "2",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    13,
+                    19,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 13,
                 20,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            14,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    14,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 14,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        14,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    14,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: BitwiseOperation(
-                                Or {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            14,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            Or {
+                                left: LiteralInteger {
                                     span: Span(
                                         14,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            14,
-                                            17,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        14,
-                        18,
-                    ),
-                },
+                                span: Span(
+                                    14,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        14,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    14,
+                    18,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 14,
                 19,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            15,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    15,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 15,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        15,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
-                                span: Span(
-                                    15,
-                                    8,
-                                ),
-                                value: "a",
-                            },
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: BitwiseOperation(
-                                And {
-                                    left: LiteralInteger {
-                                        span: Span(
-                                            15,
-                                            13,
-                                        ),
-                                        value: "1",
-                                    },
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            And {
+                                left: LiteralInteger {
                                     span: Span(
                                         15,
-                                        15,
+                                        13,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            15,
-                                            17,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "1",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        15,
-                        18,
-                    ),
-                },
+                                span: Span(
+                                    15,
+                                    15,
+                                ),
+                                right: LiteralInteger {
+                                    span: Span(
+                                        15,
+                                        17,
+                                    ),
+                                    value: "2",
+                                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    15,
+                    18,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 15,
                 19,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
+        ),
+    },
+    Expression {
+        expression: FunctionCall {
+            target: Identifier(
+                SimpleIdentifier(
+                    SimpleIdentifier {
+                        span: Span(
+                            16,
+                            1,
+                        ),
+                        value: "define",
+                    },
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                start: Span(
+                    16,
+                    7,
+                ),
+                arguments: [
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: LiteralString {
                             span: Span(
                                 16,
-                                1,
+                                8,
                             ),
-                            value: "define",
+                            value: "a",
                         },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
                     },
-                    start: Span(
-                        16,
-                        7,
-                    ),
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: LiteralString {
+                    Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: BitwiseOperation(
+                            Not {
                                 span: Span(
                                     16,
-                                    8,
+                                    13,
                                 ),
-                                value: "a",
-                            },
-                        },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: BitwiseOperation(
-                                Not {
+                                right: LiteralInteger {
                                     span: Span(
                                         16,
-                                        13,
+                                        14,
                                     ),
-                                    right: LiteralInteger {
-                                        span: Span(
-                                            16,
-                                            14,
-                                        ),
-                                        value: "2",
-                                    },
+                                    value: "2",
                                 },
-                            ),
-                        },
-                    ],
-                    end: Span(
-                        16,
-                        15,
-                    ),
-                },
+                            },
+                        ),
+                    },
+                ],
+                end: Span(
+                    16,
+                    15,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 16,
                 16,
             ),
-        },
-    ),
+        ),
+    },
     Echo {
+        echo: Span(
+            18,
+            1,
+        ),
         values: [
             ArithmeticOperation(
                 Subtraction {
@@ -1140,5 +1150,11 @@
                 },
             ),
         ],
+        ending: Semicolon(
+            Span(
+                18,
+                23,
+            ),
+        ),
     },
 ]

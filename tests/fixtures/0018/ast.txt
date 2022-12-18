@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Function(
         Function {
             comments: CommentGroup {
@@ -45,6 +51,10 @@
             ampersand: None,
             body: [
                 Echo {
+                    echo: Span(
+                        4,
+                        5,
+                    ),
                     values: [
                         LiteralString {
                             span: Span(
@@ -54,72 +64,88 @@
                             value: "looping..\n",
                         },
                     ],
+                    ending: Semicolon(
+                        Span(
+                            4,
+                            23,
+                        ),
+                    ),
                 },
                 Return {
+                    return: Span(
+                        6,
+                        5,
+                    ),
                     value: Some(
                         Null,
+                    ),
+                    ending: Semicolon(
+                        Span(
+                            6,
+                            16,
+                        ),
                     ),
                 },
             ],
         },
     ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                9,
+                                1,
+                            ),
+                            name: "bar",
+                        },
+                    ),
+                ),
+                span: Span(
+                    9,
+                    6,
+                ),
+                right: FunctionClosureCreation {
+                    target: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
                                 span: Span(
                                     9,
-                                    1,
+                                    8,
                                 ),
-                                name: "bar",
+                                value: "a",
                             },
                         ),
                     ),
-                    span: Span(
-                        9,
-                        6,
-                    ),
-                    right: FunctionClosureCreation {
-                        target: Identifier(
-                            SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: Span(
-                                        9,
-                                        8,
-                                    ),
-                                    value: "a",
-                                },
-                            ),
-                        ),
-                        placeholder: ArgumentPlaceholder {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            start: Span(
-                                9,
-                                9,
-                            ),
-                            ellipsis: Span(
-                                9,
-                                10,
-                            ),
-                            end: Span(
-                                9,
-                                13,
-                            ),
+                    placeholder: ArgumentPlaceholder {
+                        comments: CommentGroup {
+                            comments: [],
                         },
+                        start: Span(
+                            9,
+                            9,
+                        ),
+                        ellipsis: Span(
+                            9,
+                            10,
+                        ),
+                        end: Span(
+                            9,
+                            13,
+                        ),
                     },
                 },
-            ),
-            semicolon: Span(
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 9,
                 14,
             ),
-        },
-    ),
+        ),
+    },
     GotoLabel(
         GotoLabel {
             comments: CommentGroup {
@@ -138,41 +164,41 @@
             ),
         },
     ),
-    Expression(
-        SemicolonTerminated {
-            inner: FunctionCall {
-                target: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span(
-                                12,
-                                5,
-                            ),
-                            name: "bar",
-                        },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
+    Expression {
+        expression: FunctionCall {
+            target: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span(
+                            12,
+                            5,
+                        ),
+                        name: "bar",
                     },
-                    start: Span(
-                        12,
-                        9,
-                    ),
-                    arguments: [],
-                    end: Span(
-                        12,
-                        10,
-                    ),
+                ),
+            ),
+            arguments: ArgumentList {
+                comments: CommentGroup {
+                    comments: [],
                 },
+                start: Span(
+                    12,
+                    9,
+                ),
+                arguments: [],
+                end: Span(
+                    12,
+                    10,
+                ),
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 12,
                 11,
             ),
-        },
-    ),
+        ),
+    },
     Goto(
         GotoStatement {
             comments: CommentGroup {

@@ -11,6 +11,7 @@ use crate::parser::ast::classes::AnonymousClass;
 use crate::parser::ast::classes::Class;
 use crate::parser::ast::comments::Comment;
 use crate::parser::ast::constant::Constant;
+use crate::parser::ast::control_flow::IfStatement;
 use crate::parser::ast::declares::Declare;
 use crate::parser::ast::enums::BackedEnum;
 use crate::parser::ast::enums::UnitEnum;
@@ -22,10 +23,12 @@ use crate::parser::ast::goto::GotoStatement;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
-use crate::parser::ast::loops::DoWhileLoop;
-use crate::parser::ast::loops::ForLoop;
-use crate::parser::ast::loops::ForeachLoop;
-use crate::parser::ast::loops::WhileLoop;
+use crate::parser::ast::loops::BreakStatement;
+use crate::parser::ast::loops::ContinueStatement;
+use crate::parser::ast::loops::DoWhileStatement;
+use crate::parser::ast::loops::ForStatement;
+use crate::parser::ast::loops::ForeachStatement;
+use crate::parser::ast::loops::WhileStatement;
 use crate::parser::ast::namespaces::Namespace;
 use crate::parser::ast::operators::ArithmeticOperation;
 use crate::parser::ast::operators::AssignmentOperation;
@@ -38,7 +41,6 @@ use crate::parser::ast::utils::Braced;
 use crate::parser::ast::utils::Bracketed;
 use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::utils::Parenthesized;
-use crate::parser::ast::utils::SemicolonTerminated;
 use crate::parser::ast::variables::Variable;
 
 pub mod arguments;
@@ -46,6 +48,7 @@ pub mod attributes;
 pub mod classes;
 pub mod comments;
 pub mod constant;
+pub mod control_flow;
 pub mod data_type;
 pub mod declares;
 pub mod enums;
@@ -104,7 +107,18 @@ impl From<&TokenKind> for IncludeKind {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
+pub enum Ending {
+    Semicolon(Span),
+    CloseTag(Span),
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Statement {
+    FullOpeningTag(Span),
+    ShortOpeningTag(Span),
+    EchoOpeningTag(Span),
+    ClosingTag(Span),
     InlineHtml(ByteString),
     GotoLabel(GotoLabel),
     Goto(GotoStatement),
@@ -114,46 +128,37 @@ pub enum Statement {
     Static {
         vars: Vec<StaticVar>,
     },
-    DoWhile(DoWhileLoop),
-    While(WhileLoop),
-    For(ForLoop),
-    Foreach(ForeachLoop),
+    DoWhile(DoWhileStatement),
+    While(WhileStatement),
+    For(ForStatement),
+    Foreach(ForeachStatement),
+    Break(BreakStatement),
+    Continue(ContinueStatement),
     Constant(Constant),
     Function(Function),
     Class(Class),
     Trait(Trait),
     Interface(Interface),
-    If {
-        condition: Parenthesized<Expression>,
-        then: Block,
-        else_ifs: Vec<ElseIf>,
-        r#else: Option<Block>,
-    },
-    Return {
-        value: Option<Expression>,
-    },
+    If(IfStatement),
     Switch {
+        #[serde(flatten)]
         condition: Parenthesized<Expression>,
         cases: Vec<Case>,
     },
-    Break {
-        r#break: Span,
-        expression: Option<Expression>,
-        semicolon: Span,
-    },
-    Continue {
-        r#continue: Span,
-        expression: Option<Expression>,
-        semicolon: Span,
-    },
-    ShortEcho {
-        span: Span,
-        values: Vec<Expression>,
-    },
     Echo {
+        echo: Span,
         values: Vec<Expression>,
+        ending: Ending,
     },
-    Expression(SemicolonTerminated<Expression>),
+    Expression {
+        expression: Expression,
+        ending: Ending,
+    },
+    Return {
+        r#return: Span,
+        value: Option<Expression>,
+        ending: Ending,
+    },
     Namespace(Namespace),
     Use {
         uses: Vec<Use>,
@@ -238,6 +243,9 @@ pub enum Expression {
     Exit {
         value: Option<Box<Expression>>,
     },
+    Echo {
+        values: Vec<Expression>,
+    },
     ArithmeticOperation(ArithmeticOperation),
     AssignmentOperation(AssignmentOperation),
     BitwiseOperation(BitwiseOperation),
@@ -319,14 +327,14 @@ pub enum Expression {
     // `Foo::bar(1, 2, 3)`
     StaticMethodCall {
         target: Box<Self>,       // `Foo`
-        span: Span,              // `::`
+        double_colon: Span,      // `::`
         method: Box<Self>,       // `bar`
         arguments: ArgumentList, // `(1, 2, 3)`
     },
     // `Foo::bar(...)`
     StaticMethodClosureCreation {
         target: Box<Self>,                // `Foo`
-        span: Span,                       // `::`
+        double_colon: Span,               // `::`
         method: Box<Self>,                // `bar`
         placeholder: ArgumentPlaceholder, // `(...)`
     },
@@ -436,8 +444,6 @@ pub enum Expression {
     // TODO(azjezz): create a separate structure for `Match`
     Match {
         keyword: Span,
-        // TODO(azjezz): create a separate structure for `condition` to hold `(` and `)` spans
-        // this can be re-used for all control-flow statements/expressions.
         condition: Parenthesized<Box<Self>>,
         // TODO(azjezz): create a separate structure for `default` and `arms` to hold `{` and `}` spans.
         default: Option<Box<DefaultMatchArm>>,
@@ -521,11 +527,4 @@ pub struct ArrayItem {
 pub struct ListItem {
     pub key: Option<Expression>,
     pub value: Expression,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub struct ElseIf {
-    pub condition: Expression,
-    pub body: Block,
 }

@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Class(
         Class {
             span: Span(
@@ -66,6 +72,10 @@
                             body: Some(
                                 [
                                     Echo {
+                                        echo: Span(
+                                            5,
+                                            9,
+                                        ),
                                         values: [
                                             LiteralInteger {
                                                 span: Span(
@@ -75,6 +85,12 @@
                                                 value: "1",
                                             },
                                         ],
+                                        ending: Semicolon(
+                                            Span(
+                                                5,
+                                                15,
+                                            ),
+                                        ),
                                     },
                                 ],
                             ),

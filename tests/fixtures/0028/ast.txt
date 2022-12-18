@@ -1,21 +1,31 @@
 [
-    Continue {
-        continue: Span(
+    FullOpeningTag(
+        Span(
             1,
-            7,
+            1,
         ),
-        expression: Some(
-            LiteralInteger {
-                span: Span(
+    ),
+    Continue(
+        ContinueStatement {
+            continue: Span(
+                1,
+                7,
+            ),
+            level: Some(
+                LiteralInteger {
+                    span: Span(
+                        1,
+                        16,
+                    ),
+                    value: "2",
+                },
+            ),
+            ending: Semicolon(
+                Span(
                     1,
-                    16,
+                    17,
                 ),
-                value: "2",
-            },
-        ),
-        semicolon: Span(
-            1,
-            17,
-        ),
-    },
+            ),
+        },
+    ),
 ]

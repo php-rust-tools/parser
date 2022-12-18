@@ -1,17 +1,23 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: ShellExec {
-                parts: [
-                    Literal(
-                        "Hello, world!",
-                    ),
-                ],
-            },
-            semicolon: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: ShellExec {
+            parts: [
+                Literal(
+                    "Hello, world!",
+                ),
+            ],
+        },
+        ending: Semicolon(
+            Span(
                 3,
                 16,
             ),
-        },
-    ),
+        ),
+    },
 ]

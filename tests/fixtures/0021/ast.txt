@@ -1,378 +1,536 @@
 [
-    If {
-        condition: Parenthesized {
-            left_parenthesis: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    If(
+        IfStatement {
+            if: Span(
                 3,
-                4,
+                1,
             ),
-            inner: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            3,
-                            5,
-                        ),
-                        name: "a",
-                    },
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    3,
+                    4,
                 ),
-            ),
-            right_parenthesis: Span(
-                3,
-                7,
-            ),
-        },
-        then: [
-            Expression(
-                SemicolonTerminated {
-                    inner: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    4,
-                                    5,
-                                ),
-                                name: "a",
-                            },
-                        ),
+                inner: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                3,
+                                5,
+                            ),
+                            name: "a",
+                        },
                     ),
-                    semicolon: Span(
-                        4,
-                        7,
-                    ),
-                },
-            ),
-        ],
-        else_ifs: [],
-        else: None,
-    },
-    If {
-        condition: Parenthesized {
-            left_parenthesis: Span(
-                7,
-                4,
-            ),
-            inner: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            7,
-                            5,
-                        ),
-                        name: "a",
-                    },
                 ),
-            ),
-            right_parenthesis: Span(
-                7,
-                7,
-            ),
-        },
-        then: [
-            Expression(
-                SemicolonTerminated {
-                    inner: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    8,
-                                    5,
-                                ),
-                                name: "a",
-                            },
-                        ),
-                    ),
-                    semicolon: Span(
-                        8,
-                        7,
-                    ),
-                },
-            ),
-        ],
-        else_ifs: [],
-        else: Some(
-            [
-                Expression(
-                    SemicolonTerminated {
-                        inner: Variable(
+                right_parenthesis: Span(
+                    3,
+                    7,
+                ),
+            },
+            body: Block {
+                colon: Span(
+                    3,
+                    8,
+                ),
+                statements: [
+                    Expression {
+                        expression: Variable(
                             SimpleVariable(
                                 SimpleVariable {
                                     span: Span(
-                                        10,
+                                        4,
                                         5,
                                     ),
-                                    name: "b",
+                                    name: "a",
                                 },
                             ),
                         ),
-                        semicolon: Span(
-                            10,
-                            7,
+                        ending: Semicolon(
+                            Span(
+                                4,
+                                7,
+                            ),
                         ),
                     },
+                ],
+                elseifs: [],
+                else: None,
+                endif: Span(
+                    5,
+                    1,
                 ),
-            ],
-        ),
-    },
-    If {
-        condition: Parenthesized {
-            left_parenthesis: Span(
-                13,
-                4,
-            ),
-            inner: Bool {
-                value: true,
+                ending: Semicolon(
+                    Span(
+                        5,
+                        6,
+                    ),
+                ),
             },
-            right_parenthesis: Span(
-                13,
-                9,
-            ),
         },
-        then: [
-            Expression(
-                SemicolonTerminated {
-                    inner: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    14,
-                                    5,
-                                ),
-                                name: "a",
-                            },
-                        ),
-                    ),
-                    semicolon: Span(
-                        14,
-                        7,
-                    ),
-                },
+    ),
+    If(
+        IfStatement {
+            if: Span(
+                7,
+                1,
             ),
-        ],
-        else_ifs: [
-            ElseIf {
-                condition: LogicalOperation(
-                    And {
-                        left: MethodCall {
-                            target: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            15,
-                                            9,
-                                        ),
-                                        name: "foo",
-                                    },
-                                ),
-                            ),
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    7,
+                    4,
+                ),
+                inner: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
-                                15,
-                                13,
+                                7,
+                                5,
                             ),
-                            method: Identifier(
-                                SimpleIdentifier(
-                                    SimpleIdentifier {
-                                        span: Span(
-                                            15,
-                                            15,
-                                        ),
-                                        value: "bar",
-                                    },
-                                ),
-                            ),
-                            arguments: ArgumentList {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                start: Span(
-                                    15,
-                                    18,
-                                ),
-                                arguments: [],
-                                end: Span(
-                                    15,
-                                    19,
-                                ),
-                            },
+                            name: "a",
                         },
-                        span: Span(
-                            15,
-                            21,
+                    ),
+                ),
+                right_parenthesis: Span(
+                    7,
+                    7,
+                ),
+            },
+            body: Block {
+                colon: Span(
+                    7,
+                    8,
+                ),
+                statements: [
+                    Expression {
+                        expression: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        8,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
                         ),
-                        right: NullsafeMethodCall {
-                            target: PropertyFetch {
-                                target: Variable(
+                        ending: Semicolon(
+                            Span(
+                                8,
+                                7,
+                            ),
+                        ),
+                    },
+                ],
+                elseifs: [],
+                else: Some(
+                    IfStatementElseBlock {
+                        else: Span(
+                            9,
+                            1,
+                        ),
+                        colon: Span(
+                            9,
+                            5,
+                        ),
+                        statements: [
+                            Expression {
+                                expression: Variable(
                                     SimpleVariable(
                                         SimpleVariable {
                                             span: Span(
-                                                15,
-                                                24,
+                                                10,
+                                                5,
                                             ),
-                                            name: "baz",
+                                            name: "b",
                                         },
                                     ),
                                 ),
-                                span: Span(
-                                    15,
-                                    28,
-                                ),
-                                property: Identifier(
-                                    SimpleIdentifier(
-                                        SimpleIdentifier {
-                                            span: Span(
-                                                15,
-                                                30,
-                                            ),
-                                            value: "bar",
-                                        },
+                                ending: Semicolon(
+                                    Span(
+                                        10,
+                                        7,
                                     ),
                                 ),
                             },
-                            span: Span(
-                                15,
-                                33,
-                            ),
-                            method: Identifier(
-                                SimpleIdentifier(
-                                    SimpleIdentifier {
-                                        span: Span(
-                                            15,
-                                            36,
-                                        ),
-                                        value: "qux",
-                                    },
-                                ),
-                            ),
-                            arguments: ArgumentList {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                start: Span(
-                                    15,
-                                    39,
-                                ),
-                                arguments: [],
-                                end: Span(
-                                    15,
-                                    40,
-                                ),
-                            },
-                        },
+                        ],
                     },
                 ),
-                body: [
-                    Expression(
-                        SemicolonTerminated {
-                            inner: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            16,
-                                            5,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
-                            ),
-                            semicolon: Span(
-                                16,
-                                7,
-                            ),
-                        },
+                endif: Span(
+                    11,
+                    1,
+                ),
+                ending: Semicolon(
+                    Span(
+                        11,
+                        6,
                     ),
-                ],
+                ),
             },
-        ],
-        else: None,
-    },
-    If {
-        condition: Parenthesized {
-            left_parenthesis: Span(
-                19,
-                4,
-            ),
-            inner: Bool {
-                value: true,
-            },
-            right_parenthesis: Span(
-                19,
-                9,
-            ),
         },
-        then: [
-            Expression(
-                SemicolonTerminated {
-                    inner: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    20,
-                                    5,
-                                ),
-                                name: "a",
-                            },
-                        ),
-                    ),
-                    semicolon: Span(
-                        20,
-                        7,
-                    ),
-                },
+    ),
+    If(
+        IfStatement {
+            if: Span(
+                13,
+                1,
             ),
-        ],
-        else_ifs: [
-            ElseIf {
-                condition: Bool {
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    13,
+                    4,
+                ),
+                inner: Bool {
                     value: true,
                 },
-                body: [
-                    Expression(
-                        SemicolonTerminated {
-                            inner: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            22,
-                                            5,
-                                        ),
-                                        name: "b",
-                                    },
-                                ),
+                right_parenthesis: Span(
+                    13,
+                    9,
+                ),
+            },
+            body: Block {
+                colon: Span(
+                    13,
+                    10,
+                ),
+                statements: [
+                    Expression {
+                        expression: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        14,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
                             ),
-                            semicolon: Span(
-                                22,
+                        ),
+                        ending: Semicolon(
+                            Span(
+                                14,
                                 7,
                             ),
-                        },
-                    ),
+                        ),
+                    },
                 ],
+                elseifs: [
+                    IfStatementElseIfBlock {
+                        elseif: Span(
+                            15,
+                            1,
+                        ),
+                        condition: Parenthesized {
+                            left_parenthesis: Span(
+                                15,
+                                8,
+                            ),
+                            inner: LogicalOperation(
+                                And {
+                                    left: MethodCall {
+                                        target: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        15,
+                                                        9,
+                                                    ),
+                                                    name: "foo",
+                                                },
+                                            ),
+                                        ),
+                                        span: Span(
+                                            15,
+                                            13,
+                                        ),
+                                        method: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span(
+                                                        15,
+                                                        15,
+                                                    ),
+                                                    value: "bar",
+                                                },
+                                            ),
+                                        ),
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            start: Span(
+                                                15,
+                                                18,
+                                            ),
+                                            arguments: [],
+                                            end: Span(
+                                                15,
+                                                19,
+                                            ),
+                                        },
+                                    },
+                                    span: Span(
+                                        15,
+                                        21,
+                                    ),
+                                    right: NullsafeMethodCall {
+                                        target: PropertyFetch {
+                                            target: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span(
+                                                            15,
+                                                            24,
+                                                        ),
+                                                        name: "baz",
+                                                    },
+                                                ),
+                                            ),
+                                            span: Span(
+                                                15,
+                                                28,
+                                            ),
+                                            property: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: Span(
+                                                            15,
+                                                            30,
+                                                        ),
+                                                        value: "bar",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                        span: Span(
+                                            15,
+                                            33,
+                                        ),
+                                        method: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span(
+                                                        15,
+                                                        36,
+                                                    ),
+                                                    value: "qux",
+                                                },
+                                            ),
+                                        ),
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            start: Span(
+                                                15,
+                                                39,
+                                            ),
+                                            arguments: [],
+                                            end: Span(
+                                                15,
+                                                40,
+                                            ),
+                                        },
+                                    },
+                                },
+                            ),
+                            right_parenthesis: Span(
+                                15,
+                                41,
+                            ),
+                        },
+                        colon: Span(
+                            15,
+                            42,
+                        ),
+                        statements: [
+                            Expression {
+                                expression: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                16,
+                                                5,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                                ending: Semicolon(
+                                    Span(
+                                        16,
+                                        7,
+                                    ),
+                                ),
+                            },
+                        ],
+                    },
+                ],
+                else: None,
+                endif: Span(
+                    17,
+                    1,
+                ),
+                ending: Semicolon(
+                    Span(
+                        17,
+                        6,
+                    ),
+                ),
             },
-            ElseIf {
-                condition: Bool {
+        },
+    ),
+    If(
+        IfStatement {
+            if: Span(
+                19,
+                1,
+            ),
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    19,
+                    4,
+                ),
+                inner: Bool {
                     value: true,
                 },
-                body: [
-                    Expression(
-                        SemicolonTerminated {
-                            inner: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            24,
-                                            5,
-                                        ),
-                                        name: "c",
-                                    },
-                                ),
+                right_parenthesis: Span(
+                    19,
+                    9,
+                ),
+            },
+            body: Block {
+                colon: Span(
+                    19,
+                    10,
+                ),
+                statements: [
+                    Expression {
+                        expression: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        20,
+                                        5,
+                                    ),
+                                    name: "a",
+                                },
                             ),
-                            semicolon: Span(
-                                24,
+                        ),
+                        ending: Semicolon(
+                            Span(
+                                20,
                                 7,
                             ),
-                        },
-                    ),
+                        ),
+                    },
                 ],
+                elseifs: [
+                    IfStatementElseIfBlock {
+                        elseif: Span(
+                            21,
+                            1,
+                        ),
+                        condition: Parenthesized {
+                            left_parenthesis: Span(
+                                21,
+                                8,
+                            ),
+                            inner: Bool {
+                                value: true,
+                            },
+                            right_parenthesis: Span(
+                                21,
+                                13,
+                            ),
+                        },
+                        colon: Span(
+                            21,
+                            14,
+                        ),
+                        statements: [
+                            Expression {
+                                expression: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                22,
+                                                5,
+                                            ),
+                                            name: "b",
+                                        },
+                                    ),
+                                ),
+                                ending: Semicolon(
+                                    Span(
+                                        22,
+                                        7,
+                                    ),
+                                ),
+                            },
+                        ],
+                    },
+                    IfStatementElseIfBlock {
+                        elseif: Span(
+                            23,
+                            1,
+                        ),
+                        condition: Parenthesized {
+                            left_parenthesis: Span(
+                                23,
+                                8,
+                            ),
+                            inner: Bool {
+                                value: true,
+                            },
+                            right_parenthesis: Span(
+                                23,
+                                13,
+                            ),
+                        },
+                        colon: Span(
+                            23,
+                            14,
+                        ),
+                        statements: [
+                            Expression {
+                                expression: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                24,
+                                                5,
+                                            ),
+                                            name: "c",
+                                        },
+                                    ),
+                                ),
+                                ending: Semicolon(
+                                    Span(
+                                        24,
+                                        7,
+                                    ),
+                                ),
+                            },
+                        ],
+                    },
+                ],
+                else: None,
+                endif: Span(
+                    25,
+                    1,
+                ),
+                ending: Semicolon(
+                    Span(
+                        25,
+                        6,
+                    ),
+                ),
             },
-        ],
-        else: None,
-    },
+        },
+    ),
 ]

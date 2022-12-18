@@ -1,62 +1,126 @@
 [
-    If {
-        condition: Parenthesized {
-            left_parenthesis: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    If(
+        IfStatement {
+            if: Span(
                 1,
-                9,
+                7,
             ),
-            inner: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span(
-                            1,
-                            10,
-                        ),
-                        name: "foo",
-                    },
+            condition: Parenthesized {
+                left_parenthesis: Span(
+                    1,
+                    9,
                 ),
-            ),
-            right_parenthesis: Span(
-                1,
-                14,
-            ),
-        },
-        then: [
-            Return {
-                value: Some(
-                    Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    1,
-                                    25,
-                                ),
-                                name: "foo",
-                            },
-                        ),
+                inner: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                1,
+                                10,
+                            ),
+                            name: "foo",
+                        },
                     ),
+                ),
+                right_parenthesis: Span(
+                    1,
+                    14,
                 ),
             },
-        ],
-        else_ifs: [],
-        else: Some(
-            [
-                Return {
-                    value: Some(
-                        Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        1,
-                                        47,
-                                    ),
-                                    name: "foo",
-                                },
-                            ),
+            body: Statement {
+                statement: Block(
+                    Braced {
+                        left_brace: Span(
+                            1,
+                            16,
                         ),
-                    ),
-                },
-            ],
-        ),
-    },
+                        inner: [
+                            Return {
+                                return: Span(
+                                    1,
+                                    18,
+                                ),
+                                value: Some(
+                                    Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    1,
+                                                    25,
+                                                ),
+                                                name: "foo",
+                                            },
+                                        ),
+                                    ),
+                                ),
+                                ending: Semicolon(
+                                    Span(
+                                        1,
+                                        29,
+                                    ),
+                                ),
+                            },
+                        ],
+                        right_brace: Span(
+                            1,
+                            31,
+                        ),
+                    },
+                ),
+                elseifs: [],
+                else: Some(
+                    IfStatementElse {
+                        else: Span(
+                            1,
+                            33,
+                        ),
+                        statement: Block(
+                            Braced {
+                                left_brace: Span(
+                                    1,
+                                    38,
+                                ),
+                                inner: [
+                                    Return {
+                                        return: Span(
+                                            1,
+                                            40,
+                                        ),
+                                        value: Some(
+                                            Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span(
+                                                            1,
+                                                            47,
+                                                        ),
+                                                        name: "foo",
+                                                    },
+                                                ),
+                                            ),
+                                        ),
+                                        ending: Semicolon(
+                                            Span(
+                                                1,
+                                                51,
+                                            ),
+                                        ),
+                                    },
+                                ],
+                                right_brace: Span(
+                                    1,
+                                    53,
+                                ),
+                            },
+                        ),
+                    },
+                ),
+            },
+        },
+    ),
 ]

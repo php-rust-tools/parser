@@ -1,56 +1,62 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    3,
-                                    1,
-                                ),
-                                name: "foo",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        3,
-                        6,
-                    ),
-                    right: Include {
-                        span: Span(
-                            3,
-                            8,
-                        ),
-                        kind: Require,
-                        path: Concat {
-                            left: MagicConst {
-                                span: Span(
-                                    3,
-                                    16,
-                                ),
-                                constant: Directory,
-                            },
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
                             span: Span(
                                 3,
-                                24,
+                                1,
                             ),
-                            right: LiteralString {
-                                span: Span(
-                                    3,
-                                    26,
-                                ),
-                                value: "/foo.php",
-                            },
+                            name: "foo",
+                        },
+                    ),
+                ),
+                span: Span(
+                    3,
+                    6,
+                ),
+                right: Include {
+                    span: Span(
+                        3,
+                        8,
+                    ),
+                    kind: Require,
+                    path: Concat {
+                        left: MagicConst {
+                            span: Span(
+                                3,
+                                16,
+                            ),
+                            constant: Directory,
+                        },
+                        span: Span(
+                            3,
+                            24,
+                        ),
+                        right: LiteralString {
+                            span: Span(
+                                3,
+                                26,
+                            ),
+                            value: "/foo.php",
                         },
                     },
                 },
-            ),
-            semicolon: Span(
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 3,
                 36,
             ),
-        },
-    ),
+        ),
+    },
 ]

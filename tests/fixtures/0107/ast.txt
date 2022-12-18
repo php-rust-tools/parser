@@ -1,30 +1,36 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: Yield {
-                key: Some(
-                    LiteralInteger {
-                        span: Span(
-                            1,
-                            13,
-                        ),
-                        value: "0",
-                    },
-                ),
-                value: Some(
-                    LiteralInteger {
-                        span: Span(
-                            1,
-                            18,
-                        ),
-                        value: "1",
-                    },
-                ),
-            },
-            semicolon: Span(
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: Yield {
+            key: Some(
+                LiteralInteger {
+                    span: Span(
+                        1,
+                        13,
+                    ),
+                    value: "0",
+                },
+            ),
+            value: Some(
+                LiteralInteger {
+                    span: Span(
+                        1,
+                        18,
+                    ),
+                    value: "1",
+                },
+            ),
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 19,
             ),
-        },
-    ),
+        ),
+    },
 ]

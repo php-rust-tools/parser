@@ -1,142 +1,148 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    4,
-                                    1,
-                                ),
-                                name: "a",
-                            },
-                        ),
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
+                                4,
+                                1,
+                            ),
+                            name: "a",
+                        },
                     ),
+                ),
+                span: Span(
+                    4,
+                    4,
+                ),
+                right: LiteralInteger {
                     span: Span(
                         4,
-                        4,
+                        6,
                     ),
-                    right: LiteralInteger {
-                        span: Span(
-                            4,
-                            6,
-                        ),
-                        value: "4",
-                    },
+                    value: "4",
                 },
-            ),
-            semicolon: Span(
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 4,
                 7,
             ),
-        },
-    ),
-    Expression(
-        SemicolonTerminated {
-            inner: AssignmentOperation(
-                Assign {
-                    left: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span(
-                                    6,
-                                    1,
-                                ),
-                                name: "b",
-                            },
-                        ),
-                    ),
-                    span: Span(
-                        6,
-                        4,
-                    ),
-                    right: Match {
-                        keyword: Span(
-                            6,
-                            6,
-                        ),
-                        condition: Parenthesized {
-                            left_parenthesis: Span(
+        ),
+    },
+    Expression {
+        expression: AssignmentOperation(
+            Assign {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span(
                                 6,
-                                12,
+                                1,
                             ),
-                            inner: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            6,
-                                            13,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
-                            right_parenthesis: Span(
-                                6,
-                                15,
-                            ),
+                            name: "b",
                         },
-                        default: Some(
-                            DefaultMatchArm {
-                                keyword: Span(
-                                    9,
-                                    5,
-                                ),
-                                arrow: Span(
-                                    9,
-                                    14,
-                                ),
-                                body: Null,
-                            },
+                    ),
+                ),
+                span: Span(
+                    6,
+                    4,
+                ),
+                right: Match {
+                    keyword: Span(
+                        6,
+                        6,
+                    ),
+                    condition: Parenthesized {
+                        left_parenthesis: Span(
+                            6,
+                            12,
                         ),
-                        arms: [
-                            MatchArm {
-                                conditions: [
-                                    LiteralInteger {
-                                        span: Span(
-                                            7,
-                                            5,
-                                        ),
-                                        value: "1",
-                                    },
-                                    LiteralInteger {
-                                        span: Span(
-                                            7,
-                                            7,
-                                        ),
-                                        value: "2",
-                                    },
-                                    LiteralInteger {
-                                        span: Span(
-                                            7,
-                                            9,
-                                        ),
-                                        value: "3",
-                                    },
-                                    LiteralInteger {
-                                        span: Span(
-                                            7,
-                                            11,
-                                        ),
-                                        value: "4",
-                                    },
-                                ],
-                                arrow: Span(
-                                    7,
-                                    13,
-                                ),
-                                body: Null,
-                            },
-                        ],
+                        inner: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span(
+                                        6,
+                                        13,
+                                    ),
+                                    name: "a",
+                                },
+                            ),
+                        ),
+                        right_parenthesis: Span(
+                            6,
+                            15,
+                        ),
                     },
+                    default: Some(
+                        DefaultMatchArm {
+                            keyword: Span(
+                                9,
+                                5,
+                            ),
+                            arrow: Span(
+                                9,
+                                14,
+                            ),
+                            body: Null,
+                        },
+                    ),
+                    arms: [
+                        MatchArm {
+                            conditions: [
+                                LiteralInteger {
+                                    span: Span(
+                                        7,
+                                        5,
+                                    ),
+                                    value: "1",
+                                },
+                                LiteralInteger {
+                                    span: Span(
+                                        7,
+                                        7,
+                                    ),
+                                    value: "2",
+                                },
+                                LiteralInteger {
+                                    span: Span(
+                                        7,
+                                        9,
+                                    ),
+                                    value: "3",
+                                },
+                                LiteralInteger {
+                                    span: Span(
+                                        7,
+                                        11,
+                                    ),
+                                    value: "4",
+                                },
+                            ],
+                            arrow: Span(
+                                7,
+                                13,
+                            ),
+                            body: Null,
+                        },
+                    ],
                 },
-            ),
-            semicolon: Span(
+            },
+        ),
+        ending: Semicolon(
+            Span(
                 10,
                 2,
             ),
-        },
-    ),
+        ),
+    },
 ]

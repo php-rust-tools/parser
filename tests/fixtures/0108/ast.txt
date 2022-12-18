@@ -1,19 +1,25 @@
 [
-    Expression(
-        SemicolonTerminated {
-            inner: YieldFrom {
-                value: LiteralInteger {
-                    span: Span(
-                        1,
-                        18,
-                    ),
-                    value: "1",
-                },
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Expression {
+        expression: YieldFrom {
+            value: LiteralInteger {
+                span: Span(
+                    1,
+                    18,
+                ),
+                value: "1",
             },
-            semicolon: Span(
+        },
+        ending: Semicolon(
+            Span(
                 1,
                 19,
             ),
-        },
-    ),
+        ),
+    },
 ]

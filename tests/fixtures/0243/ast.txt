@@ -1,6 +1,12 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     For(
-        ForLoop {
+        ForStatement {
             for: Span(
                 3,
                 1,
@@ -10,7 +16,7 @@
                     3,
                     5,
                 ),
-                inner: ForIterator {
+                inner: ForStatementIterator {
                     initializations: SemicolonTerminated {
                         inner: CommaSeparated {
                             inner: [
@@ -99,18 +105,20 @@
                     22,
                 ),
             },
-            body: Braced(
-                Braced {
-                    left_brace: Span(
-                        3,
-                        24,
-                    ),
-                    inner: [],
-                    right_brace: Span(
-                        5,
-                        1,
-                    ),
-                },
+            body: Statement(
+                Block(
+                    Braced {
+                        left_brace: Span(
+                            3,
+                            24,
+                        ),
+                        inner: [],
+                        right_brace: Span(
+                            5,
+                            1,
+                        ),
+                    },
+                ),
             ),
         },
     ),

@@ -1,4 +1,10 @@
 [
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
     Function(
         Function {
             comments: CommentGroup {
@@ -118,25 +124,25 @@
             ),
             ampersand: None,
             body: [
-                Expression(
-                    SemicolonTerminated {
-                        inner: Exit {
-                            value: Some(
-                                LiteralInteger {
-                                    span: Span(
-                                        4,
-                                        10,
-                                    ),
-                                    value: "1",
-                                },
-                            ),
-                        },
-                        semicolon: Span(
+                Expression {
+                    expression: Exit {
+                        value: Some(
+                            LiteralInteger {
+                                span: Span(
+                                    4,
+                                    10,
+                                ),
+                                value: "1",
+                            },
+                        ),
+                    },
+                    ending: Semicolon(
+                        Span(
                             4,
                             12,
                         ),
-                    },
-                ),
+                    ),
+                },
             ],
         },
     ),
@@ -353,8 +359,18 @@
             ampersand: None,
             body: [
                 Return {
+                    return: Span(
+                        8,
+                        5,
+                    ),
                     value: Some(
                         Null,
+                    ),
+                    ending: Semicolon(
+                        Span(
+                            8,
+                            16,
+                        ),
                     ),
                 },
             ],
