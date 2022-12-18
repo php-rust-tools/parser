@@ -3810,14 +3810,100 @@
             "value": {
               "type": "object",
               "required": [
-                "kind",
                 "path",
                 "span"
               ],
               "properties": {
-                "kind": {
-                  "$ref": "#/definitions/IncludeKind"
+                "path": {
+                  "$ref": "#/definitions/Expression"
                 },
+                "span": {
+                  "$ref": "#/definitions/Span"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "include_once"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "path",
+                "span"
+              ],
+              "properties": {
+                "path": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "span": {
+                  "$ref": "#/definitions/Span"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "require"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "path",
+                "span"
+              ],
+              "properties": {
+                "path": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "span": {
+                  "$ref": "#/definitions/Span"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "require_once"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "path",
+                "span"
+              ],
+              "properties": {
                 "path": {
                   "$ref": "#/definitions/Expression"
                 },
@@ -5764,66 +5850,6 @@
           }
         }
       }
-    },
-    "IncludeKind": {
-      "oneOf": [
-        {
-          "type": "object",
-          "required": [
-            "type"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "include"
-              ]
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "include_once"
-              ]
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "require"
-              ]
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "require_once"
-              ]
-            }
-          }
-        }
-      ]
     },
     "Interface": {
       "type": "object",

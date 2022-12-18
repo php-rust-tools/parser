@@ -85,27 +85,6 @@ pub struct StaticVar {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
-pub enum IncludeKind {
-    Include,
-    IncludeOnce,
-    Require,
-    RequireOnce,
-}
-
-impl From<&TokenKind> for IncludeKind {
-    fn from(k: &TokenKind) -> Self {
-        match k {
-            TokenKind::Include => IncludeKind::Include,
-            TokenKind::IncludeOnce => IncludeKind::IncludeOnce,
-            TokenKind::Require => IncludeKind::Require,
-            TokenKind::RequireOnce => IncludeKind::RequireOnce,
-            _ => unreachable!(),
-        }
-    }
-}
-
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Ending {
     Semicolon(Span),
@@ -288,9 +267,24 @@ pub enum Expression {
     },
     Identifier(Identifier),
     Variable(Variable),
+    // include "foo.php"
     Include {
         span: Span,
-        kind: IncludeKind,
+        path: Box<Expression>,
+    },
+    // include_once "foo.php"
+    IncludeOnce {
+        span: Span,
+        path: Box<Expression>,
+    },
+    // require "foo.php"
+    Require {
+        span: Span,
+        path: Box<Expression>,
+    },
+    // require_once "foo.php"
+    RequireOnce {
+        span: Span,
         path: Box<Expression>,
     },
     // `foo(1, 2, 3)`

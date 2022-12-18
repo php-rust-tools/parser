@@ -10,7 +10,7 @@ use crate::parser::ast::operators::AssignmentOperation;
 use crate::parser::ast::operators::BitwiseOperation;
 use crate::parser::ast::operators::ComparisonOperation;
 use crate::parser::ast::operators::LogicalOperation;
-use crate::parser::ast::{Expression, IncludeKind, MagicConst};
+use crate::parser::ast::{Expression, MagicConst};
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::arrays;
@@ -1009,18 +1009,18 @@ expressions! {
     #[before(cast_prefix), current(TokenKind::Include | TokenKind::IncludeOnce | TokenKind::Require | TokenKind::RequireOnce)]
     include({
         let current = state.stream.current();
-
-        let kind: IncludeKind = (&current.kind).into();
         let span = current.span;
 
         state.stream.next();
 
-        let path = create(state)?;
+        let path = Box::new(create(state)?);
 
-        Ok(Expression::Include {
-            span,
-            kind,
-            path:Box::new(path)
+        Ok(match current.kind {
+            TokenKind::Include => Expression::Include { span, path },
+            TokenKind::IncludeOnce => Expression::IncludeOnce { span, path },
+            TokenKind::Require => Expression::Require { span, path },
+            TokenKind::RequireOnce => Expression::RequireOnce { span, path },
+            _ => unreachable!()
         })
     })
 
