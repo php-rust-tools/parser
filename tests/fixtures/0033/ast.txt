@@ -35,13 +35,17 @@
                             ),
                         ),
                         index: Some(
-                            LiteralInteger {
-                                span: Span(
-                                    1,
-                                    20,
+                            Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "0",
+                                        span: Span(
+                                            1,
+                                            20,
+                                        ),
+                                    },
                                 ),
-                                value: "0",
-                            },
+                            ),
                         ),
                     },
                 ),
@@ -59,13 +63,17 @@
                             ),
                         ),
                         index: Some(
-                            LiteralString {
-                                span: Span(
-                                    1,
-                                    29,
+                            Literal(
+                                String(
+                                    LiteralString {
+                                        value: "bar",
+                                        span: Span(
+                                            1,
+                                            29,
+                                        ),
+                                    },
                                 ),
-                                value: "bar",
-                            },
+                            ),
                         ),
                     },
                 ),

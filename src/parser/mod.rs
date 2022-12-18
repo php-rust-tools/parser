@@ -7,7 +7,7 @@ use crate::parser::ast::declares::DeclareBody;
 use crate::parser::ast::declares::DeclareEntry;
 use crate::parser::ast::declares::DeclareEntryGroup;
 use crate::parser::ast::variables::Variable;
-use crate::parser::ast::{Expression, Program, Statement, StaticVar};
+use crate::parser::ast::{Program, Statement, StaticVar};
 use crate::parser::error::ParseResult;
 use crate::parser::internal::attributes;
 use crate::parser::internal::blocks;

@@ -23,6 +23,7 @@ use crate::parser::ast::goto::GotoStatement;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
+use crate::parser::ast::literals::Literal;
 use crate::parser::ast::loops::BreakStatement;
 use crate::parser::ast::loops::ContinueStatement;
 use crate::parser::ast::loops::DoWhileStatement;
@@ -56,6 +57,7 @@ pub mod functions;
 pub mod goto;
 pub mod identifiers;
 pub mod interfaces;
+pub mod literals;
 pub mod loops;
 pub mod modifiers;
 pub mod namespaces;
@@ -229,6 +231,7 @@ pub enum Expression {
     Echo {
         values: Vec<Self>,
     },
+    Literal(Literal),
     ArithmeticOperation(ArithmeticOperation),
     AssignmentOperation(AssignmentOperation),
     BitwiseOperation(BitwiseOperation),
@@ -267,17 +270,6 @@ pub enum Expression {
         span: Span,
         expr: Box<Self>,
     },
-    // 1, 1_000, 0123, 0o123, 0x123, 0b1010
-    LiteralInteger {
-        span: Span,
-        value: ByteString,
-    },
-    // 1.12345
-    LiteralFloat {
-        span: Span,
-        value: ByteString,
-    },
-    // foo | foo_bar | _foo | foo123
     Identifier(Identifier),
     Variable(Variable),
     // include "foo.php"
@@ -369,11 +361,6 @@ pub enum Expression {
         span: Span,                      // `new`
         target: Box<Self>,               // `Foo`
         arguments: Option<ArgumentList>, // `(1, 2, 3)`
-    },
-    // `'foo'`
-    LiteralString {
-        span: Span,
-        value: ByteString,
     },
     // `"foo $bar foo"`
     InterpolatedString {

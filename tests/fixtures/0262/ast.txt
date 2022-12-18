@@ -12,13 +12,17 @@
                     items: [
                         ListItem {
                             key: Some(
-                                LiteralString {
-                                    span: Span(
-                                        3,
-                                        6,
+                                Literal(
+                                    String(
+                                        LiteralString {
+                                            value: "foo",
+                                            span: Span(
+                                                3,
+                                                6,
+                                            ),
+                                        },
                                     ),
-                                    value: "foo",
-                                },
+                                ),
                             ),
                             value: Variable(
                                 SimpleVariable(
@@ -34,13 +38,17 @@
                         },
                         ListItem {
                             key: Some(
-                                LiteralString {
-                                    span: Span(
-                                        3,
-                                        19,
+                                Literal(
+                                    String(
+                                        LiteralString {
+                                            value: "bar",
+                                            span: Span(
+                                                3,
+                                                19,
+                                            ),
+                                        },
                                     ),
-                                    value: "bar",
-                                },
+                                ),
                             ),
                             value: Variable(
                                 SimpleVariable(

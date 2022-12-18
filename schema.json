@@ -1735,7 +1735,7 @@
         "level": {
           "anyOf": [
             {
-              "$ref": "#/definitions/Expression"
+              "$ref": "#/definitions/Level"
             },
             {
               "type": "null"
@@ -2996,7 +2996,7 @@
         "level": {
           "anyOf": [
             {
-              "$ref": "#/definitions/Expression"
+              "$ref": "#/definitions/Level"
             },
             {
               "type": "null"
@@ -3159,7 +3159,7 @@
           "$ref": "#/definitions/Span"
         },
         "value": {
-          "$ref": "#/definitions/Expression"
+          "$ref": "#/definitions/Literal"
         }
       }
     },
@@ -3400,6 +3400,24 @@
                   }
                 }
               }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "literal"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Literal"
             }
           }
         },
@@ -3693,66 +3711,6 @@
                 },
                 "span": {
                   "$ref": "#/definitions/Span"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "literal_integer"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "span",
-                "value"
-              ],
-              "properties": {
-                "span": {
-                  "$ref": "#/definitions/Span"
-                },
-                "value": {
-                  "$ref": "#/definitions/ByteString"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "literal_float"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "span",
-                "value"
-              ],
-              "properties": {
-                "span": {
-                  "$ref": "#/definitions/Span"
-                },
-                "value": {
-                  "$ref": "#/definitions/ByteString"
                 }
               }
             }
@@ -4336,36 +4294,6 @@
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "literal_string"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "span",
-                "value"
-              ],
-              "properties": {
-                "span": {
-                  "$ref": "#/definitions/Span"
-                },
-                "value": {
-                  "$ref": "#/definitions/ByteString"
                 }
               }
             }
@@ -5004,36 +4932,6 @@
                 "value"
               ],
               "properties": {
-                "value": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "bitwise_not"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "span",
-                "value"
-              ],
-              "properties": {
-                "span": {
-                  "$ref": "#/definitions/Span"
-                },
                 "value": {
                   "$ref": "#/definitions/Expression"
                 }
@@ -5964,6 +5862,46 @@
         }
       ]
     },
+    "Level": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "literal"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/LiteralInteger"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "parenthesized"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Parenthesized_for_Level"
+            }
+          }
+        }
+      ]
+    },
     "ListItem": {
       "type": "object",
       "required": [
@@ -5982,6 +5920,109 @@
         },
         "value": {
           "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "Literal": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "string"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/LiteralString"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "integer"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/LiteralInteger"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "float"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/LiteralFloat"
+            }
+          }
+        }
+      ]
+    },
+    "LiteralFloat": {
+      "type": "object",
+      "required": [
+        "span",
+        "value"
+      ],
+      "properties": {
+        "span": {
+          "$ref": "#/definitions/Span"
+        },
+        "value": {
+          "$ref": "#/definitions/ByteString"
+        }
+      }
+    },
+    "LiteralInteger": {
+      "type": "object",
+      "required": [
+        "span",
+        "value"
+      ],
+      "properties": {
+        "span": {
+          "$ref": "#/definitions/Span"
+        },
+        "value": {
+          "$ref": "#/definitions/ByteString"
+        }
+      }
+    },
+    "LiteralString": {
+      "type": "object",
+      "required": [
+        "span",
+        "value"
+      ],
+      "properties": {
+        "span": {
+          "$ref": "#/definitions/Span"
+        },
+        "value": {
+          "$ref": "#/definitions/ByteString"
         }
       }
     },
@@ -6692,6 +6733,25 @@
       "properties": {
         "inner": {
           "$ref": "#/definitions/ForeachStatementIterator"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "Parenthesized_for_Level": {
+      "type": "object",
+      "required": [
+        "inner",
+        "left_parenthesis",
+        "right_parenthesis"
+      ],
+      "properties": {
+        "inner": {
+          "$ref": "#/definitions/Level"
         },
         "left_parenthesis": {
           "$ref": "#/definitions/Span"

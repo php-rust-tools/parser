@@ -62,34 +62,34 @@ macro_rules! expect_literal {
 
         match &current.kind {
             TokenKind::LiteralInteger(value) => {
-                let e = Expression::LiteralInteger {
-                    span: current.span,
-                    value: value.clone(),
-                };
-
                 $state.stream.next();
 
-                e
+                $crate::parser::ast::literals::Literal::Integer(
+                    $crate::parser::ast::literals::LiteralInteger {
+                        span: current.span,
+                        value: value.clone(),
+                    },
+                )
             }
             TokenKind::LiteralFloat(value) => {
-                let e = Expression::LiteralFloat {
-                    span: current.span,
-                    value: value.clone(),
-                };
-
                 $state.stream.next();
 
-                e
+                $crate::parser::ast::literals::Literal::Float(
+                    $crate::parser::ast::literals::LiteralFloat {
+                        span: current.span,
+                        value: value.clone(),
+                    },
+                )
             }
             TokenKind::LiteralString(value) => {
-                let e = Expression::LiteralString {
-                    span: current.span,
-                    value: value.clone(),
-                };
-
                 $state.stream.next();
 
-                e
+                $crate::parser::ast::literals::Literal::String(
+                    $crate::parser::ast::literals::LiteralString {
+                        span: current.span,
+                        value: value.clone(),
+                    },
+                )
             }
             _ => {
                 return $crate::expected_token_err!(["a literal"], $state);

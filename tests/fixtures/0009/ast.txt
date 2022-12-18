@@ -19,13 +19,17 @@
                 ),
             ),
             index: Some(
-                LiteralString {
-                    span: Span(
-                        3,
-                        6,
+                Literal(
+                    String(
+                        LiteralString {
+                            value: "bar",
+                            span: Span(
+                                3,
+                                6,
+                            ),
+                        },
                     ),
-                    value: "bar",
-                },
+                ),
             ),
         },
         ending: Semicolon(
@@ -50,23 +54,31 @@
                     ),
                 ),
                 index: Some(
-                    LiteralString {
-                        span: Span(
-                            5,
-                            6,
+                    Literal(
+                        String(
+                            LiteralString {
+                                value: "bar",
+                                span: Span(
+                                    5,
+                                    6,
+                                ),
+                            },
                         ),
-                        value: "bar",
-                    },
+                    ),
                 ),
             },
             index: Some(
-                LiteralString {
-                    span: Span(
-                        5,
-                        13,
+                Literal(
+                    String(
+                        LiteralString {
+                            value: "baz",
+                            span: Span(
+                                5,
+                                13,
+                            ),
+                        },
                     ),
-                    value: "baz",
-                },
+                ),
             ),
         },
         ending: Semicolon(
@@ -92,26 +104,34 @@
                         ),
                     ),
                     index: Some(
-                        LiteralString {
-                            span: Span(
-                                7,
-                                6,
+                        Literal(
+                            String(
+                                LiteralString {
+                                    value: "bar",
+                                    span: Span(
+                                        7,
+                                        6,
+                                    ),
+                                },
                             ),
-                            value: "bar",
-                        },
+                        ),
                     ),
                 },
                 span: Span(
                     7,
                     13,
                 ),
-                right: LiteralString {
-                    span: Span(
-                        7,
-                        15,
+                right: Literal(
+                    String(
+                        LiteralString {
+                            value: "baz",
+                            span: Span(
+                                7,
+                                15,
+                            ),
+                        },
                     ),
-                    value: "baz",
-                },
+                ),
             },
         ),
         ending: Semicolon(

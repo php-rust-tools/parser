@@ -179,13 +179,17 @@
         cases: [
             Case {
                 condition: Some(
-                    LiteralInteger {
-                        span: Span(
-                            8,
-                            10,
+                    Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "0",
+                                span: Span(
+                                    8,
+                                    10,
+                                ),
+                            },
                         ),
-                        value: "0",
-                    },
+                    ),
                 ),
                 body: [
                     Break(
@@ -207,13 +211,17 @@
             },
             Case {
                 condition: Some(
-                    LiteralInteger {
-                        span: Span(
-                            10,
-                            10,
+                    Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span(
+                                    10,
+                                    10,
+                                ),
+                            },
                         ),
-                        value: "1",
-                    },
+                    ),
                 ),
                 body: [],
             },

@@ -4,6 +4,9 @@ use crate::lexer::error::SyntaxError;
 use crate::lexer::token::DocStringIndentationKind;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::Identifier;
+use crate::parser::ast::literals::Literal;
+use crate::parser::ast::literals::LiteralInteger;
+use crate::parser::ast::literals::LiteralString;
 use crate::parser::ast::operators::ArithmeticOperation;
 use crate::parser::ast::variables::Variable;
 use crate::parser::ast::Expression;
@@ -256,40 +259,40 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                     let current = state.stream.current();
                     let index = match &current.kind {
                         TokenKind::LiteralInteger(value) => {
-                            let e = Expression::LiteralInteger {
+                            state.stream.next();
+
+                            Expression::Literal(Literal::Integer(LiteralInteger {
                                 span: current.span,
                                 value: value.clone(),
-                            };
-                            state.stream.next();
-                            e
+                            }))
                         }
                         TokenKind::Minus => {
                             let span = current.span;
                             state.stream.next();
                             let literal = state.stream.current();
                             if let TokenKind::LiteralInteger(value) = &literal.kind {
-                                let e = Expression::ArithmeticOperation(
-                                    ArithmeticOperation::Negative {
-                                        span,
-                                        right: Box::new(Expression::LiteralInteger {
+                                state.stream.next();
+
+                                Expression::ArithmeticOperation(ArithmeticOperation::Negative {
+                                    span,
+                                    right: Box::new(Expression::Literal(Literal::Integer(
+                                        LiteralInteger {
                                             span: literal.span,
                                             value: value.clone(),
-                                        }),
-                                    },
-                                );
-                                state.stream.next();
-                                e
+                                        },
+                                    ))),
+                                })
                             } else {
                                 return expected_token_err!("an integer", state);
                             }
                         }
                         TokenKind::Identifier(ident) => {
-                            let e = Expression::LiteralString {
+                            state.stream.next();
+
+                            Expression::Literal(Literal::String(LiteralString {
                                 span: current.span,
                                 value: ident.clone(),
-                            };
-                            state.stream.next();
-                            e
+                            }))
                         }
                         TokenKind::Variable(_) => Expression::Variable(Variable::SimpleVariable(
                             variables::simple_variable(state)?,

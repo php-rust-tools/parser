@@ -8,36 +8,48 @@
     Expression {
         expression: Concat {
             left: Concat {
-                left: LiteralString {
-                    span: Span(
-                        1,
-                        7,
+                left: Literal(
+                    String(
+                        LiteralString {
+                            value: "foo",
+                            span: Span(
+                                1,
+                                7,
+                            ),
+                        },
                     ),
-                    value: "foo",
-                },
+                ),
                 span: Span(
                     1,
                     13,
                 ),
-                right: LiteralString {
-                    span: Span(
-                        1,
-                        15,
+                right: Literal(
+                    String(
+                        LiteralString {
+                            value: "bar",
+                            span: Span(
+                                1,
+                                15,
+                            ),
+                        },
                     ),
-                    value: "bar",
-                },
+                ),
             },
             span: Span(
                 1,
                 21,
             ),
-            right: LiteralString {
-                span: Span(
-                    1,
-                    23,
+            right: Literal(
+                String(
+                    LiteralString {
+                        value: "baz",
+                        span: Span(
+                            1,
+                            23,
+                        ),
+                    },
                 ),
-                value: "baz",
-            },
+            ),
         },
         ending: Semicolon(
             Span(

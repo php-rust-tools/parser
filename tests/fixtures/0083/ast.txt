@@ -33,13 +33,15 @@
                             1,
                             16,
                         ),
-                        value: LiteralString {
-                            span: Span(
-                                1,
-                                17,
-                            ),
-                            value: "B",
-                        },
+                        value: String(
+                            LiteralString {
+                                value: "B",
+                                span: Span(
+                                    1,
+                                    17,
+                                ),
+                            },
+                        ),
                     },
                 ],
             },
@@ -55,13 +57,17 @@
                             24,
                         ),
                         values: [
-                            LiteralString {
-                                span: Span(
-                                    1,
-                                    29,
+                            Literal(
+                                String(
+                                    LiteralString {
+                                        value: "Hello, world!",
+                                        span: Span(
+                                            1,
+                                            29,
+                                        ),
+                                    },
                                 ),
-                                value: "Hello, world!",
-                            },
+                            ),
                         ],
                         ending: Semicolon(
                             Span(

@@ -6,13 +6,17 @@
         ),
     ),
     Expression {
-        expression: LiteralString {
-            span: Span(
-                1,
-                5,
+        expression: Literal(
+            String(
+                LiteralString {
+                    value: "<?php\n",
+                    span: Span(
+                        1,
+                        5,
+                    ),
+                },
             ),
-            value: "<?php\n",
-        },
+        ),
         ending: CloseTag(
             Span(
                 1,
@@ -35,13 +39,17 @@
             5,
         ),
         values: [
-            LiteralString {
-                span: Span(
-                    4,
-                    10,
+            Literal(
+                String(
+                    LiteralString {
+                        value: "// ",
+                        span: Span(
+                            4,
+                            10,
+                        ),
+                    },
                 ),
-                value: "// ",
-            },
+            ),
         ],
         ending: Semicolon(
             Span(

@@ -12,13 +12,17 @@
                     items: [
                         ListItem {
                             key: Some(
-                                LiteralString {
-                                    span: Span(
-                                        3,
-                                        6,
+                                Literal(
+                                    String(
+                                        LiteralString {
+                                            value: "foo",
+                                            span: Span(
+                                                3,
+                                                6,
+                                            ),
+                                        },
                                     ),
-                                    value: "foo",
-                                },
+                                ),
                             ),
                             value: Variable(
                                 SimpleVariable(

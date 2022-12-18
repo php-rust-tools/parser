@@ -87,13 +87,17 @@
                             inner: [
                                 ArrayItem {
                                     key: Some(
-                                        LiteralString {
-                                            span: Span(
-                                                6,
-                                                5,
+                                        Literal(
+                                            String(
+                                                LiteralString {
+                                                    value: "single",
+                                                    span: Span(
+                                                        6,
+                                                        5,
+                                                    ),
+                                                },
                                             ),
-                                            value: "single",
-                                        },
+                                        ),
                                     ),
                                     value: Instanceof {
                                         left: Variable(
@@ -128,13 +132,17 @@
                                 },
                                 ArrayItem {
                                     key: Some(
-                                        LiteralString {
-                                            span: Span(
-                                                7,
-                                                5,
+                                        Literal(
+                                            String(
+                                                LiteralString {
+                                                    value: "multiple",
+                                                    span: Span(
+                                                        7,
+                                                        5,
+                                                    ),
+                                                },
                                             ),
-                                            value: "multiple",
-                                        },
+                                        ),
                                     ),
                                     value: LogicalOperation(
                                         And {

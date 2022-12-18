@@ -7,13 +7,17 @@
     ),
     Expression {
         expression: YieldFrom {
-            value: LiteralInteger {
-                span: Span(
-                    1,
-                    18,
+            value: Literal(
+                Integer(
+                    LiteralInteger {
+                        value: "1",
+                        span: Span(
+                            1,
+                            18,
+                        ),
+                    },
                 ),
-                value: "1",
-            },
+            ),
         },
         ending: Semicolon(
             Span(
