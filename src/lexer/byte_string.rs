@@ -19,7 +19,7 @@ pub struct ByteString {
 
 impl ByteString {
     pub fn new(bytes: Vec<u8>) -> Self {
-        ByteString { bytes, length: bytes.len() }
+        ByteString { bytes: bytes.clone(), length: bytes.len() }
     }
 }
 
