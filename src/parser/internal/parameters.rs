@@ -113,7 +113,7 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
                             2
                         }
                     }
-                    _ => unreachable!(),
+                    scope => unreachable!("shouldn't reach scope `{:?}`", scope),
                 }
             }
         }
@@ -222,8 +222,8 @@ pub fn method_parameter_list(state: &mut State) -> Result<MethodParameterList, P
 
     Ok(MethodParameterList {
         comments,
-        start: list_start,
-        end: list_end,
+        left_parenthesis: list_start,
+        right_parenthesis: list_end,
         members,
     })
 }

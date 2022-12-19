@@ -1,0 +1,136 @@
+[
+    FullOpeningTag(
+        Span(
+            1,
+            1,
+        ),
+    ),
+    Namespace(
+        Unbraced(
+            UnbracedNamespace {
+                start: Span(
+                    3,
+                    1,
+                ),
+                name: SimpleIdentifier {
+                    span: Span(
+                        3,
+                        11,
+                    ),
+                    value: "A\B\C\D\E",
+                },
+                end: Span(
+                    3,
+                    20,
+                ),
+                statements: [
+                    Function(
+                        Function {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            function: Span(
+                                5,
+                                1,
+                            ),
+                            ampersand: None,
+                            name: SimpleIdentifier {
+                                span: Span(
+                                    5,
+                                    10,
+                                ),
+                                value: "foo",
+                            },
+                            parameters: FunctionParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span(
+                                    5,
+                                    13,
+                                ),
+                                members: [
+                                    FunctionParameter {
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        name: SimpleVariable {
+                                            span: Span(
+                                                5,
+                                                21,
+                                            ),
+                                            name: "s",
+                                        },
+                                        attributes: [],
+                                        type: Some(
+                                            String(
+                                                Span(
+                                                    5,
+                                                    14,
+                                                ),
+                                            ),
+                                        ),
+                                        ellipsis: None,
+                                        default: None,
+                                        ampersand: None,
+                                    },
+                                ],
+                                right_parenthesis: Span(
+                                    5,
+                                    23,
+                                ),
+                            },
+                            return_type: Some(
+                                SelfReference(
+                                    Span(
+                                        5,
+                                        26,
+                                    ),
+                                ),
+                            ),
+                            body: FunctionBody {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_brace: Span(
+                                    5,
+                                    31,
+                                ),
+                                statements: [
+                                    Expression {
+                                        expression: Exit {
+                                            value: Some(
+                                                Literal(
+                                                    Integer(
+                                                        LiteralInteger {
+                                                            value: "0",
+                                                            span: Span(
+                                                                6,
+                                                                11,
+                                                            ),
+                                                        },
+                                                    ),
+                                                ),
+                                            ),
+                                        },
+                                        ending: Semicolon(
+                                            Span(
+                                                6,
+                                                13,
+                                            ),
+                                        ),
+                                    },
+                                ],
+                                right_brace: Span(
+                                    7,
+                                    1,
+                                ),
+                            },
+                        },
+                    ),
+                ],
+            },
+        ),
+    ),
+]

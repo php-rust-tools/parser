@@ -35,14 +35,22 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
+                            attributes: [],
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public(
+                                        Span(
+                                            4,
+                                            5,
+                                        ),
+                                    ),
+                                ],
+                            },
+                            function: Span(
                                 4,
                                 12,
                             ),
-                            end: Span(
-                                9,
-                                8,
-                            ),
+                            ampersand: None,
                             name: SimpleIdentifier {
                                 span: Span(
                                     4,
@@ -50,12 +58,11 @@
                                 ),
                                 value: "__construct",
                             },
-                            attributes: [],
                             parameters: MethodParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     4,
                                     32,
                                 ),
@@ -210,26 +217,23 @@
                                         },
                                     },
                                 ],
-                                end: Span(
+                                right_parenthesis: Span(
                                     9,
                                     5,
                                 ),
                             },
-                            body: Some(
-                                [],
-                            ),
-                            modifiers: MethodModifierGroup {
-                                modifiers: [
-                                    Public(
-                                        Span(
-                                            4,
-                                            5,
-                                        ),
-                                    ),
-                                ],
-                            },
                             return_type: None,
-                            ampersand: None,
+                            body: Block {
+                                left_brace: Span(
+                                    9,
+                                    7,
+                                ),
+                                statements: [],
+                                right_brace: Span(
+                                    9,
+                                    8,
+                                ),
+                            },
                         },
                     ),
                 ],

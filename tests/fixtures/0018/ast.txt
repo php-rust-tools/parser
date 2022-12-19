@@ -10,14 +10,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 3,
                 1,
             ),
-            end: Span(
-                7,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     3,
@@ -25,7 +23,6 @@
                 ),
                 value: "a",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -48,49 +45,61 @@
                     ),
                 ),
             ),
-            ampersand: None,
-            body: [
-                Echo {
-                    echo: Span(
-                        4,
-                        5,
-                    ),
-                    values: [
-                        Literal(
-                            String(
-                                LiteralString {
-                                    value: "looping..\n",
-                                    span: Span(
-                                        4,
-                                        10,
-                                    ),
-                                },
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    3,
+                    20,
+                ),
+                statements: [
+                    Echo {
+                        echo: Span(
+                            4,
+                            5,
+                        ),
+                        values: [
+                            Literal(
+                                String(
+                                    LiteralString {
+                                        value: "looping..\n",
+                                        span: Span(
+                                            4,
+                                            10,
+                                        ),
+                                    },
+                                ),
+                            ),
+                        ],
+                        ending: Semicolon(
+                            Span(
+                                4,
+                                23,
                             ),
                         ),
-                    ],
-                    ending: Semicolon(
-                        Span(
-                            4,
-                            23,
-                        ),
-                    ),
-                },
-                Return {
-                    return: Span(
-                        6,
-                        5,
-                    ),
-                    value: Some(
-                        Null,
-                    ),
-                    ending: Semicolon(
-                        Span(
+                    },
+                    Return {
+                        return: Span(
                             6,
-                            16,
+                            5,
                         ),
-                    ),
-                },
-            ],
+                        value: Some(
+                            Null,
+                        ),
+                        ending: Semicolon(
+                            Span(
+                                6,
+                                16,
+                            ),
+                        ),
+                    },
+                ],
+                right_brace: Span(
+                    7,
+                    1,
+                ),
+            },
         },
     ),
     Expression {

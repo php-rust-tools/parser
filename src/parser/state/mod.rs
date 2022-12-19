@@ -28,10 +28,7 @@ pub enum Scope {
     Enum(SimpleIdentifier, bool),
     AnonymousClass(bool),
 
-    Function(SimpleIdentifier),
     Method(SimpleIdentifier, MethodModifierGroup),
-    AnonymousFunction(bool),
-    ArrowFunction(bool),
 }
 
 #[derive(Debug)]
@@ -40,8 +37,6 @@ pub struct State<'a> {
     pub stream: &'a mut TokenStream<'a>,
     pub attributes: Vec<AttributeGroup>,
     pub namespace_type: Option<NamespaceType>,
-    pub has_class_scope: bool,
-    pub has_class_parent_scope: bool,
 }
 
 impl<'a> State<'a> {
@@ -50,8 +45,6 @@ impl<'a> State<'a> {
             stack: VecDeque::with_capacity(32),
             stream: tokens,
             namespace_type: None,
-            has_class_scope: false,
-            has_class_parent_scope: false,
             attributes: vec![],
         }
     }
@@ -125,64 +118,9 @@ impl<'a> State<'a> {
         }
 
         self.stack.push_back(scope);
-        self.update_scope();
     }
 
     pub fn exit(&mut self) {
         self.stack.pop_back();
-        self.update_scope();
-    }
-
-    fn update_scope(&mut self) {
-        self.has_class_scope = self.has_class_scope();
-        self.has_class_parent_scope = if self.has_class_scope {
-            self.has_class_parent_scope()
-        } else {
-            false
-        };
-    }
-
-    fn has_class_scope(&self) -> bool {
-        for scope in self.stack.iter().rev() {
-            match &scope {
-                // we can't determine this from here, wait until we reach the classish scope.
-                Scope::ArrowFunction(_) | Scope::AnonymousFunction(_) => {}
-                Scope::BracedNamespace(_) | Scope::Namespace(_) | Scope::Function(_) => {
-                    return false;
-                }
-                _ => {
-                    return true;
-                }
-            };
-        }
-
-        false
-    }
-
-    fn has_class_parent_scope(&self) -> bool {
-        for scope in self.stack.iter().rev() {
-            match &scope {
-                Scope::BracedNamespace(_) | Scope::Namespace(_) | Scope::Function(_) => {
-                    return false;
-                }
-                // we don't know if the trait has a parent at this point
-                // the only time that we can determine if a trait has a parent
-                // is when it's used in a class.
-                Scope::Trait(_) => {
-                    return true;
-                }
-                // interfaces and enums don't have a parent.
-                Scope::Interface(_) | Scope::Enum(_, _) => {
-                    return false;
-                }
-                Scope::Class(_, _, has_parent) | Scope::AnonymousClass(has_parent) => {
-                    return *has_parent;
-                }
-                // we can't determine this from here, wait until we reach the classish scope.
-                Scope::ArrowFunction(_) | Scope::AnonymousFunction(_) | Scope::Method(_, _) => {}
-            };
-        }
-
-        false
     }
 }

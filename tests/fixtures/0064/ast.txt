@@ -31,39 +31,7 @@
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    start: Span(
-                                        4,
-                                        12,
-                                    ),
-                                    end: Span(
-                                        4,
-                                        28,
-                                    ),
-                                    name: SimpleIdentifier {
-                                        span: Span(
-                                            4,
-                                            21,
-                                        ),
-                                        value: "foo",
-                                    },
                                     attributes: [],
-                                    parameters: MethodParameterList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        start: Span(
-                                            4,
-                                            24,
-                                        ),
-                                        members: [],
-                                        end: Span(
-                                            4,
-                                            25,
-                                        ),
-                                    },
-                                    body: Some(
-                                        [],
-                                    ),
                                     modifiers: MethodModifierGroup {
                                         modifiers: [
                                             Public(
@@ -74,8 +42,44 @@
                                             ),
                                         ],
                                     },
-                                    return_type: None,
+                                    function: Span(
+                                        4,
+                                        12,
+                                    ),
                                     ampersand: None,
+                                    name: SimpleIdentifier {
+                                        span: Span(
+                                            4,
+                                            21,
+                                        ),
+                                        value: "foo",
+                                    },
+                                    parameters: MethodParameterList {
+                                        comments: CommentGroup {
+                                            comments: [],
+                                        },
+                                        left_parenthesis: Span(
+                                            4,
+                                            24,
+                                        ),
+                                        members: [],
+                                        right_parenthesis: Span(
+                                            4,
+                                            25,
+                                        ),
+                                    },
+                                    return_type: None,
+                                    body: Block {
+                                        left_brace: Span(
+                                            4,
+                                            27,
+                                        ),
+                                        statements: [],
+                                        right_brace: Span(
+                                            4,
+                                            28,
+                                        ),
+                                    },
                                 },
                             ),
                         ],

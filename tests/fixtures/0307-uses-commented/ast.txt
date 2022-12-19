@@ -197,14 +197,12 @@
                     },
                 ],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 12,
                 1,
             ),
-            end: Span(
-                12,
-                23,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     12,
@@ -212,7 +210,6 @@
                 ),
                 value: "qux",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -235,8 +232,20 @@
                     ),
                 ),
             ),
-            ampersand: None,
-            body: [],
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    12,
+                    22,
+                ),
+                statements: [],
+                right_brace: Span(
+                    12,
+                    23,
+                ),
+            },
         },
     ),
 ]

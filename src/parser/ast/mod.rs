@@ -470,9 +470,9 @@ pub enum Expression {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct DefaultMatchArm {
-    pub keyword: Span,    // `default`
-    pub arrow: Span,      // `=>`
-    pub body: Expression, // `foo()`
+    pub keyword: Span,      // `default`
+    pub double_arrow: Span, // `=>`
+    pub body: Expression,   // `foo()`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

@@ -35,14 +35,15 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
+                            attributes: [],
+                            modifiers: MethodModifierGroup {
+                                modifiers: [],
+                            },
+                            function: Span(
                                 5,
                                 5,
                             ),
-                            end: Span(
-                                8,
-                                5,
-                            ),
+                            ampersand: None,
                             name: SimpleIdentifier {
                                 span: Span(
                                     5,
@@ -50,38 +51,45 @@
                                 ),
                                 value: "bar",
                             },
-                            attributes: [],
                             parameters: MethodParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     5,
                                     17,
                                 ),
                                 members: [],
-                                end: Span(
+                                right_parenthesis: Span(
                                     5,
                                     18,
                                 ),
                             },
-                            body: Some(
-                                [
+                            return_type: None,
+                            body: Block {
+                                left_brace: Span(
+                                    6,
+                                    5,
+                                ),
+                                statements: [
                                     Expression {
                                         expression: Closure(
                                             Closure {
                                                 comments: CommentGroup {
                                                     comments: [],
                                                 },
-                                                start: Span(
-                                                    7,
-                                                    9,
-                                                ),
-                                                end: Span(
-                                                    7,
-                                                    38,
-                                                ),
                                                 attributes: [],
+                                                static: Some(
+                                                    Span(
+                                                        7,
+                                                        9,
+                                                    ),
+                                                ),
+                                                function: Span(
+                                                    7,
+                                                    16,
+                                                ),
+                                                ampersand: None,
                                                 parameters: FunctionParameterList {
                                                     comments: CommentGroup {
                                                         comments: [],
@@ -121,16 +129,22 @@
                                                         35,
                                                     ),
                                                 },
+                                                uses: None,
                                                 return_ty: None,
-                                                uses: [],
-                                                ampersand: None,
-                                                body: [],
-                                                static: Some(
-                                                    Span(
+                                                body: FunctionBody {
+                                                    comments: CommentGroup {
+                                                        comments: [],
+                                                    },
+                                                    left_brace: Span(
                                                         7,
-                                                        9,
+                                                        37,
                                                     ),
-                                                ),
+                                                    statements: [],
+                                                    right_brace: Span(
+                                                        7,
+                                                        38,
+                                                    ),
+                                                },
                                             },
                                         ),
                                         ending: Semicolon(
@@ -141,12 +155,11 @@
                                         ),
                                     },
                                 ],
-                            ),
-                            modifiers: MethodModifierGroup {
-                                modifiers: [],
+                                right_brace: Span(
+                                    8,
+                                    5,
+                                ),
                             },
-                            return_type: None,
-                            ampersand: None,
                         },
                     ),
                 ],

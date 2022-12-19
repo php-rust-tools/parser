@@ -10,14 +10,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 3,
                 1,
             ),
-            end: Span(
-                9,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     3,
@@ -25,7 +23,6 @@
                 ),
                 value: "fib",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -59,250 +56,262 @@
                 ),
             },
             return_type: None,
-            ampersand: None,
-            body: [
-                If(
-                    IfStatement {
-                        if: Span(
-                            4,
-                            5,
-                        ),
-                        condition: Parenthesized {
-                            left_parenthesis: Span(
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    3,
+                    18,
+                ),
+                statements: [
+                    If(
+                        IfStatement {
+                            if: Span(
                                 4,
-                                8,
+                                5,
                             ),
-                            inner: ComparisonOperation(
-                                LessThan {
-                                    left: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span(
-                                                    4,
+                            condition: Parenthesized {
+                                left_parenthesis: Span(
+                                    4,
+                                    8,
+                                ),
+                                inner: ComparisonOperation(
+                                    LessThan {
+                                        left: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        4,
+                                                        9,
+                                                    ),
+                                                    name: "n",
+                                                },
+                                            ),
+                                        ),
+                                        less_than: Span(
+                                            4,
+                                            12,
+                                        ),
+                                        right: Literal(
+                                            Integer(
+                                                LiteralInteger {
+                                                    value: "2",
+                                                    span: Span(
+                                                        4,
+                                                        14,
+                                                    ),
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                ),
+                                right_parenthesis: Span(
+                                    4,
+                                    15,
+                                ),
+                            },
+                            body: Statement {
+                                statement: Block(
+                                    Braced {
+                                        left_brace: Span(
+                                            4,
+                                            17,
+                                        ),
+                                        inner: [
+                                            Return {
+                                                return: Span(
+                                                    5,
                                                     9,
                                                 ),
-                                                name: "n",
-                                            },
-                                        ),
-                                    ),
-                                    less_than: Span(
-                                        4,
-                                        12,
-                                    ),
-                                    right: Literal(
-                                        Integer(
-                                            LiteralInteger {
-                                                value: "2",
-                                                span: Span(
-                                                    4,
-                                                    14,
-                                                ),
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ),
-                            right_parenthesis: Span(
-                                4,
-                                15,
-                            ),
-                        },
-                        body: Statement {
-                            statement: Block(
-                                Braced {
-                                    left_brace: Span(
-                                        4,
-                                        17,
-                                    ),
-                                    inner: [
-                                        Return {
-                                            return: Span(
-                                                5,
-                                                9,
-                                            ),
-                                            value: Some(
-                                                Variable(
-                                                    SimpleVariable(
-                                                        SimpleVariable {
-                                                            span: Span(
-                                                                5,
-                                                                16,
-                                                            ),
-                                                            name: "n",
-                                                        },
+                                                value: Some(
+                                                    Variable(
+                                                        SimpleVariable(
+                                                            SimpleVariable {
+                                                                span: Span(
+                                                                    5,
+                                                                    16,
+                                                                ),
+                                                                name: "n",
+                                                            },
+                                                        ),
                                                     ),
                                                 ),
-                                            ),
-                                            ending: Semicolon(
-                                                Span(
-                                                    5,
-                                                    18,
+                                                ending: Semicolon(
+                                                    Span(
+                                                        5,
+                                                        18,
+                                                    ),
                                                 ),
+                                            },
+                                        ],
+                                        right_brace: Span(
+                                            6,
+                                            5,
+                                        ),
+                                    },
+                                ),
+                                elseifs: [],
+                                else: None,
+                            },
+                        },
+                    ),
+                    Return {
+                        return: Span(
+                            8,
+                            5,
+                        ),
+                        value: Some(
+                            ArithmeticOperation(
+                                Addition {
+                                    left: FunctionCall {
+                                        target: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span(
+                                                        8,
+                                                        12,
+                                                    ),
+                                                    value: "fib",
+                                                },
+                                            ),
+                                        ),
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span(
+                                                8,
+                                                15,
+                                            ),
+                                            arguments: [
+                                                Positional {
+                                                    comments: CommentGroup {
+                                                        comments: [],
+                                                    },
+                                                    ellipsis: None,
+                                                    value: ArithmeticOperation(
+                                                        Subtraction {
+                                                            left: Variable(
+                                                                SimpleVariable(
+                                                                    SimpleVariable {
+                                                                        span: Span(
+                                                                            8,
+                                                                            16,
+                                                                        ),
+                                                                        name: "n",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                            minus: Span(
+                                                                8,
+                                                                19,
+                                                            ),
+                                                            right: Literal(
+                                                                Integer(
+                                                                    LiteralInteger {
+                                                                        value: "1",
+                                                                        span: Span(
+                                                                            8,
+                                                                            21,
+                                                                        ),
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        },
+                                                    ),
+                                                },
+                                            ],
+                                            right_parenthesis: Span(
+                                                8,
+                                                22,
                                             ),
                                         },
-                                    ],
-                                    right_brace: Span(
-                                        6,
-                                        5,
+                                    },
+                                    plus: Span(
+                                        8,
+                                        24,
                                     ),
+                                    right: FunctionCall {
+                                        target: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span(
+                                                        8,
+                                                        26,
+                                                    ),
+                                                    value: "fib",
+                                                },
+                                            ),
+                                        ),
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span(
+                                                8,
+                                                29,
+                                            ),
+                                            arguments: [
+                                                Positional {
+                                                    comments: CommentGroup {
+                                                        comments: [],
+                                                    },
+                                                    ellipsis: None,
+                                                    value: ArithmeticOperation(
+                                                        Subtraction {
+                                                            left: Variable(
+                                                                SimpleVariable(
+                                                                    SimpleVariable {
+                                                                        span: Span(
+                                                                            8,
+                                                                            30,
+                                                                        ),
+                                                                        name: "n",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                            minus: Span(
+                                                                8,
+                                                                33,
+                                                            ),
+                                                            right: Literal(
+                                                                Integer(
+                                                                    LiteralInteger {
+                                                                        value: "2",
+                                                                        span: Span(
+                                                                            8,
+                                                                            35,
+                                                                        ),
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        },
+                                                    ),
+                                                },
+                                            ],
+                                            right_parenthesis: Span(
+                                                8,
+                                                36,
+                                            ),
+                                        },
+                                    },
                                 },
                             ),
-                            elseifs: [],
-                            else: None,
-                        },
+                        ),
+                        ending: Semicolon(
+                            Span(
+                                8,
+                                37,
+                            ),
+                        ),
                     },
+                ],
+                right_brace: Span(
+                    9,
+                    1,
                 ),
-                Return {
-                    return: Span(
-                        8,
-                        5,
-                    ),
-                    value: Some(
-                        ArithmeticOperation(
-                            Addition {
-                                left: FunctionCall {
-                                    target: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span(
-                                                    8,
-                                                    12,
-                                                ),
-                                                value: "fib",
-                                            },
-                                        ),
-                                    ),
-                                    arguments: ArgumentList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        left_parenthesis: Span(
-                                            8,
-                                            15,
-                                        ),
-                                        arguments: [
-                                            Positional {
-                                                comments: CommentGroup {
-                                                    comments: [],
-                                                },
-                                                ellipsis: None,
-                                                value: ArithmeticOperation(
-                                                    Subtraction {
-                                                        left: Variable(
-                                                            SimpleVariable(
-                                                                SimpleVariable {
-                                                                    span: Span(
-                                                                        8,
-                                                                        16,
-                                                                    ),
-                                                                    name: "n",
-                                                                },
-                                                            ),
-                                                        ),
-                                                        minus: Span(
-                                                            8,
-                                                            19,
-                                                        ),
-                                                        right: Literal(
-                                                            Integer(
-                                                                LiteralInteger {
-                                                                    value: "1",
-                                                                    span: Span(
-                                                                        8,
-                                                                        21,
-                                                                    ),
-                                                                },
-                                                            ),
-                                                        ),
-                                                    },
-                                                ),
-                                            },
-                                        ],
-                                        right_parenthesis: Span(
-                                            8,
-                                            22,
-                                        ),
-                                    },
-                                },
-                                plus: Span(
-                                    8,
-                                    24,
-                                ),
-                                right: FunctionCall {
-                                    target: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span(
-                                                    8,
-                                                    26,
-                                                ),
-                                                value: "fib",
-                                            },
-                                        ),
-                                    ),
-                                    arguments: ArgumentList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        left_parenthesis: Span(
-                                            8,
-                                            29,
-                                        ),
-                                        arguments: [
-                                            Positional {
-                                                comments: CommentGroup {
-                                                    comments: [],
-                                                },
-                                                ellipsis: None,
-                                                value: ArithmeticOperation(
-                                                    Subtraction {
-                                                        left: Variable(
-                                                            SimpleVariable(
-                                                                SimpleVariable {
-                                                                    span: Span(
-                                                                        8,
-                                                                        30,
-                                                                    ),
-                                                                    name: "n",
-                                                                },
-                                                            ),
-                                                        ),
-                                                        minus: Span(
-                                                            8,
-                                                            33,
-                                                        ),
-                                                        right: Literal(
-                                                            Integer(
-                                                                LiteralInteger {
-                                                                    value: "2",
-                                                                    span: Span(
-                                                                        8,
-                                                                        35,
-                                                                    ),
-                                                                },
-                                                            ),
-                                                        ),
-                                                    },
-                                                ),
-                                            },
-                                        ],
-                                        right_parenthesis: Span(
-                                            8,
-                                            36,
-                                        ),
-                                    },
-                                },
-                            },
-                        ),
-                    ),
-                    ending: Semicolon(
-                        Span(
-                            8,
-                            37,
-                        ),
-                    ),
-                },
-            ],
+            },
         },
     ),
 ]

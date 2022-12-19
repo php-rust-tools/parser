@@ -128,38 +128,17 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
             let span = current.span;
             state.stream.next();
 
-            if !state.has_class_scope {
-                return Err(ParseError::CannotFindTypeInCurrentScope(
-                    "static".to_owned(),
-                    span,
-                ));
-            }
-
             Ok(Some(Type::StaticReference(span)))
         }
         TokenKind::Self_ => {
             let span = current.span;
             state.stream.next();
 
-            if !state.has_class_scope {
-                return Err(ParseError::CannotFindTypeInCurrentScope(
-                    "self".to_owned(),
-                    span,
-                ));
-            }
-
             Ok(Some(Type::SelfReference(span)))
         }
         TokenKind::Parent => {
             let span = current.span;
             state.stream.next();
-
-            if !state.has_class_scope {
-                return Err(ParseError::CannotFindTypeInCurrentScope(
-                    "parent".to_owned(),
-                    span,
-                ));
-            }
 
             Ok(Some(Type::ParentReference(span)))
         }

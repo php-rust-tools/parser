@@ -10,14 +10,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 3,
                 1,
             ),
-            end: Span(
-                5,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     3,
@@ -25,7 +23,6 @@
                 ),
                 value: "foo",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -41,37 +38,49 @@
                 ),
             },
             return_type: None,
-            ampersand: None,
-            body: [
-                Static {
-                    vars: [
-                        StaticVar {
-                            var: SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        4,
-                                        12,
-                                    ),
-                                    name: "a",
-                                },
-                            ),
-                            default: None,
-                        },
-                        StaticVar {
-                            var: SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        4,
-                                        16,
-                                    ),
-                                    name: "b",
-                                },
-                            ),
-                            default: None,
-                        },
-                    ],
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
                 },
-            ],
+                left_brace: Span(
+                    3,
+                    16,
+                ),
+                statements: [
+                    Static {
+                        vars: [
+                            StaticVar {
+                                var: SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            4,
+                                            12,
+                                        ),
+                                        name: "a",
+                                    },
+                                ),
+                                default: None,
+                            },
+                            StaticVar {
+                                var: SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            4,
+                                            16,
+                                        ),
+                                        name: "b",
+                                    },
+                                ),
+                                default: None,
+                            },
+                        ],
+                    },
+                ],
+                right_brace: Span(
+                    5,
+                    1,
+                ),
+            },
         },
     ),
 ]

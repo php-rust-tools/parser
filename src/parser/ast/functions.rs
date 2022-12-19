@@ -9,9 +9,10 @@ use crate::parser::ast::data_type::Type;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::ast::modifiers::PromotedPropertyModifierGroup;
+use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::variables::SimpleVariable;
-use crate::parser::ast::Block;
 use crate::parser::ast::Expression;
+use crate::parser::ast::Statement;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -36,39 +37,56 @@ pub struct FunctionParameterList {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
+pub struct FunctionBody {
+    pub comments: CommentGroup,
+    pub left_brace: Span,
+    pub statements: Vec<Statement>,
+    pub right_brace: Span,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub struct Function {
     pub comments: CommentGroup,
-    pub start: Span,
-    pub end: Span,
-    pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,
+    pub function: Span,
+    pub ampersand: Option<Span>,
+    pub name: SimpleIdentifier,
     pub parameters: FunctionParameterList,
     pub return_type: Option<Type>,
+    pub body: FunctionBody,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct ClosureUseVariable {
+    pub comments: CommentGroup,
     pub ampersand: Option<Span>,
-    pub body: Block,
+    pub variable: SimpleVariable,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ClosureUse {
     pub comments: CommentGroup,
-    pub variable: SimpleVariable,
-    pub ampersand: Option<Span>,
+    pub r#use: Span,
+    pub left_parenthesis: Span,
+    pub variables: CommaSeparated<ClosureUseVariable>,
+    pub right_parenthesis: Span,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Closure {
     pub comments: CommentGroup,
-    pub start: Span,
-    pub end: Span,
     pub attributes: Vec<AttributeGroup>,
-    pub parameters: FunctionParameterList,
-    pub return_ty: Option<Type>,
-    pub uses: Vec<ClosureUse>,
-    pub ampersand: Option<Span>,
-    pub body: Block,
     pub r#static: Option<Span>,
+    pub function: Span,
+    pub ampersand: Option<Span>,
+    pub parameters: FunctionParameterList,
+    pub uses: Option<ClosureUse>,
+    pub return_ty: Option<Type>,
+    pub body: FunctionBody,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -81,6 +99,7 @@ pub struct ArrowFunction {
     pub attributes: Vec<AttributeGroup>,
     pub parameters: FunctionParameterList,
     pub return_type: Option<Type>,
+    pub double_arrow: Span,
     pub body: Box<Expression>,
 }
 
@@ -102,23 +121,33 @@ pub struct MethodParameter {
 #[serde(rename_all = "snake_case")]
 pub struct MethodParameterList {
     pub comments: CommentGroup,
-    pub start: Span,
+    pub left_parenthesis: Span,
     pub members: Vec<MethodParameter>,
-    pub end: Span,
+    pub right_parenthesis: Span,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Method {
     pub comments: CommentGroup,
-    pub start: Span,
-    pub end: Span,
-    pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,
-    pub parameters: MethodParameterList,
-    pub body: Option<Block>,
     #[serde(flatten)]
     pub modifiers: MethodModifierGroup,
-    pub return_type: Option<Type>,
+    pub function: Span,
     pub ampersand: Option<Span>,
+    pub name: SimpleIdentifier,
+    pub parameters: MethodParameterList,
+    pub return_type: Option<Type>,
+    pub body: MethodBody,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum MethodBody {
+    Abstract(Span), // `;`
+    Block {
+        left_brace: Span, // `{`
+        statements: Vec<Statement>,
+        right_brace: Span, // `}`
+    },
 }

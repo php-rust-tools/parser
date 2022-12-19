@@ -140,13 +140,6 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                     })
                 }
                 TokenKind::Instanceof if op.kind == TokenKind::Self_ => {
-                    if !state.has_class_scope {
-                        return Err(ParseError::CannotFindTypeInCurrentScope(
-                            op.kind.to_string(),
-                            op.span,
-                        ));
-                    }
-
                     state.stream.next();
 
                     Expression::Instanceof {
@@ -156,13 +149,6 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                     }
                 }
                 TokenKind::Instanceof if op.kind == TokenKind::Parent => {
-                    if !state.has_class_scope {
-                        return Err(ParseError::CannotFindTypeInCurrentScope(
-                            op.kind.to_string(),
-                            op.span,
-                        ));
-                    }
-
                     state.stream.next();
 
                     Expression::Instanceof {
@@ -172,13 +158,6 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                     }
                 }
                 TokenKind::Instanceof if op.kind == TokenKind::Static => {
-                    if !state.has_class_scope {
-                        return Err(ParseError::CannotFindTypeInCurrentScope(
-                            op.kind.to_string(),
-                            op.span,
-                        ));
-                    }
-
                     state.stream.next();
 
                     Expression::Instanceof {

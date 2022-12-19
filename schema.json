@@ -612,6 +612,7 @@
         "attributes",
         "body",
         "comments",
+        "double_arrow",
         "fn",
         "parameters"
       ],
@@ -637,6 +638,9 @@
         },
         "comments": {
           "$ref": "#/definitions/CommentGroup"
+        },
+        "double_arrow": {
+          "$ref": "#/definitions/Span"
         },
         "fn": {
           "$ref": "#/definitions/Span"
@@ -2252,10 +2256,8 @@
         "attributes",
         "body",
         "comments",
-        "end",
-        "parameters",
-        "start",
-        "uses"
+        "function",
+        "parameters"
       ],
       "properties": {
         "ampersand": {
@@ -2275,15 +2277,12 @@
           }
         },
         "body": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Statement"
-          }
+          "$ref": "#/definitions/FunctionBody"
         },
         "comments": {
           "$ref": "#/definitions/CommentGroup"
         },
-        "end": {
+        "function": {
           "$ref": "#/definitions/Span"
         },
         "parameters": {
@@ -2299,9 +2298,6 @@
             }
           ]
         },
-        "start": {
-          "$ref": "#/definitions/Span"
-        },
         "static": {
           "anyOf": [
             {
@@ -2313,14 +2309,45 @@
           ]
         },
         "uses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ClosureUse"
-          }
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ClosureUse"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       }
     },
     "ClosureUse": {
+      "type": "object",
+      "required": [
+        "comments",
+        "left_parenthesis",
+        "right_parenthesis",
+        "use",
+        "variables"
+      ],
+      "properties": {
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "use": {
+          "$ref": "#/definitions/Span"
+        },
+        "variables": {
+          "$ref": "#/definitions/CommaSeparated_for_ClosureUseVariable"
+        }
+      }
+    },
+    "ClosureUseVariable": {
       "type": "object",
       "required": [
         "comments",
@@ -2362,6 +2389,27 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/ArrayItem"
+          }
+        }
+      }
+    },
+    "CommaSeparated_for_ClosureUseVariable": {
+      "type": "object",
+      "required": [
+        "commas",
+        "inner"
+      ],
+      "properties": {
+        "commas": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Span"
+          }
+        },
+        "inner": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClosureUseVariable"
           }
         }
       }
@@ -3188,16 +3236,16 @@
     "DefaultMatchArm": {
       "type": "object",
       "required": [
-        "arrow",
         "body",
+        "double_arrow",
         "keyword"
       ],
       "properties": {
-        "arrow": {
-          "$ref": "#/definitions/Span"
-        },
         "body": {
           "$ref": "#/definitions/Expression"
+        },
+        "double_arrow": {
+          "$ref": "#/definitions/Span"
         },
         "keyword": {
           "$ref": "#/definitions/Span"
@@ -5318,10 +5366,9 @@
         "attributes",
         "body",
         "comments",
-        "end",
+        "function",
         "name",
-        "parameters",
-        "start"
+        "parameters"
       ],
       "properties": {
         "ampersand": {
@@ -5341,15 +5388,12 @@
           }
         },
         "body": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Statement"
-          }
+          "$ref": "#/definitions/FunctionBody"
         },
         "comments": {
           "$ref": "#/definitions/CommentGroup"
         },
-        "end": {
+        "function": {
           "$ref": "#/definitions/Span"
         },
         "name": {
@@ -5367,9 +5411,32 @@
               "type": "null"
             }
           ]
+        }
+      }
+    },
+    "FunctionBody": {
+      "type": "object",
+      "required": [
+        "comments",
+        "left_brace",
+        "right_brace",
+        "statements"
+      ],
+      "properties": {
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
         },
-        "start": {
+        "left_brace": {
           "$ref": "#/definitions/Span"
+        },
+        "right_brace": {
+          "$ref": "#/definitions/Span"
+        },
+        "statements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
         }
       }
     },
@@ -6404,12 +6471,12 @@
       "type": "object",
       "required": [
         "attributes",
+        "body",
         "comments",
-        "end",
+        "function",
         "modifiers",
         "name",
-        "parameters",
-        "start"
+        "parameters"
       ],
       "properties": {
         "ampersand": {
@@ -6429,18 +6496,12 @@
           }
         },
         "body": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "items": {
-            "$ref": "#/definitions/Statement"
-          }
+          "$ref": "#/definitions/MethodBody"
         },
         "comments": {
           "$ref": "#/definitions/CommentGroup"
         },
-        "end": {
+        "function": {
           "$ref": "#/definitions/Span"
         },
         "modifiers": {
@@ -6464,11 +6525,55 @@
               "type": "null"
             }
           ]
-        },
-        "start": {
-          "$ref": "#/definitions/Span"
         }
       }
+    },
+    "MethodBody": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "abstract"
+          ],
+          "properties": {
+            "abstract": {
+              "$ref": "#/definitions/Span"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "block"
+          ],
+          "properties": {
+            "block": {
+              "type": "object",
+              "required": [
+                "left_brace",
+                "right_brace",
+                "statements"
+              ],
+              "properties": {
+                "left_brace": {
+                  "$ref": "#/definitions/Span"
+                },
+                "right_brace": {
+                  "$ref": "#/definitions/Span"
+                },
+                "statements": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Statement"
+                  }
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
     },
     "MethodModifier": {
       "oneOf": [
@@ -6655,15 +6760,15 @@
       "type": "object",
       "required": [
         "comments",
-        "end",
+        "left_parenthesis",
         "members",
-        "start"
+        "right_parenthesis"
       ],
       "properties": {
         "comments": {
           "$ref": "#/definitions/CommentGroup"
         },
-        "end": {
+        "left_parenthesis": {
           "$ref": "#/definitions/Span"
         },
         "members": {
@@ -6672,7 +6777,7 @@
             "$ref": "#/definitions/MethodParameter"
           }
         },
-        "start": {
+        "right_parenthesis": {
           "$ref": "#/definitions/Span"
         }
       }

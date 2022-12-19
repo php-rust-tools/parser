@@ -10,14 +10,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 3,
                 1,
             ),
-            end: Span(
-                7,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     3,
@@ -25,7 +23,6 @@
                 ),
                 value: "bar",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -119,34 +116,46 @@
                     ],
                 ),
             ),
-            ampersand: None,
-            body: [
-                Return {
-                    return: Span(
-                        6,
-                        5,
-                    ),
-                    value: Some(
-                        Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        6,
-                                        12,
-                                    ),
-                                    name: "i",
-                                },
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    5,
+                    12,
+                ),
+                statements: [
+                    Return {
+                        return: Span(
+                            6,
+                            5,
+                        ),
+                        value: Some(
+                            Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            6,
+                                            12,
+                                        ),
+                                        name: "i",
+                                    },
+                                ),
                             ),
                         ),
-                    ),
-                    ending: Semicolon(
-                        Span(
-                            6,
-                            14,
+                        ending: Semicolon(
+                            Span(
+                                6,
+                                14,
+                            ),
                         ),
-                    ),
-                },
-            ],
+                    },
+                ],
+                right_brace: Span(
+                    7,
+                    1,
+                ),
+            },
         },
     ),
 ]

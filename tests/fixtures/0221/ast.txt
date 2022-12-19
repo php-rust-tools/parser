@@ -122,14 +122,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 8,
                 1,
             ),
-            end: Span(
-                10,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     8,
@@ -137,7 +135,6 @@
                 ),
                 value: "foo",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -245,32 +242,44 @@
                     ],
                 ),
             ),
-            ampersand: None,
-            body: [
-                Expression {
-                    expression: Exit {
-                        value: Some(
-                            Literal(
-                                Integer(
-                                    LiteralInteger {
-                                        value: "0",
-                                        span: Span(
-                                            9,
-                                            10,
-                                        ),
-                                    },
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    8,
+                    39,
+                ),
+                statements: [
+                    Expression {
+                        expression: Exit {
+                            value: Some(
+                                Literal(
+                                    Integer(
+                                        LiteralInteger {
+                                            value: "0",
+                                            span: Span(
+                                                9,
+                                                10,
+                                            ),
+                                        },
+                                    ),
                                 ),
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                9,
+                                12,
                             ),
                         ),
                     },
-                    ending: Semicolon(
-                        Span(
-                            9,
-                            12,
-                        ),
-                    ),
-                },
-            ],
+                ],
+                right_brace: Span(
+                    10,
+                    1,
+                ),
+            },
         },
     ),
 ]

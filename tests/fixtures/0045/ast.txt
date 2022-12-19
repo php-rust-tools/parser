@@ -35,14 +35,15 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
+                            attributes: [],
+                            modifiers: MethodModifierGroup {
+                                modifiers: [],
+                            },
+                            function: Span(
                                 4,
                                 5,
                             ),
-                            end: Span(
-                                6,
-                                5,
-                            ),
+                            ampersand: None,
                             name: SimpleIdentifier {
                                 span: Span(
                                     4,
@@ -50,23 +51,27 @@
                                 ),
                                 value: "bar",
                             },
-                            attributes: [],
                             parameters: MethodParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     4,
                                     17,
                                 ),
                                 members: [],
-                                end: Span(
+                                right_parenthesis: Span(
                                     4,
                                     18,
                                 ),
                             },
-                            body: Some(
-                                [
+                            return_type: None,
+                            body: Block {
+                                left_brace: Span(
+                                    4,
+                                    20,
+                                ),
+                                statements: [
                                     Echo {
                                         echo: Span(
                                             5,
@@ -93,12 +98,11 @@
                                         ),
                                     },
                                 ],
-                            ),
-                            modifiers: MethodModifierGroup {
-                                modifiers: [],
+                                right_brace: Span(
+                                    6,
+                                    5,
+                                ),
                             },
-                            return_type: None,
-                            ampersand: None,
                         },
                     ),
                 ],
