@@ -20,17 +20,13 @@
             },
             attributes: [],
             body: TraitBody {
-                start: Span(
+                left_brace: Span(
                     3,
                     11,
                 ),
-                end: Span(
-                    10,
-                    1,
-                ),
                 members: [
-                    Method(
-                        Method {
+                    ConcreteMethod(
+                        ConcreteMethod {
                             comments: CommentGroup {
                                 comments: [
                                     Comment {
@@ -82,7 +78,7 @@
                                 ),
                                 value: "bar",
                             },
-                            parameters: MethodParameterList {
+                            parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -90,21 +86,33 @@
                                     7,
                                     24,
                                 ),
-                                members: [],
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
                                 right_parenthesis: Span(
                                     7,
                                     25,
                                 ),
                             },
                             return_type: Some(
-                                ParentReference(
-                                    Span(
+                                ReturnType {
+                                    colon: Span(
                                         7,
-                                        28,
+                                        26,
                                     ),
-                                ),
+                                    data_type: ParentReference(
+                                        Span(
+                                            7,
+                                            28,
+                                        ),
+                                    ),
+                                },
                             ),
-                            body: Block {
+                            body: MethodBody {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 left_brace: Span(
                                     7,
                                     35,
@@ -142,6 +150,10 @@
                         },
                     ),
                 ],
+                right_brace: Span(
+                    10,
+                    1,
+                ),
             },
         },
     ),

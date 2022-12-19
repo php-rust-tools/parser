@@ -31,48 +31,51 @@
                     1,
                     19,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                1,
-                                37,
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    1,
+                                    37,
+                                ),
+                                name: "b",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                Union(
+                                    [
+                                        String(
+                                            Span(
+                                                1,
+                                                20,
+                                            ),
+                                        ),
+                                        Integer(
+                                            Span(
+                                                1,
+                                                27,
+                                            ),
+                                        ),
+                                        Float(
+                                            Span(
+                                                1,
+                                                31,
+                                            ),
+                                        ),
+                                    ],
+                                ),
                             ),
-                            name: "b",
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        attributes: [],
-                        type: Some(
-                            Union(
-                                [
-                                    String(
-                                        Span(
-                                            1,
-                                            20,
-                                        ),
-                                    ),
-                                    Integer(
-                                        Span(
-                                            1,
-                                            27,
-                                        ),
-                                    ),
-                                    Float(
-                                        Span(
-                                            1,
-                                            31,
-                                        ),
-                                    ),
-                                ],
-                            ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                    ],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     1,
                     39,

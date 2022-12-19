@@ -31,25 +31,28 @@
                     3,
                     13,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    3,
+                                    14,
+                                ),
+                                name: "a",
+                            },
+                            attributes: [],
+                            data_type: None,
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        name: SimpleVariable {
-                            span: Span(
-                                3,
-                                14,
-                            ),
-                            name: "a",
-                        },
-                        attributes: [],
-                        type: None,
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                    ],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     3,
                     16,

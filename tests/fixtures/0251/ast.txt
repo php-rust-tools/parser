@@ -31,90 +31,99 @@
                     3,
                     13,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                4,
-                                13,
-                            ),
-                            name: "i",
-                        },
-                        attributes: [],
-                        type: Some(
-                            Union(
-                                [
-                                    Named(
-                                        Span(
-                                            4,
-                                            5,
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    4,
+                                    13,
+                                ),
+                                name: "i",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                Union(
+                                    [
+                                        Named(
+                                            Span(
+                                                4,
+                                                5,
+                                            ),
+                                            "A",
                                         ),
-                                        "A",
-                                    ),
-                                    Intersection(
-                                        [
-                                            Named(
-                                                Span(
-                                                    4,
-                                                    8,
+                                        Intersection(
+                                            [
+                                                Named(
+                                                    Span(
+                                                        4,
+                                                        8,
+                                                    ),
+                                                    "B",
                                                 ),
-                                                "B",
-                                            ),
-                                            Named(
-                                                Span(
-                                                    4,
-                                                    10,
+                                                Named(
+                                                    Span(
+                                                        4,
+                                                        10,
+                                                    ),
+                                                    "C",
                                                 ),
-                                                "C",
-                                            ),
-                                        ],
-                                    ),
-                                ],
+                                            ],
+                                        ),
+                                    ],
+                                ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
+                        },
+                    ],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     5,
                     1,
                 ),
             },
             return_type: Some(
-                Union(
-                    [
-                        Intersection(
-                            [
-                                Named(
-                                    Span(
-                                        5,
-                                        5,
+                ReturnType {
+                    colon: Span(
+                        5,
+                        2,
+                    ),
+                    data_type: Union(
+                        [
+                            Intersection(
+                                [
+                                    Named(
+                                        Span(
+                                            5,
+                                            5,
+                                        ),
+                                        "B",
                                     ),
-                                    "B",
-                                ),
-                                Named(
-                                    Span(
-                                        5,
-                                        7,
+                                    Named(
+                                        Span(
+                                            5,
+                                            7,
+                                        ),
+                                        "C",
                                     ),
-                                    "C",
-                                ),
-                            ],
-                        ),
-                        Named(
-                            Span(
-                                5,
-                                10,
+                                ],
                             ),
-                            "A",
-                        ),
-                    ],
-                ),
+                            Named(
+                                Span(
+                                    5,
+                                    10,
+                                ),
+                                "A",
+                            ),
+                        ],
+                    ),
+                },
             ),
             body: FunctionBody {
                 comments: CommentGroup {

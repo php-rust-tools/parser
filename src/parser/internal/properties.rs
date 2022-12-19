@@ -13,7 +13,7 @@ use crate::parser::state::State;
 
 pub fn parse(
     state: &mut State,
-    class: String,
+    class_name: &str,
     modifiers: PropertyModifierGroup,
 ) -> ParseResult<Property> {
     let ty = data_type::optional_data_type(state)?;
@@ -28,7 +28,7 @@ pub fn parse(
             type_checked = true;
             if modifiers.has_readonly() && modifiers.has_static() {
                 return Err(ParseError::StaticPropertyUsingReadonlyModifier(
-                    class,
+                    class_name.to_owned(),
                     variable.to_string(),
                     current.span,
                 ));
@@ -38,7 +38,7 @@ pub fn parse(
                 Some(ty) => {
                     if ty.includes_callable() || ty.is_bottom() {
                         return Err(ParseError::ForbiddenTypeUsedInProperty(
-                            class,
+                            class_name.to_owned(),
                             variable.to_string(),
                             ty.clone(),
                             current.span,
@@ -48,7 +48,7 @@ pub fn parse(
                 None => {
                     if modifiers.has_readonly() {
                         return Err(ParseError::MissingTypeForReadonlyProperty(
-                            class,
+                            class_name.to_owned(),
                             variable.to_string(),
                             current.span,
                         ));
@@ -61,7 +61,7 @@ pub fn parse(
         if current.kind == TokenKind::Equals {
             if modifiers.has_readonly() {
                 return Err(ParseError::ReadonlyPropertyHasDefaultValue(
-                    class,
+                    class_name.to_owned(),
                     variable.to_string(),
                     current.span,
                 ));
@@ -97,7 +97,7 @@ pub fn parse(
     })
 }
 
-pub fn parse_var(state: &mut State, class: String) -> ParseResult<VariableProperty> {
+pub fn parse_var(state: &mut State, class_name: &str) -> ParseResult<VariableProperty> {
     utils::skip(state, TokenKind::Var)?;
 
     let ty = data_type::optional_data_type(state)?;
@@ -113,7 +113,7 @@ pub fn parse_var(state: &mut State, class: String) -> ParseResult<VariableProper
             if let Some(ty) = &ty {
                 if ty.includes_callable() || ty.is_bottom() {
                     return Err(ParseError::ForbiddenTypeUsedInProperty(
-                        class,
+                        class_name.to_owned(),
                         variable.to_string(),
                         ty.clone(),
                         state.stream.current().span,

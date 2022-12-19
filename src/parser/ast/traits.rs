@@ -5,7 +5,10 @@ use serde::Serialize;
 use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::constant::ClassishConstant;
-use crate::parser::ast::functions::Method;
+use crate::parser::ast::functions::AbstractConstructor;
+use crate::parser::ast::functions::AbstractMethod;
+use crate::parser::ast::functions::ConcreteConstructor;
+use crate::parser::ast::functions::ConcreteMethod;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::VisibilityModifier;
 use crate::parser::ast::properties::Property;
@@ -18,15 +21,18 @@ pub enum TraitMember {
     TraitUsage(TraitUsage),
     Property(Property),
     VariableProperty(VariableProperty),
-    Method(Method),
+    AbstractMethod(AbstractMethod),
+    AbstractConstructor(AbstractConstructor),
+    ConcreteMethod(ConcreteMethod),
+    ConcreteConstructor(ConcreteConstructor),
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct TraitBody {
-    pub start: Span,
-    pub end: Span,
+    pub left_brace: Span,
     pub members: Vec<TraitMember>,
+    pub right_brace: Span,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

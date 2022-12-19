@@ -6,6 +6,118 @@
     "$ref": "#/definitions/Statement"
   },
   "definitions": {
+    "AbstractConstructor": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "comments",
+        "function",
+        "modifiers",
+        "name",
+        "parameters",
+        "semicolon"
+      ],
+      "properties": {
+        "ampersand": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "function": {
+          "$ref": "#/definitions/Span"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MethodModifier"
+          }
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "parameters": {
+          "$ref": "#/definitions/FunctionParameterList"
+        },
+        "semicolon": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "AbstractMethod": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "comments",
+        "function",
+        "modifiers",
+        "name",
+        "parameters",
+        "semicolon"
+      ],
+      "properties": {
+        "ampersand": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "function": {
+          "$ref": "#/definitions/Span"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MethodModifier"
+          }
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "parameters": {
+          "$ref": "#/definitions/FunctionParameterList"
+        },
+        "return_type": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ReturnType"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "semicolon": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "AnonymousClass": {
       "type": "object",
       "required": [
@@ -21,7 +133,7 @@
           }
         },
         "body": {
-          "$ref": "#/definitions/ClassBody"
+          "$ref": "#/definitions/AnonymousClassBody"
         },
         "class": {
           "$ref": "#/definitions/Span"
@@ -47,6 +159,140 @@
           ]
         }
       }
+    },
+    "AnonymousClassBody": {
+      "type": "object",
+      "required": [
+        "left_brace",
+        "members",
+        "right_brace"
+      ],
+      "properties": {
+        "left_brace": {
+          "$ref": "#/definitions/Span"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnonymousClassMember"
+          }
+        },
+        "right_brace": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "AnonymousClassMember": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "constant"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/ClassishConstant"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "trait_usage"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/TraitUsage"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "property"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Property"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "variable_property"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/VariableProperty"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "concrete_method"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/ConcreteMethod"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "concrete_constructor"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/ConcreteConstructor"
+            }
+          }
+        }
+      ]
     },
     "Argument": {
       "oneOf": [
@@ -651,7 +897,7 @@
         "return_type": {
           "anyOf": [
             {
-              "$ref": "#/definitions/Type"
+              "$ref": "#/definitions/ReturnType"
             },
             {
               "type": "null"
@@ -1328,7 +1574,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Method"
+              "$ref": "#/definitions/ConcreteMethod"
             }
           }
         },
@@ -2146,11 +2392,65 @@
             "type": {
               "type": "string",
               "enum": [
-                "method"
+                "abstract_method"
               ]
             },
             "value": {
-              "$ref": "#/definitions/Method"
+              "$ref": "#/definitions/AbstractMethod"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "abstract_constructor"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/AbstractConstructor"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "concrete_method"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/ConcreteMethod"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "concrete_constructor"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/ConcreteConstructor"
             }
           }
         }
@@ -2288,10 +2588,10 @@
         "parameters": {
           "$ref": "#/definitions/FunctionParameterList"
         },
-        "return_ty": {
+        "return_type": {
           "anyOf": [
             {
-              "$ref": "#/definitions/Type"
+              "$ref": "#/definitions/ReturnType"
             },
             {
               "type": "null"
@@ -2414,6 +2714,27 @@
         }
       }
     },
+    "CommaSeparated_for_ConstructorParameter": {
+      "type": "object",
+      "required": [
+        "commas",
+        "inner"
+      ],
+      "properties": {
+        "commas": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Span"
+          }
+        },
+        "inner": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ConstructorParameter"
+          }
+        }
+      }
+    },
     "CommaSeparated_for_Expression": {
       "type": "object",
       "required": [
@@ -2431,6 +2752,27 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/Expression"
+          }
+        }
+      }
+    },
+    "CommaSeparated_for_FunctionParameter": {
+      "type": "object",
+      "required": [
+        "commas",
+        "inner"
+      ],
+      "properties": {
+        "commas": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Span"
+          }
+        },
+        "inner": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FunctionParameter"
           }
         }
       }
@@ -2893,6 +3235,118 @@
         }
       ]
     },
+    "ConcreteConstructor": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "body",
+        "comments",
+        "function",
+        "modifiers",
+        "name",
+        "parameters"
+      ],
+      "properties": {
+        "ampersand": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "body": {
+          "$ref": "#/definitions/MethodBody"
+        },
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "function": {
+          "$ref": "#/definitions/Span"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MethodModifier"
+          }
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "parameters": {
+          "$ref": "#/definitions/ConstructorParameterList"
+        }
+      }
+    },
+    "ConcreteMethod": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "body",
+        "comments",
+        "function",
+        "modifiers",
+        "name",
+        "parameters"
+      ],
+      "properties": {
+        "ampersand": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "body": {
+          "$ref": "#/definitions/MethodBody"
+        },
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "function": {
+          "$ref": "#/definitions/Span"
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MethodModifier"
+          }
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "parameters": {
+          "$ref": "#/definitions/FunctionParameterList"
+        },
+        "return_type": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ReturnType"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
     "Constant": {
       "type": "object",
       "required": [
@@ -3025,6 +3479,98 @@
           "items": {
             "$ref": "#/definitions/ConstantModifier"
           }
+        }
+      }
+    },
+    "ConstructorParameter": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "comments",
+        "modifiers",
+        "name"
+      ],
+      "properties": {
+        "ampersand": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "data_type": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Type"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "default": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Expression"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ellipsis": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PromotedPropertyModifier"
+          }
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleVariable"
+        }
+      }
+    },
+    "ConstructorParameterList": {
+      "type": "object",
+      "required": [
+        "comments",
+        "left_parenthesis",
+        "parameters",
+        "right_parenthesis"
+      ],
+      "properties": {
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "parameters": {
+          "$ref": "#/definitions/CommaSeparated_for_ConstructorParameter"
+        },
+        "right_parenthesis": {
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -5405,7 +5951,7 @@
         "return_type": {
           "anyOf": [
             {
-              "$ref": "#/definitions/Type"
+              "$ref": "#/definitions/ReturnType"
             },
             {
               "type": "null"
@@ -5467,6 +6013,16 @@
         "comments": {
           "$ref": "#/definitions/CommentGroup"
         },
+        "data_type": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Type"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "default": {
           "anyOf": [
             {
@@ -5489,16 +6045,6 @@
         },
         "name": {
           "$ref": "#/definitions/SimpleVariable"
-        },
-        "type": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Type"
-            },
-            {
-              "type": "null"
-            }
-          ]
         }
       }
     },
@@ -5507,7 +6053,7 @@
       "required": [
         "comments",
         "left_parenthesis",
-        "members",
+        "parameters",
         "right_parenthesis"
       ],
       "properties": {
@@ -5517,11 +6063,8 @@
         "left_parenthesis": {
           "$ref": "#/definitions/Span"
         },
-        "members": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/FunctionParameter"
-          }
+        "parameters": {
+          "$ref": "#/definitions/CommaSeparated_for_FunctionParameter"
         },
         "right_parenthesis": {
           "$ref": "#/definitions/Span"
@@ -5919,11 +6462,29 @@
             "type": {
               "type": "string",
               "enum": [
+                "constructor"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/AbstractConstructor"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
                 "method"
               ]
             },
             "value": {
-              "$ref": "#/definitions/Method"
+              "$ref": "#/definitions/AbstractMethod"
             }
           }
         }
@@ -6467,113 +7028,31 @@
         }
       }
     },
-    "Method": {
+    "MethodBody": {
       "type": "object",
       "required": [
-        "attributes",
-        "body",
         "comments",
-        "function",
-        "modifiers",
-        "name",
-        "parameters"
+        "left_brace",
+        "right_brace",
+        "statements"
       ],
       "properties": {
-        "ampersand": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Span"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "attributes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AttributeGroup"
-          }
-        },
-        "body": {
-          "$ref": "#/definitions/MethodBody"
-        },
         "comments": {
           "$ref": "#/definitions/CommentGroup"
         },
-        "function": {
+        "left_brace": {
           "$ref": "#/definitions/Span"
         },
-        "modifiers": {
+        "right_brace": {
+          "$ref": "#/definitions/Span"
+        },
+        "statements": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/MethodModifier"
+            "$ref": "#/definitions/Statement"
           }
-        },
-        "name": {
-          "$ref": "#/definitions/SimpleIdentifier"
-        },
-        "parameters": {
-          "$ref": "#/definitions/MethodParameterList"
-        },
-        "return_type": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Type"
-            },
-            {
-              "type": "null"
-            }
-          ]
         }
       }
-    },
-    "MethodBody": {
-      "oneOf": [
-        {
-          "type": "object",
-          "required": [
-            "abstract"
-          ],
-          "properties": {
-            "abstract": {
-              "$ref": "#/definitions/Span"
-            }
-          },
-          "additionalProperties": false
-        },
-        {
-          "type": "object",
-          "required": [
-            "block"
-          ],
-          "properties": {
-            "block": {
-              "type": "object",
-              "required": [
-                "left_brace",
-                "right_brace",
-                "statements"
-              ],
-              "properties": {
-                "left_brace": {
-                  "$ref": "#/definitions/Span"
-                },
-                "right_brace": {
-                  "$ref": "#/definitions/Span"
-                },
-                "statements": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Statement"
-                  }
-                }
-              }
-            }
-          },
-          "additionalProperties": false
-        }
-      ]
     },
     "MethodModifier": {
       "oneOf": [
@@ -6686,101 +7165,6 @@
           }
         }
       ]
-    },
-    "MethodParameter": {
-      "type": "object",
-      "required": [
-        "attributes",
-        "comments",
-        "modifiers",
-        "name"
-      ],
-      "properties": {
-        "ampersand": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Span"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "attributes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AttributeGroup"
-          }
-        },
-        "comments": {
-          "$ref": "#/definitions/CommentGroup"
-        },
-        "default": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Expression"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "ellipsis": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Span"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "modifiers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PromotedPropertyModifier"
-          }
-        },
-        "name": {
-          "$ref": "#/definitions/SimpleVariable"
-        },
-        "type": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Type"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      }
-    },
-    "MethodParameterList": {
-      "type": "object",
-      "required": [
-        "comments",
-        "left_parenthesis",
-        "members",
-        "right_parenthesis"
-      ],
-      "properties": {
-        "comments": {
-          "$ref": "#/definitions/CommentGroup"
-        },
-        "left_parenthesis": {
-          "$ref": "#/definitions/Span"
-        },
-        "members": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/MethodParameter"
-          }
-        },
-        "right_parenthesis": {
-          "$ref": "#/definitions/Span"
-        }
-      }
     },
     "Namespace": {
       "oneOf": [
@@ -7173,6 +7557,21 @@
           }
         }
       ]
+    },
+    "ReturnType": {
+      "type": "object",
+      "required": [
+        "colon",
+        "data_type"
+      ],
+      "properties": {
+        "colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "data_type": {
+          "$ref": "#/definitions/Type"
+        }
+      }
     },
     "SemicolonTerminated_for_CommaSeparated_for_Expression": {
       "type": "object",
@@ -8133,12 +8532,12 @@
     "TraitBody": {
       "type": "object",
       "required": [
-        "end",
+        "left_brace",
         "members",
-        "start"
+        "right_brace"
       ],
       "properties": {
-        "end": {
+        "left_brace": {
           "$ref": "#/definitions/Span"
         },
         "members": {
@@ -8147,7 +8546,7 @@
             "$ref": "#/definitions/TraitMember"
           }
         },
-        "start": {
+        "right_brace": {
           "$ref": "#/definitions/Span"
         }
       }
@@ -8236,11 +8635,65 @@
             "type": {
               "type": "string",
               "enum": [
-                "method"
+                "abstract_method"
               ]
             },
             "value": {
-              "$ref": "#/definitions/Method"
+              "$ref": "#/definitions/AbstractMethod"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "abstract_constructor"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/AbstractConstructor"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "concrete_method"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/ConcreteMethod"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "concrete_constructor"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/ConcreteConstructor"
             }
           }
         }
@@ -8986,7 +9439,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Method"
+              "$ref": "#/definitions/ConcreteMethod"
             }
           }
         },

@@ -3,10 +3,6 @@ use std::fmt::Display;
 
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
-use crate::parser::ast::modifiers::ClassModifierGroup;
-use crate::parser::ast::modifiers::MethodModifierGroup;
-use crate::parser::error::ParseError;
-use crate::parser::error::ParseResult;
 use crate::parser::state::stream::TokenStream;
 
 pub mod stream;
@@ -21,14 +17,6 @@ pub enum NamespaceType {
 pub enum Scope {
     Namespace(SimpleIdentifier),
     BracedNamespace(Option<SimpleIdentifier>),
-
-    Interface(SimpleIdentifier),
-    Class(SimpleIdentifier, ClassModifierGroup, bool),
-    Trait(SimpleIdentifier),
-    Enum(SimpleIdentifier, bool),
-    AnonymousClass(bool),
-
-    Method(SimpleIdentifier, MethodModifierGroup),
 }
 
 #[derive(Debug)]
@@ -73,16 +61,7 @@ impl<'a> State<'a> {
     }
 
     pub fn namespace(&self) -> Option<&Scope> {
-        for scope in &self.stack {
-            match scope {
-                Scope::Namespace(_) | Scope::BracedNamespace(_) => {
-                    return Some(scope);
-                }
-                _ => {}
-            }
-        }
-
-        None
+        self.stack.iter().next()
     }
 
     pub fn named<T: Display + ?Sized>(&self, name: &T) -> String {
@@ -94,18 +73,6 @@ impl<'a> State<'a> {
         }
     }
 
-    pub fn scope(&self) -> ParseResult<&Scope> {
-        self.stack
-            .back()
-            .ok_or_else(|| ParseError::UnpredictableState(self.stream.current().span))
-    }
-
-    pub fn parent(&self) -> ParseResult<&Scope> {
-        self.stack
-            .get(self.stack.len() - 2)
-            .ok_or_else(|| ParseError::UnpredictableState(self.stream.current().span))
-    }
-
     pub fn enter(&mut self, scope: Scope) {
         match &scope {
             Scope::Namespace(_) => {
@@ -114,7 +81,6 @@ impl<'a> State<'a> {
             Scope::BracedNamespace(_) => {
                 self.namespace_type = Some(NamespaceType::Braced);
             }
-            _ => {}
         }
 
         self.stack.push_back(scope);

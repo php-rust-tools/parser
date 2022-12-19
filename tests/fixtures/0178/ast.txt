@@ -227,45 +227,54 @@
                                     32,
                                     13,
                                 ),
-                                members: [
-                                    FunctionParameter {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        name: SimpleVariable {
-                                            span: Span(
-                                                32,
-                                                22,
-                                            ),
-                                            name: "fun",
-                                        },
-                                        attributes: [],
-                                        type: Some(
-                                            Named(
-                                                Span(
+                                parameters: CommaSeparated {
+                                    inner: [
+                                        FunctionParameter {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            name: SimpleVariable {
+                                                span: Span(
                                                     32,
-                                                    14,
+                                                    22,
                                                 ),
-                                                "Closure",
+                                                name: "fun",
+                                            },
+                                            attributes: [],
+                                            data_type: Some(
+                                                Named(
+                                                    Span(
+                                                        32,
+                                                        14,
+                                                    ),
+                                                    "Closure",
+                                                ),
                                             ),
-                                        ),
-                                        ellipsis: None,
-                                        default: None,
-                                        ampersand: None,
-                                    },
-                                ],
+                                            ellipsis: None,
+                                            default: None,
+                                            ampersand: None,
+                                        },
+                                    ],
+                                    commas: [],
+                                },
                                 right_parenthesis: Span(
                                     32,
                                     26,
                                 ),
                             },
                             return_type: Some(
-                                Array(
-                                    Span(
+                                ReturnType {
+                                    colon: Span(
                                         32,
-                                        29,
+                                        27,
                                     ),
-                                ),
+                                    data_type: Array(
+                                        Span(
+                                            32,
+                                            29,
+                                        ),
+                                    ),
+                                },
                             ),
                             body: FunctionBody {
                                 comments: CommentGroup {
@@ -365,56 +374,64 @@
                                                                         36,
                                                                         39,
                                                                     ),
-                                                                    members: [
-                                                                        FunctionParameter {
-                                                                            comments: CommentGroup {
-                                                                                comments: [],
-                                                                            },
-                                                                            name: SimpleVariable {
-                                                                                span: Span(
-                                                                                    36,
-                                                                                    44,
-                                                                                ),
-                                                                                name: "_type",
-                                                                            },
-                                                                            attributes: [],
-                                                                            type: Some(
-                                                                                Integer(
-                                                                                    Span(
+                                                                    parameters: CommaSeparated {
+                                                                        inner: [
+                                                                            FunctionParameter {
+                                                                                comments: CommentGroup {
+                                                                                    comments: [],
+                                                                                },
+                                                                                name: SimpleVariable {
+                                                                                    span: Span(
                                                                                         36,
-                                                                                        40,
+                                                                                        44,
+                                                                                    ),
+                                                                                    name: "_type",
+                                                                                },
+                                                                                attributes: [],
+                                                                                data_type: Some(
+                                                                                    Integer(
+                                                                                        Span(
+                                                                                            36,
+                                                                                            40,
+                                                                                        ),
                                                                                     ),
                                                                                 ),
-                                                                            ),
-                                                                            ellipsis: None,
-                                                                            default: None,
-                                                                            ampersand: None,
-                                                                        },
-                                                                        FunctionParameter {
-                                                                            comments: CommentGroup {
-                                                                                comments: [],
+                                                                                ellipsis: None,
+                                                                                default: None,
+                                                                                ampersand: None,
                                                                             },
-                                                                            name: SimpleVariable {
-                                                                                span: Span(
-                                                                                    36,
-                                                                                    59,
-                                                                                ),
-                                                                                name: "message",
-                                                                            },
-                                                                            attributes: [],
-                                                                            type: Some(
-                                                                                String(
-                                                                                    Span(
+                                                                            FunctionParameter {
+                                                                                comments: CommentGroup {
+                                                                                    comments: [],
+                                                                                },
+                                                                                name: SimpleVariable {
+                                                                                    span: Span(
                                                                                         36,
-                                                                                        52,
+                                                                                        59,
+                                                                                    ),
+                                                                                    name: "message",
+                                                                                },
+                                                                                attributes: [],
+                                                                                data_type: Some(
+                                                                                    String(
+                                                                                        Span(
+                                                                                            36,
+                                                                                            52,
+                                                                                        ),
                                                                                     ),
                                                                                 ),
+                                                                                ellipsis: None,
+                                                                                default: None,
+                                                                                ampersand: None,
+                                                                            },
+                                                                        ],
+                                                                        commas: [
+                                                                            Span(
+                                                                                36,
+                                                                                50,
                                                                             ),
-                                                                            ellipsis: None,
-                                                                            default: None,
-                                                                            ampersand: None,
-                                                                        },
-                                                                    ],
+                                                                        ],
+                                                                    },
                                                                     right_parenthesis: Span(
                                                                         36,
                                                                         67,
@@ -462,7 +479,7 @@
                                                                         ),
                                                                     },
                                                                 ),
-                                                                return_ty: None,
+                                                                return_type: None,
                                                                 body: FunctionBody {
                                                                     comments: CommentGroup {
                                                                         comments: [],

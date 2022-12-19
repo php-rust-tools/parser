@@ -30,8 +30,8 @@
                     9,
                 ),
                 members: [
-                    Method(
-                        Method {
+                    ConcreteMethod(
+                        ConcreteMethod {
                             comments: CommentGroup {
                                 comments: [],
                             },
@@ -58,7 +58,7 @@
                                 ),
                                 value: "foo",
                             },
-                            parameters: MethodParameterList {
+                            parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -66,14 +66,20 @@
                                     4,
                                     24,
                                 ),
-                                members: [],
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
                                 right_parenthesis: Span(
                                     4,
                                     25,
                                 ),
                             },
                             return_type: None,
-                            body: Block {
+                            body: MethodBody {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 left_brace: Span(
                                     4,
                                     27,
@@ -117,14 +123,17 @@
                                                                 5,
                                                                 22,
                                                             ),
-                                                            members: [],
+                                                            parameters: CommaSeparated {
+                                                                inner: [],
+                                                                commas: [],
+                                                            },
                                                             right_parenthesis: Span(
                                                                 5,
                                                                 23,
                                                             ),
                                                         },
                                                         uses: None,
-                                                        return_ty: None,
+                                                        return_type: None,
                                                         body: FunctionBody {
                                                             comments: CommentGroup {
                                                                 comments: [],

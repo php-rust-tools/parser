@@ -31,30 +31,33 @@
                     1,
                     19,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                1,
-                                23,
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    1,
+                                    23,
+                                ),
+                                name: "bar",
+                            },
+                            attributes: [],
+                            data_type: None,
+                            ellipsis: Some(
+                                Span(
+                                    1,
+                                    20,
+                                ),
                             ),
-                            name: "bar",
+                            default: None,
+                            ampersand: None,
                         },
-                        attributes: [],
-                        type: None,
-                        ellipsis: Some(
-                            Span(
-                                1,
-                                20,
-                            ),
-                        ),
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                    ],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     1,
                     27,

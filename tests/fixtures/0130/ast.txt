@@ -30,8 +30,8 @@
                     11,
                 ),
                 members: [
-                    Method(
-                        Method {
+                    ConcreteMethod(
+                        ConcreteMethod {
                             comments: CommentGroup {
                                 comments: [],
                             },
@@ -58,7 +58,7 @@
                                 ),
                                 value: "foreach",
                             },
-                            parameters: MethodParameterList {
+                            parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -66,14 +66,20 @@
                                     4,
                                     28,
                                 ),
-                                members: [],
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
                                 right_parenthesis: Span(
                                     4,
                                     29,
                                 ),
                             },
                             return_type: None,
-                            body: Block {
+                            body: MethodBody {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 left_brace: Span(
                                     4,
                                     31,

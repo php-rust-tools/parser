@@ -27,7 +27,7 @@
                 ),
                 members: [
                     Method(
-                        Method {
+                        AbstractMethod {
                             comments: CommentGroup {
                                 comments: [],
                             },
@@ -60,7 +60,7 @@
                                 ),
                                 value: "bar",
                             },
-                            parameters: MethodParameterList {
+                            parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -68,18 +68,19 @@
                                     4,
                                     33,
                                 ),
-                                members: [],
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
                                 right_parenthesis: Span(
                                     4,
                                     34,
                                 ),
                             },
                             return_type: None,
-                            body: Abstract(
-                                Span(
-                                    4,
-                                    35,
-                                ),
+                            semicolon: Span(
+                                4,
+                                35,
                             ),
                         },
                     ),

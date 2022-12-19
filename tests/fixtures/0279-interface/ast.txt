@@ -570,7 +570,7 @@
                         },
                     ),
                     Method(
-                        Method {
+                        AbstractMethod {
                             comments: CommentGroup {
                                 comments: [],
                             },
@@ -628,7 +628,7 @@
                                 ),
                                 value: "bar",
                             },
-                            parameters: MethodParameterList {
+                            parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -636,30 +636,37 @@
                                     21,
                                     24,
                                 ),
-                                members: [],
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
                                 right_parenthesis: Span(
                                     21,
                                     25,
                                 ),
                             },
                             return_type: Some(
-                                Void(
-                                    Span(
+                                ReturnType {
+                                    colon: Span(
                                         21,
-                                        28,
+                                        26,
                                     ),
-                                ),
+                                    data_type: Void(
+                                        Span(
+                                            21,
+                                            28,
+                                        ),
+                                    ),
+                                },
                             ),
-                            body: Abstract(
-                                Span(
-                                    21,
-                                    32,
-                                ),
+                            semicolon: Span(
+                                21,
+                                32,
                             ),
                         },
                     ),
                     Method(
-                        Method {
+                        AbstractMethod {
                             comments: CommentGroup {
                                 comments: [],
                             },
@@ -753,7 +760,7 @@
                                 ),
                                 value: "baz",
                             },
-                            parameters: MethodParameterList {
+                            parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -761,25 +768,32 @@
                                     25,
                                     31,
                                 ),
-                                members: [],
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
                                 right_parenthesis: Span(
                                     25,
                                     32,
                                 ),
                             },
                             return_type: Some(
-                                Void(
-                                    Span(
+                                ReturnType {
+                                    colon: Span(
                                         25,
-                                        35,
+                                        33,
                                     ),
-                                ),
+                                    data_type: Void(
+                                        Span(
+                                            25,
+                                            35,
+                                        ),
+                                    ),
+                                },
                             ),
-                            body: Abstract(
-                                Span(
-                                    25,
-                                    39,
-                                ),
+                            semicolon: Span(
+                                25,
+                                39,
                             ),
                         },
                     ),

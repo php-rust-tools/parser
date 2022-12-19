@@ -31,97 +31,111 @@
                     3,
                     13,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                3,
-                                21,
-                            ),
-                            name: "a",
-                        },
-                        attributes: [],
-                        type: Some(
-                            String(
-                                Span(
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     3,
-                                    14,
+                                    21,
+                                ),
+                                name: "a",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                String(
+                                    Span(
+                                        3,
+                                        14,
+                                    ),
                                 ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: Some(
-                            Literal(
-                                String(
-                                    LiteralString {
-                                        value: "",
-                                        span: Span(
+                            ellipsis: None,
+                            default: Some(
+                                Literal(
+                                    String(
+                                        LiteralString {
+                                            value: "",
+                                            span: Span(
+                                                3,
+                                                26,
+                                            ),
+                                        },
+                                    ),
+                                ),
+                            ),
+                            ampersand: None,
+                        },
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    3,
+                                    36,
+                                ),
+                                name: "b",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                Array(
+                                    Span(
+                                        3,
+                                        30,
+                                    ),
+                                ),
+                            ),
+                            ellipsis: None,
+                            default: Some(
+                                ShortArray(
+                                    Bracketed {
+                                        left_bracket: Span(
                                             3,
-                                            26,
+                                            41,
+                                        ),
+                                        inner: CommaSeparated {
+                                            inner: [],
+                                            commas: [],
+                                        },
+                                        right_bracket: Span(
+                                            3,
+                                            42,
                                         ),
                                     },
                                 ),
                             ),
-                        ),
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
+                            ampersand: None,
                         },
-                        name: SimpleVariable {
-                            span: Span(
-                                3,
-                                36,
-                            ),
-                            name: "b",
-                        },
-                        attributes: [],
-                        type: Some(
-                            Array(
-                                Span(
-                                    3,
-                                    30,
-                                ),
-                            ),
+                    ],
+                    commas: [
+                        Span(
+                            3,
+                            28,
                         ),
-                        ellipsis: None,
-                        default: Some(
-                            ShortArray(
-                                Bracketed {
-                                    left_bracket: Span(
-                                        3,
-                                        41,
-                                    ),
-                                    inner: CommaSeparated {
-                                        inner: [],
-                                        commas: [],
-                                    },
-                                    right_bracket: Span(
-                                        3,
-                                        42,
-                                    ),
-                                },
-                            ),
-                        ),
-                        ampersand: None,
-                    },
-                ],
+                    ],
+                },
                 right_parenthesis: Span(
                     3,
                     43,
                 ),
             },
             return_type: Some(
-                Never(
-                    Span(
+                ReturnType {
+                    colon: Span(
                         3,
-                        46,
+                        44,
                     ),
-                ),
+                    data_type: Never(
+                        Span(
+                            3,
+                            46,
+                        ),
+                    ),
+                },
             ),
             body: FunctionBody {
                 comments: CommentGroup {
@@ -189,186 +203,216 @@
                     7,
                     13,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                7,
-                                18,
-                            ),
-                            name: "a",
-                        },
-                        attributes: [],
-                        type: Some(
-                            Integer(
-                                Span(
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     7,
-                                    14,
+                                    18,
+                                ),
+                                name: "a",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                Integer(
+                                    Span(
+                                        7,
+                                        14,
+                                    ),
                                 ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        name: SimpleVariable {
-                            span: Span(
-                                7,
-                                28,
-                            ),
-                            name: "b",
-                        },
-                        attributes: [],
-                        type: Some(
-                            Float(
-                                Span(
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     7,
-                                    22,
+                                    28,
+                                ),
+                                name: "b",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                Float(
+                                    Span(
+                                        7,
+                                        22,
+                                    ),
                                 ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        name: SimpleVariable {
-                            span: Span(
-                                7,
-                                39,
-                            ),
-                            name: "c",
-                        },
-                        attributes: [],
-                        type: Some(
-                            String(
-                                Span(
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     7,
-                                    32,
+                                    39,
+                                ),
+                                name: "c",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                String(
+                                    Span(
+                                        7,
+                                        32,
+                                    ),
                                 ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        name: SimpleVariable {
-                            span: Span(
-                                7,
-                                48,
-                            ),
-                            name: "d",
-                        },
-                        attributes: [],
-                        type: Some(
-                            True(
-                                Span(
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     7,
-                                    43,
+                                    48,
+                                ),
+                                name: "d",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                True(
+                                    Span(
+                                        7,
+                                        43,
+                                    ),
                                 ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        name: SimpleVariable {
-                            span: Span(
-                                7,
-                                58,
-                            ),
-                            name: "e",
-                        },
-                        attributes: [],
-                        type: Some(
-                            False(
-                                Span(
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     7,
-                                    52,
+                                    58,
+                                ),
+                                name: "e",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                False(
+                                    Span(
+                                        7,
+                                        52,
+                                    ),
                                 ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        name: SimpleVariable {
-                            span: Span(
-                                7,
-                                67,
-                            ),
-                            name: "f",
-                        },
-                        attributes: [],
-                        type: Some(
-                            Null(
-                                Span(
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     7,
-                                    62,
+                                    67,
+                                ),
+                                name: "f",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                Null(
+                                    Span(
+                                        7,
+                                        62,
+                                    ),
                                 ),
                             ),
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
+                        },
+                    ],
+                    commas: [
+                        Span(
+                            7,
+                            20,
                         ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                        Span(
+                            7,
+                            30,
+                        ),
+                        Span(
+                            7,
+                            41,
+                        ),
+                        Span(
+                            7,
+                            50,
+                        ),
+                        Span(
+                            7,
+                            60,
+                        ),
+                    ],
+                },
                 right_parenthesis: Span(
                     7,
                     69,
                 ),
             },
             return_type: Some(
-                Union(
-                    [
-                        Null(
-                            Span(
-                                7,
-                                72,
+                ReturnType {
+                    colon: Span(
+                        7,
+                        70,
+                    ),
+                    data_type: Union(
+                        [
+                            Null(
+                                Span(
+                                    7,
+                                    72,
+                                ),
                             ),
-                        ),
-                        String(
-                            Span(
-                                7,
-                                77,
+                            String(
+                                Span(
+                                    7,
+                                    77,
+                                ),
                             ),
-                        ),
-                        Integer(
-                            Span(
-                                7,
-                                84,
+                            Integer(
+                                Span(
+                                    7,
+                                    84,
+                                ),
                             ),
-                        ),
-                        Float(
-                            Span(
-                                7,
-                                88,
+                            Float(
+                                Span(
+                                    7,
+                                    88,
+                                ),
                             ),
-                        ),
-                    ],
-                ),
+                        ],
+                    ),
+                },
             ),
             body: FunctionBody {
                 comments: CommentGroup {

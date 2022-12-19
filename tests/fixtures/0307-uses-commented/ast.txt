@@ -218,19 +218,28 @@
                     12,
                     13,
                 ),
-                members: [],
+                parameters: CommaSeparated {
+                    inner: [],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     12,
                     14,
                 ),
             },
             return_type: Some(
-                Void(
-                    Span(
+                ReturnType {
+                    colon: Span(
                         12,
-                        17,
+                        15,
                     ),
-                ),
+                    data_type: Void(
+                        Span(
+                            12,
+                            17,
+                        ),
+                    ),
+                },
             ),
             body: FunctionBody {
                 comments: CommentGroup {

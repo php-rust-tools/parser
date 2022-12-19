@@ -16,11 +16,18 @@ use crate::parser::ast::Statement;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
+pub struct ReturnType {
+    pub colon: Span,
+    pub data_type: Type,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub struct FunctionParameter {
     pub comments: CommentGroup,
     pub name: SimpleVariable,
     pub attributes: Vec<AttributeGroup>,
-    pub r#type: Option<Type>,
+    pub data_type: Option<Type>,
     pub ellipsis: Option<Span>,
     pub default: Option<Expression>,
     pub ampersand: Option<Span>,
@@ -31,7 +38,7 @@ pub struct FunctionParameter {
 pub struct FunctionParameterList {
     pub comments: CommentGroup,
     pub left_parenthesis: Span,
-    pub members: Vec<FunctionParameter>,
+    pub parameters: CommaSeparated<FunctionParameter>,
     pub right_parenthesis: Span,
 }
 
@@ -53,7 +60,7 @@ pub struct Function {
     pub ampersand: Option<Span>,
     pub name: SimpleIdentifier,
     pub parameters: FunctionParameterList,
-    pub return_type: Option<Type>,
+    pub return_type: Option<ReturnType>,
     pub body: FunctionBody,
 }
 
@@ -85,7 +92,7 @@ pub struct Closure {
     pub ampersand: Option<Span>,
     pub parameters: FunctionParameterList,
     pub uses: Option<ClosureUse>,
-    pub return_ty: Option<Type>,
+    pub return_type: Option<ReturnType>,
     pub body: FunctionBody,
 }
 
@@ -98,19 +105,19 @@ pub struct ArrowFunction {
     pub r#fn: Span,
     pub attributes: Vec<AttributeGroup>,
     pub parameters: FunctionParameterList,
-    pub return_type: Option<Type>,
+    pub return_type: Option<ReturnType>,
     pub double_arrow: Span,
     pub body: Box<Expression>,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct MethodParameter {
+pub struct ConstructorParameter {
     pub attributes: Vec<AttributeGroup>,
     pub comments: CommentGroup,
     pub ampersand: Option<Span>,
     pub name: SimpleVariable,
-    pub r#type: Option<Type>,
+    pub data_type: Option<Type>,
     pub ellipsis: Option<Span>,
     pub default: Option<Expression>,
     #[serde(flatten)]
@@ -119,16 +126,48 @@ pub struct MethodParameter {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct MethodParameterList {
+pub struct ConstructorParameterList {
     pub comments: CommentGroup,
     pub left_parenthesis: Span,
-    pub members: Vec<MethodParameter>,
+    pub parameters: CommaSeparated<ConstructorParameter>,
     pub right_parenthesis: Span,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Method {
+pub struct AbstractConstructor {
+    pub comments: CommentGroup,
+    pub attributes: Vec<AttributeGroup>,
+    #[serde(flatten)]
+    pub modifiers: MethodModifierGroup,
+    pub function: Span,
+    // returning by reference from a constructor doesn't make sense
+    // see: https://chat.stackoverflow.com/transcript/message/55718950#55718950
+    pub ampersand: Option<Span>,
+    pub name: SimpleIdentifier,
+    pub parameters: FunctionParameterList,
+    pub semicolon: Span,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct ConcreteConstructor {
+    pub comments: CommentGroup,
+    pub attributes: Vec<AttributeGroup>,
+    #[serde(flatten)]
+    pub modifiers: MethodModifierGroup,
+    pub function: Span,
+    // returning by reference from a constructor doesn't make sense
+    // see: https://chat.stackoverflow.com/transcript/message/55718950#55718950
+    pub ampersand: Option<Span>,
+    pub name: SimpleIdentifier,
+    pub parameters: ConstructorParameterList,
+    pub body: MethodBody,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct AbstractMethod {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,
     #[serde(flatten)]
@@ -136,18 +175,31 @@ pub struct Method {
     pub function: Span,
     pub ampersand: Option<Span>,
     pub name: SimpleIdentifier,
-    pub parameters: MethodParameterList,
-    pub return_type: Option<Type>,
+    pub parameters: FunctionParameterList,
+    pub return_type: Option<ReturnType>,
+    pub semicolon: Span,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct ConcreteMethod {
+    pub comments: CommentGroup,
+    pub attributes: Vec<AttributeGroup>,
+    #[serde(flatten)]
+    pub modifiers: MethodModifierGroup,
+    pub function: Span,
+    pub ampersand: Option<Span>,
+    pub name: SimpleIdentifier,
+    pub parameters: FunctionParameterList,
+    pub return_type: Option<ReturnType>,
     pub body: MethodBody,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub enum MethodBody {
-    Abstract(Span), // `;`
-    Block {
-        left_brace: Span, // `{`
-        statements: Vec<Statement>,
-        right_brace: Span, // `}`
-    },
+pub struct MethodBody {
+    pub comments: CommentGroup,
+    pub left_brace: Span, // `{`
+    pub statements: Vec<Statement>,
+    pub right_brace: Span, // `}`
 }

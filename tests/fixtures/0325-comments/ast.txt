@@ -49,172 +49,192 @@
                     8,
                     5,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [
-                                Comment {
-                                    span: Span(
-                                        9,
-                                        9,
-                                    ),
-                                    format: SingleLine,
-                                    content: "// a single line comment on the first parameter",
-                                },
-                                Comment {
-                                    span: Span(
-                                        10,
-                                        16,
-                                    ),
-                                    format: MultiLine,
-                                    content: "/* a comment between `string` and `$a` */",
-                                },
-                            ],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                10,
-                                58,
-                            ),
-                            name: "a",
-                        },
-                        attributes: [],
-                        type: Some(
-                            String(
-                                Span(
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [
+                                    Comment {
+                                        span: Span(
+                                            9,
+                                            9,
+                                        ),
+                                        format: SingleLine,
+                                        content: "// a single line comment on the first parameter",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            10,
+                                            16,
+                                        ),
+                                        format: MultiLine,
+                                        content: "/* a comment between `string` and `$a` */",
+                                    },
+                                ],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     10,
-                                    9,
+                                    58,
                                 ),
-                            ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [
-                                Comment {
-                                    span: Span(
-                                        11,
+                                name: "a",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                String(
+                                    Span(
+                                        10,
                                         9,
                                     ),
-                                    format: HashMark,
-                                    content: "# a hash comment on the second parameter",
-                                },
-                                Comment {
-                                    span: Span(
-                                        12,
-                                        16,
-                                    ),
-                                    format: MultiLine,
-                                    content: "/* a comment between `string` and `$b` */",
-                                },
-                            ],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                12,
-                                58,
+                                ),
                             ),
-                            name: "b",
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        attributes: [],
-                        type: Some(
-                            String(
-                                Span(
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [
+                                    Comment {
+                                        span: Span(
+                                            11,
+                                            9,
+                                        ),
+                                        format: HashMark,
+                                        content: "# a hash comment on the second parameter",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            12,
+                                            16,
+                                        ),
+                                        format: MultiLine,
+                                        content: "/* a comment between `string` and `$b` */",
+                                    },
+                                ],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     12,
-                                    9,
+                                    58,
                                 ),
-                            ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [
-                                Comment {
-                                    span: Span(
-                                        13,
+                                name: "b",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                String(
+                                    Span(
+                                        12,
                                         9,
                                     ),
-                                    format: MultiLine,
-                                    content: "/* a multi-line comment on the third parameter */",
-                                },
-                                Comment {
-                                    span: Span(
-                                        14,
-                                        16,
-                                    ),
-                                    format: MultiLine,
-                                    content: "/* a comment between `string` and `$c` */",
-                                },
-                            ],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                14,
-                                58,
+                                ),
                             ),
-                            name: "c",
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        attributes: [],
-                        type: Some(
-                            String(
-                                Span(
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [
+                                    Comment {
+                                        span: Span(
+                                            13,
+                                            9,
+                                        ),
+                                        format: MultiLine,
+                                        content: "/* a multi-line comment on the third parameter */",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            14,
+                                            16,
+                                        ),
+                                        format: MultiLine,
+                                        content: "/* a comment between `string` and `$c` */",
+                                    },
+                                ],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     14,
-                                    9,
+                                    58,
                                 ),
-                            ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [
-                                Comment {
-                                    span: Span(
-                                        15,
+                                name: "c",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                String(
+                                    Span(
+                                        14,
                                         9,
                                     ),
-                                    format: Document,
-                                    content: "/** a document comment on the fourth parameter */",
-                                },
-                                Comment {
-                                    span: Span(
-                                        16,
-                                        16,
-                                    ),
-                                    format: MultiLine,
-                                    content: "/* a comment between `string` and `$d` */",
-                                },
-                            ],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                16,
-                                58,
-                            ),
-                            name: "d",
-                        },
-                        attributes: [],
-                        type: Some(
-                            String(
-                                Span(
-                                    16,
-                                    9,
                                 ),
                             ),
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
+                        },
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [
+                                    Comment {
+                                        span: Span(
+                                            15,
+                                            9,
+                                        ),
+                                        format: Document,
+                                        content: "/** a document comment on the fourth parameter */",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            16,
+                                            16,
+                                        ),
+                                        format: MultiLine,
+                                        content: "/* a comment between `string` and `$d` */",
+                                    },
+                                ],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    16,
+                                    58,
+                                ),
+                                name: "d",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                String(
+                                    Span(
+                                        16,
+                                        9,
+                                    ),
+                                ),
+                            ),
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
+                        },
+                    ],
+                    commas: [
+                        Span(
+                            10,
+                            60,
                         ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                        Span(
+                            12,
+                            60,
+                        ),
+                        Span(
+                            14,
+                            60,
+                        ),
+                        Span(
+                            16,
+                            60,
+                        ),
+                    ],
+                },
                 right_parenthesis: Span(
                     17,
                     5,

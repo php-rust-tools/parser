@@ -80,15 +80,15 @@
             },
             attributes: [],
             body: TraitBody {
-                start: Span(
+                left_brace: Span(
                     6,
                     12,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     6,
                     13,
                 ),
-                members: [],
             },
         },
     ),
@@ -146,20 +146,29 @@
                     8,
                     14,
                 ),
-                members: [],
+                parameters: CommaSeparated {
+                    inner: [],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     8,
                     15,
                 ),
             },
             return_type: Some(
-                Named(
-                    Span(
+                ReturnType {
+                    colon: Span(
                         8,
-                        18,
+                        16,
                     ),
-                    "enum",
-                ),
+                    data_type: Named(
+                        Span(
+                            8,
+                            18,
+                        ),
+                        "enum",
+                    ),
+                },
             ),
             body: FunctionBody {
                 comments: CommentGroup {
@@ -252,15 +261,15 @@
             },
             attributes: [],
             body: TraitBody {
-                start: Span(
+                left_brace: Span(
                     12,
                     12,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     12,
                     13,
                 ),
-                members: [],
             },
         },
     ),
@@ -318,20 +327,29 @@
                     14,
                     14,
                 ),
-                members: [],
+                parameters: CommaSeparated {
+                    inner: [],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     14,
                     15,
                 ),
             },
             return_type: Some(
-                Named(
-                    Span(
+                ReturnType {
+                    colon: Span(
                         14,
-                        18,
+                        16,
                     ),
-                    "from",
-                ),
+                    data_type: Named(
+                        Span(
+                            14,
+                            18,
+                        ),
+                        "from",
+                    ),
+                },
             ),
             body: FunctionBody {
                 comments: CommentGroup {

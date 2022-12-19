@@ -31,64 +31,76 @@
                     1,
                     19,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    1,
+                                    20,
+                                ),
+                                name: "bar",
+                            },
+                            attributes: [],
+                            data_type: None,
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
                         },
-                        name: SimpleVariable {
-                            span: Span(
-                                1,
-                                20,
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    1,
+                                    26,
+                                ),
+                                name: "baz",
+                            },
+                            attributes: [],
+                            data_type: None,
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
+                        },
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    1,
+                                    35,
+                                ),
+                                name: "car",
+                            },
+                            attributes: [],
+                            data_type: None,
+                            ellipsis: Some(
+                                Span(
+                                    1,
+                                    32,
+                                ),
                             ),
-                            name: "bar",
+                            default: None,
+                            ampersand: None,
                         },
-                        attributes: [],
-                        type: None,
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                1,
-                                26,
-                            ),
-                            name: "baz",
-                        },
-                        attributes: [],
-                        type: None,
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                1,
-                                35,
-                            ),
-                            name: "car",
-                        },
-                        attributes: [],
-                        type: None,
-                        ellipsis: Some(
-                            Span(
-                                1,
-                                32,
-                            ),
+                    ],
+                    commas: [
+                        Span(
+                            1,
+                            24,
                         ),
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                        Span(
+                            1,
+                            30,
+                        ),
+                    ],
+                },
                 right_parenthesis: Span(
                     1,
                     39,

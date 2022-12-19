@@ -31,44 +31,47 @@
                     1,
                     19,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                1,
-                                28,
-                            ),
-                            name: "b",
-                        },
-                        attributes: [],
-                        type: Some(
-                            Intersection(
-                                [
-                                    Named(
-                                        Span(
-                                            1,
-                                            20,
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    1,
+                                    28,
+                                ),
+                                name: "b",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                Intersection(
+                                    [
+                                        Named(
+                                            Span(
+                                                1,
+                                                20,
+                                            ),
+                                            "Foo",
                                         ),
-                                        "Foo",
-                                    ),
-                                    Named(
-                                        Span(
-                                            1,
-                                            24,
+                                        Named(
+                                            Span(
+                                                1,
+                                                24,
+                                            ),
+                                            "Bar",
                                         ),
-                                        "Bar",
-                                    ),
-                                ],
+                                    ],
+                                ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
+                        },
+                    ],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     1,
                     30,

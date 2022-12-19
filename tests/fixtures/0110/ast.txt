@@ -30,8 +30,8 @@
                     11,
                 ),
                 members: [
-                    Method(
-                        Method {
+                    ConcreteConstructor(
+                        ConcreteConstructor {
                             comments: CommentGroup {
                                 comments: [],
                             },
@@ -58,7 +58,7 @@
                                 ),
                                 value: "__construct",
                             },
-                            parameters: MethodParameterList {
+                            parameters: ConstructorParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -66,159 +66,181 @@
                                     4,
                                     32,
                                 ),
-                                members: [
-                                    MethodParameter {
-                                        attributes: [],
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        ampersand: None,
-                                        name: SimpleVariable {
-                                            span: Span(
-                                                5,
-                                                23,
-                                            ),
-                                            name: "a",
-                                        },
-                                        type: Some(
-                                            String(
-                                                Span(
+                                parameters: CommaSeparated {
+                                    inner: [
+                                        ConstructorParameter {
+                                            attributes: [],
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            ampersand: None,
+                                            name: SimpleVariable {
+                                                span: Span(
                                                     5,
-                                                    16,
+                                                    23,
                                                 ),
-                                            ),
-                                        ),
-                                        ellipsis: None,
-                                        default: None,
-                                        modifiers: PromotedPropertyModifierGroup {
-                                            modifiers: [
-                                                Public(
+                                                name: "a",
+                                            },
+                                            data_type: Some(
+                                                String(
                                                     Span(
                                                         5,
-                                                        9,
-                                                    ),
-                                                ),
-                                            ],
-                                        },
-                                    },
-                                    MethodParameter {
-                                        attributes: [],
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        ampersand: None,
-                                        name: SimpleVariable {
-                                            span: Span(
-                                                6,
-                                                29,
-                                            ),
-                                            name: "b",
-                                        },
-                                        type: Some(
-                                            Integer(
-                                                Span(
-                                                    6,
-                                                    25,
-                                                ),
-                                            ),
-                                        ),
-                                        ellipsis: None,
-                                        default: None,
-                                        modifiers: PromotedPropertyModifierGroup {
-                                            modifiers: [
-                                                Public(
-                                                    Span(
-                                                        6,
-                                                        9,
-                                                    ),
-                                                ),
-                                                Readonly(
-                                                    Span(
-                                                        6,
                                                         16,
                                                     ),
                                                 ),
-                                            ],
-                                        },
-                                    },
-                                    MethodParameter {
-                                        attributes: [],
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        ampersand: Some(
-                                            Span(
-                                                7,
-                                                32,
                                             ),
-                                        ),
-                                        name: SimpleVariable {
-                                            span: Span(
-                                                7,
-                                                32,
-                                            ),
-                                            name: "c",
+                                            ellipsis: None,
+                                            default: None,
+                                            modifiers: PromotedPropertyModifierGroup {
+                                                modifiers: [
+                                                    Public(
+                                                        Span(
+                                                            5,
+                                                            9,
+                                                        ),
+                                                    ),
+                                                ],
+                                            },
                                         },
-                                        type: Some(
-                                            Float(
+                                        ConstructorParameter {
+                                            attributes: [],
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            ampersand: None,
+                                            name: SimpleVariable {
+                                                span: Span(
+                                                    6,
+                                                    29,
+                                                ),
+                                                name: "b",
+                                            },
+                                            data_type: Some(
+                                                Integer(
+                                                    Span(
+                                                        6,
+                                                        25,
+                                                    ),
+                                                ),
+                                            ),
+                                            ellipsis: None,
+                                            default: None,
+                                            modifiers: PromotedPropertyModifierGroup {
+                                                modifiers: [
+                                                    Public(
+                                                        Span(
+                                                            6,
+                                                            9,
+                                                        ),
+                                                    ),
+                                                    Readonly(
+                                                        Span(
+                                                            6,
+                                                            16,
+                                                        ),
+                                                    ),
+                                                ],
+                                            },
+                                        },
+                                        ConstructorParameter {
+                                            attributes: [],
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            ampersand: Some(
                                                 Span(
                                                     7,
-                                                    25,
+                                                    32,
                                                 ),
                                             ),
-                                        ),
-                                        ellipsis: None,
-                                        default: None,
-                                        modifiers: PromotedPropertyModifierGroup {
-                                            modifiers: [
-                                                Public(
+                                            name: SimpleVariable {
+                                                span: Span(
+                                                    7,
+                                                    32,
+                                                ),
+                                                name: "c",
+                                            },
+                                            data_type: Some(
+                                                Float(
                                                     Span(
                                                         7,
-                                                        9,
+                                                        25,
                                                     ),
                                                 ),
-                                                Readonly(
-                                                    Span(
-                                                        7,
-                                                        16,
+                                            ),
+                                            ellipsis: None,
+                                            default: None,
+                                            modifiers: PromotedPropertyModifierGroup {
+                                                modifiers: [
+                                                    Public(
+                                                        Span(
+                                                            7,
+                                                            9,
+                                                        ),
                                                     ),
+                                                    Readonly(
+                                                        Span(
+                                                            7,
+                                                            16,
+                                                        ),
+                                                    ),
+                                                ],
+                                            },
+                                        },
+                                        ConstructorParameter {
+                                            attributes: [],
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            ampersand: None,
+                                            name: SimpleVariable {
+                                                span: Span(
+                                                    8,
+                                                    12,
                                                 ),
-                                            ],
-                                        },
-                                    },
-                                    MethodParameter {
-                                        attributes: [],
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        ampersand: None,
-                                        name: SimpleVariable {
-                                            span: Span(
-                                                8,
-                                                12,
+                                                name: "e",
+                                            },
+                                            data_type: None,
+                                            ellipsis: Some(
+                                                Span(
+                                                    8,
+                                                    9,
+                                                ),
                                             ),
-                                            name: "e",
+                                            default: None,
+                                            modifiers: PromotedPropertyModifierGroup {
+                                                modifiers: [],
+                                            },
                                         },
-                                        type: None,
-                                        ellipsis: Some(
-                                            Span(
-                                                8,
-                                                9,
-                                            ),
+                                    ],
+                                    commas: [
+                                        Span(
+                                            5,
+                                            25,
                                         ),
-                                        default: None,
-                                        modifiers: PromotedPropertyModifierGroup {
-                                            modifiers: [],
-                                        },
-                                    },
-                                ],
+                                        Span(
+                                            6,
+                                            31,
+                                        ),
+                                        Span(
+                                            7,
+                                            34,
+                                        ),
+                                        Span(
+                                            8,
+                                            14,
+                                        ),
+                                    ],
+                                },
                                 right_parenthesis: Span(
                                     9,
                                     5,
                                 ),
                             },
-                            return_type: None,
-                            body: Block {
+                            body: MethodBody {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 left_brace: Span(
                                     9,
                                     7,
