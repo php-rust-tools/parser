@@ -19,9 +19,7 @@ pub struct ByteString {
 
 impl ByteString {
     pub fn new(bytes: Vec<u8>) -> Self {
-        let length = bytes.len();
-
-        ByteString { bytes, length }
+        ByteString { bytes, length: bytes.len() }
     }
 }
 
