@@ -7,20 +7,20 @@
     ),
     Expression {
         expression: New {
-            span: Span(
+            new: Span(
                 1,
                 7,
             ),
             target: AnonymousClass(
                 AnonymousClass {
                     attributes: [],
-                    span: Span(
+                    class: Span(
                         1,
                         11,
                     ),
                     extends: Some(
                         ClassExtends {
-                            span: Span(
+                            extends: Span(
                                 1,
                                 17,
                             ),
@@ -35,15 +35,15 @@
                     ),
                     implements: None,
                     body: ClassBody {
-                        start: Span(
+                        left_brace: Span(
                             1,
                             29,
                         ),
-                        end: Span(
+                        members: [],
+                        right_brace: Span(
                             1,
                             30,
                         ),
-                        members: [],
                     },
                 },
             ),

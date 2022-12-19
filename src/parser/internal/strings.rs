@@ -253,10 +253,11 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
             let current = state.stream.current();
             let e = match &current.kind {
                 TokenKind::LeftBracket => {
-                    state.stream.next();
+                    let left_bracket = utils::skip_left_bracket(state)?;
+
+                    let current = state.stream.current();
                     // Full expression syntax is not allowed here,
                     // so we can't call expression.
-                    let current = state.stream.current();
                     let index = match &current.kind {
                         TokenKind::LiteralInteger(value) => {
                             state.stream.next();
@@ -274,7 +275,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                                 state.stream.next();
 
                                 Expression::ArithmeticOperation(ArithmeticOperation::Negative {
-                                    span,
+                                    minus: span,
                                     right: Box::new(Expression::Literal(Literal::Integer(
                                         LiteralInteger {
                                             span: literal.span,
@@ -305,11 +306,13 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                         }
                     };
 
-                    utils::skip_right_bracket(state)?;
+                    let right_bracket = utils::skip_right_bracket(state)?;
 
                     Expression::ArrayIndex {
                         array: Box::new(variable),
+                        left_bracket,
                         index: Some(Box::new(index)),
+                        right_bracket,
                     }
                 }
                 TokenKind::Arrow => {
@@ -317,18 +320,18 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                     state.stream.next();
                     Expression::PropertyFetch {
                         target: Box::new(variable),
-                        span,
+                        arrow: span,
                         property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             identifiers::identifier_maybe_reserved(state)?,
                         ))),
                     }
                 }
-                TokenKind::NullsafeArrow => {
+                TokenKind::QuestionArrow => {
                     let span = current.span;
                     state.stream.next();
                     Expression::NullsafePropertyFetch {
                         target: Box::new(variable),
-                        span,
+                        question_arrow: span,
                         property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             identifiers::identifier_maybe_reserved(state)?,
                         ))),

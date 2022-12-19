@@ -7,7 +7,11 @@
     ),
     Class(
         Class {
-            span: Span(
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
                 3,
                 1,
             ),
@@ -18,28 +22,28 @@
                 ),
                 value: "s",
             },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
             extends: None,
             implements: None,
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     3,
                     9,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     3,
                     10,
                 ),
-                members: [],
             },
         },
     ),
     Class(
         Class {
-            span: Span(
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
                 5,
                 1,
             ),
@@ -50,12 +54,9 @@
                 ),
                 value: "foo",
             },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
             extends: Some(
                 ClassExtends {
-                    span: Span(
+                    extends: Span(
                         5,
                         11,
                     ),
@@ -69,15 +70,10 @@
                 },
             ),
             implements: None,
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     5,
                     21,
-                ),
-                end: Span(
-                    9,
-                    1,
                 ),
                 members: [
                     Method(
@@ -124,7 +120,7 @@
                                         ),
                                         value: Some(
                                             New {
-                                                span: Span(
+                                                new: Span(
                                                     7,
                                                     16,
                                                 ),
@@ -144,12 +140,12 @@
                                                         comments: CommentGroup {
                                                             comments: [],
                                                         },
-                                                        start: Span(
+                                                        left_parenthesis: Span(
                                                             7,
                                                             21,
                                                         ),
                                                         arguments: [],
-                                                        end: Span(
+                                                        right_parenthesis: Span(
                                                             7,
                                                             22,
                                                         ),
@@ -188,6 +184,10 @@
                         },
                     ),
                 ],
+                right_brace: Span(
+                    9,
+                    1,
+                ),
             },
         },
     ),

@@ -27,7 +27,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let attributes = state.get_attributes();
 
     let modifiers = modifiers::class_group(modifiers::collect(state)?)?;
-    let span = utils::skip(state, TokenKind::Class)?;
+    let class = utils::skip(state, TokenKind::Class)?;
     let name = identifiers::type_identifier(state)?;
     let current = state.stream.current();
     let extends = if current.kind == TokenKind::Extends {
@@ -36,7 +36,10 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         state.stream.next();
         let parent = identifiers::full_type_name(state)?;
 
-        Some(ClassExtends { span, parent })
+        Some(ClassExtends {
+            extends: span,
+            parent,
+        })
     } else {
         None
     };
@@ -52,7 +55,10 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
                 identifiers::full_type_name(state)
             })?;
 
-        Some(ClassImplements { span, interfaces })
+        Some(ClassImplements {
+            implements: span,
+            interfaces,
+        })
     } else {
         None
     };
@@ -62,25 +68,23 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         state,
         Scope::Class(name.clone(), modifiers.clone(), extends.is_some()),
         {
-            let start = utils::skip_left_brace(state)?;
-
-            let mut members = Vec::new();
-            while state.stream.current().kind != TokenKind::RightBrace {
-                members.push(member(state, classname.clone())?);
-            }
-
-            let end = utils::skip_right_brace(state)?;
-
             ClassBody {
-                start,
-                members,
-                end,
+                left_brace: utils::skip_left_brace(state)?,
+                members: {
+                    let mut members = Vec::new();
+                    while state.stream.current().kind != TokenKind::RightBrace {
+                        members.push(member(state, classname.clone())?);
+                    }
+
+                    members
+                },
+                right_brace: utils::skip_right_brace(state)?,
             }
         }
     );
 
     Ok(Statement::Class(Class {
-        span,
+        class,
         name,
         modifiers,
         extends,
@@ -91,14 +95,16 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 }
 
 pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Expression> {
-    let span = match span {
+    let new = match span {
         Some(span) => span,
         None => utils::skip(state, TokenKind::New)?,
     };
 
     attributes::gather_attributes(state)?;
 
-    let class_span = utils::skip(state, TokenKind::Class)?;
+    let attributes = state.get_attributes();
+
+    let class = utils::skip(state, TokenKind::Class)?;
 
     let arguments = if state.stream.current().kind == TokenKind::LeftParen {
         Some(parameters::argument_list(state)?)
@@ -108,60 +114,57 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
 
     let current = state.stream.current();
     let extends = if current.kind == TokenKind::Extends {
-        let span = current.span;
-
         state.stream.next();
+
+        let extends = current.span;
         let parent = identifiers::full_name(state)?;
 
-        Some(ClassExtends { span, parent })
+        Some(ClassExtends { extends, parent })
     } else {
         None
     };
 
     let current = state.stream.current();
     let implements = if current.kind == TokenKind::Implements {
-        let span = current.span;
-
         state.stream.next();
 
+        let implements = current.span;
         let interfaces =
             utils::at_least_one_comma_separated_no_trailing::<SimpleIdentifier>(state, &|state| {
                 identifiers::full_name(state)
             })?;
 
-        Some(ClassImplements { span, interfaces })
+        Some(ClassImplements {
+            implements,
+            interfaces,
+        })
     } else {
         None
     };
 
-    let attributes = state.get_attributes();
-
     let body = scoped!(state, Scope::AnonymousClass(extends.is_some()), {
-        let start = utils::skip_left_brace(state)?;
-
-        let mut members = Vec::new();
-        while state.stream.current().kind != TokenKind::RightBrace {
-            members.push(member(state, "class@anonymous".to_owned())?);
-        }
-
-        let end = utils::skip_right_brace(state)?;
-
         ClassBody {
-            start,
-            members,
-            end,
+            left_brace: utils::skip_left_brace(state)?,
+            members: {
+                let mut members = Vec::new();
+                while state.stream.current().kind != TokenKind::RightBrace {
+                    members.push(member(state, "class@anonymous".to_owned())?);
+                }
+                members
+            },
+            right_brace: utils::skip_right_brace(state)?,
         }
     });
 
     Ok(Expression::New {
         target: Box::new(Expression::AnonymousClass(AnonymousClass {
-            span: class_span,
+            class,
             extends,
             implements,
             attributes,
             body,
         })),
-        span,
+        new,
         arguments,
     })
 }

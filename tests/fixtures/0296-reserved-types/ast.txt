@@ -7,11 +7,11 @@
     ),
     Interface(
         Interface {
+            attributes: [],
             span: Span(
                 3,
                 1,
             ),
-            attributes: [],
             name: SimpleIdentifier {
                 span: Span(
                     3,
@@ -21,7 +21,7 @@
             },
             extends: Some(
                 InterfaceExtends {
-                    span: Span(
+                    extends: Span(
                         3,
                         16,
                     ),
@@ -52,21 +52,25 @@
                 },
             ),
             body: InterfaceBody {
-                start: Span(
+                left_brace: Span(
                     3,
                     35,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     3,
                     36,
                 ),
-                members: [],
             },
         },
     ),
     Class(
         Class {
-            span: Span(
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
                 5,
                 1,
             ),
@@ -77,12 +81,9 @@
                 ),
                 value: "enum",
             },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
             extends: Some(
                 ClassExtends {
-                    span: Span(
+                    extends: Span(
                         5,
                         12,
                     ),
@@ -97,7 +98,7 @@
             ),
             implements: Some(
                 ClassImplements {
-                    span: Span(
+                    implements: Span(
                         5,
                         25,
                     ),
@@ -127,23 +128,26 @@
                     },
                 },
             ),
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     5,
                     47,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     5,
                     48,
                 ),
-                members: [],
             },
         },
     ),
     Class(
         Class {
-            span: Span(
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
                 6,
                 1,
             ),
@@ -154,12 +158,9 @@
                 ),
                 value: "from",
             },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
             extends: Some(
                 ClassExtends {
-                    span: Span(
+                    extends: Span(
                         6,
                         12,
                     ),
@@ -174,7 +175,7 @@
             ),
             implements: Some(
                 ClassImplements {
-                    span: Span(
+                    implements: Span(
                         6,
                         25,
                     ),
@@ -204,17 +205,16 @@
                     },
                 },
             ),
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     6,
                     60,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     6,
                     61,
                 ),
-                members: [],
             },
         },
     ),

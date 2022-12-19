@@ -14,7 +14,7 @@ use crate::parser::ast::operators::AssignmentOperation;
 use crate::parser::ast::operators::BitwiseOperation;
 use crate::parser::ast::operators::ComparisonOperation;
 use crate::parser::ast::operators::LogicalOperation;
-use crate::parser::ast::{Expression, MagicConst};
+use crate::parser::ast::{Expression, MagicConstant};
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::arrays;
@@ -84,401 +84,424 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
             let op = state.stream.current();
 
-            left =
-                match kind {
-                    TokenKind::Question => {
-                        // this happens due to a comment, or whitespaces between the ? and the :
-                        // we consider `foo() ? : bar()` a ternary expression, with `then` being a noop
-                        // however, this must behave like a short ternary at runtime.
-                        if op.kind == TokenKind::Colon {
-                            state.stream.next();
+            left = match kind {
+                TokenKind::Question => {
+                    // this happens due to a comment, or whitespaces between the ? and the :
+                    // we consider `foo() ? : bar()` a ternary expression, with `then` being a noop
+                    // however, this must behave like a short ternary at runtime.
+                    if op.kind == TokenKind::Colon {
+                        state.stream.next();
 
-                            let r#else = create(state)?;
-
-                            Expression::Ternary {
-                                condition: Box::new(left),
-                                span,
-                                then: Box::new(Expression::Noop),
-                                colon: op.span,
-                                r#else: Box::new(r#else),
-                            }
-                        } else {
-                            let then = create(state)?;
-                            let colon = utils::skip_colon(state)?;
-                            let r#else = create(state)?;
-
-                            Expression::Ternary {
-                                condition: Box::new(left),
-                                span,
-                                then: Box::new(then),
-                                colon,
-                                r#else: Box::new(r#else),
-                            }
-                        }
-                    }
-                    TokenKind::QuestionColon => {
                         let r#else = create(state)?;
-                        Expression::ShortTernary {
+
+                        Expression::Ternary {
                             condition: Box::new(left),
-                            span,
+                            question: span,
+                            then: Box::new(Expression::Noop),
+                            colon: op.span,
+                            r#else: Box::new(r#else),
+                        }
+                    } else {
+                        let then = create(state)?;
+                        let colon = utils::skip_colon(state)?;
+                        let r#else = create(state)?;
+
+                        Expression::Ternary {
+                            condition: Box::new(left),
+                            question: span,
+                            then: Box::new(then),
+                            colon,
                             r#else: Box::new(r#else),
                         }
                     }
-                    TokenKind::Equals if op.kind == TokenKind::Ampersand => {
-                        state.stream.next();
+                }
+                TokenKind::QuestionColon => {
+                    let r#else = create(state)?;
+                    Expression::ShortTernary {
+                        condition: Box::new(left),
+                        question_colon: span,
+                        r#else: Box::new(r#else),
+                    }
+                }
+                TokenKind::Equals if op.kind == TokenKind::Ampersand => {
+                    state.stream.next();
 
-                        // FIXME: You should only be allowed to assign a referencable variable,
-                        //        here, not any old expression.
-                        let right = Box::new(for_precedence(state, rpred)?);
+                    // FIXME: You should only be allowed to assign a referencable variable,
+                    //        here, not any old expression.
+                    let right = Box::new(for_precedence(state, rpred)?);
 
-                        Expression::AssignmentOperation(AssignmentOperation::Assign {
-                            left: Box::new(left),
-                            span,
-                            right: Box::new(Expression::Reference {
-                                span: op.span,
+                    Expression::AssignmentOperation(AssignmentOperation::Assign {
+                        left: Box::new(left),
+                        equals: span,
+                        right: Box::new(Expression::Reference {
+                            span: op.span,
+                            right,
+                        }),
+                    })
+                }
+                TokenKind::Instanceof if op.kind == TokenKind::Self_ => {
+                    if !state.has_class_scope {
+                        return Err(ParseError::CannotFindTypeInCurrentScope(
+                            op.kind.to_string(),
+                            op.span,
+                        ));
+                    }
+
+                    state.stream.next();
+
+                    Expression::Instanceof {
+                        left: Box::new(left),
+                        span,
+                        right: Box::new(Expression::Self_),
+                    }
+                }
+                TokenKind::Instanceof if op.kind == TokenKind::Parent => {
+                    if !state.has_class_scope {
+                        return Err(ParseError::CannotFindTypeInCurrentScope(
+                            op.kind.to_string(),
+                            op.span,
+                        ));
+                    }
+
+                    state.stream.next();
+
+                    Expression::Instanceof {
+                        left: Box::new(left),
+                        span,
+                        right: Box::new(Expression::Parent),
+                    }
+                }
+                TokenKind::Instanceof if op.kind == TokenKind::Static => {
+                    if !state.has_class_scope {
+                        return Err(ParseError::CannotFindTypeInCurrentScope(
+                            op.kind.to_string(),
+                            op.span,
+                        ));
+                    }
+
+                    state.stream.next();
+
+                    Expression::Instanceof {
+                        left: Box::new(left),
+                        span,
+                        right: Box::new(Expression::Static),
+                    }
+                }
+                TokenKind::Instanceof if op.kind == TokenKind::Enum => {
+                    let enum_span = op.span;
+                    state.stream.next();
+
+                    Expression::Instanceof {
+                        left: Box::new(left),
+                        span,
+                        right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: enum_span,
+                                value: "enum".into(),
+                            },
+                        ))),
+                    }
+                }
+                TokenKind::Instanceof if op.kind == TokenKind::From => {
+                    let from_span = op.span;
+                    state.stream.next();
+
+                    Expression::Instanceof {
+                        left: Box::new(left),
+                        span,
+                        right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: from_span,
+                                value: "from".into(),
+                            },
+                        ))),
+                    }
+                }
+                _ => {
+                    let left = Box::new(left);
+                    let right = Box::new(for_precedence(state, rpred)?);
+
+                    match kind {
+                        TokenKind::Plus => {
+                            Expression::ArithmeticOperation(ArithmeticOperation::Addition {
+                                left,
+                                plus: span,
                                 right,
-                            }),
-                        })
-                    }
-                    TokenKind::Instanceof if op.kind == TokenKind::Self_ => {
-                        if !state.has_class_scope {
-                            return Err(ParseError::CannotFindTypeInCurrentScope(
-                                op.kind.to_string(),
-                                op.span,
-                            ));
+                            })
                         }
-
-                        state.stream.next();
-
-                        Expression::Instanceof {
-                            left: Box::new(left),
-                            span,
-                            right: Box::new(Expression::Self_),
+                        TokenKind::Minus => {
+                            Expression::ArithmeticOperation(ArithmeticOperation::Subtraction {
+                                left,
+                                minus: span,
+                                right,
+                            })
                         }
-                    }
-                    TokenKind::Instanceof if op.kind == TokenKind::Parent => {
-                        if !state.has_class_scope {
-                            return Err(ParseError::CannotFindTypeInCurrentScope(
-                                op.kind.to_string(),
-                                op.span,
-                            ));
+                        TokenKind::Asterisk => {
+                            Expression::ArithmeticOperation(ArithmeticOperation::Multiplication {
+                                left,
+                                asterisk: span,
+                                right,
+                            })
                         }
-
-                        state.stream.next();
-
-                        Expression::Instanceof {
-                            left: Box::new(left),
-                            span,
-                            right: Box::new(Expression::Parent),
+                        TokenKind::Slash => {
+                            Expression::ArithmeticOperation(ArithmeticOperation::Division {
+                                left,
+                                slash: span,
+                                right,
+                            })
                         }
-                    }
-                    TokenKind::Instanceof if op.kind == TokenKind::Static => {
-                        if !state.has_class_scope {
-                            return Err(ParseError::CannotFindTypeInCurrentScope(
-                                op.kind.to_string(),
-                                op.span,
-                            ));
+                        TokenKind::Percent => {
+                            Expression::ArithmeticOperation(ArithmeticOperation::Modulo {
+                                left,
+                                percent: span,
+                                right,
+                            })
                         }
-
-                        state.stream.next();
-
-                        Expression::Instanceof {
-                            left: Box::new(left),
-                            span,
-                            right: Box::new(Expression::Static),
+                        TokenKind::Pow => {
+                            Expression::ArithmeticOperation(ArithmeticOperation::Exponentiation {
+                                left,
+                                pow: span,
+                                right,
+                            })
                         }
-                    }
-                    TokenKind::Instanceof if op.kind == TokenKind::Enum => {
-                        let enum_span = op.span;
-                        state.stream.next();
-
-                        Expression::Instanceof {
-                            left: Box::new(left),
-                            span,
-                            right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: enum_span,
-                                    value: "enum".into(),
-                                },
-                            ))),
+                        TokenKind::Equals => {
+                            Expression::AssignmentOperation(AssignmentOperation::Assign {
+                                left,
+                                equals: span,
+                                right,
+                            })
                         }
-                    }
-                    TokenKind::Instanceof if op.kind == TokenKind::From => {
-                        let from_span = op.span;
-                        state.stream.next();
-
-                        Expression::Instanceof {
-                            left: Box::new(left),
-                            span,
-                            right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: from_span,
-                                    value: "from".into(),
-                                },
-                            ))),
+                        TokenKind::PlusEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::Addition {
+                                left,
+                                plus_equals: span,
+                                right,
+                            })
                         }
-                    }
-                    _ => {
-                        let left = Box::new(left);
-                        let right = Box::new(for_precedence(state, rpred)?);
-
-                        match kind {
-                            TokenKind::Plus => {
-                                Expression::ArithmeticOperation(ArithmeticOperation::Addition {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::Minus => {
-                                Expression::ArithmeticOperation(ArithmeticOperation::Subtraction {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::Asterisk => Expression::ArithmeticOperation(
-                                ArithmeticOperation::Multiplication { left, span, right },
-                            ),
-                            TokenKind::Slash => {
-                                Expression::ArithmeticOperation(ArithmeticOperation::Division {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::Percent => {
-                                Expression::ArithmeticOperation(ArithmeticOperation::Modulo {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::Pow => Expression::ArithmeticOperation(
-                                ArithmeticOperation::Exponentiation { left, span, right },
-                            ),
-                            TokenKind::Equals => {
-                                Expression::AssignmentOperation(AssignmentOperation::Assign {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::PlusEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::Addition {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::MinusEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::Subtraction {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::AsteriskEqual => Expression::AssignmentOperation(
-                                AssignmentOperation::Multiplication { left, span, right },
-                            ),
-                            TokenKind::SlashEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::Division {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::PercentEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::Modulo {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::PowEquals => Expression::AssignmentOperation(
-                                AssignmentOperation::Exponentiation { left, span, right },
-                            ),
-                            TokenKind::AmpersandEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::BitwiseAnd {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::PipeEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::BitwiseOr {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::CaretEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::BitwiseXor {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::LeftShiftEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::LeftShift {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::RightShiftEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::RightShift {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::CoalesceEqual => {
-                                Expression::AssignmentOperation(AssignmentOperation::Coalesce {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::DotEquals => {
-                                Expression::AssignmentOperation(AssignmentOperation::Concat {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::Ampersand => {
-                                Expression::BitwiseOperation(BitwiseOperation::And {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::Pipe => Expression::BitwiseOperation(BitwiseOperation::Or {
+                        TokenKind::MinusEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::Subtraction {
+                                left,
+                                minus_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::AsteriskEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::Multiplication {
+                                left,
+                                asterisk_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::SlashEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::Division {
+                                left,
+                                slash_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::PercentEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::Modulo {
+                                left,
+                                percent_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::PowEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::Exponentiation {
+                                left,
+                                pow_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::AmpersandEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::BitwiseAnd {
+                                left,
+                                ampersand_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::PipeEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::BitwiseOr {
+                                left,
+                                pipe_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::CaretEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::BitwiseXor {
+                                left,
+                                caret_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::LeftShiftEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::LeftShift {
+                                left,
+                                left_shift_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::RightShiftEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::RightShift {
+                                left,
+                                right_shift_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::DoubleQuestionEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::Coalesce {
+                                left,
+                                coalesce_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::DotEquals => {
+                            Expression::AssignmentOperation(AssignmentOperation::Concat {
+                                left,
+                                dot_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::Ampersand => {
+                            Expression::BitwiseOperation(BitwiseOperation::And {
                                 left,
                                 span,
                                 right,
-                            }),
-                            TokenKind::Caret => {
-                                Expression::BitwiseOperation(BitwiseOperation::Xor {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::LeftShift => {
-                                Expression::BitwiseOperation(BitwiseOperation::LeftShift {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::RightShift => {
-                                Expression::BitwiseOperation(BitwiseOperation::RightShift {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::DoubleEquals => {
-                                Expression::ComparisonOperation(ComparisonOperation::Equal {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::TripleEquals => {
-                                Expression::ComparisonOperation(ComparisonOperation::Identical {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::BangEquals => {
-                                Expression::ComparisonOperation(ComparisonOperation::NotEqual {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::AngledLeftRight => Expression::ComparisonOperation(
-                                ComparisonOperation::AngledNotEqual { left, span, right },
-                            ),
-                            TokenKind::BangDoubleEquals => {
-                                Expression::ComparisonOperation(ComparisonOperation::NotIdentical {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::LessThan => {
-                                Expression::ComparisonOperation(ComparisonOperation::LessThan {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::GreaterThan => {
-                                Expression::ComparisonOperation(ComparisonOperation::GreaterThan {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::LessThanEquals => Expression::ComparisonOperation(
-                                ComparisonOperation::LessThanOrEqual { left, span, right },
-                            ),
-                            TokenKind::GreaterThanEquals => Expression::ComparisonOperation(
-                                ComparisonOperation::GreaterThanOrEqual { left, span, right },
-                            ),
-                            TokenKind::Spaceship => {
-                                Expression::ComparisonOperation(ComparisonOperation::Spaceship {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::BooleanAnd => {
-                                Expression::LogicalOperation(LogicalOperation::And {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::BooleanOr => {
-                                Expression::LogicalOperation(LogicalOperation::Or {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::LogicalAnd => {
-                                Expression::LogicalOperation(LogicalOperation::LogicalAnd {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::LogicalOr => {
-                                Expression::LogicalOperation(LogicalOperation::LogicalOr {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::LogicalXor => {
-                                Expression::LogicalOperation(LogicalOperation::LogicalXor {
-                                    left,
-                                    span,
-                                    right,
-                                })
-                            }
-                            TokenKind::Dot => Expression::Concat { left, span, right },
-                            TokenKind::Instanceof => Expression::Instanceof { left, span, right },
-                            _ => todo!(),
+                            })
                         }
+                        TokenKind::Pipe => {
+                            Expression::BitwiseOperation(BitwiseOperation::Or { left, span, right })
+                        }
+                        TokenKind::Caret => Expression::BitwiseOperation(BitwiseOperation::Xor {
+                            left,
+                            span,
+                            right,
+                        }),
+                        TokenKind::LeftShift => {
+                            Expression::BitwiseOperation(BitwiseOperation::LeftShift {
+                                left,
+                                span,
+                                right,
+                            })
+                        }
+                        TokenKind::RightShift => {
+                            Expression::BitwiseOperation(BitwiseOperation::RightShift {
+                                left,
+                                span,
+                                right,
+                            })
+                        }
+                        TokenKind::DoubleEquals => {
+                            Expression::ComparisonOperation(ComparisonOperation::Equal {
+                                left,
+                                double_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::TripleEquals => {
+                            Expression::ComparisonOperation(ComparisonOperation::Identical {
+                                left,
+                                triple_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::BangEquals => {
+                            Expression::ComparisonOperation(ComparisonOperation::NotEqual {
+                                left,
+                                bang_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::AngledLeftRight => {
+                            Expression::ComparisonOperation(ComparisonOperation::AngledNotEqual {
+                                left,
+                                angled_left_right: span,
+                                right,
+                            })
+                        }
+                        TokenKind::BangDoubleEquals => {
+                            Expression::ComparisonOperation(ComparisonOperation::NotIdentical {
+                                left,
+                                bang_double_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::LessThan => {
+                            Expression::ComparisonOperation(ComparisonOperation::LessThan {
+                                left,
+                                less_than: span,
+                                right,
+                            })
+                        }
+                        TokenKind::GreaterThan => {
+                            Expression::ComparisonOperation(ComparisonOperation::GreaterThan {
+                                left,
+                                greater_than: span,
+                                right,
+                            })
+                        }
+                        TokenKind::LessThanEquals => {
+                            Expression::ComparisonOperation(ComparisonOperation::LessThanOrEqual {
+                                left,
+                                less_than_equals: span,
+                                right,
+                            })
+                        }
+                        TokenKind::GreaterThanEquals => Expression::ComparisonOperation(
+                            ComparisonOperation::GreaterThanOrEqual {
+                                left,
+                                greater_than_equals: span,
+                                right,
+                            },
+                        ),
+                        TokenKind::Spaceship => {
+                            Expression::ComparisonOperation(ComparisonOperation::Spaceship {
+                                left,
+                                spaceship: span,
+                                right,
+                            })
+                        }
+                        TokenKind::BooleanAnd => {
+                            Expression::LogicalOperation(LogicalOperation::And {
+                                left,
+                                double_ampersand: span,
+                                right,
+                            })
+                        }
+                        TokenKind::BooleanOr => {
+                            Expression::LogicalOperation(LogicalOperation::Or {
+                                left,
+                                double_pipe: span,
+                                right,
+                            })
+                        }
+                        TokenKind::LogicalAnd => {
+                            Expression::LogicalOperation(LogicalOperation::LogicalAnd {
+                                left,
+                                and: span,
+                                right,
+                            })
+                        }
+                        TokenKind::LogicalOr => {
+                            Expression::LogicalOperation(LogicalOperation::LogicalOr {
+                                left,
+                                or: span,
+                                right,
+                            })
+                        }
+                        TokenKind::LogicalXor => {
+                            Expression::LogicalOperation(LogicalOperation::LogicalXor {
+                                left,
+                                xor: span,
+                                right,
+                            })
+                        }
+                        TokenKind::Dot => Expression::Concat { left, span, right },
+                        TokenKind::Instanceof => Expression::Instanceof { left, span, right },
+                        _ => todo!(),
                     }
-                };
+                }
+            };
 
             continue;
         }
@@ -867,12 +890,12 @@ expressions! {
 
     #[before(directory_magic_constant), current(TokenKind::New)]
     new({
-        let span = state.stream.current().span;
+        let new = state.stream.current().span;
 
         state.stream.next();
 
         if state.stream.current().kind == TokenKind::Class || state.stream.current().kind == TokenKind::Attribute {
-            return classes::parse_anonymous(state, Some(span));
+            return classes::parse_anonymous(state, Some(new));
         };
 
         let target = match state.stream.current().kind {
@@ -916,7 +939,7 @@ expressions! {
 
         Ok(Expression::New {
             target: Box::new(target),
-            span,
+            new,
             arguments,
         })
     })
@@ -926,10 +949,7 @@ expressions! {
         let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::MagicConst {
-            span,
-            constant: MagicConst::Directory
-        })
+        Ok(Expression::MagicConstant(MagicConstant::Directory(span)))
     })
 
     #[before(line_magic_constant), current(TokenKind::FileConstant)]
@@ -937,10 +957,7 @@ expressions! {
         let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::MagicConst {
-            span,
-            constant: MagicConst::File
-        })
+        Ok(Expression::MagicConstant(MagicConstant::File(span)))
     })
 
     #[before(function_magic_constant), current(TokenKind::LineConstant)]
@@ -948,10 +965,7 @@ expressions! {
         let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::MagicConst {
-            span,
-            constant: MagicConst::Line
-        })
+        Ok(Expression::MagicConstant(MagicConstant::Line(span)))
     })
 
     #[before(class_magic_constant), current(TokenKind::FunctionConstant)]
@@ -959,10 +973,7 @@ expressions! {
         let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::MagicConst {
-            span,
-            constant: MagicConst::Function,
-        })
+        Ok(Expression::MagicConstant(MagicConstant::Function(span)))
     })
 
     #[before(method_magic_constant), current(TokenKind::ClassConstant)]
@@ -970,10 +981,7 @@ expressions! {
         let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::MagicConst {
-            span,
-            constant: MagicConst::Class,
-        })
+        Ok(Expression::MagicConstant(MagicConstant::Class(span)))
     })
 
     #[before(namespace_magic_constant), current(TokenKind::MethodConstant)]
@@ -981,10 +989,7 @@ expressions! {
         let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::MagicConst {
-            span,
-            constant: MagicConst::Method,
-        })
+        Ok(Expression::MagicConstant(MagicConstant::Method(span)))
     })
 
     #[before(trait_magic_constant), current(TokenKind::NamespaceConstant)]
@@ -992,10 +997,7 @@ expressions! {
         let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::MagicConst {
-            span,
-            constant: MagicConst::Namespace,
-        })
+        Ok(Expression::MagicConstant(MagicConstant::Namespace(span)))
     })
 
     #[before(include), current(TokenKind::TraitConstant)]
@@ -1003,10 +1005,7 @@ expressions! {
         let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::MagicConst {
-            span,
-            constant: MagicConst::Trait
-        })
+        Ok(Expression::MagicConstant(MagicConstant::Trait(span)))
     })
 
     #[before(cast_prefix), current(TokenKind::Include | TokenKind::IncludeOnce | TokenKind::Require | TokenKind::RequireOnce)]
@@ -1061,10 +1060,10 @@ expressions! {
 
         let right = Box::new(for_precedence(state, Precedence::Prefix)?);
         let expr = match op {
-            TokenKind::Minus => Expression::ArithmeticOperation(ArithmeticOperation::Negative { span, right }),
-            TokenKind::Plus => Expression::ArithmeticOperation(ArithmeticOperation::Positive { span, right }),
-            TokenKind::Decrement => Expression::ArithmeticOperation(ArithmeticOperation::PreDecrement { span, right }),
-            TokenKind::Increment => Expression::ArithmeticOperation(ArithmeticOperation::PreIncrement { span, right }),
+            TokenKind::Minus => Expression::ArithmeticOperation(ArithmeticOperation::Negative { minus: span, right }),
+            TokenKind::Plus => Expression::ArithmeticOperation(ArithmeticOperation::Positive { plus: span, right }),
+            TokenKind::Decrement => Expression::ArithmeticOperation(ArithmeticOperation::PreDecrement { decrement: span, right }),
+            TokenKind::Increment => Expression::ArithmeticOperation(ArithmeticOperation::PreIncrement { increment: span, right }),
             _ => unreachable!(),
         };
 
@@ -1073,14 +1072,14 @@ expressions! {
 
     #[before(at_prefix), current(TokenKind::Bang)]
     bang_prefix({
-        let span = state.stream.current().span;
+        let bang = state.stream.current().span;
 
         state.stream.next();
 
         let rhs = for_precedence(state, Precedence::Bang)?;
 
         Ok(Expression::LogicalOperation(LogicalOperation::Not {
-            span,
+            bang,
             right: Box::new(rhs)
         }))
     })
@@ -1141,13 +1140,15 @@ fn unexpected_token(state: &mut State) -> ParseResult<Expression> {
 
 fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Expression, ParseError> {
     Ok(match op {
-        TokenKind::Coalesce => {
+        TokenKind::DoubleQuestion => {
+            let double_question = state.stream.current().span;
             state.stream.next();
 
             let rhs = null_coalesce_precedence(state)?;
 
             Expression::Coalesce {
                 lhs: Box::new(lhs),
+                double_question,
                 rhs: Box::new(rhs),
             }
         }
@@ -1162,9 +1163,9 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
 
                 let placeholder = ArgumentPlaceholder {
                     comments: state.stream.comments(),
-                    start,
+                    left_parenthesis: start,
                     ellipsis,
-                    end,
+                    right_parenthesis: end,
                 };
 
                 Expression::FunctionClosureCreation {
@@ -1180,27 +1181,16 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                 }
             }
         }
-        TokenKind::LeftBracket => {
-            utils::skip_left_bracket(state)?;
-
-            if state.stream.current().kind == TokenKind::RightBracket {
-                state.stream.next();
-
-                Expression::ArrayIndex {
-                    array: Box::new(lhs),
-                    index: None,
-                }
+        TokenKind::LeftBracket => Expression::ArrayIndex {
+            array: Box::new(lhs),
+            left_bracket: utils::skip_left_bracket(state)?,
+            index: if state.stream.current().kind == TokenKind::RightBracket {
+                None
             } else {
-                let index = create(state)?;
-
-                utils::skip_right_bracket(state)?;
-
-                Expression::ArrayIndex {
-                    array: Box::new(lhs),
-                    index: Some(Box::new(index)),
-                }
-            }
-        }
+                Some(create(state).map(Box::new)?)
+            },
+            right_bracket: utils::skip_right_bracket(state)?,
+        },
         TokenKind::DoubleColon => {
             let span = utils::skip_double_colon(state)?;
 
@@ -1263,9 +1253,9 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
 
                         let placeholder = ArgumentPlaceholder {
                             comments: state.stream.comments(),
-                            start,
+                            left_parenthesis: start,
                             ellipsis,
-                            end,
+                            right_parenthesis: end,
                         };
 
                         Expression::StaticMethodClosureCreation {
@@ -1297,12 +1287,12 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                 //    that we're parsing a static property fetch.
                 _ => Expression::StaticPropertyFetch {
                     target: lhs,
-                    span,
+                    double_colon: span,
                     property: Box::new(property),
                 },
             }
         }
-        TokenKind::Arrow | TokenKind::NullsafeArrow => {
+        TokenKind::Arrow | TokenKind::QuestionArrow => {
             let span = state.stream.current().span;
             state.stream.next();
 
@@ -1335,13 +1325,13 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             };
 
             if state.stream.current().kind == TokenKind::LeftParen {
-                if op == &TokenKind::NullsafeArrow {
+                if op == &TokenKind::QuestionArrow {
                     let arguments = parameters::argument_list(state)?;
 
                     Expression::NullsafeMethodCall {
                         target: Box::new(lhs),
                         method: Box::new(property),
-                        span,
+                        question_arrow: span,
                         arguments,
                     }
                 } else {
@@ -1355,15 +1345,15 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
 
                         let placeholder = ArgumentPlaceholder {
                             comments: state.stream.comments(),
-                            start,
+                            left_parenthesis: start,
                             ellipsis,
-                            end,
+                            right_parenthesis: end,
                         };
 
                         Expression::MethodClosureCreation {
                             target: Box::new(lhs),
                             method: Box::new(property),
-                            span,
+                            arrow: span,
                             placeholder,
                         }
                     } else {
@@ -1372,21 +1362,21 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                         Expression::MethodCall {
                             target: Box::new(lhs),
                             method: Box::new(property),
-                            span,
+                            arrow: span,
                             arguments,
                         }
                     }
                 }
-            } else if op == &TokenKind::NullsafeArrow {
+            } else if op == &TokenKind::QuestionArrow {
                 Expression::NullsafePropertyFetch {
                     target: Box::new(lhs),
-                    span,
+                    question_arrow: span,
                     property: Box::new(property),
                 }
             } else {
                 Expression::PropertyFetch {
                     target: Box::new(lhs),
-                    span,
+                    arrow: span,
                     property: Box::new(property),
                 }
             }
@@ -1397,7 +1387,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
 
             Expression::ArithmeticOperation(ArithmeticOperation::PostIncrement {
                 left: Box::new(lhs),
-                span,
+                increment: span,
             })
         }
         TokenKind::Decrement => {
@@ -1406,7 +1396,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
 
             Expression::ArithmeticOperation(ArithmeticOperation::PostDecrement {
                 left: Box::new(lhs),
-                span,
+                decrement: span,
             })
         }
         _ => todo!("postfix: {:?}", op),
@@ -1457,8 +1447,8 @@ fn is_infix(t: &TokenKind) -> bool {
             | TokenKind::PlusEquals
             | TokenKind::MinusEquals
             | TokenKind::DotEquals
-            | TokenKind::CoalesceEqual
-            | TokenKind::AsteriskEqual
+            | TokenKind::DoubleQuestionEquals
+            | TokenKind::AsteriskEquals
             | TokenKind::SlashEquals
     )
 }
@@ -1472,8 +1462,8 @@ fn is_postfix(t: &TokenKind) -> bool {
             | TokenKind::LeftParen
             | TokenKind::LeftBracket
             | TokenKind::Arrow
-            | TokenKind::NullsafeArrow
+            | TokenKind::QuestionArrow
             | TokenKind::DoubleColon
-            | TokenKind::Coalesce
+            | TokenKind::DoubleQuestion
     )
 }

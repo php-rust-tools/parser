@@ -122,7 +122,6 @@ pub enum Statement {
     Interface(Interface),
     If(IfStatement),
     Switch {
-        #[serde(flatten)]
         condition: Parenthesized<Expression>,
         cases: Vec<Case>,
     },
@@ -305,21 +304,21 @@ pub enum Expression {
     // `$foo->bar(1, 2, 3)`
     MethodCall {
         target: Box<Self>,       // `$foo`
-        span: Span,              // `->`
+        arrow: Span,             // `->`
         method: Box<Self>,       // `bar`
         arguments: ArgumentList, // `(1, 2, 3)`
     },
     // `$foo->bar(...)`
     MethodClosureCreation {
         target: Box<Self>,                // `$foo`
-        span: Span,                       // `->`
+        arrow: Span,                      // `->`
         method: Box<Self>,                // `bar`
         placeholder: ArgumentPlaceholder, // `(...)`
     },
     // `$foo?->bar(1, 2, 3)`
     NullsafeMethodCall {
         target: Box<Self>,       // `$foo`
-        span: Span,              // `?->`
+        question_arrow: Span,    // `?->`
         method: Box<Self>,       // `bar`
         arguments: ArgumentList, // `(1, 2, 3)`
     },
@@ -358,7 +357,7 @@ pub enum Expression {
     ArrowFunction(ArrowFunction),
     // `new Foo(1, 2, 3)`
     New {
-        span: Span,                      // `new`
+        new: Span,                       // `new`
         target: Box<Self>,               // `Foo`
         arguments: Option<ArgumentList>, // `(1, 2, 3)`
     },
@@ -381,19 +380,19 @@ pub enum Expression {
     // `foo()->bar`
     PropertyFetch {
         target: Box<Self>,   // `foo()`
-        span: Span,          // `->`
+        arrow: Span,         // `->`
         property: Box<Self>, // `bar`
     },
     // `foo()?->bar`
     NullsafePropertyFetch {
-        target: Box<Self>,   // `foo()`
-        span: Span,          // `?->`
-        property: Box<Self>, // `bar`
+        target: Box<Self>,    // `foo()`
+        question_arrow: Span, // `?->`
+        property: Box<Self>,  // `bar`
     },
     // `foo()::bar`
     StaticPropertyFetch {
         target: Box<Self>,   // `foo()`
-        span: Span,          // `::`
+        double_colon: Span,  // `::`
         property: Box<Self>, // `bar`
     },
     ConstFetch {
@@ -406,29 +405,30 @@ pub enum Expression {
     },
     ArrayIndex {
         array: Box<Self>,
+        left_bracket: Span,
         index: Option<Box<Self>>,
+        right_bracket: Span,
     },
     Null,
-    MagicConst {
-        span: Span,
-        constant: MagicConst,
-    },
+    MagicConstant(MagicConstant),
     // `foo() ?: bar()`
     ShortTernary {
         condition: Box<Self>, // `foo()`
-        span: Span,           // `?:`
+        question_colon: Span, // `?:`
         r#else: Box<Self>,    // `bar()`
     },
     // `foo() ? bar() : baz()`
     Ternary {
         condition: Box<Self>, // `foo()`
-        span: Span,           // `?`
+        question: Span,       // `?`
         then: Box<Self>,      // `bar()`
         colon: Span,          // `:`
         r#else: Box<Self>,    // `baz()`
     },
+    // `foo() ?? bar()`
     Coalesce {
         lhs: Box<Self>,
+        double_question: Span,
         rhs: Box<Self>,
     },
     Clone {
@@ -484,16 +484,16 @@ pub struct MatchArm {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
-pub enum MagicConst {
-    Directory,
-    File,
-    Line,
-    Class,
-    Function,
-    Method,
-    Namespace,
-    Trait,
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+pub enum MagicConstant {
+    Directory(Span),
+    File(Span),
+    Line(Span),
+    Class(Span),
+    Function(Span),
+    Method(Span),
+    Namespace(Span),
+    Trait(Span),
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

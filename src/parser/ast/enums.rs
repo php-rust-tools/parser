@@ -29,9 +29,9 @@ pub enum UnitEnumMember {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct UnitEnumBody {
-    pub start: Span,                  // `{`
-    pub end: Span,                    // `}`
+    pub left_brace: Span,             // `{`
     pub members: Vec<UnitEnumMember>, // `...`
+    pub right_brace: Span,            // `}`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -55,11 +55,11 @@ pub enum BackedEnumType {
 #[serde(rename_all = "snake_case")]
 pub struct BackedEnumCase {
     pub attributes: Vec<AttributeGroup>, // `#[Foo]`
-    pub start: Span,                     // `case`
+    pub case: Span,                      // `case`
     pub name: SimpleIdentifier,          // `Bar`
-    pub span: Span,                      // `=`
+    pub equals: Span,                    // `=`
     pub value: Expression,               // `123`
-    pub end: Span,                       // `;`
+    pub semicolon: Span,                 // `;`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -73,9 +73,9 @@ pub enum BackedEnumMember {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BackedEnumBody {
-    pub start: Span,                    // `{`
+    pub left_brace: Span,               // `{`
     pub members: Vec<BackedEnumMember>, // `...`
-    pub end: Span,                      // `}`
+    pub right_brace: Span,              // `}`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

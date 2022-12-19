@@ -19,23 +19,23 @@ pub enum InterfaceMember {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct InterfaceExtends {
-    pub span: Span,                                // `extends`
+    pub extends: Span,                             // `extends`
     pub parents: CommaSeparated<SimpleIdentifier>, // `Foo`, `Bar`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct InterfaceBody {
-    pub start: Span,                   // `{`
-    pub end: Span,                     // `}`
+    pub left_brace: Span,              // `{`
     pub members: Vec<InterfaceMember>, // `public const FOO = 123;`, `public function foo(): void;`
+    pub right_brace: Span,             // `}`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Interface {
-    pub span: Span,                        // `interface`
     pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
+    pub span: Span,                        // `interface`
     pub name: SimpleIdentifier,            // `Foo`
     pub extends: Option<InterfaceExtends>, // `extends Bar`
     pub body: InterfaceBody,               // `{ ... }`

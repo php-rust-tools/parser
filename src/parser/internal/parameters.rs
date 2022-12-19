@@ -259,8 +259,8 @@ pub fn argument_list(state: &mut State) -> ParseResult<ArgumentList> {
 
     Ok(ArgumentList {
         comments,
-        start,
-        end,
+        left_parenthesis: start,
+        right_parenthesis: end,
         arguments,
     })
 }

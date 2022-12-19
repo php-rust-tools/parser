@@ -13,7 +13,7 @@ use crate::parser::ast::Expression;
 #[serde(rename_all = "snake_case")]
 pub struct ConstantEntry {
     pub name: SimpleIdentifier, // `FOO`
-    pub span: Span,             // `=`
+    pub equals: Span,           // `=`
     pub value: Expression,      // `123`
 }
 
@@ -21,9 +21,9 @@ pub struct ConstantEntry {
 #[serde(rename_all = "snake_case")]
 pub struct Constant {
     pub comments: CommentGroup,
-    pub start: Span,                 // `const`
+    pub r#const: Span,               // `const`
     pub entries: Vec<ConstantEntry>, // `FOO = 123`
-    pub end: Span,                   // `;`
+    pub semicolon: Span,             // `;`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -32,8 +32,8 @@ pub struct ClassishConstant {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,  // `#[Foo]`
     pub modifiers: ConstantModifierGroup, // `public`
-    pub start: Span,                      // `const`
+    pub r#const: Span,                    // `const`
     #[serde(flatten)]
     pub entries: Vec<ConstantEntry>, // `FOO = 123`
-    pub end: Span,                        // `;`
+    pub semicolon: Span,                  // `;`
 }

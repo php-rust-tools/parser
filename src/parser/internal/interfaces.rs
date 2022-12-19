@@ -38,7 +38,10 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
                 identifiers::full_type_name(state)
             })?;
 
-        Some(InterfaceExtends { span, parents })
+        Some(InterfaceExtends {
+            extends: span,
+            parents,
+        })
     } else {
         None
     };
@@ -46,19 +49,19 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let attributes = state.get_attributes();
 
     let body = scoped!(state, Scope::Interface(name.clone()), {
-        let start = utils::skip_left_brace(state)?;
+        let left_brace = utils::skip_left_brace(state)?;
 
         let mut members = Vec::new();
         while state.stream.current().kind != TokenKind::RightBrace {
             members.push(member(state)?);
         }
 
-        let end = utils::skip_right_brace(state)?;
+        let right_brace = utils::skip_right_brace(state)?;
 
         InterfaceBody {
-            start,
+            left_brace,
             members,
-            end,
+            right_brace,
         }
     });
 

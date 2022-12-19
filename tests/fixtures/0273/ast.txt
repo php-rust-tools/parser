@@ -7,7 +7,11 @@
     ),
     Class(
         Class {
-            span: Span(
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
                 3,
                 1,
             ),
@@ -18,20 +22,12 @@
                 ),
                 value: "a",
             },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
             extends: None,
             implements: None,
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     3,
                     9,
-                ),
-                end: Span(
-                    7,
-                    1,
                 ),
                 members: [
                     Method(
@@ -85,7 +81,7 @@
                                                         },
                                                     ),
                                                 ),
-                                                span: Span(
+                                                equals: Span(
                                                     5,
                                                     12,
                                                 ),
@@ -110,12 +106,12 @@
                                                         comments: CommentGroup {
                                                             comments: [],
                                                         },
-                                                        start: Span(
+                                                        left_parenthesis: Span(
                                                             5,
                                                             25,
                                                         ),
                                                         arguments: [],
-                                                        end: Span(
+                                                        right_parenthesis: Span(
                                                             5,
                                                             26,
                                                         ),
@@ -147,6 +143,10 @@
                         },
                     ),
                 ],
+                right_brace: Span(
+                    7,
+                    1,
+                ),
             },
         },
     ),

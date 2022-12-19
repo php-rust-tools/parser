@@ -7,10 +7,6 @@
     ),
     Interface(
         Interface {
-            span: Span(
-                5,
-                1,
-            ),
             attributes: [
                 AttributeGroup {
                     start: Span(
@@ -109,6 +105,10 @@
                     ],
                 },
             ],
+            span: Span(
+                5,
+                1,
+            ),
             name: SimpleIdentifier {
                 span: Span(
                     5,
@@ -118,7 +118,7 @@
             },
             extends: Some(
                 InterfaceExtends {
-                    span: Span(
+                    extends: Span(
                         5,
                         13,
                     ),
@@ -149,13 +149,9 @@
                 },
             ),
             body: InterfaceBody {
-                start: Span(
+                left_brace: Span(
                     5,
                     26,
-                ),
-                end: Span(
-                    26,
-                    1,
                 ),
                 members: [
                     Constant(
@@ -198,7 +194,7 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [],
                             },
-                            start: Span(
+                            const: Span(
                                 7,
                                 5,
                             ),
@@ -211,7 +207,7 @@
                                         ),
                                         value: "F",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         7,
                                         13,
                                     ),
@@ -228,7 +224,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 7,
                                 18,
                             ),
@@ -281,7 +277,7 @@
                                     ),
                                 ],
                             },
-                            start: Span(
+                            const: Span(
                                 10,
                                 12,
                             ),
@@ -294,7 +290,7 @@
                                         ),
                                         value: "O",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         10,
                                         20,
                                     ),
@@ -311,7 +307,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 10,
                                 25,
                             ),
@@ -400,7 +396,7 @@
                                     ),
                                 ],
                             },
-                            start: Span(
+                            const: Span(
                                 14,
                                 18,
                             ),
@@ -413,7 +409,7 @@
                                         ),
                                         value: "R",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         14,
                                         26,
                                     ),
@@ -437,7 +433,7 @@
                                         ),
                                         value: "P",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         14,
                                         35,
                                     ),
@@ -454,7 +450,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 14,
                                 40,
                             ),
@@ -537,7 +533,7 @@
                                     ),
                                 ],
                             },
-                            start: Span(
+                            const: Span(
                                 18,
                                 11,
                             ),
@@ -550,7 +546,7 @@
                                         ),
                                         value: "M",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         18,
                                         19,
                                     ),
@@ -567,7 +563,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 18,
                                 23,
                             ),
@@ -786,6 +782,10 @@
                         },
                     ),
                 ],
+                right_brace: Span(
+                    26,
+                    1,
+                ),
             },
         },
     ),

@@ -19,32 +19,28 @@
                         },
                     ),
                 ),
-                span: Span(
+                equals: Span(
                     3,
                     4,
                 ),
                 right: New {
-                    span: Span(
+                    new: Span(
                         3,
                         6,
                     ),
                     target: AnonymousClass(
                         AnonymousClass {
                             attributes: [],
-                            span: Span(
+                            class: Span(
                                 3,
                                 10,
                             ),
                             extends: None,
                             implements: None,
                             body: ClassBody {
-                                start: Span(
+                                left_brace: Span(
                                     3,
                                     16,
-                                ),
-                                end: Span(
-                                    7,
-                                    1,
                                 ),
                                 members: [
                                     Method(
@@ -131,6 +127,10 @@
                                         },
                                     ),
                                 ],
+                                right_brace: Span(
+                                    7,
+                                    1,
+                                ),
                             },
                         },
                     ),

@@ -28,16 +28,16 @@ pub enum Argument {
 #[serde(rename_all = "snake_case")]
 pub struct ArgumentList {
     pub comments: CommentGroup,
-    pub start: Span,              // `(`
+    pub left_parenthesis: Span,   // `(`
     pub arguments: Vec<Argument>, // `$var`, `...$var`, `foo: $var`, `foo: ...$var`
-    pub end: Span,                // `)`
+    pub right_parenthesis: Span,  // `)`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ArgumentPlaceholder {
     pub comments: CommentGroup,
-    pub start: Span,    // `(`
-    pub ellipsis: Span, // `...`
-    pub end: Span,      // `)`
+    pub left_parenthesis: Span,  // `(`
+    pub ellipsis: Span,          // `...`
+    pub right_parenthesis: Span, // `)`
 }

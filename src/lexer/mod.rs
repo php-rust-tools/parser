@@ -197,11 +197,11 @@ impl Lexer {
             }
             [b'?', b'?', b'='] => {
                 state.source.skip(3);
-                TokenKind::CoalesceEqual
+                TokenKind::DoubleQuestionEquals
             }
             [b'?', b'-', b'>'] => {
                 state.source.skip(3);
-                TokenKind::NullsafeArrow
+                TokenKind::QuestionArrow
             }
             [b'=', b'=', b'='] => {
                 state.source.skip(3);
@@ -250,7 +250,7 @@ impl Lexer {
             }
             [b'?', b'?', ..] => {
                 state.source.skip(2);
-                TokenKind::Coalesce
+                TokenKind::DoubleQuestion
             }
             [b'?', b':', ..] => {
                 state.source.skip(2);
@@ -542,7 +542,7 @@ impl Lexer {
             }
             [b'*', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::AsteriskEqual
+                TokenKind::AsteriskEquals
             }
             [b'*', ..] => {
                 state.source.next();
@@ -1373,7 +1373,7 @@ impl Lexer {
         let kind = match state.source.read(3) {
             [b'?', b'-', b'>'] => {
                 state.source.skip(3);
-                TokenKind::NullsafeArrow
+                TokenKind::QuestionArrow
             }
             [b'-', b'>', ..] => {
                 state.source.skip(2);
