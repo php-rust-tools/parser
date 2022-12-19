@@ -31,19 +31,28 @@
                     1,
                     19,
                 ),
-                members: [],
+                parameters: CommaSeparated {
+                    inner: [],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     1,
                     20,
                 ),
             },
             return_type: Some(
-                String(
-                    Span(
+                ReturnType {
+                    colon: Span(
                         1,
-                        23,
+                        21,
                     ),
-                ),
+                    data_type: String(
+                        Span(
+                            1,
+                            23,
+                        ),
+                    ),
+                },
             ),
             body: FunctionBody {
                 comments: CommentGroup {

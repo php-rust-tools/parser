@@ -56,8 +56,8 @@
                                     17,
                                 ),
                                 members: [
-                                    Method(
-                                        Method {
+                                    ConcreteConstructor(
+                                        ConcreteConstructor {
                                             comments: CommentGroup {
                                                 comments: [],
                                             },
@@ -84,7 +84,7 @@
                                                 ),
                                                 value: "__construct",
                                             },
-                                            parameters: MethodParameterList {
+                                            parameters: ConstructorParameterList {
                                                 comments: CommentGroup {
                                                     comments: [],
                                                 },
@@ -92,67 +92,77 @@
                                                     6,
                                                     33,
                                                 ),
-                                                members: [
-                                                    MethodParameter {
-                                                        attributes: [],
-                                                        comments: CommentGroup {
-                                                            comments: [],
-                                                        },
-                                                        ampersand: None,
-                                                        name: SimpleVariable {
-                                                            span: Span(
-                                                                7,
-                                                                34,
-                                                            ),
-                                                            name: "name",
-                                                        },
-                                                        type: Some(
-                                                            String(
-                                                                Span(
+                                                parameters: CommaSeparated {
+                                                    inner: [
+                                                        ConstructorParameter {
+                                                            attributes: [],
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
+                                                            ampersand: None,
+                                                            name: SimpleVariable {
+                                                                span: Span(
                                                                     7,
-                                                                    27,
+                                                                    34,
                                                                 ),
-                                                            ),
-                                                        ),
-                                                        ellipsis: None,
-                                                        default: Some(
-                                                            Literal(
+                                                                name: "name",
+                                                            },
+                                                            data_type: Some(
                                                                 String(
-                                                                    LiteralString {
-                                                                        value: "foo",
-                                                                        span: Span(
-                                                                            7,
-                                                                            42,
-                                                                        ),
-                                                                    },
+                                                                    Span(
+                                                                        7,
+                                                                        27,
+                                                                    ),
                                                                 ),
                                                             ),
-                                                        ),
-                                                        modifiers: PromotedPropertyModifierGroup {
-                                                            modifiers: [
-                                                                Public(
-                                                                    Span(
-                                                                        7,
-                                                                        11,
+                                                            ellipsis: None,
+                                                            default: Some(
+                                                                Literal(
+                                                                    String(
+                                                                        LiteralString {
+                                                                            value: "foo",
+                                                                            span: Span(
+                                                                                7,
+                                                                                42,
+                                                                            ),
+                                                                        },
                                                                     ),
                                                                 ),
-                                                                Readonly(
-                                                                    Span(
-                                                                        7,
-                                                                        18,
+                                                            ),
+                                                            modifiers: PromotedPropertyModifierGroup {
+                                                                modifiers: [
+                                                                    Public(
+                                                                        Span(
+                                                                            7,
+                                                                            11,
+                                                                        ),
                                                                     ),
-                                                                ),
-                                                            ],
+                                                                    Readonly(
+                                                                        Span(
+                                                                            7,
+                                                                            18,
+                                                                        ),
+                                                                    ),
+                                                                ],
+                                                            },
                                                         },
-                                                    },
-                                                ],
+                                                    ],
+                                                    commas: [
+                                                        Span(
+                                                            7,
+                                                            47,
+                                                        ),
+                                                    ],
+                                                },
                                                 right_parenthesis: Span(
                                                     8,
                                                     6,
                                                 ),
                                             },
-                                            return_type: None,
-                                            body: Block {
+                                            body: MethodBody {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
                                                 left_brace: Span(
                                                     8,
                                                     8,

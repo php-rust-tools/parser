@@ -49,20 +49,29 @@
                                         3,
                                         10,
                                     ),
-                                    members: [],
+                                    parameters: CommaSeparated {
+                                        inner: [],
+                                        commas: [],
+                                    },
                                     right_parenthesis: Span(
                                         3,
                                         11,
                                     ),
                                 },
                                 return_type: Some(
-                                    Named(
-                                        Span(
+                                    ReturnType {
+                                        colon: Span(
                                             3,
-                                            14,
+                                            12,
                                         ),
-                                        "\Generator",
-                                    ),
+                                        data_type: Named(
+                                            Span(
+                                                3,
+                                                14,
+                                            ),
+                                            "\Generator",
+                                        ),
+                                    },
                                 ),
                                 double_arrow: Span(
                                     3,

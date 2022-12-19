@@ -89,14 +89,14 @@
                                 },
                             ),
                             implements: None,
-                            body: ClassBody {
+                            body: AnonymousClassBody {
                                 left_brace: Span(
                                     5,
                                     28,
                                 ),
                                 members: [
-                                    Method(
-                                        Method {
+                                    ConcreteMethod(
+                                        ConcreteMethod {
                                             comments: CommentGroup {
                                                 comments: [],
                                             },
@@ -123,7 +123,7 @@
                                                 ),
                                                 value: "bar",
                                             },
-                                            parameters: MethodParameterList {
+                                            parameters: FunctionParameterList {
                                                 comments: CommentGroup {
                                                     comments: [],
                                                 },
@@ -131,21 +131,33 @@
                                                     6,
                                                     24,
                                                 ),
-                                                members: [],
+                                                parameters: CommaSeparated {
+                                                    inner: [],
+                                                    commas: [],
+                                                },
                                                 right_parenthesis: Span(
                                                     6,
                                                     25,
                                                 ),
                                             },
                                             return_type: Some(
-                                                ParentReference(
-                                                    Span(
+                                                ReturnType {
+                                                    colon: Span(
                                                         6,
-                                                        28,
+                                                        26,
                                                     ),
-                                                ),
+                                                    data_type: ParentReference(
+                                                        Span(
+                                                            6,
+                                                            28,
+                                                        ),
+                                                    ),
+                                                },
                                             ),
-                                            body: Block {
+                                            body: MethodBody {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
                                                 left_brace: Span(
                                                     6,
                                                     35,

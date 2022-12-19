@@ -92,7 +92,7 @@ impl Display for ParseError {
 
                 write!(f, "Parse Error: unexpected identifier `{}`, expecting `{}` on line {} column {}", found, expected, span.0, span.1)
             },
-            Self::MissingTypeForReadonlyProperty(class, prop, span) => write!(f, "Parse Error: Readonly property {}::${} must have type on line {} column {}", class, prop, span.0, span.1),
+            Self::MissingTypeForReadonlyProperty(class, prop, span) => write!(f, "Parse Error: Readonly property {}::{} must have type on line {} column {}", class, prop, span.0, span.1),
             Self::MultipleModifiers(modifier, span) => write!(f, "Parse Error: Multiple {} modifiers are not allowed on line {} column {}", modifier, span.0, span.1),
             Self::MultipleVisibilityModifiers( span) => write!(f, "Parse Error: Multiple visibility modifiers are not allowed on line {} column {}", span.0, span.1),
             Self::UnexpectedToken(message, span) => write!(f, "Parse Error: Unexpected token {} on line {} column {}", message, span.0, span.1),

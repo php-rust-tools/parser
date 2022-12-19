@@ -87,6 +87,23 @@ pub fn method_group(input: Vec<(Span, TokenKind)>) -> ParseResult<MethodModifier
     Ok(MethodModifierGroup { modifiers })
 }
 
+#[inline(always)]
+pub fn interface_method_group(input: Vec<(Span, TokenKind)>) -> ParseResult<MethodModifierGroup> {
+    let modifiers = input
+        .iter()
+        .map(|(span, token)| match token {
+            TokenKind::Public => Ok(MethodModifier::Public(*span)),
+            TokenKind::Static => Ok(MethodModifier::Static(*span)),
+            _ => Err(ParseError::CannotUseModifierOnInterfaceMethod(
+                token.to_string(),
+                *span,
+            )),
+        })
+        .collect::<ParseResult<Vec<MethodModifier>>>()?;
+
+    Ok(MethodModifierGroup { modifiers })
+}
+
 pub fn enum_method_group(input: Vec<(Span, TokenKind)>) -> ParseResult<MethodModifierGroup> {
     let modifiers = input
         .iter()
@@ -173,6 +190,24 @@ pub fn constant_group(input: Vec<(Span, TokenKind)>) -> ParseResult<ConstantModi
                 }
             }
             _ => Err(ParseError::CannotUseModifierOnConstant(
+                token.to_string(),
+                *span,
+            )),
+        })
+        .collect::<ParseResult<Vec<ConstantModifier>>>()?;
+
+    Ok(ConstantModifierGroup { modifiers })
+}
+
+pub fn interface_constant_group(
+    input: Vec<(Span, TokenKind)>,
+) -> ParseResult<ConstantModifierGroup> {
+    let modifiers = input
+        .iter()
+        .map(|(span, token)| match token {
+            TokenKind::Public => Ok(ConstantModifier::Public(*span)),
+            TokenKind::Final => Ok(ConstantModifier::Final(*span)),
+            _ => Err(ParseError::CannotUseModifierOnInterfaceConstant(
                 token.to_string(),
                 *span,
             )),

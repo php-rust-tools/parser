@@ -31,42 +31,45 @@
                     1,
                     19,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                1,
-                                30,
-                            ),
-                            name: "b",
-                        },
-                        attributes: [],
-                        type: Some(
-                            Union(
-                                [
-                                    Integer(
-                                        Span(
-                                            1,
-                                            20,
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    1,
+                                    30,
+                                ),
+                                name: "b",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                Union(
+                                    [
+                                        Integer(
+                                            Span(
+                                                1,
+                                                20,
+                                            ),
                                         ),
-                                    ),
-                                    Float(
-                                        Span(
-                                            1,
-                                            24,
+                                        Float(
+                                            Span(
+                                                1,
+                                                24,
+                                            ),
                                         ),
-                                    ),
-                                ],
+                                    ],
+                                ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                            ellipsis: None,
+                            default: None,
+                            ampersand: None,
+                        },
+                    ],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     1,
                     32,

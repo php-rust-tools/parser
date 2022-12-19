@@ -5,7 +5,7 @@ use serde::Serialize;
 use crate::lexer::token::Span;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::constant::ClassishConstant;
-use crate::parser::ast::functions::Method;
+use crate::parser::ast::functions::ConcreteMethod;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 
@@ -22,7 +22,7 @@ pub struct UnitEnumCase {
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum UnitEnumMember {
     Case(UnitEnumCase),         // `case Bar;`
-    Method(Method),             // `public function foo(): void { ... }`
+    Method(ConcreteMethod),     // `public function foo(): void { ... }`
     Constant(ClassishConstant), // `public const FOO = 123;`
 }
 
@@ -66,7 +66,7 @@ pub struct BackedEnumCase {
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum BackedEnumMember {
     Case(BackedEnumCase),
-    Method(Method),
+    Method(ConcreteMethod),
     Constant(ClassishConstant),
 }
 

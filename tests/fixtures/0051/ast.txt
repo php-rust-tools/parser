@@ -31,37 +31,40 @@
                     1,
                     19,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                1,
-                                30,
-                            ),
-                            name: "bar",
-                        },
-                        attributes: [],
-                        type: Some(
-                            String(
-                                Span(
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
                                     1,
-                                    20,
+                                    30,
+                                ),
+                                name: "bar",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                String(
+                                    Span(
+                                        1,
+                                        20,
+                                    ),
                                 ),
                             ),
-                        ),
-                        ellipsis: Some(
-                            Span(
-                                1,
-                                27,
+                            ellipsis: Some(
+                                Span(
+                                    1,
+                                    27,
+                                ),
                             ),
-                        ),
-                        default: None,
-                        ampersand: None,
-                    },
-                ],
+                            default: None,
+                            ampersand: None,
+                        },
+                    ],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     1,
                     34,

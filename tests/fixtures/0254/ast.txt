@@ -30,8 +30,8 @@
                     1,
                 ),
                 members: [
-                    Method(
-                        Method {
+                    ConcreteMethod(
+                        ConcreteMethod {
                             comments: CommentGroup {
                                 comments: [],
                             },
@@ -51,7 +51,7 @@
                                 ),
                                 value: "bar",
                             },
-                            parameters: MethodParameterList {
+                            parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -59,14 +59,20 @@
                                     5,
                                     17,
                                 ),
-                                members: [],
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
                                 right_parenthesis: Span(
                                     5,
                                     18,
                                 ),
                             },
                             return_type: None,
-                            body: Block {
+                            body: MethodBody {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 left_brace: Span(
                                     6,
                                     5,
@@ -98,39 +104,42 @@
                                                         7,
                                                         25,
                                                     ),
-                                                    members: [
-                                                        FunctionParameter {
-                                                            comments: CommentGroup {
-                                                                comments: [],
-                                                            },
-                                                            name: SimpleVariable {
-                                                                span: Span(
-                                                                    7,
-                                                                    31,
-                                                                ),
-                                                                name: "foo",
-                                                            },
-                                                            attributes: [],
-                                                            type: Some(
-                                                                SelfReference(
-                                                                    Span(
+                                                    parameters: CommaSeparated {
+                                                        inner: [
+                                                            FunctionParameter {
+                                                                comments: CommentGroup {
+                                                                    comments: [],
+                                                                },
+                                                                name: SimpleVariable {
+                                                                    span: Span(
                                                                         7,
-                                                                        26,
+                                                                        31,
+                                                                    ),
+                                                                    name: "foo",
+                                                                },
+                                                                attributes: [],
+                                                                data_type: Some(
+                                                                    SelfReference(
+                                                                        Span(
+                                                                            7,
+                                                                            26,
+                                                                        ),
                                                                     ),
                                                                 ),
-                                                            ),
-                                                            ellipsis: None,
-                                                            default: None,
-                                                            ampersand: None,
-                                                        },
-                                                    ],
+                                                                ellipsis: None,
+                                                                default: None,
+                                                                ampersand: None,
+                                                            },
+                                                        ],
+                                                        commas: [],
+                                                    },
                                                     right_parenthesis: Span(
                                                         7,
                                                         35,
                                                     ),
                                                 },
                                                 uses: None,
-                                                return_ty: None,
+                                                return_type: None,
                                                 body: FunctionBody {
                                                     comments: CommentGroup {
                                                         comments: [],

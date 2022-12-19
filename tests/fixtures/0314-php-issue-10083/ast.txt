@@ -31,54 +31,57 @@
                     3,
                     13,
                 ),
-                members: [
-                    FunctionParameter {
-                        comments: CommentGroup {
-                            comments: [
-                                Comment {
-                                    span: Span(
-                                        5,
+                parameters: CommaSeparated {
+                    inner: [
+                        FunctionParameter {
+                            comments: CommentGroup {
+                                comments: [
+                                    Comment {
+                                        span: Span(
+                                            5,
+                                            1,
+                                        ),
+                                        format: HashMark,
+                                        content: "#if __PHP__",
+                                    },
+                                    Comment {
+                                        span: Span(
+                                            7,
+                                            1,
+                                        ),
+                                        format: HashMark,
+                                        content: "#endif",
+                                    },
+                                ],
+                            },
+                            name: SimpleVariable {
+                                span: Span(
+                                    8,
+                                    1,
+                                ),
+                                name: "bodies",
+                            },
+                            attributes: [],
+                            data_type: Some(
+                                Array(
+                                    Span(
+                                        4,
                                         1,
                                     ),
-                                    format: HashMark,
-                                    content: "#if __PHP__",
-                                },
-                                Comment {
-                                    span: Span(
-                                        7,
-                                        1,
-                                    ),
-                                    format: HashMark,
-                                    content: "#endif",
-                                },
-                            ],
-                        },
-                        name: SimpleVariable {
-                            span: Span(
-                                8,
-                                1,
+                                ),
                             ),
-                            name: "bodies",
-                        },
-                        attributes: [],
-                        type: Some(
-                            Array(
+                            ellipsis: None,
+                            default: None,
+                            ampersand: Some(
                                 Span(
-                                    4,
+                                    8,
                                     1,
                                 ),
                             ),
-                        ),
-                        ellipsis: None,
-                        default: None,
-                        ampersand: Some(
-                            Span(
-                                8,
-                                1,
-                            ),
-                        ),
-                    },
-                ],
+                        },
+                    ],
+                    commas: [],
+                },
                 right_parenthesis: Span(
                     9,
                     1,

@@ -12,15 +12,15 @@ use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::attributes;
 use crate::parser::internal::constants;
-use crate::parser::internal::functions;
+use crate::parser::internal::functions::method;
+use crate::parser::internal::functions::Method;
+use crate::parser::internal::functions::MethodType;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::modifiers;
 use crate::parser::internal::properties;
 use crate::parser::internal::utils;
-use crate::parser::state::Scope;
 use crate::parser::state::State;
 use crate::peek_token;
-use crate::scoped;
 
 pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
     let span = utils::skip(state, TokenKind::Use)?;
@@ -161,25 +161,19 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let span = utils::skip(state, TokenKind::Trait)?;
     let name = identifiers::type_identifier(state)?;
-    let class = name.value.to_string();
     let attributes = state.get_attributes();
 
-    let body = scoped!(state, Scope::Trait(name.clone()), {
-        let start = utils::skip_left_brace(state)?;
-
-        let mut members = Vec::new();
-        while state.stream.current().kind != TokenKind::RightBrace && !state.stream.is_eof() {
-            members.push(member(state, class.clone())?);
-        }
-
-        let end = utils::skip_right_brace(state)?;
-
-        TraitBody {
-            start,
-            end,
-            members,
-        }
-    });
+    let body = TraitBody {
+        left_brace: utils::skip_left_brace(state)?,
+        members: {
+            let mut members = Vec::new();
+            while state.stream.current().kind != TokenKind::RightBrace && !state.stream.is_eof() {
+                members.push(member(state, &name.value.to_string())?);
+            }
+            members
+        },
+        right_brace: utils::skip_right_brace(state)?,
+    };
 
     Ok(Statement::Trait(Trait {
         span,
@@ -189,7 +183,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     }))
 }
 
-fn member(state: &mut State, class: String) -> ParseResult<TraitMember> {
+fn member(state: &mut State, class_name: &str) -> ParseResult<TraitMember> {
     let has_attributes = attributes::gather_attributes(state)?;
 
     if !has_attributes && state.stream.current().kind == TokenKind::Use {
@@ -197,7 +191,7 @@ fn member(state: &mut State, class: String) -> ParseResult<TraitMember> {
     }
 
     if state.stream.current().kind == TokenKind::Var {
-        return properties::parse_var(state, class).map(TraitMember::VariableProperty);
+        return properties::parse_var(state, class_name).map(TraitMember::VariableProperty);
     }
 
     let modifiers = modifiers::collect(state)?;
@@ -208,10 +202,29 @@ fn member(state: &mut State, class: String) -> ParseResult<TraitMember> {
     }
 
     if state.stream.current().kind == TokenKind::Function {
-        return functions::method(state, modifiers::method_group(modifiers)?)
-            .map(TraitMember::Method);
+        let method = method(
+            state,
+            MethodType::DependingOnModifiers,
+            modifiers::method_group(modifiers)?,
+            class_name,
+        )?;
+
+        match method {
+            Method::Abstract(method) => {
+                return Ok(TraitMember::AbstractMethod(method));
+            }
+            Method::Concrete(method) => {
+                return Ok(TraitMember::ConcreteMethod(method));
+            }
+            Method::AbstractConstructor(ctor) => {
+                return Ok(TraitMember::AbstractConstructor(ctor));
+            }
+            Method::ConcreteConstructor(ctor) => {
+                return Ok(TraitMember::ConcreteConstructor(ctor));
+            }
+        }
     }
 
-    properties::parse(state, class, modifiers::property_group(modifiers)?)
+    properties::parse(state, class_name, modifiers::property_group(modifiers)?)
         .map(TraitMember::Property)
 }

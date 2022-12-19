@@ -134,6 +134,19 @@ pub enum MethodModifier {
     Private(Span),
 }
 
+impl MethodModifier {
+    pub fn span(&self) -> Span {
+        match self {
+            MethodModifier::Final(span) => *span,
+            MethodModifier::Static(span) => *span,
+            MethodModifier::Abstract(span) => *span,
+            MethodModifier::Public(span) => *span,
+            MethodModifier::Protected(span) => *span,
+            MethodModifier::Private(span) => *span,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 #[repr(transparent)]
@@ -174,6 +187,16 @@ impl MethodModifierGroup {
         }
 
         false
+    }
+
+    pub fn get_abstract(&self) -> Option<&MethodModifier> {
+        for modifier in &self.modifiers {
+            if matches!(modifier, MethodModifier::Abstract { .. }) {
+                return Some(modifier);
+            }
+        }
+
+        None
     }
 
     pub fn visibility(&self) -> Visibility {

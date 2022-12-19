@@ -27,7 +27,7 @@
                 ),
                 members: [
                     Method(
-                        Method {
+                        ConcreteMethod {
                             comments: CommentGroup {
                                 comments: [],
                             },
@@ -60,7 +60,7 @@
                                 ),
                                 value: "__callStatic",
                             },
-                            parameters: MethodParameterList {
+                            parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -68,55 +68,60 @@
                                     4,
                                     40,
                                 ),
-                                members: [
-                                    MethodParameter {
-                                        attributes: [],
-                                        comments: CommentGroup {
-                                            comments: [],
+                                parameters: CommaSeparated {
+                                    inner: [
+                                        FunctionParameter {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            name: SimpleVariable {
+                                                span: Span(
+                                                    4,
+                                                    41,
+                                                ),
+                                                name: "k",
+                                            },
+                                            attributes: [],
+                                            data_type: None,
+                                            ellipsis: None,
+                                            default: None,
+                                            ampersand: None,
                                         },
-                                        ampersand: None,
-                                        name: SimpleVariable {
-                                            span: Span(
-                                                4,
-                                                41,
-                                            ),
-                                            name: "k",
+                                        FunctionParameter {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            name: SimpleVariable {
+                                                span: Span(
+                                                    4,
+                                                    45,
+                                                ),
+                                                name: "v",
+                                            },
+                                            attributes: [],
+                                            data_type: None,
+                                            ellipsis: None,
+                                            default: None,
+                                            ampersand: None,
                                         },
-                                        type: None,
-                                        ellipsis: None,
-                                        default: None,
-                                        modifiers: PromotedPropertyModifierGroup {
-                                            modifiers: [],
-                                        },
-                                    },
-                                    MethodParameter {
-                                        attributes: [],
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        ampersand: None,
-                                        name: SimpleVariable {
-                                            span: Span(
-                                                4,
-                                                45,
-                                            ),
-                                            name: "v",
-                                        },
-                                        type: None,
-                                        ellipsis: None,
-                                        default: None,
-                                        modifiers: PromotedPropertyModifierGroup {
-                                            modifiers: [],
-                                        },
-                                    },
-                                ],
+                                    ],
+                                    commas: [
+                                        Span(
+                                            4,
+                                            43,
+                                        ),
+                                    ],
+                                },
                                 right_parenthesis: Span(
                                     4,
                                     47,
                                 ),
                             },
                             return_type: None,
-                            body: Block {
+                            body: MethodBody {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
                                 left_brace: Span(
                                     4,
                                     49,

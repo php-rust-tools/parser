@@ -1,26 +1,20 @@
-use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::interfaces::Interface;
 use crate::parser::ast::interfaces::InterfaceBody;
 use crate::parser::ast::interfaces::InterfaceExtends;
 use crate::parser::ast::interfaces::InterfaceMember;
-use crate::parser::ast::modifiers::ConstantModifier;
-use crate::parser::ast::modifiers::ConstantModifierGroup;
-use crate::parser::ast::modifiers::MethodModifier;
-use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::ast::Statement;
-use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::attributes;
 use crate::parser::internal::constants;
 use crate::parser::internal::functions::method;
+use crate::parser::internal::functions::Method;
+use crate::parser::internal::functions::MethodType;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::modifiers;
 use crate::parser::internal::utils;
-use crate::parser::state::Scope;
 use crate::parser::state::State;
-use crate::scoped;
 
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let span = utils::skip(state, TokenKind::Interface)?;
@@ -48,22 +42,19 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
     let attributes = state.get_attributes();
 
-    let body = scoped!(state, Scope::Interface(name.clone()), {
-        let left_brace = utils::skip_left_brace(state)?;
+    let interface_name = name.value.to_string();
+    let body = InterfaceBody {
+        left_brace: utils::skip_left_brace(state)?,
+        members: {
+            let mut members = Vec::new();
+            while state.stream.current().kind != TokenKind::RightBrace {
+                members.push(member(state, &interface_name)?);
+            }
 
-        let mut members = Vec::new();
-        while state.stream.current().kind != TokenKind::RightBrace {
-            members.push(member(state)?);
-        }
-
-        let right_brace = utils::skip_right_brace(state)?;
-
-        InterfaceBody {
-            left_brace,
-            members,
-            right_brace,
-        }
-    });
+            members
+        },
+        right_brace: utils::skip_right_brace(state)?,
+    };
 
     Ok(Statement::Interface(Interface {
         span,
@@ -74,48 +65,26 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     }))
 }
 
-fn member(state: &mut State) -> ParseResult<InterfaceMember> {
+fn member(state: &mut State, interface_name: &str) -> ParseResult<InterfaceMember> {
     attributes::gather_attributes(state)?;
 
     let modifiers = modifiers::collect(state)?;
 
     if state.stream.current().kind == TokenKind::Const {
-        constants::classish(state, constant_modifiers(modifiers)?).map(InterfaceMember::Constant)
+        constants::classish(state, modifiers::interface_constant_group(modifiers)?)
+            .map(InterfaceMember::Constant)
     } else {
-        method(state, method_modifiers(modifiers)?).map(InterfaceMember::Method)
+        let method = method(
+            state,
+            MethodType::Abstract,
+            modifiers::interface_method_group(modifiers)?,
+            interface_name,
+        )?;
+
+        match method {
+            Method::Abstract(method) => Ok(InterfaceMember::Method(method)),
+            Method::AbstractConstructor(ctor) => Ok(InterfaceMember::Constructor(ctor)),
+            Method::ConcreteConstructor(_) | Method::Concrete(_) => unreachable!(),
+        }
     }
-}
-
-#[inline(always)]
-fn method_modifiers(input: Vec<(Span, TokenKind)>) -> ParseResult<MethodModifierGroup> {
-    let modifiers = input
-        .iter()
-        .map(|(span, token)| match token {
-            TokenKind::Public => Ok(MethodModifier::Public(*span)),
-            TokenKind::Static => Ok(MethodModifier::Static(*span)),
-            _ => Err(ParseError::CannotUseModifierOnInterfaceMethod(
-                token.to_string(),
-                *span,
-            )),
-        })
-        .collect::<ParseResult<Vec<MethodModifier>>>()?;
-
-    Ok(MethodModifierGroup { modifiers })
-}
-
-#[inline(always)]
-fn constant_modifiers(input: Vec<(Span, TokenKind)>) -> ParseResult<ConstantModifierGroup> {
-    let modifiers = input
-        .iter()
-        .map(|(span, token)| match token {
-            TokenKind::Public => Ok(ConstantModifier::Public(*span)),
-            TokenKind::Final => Ok(ConstantModifier::Final(*span)),
-            _ => Err(ParseError::CannotUseModifierOnInterfaceConstant(
-                token.to_string(),
-                *span,
-            )),
-        })
-        .collect::<ParseResult<Vec<ConstantModifier>>>()?;
-
-    Ok(ConstantModifierGroup { modifiers })
 }
