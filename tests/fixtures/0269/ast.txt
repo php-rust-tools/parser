@@ -72,14 +72,22 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
+                            attributes: [],
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public(
+                                        Span(
+                                            6,
+                                            3,
+                                        ),
+                                    ),
+                                ],
+                            },
+                            function: Span(
                                 6,
                                 10,
                             ),
-                            end: Span(
-                                6,
-                                43,
-                            ),
+                            ampersand: None,
                             name: SimpleIdentifier {
                                 span: Span(
                                     6,
@@ -87,12 +95,11 @@
                                 ),
                                 value: "\xf0\x9f\x93\x9d",
                             },
-                            attributes: [],
                             parameters: MethodParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     6,
                                     23,
                                 ),
@@ -125,21 +132,10 @@
                                         },
                                     },
                                 ],
-                                end: Span(
+                                right_parenthesis: Span(
                                     6,
                                     36,
                                 ),
-                            },
-                            body: None,
-                            modifiers: MethodModifierGroup {
-                                modifiers: [
-                                    Public(
-                                        Span(
-                                            6,
-                                            3,
-                                        ),
-                                    ),
-                                ],
                             },
                             return_type: Some(
                                 Void(
@@ -149,7 +145,12 @@
                                     ),
                                 ),
                             ),
-                            ampersand: None,
+                            body: Abstract(
+                                Span(
+                                    6,
+                                    43,
+                                ),
+                            ),
                         },
                     ),
                 ],
@@ -216,14 +217,22 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
+                            attributes: [],
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public(
+                                        Span(
+                                            10,
+                                            3,
+                                        ),
+                                    ),
+                                ],
+                            },
+                            function: Span(
                                 10,
                                 10,
                             ),
-                            end: Span(
-                                12,
-                                3,
-                            ),
+                            ampersand: None,
                             name: SimpleIdentifier {
                                 span: Span(
                                     10,
@@ -231,12 +240,11 @@
                                 ),
                                 value: "\xf0\x9f\x93\x9d",
                             },
-                            attributes: [],
                             parameters: MethodParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     10,
                                     23,
                                 ),
@@ -269,13 +277,25 @@
                                         },
                                     },
                                 ],
-                                end: Span(
+                                right_parenthesis: Span(
                                     10,
                                     36,
                                 ),
                             },
-                            body: Some(
-                                [
+                            return_type: Some(
+                                Void(
+                                    Span(
+                                        10,
+                                        39,
+                                    ),
+                                ),
+                            ),
+                            body: Block {
+                                left_brace: Span(
+                                    10,
+                                    44,
+                                ),
+                                statements: [
                                     Expression {
                                         expression: Print {
                                             span: Span(
@@ -329,26 +349,11 @@
                                         ),
                                     },
                                 ],
-                            ),
-                            modifiers: MethodModifierGroup {
-                                modifiers: [
-                                    Public(
-                                        Span(
-                                            10,
-                                            3,
-                                        ),
-                                    ),
-                                ],
-                            },
-                            return_type: Some(
-                                Void(
-                                    Span(
-                                        10,
-                                        39,
-                                    ),
+                                right_brace: Span(
+                                    12,
+                                    3,
                                 ),
-                            ),
-                            ampersand: None,
+                            },
                         },
                     ),
                 ],
@@ -364,14 +369,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 15,
                 1,
             ),
-            end: Span(
-                19,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     15,
@@ -379,7 +382,6 @@
                 ),
                 value: "\xf0\x9f\x9a\xaa",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -402,186 +404,198 @@
                     ),
                 ),
             ),
-            ampersand: None,
-            body: [
-                Expression {
-                    expression: AssignmentOperation(
-                        Assign {
-                            left: Variable(
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    15,
+                    23,
+                ),
+                statements: [
+                    Expression {
+                        expression: AssignmentOperation(
+                            Assign {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                16,
+                                                3,
+                                            ),
+                                            name: "\xf0\x9f\x92\xbb",
+                                        },
+                                    ),
+                                ),
+                                equals: Span(
+                                    16,
+                                    9,
+                                ),
+                                right: New {
+                                    new: Span(
+                                        16,
+                                        11,
+                                    ),
+                                    target: Identifier(
+                                        SimpleIdentifier(
+                                            SimpleIdentifier {
+                                                span: Span(
+                                                    16,
+                                                    15,
+                                                ),
+                                                value: "\xf0\x9f\x92\xbb",
+                                            },
+                                        ),
+                                    ),
+                                    arguments: Some(
+                                        ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span(
+                                                16,
+                                                19,
+                                            ),
+                                            arguments: [],
+                                            right_parenthesis: Span(
+                                                16,
+                                                20,
+                                            ),
+                                        },
+                                    ),
+                                },
+                            },
+                        ),
+                        ending: Semicolon(
+                            Span(
+                                16,
+                                21,
+                            ),
+                        ),
+                    },
+                    Expression {
+                        expression: AssignmentOperation(
+                            Assign {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span(
+                                                17,
+                                                3,
+                                            ),
+                                            name: "\xf0\x9f\x93\x84",
+                                        },
+                                    ),
+                                ),
+                                equals: Span(
+                                    17,
+                                    9,
+                                ),
+                                right: Literal(
+                                    String(
+                                        LiteralString {
+                                            value: "hello, world",
+                                            span: Span(
+                                                17,
+                                                11,
+                                            ),
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                        ending: Semicolon(
+                            Span(
+                                17,
+                                25,
+                            ),
+                        ),
+                    },
+                    Expression {
+                        expression: MethodCall {
+                            target: Variable(
                                 SimpleVariable(
                                     SimpleVariable {
                                         span: Span(
-                                            16,
+                                            18,
                                             3,
                                         ),
                                         name: "\xf0\x9f\x92\xbb",
                                     },
                                 ),
                             ),
-                            equals: Span(
-                                16,
-                                9,
+                            arrow: Span(
+                                18,
+                                8,
                             ),
-                            right: New {
-                                new: Span(
-                                    16,
-                                    11,
+                            method: Identifier(
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: Span(
+                                            18,
+                                            10,
+                                        ),
+                                        value: "\xf0\x9f\x93\x9d",
+                                    },
                                 ),
-                                target: Identifier(
-                                    SimpleIdentifier(
-                                        SimpleIdentifier {
-                                            span: Span(
-                                                16,
-                                                15,
-                                            ),
-                                            value: "\xf0\x9f\x92\xbb",
-                                        },
-                                    ),
+                            ),
+                            arguments: ArgumentList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span(
+                                    18,
+                                    14,
                                 ),
-                                arguments: Some(
-                                    ArgumentList {
+                                arguments: [
+                                    Named {
                                         comments: CommentGroup {
                                             comments: [],
                                         },
-                                        left_parenthesis: Span(
-                                            16,
+                                        name: SimpleIdentifier {
+                                            span: Span(
+                                                18,
+                                                15,
+                                            ),
+                                            value: "\xf0\x9f\x93\x83",
+                                        },
+                                        colon: Span(
+                                            18,
                                             19,
                                         ),
-                                        arguments: [],
-                                        right_parenthesis: Span(
-                                            16,
-                                            20,
+                                        ellipsis: None,
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        18,
+                                                        21,
+                                                    ),
+                                                    name: "\xf0\x9f\x93\x84",
+                                                },
+                                            ),
                                         ),
                                     },
+                                ],
+                                right_parenthesis: Span(
+                                    18,
+                                    26,
                                 ),
                             },
                         },
-                    ),
-                    ending: Semicolon(
-                        Span(
-                            16,
-                            21,
-                        ),
-                    ),
-                },
-                Expression {
-                    expression: AssignmentOperation(
-                        Assign {
-                            left: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            17,
-                                            3,
-                                        ),
-                                        name: "\xf0\x9f\x93\x84",
-                                    },
-                                ),
-                            ),
-                            equals: Span(
-                                17,
-                                9,
-                            ),
-                            right: Literal(
-                                String(
-                                    LiteralString {
-                                        value: "hello, world",
-                                        span: Span(
-                                            17,
-                                            11,
-                                        ),
-                                    },
-                                ),
-                            ),
-                        },
-                    ),
-                    ending: Semicolon(
-                        Span(
-                            17,
-                            25,
-                        ),
-                    ),
-                },
-                Expression {
-                    expression: MethodCall {
-                        target: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        18,
-                                        3,
-                                    ),
-                                    name: "\xf0\x9f\x92\xbb",
-                                },
-                            ),
-                        ),
-                        arrow: Span(
-                            18,
-                            8,
-                        ),
-                        method: Identifier(
-                            SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: Span(
-                                        18,
-                                        10,
-                                    ),
-                                    value: "\xf0\x9f\x93\x9d",
-                                },
-                            ),
-                        ),
-                        arguments: ArgumentList {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            left_parenthesis: Span(
+                        ending: Semicolon(
+                            Span(
                                 18,
-                                14,
+                                27,
                             ),
-                            arguments: [
-                                Named {
-                                    comments: CommentGroup {
-                                        comments: [],
-                                    },
-                                    name: SimpleIdentifier {
-                                        span: Span(
-                                            18,
-                                            15,
-                                        ),
-                                        value: "\xf0\x9f\x93\x83",
-                                    },
-                                    colon: Span(
-                                        18,
-                                        19,
-                                    ),
-                                    ellipsis: None,
-                                    value: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span(
-                                                    18,
-                                                    21,
-                                                ),
-                                                name: "\xf0\x9f\x93\x84",
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ],
-                            right_parenthesis: Span(
-                                18,
-                                26,
-                            ),
-                        },
+                        ),
                     },
-                    ending: Semicolon(
-                        Span(
-                            18,
-                            27,
-                        ),
-                    ),
-                },
-            ],
+                ],
+                right_brace: Span(
+                    19,
+                    1,
+                ),
+            },
         },
     ),
     Expression {

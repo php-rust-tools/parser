@@ -11,15 +11,13 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                start: Span(
+                attributes: [],
+                static: None,
+                function: Span(
                     3,
                     1,
                 ),
-                end: Span(
-                    5,
-                    1,
-                ),
-                attributes: [],
+                ampersand: None,
                 parameters: FunctionParameterList {
                     comments: CommentGroup {
                         comments: [],
@@ -34,64 +32,75 @@
                         11,
                     ),
                 },
+                uses: None,
                 return_ty: None,
-                uses: [],
-                ampersand: None,
-                body: [
-                    If(
-                        IfStatement {
-                            if: Span(
-                                4,
-                                5,
-                            ),
-                            condition: Parenthesized {
-                                left_parenthesis: Span(
+                body: FunctionBody {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_brace: Span(
+                        3,
+                        13,
+                    ),
+                    statements: [
+                        If(
+                            IfStatement {
+                                if: Span(
                                     4,
-                                    8,
+                                    5,
                                 ),
-                                inner: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                4,
-                                                9,
-                                            ),
-                                            name: "foo",
-                                        },
+                                condition: Parenthesized {
+                                    left_parenthesis: Span(
+                                        4,
+                                        8,
                                     ),
-                                ),
-                                right_parenthesis: Span(
-                                    4,
-                                    13,
-                                ),
-                            },
-                            body: Statement {
-                                statement: Expression {
-                                    expression: Variable(
+                                    inner: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
                                                 span: Span(
                                                     4,
-                                                    15,
+                                                    9,
                                                 ),
-                                                name: "bar",
+                                                name: "foo",
                                             },
                                         ),
                                     ),
-                                    ending: Semicolon(
-                                        Span(
-                                            4,
-                                            19,
-                                        ),
+                                    right_parenthesis: Span(
+                                        4,
+                                        13,
                                     ),
                                 },
-                                elseifs: [],
-                                else: None,
+                                body: Statement {
+                                    statement: Expression {
+                                        expression: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        4,
+                                                        15,
+                                                    ),
+                                                    name: "bar",
+                                                },
+                                            ),
+                                        ),
+                                        ending: Semicolon(
+                                            Span(
+                                                4,
+                                                19,
+                                            ),
+                                        ),
+                                    },
+                                    elseifs: [],
+                                    else: None,
+                                },
                             },
-                        },
+                        ),
+                    ],
+                    right_brace: Span(
+                        5,
+                        1,
                     ),
-                ],
-                static: None,
+                },
             },
         ),
         ending: Semicolon(

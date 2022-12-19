@@ -19,14 +19,12 @@
                     },
                 ],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 6,
                 1,
             ),
-            end: Span(
-                18,
-                2,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     6,
@@ -34,7 +32,6 @@
                 ),
                 value: "foo",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [
@@ -224,8 +221,20 @@
                 ),
             },
             return_type: None,
-            ampersand: None,
-            body: [],
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    18,
+                    1,
+                ),
+                statements: [],
+                right_brace: Span(
+                    18,
+                    2,
+                ),
+            },
         },
     ),
 ]

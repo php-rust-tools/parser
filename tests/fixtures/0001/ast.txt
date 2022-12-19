@@ -10,14 +10,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 3,
                 1,
             ),
-            end: Span(
-                5,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     3,
@@ -25,7 +23,6 @@
                 ),
                 value: "foo",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -126,32 +123,44 @@
                     ),
                 ),
             ),
-            ampersand: None,
-            body: [
-                Expression {
-                    expression: Exit {
-                        value: Some(
-                            Literal(
-                                Integer(
-                                    LiteralInteger {
-                                        value: "1",
-                                        span: Span(
-                                            4,
-                                            10,
-                                        ),
-                                    },
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    3,
+                    52,
+                ),
+                statements: [
+                    Expression {
+                        expression: Exit {
+                            value: Some(
+                                Literal(
+                                    Integer(
+                                        LiteralInteger {
+                                            value: "1",
+                                            span: Span(
+                                                4,
+                                                10,
+                                            ),
+                                        },
+                                    ),
                                 ),
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                4,
+                                12,
                             ),
                         ),
                     },
-                    ending: Semicolon(
-                        Span(
-                            4,
-                            12,
-                        ),
-                    ),
-                },
-            ],
+                ],
+                right_brace: Span(
+                    5,
+                    1,
+                ),
+            },
         },
     ),
     Function(
@@ -159,14 +168,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 7,
                 1,
             ),
-            end: Span(
-                9,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     7,
@@ -174,7 +181,6 @@
                 ),
                 value: "bar",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -364,24 +370,36 @@
                     ],
                 ),
             ),
-            ampersand: None,
-            body: [
-                Return {
-                    return: Span(
-                        8,
-                        5,
-                    ),
-                    value: Some(
-                        Null,
-                    ),
-                    ending: Semicolon(
-                        Span(
-                            8,
-                            16,
-                        ),
-                    ),
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
                 },
-            ],
+                left_brace: Span(
+                    7,
+                    94,
+                ),
+                statements: [
+                    Return {
+                        return: Span(
+                            8,
+                            5,
+                        ),
+                        value: Some(
+                            Null,
+                        ),
+                        ending: Semicolon(
+                            Span(
+                                8,
+                                16,
+                            ),
+                        ),
+                    },
+                ],
+                right_brace: Span(
+                    9,
+                    1,
+                ),
+            },
         },
     ),
 ]

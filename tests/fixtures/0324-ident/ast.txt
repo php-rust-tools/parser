@@ -28,14 +28,12 @@
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                attributes: [],
+                                function: Span(
                                     4,
                                     5,
                                 ),
-                                end: Span(
-                                    6,
-                                    5,
-                                ),
+                                ampersand: None,
                                 name: SimpleIdentifier {
                                     span: Span(
                                         4,
@@ -43,7 +41,6 @@
                                     ),
                                     value: "null",
                                 },
-                                attributes: [],
                                 parameters: FunctionParameterList {
                                     comments: CommentGroup {
                                         comments: [],
@@ -59,34 +56,46 @@
                                     ),
                                 },
                                 return_type: None,
-                                ampersand: None,
-                                body: [
-                                    Echo {
-                                        echo: Span(
-                                            5,
-                                            9,
-                                        ),
-                                        values: [
-                                            Literal(
-                                                String(
-                                                    LiteralString {
-                                                        value: "p\n",
-                                                        span: Span(
-                                                            5,
-                                                            14,
-                                                        ),
-                                                    },
+                                body: FunctionBody {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    left_brace: Span(
+                                        4,
+                                        21,
+                                    ),
+                                    statements: [
+                                        Echo {
+                                            echo: Span(
+                                                5,
+                                                9,
+                                            ),
+                                            values: [
+                                                Literal(
+                                                    String(
+                                                        LiteralString {
+                                                            value: "p\n",
+                                                            span: Span(
+                                                                5,
+                                                                14,
+                                                            ),
+                                                        },
+                                                    ),
+                                                ),
+                                            ],
+                                            ending: Semicolon(
+                                                Span(
+                                                    5,
+                                                    19,
                                                 ),
                                             ),
-                                        ],
-                                        ending: Semicolon(
-                                            Span(
-                                                5,
-                                                19,
-                                            ),
-                                        ),
-                                    },
-                                ],
+                                        },
+                                    ],
+                                    right_brace: Span(
+                                        6,
+                                        5,
+                                    ),
+                                },
                             },
                         ),
                     ],
@@ -125,14 +134,12 @@
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                attributes: [],
+                                function: Span(
                                     10,
                                     5,
                                 ),
-                                end: Span(
-                                    12,
-                                    5,
-                                ),
+                                ampersand: None,
                                 name: SimpleIdentifier {
                                     span: Span(
                                         10,
@@ -140,7 +147,6 @@
                                     ),
                                     value: "null",
                                 },
-                                attributes: [],
                                 parameters: FunctionParameterList {
                                     comments: CommentGroup {
                                         comments: [],
@@ -156,34 +162,46 @@
                                     ),
                                 },
                                 return_type: None,
-                                ampersand: None,
-                                body: [
-                                    Echo {
-                                        echo: Span(
-                                            11,
-                                            9,
-                                        ),
-                                        values: [
-                                            Literal(
-                                                String(
-                                                    LiteralString {
-                                                        value: "n",
-                                                        span: Span(
-                                                            11,
-                                                            14,
-                                                        ),
-                                                    },
+                                body: FunctionBody {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    left_brace: Span(
+                                        10,
+                                        21,
+                                    ),
+                                    statements: [
+                                        Echo {
+                                            echo: Span(
+                                                11,
+                                                9,
+                                            ),
+                                            values: [
+                                                Literal(
+                                                    String(
+                                                        LiteralString {
+                                                            value: "n",
+                                                            span: Span(
+                                                                11,
+                                                                14,
+                                                            ),
+                                                        },
+                                                    ),
+                                                ),
+                                            ],
+                                            ending: Semicolon(
+                                                Span(
+                                                    11,
+                                                    17,
                                                 ),
                                             ),
-                                        ],
-                                        ending: Semicolon(
-                                            Span(
-                                                11,
-                                                17,
-                                            ),
-                                        ),
-                                    },
-                                ],
+                                        },
+                                    ],
+                                    right_brace: Span(
+                                        12,
+                                        5,
+                                    ),
+                                },
                             },
                         ),
                     ],

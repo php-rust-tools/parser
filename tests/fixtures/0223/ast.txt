@@ -10,21 +10,6 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
-                9,
-                1,
-            ),
-            end: Span(
-                16,
-                1,
-            ),
-            name: SimpleIdentifier {
-                span: Span(
-                    9,
-                    10,
-                ),
-                value: "a",
-            },
             attributes: [
                 AttributeGroup {
                     start: Span(
@@ -203,6 +188,18 @@
                     ],
                 },
             ],
+            function: Span(
+                9,
+                1,
+            ),
+            ampersand: None,
+            name: SimpleIdentifier {
+                span: Span(
+                    9,
+                    10,
+                ),
+                value: "a",
+            },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -387,8 +384,20 @@
                 ),
             },
             return_type: None,
-            ampersand: None,
-            body: [],
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    15,
+                    3,
+                ),
+                statements: [],
+                right_brace: Span(
+                    16,
+                    1,
+                ),
+            },
         },
     ),
     Class(
@@ -547,21 +556,6 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
-                                22,
-                                12,
-                            ),
-                            end: Span(
-                                25,
-                                8,
-                            ),
-                            name: SimpleIdentifier {
-                                span: Span(
-                                    22,
-                                    21,
-                                ),
-                                value: "__construct",
-                            },
                             attributes: [
                                 AttributeGroup {
                                     start: Span(
@@ -594,11 +588,33 @@
                                     ],
                                 },
                             ],
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public(
+                                        Span(
+                                            22,
+                                            5,
+                                        ),
+                                    ),
+                                ],
+                            },
+                            function: Span(
+                                22,
+                                12,
+                            ),
+                            ampersand: None,
+                            name: SimpleIdentifier {
+                                span: Span(
+                                    22,
+                                    21,
+                                ),
+                                value: "__construct",
+                            },
                             parameters: MethodParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     22,
                                     32,
                                 ),
@@ -675,47 +691,29 @@
                                         },
                                     },
                                 ],
-                                end: Span(
+                                right_parenthesis: Span(
                                     25,
                                     5,
                                 ),
                             },
-                            body: Some(
-                                [],
-                            ),
-                            modifiers: MethodModifierGroup {
-                                modifiers: [
-                                    Public(
-                                        Span(
-                                            22,
-                                            5,
-                                        ),
-                                    ),
-                                ],
-                            },
                             return_type: None,
-                            ampersand: None,
+                            body: Block {
+                                left_brace: Span(
+                                    25,
+                                    7,
+                                ),
+                                statements: [],
+                                right_brace: Span(
+                                    25,
+                                    8,
+                                ),
+                            },
                         },
                     ),
                     Method(
                         Method {
                             comments: CommentGroup {
                                 comments: [],
-                            },
-                            start: Span(
-                                28,
-                                12,
-                            ),
-                            end: Span(
-                                30,
-                                8,
-                            ),
-                            name: SimpleIdentifier {
-                                span: Span(
-                                    28,
-                                    21,
-                                ),
-                                value: "m",
                             },
                             attributes: [
                                 AttributeGroup {
@@ -749,11 +747,33 @@
                                     ],
                                 },
                             ],
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public(
+                                        Span(
+                                            28,
+                                            5,
+                                        ),
+                                    ),
+                                ],
+                            },
+                            function: Span(
+                                28,
+                                12,
+                            ),
+                            ampersand: None,
+                            name: SimpleIdentifier {
+                                span: Span(
+                                    28,
+                                    21,
+                                ),
+                                value: "m",
+                            },
                             parameters: MethodParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     28,
                                     22,
                                 ),
@@ -810,26 +830,23 @@
                                         },
                                     },
                                 ],
-                                end: Span(
+                                right_parenthesis: Span(
                                     30,
                                     5,
                                 ),
                             },
-                            body: Some(
-                                [],
-                            ),
-                            modifiers: MethodModifierGroup {
-                                modifiers: [
-                                    Public(
-                                        Span(
-                                            28,
-                                            5,
-                                        ),
-                                    ),
-                                ],
-                            },
                             return_type: None,
-                            ampersand: None,
+                            body: Block {
+                                left_brace: Span(
+                                    30,
+                                    7,
+                                ),
+                                statements: [],
+                                right_brace: Span(
+                                    30,
+                                    8,
+                                ),
+                            },
                         },
                     ),
                     Property(
@@ -1228,14 +1245,6 @@
                         comments: CommentGroup {
                             comments: [],
                         },
-                        start: Span(
-                            51,
-                            13,
-                        ),
-                        end: Span(
-                            51,
-                            25,
-                        ),
                         attributes: [
                             AttributeGroup {
                                 start: Span(
@@ -1268,6 +1277,12 @@
                                 ],
                             },
                         ],
+                        static: None,
+                        function: Span(
+                            51,
+                            13,
+                        ),
+                        ampersand: None,
                         parameters: FunctionParameterList {
                             comments: CommentGroup {
                                 comments: [],
@@ -1282,11 +1297,22 @@
                                 22,
                             ),
                         },
+                        uses: None,
                         return_ty: None,
-                        uses: [],
-                        ampersand: None,
-                        body: [],
-                        static: None,
+                        body: FunctionBody {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            left_brace: Span(
+                                51,
+                                24,
+                            ),
+                            statements: [],
+                            right_brace: Span(
+                                51,
+                                25,
+                            ),
+                        },
                     },
                 ),
             },
@@ -1374,6 +1400,10 @@
                             ),
                         },
                         return_type: None,
+                        double_arrow: Span(
+                            52,
+                            18,
+                        ),
                         body: Literal(
                             Integer(
                                 LiteralInteger {
@@ -1419,14 +1449,6 @@
                         comments: CommentGroup {
                             comments: [],
                         },
-                        start: Span(
-                            53,
-                            13,
-                        ),
-                        end: Span(
-                            53,
-                            32,
-                        ),
                         attributes: [
                             AttributeGroup {
                                 start: Span(
@@ -1459,6 +1481,17 @@
                                 ],
                             },
                         ],
+                        static: Some(
+                            Span(
+                                53,
+                                13,
+                            ),
+                        ),
+                        function: Span(
+                            53,
+                            20,
+                        ),
+                        ampersand: None,
                         parameters: FunctionParameterList {
                             comments: CommentGroup {
                                 comments: [],
@@ -1473,16 +1506,22 @@
                                 29,
                             ),
                         },
+                        uses: None,
                         return_ty: None,
-                        uses: [],
-                        ampersand: None,
-                        body: [],
-                        static: Some(
-                            Span(
+                        body: FunctionBody {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            left_brace: Span(
                                 53,
-                                13,
+                                31,
                             ),
-                        ),
+                            statements: [],
+                            right_brace: Span(
+                                53,
+                                32,
+                            ),
+                        },
                     },
                 ),
             },
@@ -1575,6 +1614,10 @@
                             ),
                         },
                         return_type: None,
+                        double_arrow: Span(
+                            54,
+                            25,
+                        ),
                         body: Literal(
                             Integer(
                                 LiteralInteger {

@@ -31,37 +31,7 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
-                                4,
-                                13,
-                            ),
-                            end: Span(
-                                4,
-                                27,
-                            ),
-                            name: SimpleIdentifier {
-                                span: Span(
-                                    4,
-                                    22,
-                                ),
-                                value: "bar",
-                            },
                             attributes: [],
-                            parameters: MethodParameterList {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                start: Span(
-                                    4,
-                                    25,
-                                ),
-                                members: [],
-                                end: Span(
-                                    4,
-                                    26,
-                                ),
-                            },
-                            body: None,
                             modifiers: MethodModifierGroup {
                                 modifiers: [
                                     Public(
@@ -72,8 +42,39 @@
                                     ),
                                 ],
                             },
-                            return_type: None,
+                            function: Span(
+                                4,
+                                13,
+                            ),
                             ampersand: None,
+                            name: SimpleIdentifier {
+                                span: Span(
+                                    4,
+                                    22,
+                                ),
+                                value: "bar",
+                            },
+                            parameters: MethodParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span(
+                                    4,
+                                    25,
+                                ),
+                                members: [],
+                                right_parenthesis: Span(
+                                    4,
+                                    26,
+                                ),
+                            },
+                            return_type: None,
+                            body: Abstract(
+                                Span(
+                                    4,
+                                    27,
+                                ),
+                            ),
                         },
                     ),
                 ],

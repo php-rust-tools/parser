@@ -54,7 +54,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
 
             default = Some(Box::new(DefaultMatchArm {
                 keyword: current.span,
-                arrow,
+                double_arrow: arrow,
                 body,
             }));
         } else {

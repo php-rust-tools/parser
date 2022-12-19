@@ -59,14 +59,22 @@
                                     },
                                 ],
                             },
-                            start: Span(
+                            attributes: [],
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public(
+                                        Span(
+                                            7,
+                                            5,
+                                        ),
+                                    ),
+                                ],
+                            },
+                            function: Span(
                                 7,
                                 12,
                             ),
-                            end: Span(
-                                9,
-                                5,
-                            ),
+                            ampersand: None,
                             name: SimpleIdentifier {
                                 span: Span(
                                     7,
@@ -74,23 +82,34 @@
                                 ),
                                 value: "bar",
                             },
-                            attributes: [],
                             parameters: MethodParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     7,
                                     24,
                                 ),
                                 members: [],
-                                end: Span(
+                                right_parenthesis: Span(
                                     7,
                                     25,
                                 ),
                             },
-                            body: Some(
-                                [
+                            return_type: Some(
+                                ParentReference(
+                                    Span(
+                                        7,
+                                        28,
+                                    ),
+                                ),
+                            ),
+                            body: Block {
+                                left_brace: Span(
+                                    7,
+                                    35,
+                                ),
+                                statements: [
                                     Expression {
                                         expression: Exit {
                                             value: Some(
@@ -115,26 +134,11 @@
                                         ),
                                     },
                                 ],
-                            ),
-                            modifiers: MethodModifierGroup {
-                                modifiers: [
-                                    Public(
-                                        Span(
-                                            7,
-                                            5,
-                                        ),
-                                    ),
-                                ],
-                            },
-                            return_type: Some(
-                                ParentReference(
-                                    Span(
-                                        7,
-                                        28,
-                                    ),
+                                right_brace: Span(
+                                    9,
+                                    5,
                                 ),
-                            ),
-                            ampersand: None,
+                            },
                         },
                     ),
                 ],

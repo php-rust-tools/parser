@@ -10,14 +10,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 3,
                 1,
             ),
-            end: Span(
-                17,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     3,
@@ -25,7 +23,6 @@
                 ),
                 value: "foo",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -48,313 +45,127 @@
                     ),
                 ),
             ),
-            ampersand: None,
-            body: [
-                Expression {
-                    expression: Yield {
-                        key: None,
-                        value: Some(
-                            Literal(
-                                Integer(
-                                    LiteralInteger {
-                                        value: "1",
-                                        span: Span(
-                                            4,
-                                            11,
-                                        ),
-                                    },
-                                ),
-                            ),
-                        ),
-                    },
-                    ending: Semicolon(
-                        Span(
-                            4,
-                            12,
-                        ),
-                    ),
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
                 },
-                Expression {
-                    expression: Yield {
-                        key: None,
-                        value: None,
-                    },
-                    ending: Semicolon(
-                        Span(
-                            5,
-                            10,
-                        ),
-                    ),
-                },
-                Expression {
-                    expression: Yield {
-                        key: Some(
-                            Literal(
-                                Integer(
-                                    LiteralInteger {
-                                        value: "123",
-                                        span: Span(
-                                            6,
-                                            11,
-                                        ),
-                                    },
-                                ),
-                            ),
-                        ),
-                        value: Some(
-                            Literal(
-                                Integer(
-                                    LiteralInteger {
-                                        value: "41",
-                                        span: Span(
-                                            6,
-                                            18,
-                                        ),
-                                    },
-                                ),
-                            ),
-                        ),
-                    },
-                    ending: Semicolon(
-                        Span(
-                            6,
-                            20,
-                        ),
-                    ),
-                },
-                Expression {
-                    expression: Yield {
-                        key: None,
-                        value: Some(
-                            Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            7,
-                                            11,
-                                        ),
-                                        name: "a",
-                                    },
-                                ),
-                            ),
-                        ),
-                    },
-                    ending: Semicolon(
-                        Span(
-                            7,
-                            13,
-                        ),
-                    ),
-                },
-                Expression {
-                    expression: Yield {
-                        key: None,
-                        value: Some(
-                            ArithmeticOperation(
-                                PreIncrement {
-                                    increment: Span(
-                                        9,
-                                        11,
-                                    ),
-                                    right: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span(
-                                                    9,
-                                                    13,
-                                                ),
-                                                name: "a",
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ),
-                        ),
-                    },
-                    ending: Semicolon(
-                        Span(
-                            9,
-                            15,
-                        ),
-                    ),
-                },
-                Expression {
-                    expression: Yield {
-                        key: None,
-                        value: Some(
-                            ArithmeticOperation(
-                                PostIncrement {
-                                    left: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span(
-                                                    10,
-                                                    11,
-                                                ),
-                                                name: "b",
-                                            },
-                                        ),
-                                    ),
-                                    increment: Span(
-                                        10,
-                                        13,
-                                    ),
-                                },
-                            ),
-                        ),
-                    },
-                    ending: Semicolon(
-                        Span(
-                            10,
-                            15,
-                        ),
-                    ),
-                },
-                Expression {
-                    expression: Yield {
-                        key: Some(
-                            ArithmeticOperation(
-                                PreIncrement {
-                                    increment: Span(
-                                        12,
-                                        11,
-                                    ),
-                                    right: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span(
-                                                    12,
-                                                    13,
-                                                ),
-                                                name: "a",
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ),
-                        ),
-                        value: Some(
-                            Ternary {
-                                condition: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
+                left_brace: Span(
+                    3,
+                    26,
+                ),
+                statements: [
+                    Expression {
+                        expression: Yield {
+                            key: None,
+                            value: Some(
+                                Literal(
+                                    Integer(
+                                        LiteralInteger {
+                                            value: "1",
                                             span: Span(
-                                                12,
-                                                19,
+                                                4,
+                                                11,
                                             ),
-                                            name: "a",
                                         },
                                     ),
                                 ),
-                                question: Span(
-                                    12,
-                                    22,
-                                ),
-                                then: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                12,
-                                                24,
-                                            ),
-                                            name: "m",
-                                        },
-                                    ),
-                                ),
-                                colon: Span(
-                                    12,
-                                    27,
-                                ),
-                                else: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                12,
-                                                29,
-                                            ),
-                                            name: "s",
-                                        },
-                                    ),
-                                ),
-                            },
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                4,
+                                12,
+                            ),
                         ),
                     },
-                    ending: Semicolon(
-                        Span(
-                            12,
-                            31,
+                    Expression {
+                        expression: Yield {
+                            key: None,
+                            value: None,
+                        },
+                        ending: Semicolon(
+                            Span(
+                                5,
+                                10,
+                            ),
                         ),
-                    ),
-                },
-                Expression {
-                    expression: Yield {
-                        key: Some(
-                            Ternary {
-                                condition: ArithmeticOperation(
-                                    PreIncrement {
-                                        increment: Span(
-                                            13,
-                                            11,
-                                        ),
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span(
-                                                        13,
-                                                        13,
-                                                    ),
-                                                    name: "a",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                                question: Span(
-                                    13,
-                                    16,
-                                ),
-                                then: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
+                    },
+                    Expression {
+                        expression: Yield {
+                            key: Some(
+                                Literal(
+                                    Integer(
+                                        LiteralInteger {
+                                            value: "123",
                                             span: Span(
-                                                13,
+                                                6,
+                                                11,
+                                            ),
+                                        },
+                                    ),
+                                ),
+                            ),
+                            value: Some(
+                                Literal(
+                                    Integer(
+                                        LiteralInteger {
+                                            value: "41",
+                                            span: Span(
+                                                6,
                                                 18,
                                             ),
-                                            name: "m",
                                         },
                                     ),
                                 ),
-                                colon: Span(
-                                    13,
-                                    21,
-                                ),
-                                else: Variable(
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                6,
+                                20,
+                            ),
+                        ),
+                    },
+                    Expression {
+                        expression: Yield {
+                            key: None,
+                            value: Some(
+                                Variable(
                                     SimpleVariable(
                                         SimpleVariable {
                                             span: Span(
-                                                13,
-                                                23,
+                                                7,
+                                                11,
                                             ),
-                                            name: "s",
+                                            name: "a",
                                         },
                                     ),
                                 ),
-                            },
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                7,
+                                13,
+                            ),
                         ),
-                        value: Some(
-                            Ternary {
-                                condition: ArithmeticOperation(
+                    },
+                    Expression {
+                        expression: Yield {
+                            key: None,
+                            value: Some(
+                                ArithmeticOperation(
                                     PreIncrement {
                                         increment: Span(
-                                            13,
-                                            29,
+                                            9,
+                                            11,
                                         ),
                                         right: Variable(
                                             SimpleVariable(
                                                 SimpleVariable {
                                                     span: Span(
+                                                        9,
                                                         13,
-                                                        31,
                                                     ),
                                                     name: "a",
                                                 },
@@ -362,133 +173,249 @@
                                         ),
                                     },
                                 ),
-                                question: Span(
-                                    13,
-                                    34,
-                                ),
-                                then: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                13,
-                                                36,
-                                            ),
-                                            name: "m",
-                                        },
-                                    ),
-                                ),
-                                colon: Span(
-                                    13,
-                                    39,
-                                ),
-                                else: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                13,
-                                                41,
-                                            ),
-                                            name: "s",
-                                        },
-                                    ),
-                                ),
-                            },
-                        ),
-                    },
-                    ending: Semicolon(
-                        Span(
-                            13,
-                            43,
-                        ),
-                    ),
-                },
-                Expression {
-                    expression: Yield {
-                        key: Some(
-                            ArithmeticOperation(
-                                PostIncrement {
-                                    left: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span(
-                                                    15,
-                                                    11,
-                                                ),
-                                                name: "a",
-                                            },
-                                        ),
-                                    ),
-                                    increment: Span(
-                                        15,
-                                        13,
-                                    ),
-                                },
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                9,
+                                15,
                             ),
                         ),
-                        value: Some(
-                            Ternary {
-                                condition: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                15,
-                                                19,
-                                            ),
-                                            name: "a",
-                                        },
-                                    ),
-                                ),
-                                question: Span(
-                                    15,
-                                    22,
-                                ),
-                                then: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                15,
-                                                24,
-                                            ),
-                                            name: "m",
-                                        },
-                                    ),
-                                ),
-                                colon: Span(
-                                    15,
-                                    27,
-                                ),
-                                else: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                15,
-                                                29,
-                                            ),
-                                            name: "s",
-                                        },
-                                    ),
-                                ),
-                            },
-                        ),
                     },
-                    ending: Semicolon(
-                        Span(
-                            15,
-                            31,
-                        ),
-                    ),
-                },
-                Expression {
-                    expression: Yield {
-                        key: Some(
-                            Ternary {
-                                condition: ArithmeticOperation(
+                    Expression {
+                        expression: Yield {
+                            key: None,
+                            value: Some(
+                                ArithmeticOperation(
                                     PostIncrement {
                                         left: Variable(
                                             SimpleVariable(
                                                 SimpleVariable {
                                                     span: Span(
-                                                        16,
+                                                        10,
+                                                        11,
+                                                    ),
+                                                    name: "b",
+                                                },
+                                            ),
+                                        ),
+                                        increment: Span(
+                                            10,
+                                            13,
+                                        ),
+                                    },
+                                ),
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                10,
+                                15,
+                            ),
+                        ),
+                    },
+                    Expression {
+                        expression: Yield {
+                            key: Some(
+                                ArithmeticOperation(
+                                    PreIncrement {
+                                        increment: Span(
+                                            12,
+                                            11,
+                                        ),
+                                        right: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        12,
+                                                        13,
+                                                    ),
+                                                    name: "a",
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            ),
+                            value: Some(
+                                Ternary {
+                                    condition: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    12,
+                                                    19,
+                                                ),
+                                                name: "a",
+                                            },
+                                        ),
+                                    ),
+                                    question: Span(
+                                        12,
+                                        22,
+                                    ),
+                                    then: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    12,
+                                                    24,
+                                                ),
+                                                name: "m",
+                                            },
+                                        ),
+                                    ),
+                                    colon: Span(
+                                        12,
+                                        27,
+                                    ),
+                                    else: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    12,
+                                                    29,
+                                                ),
+                                                name: "s",
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                12,
+                                31,
+                            ),
+                        ),
+                    },
+                    Expression {
+                        expression: Yield {
+                            key: Some(
+                                Ternary {
+                                    condition: ArithmeticOperation(
+                                        PreIncrement {
+                                            increment: Span(
+                                                13,
+                                                11,
+                                            ),
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span(
+                                                            13,
+                                                            13,
+                                                        ),
+                                                        name: "a",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    question: Span(
+                                        13,
+                                        16,
+                                    ),
+                                    then: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    13,
+                                                    18,
+                                                ),
+                                                name: "m",
+                                            },
+                                        ),
+                                    ),
+                                    colon: Span(
+                                        13,
+                                        21,
+                                    ),
+                                    else: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    13,
+                                                    23,
+                                                ),
+                                                name: "s",
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            value: Some(
+                                Ternary {
+                                    condition: ArithmeticOperation(
+                                        PreIncrement {
+                                            increment: Span(
+                                                13,
+                                                29,
+                                            ),
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span(
+                                                            13,
+                                                            31,
+                                                        ),
+                                                        name: "a",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    question: Span(
+                                        13,
+                                        34,
+                                    ),
+                                    then: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    13,
+                                                    36,
+                                                ),
+                                                name: "m",
+                                            },
+                                        ),
+                                    ),
+                                    colon: Span(
+                                        13,
+                                        39,
+                                    ),
+                                    else: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    13,
+                                                    41,
+                                                ),
+                                                name: "s",
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                13,
+                                43,
+                            ),
+                        ),
+                    },
+                    Expression {
+                        expression: Yield {
+                            key: Some(
+                                ArithmeticOperation(
+                                    PostIncrement {
+                                        left: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span(
+                                                        15,
                                                         11,
                                                     ),
                                                     name: "a",
@@ -496,105 +423,187 @@
                                             ),
                                         ),
                                         increment: Span(
-                                            16,
+                                            15,
                                             13,
                                         ),
                                     },
                                 ),
-                                question: Span(
-                                    16,
-                                    16,
-                                ),
-                                then: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                16,
-                                                18,
-                                            ),
-                                            name: "m",
-                                        },
-                                    ),
-                                ),
-                                colon: Span(
-                                    16,
-                                    21,
-                                ),
-                                else: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                16,
-                                                23,
-                                            ),
-                                            name: "s",
-                                        },
-                                    ),
-                                ),
-                            },
-                        ),
-                        value: Some(
-                            Ternary {
-                                condition: ArithmeticOperation(
-                                    PostIncrement {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span(
-                                                        16,
-                                                        29,
-                                                    ),
-                                                    name: "a",
-                                                },
-                                            ),
+                            ),
+                            value: Some(
+                                Ternary {
+                                    condition: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    15,
+                                                    19,
+                                                ),
+                                                name: "a",
+                                            },
                                         ),
-                                        increment: Span(
-                                            16,
-                                            31,
+                                    ),
+                                    question: Span(
+                                        15,
+                                        22,
+                                    ),
+                                    then: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    15,
+                                                    24,
+                                                ),
+                                                name: "m",
+                                            },
                                         ),
-                                    },
-                                ),
-                                question: Span(
-                                    16,
-                                    34,
-                                ),
-                                then: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                16,
-                                                36,
-                                            ),
-                                            name: "m",
-                                        },
                                     ),
-                                ),
-                                colon: Span(
-                                    16,
-                                    39,
-                                ),
-                                else: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                16,
-                                                41,
-                                            ),
-                                            name: "s",
-                                        },
+                                    colon: Span(
+                                        15,
+                                        27,
                                     ),
-                                ),
-                            },
+                                    else: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    15,
+                                                    29,
+                                                ),
+                                                name: "s",
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                15,
+                                31,
+                            ),
                         ),
                     },
-                    ending: Semicolon(
-                        Span(
-                            16,
-                            43,
+                    Expression {
+                        expression: Yield {
+                            key: Some(
+                                Ternary {
+                                    condition: ArithmeticOperation(
+                                        PostIncrement {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span(
+                                                            16,
+                                                            11,
+                                                        ),
+                                                        name: "a",
+                                                    },
+                                                ),
+                                            ),
+                                            increment: Span(
+                                                16,
+                                                13,
+                                            ),
+                                        },
+                                    ),
+                                    question: Span(
+                                        16,
+                                        16,
+                                    ),
+                                    then: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    16,
+                                                    18,
+                                                ),
+                                                name: "m",
+                                            },
+                                        ),
+                                    ),
+                                    colon: Span(
+                                        16,
+                                        21,
+                                    ),
+                                    else: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    16,
+                                                    23,
+                                                ),
+                                                name: "s",
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            value: Some(
+                                Ternary {
+                                    condition: ArithmeticOperation(
+                                        PostIncrement {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span(
+                                                            16,
+                                                            29,
+                                                        ),
+                                                        name: "a",
+                                                    },
+                                                ),
+                                            ),
+                                            increment: Span(
+                                                16,
+                                                31,
+                                            ),
+                                        },
+                                    ),
+                                    question: Span(
+                                        16,
+                                        34,
+                                    ),
+                                    then: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    16,
+                                                    36,
+                                                ),
+                                                name: "m",
+                                            },
+                                        ),
+                                    ),
+                                    colon: Span(
+                                        16,
+                                        39,
+                                    ),
+                                    else: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span(
+                                                    16,
+                                                    41,
+                                                ),
+                                                name: "s",
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ),
+                        },
+                        ending: Semicolon(
+                            Span(
+                                16,
+                                43,
+                            ),
                         ),
-                    ),
-                },
-            ],
+                    },
+                ],
+                right_brace: Span(
+                    17,
+                    1,
+                ),
+            },
         },
     ),
 ]

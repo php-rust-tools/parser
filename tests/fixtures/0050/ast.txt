@@ -10,14 +10,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 1,
                 7,
             ),
-            end: Span(
-                1,
-                30,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     1,
@@ -25,7 +23,6 @@
                 ),
                 value: "foo",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -64,8 +61,20 @@
                 ),
             },
             return_type: None,
-            ampersand: None,
-            body: [],
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    1,
+                    29,
+                ),
+                statements: [],
+                right_brace: Span(
+                    1,
+                    30,
+                ),
+            },
         },
     ),
 ]

@@ -10,14 +10,12 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            attributes: [],
+            function: Span(
                 3,
                 1,
             ),
-            end: Span(
-                11,
-                1,
-            ),
+            ampersand: None,
             name: SimpleIdentifier {
                 span: Span(
                     3,
@@ -25,7 +23,6 @@
                 ),
                 value: "foo",
             },
-            attributes: [],
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
@@ -59,177 +56,193 @@
                 ),
             },
             return_type: None,
-            ampersand: None,
-            body: [
-                Global {
-                    span: Span(
-                        4,
-                        5,
-                    ),
-                    variables: [
-                        BracedVariableVariable(
-                            BracedVariableVariable {
-                                start: Span(
-                                    4,
-                                    12,
-                                ),
-                                variable: New {
-                                    new: Span(
+            body: FunctionBody {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_brace: Span(
+                    3,
+                    18,
+                ),
+                statements: [
+                    Global {
+                        span: Span(
+                            4,
+                            5,
+                        ),
+                        variables: [
+                            BracedVariableVariable(
+                                BracedVariableVariable {
+                                    start: Span(
                                         4,
-                                        14,
+                                        12,
                                     ),
-                                    target: AnonymousClass(
-                                        AnonymousClass {
-                                            attributes: [],
-                                            class: Span(
-                                                4,
-                                                18,
-                                            ),
-                                            extends: None,
-                                            implements: None,
-                                            body: ClassBody {
-                                                left_brace: Span(
+                                    variable: New {
+                                        new: Span(
+                                            4,
+                                            14,
+                                        ),
+                                        target: AnonymousClass(
+                                            AnonymousClass {
+                                                attributes: [],
+                                                class: Span(
                                                     4,
-                                                    26,
+                                                    18,
                                                 ),
-                                                members: [
-                                                    Method(
-                                                        Method {
-                                                            comments: CommentGroup {
-                                                                comments: [],
-                                                            },
-                                                            start: Span(
-                                                                5,
-                                                                16,
-                                                            ),
-                                                            end: Span(
-                                                                7,
-                                                                9,
-                                                            ),
-                                                            name: SimpleIdentifier {
-                                                                span: Span(
-                                                                    5,
-                                                                    25,
-                                                                ),
-                                                                value: "__toString",
-                                                            },
-                                                            attributes: [],
-                                                            parameters: MethodParameterList {
+                                                extends: None,
+                                                implements: None,
+                                                body: ClassBody {
+                                                    left_brace: Span(
+                                                        4,
+                                                        26,
+                                                    ),
+                                                    members: [
+                                                        Method(
+                                                            Method {
                                                                 comments: CommentGroup {
                                                                     comments: [],
                                                                 },
-                                                                start: Span(
-                                                                    5,
-                                                                    35,
-                                                                ),
-                                                                members: [],
-                                                                end: Span(
-                                                                    5,
-                                                                    36,
-                                                                ),
-                                                            },
-                                                            body: Some(
-                                                                [
-                                                                    Return {
-                                                                        return: Span(
-                                                                            6,
-                                                                            13,
+                                                                attributes: [],
+                                                                modifiers: MethodModifierGroup {
+                                                                    modifiers: [
+                                                                        Public(
+                                                                            Span(
+                                                                                5,
+                                                                                9,
+                                                                            ),
                                                                         ),
-                                                                        value: Some(
-                                                                            Literal(
-                                                                                String(
-                                                                                    LiteralString {
-                                                                                        value: "p",
-                                                                                        span: Span(
-                                                                                            6,
-                                                                                            20,
-                                                                                        ),
-                                                                                    },
+                                                                    ],
+                                                                },
+                                                                function: Span(
+                                                                    5,
+                                                                    16,
+                                                                ),
+                                                                ampersand: None,
+                                                                name: SimpleIdentifier {
+                                                                    span: Span(
+                                                                        5,
+                                                                        25,
+                                                                    ),
+                                                                    value: "__toString",
+                                                                },
+                                                                parameters: MethodParameterList {
+                                                                    comments: CommentGroup {
+                                                                        comments: [],
+                                                                    },
+                                                                    left_parenthesis: Span(
+                                                                        5,
+                                                                        35,
+                                                                    ),
+                                                                    members: [],
+                                                                    right_parenthesis: Span(
+                                                                        5,
+                                                                        36,
+                                                                    ),
+                                                                },
+                                                                return_type: None,
+                                                                body: Block {
+                                                                    left_brace: Span(
+                                                                        5,
+                                                                        38,
+                                                                    ),
+                                                                    statements: [
+                                                                        Return {
+                                                                            return: Span(
+                                                                                6,
+                                                                                13,
+                                                                            ),
+                                                                            value: Some(
+                                                                                Literal(
+                                                                                    String(
+                                                                                        LiteralString {
+                                                                                            value: "p",
+                                                                                            span: Span(
+                                                                                                6,
+                                                                                                20,
+                                                                                            ),
+                                                                                        },
+                                                                                    ),
                                                                                 ),
                                                                             ),
-                                                                        ),
-                                                                        ending: Semicolon(
-                                                                            Span(
-                                                                                6,
-                                                                                23,
+                                                                            ending: Semicolon(
+                                                                                Span(
+                                                                                    6,
+                                                                                    23,
+                                                                                ),
                                                                             ),
-                                                                        ),
-                                                                    },
-                                                                ],
-                                                            ),
-                                                            modifiers: MethodModifierGroup {
-                                                                modifiers: [
-                                                                    Public(
-                                                                        Span(
-                                                                            5,
-                                                                            9,
-                                                                        ),
+                                                                        },
+                                                                    ],
+                                                                    right_brace: Span(
+                                                                        7,
+                                                                        9,
                                                                     ),
-                                                                ],
+                                                                },
                                                             },
-                                                            return_type: None,
-                                                            ampersand: None,
-                                                        },
+                                                        ),
+                                                    ],
+                                                    right_brace: Span(
+                                                        8,
+                                                        5,
                                                     ),
-                                                ],
-                                                right_brace: Span(
-                                                    8,
-                                                    5,
+                                                },
+                                            },
+                                        ),
+                                        arguments: Some(
+                                            ArgumentList {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
+                                                left_parenthesis: Span(
+                                                    4,
+                                                    23,
+                                                ),
+                                                arguments: [],
+                                                right_parenthesis: Span(
+                                                    4,
+                                                    24,
                                                 ),
                                             },
-                                        },
+                                        ),
+                                    },
+                                    end: Span(
+                                        8,
+                                        6,
                                     ),
-                                    arguments: Some(
-                                        ArgumentList {
-                                            comments: CommentGroup {
-                                                comments: [],
-                                            },
-                                            left_parenthesis: Span(
-                                                4,
-                                                23,
-                                            ),
-                                            arguments: [],
-                                            right_parenthesis: Span(
-                                                4,
-                                                24,
-                                            ),
-                                        },
-                                    ),
-                                },
-                                end: Span(
-                                    8,
-                                    6,
-                                ),
-                            },
-                        ),
-                    ],
-                },
-                Echo {
-                    echo: Span(
-                        10,
-                        5,
-                    ),
-                    values: [
-                        Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span(
-                                        10,
-                                        10,
-                                    ),
-                                    name: "p",
                                 },
                             ),
-                        ),
-                    ],
-                    ending: Semicolon(
-                        Span(
+                        ],
+                    },
+                    Echo {
+                        echo: Span(
                             10,
-                            12,
+                            5,
                         ),
-                    ),
-                },
-            ],
+                        values: [
+                            Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span(
+                                            10,
+                                            10,
+                                        ),
+                                        name: "p",
+                                    },
+                                ),
+                            ),
+                        ],
+                        ending: Semicolon(
+                            Span(
+                                10,
+                                12,
+                            ),
+                        ),
+                    },
+                ],
+                right_brace: Span(
+                    11,
+                    1,
+                ),
+            },
         },
     ),
     Expression {
@@ -338,14 +351,28 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
+                            attributes: [],
+                            modifiers: MethodModifierGroup {
+                                modifiers: [
+                                    Public(
+                                        Span(
+                                            17,
+                                            5,
+                                        ),
+                                    ),
+                                    Static(
+                                        Span(
+                                            17,
+                                            12,
+                                        ),
+                                    ),
+                                ],
+                            },
+                            function: Span(
                                 17,
                                 19,
                             ),
-                            end: Span(
-                                19,
-                                5,
-                            ),
+                            ampersand: None,
                             name: SimpleIdentifier {
                                 span: Span(
                                     17,
@@ -353,23 +380,27 @@
                                 ),
                                 value: "foo",
                             },
-                            attributes: [],
                             parameters: MethodParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     17,
                                     31,
                                 ),
                                 members: [],
-                                end: Span(
+                                right_parenthesis: Span(
                                     17,
                                     32,
                                 ),
                             },
-                            body: Some(
-                                [
+                            return_type: None,
+                            body: Block {
+                                left_brace: Span(
+                                    17,
+                                    34,
+                                ),
+                                statements: [
                                     Return {
                                         return: Span(
                                             18,
@@ -435,25 +466,11 @@
                                         ),
                                     },
                                 ],
-                            ),
-                            modifiers: MethodModifierGroup {
-                                modifiers: [
-                                    Public(
-                                        Span(
-                                            17,
-                                            5,
-                                        ),
-                                    ),
-                                    Static(
-                                        Span(
-                                            17,
-                                            12,
-                                        ),
-                                    ),
-                                ],
+                                right_brace: Span(
+                                    19,
+                                    5,
+                                ),
                             },
-                            return_type: None,
-                            ampersand: None,
                         },
                     ),
                 ],
@@ -499,15 +516,13 @@
                                         comments: CommentGroup {
                                             comments: [],
                                         },
-                                        start: Span(
+                                        attributes: [],
+                                        static: None,
+                                        function: Span(
                                             22,
                                             7,
                                         ),
-                                        end: Span(
-                                            24,
-                                            1,
-                                        ),
-                                        attributes: [],
+                                        ampersand: None,
                                         parameters: FunctionParameterList {
                                             comments: CommentGroup {
                                                 comments: [],
@@ -522,37 +537,48 @@
                                                 16,
                                             ),
                                         },
+                                        uses: None,
                                         return_ty: None,
-                                        uses: [],
-                                        ampersand: None,
-                                        body: [
-                                            Return {
-                                                return: Span(
-                                                    23,
-                                                    5,
-                                                ),
-                                                value: Some(
-                                                    Literal(
-                                                        String(
-                                                            LiteralString {
-                                                                value: "m",
-                                                                span: Span(
-                                                                    23,
-                                                                    12,
-                                                                ),
-                                                            },
+                                        body: FunctionBody {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_brace: Span(
+                                                22,
+                                                18,
+                                            ),
+                                            statements: [
+                                                Return {
+                                                    return: Span(
+                                                        23,
+                                                        5,
+                                                    ),
+                                                    value: Some(
+                                                        Literal(
+                                                            String(
+                                                                LiteralString {
+                                                                    value: "m",
+                                                                    span: Span(
+                                                                        23,
+                                                                        12,
+                                                                    ),
+                                                                },
+                                                            ),
                                                         ),
                                                     ),
-                                                ),
-                                                ending: Semicolon(
-                                                    Span(
-                                                        23,
-                                                        15,
+                                                    ending: Semicolon(
+                                                        Span(
+                                                            23,
+                                                            15,
+                                                        ),
                                                     ),
-                                                ),
-                                            },
-                                        ],
-                                        static: None,
+                                                },
+                                            ],
+                                            right_brace: Span(
+                                                24,
+                                                1,
+                                            ),
+                                        },
                                     },
                                 ),
                                 end: Span(

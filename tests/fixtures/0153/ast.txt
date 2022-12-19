@@ -61,14 +61,22 @@
                                             comments: CommentGroup {
                                                 comments: [],
                                             },
-                                            start: Span(
+                                            attributes: [],
+                                            modifiers: MethodModifierGroup {
+                                                modifiers: [
+                                                    Public(
+                                                        Span(
+                                                            6,
+                                                            6,
+                                                        ),
+                                                    ),
+                                                ],
+                                            },
+                                            function: Span(
                                                 6,
                                                 13,
                                             ),
-                                            end: Span(
-                                                8,
-                                                9,
-                                            ),
+                                            ampersand: None,
                                             name: SimpleIdentifier {
                                                 span: Span(
                                                     6,
@@ -76,12 +84,11 @@
                                                 ),
                                                 value: "__construct",
                                             },
-                                            attributes: [],
                                             parameters: MethodParameterList {
                                                 comments: CommentGroup {
                                                     comments: [],
                                                 },
-                                                start: Span(
+                                                left_parenthesis: Span(
                                                     6,
                                                     33,
                                                 ),
@@ -139,26 +146,23 @@
                                                         },
                                                     },
                                                 ],
-                                                end: Span(
+                                                right_parenthesis: Span(
                                                     8,
                                                     6,
                                                 ),
                                             },
-                                            body: Some(
-                                                [],
-                                            ),
-                                            modifiers: MethodModifierGroup {
-                                                modifiers: [
-                                                    Public(
-                                                        Span(
-                                                            6,
-                                                            6,
-                                                        ),
-                                                    ),
-                                                ],
-                                            },
                                             return_type: None,
-                                            ampersand: None,
+                                            body: Block {
+                                                left_brace: Span(
+                                                    8,
+                                                    8,
+                                                ),
+                                                statements: [],
+                                                right_brace: Span(
+                                                    8,
+                                                    9,
+                                                ),
+                                            },
                                         },
                                     ),
                                 ],
