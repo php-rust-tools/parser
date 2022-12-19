@@ -26,17 +26,7 @@
                 statements: [
                     Class(
                         Class {
-                            span: Span(
-                                5,
-                                7,
-                            ),
-                            name: SimpleIdentifier {
-                                span: Span(
-                                    5,
-                                    13,
-                                ),
-                                value: "Baz",
-                            },
+                            attributes: [],
                             modifiers: ClassModifierGroup {
                                 modifiers: [
                                     Final(
@@ -47,17 +37,23 @@
                                     ),
                                 ],
                             },
+                            class: Span(
+                                5,
+                                7,
+                            ),
+                            name: SimpleIdentifier {
+                                span: Span(
+                                    5,
+                                    13,
+                                ),
+                                value: "Baz",
+                            },
                             extends: None,
                             implements: None,
-                            attributes: [],
                             body: ClassBody {
-                                start: Span(
+                                left_brace: Span(
                                     5,
                                     17,
-                                ),
-                                end: Span(
-                                    7,
-                                    1,
                                 ),
                                 members: [
                                     Property(
@@ -105,6 +101,10 @@
                                         },
                                     ),
                                 ],
+                                right_brace: Span(
+                                    7,
+                                    1,
+                                ),
                             },
                         },
                     ),

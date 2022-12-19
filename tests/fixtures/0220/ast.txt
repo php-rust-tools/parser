@@ -7,7 +7,11 @@
     ),
     Class(
         Class {
-            span: Span(
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
                 3,
                 1,
             ),
@@ -18,22 +22,18 @@
                 ),
                 value: "bar",
             },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
             extends: None,
             implements: None,
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     3,
                     11,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     3,
                     12,
                 ),
-                members: [],
             },
         },
     ),
@@ -57,25 +57,25 @@
                         },
                     ),
                 ),
-                span: Span(
+                equals: Span(
                     5,
                     4,
                 ),
                 right: New {
-                    span: Span(
+                    new: Span(
                         5,
                         6,
                     ),
                     target: AnonymousClass(
                         AnonymousClass {
                             attributes: [],
-                            span: Span(
+                            class: Span(
                                 5,
                                 10,
                             ),
                             extends: Some(
                                 ClassExtends {
-                                    span: Span(
+                                    extends: Span(
                                         5,
                                         16,
                                     ),
@@ -90,13 +90,9 @@
                             ),
                             implements: None,
                             body: ClassBody {
-                                start: Span(
+                                left_brace: Span(
                                     5,
                                     28,
-                                ),
-                                end: Span(
-                                    9,
-                                    1,
                                 ),
                                 members: [
                                     Method(
@@ -143,7 +139,7 @@
                                                         ),
                                                         value: Some(
                                                             New {
-                                                                span: Span(
+                                                                new: Span(
                                                                     7,
                                                                     16,
                                                                 ),
@@ -163,12 +159,12 @@
                                                                         comments: CommentGroup {
                                                                             comments: [],
                                                                         },
-                                                                        start: Span(
+                                                                        left_parenthesis: Span(
                                                                             7,
                                                                             23,
                                                                         ),
                                                                         arguments: [],
-                                                                        end: Span(
+                                                                        right_parenthesis: Span(
                                                                             7,
                                                                             24,
                                                                         ),
@@ -207,6 +203,10 @@
                                         },
                                     ),
                                 ],
+                                right_brace: Span(
+                                    9,
+                                    1,
+                                ),
                             },
                         },
                     ),

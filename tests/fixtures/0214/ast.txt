@@ -7,11 +7,11 @@
     ),
     Interface(
         Interface {
+            attributes: [],
             span: Span(
                 3,
                 1,
             ),
-            attributes: [],
             name: SimpleIdentifier {
                 span: Span(
                     3,
@@ -21,25 +21,25 @@
             },
             extends: None,
             body: InterfaceBody {
-                start: Span(
+                left_brace: Span(
                     3,
                     13,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     3,
                     14,
                 ),
-                members: [],
             },
         },
     ),
     Interface(
         Interface {
+            attributes: [],
             span: Span(
                 5,
                 1,
             ),
-            attributes: [],
             name: SimpleIdentifier {
                 span: Span(
                     5,
@@ -49,7 +49,7 @@
             },
             extends: Some(
                 InterfaceExtends {
-                    span: Span(
+                    extends: Span(
                         5,
                         15,
                     ),
@@ -68,13 +68,9 @@
                 },
             ),
             body: InterfaceBody {
-                start: Span(
+                left_brace: Span(
                     5,
                     25,
-                ),
-                end: Span(
-                    7,
-                    1,
                 ),
                 members: [
                     Method(
@@ -135,6 +131,10 @@
                         },
                     ),
                 ],
+                right_brace: Span(
+                    7,
+                    1,
+                ),
             },
         },
     ),

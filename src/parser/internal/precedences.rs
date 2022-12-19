@@ -59,10 +59,10 @@ impl Precedence {
             Pipe => Self::BitwiseOr,
             BooleanAnd => Self::And,
             BooleanOr => Self::Or,
-            Coalesce => Self::NullCoalesce,
+            DoubleQuestion => Self::NullCoalesce,
             Question | QuestionColon => Self::Ternary,
-            Equals | PlusEquals | MinusEquals | AsteriskEqual | PowEquals | SlashEquals
-            | DotEquals | AndEqual | CoalesceEqual | PercentEquals | AmpersandEquals
+            Equals | PlusEquals | MinusEquals | AsteriskEquals | PowEquals | SlashEquals
+            | DotEquals | AndEquals | DoubleQuestionEquals | PercentEquals | AmpersandEquals
             | PipeEquals | CaretEquals | LeftShiftEquals | RightShiftEquals => Self::Assignment,
             Yield => Self::Yield,
             LogicalAnd => Self::KeyAnd,
@@ -76,10 +76,10 @@ impl Precedence {
         use TokenKind::*;
 
         match kind {
-            Coalesce => Self::NullCoalesce,
+            DoubleQuestion => Self::NullCoalesce,
             Increment | Decrement => Self::IncDec,
             LeftParen | LeftBracket => Self::CallDim,
-            Arrow | NullsafeArrow | DoubleColon => Self::ObjectAccess,
+            Arrow | QuestionArrow | DoubleColon => Self::ObjectAccess,
             _ => unimplemented!("postfix precedence for op {:?}", kind),
         }
     }

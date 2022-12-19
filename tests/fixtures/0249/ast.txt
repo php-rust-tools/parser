@@ -7,22 +7,6 @@
     ),
     Class(
         Class {
-            span: Span(
-                4,
-                1,
-            ),
-            name: SimpleIdentifier {
-                span: Span(
-                    4,
-                    7,
-                ),
-                value: "Bar",
-            },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
-            extends: None,
-            implements: None,
             attributes: [
                 AttributeGroup {
                     start: Span(
@@ -55,7 +39,7 @@
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    start: Span(
+                                    left_parenthesis: Span(
                                         3,
                                         6,
                                     ),
@@ -81,7 +65,7 @@
                                             },
                                         },
                                     ],
-                                    end: Span(
+                                    right_parenthesis: Span(
                                         3,
                                         19,
                                     ),
@@ -91,16 +75,32 @@
                     ],
                 },
             ],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
+                4,
+                1,
+            ),
+            name: SimpleIdentifier {
+                span: Span(
+                    4,
+                    7,
+                ),
+                value: "Bar",
+            },
+            extends: None,
+            implements: None,
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     4,
                     11,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     4,
                     12,
                 ),
-                members: [],
             },
         },
     ),

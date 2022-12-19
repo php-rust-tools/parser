@@ -31,7 +31,7 @@
             ),
             implements: [],
             body: BackedEnumBody {
-                start: Span(
+                left_brace: Span(
                     3,
                     13,
                 ),
@@ -39,7 +39,7 @@
                     Case(
                         BackedEnumCase {
                             attributes: [],
-                            start: Span(
+                            case: Span(
                                 4,
                                 5,
                             ),
@@ -50,7 +50,7 @@
                                 ),
                                 value: "static",
                             },
-                            span: Span(
+                            equals: Span(
                                 4,
                                 17,
                             ),
@@ -65,7 +65,7 @@
                                     },
                                 ),
                             ),
-                            end: Span(
+                            semicolon: Span(
                                 4,
                                 23,
                             ),
@@ -74,7 +74,7 @@
                     Case(
                         BackedEnumCase {
                             attributes: [],
-                            start: Span(
+                            case: Span(
                                 5,
                                 5,
                             ),
@@ -85,7 +85,7 @@
                                 ),
                                 value: "self",
                             },
-                            span: Span(
+                            equals: Span(
                                 5,
                                 15,
                             ),
@@ -100,7 +100,7 @@
                                     },
                                 ),
                             ),
-                            end: Span(
+                            semicolon: Span(
                                 5,
                                 21,
                             ),
@@ -109,7 +109,7 @@
                     Case(
                         BackedEnumCase {
                             attributes: [],
-                            start: Span(
+                            case: Span(
                                 6,
                                 5,
                             ),
@@ -120,7 +120,7 @@
                                 ),
                                 value: "return",
                             },
-                            span: Span(
+                            equals: Span(
                                 6,
                                 17,
                             ),
@@ -135,7 +135,7 @@
                                     },
                                 ),
                             ),
-                            end: Span(
+                            semicolon: Span(
                                 6,
                                 23,
                             ),
@@ -144,7 +144,7 @@
                     Case(
                         BackedEnumCase {
                             attributes: [],
-                            start: Span(
+                            case: Span(
                                 7,
                                 5,
                             ),
@@ -155,7 +155,7 @@
                                 ),
                                 value: "parent",
                             },
-                            span: Span(
+                            equals: Span(
                                 7,
                                 17,
                             ),
@@ -170,7 +170,7 @@
                                     },
                                 ),
                             ),
-                            end: Span(
+                            semicolon: Span(
                                 7,
                                 23,
                             ),
@@ -179,7 +179,7 @@
                     Case(
                         BackedEnumCase {
                             attributes: [],
-                            start: Span(
+                            case: Span(
                                 8,
                                 5,
                             ),
@@ -190,7 +190,7 @@
                                 ),
                                 value: "enum",
                             },
-                            span: Span(
+                            equals: Span(
                                 8,
                                 15,
                             ),
@@ -205,7 +205,7 @@
                                     },
                                 ),
                             ),
-                            end: Span(
+                            semicolon: Span(
                                 8,
                                 22,
                             ),
@@ -214,7 +214,7 @@
                     Case(
                         BackedEnumCase {
                             attributes: [],
-                            start: Span(
+                            case: Span(
                                 9,
                                 5,
                             ),
@@ -225,7 +225,7 @@
                                 ),
                                 value: "from",
                             },
-                            span: Span(
+                            equals: Span(
                                 9,
                                 15,
                             ),
@@ -240,14 +240,14 @@
                                     },
                                 ),
                             ),
-                            end: Span(
+                            semicolon: Span(
                                 9,
                                 22,
                             ),
                         },
                     ),
                 ],
-                end: Span(
+                right_brace: Span(
                     10,
                     1,
                 ),
@@ -256,7 +256,11 @@
     ),
     Class(
         Class {
-            span: Span(
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
                 13,
                 1,
             ),
@@ -267,20 +271,12 @@
                 ),
                 value: "f",
             },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
             extends: None,
             implements: None,
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     13,
                     9,
-                ),
-                end: Span(
-                    20,
-                    1,
                 ),
                 members: [
                     Constant(
@@ -292,7 +288,7 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [],
                             },
-                            start: Span(
+                            const: Span(
                                 14,
                                 5,
                             ),
@@ -305,7 +301,7 @@
                                         ),
                                         value: "static",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         14,
                                         18,
                                     ),
@@ -322,7 +318,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 14,
                                 24,
                             ),
@@ -337,7 +333,7 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [],
                             },
-                            start: Span(
+                            const: Span(
                                 15,
                                 5,
                             ),
@@ -350,7 +346,7 @@
                                         ),
                                         value: "self",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         15,
                                         16,
                                     ),
@@ -367,7 +363,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 15,
                                 22,
                             ),
@@ -382,7 +378,7 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [],
                             },
-                            start: Span(
+                            const: Span(
                                 16,
                                 5,
                             ),
@@ -395,7 +391,7 @@
                                         ),
                                         value: "return",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         16,
                                         18,
                                     ),
@@ -412,7 +408,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 16,
                                 24,
                             ),
@@ -427,7 +423,7 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [],
                             },
-                            start: Span(
+                            const: Span(
                                 17,
                                 5,
                             ),
@@ -440,7 +436,7 @@
                                         ),
                                         value: "parent",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         17,
                                         18,
                                     ),
@@ -457,7 +453,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 17,
                                 24,
                             ),
@@ -472,7 +468,7 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [],
                             },
-                            start: Span(
+                            const: Span(
                                 18,
                                 5,
                             ),
@@ -485,7 +481,7 @@
                                         ),
                                         value: "enum",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         18,
                                         16,
                                     ),
@@ -502,7 +498,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 18,
                                 23,
                             ),
@@ -517,7 +513,7 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [],
                             },
-                            start: Span(
+                            const: Span(
                                 19,
                                 5,
                             ),
@@ -530,7 +526,7 @@
                                         ),
                                         value: "from",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         19,
                                         16,
                                     ),
@@ -547,13 +543,17 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 19,
                                 23,
                             ),
                         },
                     ),
                 ],
+                right_brace: Span(
+                    20,
+                    1,
+                ),
             },
         },
     ),
@@ -562,7 +562,7 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            const: Span(
                 22,
                 1,
             ),
@@ -575,7 +575,7 @@
                         ),
                         value: "from",
                     },
-                    span: Span(
+                    equals: Span(
                         22,
                         12,
                     ),
@@ -592,7 +592,7 @@
                     ),
                 },
             ],
-            end: Span(
+            semicolon: Span(
                 22,
                 17,
             ),
@@ -603,7 +603,7 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            const: Span(
                 23,
                 1,
             ),
@@ -616,7 +616,7 @@
                         ),
                         value: "enum",
                     },
-                    span: Span(
+                    equals: Span(
                         23,
                         12,
                     ),
@@ -633,7 +633,7 @@
                     ),
                 },
             ],
-            end: Span(
+            semicolon: Span(
                 23,
                 17,
             ),

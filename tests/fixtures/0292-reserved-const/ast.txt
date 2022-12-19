@@ -26,7 +26,11 @@
                 statements: [
                     Class(
                         Class {
-                            span: Span(
+                            attributes: [],
+                            modifiers: ClassModifierGroup {
+                                modifiers: [],
+                            },
+                            class: Span(
                                 5,
                                 1,
                             ),
@@ -37,20 +41,12 @@
                                 ),
                                 value: "s",
                             },
-                            modifiers: ClassModifierGroup {
-                                modifiers: [],
-                            },
                             extends: None,
                             implements: None,
-                            attributes: [],
                             body: ClassBody {
-                                start: Span(
+                                left_brace: Span(
                                     5,
                                     9,
-                                ),
-                                end: Span(
-                                    9,
-                                    1,
                                 ),
                                 members: [
                                     Method(
@@ -138,6 +134,10 @@
                                         },
                                     ),
                                 ],
+                                right_brace: Span(
+                                    9,
+                                    1,
+                                ),
                             },
                         },
                     ),
@@ -146,7 +146,7 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
+                            const: Span(
                                 11,
                                 1,
                             ),
@@ -159,12 +159,12 @@
                                         ),
                                         value: "self",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         11,
                                         12,
                                     ),
                                     value: New {
-                                        span: Span(
+                                        new: Span(
                                             11,
                                             14,
                                         ),
@@ -183,7 +183,7 @@
                                     },
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 11,
                                 19,
                             ),
@@ -194,7 +194,7 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
+                            const: Span(
                                 12,
                                 1,
                             ),
@@ -207,12 +207,12 @@
                                         ),
                                         value: "parent",
                                     },
-                                    span: Span(
+                                    equals: Span(
                                         12,
                                         14,
                                     ),
                                     value: New {
-                                        span: Span(
+                                        new: Span(
                                             12,
                                             16,
                                         ),
@@ -231,7 +231,7 @@
                                     },
                                 },
                             ],
-                            end: Span(
+                            semicolon: Span(
                                 12,
                                 21,
                             ),
@@ -239,7 +239,11 @@
                     ),
                     Class(
                         Class {
-                            span: Span(
+                            attributes: [],
+                            modifiers: ClassModifierGroup {
+                                modifiers: [],
+                            },
+                            class: Span(
                                 14,
                                 1,
                             ),
@@ -250,20 +254,12 @@
                                 ),
                                 value: "a",
                             },
-                            modifiers: ClassModifierGroup {
-                                modifiers: [],
-                            },
                             extends: None,
                             implements: None,
-                            attributes: [],
                             body: ClassBody {
-                                start: Span(
+                                left_brace: Span(
                                     14,
                                     9,
-                                ),
-                                end: Span(
-                                    27,
-                                    1,
                                 ),
                                 members: [
                                     Method(
@@ -404,7 +400,7 @@
                                                                 comments: CommentGroup {
                                                                     comments: [],
                                                                 },
-                                                                start: Span(
+                                                                left_parenthesis: Span(
                                                                     20,
                                                                     17,
                                                                 ),
@@ -427,7 +423,7 @@
                                                                         ),
                                                                     },
                                                                 ],
-                                                                end: Span(
+                                                                right_parenthesis: Span(
                                                                     20,
                                                                     22,
                                                                 ),
@@ -457,7 +453,7 @@
                                                                 comments: CommentGroup {
                                                                     comments: [],
                                                                 },
-                                                                start: Span(
+                                                                left_parenthesis: Span(
                                                                     21,
                                                                     17,
                                                                 ),
@@ -480,7 +476,7 @@
                                                                         ),
                                                                     },
                                                                 ],
-                                                                end: Span(
+                                                                right_parenthesis: Span(
                                                                     21,
                                                                     24,
                                                                 ),
@@ -525,12 +521,12 @@
                                                                 comments: CommentGroup {
                                                                     comments: [],
                                                                 },
-                                                                start: Span(
+                                                                left_parenthesis: Span(
                                                                     23,
                                                                     18,
                                                                 ),
                                                                 arguments: [],
-                                                                end: Span(
+                                                                right_parenthesis: Span(
                                                                     23,
                                                                     19,
                                                                 ),
@@ -585,12 +581,12 @@
                                                                 comments: CommentGroup {
                                                                     comments: [],
                                                                 },
-                                                                start: Span(
+                                                                left_parenthesis: Span(
                                                                     24,
                                                                     20,
                                                                 ),
                                                                 arguments: [],
-                                                                end: Span(
+                                                                right_parenthesis: Span(
                                                                     24,
                                                                     21,
                                                                 ),
@@ -645,12 +641,12 @@
                                                                 comments: CommentGroup {
                                                                     comments: [],
                                                                 },
-                                                                start: Span(
+                                                                left_parenthesis: Span(
                                                                     25,
                                                                     22,
                                                                 ),
                                                                 arguments: [],
-                                                                end: Span(
+                                                                right_parenthesis: Span(
                                                                     25,
                                                                     23,
                                                                 ),
@@ -680,6 +676,10 @@
                                         },
                                     ),
                                 ],
+                                right_brace: Span(
+                                    27,
+                                    1,
+                                ),
                             },
                         },
                     ),
@@ -691,7 +691,7 @@
                                     1,
                                 ),
                                 expr: New {
-                                    span: Span(
+                                    new: Span(
                                         29,
                                         2,
                                     ),
@@ -713,7 +713,7 @@
                                     7,
                                 ),
                             },
-                            span: Span(
+                            arrow: Span(
                                 29,
                                 8,
                             ),
@@ -732,12 +732,12 @@
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                start: Span(
+                                left_parenthesis: Span(
                                     29,
                                     11,
                                 ),
                                 arguments: [],
-                                end: Span(
+                                right_parenthesis: Span(
                                     29,
                                     12,
                                 ),

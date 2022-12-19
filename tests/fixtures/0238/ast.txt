@@ -19,7 +19,7 @@
                         },
                     ),
                 ),
-                span: Span(
+                equals: Span(
                     3,
                     6,
                 ),
@@ -29,13 +29,14 @@
                         8,
                     ),
                     path: Concat {
-                        left: MagicConst {
-                            span: Span(
-                                3,
-                                16,
+                        left: MagicConstant(
+                            Directory(
+                                Span(
+                                    3,
+                                    16,
+                                ),
                             ),
-                            constant: Directory,
-                        },
+                        ),
                         span: Span(
                             3,
                             24,

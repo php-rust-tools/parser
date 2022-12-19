@@ -7,17 +7,7 @@
     ),
     Class(
         Class {
-            span: Span(
-                1,
-                16,
-            ),
-            name: SimpleIdentifier {
-                span: Span(
-                    1,
-                    22,
-                ),
-                value: "Foo",
-            },
+            attributes: [],
             modifiers: ClassModifierGroup {
                 modifiers: [
                     Readonly(
@@ -28,19 +18,29 @@
                     ),
                 ],
             },
+            class: Span(
+                1,
+                16,
+            ),
+            name: SimpleIdentifier {
+                span: Span(
+                    1,
+                    22,
+                ),
+                value: "Foo",
+            },
             extends: None,
             implements: None,
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     1,
                     26,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     1,
                     27,
                 ),
-                members: [],
             },
         },
     ),

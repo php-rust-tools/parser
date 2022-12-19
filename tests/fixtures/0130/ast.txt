@@ -7,7 +7,11 @@
     ),
     Class(
         Class {
-            span: Span(
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
                 3,
                 1,
             ),
@@ -18,20 +22,12 @@
                 ),
                 value: "foo",
             },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
             extends: None,
             implements: None,
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     3,
                     11,
-                ),
-                end: Span(
-                    7,
-                    1,
                 ),
                 members: [
                     Method(
@@ -87,6 +83,10 @@
                         },
                     ),
                 ],
+                right_brace: Span(
+                    7,
+                    1,
+                ),
             },
         },
     ),

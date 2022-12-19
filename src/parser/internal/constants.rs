@@ -20,7 +20,11 @@ pub fn parse(state: &mut State) -> ParseResult<Constant> {
         let span = utils::skip(state, TokenKind::Equals)?;
         let value = expressions::create(state)?;
 
-        entries.push(ConstantEntry { name, span, value });
+        entries.push(ConstantEntry {
+            name,
+            equals: span,
+            value,
+        });
 
         if state.stream.current().kind == TokenKind::Comma {
             state.stream.next();
@@ -33,9 +37,9 @@ pub fn parse(state: &mut State) -> ParseResult<Constant> {
 
     Ok(Constant {
         comments,
-        start,
+        r#const: start,
         entries,
-        end,
+        semicolon: end,
     })
 }
 
@@ -55,7 +59,11 @@ pub fn classish(
         let span = utils::skip(state, TokenKind::Equals)?;
         let value = expressions::create(state)?;
 
-        entries.push(ConstantEntry { name, span, value });
+        entries.push(ConstantEntry {
+            name,
+            equals: span,
+            value,
+        });
 
         if state.stream.current().kind == TokenKind::Comma {
             state.stream.next();
@@ -70,8 +78,8 @@ pub fn classish(
         comments,
         attributes,
         modifiers,
-        start,
+        r#const: start,
         entries,
-        end,
+        semicolon: end,
     })
 }

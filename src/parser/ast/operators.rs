@@ -10,57 +10,57 @@ use crate::parser::ast::Expression;
 pub enum ArithmeticOperation {
     Addition {
         left: Box<Expression>,
-        span: Span,
+        plus: Span,
         right: Box<Expression>,
     },
     Subtraction {
         left: Box<Expression>,
-        span: Span,
+        minus: Span,
         right: Box<Expression>,
     },
     Multiplication {
         left: Box<Expression>,
-        span: Span,
+        asterisk: Span,
         right: Box<Expression>,
     },
     Division {
         left: Box<Expression>,
-        span: Span,
+        slash: Span,
         right: Box<Expression>,
     },
     Modulo {
         left: Box<Expression>,
-        span: Span,
+        percent: Span,
         right: Box<Expression>,
     },
     Exponentiation {
         left: Box<Expression>,
-        span: Span,
+        pow: Span,
         right: Box<Expression>,
     },
     Negative {
-        span: Span,
+        minus: Span,
         right: Box<Expression>,
     },
     Positive {
-        span: Span,
+        plus: Span,
         right: Box<Expression>,
     },
     PreIncrement {
-        span: Span,
+        increment: Span,
         right: Box<Expression>,
     },
     PostIncrement {
         left: Box<Expression>,
-        span: Span,
+        increment: Span,
     },
     PreDecrement {
-        span: Span,
+        decrement: Span,
         right: Box<Expression>,
     },
     PostDecrement {
         left: Box<Expression>,
-        span: Span,
+        decrement: Span,
     },
 }
 
@@ -69,72 +69,72 @@ pub enum ArithmeticOperation {
 pub enum AssignmentOperation {
     Assign {
         left: Box<Expression>,
-        span: Span,
+        equals: Span,
         right: Box<Expression>,
     },
     Addition {
         left: Box<Expression>,
-        span: Span,
+        plus_equals: Span,
         right: Box<Expression>,
     },
     Subtraction {
         left: Box<Expression>,
-        span: Span,
+        minus_equals: Span,
         right: Box<Expression>,
     },
     Multiplication {
         left: Box<Expression>,
-        span: Span,
+        asterisk_equals: Span,
         right: Box<Expression>,
     },
     Division {
         left: Box<Expression>,
-        span: Span,
+        slash_equals: Span,
         right: Box<Expression>,
     },
     Modulo {
         left: Box<Expression>,
-        span: Span,
+        percent_equals: Span,
         right: Box<Expression>,
     },
     Exponentiation {
         left: Box<Expression>,
-        span: Span,
+        pow_equals: Span,
         right: Box<Expression>,
     },
     Concat {
         left: Box<Expression>,
-        span: Span,
+        dot_equals: Span,
         right: Box<Expression>,
     },
     BitwiseAnd {
         left: Box<Expression>,
-        span: Span,
+        ampersand_equals: Span,
         right: Box<Expression>,
     },
     BitwiseOr {
         left: Box<Expression>,
-        span: Span,
+        pipe_equals: Span,
         right: Box<Expression>,
     },
     BitwiseXor {
         left: Box<Expression>,
-        span: Span,
+        caret_equals: Span,
         right: Box<Expression>,
     },
     LeftShift {
         left: Box<Expression>,
-        span: Span,
+        left_shift_equals: Span,
         right: Box<Expression>,
     },
     RightShift {
         left: Box<Expression>,
-        span: Span,
+        right_shift_equals: Span,
         right: Box<Expression>,
     },
     Coalesce {
         left: Box<Expression>,
-        span: Span,
+        coalesce_equals: Span,
         right: Box<Expression>,
     },
 }
@@ -178,52 +178,52 @@ pub enum BitwiseOperation {
 pub enum ComparisonOperation {
     Equal {
         left: Box<Expression>,
-        span: Span,
+        double_equals: Span,
         right: Box<Expression>,
     },
     Identical {
         left: Box<Expression>,
-        span: Span,
+        triple_equals: Span,
         right: Box<Expression>,
     },
     NotEqual {
         left: Box<Expression>,
-        span: Span,
+        bang_equals: Span,
         right: Box<Expression>,
     },
     AngledNotEqual {
         left: Box<Expression>,
-        span: Span,
+        angled_left_right: Span,
         right: Box<Expression>,
     },
     NotIdentical {
         left: Box<Expression>,
-        span: Span,
+        bang_double_equals: Span,
         right: Box<Expression>,
     },
     LessThan {
         left: Box<Expression>,
-        span: Span,
+        less_than: Span,
         right: Box<Expression>,
     },
     GreaterThan {
         left: Box<Expression>,
-        span: Span,
+        greater_than: Span,
         right: Box<Expression>,
     },
     LessThanOrEqual {
         left: Box<Expression>,
-        span: Span,
+        less_than_equals: Span,
         right: Box<Expression>,
     },
     GreaterThanOrEqual {
         left: Box<Expression>,
-        span: Span,
+        greater_than_equals: Span,
         right: Box<Expression>,
     },
     Spaceship {
         left: Box<Expression>,
-        span: Span,
+        spaceship: Span,
         right: Box<Expression>,
     },
 }
@@ -233,31 +233,31 @@ pub enum ComparisonOperation {
 pub enum LogicalOperation {
     And {
         left: Box<Expression>,
-        span: Span,
+        double_ampersand: Span,
         right: Box<Expression>,
     },
     Or {
         left: Box<Expression>,
-        span: Span,
+        double_pipe: Span,
         right: Box<Expression>,
     },
     Not {
-        span: Span,
+        bang: Span,
         right: Box<Expression>,
     },
     LogicalAnd {
         left: Box<Expression>,
-        span: Span,
+        and: Span,
         right: Box<Expression>,
     },
     LogicalOr {
         left: Box<Expression>,
-        span: Span,
+        or: Span,
         right: Box<Expression>,
     },
     LogicalXor {
         left: Box<Expression>,
-        span: Span,
+        xor: Span,
         right: Box<Expression>,
     },
 }

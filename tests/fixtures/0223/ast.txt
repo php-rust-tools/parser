@@ -75,12 +75,12 @@
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    start: Span(
+                                    left_parenthesis: Span(
                                         5,
                                         7,
                                     ),
                                     arguments: [],
-                                    end: Span(
+                                    right_parenthesis: Span(
                                         5,
                                         8,
                                     ),
@@ -108,7 +108,7 @@
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    start: Span(
+                                    left_parenthesis: Span(
                                         6,
                                         7,
                                     ),
@@ -131,7 +131,7 @@
                                             ),
                                         },
                                     ],
-                                    end: Span(
+                                    right_parenthesis: Span(
                                         6,
                                         9,
                                     ),
@@ -159,7 +159,7 @@
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    start: Span(
+                                    left_parenthesis: Span(
                                         7,
                                         7,
                                     ),
@@ -193,7 +193,7 @@
                                             ),
                                         },
                                     ],
-                                    end: Span(
+                                    right_parenthesis: Span(
                                         7,
                                         12,
                                     ),
@@ -393,22 +393,6 @@
     ),
     Class(
         Class {
-            span: Span(
-                20,
-                1,
-            ),
-            name: SimpleIdentifier {
-                span: Span(
-                    20,
-                    7,
-                ),
-                value: "C",
-            },
-            modifiers: ClassModifierGroup {
-                modifiers: [],
-            },
-            extends: None,
-            implements: None,
             attributes: [
                 AttributeGroup {
                     start: Span(
@@ -459,12 +443,12 @@
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    start: Span(
+                                    left_parenthesis: Span(
                                         19,
                                         9,
                                     ),
                                     arguments: [],
-                                    end: Span(
+                                    right_parenthesis: Span(
                                         19,
                                         10,
                                     ),
@@ -492,7 +476,7 @@
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    start: Span(
+                                    left_parenthesis: Span(
                                         19,
                                         16,
                                     ),
@@ -526,7 +510,7 @@
                                             ),
                                         },
                                     ],
-                                    end: Span(
+                                    right_parenthesis: Span(
                                         19,
                                         25,
                                     ),
@@ -536,14 +520,26 @@
                     ],
                 },
             ],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span(
+                20,
+                1,
+            ),
+            name: SimpleIdentifier {
+                span: Span(
+                    20,
+                    7,
+                ),
+                value: "C",
+            },
+            extends: None,
+            implements: None,
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     20,
                     9,
-                ),
-                end: Span(
-                    34,
-                    1,
                 ),
                 members: [
                     Method(
@@ -899,6 +895,10 @@
                         },
                     ),
                 ],
+                right_brace: Span(
+                    34,
+                    1,
+                ),
             },
         },
     ),
@@ -1007,15 +1007,15 @@
             },
             implements: [],
             body: UnitEnumBody {
-                start: Span(
+                left_brace: Span(
                     40,
                     8,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     40,
                     9,
                 ),
-                members: [],
             },
         },
     ),
@@ -1076,12 +1076,12 @@
             ),
             implements: [],
             body: BackedEnumBody {
-                start: Span(
+                left_brace: Span(
                     43,
                     13,
                 ),
                 members: [],
-                end: Span(
+                right_brace: Span(
                     43,
                     14,
                 ),
@@ -1090,10 +1090,6 @@
     ),
     Interface(
         Interface {
-            span: Span(
-                46,
-                1,
-            ),
             attributes: [
                 AttributeGroup {
                     start: Span(
@@ -1126,6 +1122,10 @@
                     ],
                 },
             ],
+            span: Span(
+                46,
+                1,
+            ),
             name: SimpleIdentifier {
                 span: Span(
                     46,
@@ -1135,15 +1135,15 @@
             },
             extends: None,
             body: InterfaceBody {
-                start: Span(
+                left_brace: Span(
                     46,
                     13,
                 ),
-                end: Span(
+                members: [],
+                right_brace: Span(
                     46,
                     14,
                 ),
-                members: [],
             },
         },
     ),
@@ -1219,7 +1219,7 @@
                         },
                     ),
                 ),
-                span: Span(
+                equals: Span(
                     51,
                     4,
                 ),
@@ -1312,7 +1312,7 @@
                         },
                     ),
                 ),
-                span: Span(
+                equals: Span(
                     52,
                     4,
                 ),
@@ -1410,7 +1410,7 @@
                         },
                     ),
                 ),
-                span: Span(
+                equals: Span(
                     53,
                     4,
                 ),
@@ -1508,7 +1508,7 @@
                         },
                     ),
                 ),
-                span: Span(
+                equals: Span(
                     54,
                     4,
                 ),
@@ -1611,12 +1611,12 @@
                         },
                     ),
                 ),
-                span: Span(
+                equals: Span(
                     55,
                     4,
                 ),
                 right: New {
-                    span: Span(
+                    new: Span(
                         55,
                         6,
                     ),
@@ -1654,20 +1654,16 @@
                                     ],
                                 },
                             ],
-                            span: Span(
+                            class: Span(
                                 55,
                                 17,
                             ),
                             extends: None,
                             implements: None,
                             body: ClassBody {
-                                start: Span(
+                                left_brace: Span(
                                     55,
                                     23,
-                                ),
-                                end: Span(
-                                    58,
-                                    1,
                                 ),
                                 members: [
                                     VariableProperty(
@@ -1723,6 +1719,10 @@
                                         },
                                     ),
                                 ],
+                                right_brace: Span(
+                                    58,
+                                    1,
+                                ),
                             },
                         },
                     ),

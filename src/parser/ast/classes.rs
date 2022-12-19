@@ -16,46 +16,46 @@ use crate::parser::ast::utils::CommaSeparated;
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ClassBody {
-    pub start: Span,
-    pub end: Span,
+    pub left_brace: Span, // `{`
     pub members: Vec<ClassMember>,
+    pub right_brace: Span, // `}`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Class {
-    pub span: Span,
-    pub name: SimpleIdentifier,
+    pub attributes: Vec<AttributeGroup>, // `#[Qux]`
     #[serde(flatten)]
-    pub modifiers: ClassModifierGroup,
-    pub extends: Option<ClassExtends>,
-    pub implements: Option<ClassImplements>,
-    pub attributes: Vec<AttributeGroup>,
-    pub body: ClassBody,
+    pub modifiers: ClassModifierGroup, // `abstract`, `final`
+    pub class: Span,                     // `class`
+    pub name: SimpleIdentifier,          // `Foo`
+    pub extends: Option<ClassExtends>,   // `extends Foo`
+    pub implements: Option<ClassImplements>, // `implements Bar, Baz`
+    pub body: ClassBody,                 // `{ ... }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct AnonymousClass {
-    pub attributes: Vec<AttributeGroup>,     // `#[Foo]`
-    pub span: Span,                          // `class`
-    pub extends: Option<ClassExtends>,       // `extends Foo, Bar`
-    pub implements: Option<ClassImplements>, // `implements Foo, Bar`
+    pub attributes: Vec<AttributeGroup>,     // `#[Qux]`
+    pub class: Span,                         // `class`
+    pub extends: Option<ClassExtends>,       // `extends Foo`
+    pub implements: Option<ClassImplements>, // `implements Baz, Baz`
     pub body: ClassBody,                     // `{ ... }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ClassExtends {
-    pub span: Span,
-    pub parent: SimpleIdentifier,
+    pub extends: Span,            // `extends`
+    pub parent: SimpleIdentifier, // `Foo`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ClassImplements {
-    pub span: Span,
-    pub interfaces: CommaSeparated<SimpleIdentifier>,
+    pub implements: Span,                             // `implements`
+    pub interfaces: CommaSeparated<SimpleIdentifier>, // `Bar, Baz`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

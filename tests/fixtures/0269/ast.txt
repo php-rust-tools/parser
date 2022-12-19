@@ -10,7 +10,7 @@
             comments: CommentGroup {
                 comments: [],
             },
-            start: Span(
+            const: Span(
                 3,
                 1,
             ),
@@ -23,7 +23,7 @@
                         ),
                         value: "\xe2\x86\xaa",
                     },
-                    span: Span(
+                    equals: Span(
                         3,
                         11,
                     ),
@@ -40,7 +40,7 @@
                     ),
                 },
             ],
-            end: Span(
+            semicolon: Span(
                 3,
                 17,
             ),
@@ -48,11 +48,11 @@
     ),
     Interface(
         Interface {
+            attributes: [],
             span: Span(
                 5,
                 1,
             ),
-            attributes: [],
             name: SimpleIdentifier {
                 span: Span(
                     5,
@@ -62,13 +62,9 @@
             },
             extends: None,
             body: InterfaceBody {
-                start: Span(
+                left_brace: Span(
                     5,
                     16,
-                ),
-                end: Span(
-                    7,
-                    1,
                 ),
                 members: [
                     Method(
@@ -157,22 +153,16 @@
                         },
                     ),
                 ],
+                right_brace: Span(
+                    7,
+                    1,
+                ),
             },
         },
     ),
     Class(
         Class {
-            span: Span(
-                9,
-                7,
-            ),
-            name: SimpleIdentifier {
-                span: Span(
-                    9,
-                    13,
-                ),
-                value: "\xf0\x9f\x92\xbb",
-            },
+            attributes: [],
             modifiers: ClassModifierGroup {
                 modifiers: [
                     Final(
@@ -183,10 +173,21 @@
                     ),
                 ],
             },
+            class: Span(
+                9,
+                7,
+            ),
+            name: SimpleIdentifier {
+                span: Span(
+                    9,
+                    13,
+                ),
+                value: "\xf0\x9f\x92\xbb",
+            },
             extends: None,
             implements: Some(
                 ClassImplements {
-                    span: Span(
+                    implements: Span(
                         9,
                         18,
                     ),
@@ -204,15 +205,10 @@
                     },
                 },
             ),
-            attributes: [],
             body: ClassBody {
-                start: Span(
+                left_brace: Span(
                     9,
                     34,
-                ),
-                end: Span(
-                    13,
-                    1,
                 ),
                 members: [
                     Method(
@@ -356,6 +352,10 @@
                         },
                     ),
                 ],
+                right_brace: Span(
+                    13,
+                    1,
+                ),
             },
         },
     ),
@@ -418,12 +418,12 @@
                                     },
                                 ),
                             ),
-                            span: Span(
+                            equals: Span(
                                 16,
                                 9,
                             ),
                             right: New {
-                                span: Span(
+                                new: Span(
                                     16,
                                     11,
                                 ),
@@ -443,12 +443,12 @@
                                         comments: CommentGroup {
                                             comments: [],
                                         },
-                                        start: Span(
+                                        left_parenthesis: Span(
                                             16,
                                             19,
                                         ),
                                         arguments: [],
-                                        end: Span(
+                                        right_parenthesis: Span(
                                             16,
                                             20,
                                         ),
@@ -478,7 +478,7 @@
                                     },
                                 ),
                             ),
-                            span: Span(
+                            equals: Span(
                                 17,
                                 9,
                             ),
@@ -515,7 +515,7 @@
                                 },
                             ),
                         ),
-                        span: Span(
+                        arrow: Span(
                             18,
                             8,
                         ),
@@ -534,7 +534,7 @@
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            start: Span(
+                            left_parenthesis: Span(
                                 18,
                                 14,
                             ),
@@ -568,7 +568,7 @@
                                     ),
                                 },
                             ],
-                            end: Span(
+                            right_parenthesis: Span(
                                 18,
                                 26,
                             ),
@@ -601,12 +601,12 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                start: Span(
+                left_parenthesis: Span(
                     21,
                     5,
                 ),
                 arguments: [],
-                end: Span(
+                right_parenthesis: Span(
                     21,
                     6,
                 ),
@@ -633,7 +633,7 @@
                         },
                     ),
                 ),
-                span: Span(
+                equals: Span(
                     23,
                     9,
                 ),
