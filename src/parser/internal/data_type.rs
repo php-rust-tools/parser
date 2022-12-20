@@ -26,7 +26,7 @@ pub fn data_type(state: &mut State) -> ParseResult<Type> {
     if state.stream.current().kind == TokenKind::Ampersand
         && !matches!(
             state.stream.peek().kind,
-            TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
+            TokenKind::Variable | TokenKind::Ellipsis | TokenKind::Ampersand
         )
     {
         return instersection(state, ty, false);
@@ -56,7 +56,7 @@ pub fn optional_data_type(state: &mut State) -> ParseResult<Option<Type>> {
             if state.stream.current().kind == TokenKind::Ampersand
                 && !matches!(
                     state.stream.peek().kind,
-                    TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
+                    TokenKind::Variable | TokenKind::Ellipsis | TokenKind::Ampersand
                 )
             {
                 return instersection(state, ty, false).map(Some);
@@ -144,13 +144,14 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
         }
         TokenKind::Enum | TokenKind::From => {
             let span = current.span;
-            let name = current.kind.to_string().into();
+            let name = current.to_string().into();
 
             state.stream.next();
 
             Ok(Some(Type::Named(span, name)))
         }
-        TokenKind::Identifier(id) => {
+        TokenKind::Identifier => {
+            let id = current.value.clone();
             let span = current.span;
             state.stream.next();
 
@@ -174,11 +175,12 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
                 _ => Ok(Some(Type::Named(span, name.into()))),
             }
         }
-        TokenKind::QualifiedIdentifier(name) | TokenKind::FullyQualifiedIdentifier(name) => {
+        TokenKind::QualifiedIdentifier | TokenKind::FullyQualifiedIdentifier => {
+            let name = current.value.clone();
             let span = current.span;
             state.stream.next();
 
-            Ok(Some(Type::Named(span, name.clone())))
+            Ok(Some(Type::Named(span, name)))
         }
         _ => Ok(None),
     }
@@ -324,7 +326,7 @@ fn instersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResul
         if state.stream.current().kind == TokenKind::Ampersand
             && !matches!(
                 state.stream.peek().kind,
-                TokenKind::Variable(_) | TokenKind::Ellipsis | TokenKind::Ampersand
+                TokenKind::Variable | TokenKind::Ellipsis | TokenKind::Ampersand
             )
         {
             state.stream.next();

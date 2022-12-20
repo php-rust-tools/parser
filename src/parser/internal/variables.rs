@@ -11,13 +11,14 @@ use crate::parser::state::State;
 
 pub fn simple_variable(state: &mut State) -> ParseResult<SimpleVariable> {
     let current = state.stream.current();
-    if let TokenKind::Variable(name) = &current.kind {
+    if let TokenKind::Variable = &current.kind {
         let span = current.span;
+        let name = current.value.clone();
         state.stream.next();
 
         return Ok(SimpleVariable {
             span,
-            name: name.clone(),
+            name,
         });
     }
 
@@ -27,13 +28,14 @@ pub fn simple_variable(state: &mut State) -> ParseResult<SimpleVariable> {
 pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
     let current = state.stream.current();
     match &current.kind {
-        TokenKind::Variable(name) => {
+        TokenKind::Variable => {
             let span = current.span;
+            let name = current.value.clone();
             state.stream.next();
 
             Ok(Variable::SimpleVariable(SimpleVariable {
                 span,
-                name: name.clone(),
+                name,
             }))
         }
         TokenKind::DollarLeftBrace => {

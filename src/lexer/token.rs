@@ -76,8 +76,8 @@ pub enum TokenKind {
     Self_,
     Parent,
     Backtick,
-    StartDocString(ByteString, DocStringKind),
-    EndDocString(ByteString, DocStringIndentationKind, usize),
+    StartDocString(DocStringKind),
+    EndDocString(DocStringIndentationKind, usize),
     From,
     Print,
     Dollar,
@@ -127,12 +127,12 @@ pub enum TokenKind {
     AsteriskEquals,
     Colon,
     Comma,
-    SingleLineComment(ByteString),
-    HashMarkComment(ByteString),
-    MultiLineComment(ByteString),
-    DocumentComment(ByteString),
+    SingleLineComment,
+    HashMarkComment,
+    MultiLineComment,
+    DocumentComment,
     Const,
-    LiteralString(ByteString),
+    LiteralString,
     Continue,
     CurlyOpen,
     Declare,
@@ -141,7 +141,6 @@ pub enum TokenKind {
     DirConstant,
     DivEquals,
     Do,
-    DocOpen(ByteString),
     DollarLeftBrace,
     Dot,
     DotEquals,
@@ -170,22 +169,22 @@ pub enum TokenKind {
     False,
     Final,
     Finally,
-    LiteralFloat(ByteString),
+    LiteralFloat,
     Fn,
     For,
     Foreach,
-    FullyQualifiedIdentifier(ByteString),
+    FullyQualifiedIdentifier,
     Function,
     Goto,
     GreaterThan,
     GreaterThanEquals,
-    Identifier(ByteString),
+    Identifier,
     If,
     Implements,
     Include,
     IncludeOnce,
     Increment,
-    InlineHtml(ByteString),
+    InlineHtml,
     Instanceof,
     Insteadof,
     Eval,
@@ -193,7 +192,7 @@ pub enum TokenKind {
     Unset,
     Isset,
     List,
-    LiteralInteger(ByteString),
+    LiteralInteger,
     IntCast,
     IntegerCast,
     Interface,
@@ -227,7 +226,7 @@ pub enum TokenKind {
     Private,
     Protected,
     Public,
-    QualifiedIdentifier(ByteString),
+    QualifiedIdentifier,
     Question,
     QuestionColon,
     Require,
@@ -242,7 +241,7 @@ pub enum TokenKind {
     Static,
     StringCast,
     BinaryCast,
-    StringPart(ByteString),
+    StringPart,
     Switch,
     Throw,
     Trait,
@@ -251,7 +250,7 @@ pub enum TokenKind {
     Try,
     Use,
     Var,
-    Variable(ByteString),
+    Variable,
     Yield,
     While,
     BitwiseNot,
@@ -265,6 +264,7 @@ pub enum TokenKind {
 pub struct Token {
     pub kind: TokenKind,
     pub span: Span,
+    pub value: ByteString,
 }
 
 impl Default for Token {
@@ -272,6 +272,16 @@ impl Default for Token {
         Self {
             kind: TokenKind::Eof,
             span: Span(0, 0),
+            value: ByteString::default(),
+        }
+    }
+}
+
+impl Display for Token {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.kind {
+            TokenKind::Variable => return write!(f, "${}", self.value),
+            _ => return write!(f, "{}", self.value)
         }
     }
 }
@@ -283,14 +293,8 @@ impl Display for TokenKind {
             Self::Self_ => "self",
             Self::Parent => "parent",
             Self::Backtick => "`",
-            Self::StartDocString(label, kind) => {
-                if kind == &DocStringKind::Nowdoc {
-                    return write!(f, "<<<'{}'", label);
-                } else {
-                    return write!(f, "<<<{}", label);
-                }
-            }
-            Self::EndDocString(label, ..) => return write!(f, "{}", label),
+            Self::StartDocString(_) => todo!(),
+            Self::EndDocString(..) => todo!(),
             Self::BangEquals => "!=",
             Self::From => "from",
             Self::Print => "print",
@@ -368,7 +372,7 @@ impl Display for TokenKind {
             Self::False => "false",
             Self::Final => "final",
             Self::Finally => "finally",
-            Self::LiteralFloat(bytes) => return write!(f, "{}", bytes),
+            Self::LiteralFloat => return write!(f, "float literal"),
             Self::Fn => "fn",
             Self::For => "for",
             Self::Function => "function",
@@ -378,8 +382,8 @@ impl Display for TokenKind {
             Self::If => "if",
             Self::Implements => "implements",
             Self::Increment => "++",
-            Self::InlineHtml(_) => "InlineHtml",
-            Self::LiteralInteger(bytes) => return write!(f, "{}", bytes),
+            Self::InlineHtml => "InlineHtml",
+            Self::LiteralInteger => return write!(f, "integer literal"),
             Self::LeftBrace => "{",
             Self::LeftBracket => "[",
             Self::LeftParen => "(",
@@ -464,20 +468,17 @@ impl Display for TokenKind {
             Self::Interface => "interface",
             Self::NamespaceConstant => "__NAMESPACE__",
             Self::PowEquals => "**=",
-            Self::Variable(v) => {
-                return write!(f, "${}", v);
-            }
-            Self::StringPart(v)
-            | Self::QualifiedIdentifier(v)
-            | Self::Identifier(v)
-            | Self::FullyQualifiedIdentifier(v)
-            | Self::DocOpen(v)
-            | Self::LiteralString(v)
-            | Self::SingleLineComment(v)
-            | Self::MultiLineComment(v)
-            | Self::HashMarkComment(v)
-            | Self::DocumentComment(v) => {
-                return write!(f, "{}", v);
+            Self::StringPart
+            | Self::Variable
+            | Self::QualifiedIdentifier
+            | Self::Identifier
+            | Self::FullyQualifiedIdentifier
+            | Self::LiteralString
+            | Self::SingleLineComment
+            | Self::MultiLineComment
+            | Self::HashMarkComment
+            | Self::DocumentComment => {
+                return write!(f, "{:?}", self);
             }
         };
 

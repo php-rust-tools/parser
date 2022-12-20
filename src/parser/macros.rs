@@ -44,7 +44,7 @@ macro_rules! expect_token {
             _ => {
                 return Err($crate::parser::error::ParseError::ExpectedToken(
                     vec![$($message.into(),)+],
-                    Some(token.kind.to_string()),
+                    Some(token.to_string()),
                     token.span,
                 ))
             }
@@ -61,33 +61,33 @@ macro_rules! expect_literal {
         let current = $state.stream.current();
 
         match &current.kind {
-            TokenKind::LiteralInteger(value) => {
+            TokenKind::LiteralInteger => {
                 $state.stream.next();
 
                 $crate::parser::ast::literals::Literal::Integer(
                     $crate::parser::ast::literals::LiteralInteger {
                         span: current.span,
-                        value: value.clone(),
+                        value: current.value.clone(),
                     },
                 )
             }
-            TokenKind::LiteralFloat(value) => {
+            TokenKind::LiteralFloat => {
                 $state.stream.next();
 
                 $crate::parser::ast::literals::Literal::Float(
                     $crate::parser::ast::literals::LiteralFloat {
                         span: current.span,
-                        value: value.clone(),
+                        value: current.value.clone(),
                     },
                 )
             }
-            TokenKind::LiteralString(value) => {
+            TokenKind::LiteralString => {
                 $state.stream.next();
 
                 $crate::parser::ast::literals::Literal::String(
                     $crate::parser::ast::literals::LiteralString {
                         span: current.span,
-                        value: value.clone(),
+                        value: current.value.clone(),
                     },
                 )
             }
@@ -125,7 +125,7 @@ macro_rules! expected_token {
             _ => {
                 $crate::parser::error::ParseError::ExpectedToken(
                     vec![$($expected.into()),+],
-                    Some(current.kind.to_string()),
+                    Some(current.to_string()),
                     current.span,
                 )
             }

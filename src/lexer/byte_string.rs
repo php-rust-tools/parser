@@ -25,6 +25,12 @@ impl ByteString {
     }
 }
 
+impl Default for ByteString {
+    fn default() -> Self {
+        ByteString::new(Vec::new())
+    }
+}
+
 impl std::fmt::Display for ByteString {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         for &b in &self.bytes {
@@ -107,6 +113,12 @@ impl<const N: usize> PartialEq<&[u8; N]> for ByteString {
 impl<const N: usize> PartialEq<&[u8; N]> for &ByteString {
     fn eq(&self, other: &&[u8; N]) -> bool {
         &self.bytes == other
+    }
+}
+
+impl From<u8> for ByteString {
+    fn from(byte: u8) -> Self {
+        ByteString::new(vec![byte])
     }
 }
 

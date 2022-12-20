@@ -59,7 +59,8 @@ fn top_level_statement(state: &mut State) -> ParseResult<Statement> {
             state.stream.next();
 
             let content =
-                if let TokenKind::InlineHtml(content) = state.stream.current().kind.clone() {
+                if let TokenKind::InlineHtml = state.stream.current().kind.clone() {
+                    let content = state.stream.current().value.clone();
                     state.stream.next();
                     Some(content)
                 } else {
@@ -279,7 +280,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 utils::skip_semicolon(state)?;
                 Statement::Global { span, variables }
             }
-            TokenKind::Static if matches!(peek.kind, TokenKind::Variable(_)) => {
+            TokenKind::Static if matches!(peek.kind, TokenKind::Variable) => {
                 state.stream.next();
 
                 let mut vars = vec![];
@@ -312,10 +313,11 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
 
                 Statement::Static { vars }
             }
-            TokenKind::InlineHtml(html) => {
+            TokenKind::InlineHtml => {
+                let html = state.stream.current().value.clone();
                 state.stream.next();
 
-                Statement::InlineHtml(html.clone())
+                Statement::InlineHtml(html)
             }
             TokenKind::Do => loops::do_while_statement(state)?,
             TokenKind::While => loops::while_statement(state)?,

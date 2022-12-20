@@ -209,14 +209,15 @@ fn maybe_loop_level(state: &mut State) -> ParseResult<Option<Level>> {
 
 fn loop_level(state: &mut State) -> ParseResult<Level> {
     if let Token {
-        kind: TokenKind::LiteralInteger(i),
+        kind: TokenKind::LiteralInteger,
         span,
+        value,
     } = state.stream.current()
     {
         state.stream.next();
 
         return Ok(Level::Literal(LiteralInteger {
-            value: i.clone(),
+            value: value.clone(),
             span: *span,
         }));
     }

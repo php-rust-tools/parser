@@ -69,7 +69,7 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
             expect_token!([
                     TokenKind::As => {
                         match state.stream.current() {
-                            Token { kind: TokenKind::Public | TokenKind::Protected | TokenKind::Private, span }=> {
+                            Token { kind: TokenKind::Public | TokenKind::Protected | TokenKind::Private, span, .. }=> {
                                 let visibility = peek_token!([
                                     TokenKind::Public => VisibilityModifier::Public(*span),
                                     TokenKind::Protected => VisibilityModifier::Protected(*span),
