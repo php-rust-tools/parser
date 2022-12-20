@@ -292,24 +292,22 @@ impl Lexer {
             }
             // Single quoted string.
             [b'\'', ..] => {
-                state.source.next();
-                self.tokenize_single_quote_string(state)?
+                let opening = state.source.read_and_skip(1);
+                self.tokenize_single_quote_string(state, opening)?
             }
             [b'b' | b'B', b'\'', ..] => {
-                state.source.skip(2);
-                self.tokenize_single_quote_string(state)?
+                let opening = state.source.read_and_skip(2);
+                self.tokenize_single_quote_string(state, opening)?
             }
             [b'"', ..] => {
-                state.source.next();
-                self.tokenize_double_quote_string(state)?
+                let opening = state.source.read_and_skip(1);
+                self.tokenize_double_quote_string(state, opening)?
             }
             [b'b' | b'B', b'"', ..] => {
-                state.source.skip(2);
-                self.tokenize_double_quote_string(state)?
+                let opening = state.source.read_and_skip(2);
+                self.tokenize_double_quote_string(state, opening)?
             }
-            [b'$', ident_start!(), ..] => {
-                self.tokenize_variable(state)
-            }
+            [b'$', ident_start!(), ..] => self.tokenize_variable(state),
             [b'$', ..] => {
                 state.source.next();
                 (TokenKind::Dollar, b"$".into())
@@ -1439,9 +1437,7 @@ impl Lexer {
     fn var_offset(&self, state: &mut State) -> SyntaxResult<Token> {
         let span = state.source.span();
         let (kind, value) = match state.source.read(2) {
-            [b'$', ident_start!()] => {
-                self.tokenize_variable(state)
-            }
+            [b'$', ident_start!()] => self.tokenize_variable(state),
             [b'0'..=b'9', ..] => {
                 // TODO: all integer literals are allowed, but only decimal integers with no underscores
                 // are actually treated as numbers. Others are treated as strings.
@@ -1474,12 +1470,14 @@ impl Lexer {
     fn tokenize_single_quote_string(
         &self,
         state: &mut State,
+        opening: &[u8],
     ) -> SyntaxResult<(TokenKind, ByteString)> {
-        let mut buffer = Vec::new();
+        let mut buffer = opening.to_vec();
 
         loop {
             match state.source.read(2) {
                 [b'\'', ..] => {
+                    buffer.push(b'\'');
                     state.source.next();
                     break;
                 }
@@ -1501,12 +1499,14 @@ impl Lexer {
     fn tokenize_double_quote_string(
         &self,
         state: &mut State,
+        opening: &[u8],
     ) -> SyntaxResult<(TokenKind, ByteString)> {
-        let mut buffer = Vec::new();
+        let mut buffer = opening.to_vec();
 
         let constant = loop {
             match state.source.read(3) {
                 [b'"', ..] => {
+                    buffer.push(b'"');
                     state.source.next();
                     break true;
                 }
