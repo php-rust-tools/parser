@@ -129,10 +129,10 @@ impl<'a> TokenStream<'a> {
 
             if matches!(
                 current.kind,
-                TokenKind::SingleLineComment(_)
-                    | TokenKind::MultiLineComment(_)
-                    | TokenKind::HashMarkComment(_)
-                    | TokenKind::DocumentComment(_)
+                TokenKind::SingleLineComment
+                    | TokenKind::MultiLineComment
+                    | TokenKind::HashMarkComment
+                    | TokenKind::DocumentComment
             ) {
                 cursor += 1;
                 continue;
@@ -168,36 +168,40 @@ impl<'a> TokenStream<'a> {
                 .iter()
                 .map(|token| match token {
                     Token {
-                        kind: TokenKind::SingleLineComment(content),
+                        kind: TokenKind::SingleLineComment,
                         span,
+                        value,
                     } => Comment {
                         span: *span,
                         format: CommentFormat::SingleLine,
-                        content: content.clone(),
+                        content: value.clone(),
                     },
                     Token {
-                        kind: TokenKind::MultiLineComment(content),
+                        kind: TokenKind::MultiLineComment,
                         span,
+                        value,
                     } => Comment {
                         span: *span,
                         format: CommentFormat::MultiLine,
-                        content: content.clone(),
+                        content: value.clone(),
                     },
                     Token {
-                        kind: TokenKind::HashMarkComment(content),
+                        kind: TokenKind::HashMarkComment,
                         span,
+                        value
                     } => Comment {
                         span: *span,
                         format: CommentFormat::HashMark,
-                        content: content.clone(),
+                        content: value.clone(),
                     },
                     Token {
-                        kind: TokenKind::DocumentComment(content),
+                        kind: TokenKind::DocumentComment,
                         span,
+                        value
                     } => Comment {
                         span: *span,
                         format: CommentFormat::Document,
-                        content: content.clone(),
+                        content: value.clone(),
                     },
                     _ => unreachable!(),
                 })
@@ -215,10 +219,10 @@ impl<'a> TokenStream<'a> {
 
             if !matches!(
                 current.kind,
-                TokenKind::SingleLineComment(_)
-                    | TokenKind::MultiLineComment(_)
-                    | TokenKind::HashMarkComment(_)
-                    | TokenKind::DocumentComment(_)
+                TokenKind::SingleLineComment
+                    | TokenKind::MultiLineComment
+                    | TokenKind::HashMarkComment
+                    | TokenKind::DocumentComment
             ) {
                 break;
             }

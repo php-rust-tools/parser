@@ -32,7 +32,7 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
                 TokenKind::Function => {
                     if kind != UseKind::Normal {
                         return Err(ParseError::UnexpectedToken(
-                            state.stream.current().kind.to_string(),
+                            state.stream.current().to_string(),
                             state.stream.current().span,
                         ));
                     }
@@ -43,7 +43,7 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
                 TokenKind::Const => {
                     if kind != UseKind::Normal {
                         return Err(ParseError::UnexpectedToken(
-                            state.stream.current().kind.to_string(),
+                            state.stream.current().to_string(),
                             state.stream.current().span,
                         ));
                     }

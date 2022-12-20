@@ -732,17 +732,17 @@ expressions! {
         Ok(Expression::Null)
     })
 
-    #[before(literal_float), current(TokenKind::LiteralInteger(_))]
+    #[before(literal_float), current(TokenKind::LiteralInteger)]
     literal_integer({
         let current = state.stream.current();
 
-        if let TokenKind::LiteralInteger(value) = &current.kind {
+        if let TokenKind::LiteralInteger = &current.kind {
             state.stream.next();
 
             Ok(Expression::Literal(Literal::Integer(
                 LiteralInteger {
                     span: current.span,
-                    value: value.clone()
+                    value: current.value.clone()
                 }
             )))
         } else {
@@ -750,17 +750,17 @@ expressions! {
         }
     })
 
-    #[before(literal_string), current(TokenKind::LiteralFloat(_))]
+    #[before(literal_string), current(TokenKind::LiteralFloat)]
     literal_float({
         let current = state.stream.current();
 
-        if let TokenKind::LiteralFloat(value) = &current.kind {
+        if let TokenKind::LiteralFloat = &current.kind {
             state.stream.next();
 
             Ok(Expression::Literal(
                 Literal::Float(LiteralFloat {
                     span: current.span,
-                    value: value.clone()
+                    value: current.value.clone()
                 })
             ))
         } else {
@@ -768,17 +768,17 @@ expressions! {
         }
     })
 
-    #[before(string_part), current(TokenKind::LiteralString(_))]
+    #[before(string_part), current(TokenKind::LiteralString)]
     literal_string({
         let current = state.stream.current();
 
-        if let TokenKind::LiteralString(value) = &current.kind {
+        if let TokenKind::LiteralString = &current.kind {
             state.stream.next();
 
             Ok(Expression::Literal(
                 Literal::String(LiteralString {
                     span: current.span,
-                    value: value.clone()
+                    value: current.value.clone()
                 })
             ))
         } else {
@@ -786,17 +786,17 @@ expressions! {
         }
     })
 
-    #[before(heredoc), current(TokenKind::StringPart(_))]
+    #[before(heredoc), current(TokenKind::StringPart)]
     string_part({
         strings::interpolated(state)
     })
 
-    #[before(nowdoc), current(TokenKind::StartDocString(_, DocStringKind::Heredoc))]
+    #[before(nowdoc), current(TokenKind::StartDocString(DocStringKind::Heredoc))]
     heredoc({
         strings::heredoc(state)
     })
 
-    #[before(backtick), current(TokenKind::StartDocString(_, DocStringKind::Nowdoc))]
+    #[before(backtick), current(TokenKind::StartDocString(DocStringKind::Nowdoc))]
     nowdoc({
         strings::nowdoc(state)
     })
@@ -806,7 +806,7 @@ expressions! {
         strings::shell_exec(state)
     })
 
-    #[before(static_postfix), current(TokenKind::Identifier(_) | TokenKind::QualifiedIdentifier(_) | TokenKind::FullyQualifiedIdentifier(_))]
+    #[before(static_postfix), current(TokenKind::Identifier | TokenKind::QualifiedIdentifier | TokenKind::FullyQualifiedIdentifier)]
     identifier({
         Ok(Expression::Identifier(Identifier::SimpleIdentifier(identifiers::full_name(state)?)))
     })
@@ -1102,7 +1102,7 @@ expressions! {
         Ok(Expression::BitwiseOperation(BitwiseOperation::Not { span, right }))
     })
 
-    #[before(unexpected_token), current(TokenKind::Dollar | TokenKind::DollarLeftBrace | TokenKind::Variable(_))]
+    #[before(unexpected_token), current(TokenKind::Dollar | TokenKind::DollarLeftBrace | TokenKind::Variable)]
     variable({
         Ok(Expression::Variable(variables::dynamic_variable(state)?))
     })
@@ -1112,7 +1112,7 @@ fn unexpected_token(state: &mut State) -> ParseResult<Expression> {
     let current = state.stream.current();
 
     Err(ParseError::UnexpectedToken(
-        current.kind.to_string(),
+        current.to_string(),
         current.span,
     ))
 }
@@ -1178,7 +1178,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             let current = state.stream.current();
 
             let property = match current.kind {
-                TokenKind::Variable(_) | TokenKind::Dollar | TokenKind::DollarLeftBrace => {
+                TokenKind::Variable | TokenKind::Dollar | TokenKind::DollarLeftBrace => {
                     Expression::Variable(variables::dynamic_variable(state)?)
                 }
                 _ if identifiers::is_identifier_maybe_reserved(&state.stream.current().kind) => {
@@ -1276,7 +1276,7 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
             state.stream.next();
 
             let property = match state.stream.current().kind {
-                TokenKind::Variable(_) | TokenKind::Dollar | TokenKind::DollarLeftBrace => {
+                TokenKind::Variable | TokenKind::Dollar | TokenKind::DollarLeftBrace => {
                     Expression::Variable(variables::dynamic_variable(state)?)
                 }
                 _ if identifiers::is_identifier_maybe_reserved(&state.stream.current().kind) => {

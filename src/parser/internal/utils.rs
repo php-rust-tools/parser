@@ -25,7 +25,7 @@ pub fn skip_ending(state: &mut State) -> ParseResult<Ending> {
         let found = if state.stream.current().kind == TokenKind::Eof {
             None
         } else {
-            Some(state.stream.current().kind.to_string())
+            Some(state.stream.current().to_string())
         };
 
         Err(ParseError::ExpectedToken(
@@ -47,7 +47,7 @@ pub fn skip_semicolon(state: &mut State) -> ParseResult<Span> {
         let found = if state.stream.current().kind == TokenKind::Eof {
             None
         } else {
-            Some(state.stream.current().kind.to_string())
+            Some(state.stream.current().to_string())
         };
 
         Err(ParseError::ExpectedToken(
@@ -107,7 +107,7 @@ pub fn skip(state: &mut State, kind: TokenKind) -> ParseResult<Span> {
         let found = if current.kind == TokenKind::Eof {
             None
         } else {
-            Some(current.kind.to_string())
+            Some(current.to_string())
         };
 
         Err(ParseError::ExpectedToken(
@@ -131,7 +131,7 @@ pub fn skip_any_of(state: &mut State, kinds: &[TokenKind]) -> ParseResult<Span> 
         let found = if current.kind == TokenKind::Eof {
             None
         } else {
-            Some(current.kind.to_string())
+            Some(current.to_string())
         };
 
         Err(ParseError::ExpectedToken(

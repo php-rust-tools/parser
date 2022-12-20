@@ -55,8 +55,9 @@ impl Lexer {
                 // into a single "InlineHtml" token (kind of cheating, oh well).
                 StackFrame::Halted => {
                     tokens.push(Token {
-                        kind: TokenKind::InlineHtml(state.source.read_remaining().into()),
+                        kind: TokenKind::InlineHtml,
                         span: state.source.span(),
+                        value: state.source.read_remaining().into()
                     });
                     break;
                 }
@@ -101,6 +102,7 @@ impl Lexer {
         tokens.push(Token {
             kind: TokenKind::Eof,
             span: state.source.span(),
+            value: ByteString::default()
         });
 
         Ok(tokens)
@@ -112,6 +114,15 @@ impl Lexer {
         }
     }
 
+    fn read_and_skip_whitespace(&self, state: &mut State) -> Vec<u8> {
+        let mut buffer = Vec::new();
+        while let Some(true) = state.source.current().map(|u: &u8| u.is_ascii_whitespace()) {
+            buffer.push(*state.source.current().unwrap());
+            state.source.next();
+        }
+        buffer
+    }
+
     fn initial(&self, state: &mut State, tokens: &mut Vec<Token>) -> SyntaxResult<()> {
         let inline_span = state.source.span();
         let mut buffer = Vec::new();
@@ -119,19 +130,21 @@ impl Lexer {
             if state.source.at_case_insensitive(b"<?php", 5) {
                 let tag_span = state.source.span();
 
-                state.source.skip(5);
+                let tag = state.source.read_and_skip(5);
                 state.replace(StackFrame::Scripting);
 
                 if !buffer.is_empty() {
                     tokens.push(Token {
-                        kind: TokenKind::InlineHtml(buffer.into()),
+                        kind: TokenKind::InlineHtml,
                         span: inline_span,
+                        value: buffer.into()
                     });
                 }
 
                 tokens.push(Token {
                     kind: TokenKind::OpenTag(OpenTagKind::Full),
                     span: tag_span,
+                    value: tag.into()
                 });
 
                 return Ok(());
@@ -143,14 +156,16 @@ impl Lexer {
 
                 if !buffer.is_empty() {
                     tokens.push(Token {
-                        kind: TokenKind::InlineHtml(buffer.into()),
+                        kind: TokenKind::InlineHtml,
                         span: inline_span,
+                        value: buffer.into()
                     });
                 }
 
                 tokens.push(Token {
                     kind: TokenKind::OpenTag(OpenTagKind::Echo),
                     span: tag_span,
+                    value: b"<?=".into()
                 });
 
                 return Ok(());
@@ -162,14 +177,16 @@ impl Lexer {
 
                 if !buffer.is_empty() {
                     tokens.push(Token {
-                        kind: TokenKind::InlineHtml(buffer.into()),
+                        kind: TokenKind::InlineHtml,
                         span: inline_span,
+                        value: buffer.into()
                     });
                 }
 
                 tokens.push(Token {
                     kind: TokenKind::OpenTag(OpenTagKind::Short),
                     span: tag_span,
+                    value: b"<?".into()
                 });
 
                 return Ok(());
@@ -180,8 +197,9 @@ impl Lexer {
         }
 
         tokens.push(Token {
-            kind: TokenKind::InlineHtml(buffer.into()),
+            kind: TokenKind::InlineHtml,
             span: inline_span,
+            value: buffer.into()
         });
 
         Ok(())
@@ -189,56 +207,56 @@ impl Lexer {
 
     fn scripting(&self, state: &mut State) -> SyntaxResult<Token> {
         let span = state.source.span();
-        let kind = match state.source.read(3) {
+        let (kind, value): (TokenKind, ByteString) = match state.source.read(3) {
             [b'!', b'=', b'='] => {
                 state.source.skip(3);
 
-                TokenKind::BangDoubleEquals
+                (TokenKind::BangDoubleEquals, b"!==".into())
             }
             [b'?', b'?', b'='] => {
                 state.source.skip(3);
-                TokenKind::DoubleQuestionEquals
+                (TokenKind::DoubleQuestionEquals, b"??=".into())
             }
             [b'?', b'-', b'>'] => {
                 state.source.skip(3);
-                TokenKind::QuestionArrow
+                (TokenKind::QuestionArrow, b"?->".into())
             }
             [b'=', b'=', b'='] => {
                 state.source.skip(3);
-                TokenKind::TripleEquals
+                (TokenKind::TripleEquals, b"===".into())
             }
             [b'.', b'.', b'.'] => {
                 state.source.skip(3);
-                TokenKind::Ellipsis
+                (TokenKind::Ellipsis, b"...".into())
             }
             [b'`', ..] => {
                 state.source.next();
                 state.replace(StackFrame::ShellExec);
-                TokenKind::Backtick
+                (TokenKind::Backtick, b"`".into())
             }
             [b'@', ..] => {
                 state.source.next();
-                TokenKind::At
+                (TokenKind::At, b"@".into())
             }
             [b'!', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::BangEquals
+                (TokenKind::BangEquals, b"!=".into())
             }
             [b'!', ..] => {
                 state.source.next();
-                TokenKind::Bang
+                (TokenKind::Bang, b"!".into())
             }
             [b'&', b'&', ..] => {
                 state.source.skip(2);
-                TokenKind::BooleanAnd
+                (TokenKind::BooleanAnd, b"&&".into())
             }
             [b'&', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::AmpersandEquals
+                (TokenKind::AmpersandEquals, b"&=".into())
             }
             [b'&', ..] => {
                 state.source.next();
-                TokenKind::Ampersand
+                (TokenKind::Ampersand, b"&".into())
             }
             [b'?', b'>', ..] => {
                 // This is a close tag, we can enter "Initial" mode again.
@@ -246,31 +264,31 @@ impl Lexer {
 
                 state.replace(StackFrame::Initial);
 
-                TokenKind::CloseTag
+                (TokenKind::CloseTag, b"?>".into())
             }
             [b'?', b'?', ..] => {
                 state.source.skip(2);
-                TokenKind::DoubleQuestion
+                (TokenKind::DoubleQuestion, b"??".into())
             }
             [b'?', b':', ..] => {
                 state.source.skip(2);
-                TokenKind::QuestionColon
+                (TokenKind::QuestionColon, b"?:".into())
             }
             [b'?', ..] => {
                 state.source.next();
-                TokenKind::Question
+                (TokenKind::Question, b"?".into())
             }
             [b'=', b'>', ..] => {
                 state.source.skip(2);
-                TokenKind::DoubleArrow
+                (TokenKind::DoubleArrow, b"=>".into())
             }
             [b'=', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::DoubleEquals
+                (TokenKind::DoubleEquals, b"==".into())
             }
             [b'=', ..] => {
                 state.source.next();
-                TokenKind::Equals
+                (TokenKind::Equals, b"=".into())
             }
             // Single quoted string.
             [b'\'', ..] => {
@@ -295,17 +313,17 @@ impl Lexer {
             }
             [b'$', ..] => {
                 state.source.next();
-                TokenKind::Dollar
+                (TokenKind::Dollar, b"$".into())
             }
             [b'.', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::DotEquals
+                (TokenKind::DotEquals, b".=".into())
             }
             [b'0'..=b'9', ..] => self.tokenize_number(state)?,
             [b'.', b'0'..=b'9', ..] => self.tokenize_number(state)?,
             [b'.', ..] => {
                 state.source.next();
-                TokenKind::Dot
+                (TokenKind::Dot, b".".into())
             }
             [b'\\', ident_start!(), ..] => {
                 state.source.next();
@@ -313,35 +331,35 @@ impl Lexer {
                 match self.scripting(state)? {
                     Token {
                         kind:
-                            TokenKind::Identifier(ByteString { mut bytes, length })
-                            | TokenKind::QualifiedIdentifier(ByteString { mut bytes, length }),
+                            TokenKind::Identifier
+                            | TokenKind::QualifiedIdentifier,
+                        value,
                         ..
                     } => {
+                        let mut bytes = value.clone();
                         bytes.insert(0, b'\\');
+                        bytes.length += 1;
 
-                        TokenKind::FullyQualifiedIdentifier(ByteString {
-                            bytes,
-                            length: length + 1,
-                        })
+                        (TokenKind::FullyQualifiedIdentifier, bytes)
                     }
                     Token {
                         kind: TokenKind::True,
                         ..
-                    } => TokenKind::FullyQualifiedIdentifier("\\true".into()),
+                    } => (TokenKind::FullyQualifiedIdentifier, b"\\true".into()),
                     Token {
                         kind: TokenKind::False,
                         ..
-                    } => TokenKind::FullyQualifiedIdentifier("\\false".into()),
+                    } => (TokenKind::FullyQualifiedIdentifier, b"\\false".into()),
                     Token {
                         kind: TokenKind::Null,
                         ..
-                    } => TokenKind::FullyQualifiedIdentifier("\\null".into()),
+                    } => (TokenKind::FullyQualifiedIdentifier, b"\\null".into()),
                     s => unreachable!("{:?}", s),
                 }
             }
             [b'\\', ..] => {
                 state.source.next();
-                TokenKind::NamespaceSeparator
+                (TokenKind::NamespaceSeparator, b"\\".into())
             }
             [b @ ident_start!(), ..] => {
                 state.source.next();
@@ -369,10 +387,10 @@ impl Lexer {
                 }
 
                 if qualified {
-                    TokenKind::QualifiedIdentifier(buffer.into())
+                    (TokenKind::QualifiedIdentifier, buffer.into())
                 } else {
                     let kind = identifier_to_keyword(&buffer)
-                        .unwrap_or_else(|| TokenKind::Identifier(buffer.into()));
+                        .unwrap_or_else(|| TokenKind::Identifier);
 
                     if kind == TokenKind::HaltCompiler {
                         match state.source.read(3) {
@@ -384,7 +402,7 @@ impl Lexer {
                         }
                     }
 
-                    kind
+                    (kind, buffer.into())
                 }
             }
             [b'/', b'*', ..] => {
@@ -409,14 +427,14 @@ impl Lexer {
                 }
 
                 if buffer.starts_with(b"/**") {
-                    TokenKind::DocumentComment(buffer.into())
+                    (TokenKind::DocumentComment, buffer.into())
                 } else {
-                    TokenKind::MultiLineComment(buffer.into())
+                    (TokenKind::MultiLineComment, buffer.into())
                 }
             }
             [b'#', b'[', ..] => {
                 state.source.skip(2);
-                TokenKind::Attribute
+                (TokenKind::Attribute, b"#[".into())
             }
             [ch @ b'/', b'/', ..] | [ch @ b'#', ..] => {
                 let mut buffer = if *ch == b'/' {
@@ -442,47 +460,49 @@ impl Lexer {
                 }
 
                 if buffer.starts_with(b"#") {
-                    TokenKind::HashMarkComment(buffer.into())
+                    (TokenKind::HashMarkComment, buffer.into())
                 } else {
-                    TokenKind::SingleLineComment(buffer.into())
+                    (TokenKind::SingleLineComment, buffer.into())
                 }
             }
             [b'/', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::SlashEquals
+                (TokenKind::SlashEquals, b"/=".into())
             }
             [b'/', ..] => {
                 state.source.next();
-                TokenKind::Slash
+                (TokenKind::Slash, b"/".into())
             }
             [b'*', b'*', b'=', ..] => {
                 state.source.skip(3);
-                TokenKind::PowEquals
+                (TokenKind::PowEquals, b"**=".into())
             }
             [b'<', b'<', b'='] => {
                 state.source.skip(3);
 
-                TokenKind::LeftShiftEquals
+                (TokenKind::LeftShiftEquals, b"<<=".into())
             }
             [b'<', b'=', b'>'] => {
                 state.source.skip(3);
-                TokenKind::Spaceship
+                (TokenKind::Spaceship, b"<=>".into())
             }
             [b'>', b'>', b'='] => {
                 state.source.skip(3);
-                TokenKind::RightShiftEquals
+                (TokenKind::RightShiftEquals, b">>=".into())
             }
             [b'<', b'<', b'<'] => {
                 state.source.skip(3);
-
-                self.skip_whitespace(state);
+                let mut buffer = b"<<<".to_vec();
+                buffer.extend(self.read_and_skip_whitespace(state));
 
                 let doc_string_kind = match state.source.read(1) {
                     [b'\''] => {
+                        buffer.push(b'\'');
                         state.source.next();
                         DocStringKind::Nowdoc
                     }
                     [b'"'] => {
+                        buffer.push(b'"');
                         state.source.next();
                         DocStringKind::Heredoc
                     }
@@ -504,9 +524,14 @@ impl Lexer {
                     },
                 };
 
+                buffer.extend_from_slice(&label);
+
                 if doc_string_kind == DocStringKind::Nowdoc {
                     match state.source.current() {
-                        Some(b'\'') => state.source.next(),
+                        Some(b'\'') => {
+                            buffer.push(b'\'');
+                            state.source.next();
+                        },
                         _ => {
                             // TODO(azjezz) this is most likely a bug, what if current is none?
                             return Err(SyntaxError::UnexpectedCharacter(
@@ -516,6 +541,7 @@ impl Lexer {
                         }
                     };
                 } else if let Some(b'"') = state.source.current() {
+                    buffer.push(b'"');
                     state.source.next();
                 }
 
@@ -534,270 +560,275 @@ impl Lexer {
                     0,
                 ));
 
-                TokenKind::StartDocString(label, doc_string_kind)
+                (TokenKind::StartDocString(doc_string_kind), buffer.into())
             }
             [b'*', b'*', ..] => {
                 state.source.skip(2);
-                TokenKind::Pow
+                (TokenKind::Pow, b"**".into())
             }
             [b'*', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::AsteriskEquals
+                (TokenKind::AsteriskEquals, b"*=".into())
             }
             [b'*', ..] => {
                 state.source.next();
-                TokenKind::Asterisk
+                (TokenKind::Asterisk, b"*".into())
             }
             [b'|', b'|', ..] => {
                 state.source.skip(2);
-                TokenKind::Pipe
+                (TokenKind::Pipe, b"||".into())
             }
             [b'|', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::PipeEquals
+                (TokenKind::PipeEquals, b"|=".into())
             }
             [b'|', ..] => {
                 state.source.next();
-                TokenKind::Pipe
+                (TokenKind::Pipe, b"|".into())
             }
             [b'^', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::CaretEquals
+                (TokenKind::CaretEquals, b"^=".into())
             }
             [b'^', ..] => {
                 state.source.next();
-                TokenKind::Caret
+                (TokenKind::Caret, b"^".into())
             }
             [b'{', ..] => {
                 state.source.next();
                 state.enter(StackFrame::Scripting);
-                TokenKind::LeftBrace
+                (TokenKind::LeftBrace, b"{".into())
             }
             [b'}', ..] => {
                 state.source.next();
                 state.exit();
-                TokenKind::RightBrace
+                (TokenKind::RightBrace, b"}".into())
             }
             [b'(', ..] => {
                 state.source.next();
+                let mut buffer = b"(".to_vec();
 
-                self.skip_whitespace(state);
+                // Inlined so we can add whitespace to the buffer.
+                while let Some(true) = state.source.current().map(|u: &u8| u.is_ascii_whitespace()) {
+                    buffer.push(*state.source.current().unwrap());
+                    state.source.next();
+                }
 
                 if state.source.at_case_insensitive(b"int", 3) {
                     if state.source.at_case_insensitive(b"integer", 7)
                         && state.source.peek_ignoring_whitespace(7, 1) == [b')']
                     {
-                        state.source.skip(7);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(7));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::IntegerCast
+                        (TokenKind::IntegerCast, buffer.into())
                     } else if state.source.peek_ignoring_whitespace(3, 1) == [b')'] {
-                        state.source.skip(3);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(3));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::IntCast
+                        (TokenKind::IntCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else if state.source.at_case_insensitive(b"bool", 4) {
                     if state.source.at_case_insensitive(b"boolean", 7)
                         && state.source.peek_ignoring_whitespace(7, 1) == [b')']
                     {
-                        state.source.skip(7);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(7));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::BooleanCast
+                        (TokenKind::BooleanCast, buffer.into())
                     } else if state.source.peek_ignoring_whitespace(4, 1) == [b')'] {
-                        state.source.skip(4);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(4));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::BoolCast
+                        (TokenKind::BoolCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else if state.source.at_case_insensitive(b"float", 5) {
                     if state.source.peek_ignoring_whitespace(5, 1) == [b')'] {
-                        state.source.skip(5);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(5));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::FloatCast
+                        (TokenKind::FloatCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else if state.source.at_case_insensitive(b"double", 6) {
                     if state.source.peek_ignoring_whitespace(6, 1) == [b')'] {
-                        state.source.skip(6);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(6));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::DoubleCast
+                        (TokenKind::DoubleCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else if state.source.at_case_insensitive(b"real", 4) {
                     if state.source.peek_ignoring_whitespace(4, 1) == [b')'] {
-                        state.source.skip(4);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(4));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::RealCast
+                        (TokenKind::RealCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else if state.source.at_case_insensitive(b"string", 6) {
                     if state.source.peek_ignoring_whitespace(6, 1) == [b')'] {
-                        state.source.skip(6);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(6));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::StringCast
+                        (TokenKind::StringCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else if state.source.at_case_insensitive(b"binary", 6) {
                     if state.source.peek_ignoring_whitespace(6, 1) == [b')'] {
-                        state.source.skip(6);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(6));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::BinaryCast
+                        (TokenKind::BinaryCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else if state.source.at_case_insensitive(b"array", 5) {
                     if state.source.peek_ignoring_whitespace(5, 1) == [b')'] {
-                        state.source.skip(5);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(5));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::ArrayCast
+                        (TokenKind::ArrayCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else if state.source.at_case_insensitive(b"object", 6) {
                     if state.source.peek_ignoring_whitespace(6, 1) == [b')'] {
-                        state.source.skip(6);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(6));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::ObjectCast
+                        (TokenKind::ObjectCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else if state.source.at_case_insensitive(b"unset", 5) {
                     if state.source.peek_ignoring_whitespace(5, 1) == [b')'] {
-                        state.source.skip(5);
-                        self.skip_whitespace(state);
-                        state.source.skip(1);
+                        buffer.extend(state.source.read_and_skip(5));
+                        buffer.extend(self.read_and_skip_whitespace(state));
+                        buffer.extend(state.source.read_and_skip(1));
 
-                        TokenKind::UnsetCast
+                        (TokenKind::UnsetCast, buffer.into())
                     } else {
-                        TokenKind::LeftParen
+                        (TokenKind::LeftParen, buffer.into())
                     }
                 } else {
-                    TokenKind::LeftParen
+                    (TokenKind::LeftParen, buffer.into())
                 }
             }
             [b')', ..] => {
                 state.source.next();
-                TokenKind::RightParen
+                (TokenKind::RightParen, b")".into())
             }
             [b';', ..] => {
                 state.source.next();
-                TokenKind::SemiColon
+                (TokenKind::SemiColon, b";".into())
             }
             [b'+', b'+', ..] => {
                 state.source.skip(2);
-                TokenKind::Increment
+                (TokenKind::Increment, b"++".into())
             }
             [b'+', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::PlusEquals
+                (TokenKind::PlusEquals, b"+=".into())
             }
             [b'+', ..] => {
                 state.source.next();
-                TokenKind::Plus
+                (TokenKind::Plus, b"+".into())
             }
             [b'%', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::PercentEquals
+                (TokenKind::PercentEquals, b"%=".into())
             }
             [b'%', ..] => {
                 state.source.next();
-                TokenKind::Percent
+                (TokenKind::Percent, b"%".into())
             }
             [b'-', b'-', ..] => {
                 state.source.skip(2);
-                TokenKind::Decrement
+                (TokenKind::Decrement, b"--".into())
             }
             [b'-', b'>', ..] => {
                 state.source.skip(2);
-                TokenKind::Arrow
+                (TokenKind::Arrow, b"->".into())
             }
             [b'-', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::MinusEquals
+                (TokenKind::MinusEquals, b"-=".into())
             }
             [b'-', ..] => {
                 state.source.next();
-                TokenKind::Minus
+                (TokenKind::Minus, b"-".into())
             }
             [b'<', b'<', ..] => {
                 state.source.skip(2);
-                TokenKind::LeftShift
+                (TokenKind::LeftShift, b"<<".into())
             }
             [b'<', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::LessThanEquals
+                (TokenKind::LessThanEquals, b"<=".into())
             }
             [b'<', b'>', ..] => {
                 state.source.skip(2);
-                TokenKind::AngledLeftRight
+                (TokenKind::AngledLeftRight, b"<>".into())
             }
             [b'<', ..] => {
                 state.source.next();
-                TokenKind::LessThan
+                (TokenKind::LessThan, b"<".into())
             }
             [b'>', b'>', ..] => {
                 state.source.skip(2);
-                TokenKind::RightShift
+                (TokenKind::RightShift, b">>".into())
             }
             [b'>', b'=', ..] => {
                 state.source.skip(2);
-                TokenKind::GreaterThanEquals
+                (TokenKind::GreaterThanEquals, b">=".into())
             }
             [b'>', ..] => {
                 state.source.next();
-                TokenKind::GreaterThan
+                (TokenKind::GreaterThan, b">".into())
             }
             [b',', ..] => {
                 state.source.next();
-                TokenKind::Comma
+                (TokenKind::Comma, b",".into())
             }
             [b'[', ..] => {
                 state.source.next();
-                TokenKind::LeftBracket
+                (TokenKind::LeftBracket, b"[".into())
             }
             [b']', ..] => {
                 state.source.next();
-                TokenKind::RightBracket
+                (TokenKind::RightBracket, b"]".into())
             }
             [b':', b':', ..] => {
                 state.source.skip(2);
-                TokenKind::DoubleColon
+                (TokenKind::DoubleColon, b"::".into())
             }
             [b':', ..] => {
                 state.source.next();
-                TokenKind::Colon
+                (TokenKind::Colon, b":".into())
             }
             [b'~', ..] => {
                 state.source.next();
-                TokenKind::BitwiseNot
+                (TokenKind::BitwiseNot, b"~".into())
             }
             [b, ..] => unimplemented!(
                 "<scripting> char: {}, line: {}, col: {}",
@@ -810,29 +841,29 @@ impl Lexer {
             [] => return Err(SyntaxError::UnexpectedEndOfFile(state.source.span())),
         };
 
-        Ok(Token { kind, span })
+        Ok(Token { kind, span, value })
     }
 
     fn double_quote(&self, state: &mut State, tokens: &mut Vec<Token>) -> SyntaxResult<()> {
         let span = state.source.span();
         let mut buffer = Vec::new();
-        let kind = loop {
+        let (kind, value) = loop {
             match state.source.read(3) {
                 [b'$', b'{', ..] => {
                     state.source.skip(2);
                     state.enter(StackFrame::LookingForVarname);
-                    break TokenKind::DollarLeftBrace;
+                    break (TokenKind::DollarLeftBrace, b"${".into());
                 }
                 [b'{', b'$', ..] => {
                     // Intentionally only consume the left brace.
                     state.source.next();
                     state.enter(StackFrame::Scripting);
-                    break TokenKind::LeftBrace;
+                    break (TokenKind::LeftBrace, b"{".into());
                 }
                 [b'"', ..] => {
                     state.source.next();
                     state.replace(StackFrame::Scripting);
-                    break TokenKind::DoubleQuote;
+                    break (TokenKind::DoubleQuote, b'"'.into());
                 }
                 &[b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
                     state.source.skip(2);
@@ -937,7 +968,7 @@ impl Lexer {
                         _ => {}
                     }
 
-                    break TokenKind::Variable(ident.into());
+                    break (TokenKind::Variable, ident.into());
                 }
                 &[b, ..] => {
                     state.source.next();
@@ -949,35 +980,36 @@ impl Lexer {
 
         if !buffer.is_empty() {
             tokens.push(Token {
-                kind: TokenKind::StringPart(buffer.into()),
+                kind: TokenKind::StringPart,
                 span,
+                value: buffer.into()
             })
         }
 
-        tokens.push(Token { kind, span });
+        tokens.push(Token { kind, span, value });
         Ok(())
     }
 
     fn shell_exec(&self, state: &mut State, tokens: &mut Vec<Token>) -> SyntaxResult<()> {
         let span = state.source.span();
         let mut buffer = Vec::new();
-        let kind = loop {
+        let (kind, value) = loop {
             match state.source.read(2) {
                 [b'$', b'{'] => {
                     state.source.skip(2);
                     state.enter(StackFrame::LookingForVarname);
-                    break TokenKind::DollarLeftBrace;
+                    break (TokenKind::DollarLeftBrace, b"${".into());
                 }
                 [b'{', b'$'] => {
                     // Intentionally only consume the left brace.
                     state.source.next();
                     state.enter(StackFrame::Scripting);
-                    break TokenKind::LeftBrace;
+                    break (TokenKind::LeftBrace, b"{".into());
                 }
                 [b'`', ..] => {
                     state.source.next();
                     state.replace(StackFrame::Scripting);
-                    break TokenKind::Backtick;
+                    break (TokenKind::Backtick, b"`".into());
                 }
                 [b'$', ident_start!()] => {
                     state.source.next();
@@ -991,7 +1023,7 @@ impl Lexer {
                         _ => {}
                     }
 
-                    break TokenKind::Variable(ident.into());
+                    break (TokenKind::Variable, ident.into());
                 }
                 &[b, ..] => {
                     state.source.next();
@@ -1003,12 +1035,13 @@ impl Lexer {
 
         if !buffer.is_empty() {
             tokens.push(Token {
-                kind: TokenKind::StringPart(buffer.into()),
+                kind: TokenKind::StringPart,
                 span,
+                value: buffer.into()
             })
         }
 
-        tokens.push(Token { kind, span });
+        tokens.push(Token { kind, span, value });
 
         Ok(())
     }
@@ -1022,18 +1055,18 @@ impl Lexer {
         let span = state.source.span();
         let mut buffer: Vec<u8> = Vec::new();
 
-        let kind = loop {
+        let (kind, value) = loop {
             match state.source.read(3) {
                 [b'$', b'{', ..] => {
                     state.source.skip(2);
                     state.enter(StackFrame::LookingForVarname);
-                    break TokenKind::DollarLeftBrace;
+                    break (TokenKind::DollarLeftBrace, b"${".into());
                 }
                 [b'{', b'$', ..] => {
                     // Intentionally only consume the left brace.
                     state.source.next();
                     state.enter(StackFrame::Scripting);
-                    break TokenKind::LeftBrace;
+                    break (TokenKind::LeftBrace, b"{".into());
                 }
                 &[b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
                     state.source.skip(2);
@@ -1138,7 +1171,7 @@ impl Lexer {
                         _ => {}
                     }
 
-                    break TokenKind::Variable(ident.into());
+                    break (TokenKind::Variable, ident.into());
                 }
                 // If we find a new-line, we can start to check if we can see the EndHeredoc token.
                 [b'\n', ..] => {
@@ -1149,7 +1182,7 @@ impl Lexer {
                     if state.source.at(&label, label.len()) {
                         state.source.skip(label.len());
                         state.replace(StackFrame::Scripting);
-                        break TokenKind::EndDocString(label, DocStringIndentationKind::None, 0);
+                        break (TokenKind::EndDocString(DocStringIndentationKind::None, 0), label.into());
                     }
 
                     // Check if there's any whitespace first.
@@ -1198,7 +1231,7 @@ impl Lexer {
                         // with the EndHeredoc token, storing the kind and amount of whitespace.
                         state.source.skip(label.len());
                         state.replace(StackFrame::Scripting);
-                        break TokenKind::EndDocString(label, whitespace_kind, whitespace_amount);
+                        break (TokenKind::EndDocString(whitespace_kind, whitespace_amount), label.into());
                     } else {
                         // We didn't find the label. The buffer still needs to know about
                         // the whitespace, so let's extend the buffer with the whitespace
@@ -1228,12 +1261,13 @@ impl Lexer {
 
         if !buffer.is_empty() {
             tokens.push(Token {
-                kind: TokenKind::StringPart(buffer.into()),
+                kind: TokenKind::StringPart,
                 span,
+                value: buffer.into(),
             })
         }
 
-        tokens.push(Token { kind, span });
+        tokens.push(Token { kind, span, value });
 
         Ok(())
     }
@@ -1247,7 +1281,7 @@ impl Lexer {
         let span = state.source.span();
         let mut buffer: Vec<u8> = Vec::new();
 
-        let kind = loop {
+        let (kind, value) = loop {
             match state.source.read(3) {
                 // If we find a new-line, we can start to check if we can see the EndHeredoc token.
                 [b'\n', ..] => {
@@ -1258,7 +1292,7 @@ impl Lexer {
                     if state.source.at(&label, label.len()) {
                         state.source.skip(label.len());
                         state.replace(StackFrame::Scripting);
-                        break TokenKind::EndDocString(label, DocStringIndentationKind::None, 0);
+                        break (TokenKind::EndDocString(DocStringIndentationKind::None, 0), label);
                     }
 
                     // Check if there's any whitespace first.
@@ -1307,7 +1341,7 @@ impl Lexer {
                         // with the EndHeredoc token, storing the kind and amount of whitespace.
                         state.source.skip(label.len());
                         state.replace(StackFrame::Scripting);
-                        break TokenKind::EndDocString(label, whitespace_kind, whitespace_amount);
+                        break (TokenKind::EndDocString(whitespace_kind, whitespace_amount), label);
                     } else {
                         // We didn't find the label. The buffer still needs to know about
                         // the whitespace, so let's extend the buffer with the whitespace
@@ -1337,12 +1371,13 @@ impl Lexer {
 
         if !buffer.is_empty() {
             tokens.push(Token {
-                kind: TokenKind::StringPart(buffer.into()),
+                kind: TokenKind::StringPart,
                 span,
+                value: buffer.into(),
             })
         }
 
-        tokens.push(Token { kind, span });
+        tokens.push(Token { kind, span, value });
 
         Ok(())
     }
@@ -1357,8 +1392,9 @@ impl Lexer {
                 state.source.skip(ident.len());
                 state.replace(StackFrame::Scripting);
                 return Ok(Some(Token {
-                    kind: TokenKind::Identifier(ident.into()),
+                    kind: TokenKind::Identifier,
                     span,
+                    value: ident.into()
                 }));
             }
         }
@@ -1370,30 +1406,30 @@ impl Lexer {
 
     fn looking_for_property(&self, state: &mut State) -> SyntaxResult<Token> {
         let span = state.source.span();
-        let kind = match state.source.read(3) {
+        let (kind, value) = match state.source.read(3) {
             [b'?', b'-', b'>'] => {
                 state.source.skip(3);
-                TokenKind::QuestionArrow
+                (TokenKind::QuestionArrow, b"?->".into())
             }
             [b'-', b'>', ..] => {
                 state.source.skip(2);
-                TokenKind::Arrow
+                (TokenKind::Arrow, b"->".into())
             }
             &[ident_start!(), ..] => {
                 let buffer = self.consume_identifier(state);
                 state.exit();
-                TokenKind::Identifier(buffer.into())
+                (TokenKind::Identifier, buffer.into())
             }
             // Should be impossible as we already looked ahead this far inside double_quote.
             _ => unreachable!(),
         };
 
-        Ok(Token { kind, span })
+        Ok(Token { kind, span, value })
     }
 
     fn var_offset(&self, state: &mut State) -> SyntaxResult<Token> {
         let span = state.source.span();
-        let kind = match state.source.read(2) {
+        let (kind, value) = match state.source.read(2) {
             [b'$', ident_start!()] => {
                 state.source.next();
                 self.tokenize_variable(state)
@@ -1406,28 +1442,28 @@ impl Lexer {
             }
             [b'[', ..] => {
                 state.source.next();
-                TokenKind::LeftBracket
+                (TokenKind::LeftBracket, b"[".into())
             }
             [b'-', ..] => {
                 state.source.next();
-                TokenKind::Minus
+                (TokenKind::Minus, b"-".into())
             }
             [b']', ..] => {
                 state.source.next();
                 state.exit();
-                TokenKind::RightBracket
+                (TokenKind::RightBracket, b"]".into())
             }
             &[ident_start!(), ..] => {
                 let label = self.consume_identifier(state);
-                TokenKind::Identifier(label.into())
+                (TokenKind::Identifier, label.into())
             }
             &[b, ..] => return Err(SyntaxError::UnrecognisedToken(b, state.source.span())),
             [] => return Err(SyntaxError::UnexpectedEndOfFile(state.source.span())),
         };
-        Ok(Token { kind, span })
+        Ok(Token { kind, span, value })
     }
 
-    fn tokenize_single_quote_string(&self, state: &mut State) -> SyntaxResult<TokenKind> {
+    fn tokenize_single_quote_string(&self, state: &mut State) -> SyntaxResult<(TokenKind, ByteString)> {
         let mut buffer = Vec::new();
 
         loop {
@@ -1448,10 +1484,10 @@ impl Lexer {
             }
         }
 
-        Ok(TokenKind::LiteralString(buffer.into()))
+        Ok((TokenKind::LiteralString, buffer.into()))
     }
 
-    fn tokenize_double_quote_string(&self, state: &mut State) -> SyntaxResult<TokenKind> {
+    fn tokenize_double_quote_string(&self, state: &mut State) -> SyntaxResult<(TokenKind, ByteString)> {
         let mut buffer = Vec::new();
 
         let constant = loop {
@@ -1564,10 +1600,10 @@ impl Lexer {
         };
 
         Ok(if constant {
-            TokenKind::LiteralString(buffer.into())
+            (TokenKind::LiteralString, buffer.into())
         } else {
             state.replace(StackFrame::DoubleQuote);
-            TokenKind::StringPart(buffer.into())
+            (TokenKind::StringPart, buffer.into())
         })
     }
 
@@ -1593,11 +1629,11 @@ impl Lexer {
         ident
     }
 
-    fn tokenize_variable(&self, state: &mut State) -> TokenKind {
-        TokenKind::Variable(self.consume_identifier(state).into())
+    fn tokenize_variable(&self, state: &mut State) -> (TokenKind, ByteString) {
+        (TokenKind::Variable, self.consume_identifier(state).into())
     }
 
-    fn tokenize_number(&self, state: &mut State) -> SyntaxResult<TokenKind> {
+    fn tokenize_number(&self, state: &mut State) -> SyntaxResult<(TokenKind, ByteString)> {
         let mut buffer = Vec::new();
 
         let (base, kind) = match state.source.read(2) {
@@ -1657,7 +1693,7 @@ impl Lexer {
             self.read_digits(state, &mut buffer, 10);
         }
 
-        Ok(TokenKind::LiteralFloat(buffer.into()))
+        Ok((TokenKind::LiteralFloat, buffer.into()))
     }
 
     fn read_digits(&self, state: &mut State, buffer: &mut Vec<u8>, base: usize) {
@@ -1705,10 +1741,11 @@ impl Lexer {
 
 // Parses an integer literal in the given base and converts errors to SyntaxError.
 // It returns a float token instead on overflow.
-fn parse_int(buffer: &[u8]) -> SyntaxResult<TokenKind> {
-    Ok(TokenKind::LiteralInteger(buffer.into()))
+fn parse_int(buffer: &[u8]) -> SyntaxResult<(TokenKind, ByteString)> {
+    Ok((TokenKind::LiteralInteger, buffer.into()))
 }
 
+#[inline(always)]
 fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident.to_ascii_lowercase().as_slice() {
         b"eval" => TokenKind::Eval,

@@ -49,6 +49,14 @@ impl<'a> Source<'a> {
         }
     }
 
+    pub fn read_and_skip(&mut self, count: usize) -> &'a [u8] {
+        let (from, until) = self.to_bound(count);
+
+        self.skip(count);
+
+        &self.input[from..until]
+    }
+
     pub fn current(&self) -> Option<&'a u8> {
         if self.cursor >= self.length {
             None

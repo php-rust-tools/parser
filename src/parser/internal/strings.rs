@@ -60,7 +60,7 @@ pub fn heredoc(state: &mut State) -> ParseResult<Expression> {
 
     while !matches!(
         state.stream.current().kind,
-        TokenKind::EndDocString(_, _, _)
+        TokenKind::EndDocString(_, _)
     ) {
         if let Some(part) = part(state)? {
             parts.push(part);
@@ -68,7 +68,7 @@ pub fn heredoc(state: &mut State) -> ParseResult<Expression> {
     }
 
     let (indentation_type, indentation_amount) = match &state.stream.current().kind {
-        TokenKind::EndDocString(_, indentation_type, indentation_amount) => {
+        TokenKind::EndDocString(indentation_type, indentation_amount) => {
             (indentation_type.clone(), *indentation_amount)
         }
         _ => unreachable!(),
@@ -143,12 +143,12 @@ pub fn nowdoc(state: &mut State) -> ParseResult<Expression> {
 
     state.stream.next();
 
-    let mut string_part = expect_token!([
-        TokenKind::StringPart(s) => s,
-    ], state, "constant string");
+    // TODO(ryangjchandler): this is a hack, but it works for now.
+    let mut string_part = state.stream.current().value.clone();
+    expect_token!([TokenKind::StringPart => ()], state, "constant string");
 
     let (indentation_type, indentation_amount) = match &state.stream.current().kind {
-        TokenKind::EndDocString(_, indentation_type, indentation_amount) => {
+        TokenKind::EndDocString(indentation_type, indentation_amount) => {
             (indentation_type.clone(), *indentation_amount)
         }
         _ => unreachable!(),
@@ -223,9 +223,10 @@ pub fn nowdoc(state: &mut State) -> ParseResult<Expression> {
 
 fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
     Ok(match &state.stream.current().kind {
-        TokenKind::StringPart(s) => {
+        TokenKind::StringPart => {
+            let s = state.stream.current().value.clone();
             let part = if s.len() > 0 {
-                Some(StringPart::Literal(s.clone()))
+                Some(StringPart::Literal(s))
             } else {
                 None
             };
@@ -247,7 +248,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
             utils::skip_right_brace(state)?;
             Some(StringPart::Expression(Box::new(e)))
         }
-        TokenKind::Variable(_) => {
+        TokenKind::Variable => {
             // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
             let variable = Expression::Variable(variables::dynamic_variable(state)?);
             let current = state.stream.current();
@@ -259,19 +260,19 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                     // Full expression syntax is not allowed here,
                     // so we can't call expression.
                     let index = match &current.kind {
-                        TokenKind::LiteralInteger(value) => {
+                        TokenKind::LiteralInteger => {
                             state.stream.next();
 
                             Expression::Literal(Literal::Integer(LiteralInteger {
                                 span: current.span,
-                                value: value.clone(),
+                                value: current.value.clone(),
                             }))
                         }
                         TokenKind::Minus => {
                             let span = current.span;
                             state.stream.next();
                             let literal = state.stream.current();
-                            if let TokenKind::LiteralInteger(value) = &literal.kind {
+                            if let TokenKind::LiteralInteger = &literal.kind {
                                 state.stream.next();
 
                                 Expression::ArithmeticOperation(ArithmeticOperation::Negative {
@@ -279,7 +280,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                                     right: Box::new(Expression::Literal(Literal::Integer(
                                         LiteralInteger {
                                             span: literal.span,
-                                            value: value.clone(),
+                                            value: literal.value.clone(),
                                         },
                                     ))),
                                 })
@@ -287,15 +288,15 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                                 return expected_token_err!("an integer", state);
                             }
                         }
-                        TokenKind::Identifier(ident) => {
+                        TokenKind::Identifier => {
                             state.stream.next();
 
                             Expression::Literal(Literal::String(LiteralString {
                                 span: current.span,
-                                value: ident.clone(),
+                                value: current.value.clone(),
                             }))
                         }
-                        TokenKind::Variable(_) => Expression::Variable(Variable::SimpleVariable(
+                        TokenKind::Variable => Expression::Variable(Variable::SimpleVariable(
                             variables::simple_variable(state)?,
                         )),
                         _ => {
