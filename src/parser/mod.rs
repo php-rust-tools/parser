@@ -2,6 +2,7 @@ use crate::expect_literal;
 use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
+use crate::lexer::Lexer;
 use crate::parser::ast::declares::Declare;
 use crate::parser::ast::declares::DeclareBody;
 use crate::parser::ast::declares::DeclareEntry;
@@ -29,6 +30,8 @@ use crate::parser::internal::variables;
 use crate::parser::state::stream::TokenStream;
 use crate::parser::state::State;
 
+use self::error::ParseError;
+
 pub mod ast;
 pub mod error;
 
@@ -37,7 +40,17 @@ mod internal;
 mod macros;
 mod state;
 
-pub fn parse(tokens: &[Token]) -> ParseResult<Program> {
+pub fn parse<B: ?Sized + AsRef<[u8]>>(input: &B) -> ParseResult<Program> {
+    let lexer = Lexer::new();
+    let tokens = match lexer.tokenize(input) {
+        Ok(tokens) => tokens,
+        Err(error) => return Err(ParseError::SyntaxError(error)),
+    };
+
+    construct(&tokens)
+}
+
+pub fn construct(tokens: &[Token]) -> ParseResult<Program> {
     let mut stream = TokenStream::new(tokens);
     let mut state = State::new(&mut stream);
 

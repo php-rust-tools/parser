@@ -54,7 +54,7 @@ fn test_fixtures() {
 
         if ast_file.exists() {
             let expected_ast = std::fs::read_to_string(&ast_file).unwrap();
-            let ast = php_parser_rs::parse(&tokens).unwrap();
+            let ast = php_parser_rs::construct(&tokens).unwrap();
             assert_str_eq!(
                 expected_ast.trim(),
                 format!("{:#?}", ast),
@@ -72,7 +72,7 @@ fn test_fixtures() {
         );
 
         let expected_error = std::fs::read_to_string(&parse_err_file).unwrap();
-        let error = php_parser_rs::parse(&tokens).err().unwrap();
+        let error = php_parser_rs::construct(&tokens).err().unwrap();
 
         assert_str_eq!(
             expected_error.trim(),

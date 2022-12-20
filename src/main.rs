@@ -48,7 +48,7 @@ fn main() -> ParseResult<()> {
         return Ok(());
     }
 
-    let ast = php_parser_rs::parse(&tokens)?;
+    let ast = php_parser_rs::construct(&tokens)?;
 
     // if --silent is passed, don't print anything
     if silent {

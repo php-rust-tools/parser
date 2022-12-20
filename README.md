@@ -14,13 +14,13 @@ Add `php-parser-rs` in your `Cargo.toml`'s `dependencies` section
 
 ```toml
 [dependencies]
-php-parser-rs = "0.0.0-b3"
+php-parser-rs = { git = "https://github.com/php-rust-tools/parser" }
 ```
 
 or use `cargo add`
 
 ```sh
-cargo add php-parser-rs
+cargo add php-parser-rs --git https://github.com/php-rust-tools/parser
 ```
 
 ### Example
@@ -30,8 +30,6 @@ use php_parser_rs::parse;
 use php_parser_rs::lexer::Lexer;
 
 fn main() -> ParseResult<()> {
-    let lexer = Lexer::new();
-
     let code = "
 <?php
 
@@ -42,8 +40,7 @@ function hello(): void {
 hello();
 ";
 
-    let tokens = lexer.tokenize(code.as_bytes())?;
-    let ast = parse(tokens)?;
+    let ast = parse(code.as_bytes())?;
 
     dbg!(ast);
 

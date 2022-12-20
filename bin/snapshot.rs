@@ -2,8 +2,8 @@ use std::env;
 use std::fs::read_dir;
 use std::path::PathBuf;
 
+use php_parser_rs::construct;
 use php_parser_rs::lexer::Lexer;
-use php_parser_rs::parse;
 
 static LEXER: Lexer = Lexer::new();
 
@@ -45,7 +45,7 @@ fn main() {
 
         match tokens {
             Ok(tokens) => {
-                let ast = parse(&tokens);
+                let ast = construct(&tokens);
                 match ast {
                     Ok(ast) => {
                         std::fs::write(ast_filename, format!("{:#?}\n", ast)).unwrap();

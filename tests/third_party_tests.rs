@@ -405,7 +405,7 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
                 let code = std::fs::read(&filename).unwrap();
 
                 match Lexer::new().tokenize(&code) {
-                    Ok(tokens) => match php_parser_rs::parse(&tokens) {
+                    Ok(tokens) => match php_parser_rs::construct(&tokens) {
                         Ok(_) => {
                             results.push(TestResult::Success);
                         }

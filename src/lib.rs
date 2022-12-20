@@ -1,4 +1,4 @@
 pub mod lexer;
 pub mod parser;
 
-pub use parser::parse;
+pub use parser::{construct, parse};
