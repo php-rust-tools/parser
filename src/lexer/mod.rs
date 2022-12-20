@@ -308,7 +308,6 @@ impl Lexer {
                 self.tokenize_double_quote_string(state)?
             }
             [b'$', ident_start!(), ..] => {
-                state.source.next();
                 self.tokenize_variable(state)
             }
             [b'$', ..] => {
@@ -1010,8 +1009,8 @@ impl Lexer {
                     break (TokenKind::Backtick, b"`".into());
                 }
                 [b'$', ident_start!()] => {
-                    state.source.next();
-                    let ident = self.consume_identifier(state);
+                    let mut var = state.source.read_and_skip(1).to_vec();
+                    var.extend(self.consume_identifier(state));
 
                     match state.source.read(4) {
                         [b'[', ..] => state.enter(StackFrame::VarOffset),
@@ -1021,7 +1020,7 @@ impl Lexer {
                         _ => {}
                     }
 
-                    break (TokenKind::Variable, ident.into());
+                    break (TokenKind::Variable, var.into());
                 }
                 &[b, ..] => {
                     state.source.next();
@@ -1158,8 +1157,8 @@ impl Lexer {
                     }
                 }
                 [b'$', ident_start!(), ..] => {
-                    state.source.next();
-                    let ident = self.consume_identifier(state);
+                    let mut var = state.source.read_and_skip(1).to_vec();
+                    var.extend(self.consume_identifier(state));
 
                     match state.source.read(4) {
                         [b'[', ..] => state.enter(StackFrame::VarOffset),
@@ -1169,7 +1168,7 @@ impl Lexer {
                         _ => {}
                     }
 
-                    break (TokenKind::Variable, ident.into());
+                    break (TokenKind::Variable, var.into());
                 }
                 // If we find a new-line, we can start to check if we can see the EndHeredoc token.
                 [b'\n', ..] => {
@@ -1441,7 +1440,6 @@ impl Lexer {
         let span = state.source.span();
         let (kind, value) = match state.source.read(2) {
             [b'$', ident_start!()] => {
-                state.source.next();
                 self.tokenize_variable(state)
             }
             [b'0'..=b'9', ..] => {
@@ -1646,7 +1644,9 @@ impl Lexer {
     }
 
     fn tokenize_variable(&self, state: &mut State) -> (TokenKind, ByteString) {
-        (TokenKind::Variable, self.consume_identifier(state).into())
+        let mut var = state.source.read_and_skip(1).to_vec();
+        var.extend(self.consume_identifier(state));
+        (TokenKind::Variable, var.into())
     }
 
     fn tokenize_number(&self, state: &mut State) -> SyntaxResult<(TokenKind, ByteString)> {
