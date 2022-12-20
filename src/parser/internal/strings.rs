@@ -58,10 +58,7 @@ pub fn heredoc(state: &mut State) -> ParseResult<Expression> {
 
     let mut parts = Vec::new();
 
-    while !matches!(
-        state.stream.current().kind,
-        TokenKind::EndDocString(_, _)
-    ) {
+    while !matches!(state.stream.current().kind, TokenKind::EndDocString(_, _)) {
         if let Some(part) = part(state)? {
             parts.push(part);
         }

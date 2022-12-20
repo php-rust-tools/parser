@@ -164,12 +164,10 @@ pub fn optional_name(state: &mut State) -> Option<SimpleIdentifier> {
     let current = state.stream.current();
 
     let ident = match &current.kind {
-        TokenKind::Identifier | TokenKind::QualifiedIdentifier => {
-            Some(SimpleIdentifier {
-                span: current.span,
-                value: current.value.clone(),
-            })
-        }
+        TokenKind::Identifier | TokenKind::QualifiedIdentifier => Some(SimpleIdentifier {
+            span: current.span,
+            value: current.value.clone(),
+        }),
         _ => None,
     };
 

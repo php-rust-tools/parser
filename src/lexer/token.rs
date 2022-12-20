@@ -281,7 +281,7 @@ impl Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self.kind {
             TokenKind::Variable => return write!(f, "${}", self.value),
-            _ => return write!(f, "{}", self.value)
+            _ => return write!(f, "{}", self.value),
         }
     }
 }

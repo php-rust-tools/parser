@@ -58,14 +58,13 @@ fn top_level_statement(state: &mut State) -> ParseResult<Statement> {
         TokenKind::HaltCompiler => {
             state.stream.next();
 
-            let content =
-                if let TokenKind::InlineHtml = state.stream.current().kind.clone() {
-                    let content = state.stream.current().value.clone();
-                    state.stream.next();
-                    Some(content)
-                } else {
-                    None
-                };
+            let content = if let TokenKind::InlineHtml = state.stream.current().kind.clone() {
+                let content = state.stream.current().value.clone();
+                state.stream.next();
+                Some(content)
+            } else {
+                None
+            };
 
             Statement::HaltCompiler { content }
         }

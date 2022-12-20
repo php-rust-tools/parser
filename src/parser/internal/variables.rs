@@ -16,10 +16,7 @@ pub fn simple_variable(state: &mut State) -> ParseResult<SimpleVariable> {
         let name = current.value.clone();
         state.stream.next();
 
-        return Ok(SimpleVariable {
-            span,
-            name,
-        });
+        return Ok(SimpleVariable { span, name });
     }
 
     expected_token_err!("a variable", state)
@@ -33,10 +30,7 @@ pub fn dynamic_variable(state: &mut State) -> ParseResult<Variable> {
             let name = current.value.clone();
             state.stream.next();
 
-            Ok(Variable::SimpleVariable(SimpleVariable {
-                span,
-                name,
-            }))
+            Ok(Variable::SimpleVariable(SimpleVariable { span, name }))
         }
         TokenKind::DollarLeftBrace => {
             let start = current.span;

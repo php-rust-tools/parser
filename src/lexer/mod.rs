@@ -57,7 +57,7 @@ impl Lexer {
                     tokens.push(Token {
                         kind: TokenKind::InlineHtml,
                         span: state.source.span(),
-                        value: state.source.read_remaining().into()
+                        value: state.source.read_remaining().into(),
                     });
                     break;
                 }
@@ -102,7 +102,7 @@ impl Lexer {
         tokens.push(Token {
             kind: TokenKind::Eof,
             span: state.source.span(),
-            value: ByteString::default()
+            value: ByteString::default(),
         });
 
         Ok(tokens)
@@ -137,14 +137,14 @@ impl Lexer {
                     tokens.push(Token {
                         kind: TokenKind::InlineHtml,
                         span: inline_span,
-                        value: buffer.into()
+                        value: buffer.into(),
                     });
                 }
 
                 tokens.push(Token {
                     kind: TokenKind::OpenTag(OpenTagKind::Full),
                     span: tag_span,
-                    value: tag.into()
+                    value: tag.into(),
                 });
 
                 return Ok(());
@@ -158,14 +158,14 @@ impl Lexer {
                     tokens.push(Token {
                         kind: TokenKind::InlineHtml,
                         span: inline_span,
-                        value: buffer.into()
+                        value: buffer.into(),
                     });
                 }
 
                 tokens.push(Token {
                     kind: TokenKind::OpenTag(OpenTagKind::Echo),
                     span: tag_span,
-                    value: b"<?=".into()
+                    value: b"<?=".into(),
                 });
 
                 return Ok(());
@@ -179,14 +179,14 @@ impl Lexer {
                     tokens.push(Token {
                         kind: TokenKind::InlineHtml,
                         span: inline_span,
-                        value: buffer.into()
+                        value: buffer.into(),
                     });
                 }
 
                 tokens.push(Token {
                     kind: TokenKind::OpenTag(OpenTagKind::Short),
                     span: tag_span,
-                    value: b"<?".into()
+                    value: b"<?".into(),
                 });
 
                 return Ok(());
@@ -199,7 +199,7 @@ impl Lexer {
         tokens.push(Token {
             kind: TokenKind::InlineHtml,
             span: inline_span,
-            value: buffer.into()
+            value: buffer.into(),
         });
 
         Ok(())
@@ -330,9 +330,7 @@ impl Lexer {
 
                 match self.scripting(state)? {
                     Token {
-                        kind:
-                            TokenKind::Identifier
-                            | TokenKind::QualifiedIdentifier,
+                        kind: TokenKind::Identifier | TokenKind::QualifiedIdentifier,
                         value,
                         ..
                     } => {
@@ -389,8 +387,8 @@ impl Lexer {
                 if qualified {
                     (TokenKind::QualifiedIdentifier, buffer.into())
                 } else {
-                    let kind = identifier_to_keyword(&buffer)
-                        .unwrap_or_else(|| TokenKind::Identifier);
+                    let kind =
+                        identifier_to_keyword(&buffer).unwrap_or_else(|| TokenKind::Identifier);
 
                     if kind == TokenKind::HaltCompiler {
                         match state.source.read(3) {
@@ -531,7 +529,7 @@ impl Lexer {
                         Some(b'\'') => {
                             buffer.push(b'\'');
                             state.source.next();
-                        },
+                        }
                         _ => {
                             // TODO(azjezz) this is most likely a bug, what if current is none?
                             return Err(SyntaxError::UnexpectedCharacter(
@@ -609,7 +607,8 @@ impl Lexer {
                 let mut buffer = b"(".to_vec();
 
                 // Inlined so we can add whitespace to the buffer.
-                while let Some(true) = state.source.current().map(|u: &u8| u.is_ascii_whitespace()) {
+                while let Some(true) = state.source.current().map(|u: &u8| u.is_ascii_whitespace())
+                {
                     buffer.push(*state.source.current().unwrap());
                     state.source.next();
                 }
@@ -982,7 +981,7 @@ impl Lexer {
             tokens.push(Token {
                 kind: TokenKind::StringPart,
                 span,
-                value: buffer.into()
+                value: buffer.into(),
             })
         }
 
@@ -1037,7 +1036,7 @@ impl Lexer {
             tokens.push(Token {
                 kind: TokenKind::StringPart,
                 span,
-                value: buffer.into()
+                value: buffer.into(),
             })
         }
 
@@ -1182,7 +1181,10 @@ impl Lexer {
                     if state.source.at(&label, label.len()) {
                         state.source.skip(label.len());
                         state.replace(StackFrame::Scripting);
-                        break (TokenKind::EndDocString(DocStringIndentationKind::None, 0), label.into());
+                        break (
+                            TokenKind::EndDocString(DocStringIndentationKind::None, 0),
+                            label.into(),
+                        );
                     }
 
                     // Check if there's any whitespace first.
@@ -1231,7 +1233,10 @@ impl Lexer {
                         // with the EndHeredoc token, storing the kind and amount of whitespace.
                         state.source.skip(label.len());
                         state.replace(StackFrame::Scripting);
-                        break (TokenKind::EndDocString(whitespace_kind, whitespace_amount), label.into());
+                        break (
+                            TokenKind::EndDocString(whitespace_kind, whitespace_amount),
+                            label.into(),
+                        );
                     } else {
                         // We didn't find the label. The buffer still needs to know about
                         // the whitespace, so let's extend the buffer with the whitespace
@@ -1292,7 +1297,10 @@ impl Lexer {
                     if state.source.at(&label, label.len()) {
                         state.source.skip(label.len());
                         state.replace(StackFrame::Scripting);
-                        break (TokenKind::EndDocString(DocStringIndentationKind::None, 0), label);
+                        break (
+                            TokenKind::EndDocString(DocStringIndentationKind::None, 0),
+                            label,
+                        );
                     }
 
                     // Check if there's any whitespace first.
@@ -1341,7 +1349,10 @@ impl Lexer {
                         // with the EndHeredoc token, storing the kind and amount of whitespace.
                         state.source.skip(label.len());
                         state.replace(StackFrame::Scripting);
-                        break (TokenKind::EndDocString(whitespace_kind, whitespace_amount), label);
+                        break (
+                            TokenKind::EndDocString(whitespace_kind, whitespace_amount),
+                            label,
+                        );
                     } else {
                         // We didn't find the label. The buffer still needs to know about
                         // the whitespace, so let's extend the buffer with the whitespace
@@ -1394,7 +1405,7 @@ impl Lexer {
                 return Ok(Some(Token {
                     kind: TokenKind::Identifier,
                     span,
-                    value: ident.into()
+                    value: ident.into(),
                 }));
             }
         }
@@ -1463,7 +1474,10 @@ impl Lexer {
         Ok(Token { kind, span, value })
     }
 
-    fn tokenize_single_quote_string(&self, state: &mut State) -> SyntaxResult<(TokenKind, ByteString)> {
+    fn tokenize_single_quote_string(
+        &self,
+        state: &mut State,
+    ) -> SyntaxResult<(TokenKind, ByteString)> {
         let mut buffer = Vec::new();
 
         loop {
@@ -1487,7 +1501,10 @@ impl Lexer {
         Ok((TokenKind::LiteralString, buffer.into()))
     }
 
-    fn tokenize_double_quote_string(&self, state: &mut State) -> SyntaxResult<(TokenKind, ByteString)> {
+    fn tokenize_double_quote_string(
+        &self,
+        state: &mut State,
+    ) -> SyntaxResult<(TokenKind, ByteString)> {
         let mut buffer = Vec::new();
 
         let constant = loop {

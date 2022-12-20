@@ -188,7 +188,7 @@ impl<'a> TokenStream<'a> {
                     Token {
                         kind: TokenKind::HashMarkComment,
                         span,
-                        value
+                        value,
                     } => Comment {
                         span: *span,
                         format: CommentFormat::HashMark,
@@ -197,7 +197,7 @@ impl<'a> TokenStream<'a> {
                     Token {
                         kind: TokenKind::DocumentComment,
                         span,
-                        value
+                        value,
                     } => Comment {
                         span: *span,
                         format: CommentFormat::Document,
