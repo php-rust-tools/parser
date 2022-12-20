@@ -293,11 +293,11 @@ impl Lexer {
             // Single quoted string.
             [b'\'', ..] => {
                 state.source.next();
-                self.tokenize_single_quote_string(state)?
+                self.tokenize_single_quote_string(state, &[&b'\''])?
             }
-            [b'b' | b'B', b'\'', ..] => {
+            [p @ (b'b' | b'B'), b'\'', ..] => {
                 state.source.skip(2);
-                self.tokenize_single_quote_string(state)?
+                self.tokenize_single_quote_string(state, &[p, &b'\''])?
             }
             [b'"', ..] => {
                 state.source.next();
@@ -307,10 +307,7 @@ impl Lexer {
                 state.source.skip(2);
                 self.tokenize_double_quote_string(state)?
             }
-            [b'$', ident_start!(), ..] => {
-                state.source.next();
-                self.tokenize_variable(state)
-            }
+            [b'$', ident_start!(), ..] => self.tokenize_variable(state),
             [b'$', ..] => {
                 state.source.next();
                 (TokenKind::Dollar, b"$".into())
@@ -493,13 +490,13 @@ impl Lexer {
                 buffer.extend(self.read_and_skip_whitespace(state));
 
                 let doc_string_kind = match state.source.read(1) {
-                    [b'\''] => {
-                        buffer.push(b'\'');
+                    [b @ b'\''] => {
+                        buffer.push(*b);
                         state.source.next();
                         DocStringKind::Nowdoc
                     }
-                    [b'"'] => {
-                        buffer.push(b'"');
+                    [b @ b'"'] => {
+                        buffer.push(*b);
                         state.source.next();
                         DocStringKind::Heredoc
                     }
@@ -525,8 +522,8 @@ impl Lexer {
 
                 if doc_string_kind == DocStringKind::Nowdoc {
                     match state.source.current() {
-                        Some(b'\'') => {
-                            buffer.push(b'\'');
+                        Some(b @ b'\'') => {
+                            buffer.push(*b);
                             state.source.next();
                         }
                         _ => {
@@ -537,8 +534,8 @@ impl Lexer {
                             ));
                         }
                     };
-                } else if let Some(b'"') = state.source.current() {
-                    buffer.push(b'"');
+                } else if let Some(b @ b'"') = state.source.current() {
+                    buffer.push(*b);
                     state.source.next();
                 }
 
@@ -863,33 +860,10 @@ impl Lexer {
                     state.replace(StackFrame::Scripting);
                     break (TokenKind::DoubleQuote, b'"'.into());
                 }
-                &[b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
+                &[s @ b'\\', b @ (b'"' | b'\\' | b'$'), ..] => {
                     state.source.skip(2);
+                    buffer.push(s);
                     buffer.push(b);
-                }
-                &[b'\\', b'n', ..] => {
-                    state.source.skip(2);
-                    buffer.push(b'\n');
-                }
-                &[b'\\', b'r', ..] => {
-                    state.source.skip(2);
-                    buffer.push(b'\r');
-                }
-                &[b'\\', b't', ..] => {
-                    state.source.skip(2);
-                    buffer.push(b'\t');
-                }
-                &[b'\\', b'v', ..] => {
-                    state.source.skip(2);
-                    buffer.push(b'\x0b');
-                }
-                &[b'\\', b'e', ..] => {
-                    state.source.skip(2);
-                    buffer.push(b'\x1b');
-                }
-                &[b'\\', b'f', ..] => {
-                    state.source.skip(2);
-                    buffer.push(b'\x0c');
                 }
                 &[b'\\', b'x', b @ (b'0'..=b'9' | b'a'..=b'f' | b'A'..=b'F')] => {
                     state.source.skip(3);
@@ -956,7 +930,8 @@ impl Lexer {
                 }
                 [b'$', ident_start!(), ..] => {
                     state.source.next();
-                    let ident = self.consume_identifier(state);
+                    let mut ident = self.consume_identifier(state);
+                    ident.insert(0, b'$');
 
                     match state.source.read(4) {
                         [b'[', ..] => state.enter(StackFrame::VarOffset),
@@ -1011,7 +986,8 @@ impl Lexer {
                 }
                 [b'$', ident_start!()] => {
                     state.source.next();
-                    let ident = self.consume_identifier(state);
+                    let mut ident = self.consume_identifier(state);
+                    ident.insert(0, b'$');
 
                     match state.source.read(4) {
                         [b'[', ..] => state.enter(StackFrame::VarOffset),
@@ -1159,7 +1135,8 @@ impl Lexer {
                 }
                 [b'$', ident_start!(), ..] => {
                     state.source.next();
-                    let ident = self.consume_identifier(state);
+                    let mut ident = self.consume_identifier(state);
+                    ident.insert(0, b'$');
 
                     match state.source.read(4) {
                         [b'[', ..] => state.enter(StackFrame::VarOffset),
@@ -1440,10 +1417,7 @@ impl Lexer {
     fn var_offset(&self, state: &mut State) -> SyntaxResult<Token> {
         let span = state.source.span();
         let (kind, value) = match state.source.read(2) {
-            [b'$', ident_start!()] => {
-                state.source.next();
-                self.tokenize_variable(state)
-            }
+            [b'$', ident_start!()] => self.tokenize_variable(state),
             [b'0'..=b'9', ..] => {
                 // TODO: all integer literals are allowed, but only decimal integers with no underscores
                 // are actually treated as numbers. Others are treated as strings.
@@ -1476,18 +1450,20 @@ impl Lexer {
     fn tokenize_single_quote_string(
         &self,
         state: &mut State,
+        prefix: &[&u8],
     ) -> SyntaxResult<(TokenKind, ByteString)> {
         let mut buffer = Vec::new();
 
+        for c in prefix {
+            buffer.push(**c);
+        }
+
         loop {
             match state.source.read(2) {
-                [b'\'', ..] => {
+                [b @ b'\'', ..] => {
                     state.source.next();
+                    buffer.push(*b);
                     break;
-                }
-                &[b'\\', b @ b'\'' | b @ b'\\'] => {
-                    state.source.skip(2);
-                    buffer.push(b);
                 }
                 &[b, ..] => {
                     state.source.next();
@@ -1646,7 +1622,12 @@ impl Lexer {
     }
 
     fn tokenize_variable(&self, state: &mut State) -> (TokenKind, ByteString) {
-        (TokenKind::Variable, self.consume_identifier(state).into())
+        state.source.next();
+
+        let mut ident = self.consume_identifier(state);
+        ident.insert(0, b'$');
+
+        (TokenKind::Variable, ident.into())
     }
 
     fn tokenize_number(&self, state: &mut State) -> SyntaxResult<(TokenKind, ByteString)> {
@@ -1693,14 +1674,14 @@ impl Lexer {
             return parse_int(&buffer);
         }
 
-        if let Some(b'.') = state.source.current() {
-            buffer.push(b'.');
+        if let Some(d @ b'.') = state.source.current() {
+            buffer.push(*d);
             state.source.next();
             self.read_digits(state, &mut buffer, 10);
         }
 
-        if let Some(b'e' | b'E') = state.source.current() {
-            buffer.push(b'e');
+        if let Some(e @ (b'e' | b'E')) = state.source.current() {
+            buffer.push(*e);
             state.source.next();
             if let Some(b @ (b'-' | b'+')) = state.source.current() {
                 buffer.push(*b);

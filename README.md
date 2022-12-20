@@ -27,7 +27,6 @@ cargo add php-parser-rs --git https://github.com/php-rust-tools/parser
 
 ```rust
 use php_parser_rs::parse;
-use php_parser_rs::lexer::Lexer;
 
 fn main() -> ParseResult<()> {
     let code = "
