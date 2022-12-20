@@ -106,8 +106,9 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
                         }
                     },
                     TokenKind::Insteadof => {
-                        let mut insteadof = Vec::new();
-                        insteadof.push(identifiers::full_type_name(state)?);
+                        let mut insteadof = vec![
+                            identifiers::full_type_name(state)?
+                        ];
 
                         if state.stream.current().kind == TokenKind::Comma {
                             if state.stream.peek().kind == TokenKind::SemiColon {

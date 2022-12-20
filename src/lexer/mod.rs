@@ -334,7 +334,7 @@ impl Lexer {
                         value,
                         ..
                     } => {
-                        let mut bytes = value.clone();
+                        let mut bytes = value;
                         bytes.insert(0, b'\\');
                         bytes.length += 1;
 
@@ -387,8 +387,7 @@ impl Lexer {
                 if qualified {
                     (TokenKind::QualifiedIdentifier, buffer.into())
                 } else {
-                    let kind =
-                        identifier_to_keyword(&buffer).unwrap_or_else(|| TokenKind::Identifier);
+                    let kind = identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier);
 
                     if kind == TokenKind::HaltCompiler {
                         match state.source.read(3) {
@@ -1183,7 +1182,7 @@ impl Lexer {
                         state.replace(StackFrame::Scripting);
                         break (
                             TokenKind::EndDocString(DocStringIndentationKind::None, 0),
-                            label.into(),
+                            label,
                         );
                     }
 
@@ -1235,7 +1234,7 @@ impl Lexer {
                         state.replace(StackFrame::Scripting);
                         break (
                             TokenKind::EndDocString(whitespace_kind, whitespace_amount),
-                            label.into(),
+                            label,
                         );
                     } else {
                         // We didn't find the label. The buffer still needs to know about
