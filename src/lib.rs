@@ -2,4 +2,4 @@ pub mod lexer;
 pub mod parser;
 pub mod printer;
 
-pub use parser::{construct, parse};
+pub use parser::{construct, parse, TokenStream};

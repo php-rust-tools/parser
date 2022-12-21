@@ -27,7 +27,7 @@ use crate::parser::internal::try_block;
 use crate::parser::internal::uses;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;
-use crate::parser::state::stream::TokenStream;
+pub use crate::parser::state::stream::TokenStream;
 use crate::parser::state::State;
 
 use self::error::ParseError;
