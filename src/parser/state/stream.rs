@@ -99,6 +99,17 @@ impl<'a> TokenStream<'a> {
         &self.tokens[position]
     }
 
+    /// Get previous token.
+    pub const fn previous(&self) -> &'a Token {
+        let position = if self.cursor == 0 {
+            0
+        } else {
+            self.cursor - 1
+        };
+
+        &self.tokens[position]
+    }
+
     /// Peek next token.
     ///
     /// All comments are skipped.
