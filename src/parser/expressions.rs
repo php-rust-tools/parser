@@ -348,9 +348,11 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                                 right,
                             })
                         }
-                        TokenKind::Pipe => {
-                            Expression::BitwiseOperation(BitwiseOperation::Or { left, or: span, right })
-                        }
+                        TokenKind::Pipe => Expression::BitwiseOperation(BitwiseOperation::Or {
+                            left,
+                            or: span,
+                            right,
+                        }),
                         TokenKind::Caret => Expression::BitwiseOperation(BitwiseOperation::Xor {
                             left,
                             xor: span,
@@ -475,8 +477,16 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                                 right,
                             })
                         }
-                        TokenKind::Dot => Expression::Concat { left, dot: span, right },
-                        TokenKind::Instanceof => Expression::Instanceof { left, instanceof: span, right },
+                        TokenKind::Dot => Expression::Concat {
+                            left,
+                            dot: span,
+                            right,
+                        },
+                        TokenKind::Instanceof => Expression::Instanceof {
+                            left,
+                            instanceof: span,
+                            right,
+                        },
                         _ => todo!(),
                     }
                 }

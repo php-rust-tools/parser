@@ -209,7 +209,11 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         let span = utils::skip(state, TokenKind::Equals)?;
                         let value = expect_literal!(state);
 
-                        entries.push(DeclareEntry { key, equals: span, value });
+                        entries.push(DeclareEntry {
+                            key,
+                            equals: span,
+                            value,
+                        });
 
                         if state.stream.current().kind == TokenKind::Comma {
                             state.stream.next();
@@ -263,7 +267,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         let expression = expressions::create(state)?;
                         let end = utils::skip_semicolon(state)?;
 
-                        DeclareBody::Expression { expression, semicolon: end }
+                        DeclareBody::Expression {
+                            expression,
+                            semicolon: end,
+                        }
                     }
                 };
 
@@ -290,7 +297,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 }
 
                 utils::skip_semicolon(state)?;
-                Statement::Global { global: span, variables }
+                Statement::Global {
+                    global: span,
+                    variables,
+                }
             }
             TokenKind::Static if matches!(peek.kind, TokenKind::Variable) => {
                 state.stream.next();
