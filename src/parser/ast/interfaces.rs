@@ -37,7 +37,7 @@ pub struct InterfaceBody {
 #[serde(rename_all = "snake_case")]
 pub struct Interface {
     pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
-    pub span: Span,                        // `interface`
+    pub interface: Span,                   // `interface`
     pub name: SimpleIdentifier,            // `Foo`
     pub extends: Option<InterfaceExtends>, // `extends Bar`
     pub body: InterfaceBody,               // `{ ... }`

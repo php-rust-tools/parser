@@ -175,7 +175,7 @@ pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
     let end = utils::skip_right_parenthesis(state)?;
 
     Ok(Expression::Array {
-        span,
+        array: span,
         start,
         items,
         end,

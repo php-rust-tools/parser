@@ -144,31 +144,31 @@ pub enum AssignmentOperation {
 pub enum BitwiseOperation {
     And {
         left: Box<Expression>,
-        span: Span,
+        and: Span,
         right: Box<Expression>,
     },
     Or {
         left: Box<Expression>,
-        span: Span,
+        or: Span,
         right: Box<Expression>,
     },
     Xor {
         left: Box<Expression>,
-        span: Span,
+        xor: Span,
         right: Box<Expression>,
     },
     LeftShift {
         left: Box<Expression>,
-        span: Span,
+        left_shift: Span,
         right: Box<Expression>,
     },
     RightShift {
         left: Box<Expression>,
-        span: Span,
+        right_shift: Span,
         right: Box<Expression>,
     },
     Not {
-        span: Span,
+        not: Span,
         right: Box<Expression>,
     },
 }

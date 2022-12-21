@@ -57,7 +57,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     };
 
     Ok(Statement::Interface(Interface {
-        span,
+        interface: span,
         name,
         attributes,
         extends,

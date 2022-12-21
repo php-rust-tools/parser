@@ -209,7 +209,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         let span = utils::skip(state, TokenKind::Equals)?;
                         let value = expect_literal!(state);
 
-                        entries.push(DeclareEntry { key, span, value });
+                        entries.push(DeclareEntry { key, equals: span, value });
 
                         if state.stream.current().kind == TokenKind::Comma {
                             state.stream.next();
@@ -220,9 +220,9 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     let end = utils::skip_right_parenthesis(state)?;
 
                     DeclareEntryGroup {
-                        start,
+                        left_parenthesis: start,
                         entries,
-                        end,
+                        right_parenthesis: end,
                     }
                 };
 
@@ -230,7 +230,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     TokenKind::SemiColon => {
                         let span = utils::skip_semicolon(state)?;
 
-                        DeclareBody::Noop { span }
+                        DeclareBody::Noop { semicolon: span }
                     }
                     TokenKind::LeftBrace => {
                         let start = utils::skip_left_brace(state)?;
@@ -239,9 +239,9 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         let end = utils::skip_right_brace(state)?;
 
                         DeclareBody::Braced {
-                            start,
+                            left_brace: start,
                             statements,
-                            end,
+                            right_brace: end,
                         }
                     }
                     TokenKind::Colon => {
@@ -254,7 +254,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         );
 
                         DeclareBody::Block {
-                            start,
+                            colon: start,
                             statements,
                             end,
                         }
@@ -263,12 +263,12 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         let expression = expressions::create(state)?;
                         let end = utils::skip_semicolon(state)?;
 
-                        DeclareBody::Expression { expression, end }
+                        DeclareBody::Expression { expression, semicolon: end }
                     }
                 };
 
                 Statement::Declare(Declare {
-                    span,
+                    declare: span,
                     entries,
                     body,
                 })
@@ -290,7 +290,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 }
 
                 utils::skip_semicolon(state)?;
-                Statement::Global { span, variables }
+                Statement::Global { global: span, variables }
             }
             TokenKind::Static if matches!(peek.kind, TokenKind::Variable) => {
                 state.stream.next();

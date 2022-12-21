@@ -153,7 +153,7 @@ pub fn usage(state: &mut State) -> ParseResult<TraitUsage> {
     }
 
     Ok(TraitUsage {
-        span,
+        r#use: span,
         traits,
         adaptations,
     })
@@ -177,7 +177,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     };
 
     Ok(Statement::Trait(Trait {
-        span,
+        r#trait: span,
         name,
         attributes,
         body,

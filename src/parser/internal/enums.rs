@@ -72,7 +72,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         };
 
         Ok(Statement::BackedEnum(BackedEnum {
-            span,
+            r#enum: span,
             name,
             backed_type,
             attributes,
@@ -93,7 +93,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         };
 
         Ok(Statement::UnitEnum(UnitEnum {
-            span,
+            r#enum: span,
             name,
             attributes,
             implements,

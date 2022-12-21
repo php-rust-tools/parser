@@ -155,7 +155,7 @@ pub enum Statement {
     BackedEnum(BackedEnum),
     Block(Braced<Vec<Statement>>),
     Global {
-        span: Span,
+        global: Span,
         variables: Vec<Variable>,
     },
     Declare(Declare),
@@ -239,18 +239,18 @@ pub enum Expression {
     // $a . $b
     Concat {
         left: Box<Self>,
-        span: Span,
+        dot: Span,
         right: Box<Self>,
     },
     // $foo instanceof Bar
     Instanceof {
         left: Box<Self>,
-        span: Span,
+        instanceof: Span,
         right: Box<Self>,
     },
     // &$foo
     Reference {
-        span: Span,
+        ampersand: Span,
         right: Box<Self>,
     },
     // ($a && $b)
@@ -266,29 +266,29 @@ pub enum Expression {
     Empty,
     // @foo()
     ErrorSuppress {
-        span: Span,
+        at: Span,
         expr: Box<Self>,
     },
     Identifier(Identifier),
     Variable(Variable),
     // include "foo.php"
     Include {
-        span: Span,
+        include: Span,
         path: Box<Self>,
     },
     // include_once "foo.php"
     IncludeOnce {
-        span: Span,
+        include_once: Span,
         path: Box<Self>,
     },
     // require "foo.php"
     Require {
-        span: Span,
+        require: Span,
         path: Box<Self>,
     },
     // require_once "foo.php"
     RequireOnce {
-        span: Span,
+        require_once: Span,
         path: Box<Self>,
     },
     // `foo(1, 2, 3)`
@@ -346,7 +346,7 @@ pub enum Expression {
     ShortArray(Bracketed<CommaSeparated<ArrayItem>>),
     // `array(1, 2, 3)`
     Array {
-        span: Span,            // `array`
+        array: Span,           // `array`
         start: Span,           // `(`
         items: Vec<ArrayItem>, // `1, 2, 3`
         end: Span,             // `)`
@@ -454,11 +454,11 @@ pub enum Expression {
         value: Box<Self>,
     },
     Print {
-        span: Span,
+        print: Span,
         value: Box<Self>,
     },
     Cast {
-        span: Span,
+        cast: Span,
         kind: CastKind,
         value: Box<Self>,
     },

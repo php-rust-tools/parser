@@ -37,7 +37,7 @@ pub enum PropertyEntry {
     },
     Initialized {
         variable: SimpleVariable,
-        span: Span,
+        equals: Span,
         value: Expression,
     },
 }

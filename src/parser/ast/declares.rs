@@ -12,15 +12,15 @@ use crate::parser::ast::Statement;
 #[serde(rename_all = "snake_case")]
 pub struct DeclareEntry {
     pub key: SimpleIdentifier, // `strict_types`
-    pub span: Span,            // `=`
+    pub equals: Span,          // `=`
     pub value: Literal,        // `1`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct DeclareEntryGroup {
-    pub start: Span,                // `(`
-    pub end: Span,                  // `)`
+    pub left_parenthesis: Span,     // `(`
+    pub right_parenthesis: Span,    // `)`
     pub entries: Vec<DeclareEntry>, // `strict_types = 1`
 }
 
@@ -29,22 +29,22 @@ pub struct DeclareEntryGroup {
 pub enum DeclareBody {
     // declaration is terminated with `;`
     Noop {
-        span: Span, // `;`
+        semicolon: Span, // `;`
     },
     // declaration is followed by a `{` and terminated with `}` after multiple statements.
     Braced {
-        start: Span,                // `{`
+        left_brace: Span,           // `{`
         statements: Vec<Statement>, // `*statements*`
-        end: Span,                  // `}`
+        right_brace: Span,          // `}`
     },
     // declaration is terminated with `;` after a single expression.
     Expression {
         expression: Expression, // `*expression*`
-        end: Span,              // `;`
+        semicolon: Span,        // `;`
     },
     // declaration is followed by a `:` and terminated with `enddeclare` and `;` after multiple statements.
     Block {
-        start: Span,                // `:`
+        colon: Span,                // `:`
         statements: Vec<Statement>, // `*statements*`
         end: (Span, Span),          // `enddeclare` + `;`
     },
@@ -53,7 +53,7 @@ pub enum DeclareBody {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Declare {
-    pub span: Span,                 // `declare`
+    pub declare: Span,              // `declare`
     pub entries: DeclareEntryGroup, // `(strict_types = 1)`
     pub body: DeclareBody,          // `;`
 }

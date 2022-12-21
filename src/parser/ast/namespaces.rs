@@ -18,7 +18,7 @@ pub struct UnbracedNamespace {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BracedNamespace {
-    pub span: Span,                     // `namespace`
+    pub namespace: Span,                // `namespace`
     pub name: Option<SimpleIdentifier>, // `Foo`
     pub body: BracedNamespaceBody,      // `{ *statements* }`
 }

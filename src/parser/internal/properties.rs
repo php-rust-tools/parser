@@ -72,7 +72,7 @@ pub fn parse(
 
             entries.push(PropertyEntry::Initialized {
                 variable,
-                span: current.span,
+                equals: current.span,
                 value,
             });
         } else {
@@ -130,7 +130,7 @@ pub fn parse_var(state: &mut State, class_name: &str) -> ParseResult<VariablePro
 
             entries.push(PropertyEntry::Initialized {
                 variable,
-                span,
+                equals: span,
                 value,
             });
         } else {

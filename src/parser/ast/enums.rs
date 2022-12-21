@@ -38,7 +38,7 @@ pub struct UnitEnumBody {
 #[serde(rename_all = "snake_case")]
 pub struct UnitEnum {
     pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
-    pub span: Span,                        // `enum`
+    pub r#enum: Span,                      // `enum`
     pub name: SimpleIdentifier,            // `Foo`
     pub implements: Vec<SimpleIdentifier>, // `implements Bar`
     pub body: UnitEnumBody,                // `{ ... }`
@@ -82,7 +82,7 @@ pub struct BackedEnumBody {
 #[serde(rename_all = "snake_case")]
 pub struct BackedEnum {
     pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
-    pub span: Span,                        // `enum`
+    pub r#enum: Span,                      // `enum`
     pub name: SimpleIdentifier,            // `Foo`
     pub backed_type: BackedEnumType,       // `: string`
     pub implements: Vec<SimpleIdentifier>, // `implements Bar`

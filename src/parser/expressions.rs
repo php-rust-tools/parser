@@ -134,7 +134,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                         left: Box::new(left),
                         equals: span,
                         right: Box::new(Expression::Reference {
-                            span: op.span,
+                            ampersand: op.span,
                             right,
                         }),
                     })
@@ -144,7 +144,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
                     Expression::Instanceof {
                         left: Box::new(left),
-                        span,
+                        instanceof: span,
                         right: Box::new(Expression::Self_),
                     }
                 }
@@ -153,7 +153,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
                     Expression::Instanceof {
                         left: Box::new(left),
-                        span,
+                        instanceof: span,
                         right: Box::new(Expression::Parent),
                     }
                 }
@@ -162,7 +162,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
                     Expression::Instanceof {
                         left: Box::new(left),
-                        span,
+                        instanceof: span,
                         right: Box::new(Expression::Static),
                     }
                 }
@@ -172,7 +172,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
                     Expression::Instanceof {
                         left: Box::new(left),
-                        span,
+                        instanceof: span,
                         right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             SimpleIdentifier {
                                 span: enum_span,
@@ -187,7 +187,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
                     Expression::Instanceof {
                         left: Box::new(left),
-                        span,
+                        instanceof: span,
                         right: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             SimpleIdentifier {
                                 span: from_span,
@@ -344,29 +344,29 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                         TokenKind::Ampersand => {
                             Expression::BitwiseOperation(BitwiseOperation::And {
                                 left,
-                                span,
+                                and: span,
                                 right,
                             })
                         }
                         TokenKind::Pipe => {
-                            Expression::BitwiseOperation(BitwiseOperation::Or { left, span, right })
+                            Expression::BitwiseOperation(BitwiseOperation::Or { left, or: span, right })
                         }
                         TokenKind::Caret => Expression::BitwiseOperation(BitwiseOperation::Xor {
                             left,
-                            span,
+                            xor: span,
                             right,
                         }),
                         TokenKind::LeftShift => {
                             Expression::BitwiseOperation(BitwiseOperation::LeftShift {
                                 left,
-                                span,
+                                left_shift: span,
                                 right,
                             })
                         }
                         TokenKind::RightShift => {
                             Expression::BitwiseOperation(BitwiseOperation::RightShift {
                                 left,
-                                span,
+                                right_shift: span,
                                 right,
                             })
                         }
@@ -475,8 +475,8 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
                                 right,
                             })
                         }
-                        TokenKind::Dot => Expression::Concat { left, span, right },
-                        TokenKind::Instanceof => Expression::Instanceof { left, span, right },
+                        TokenKind::Dot => Expression::Concat { left, dot: span, right },
+                        TokenKind::Instanceof => Expression::Instanceof { left, instanceof: span, right },
                         _ => todo!(),
                     }
                 }
@@ -997,10 +997,10 @@ expressions! {
         let path = Box::new(create(state)?);
 
         Ok(match current.kind {
-            TokenKind::Include => Expression::Include { span, path },
-            TokenKind::IncludeOnce => Expression::IncludeOnce { span, path },
-            TokenKind::Require => Expression::Require { span, path },
-            TokenKind::RequireOnce => Expression::RequireOnce { span, path },
+            TokenKind::Include => Expression::Include { include: span, path },
+            TokenKind::IncludeOnce => Expression::IncludeOnce { include_once: span, path },
+            TokenKind::Require => Expression::Require { require: span, path },
+            TokenKind::RequireOnce => Expression::RequireOnce { require_once: span, path },
             _ => unreachable!()
         })
     })
@@ -1022,7 +1022,7 @@ expressions! {
         let rhs = for_precedence(state, Precedence::Prefix)?;
 
         Ok(Expression::Cast {
-            span,
+            cast: span,
             kind,
             value: Box::new(rhs),
         })
@@ -1072,7 +1072,7 @@ expressions! {
         let rhs = for_precedence(state, Precedence::Prefix)?;
 
         Ok(Expression::ErrorSuppress {
-            span,
+            at: span,
             expr: Box::new(rhs)
         })
     })
@@ -1086,7 +1086,7 @@ expressions! {
         let rhs = for_precedence(state, Precedence::Prefix)?;
 
         Ok(Expression::Print {
-            span,
+            print: span,
             value: Box::new(rhs)
         })
     })
@@ -1099,7 +1099,7 @@ expressions! {
 
         let right = Box::new(for_precedence(state, Precedence::Prefix)?);
 
-        Ok(Expression::BitwiseOperation(BitwiseOperation::Not { span, right }))
+        Ok(Expression::BitwiseOperation(BitwiseOperation::Not { not: span, right }))
     })
 
     #[before(unexpected_token), current(TokenKind::Dollar | TokenKind::DollarLeftBrace | TokenKind::Variable)]
