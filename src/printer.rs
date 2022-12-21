@@ -54,7 +54,12 @@ pub fn print(tokens: &[Token]) -> String {
                         break;
                     }
 
-                    representation.push_str(&" ".repeat((token.span.1 - 1) - representation.len()));
+                    let repeat = token
+                        .span
+                        .1
+                        .saturating_sub(1)
+                        .saturating_sub(representation.len());
+                    representation.push_str(&" ".repeat(repeat));
                     representation.push_str(&token.value.to_string());
                 }
 
