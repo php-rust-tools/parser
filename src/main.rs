@@ -12,6 +12,7 @@ fn main() -> ParseResult<()> {
         println!("  --silent   Don't print anything");
         println!("  --json     Print as json");
         println!("  --tokens   Print tokens instead of ast");
+        println!("  --print    Print the code again after parsing");
         ::std::process::exit(0);
     }
 
@@ -20,6 +21,7 @@ fn main() -> ParseResult<()> {
     let silent = args.contains(&String::from("--silent"));
     let print_json = args.contains(&String::from("--json"));
     let print_tokens = args.contains(&String::from("--tokens"));
+    let print = args.contains(&String::from("--print"));
     let contents = match std::fs::read_to_string(file) {
         Ok(contents) => contents,
         Err(error) => {
@@ -29,23 +31,29 @@ fn main() -> ParseResult<()> {
     };
 
     let tokens = Lexer::new().tokenize(&contents)?;
-    if !silent && print_tokens {
-        // if --json is passed, print as json
-        if print_json {
-            match serde_json::to_string_pretty(&tokens) {
-                Ok(json) => println!("{}", json),
-                Err(error) => {
-                    eprintln!("Failed to convert tokens to json: {}", error);
+    if !silent {
+        if print_tokens {
+            // if --json is passed, print as json
+            if print_json {
+                match serde_json::to_string_pretty(&tokens) {
+                    Ok(json) => println!("{}", json),
+                    Err(error) => {
+                        eprintln!("Failed to convert tokens to json: {}", error);
 
-                    ::std::process::exit(1);
+                        ::std::process::exit(1);
+                    }
                 }
+            } else {
+                // if --json is not passed, print as text
+                println!("{:?}", tokens);
             }
-        } else {
-            // if --json is not passed, print as text
-            println!("{:?}", tokens);
-        }
 
-        return Ok(());
+            return Ok(());
+        } else if print {
+            println!("{}", php_parser_rs::printer::print(&tokens));
+
+            return Ok(());
+        }
     }
 
     let ast = php_parser_rs::construct(&tokens)?;
