@@ -952,8 +952,8 @@ impl Lexer {
                     }
                 }
                 [b'$', ident_start!(), ..] => {
-                    state.source.next();
-                    let ident = self.consume_identifier(state);
+                    let mut var = state.source.read_and_skip(1).to_vec();
+                    var.extend(self.consume_identifier(state));
 
                     match state.source.read(4) {
                         [b'[', ..] => state.enter(StackFrame::VarOffset),
@@ -963,7 +963,7 @@ impl Lexer {
                         _ => {}
                     }
 
-                    break (TokenKind::Variable, ident.into());
+                    break (TokenKind::Variable, var.into());
                 }
                 &[b, ..] => {
                     state.source.next();
