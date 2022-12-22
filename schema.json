@@ -4768,7 +4768,45 @@
                   "$ref": "#/definitions/Span"
                 },
                 "method": {
+                  "$ref": "#/definitions/Identifier"
+                },
+                "target": {
                   "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "static_variable_method_call"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "arguments",
+                "double_colon",
+                "method",
+                "target"
+              ],
+              "properties": {
+                "arguments": {
+                  "$ref": "#/definitions/ArgumentList"
+                },
+                "double_colon": {
+                  "$ref": "#/definitions/Span"
+                },
+                "method": {
+                  "$ref": "#/definitions/Variable"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -4803,10 +4841,184 @@
                   "$ref": "#/definitions/Span"
                 },
                 "method": {
-                  "$ref": "#/definitions/Expression"
+                  "$ref": "#/definitions/Identifier"
                 },
                 "placeholder": {
                   "$ref": "#/definitions/ArgumentPlaceholder"
+                },
+                "target": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "static_variable_method_closure_creation"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "double_colon",
+                "method",
+                "placeholder",
+                "target"
+              ],
+              "properties": {
+                "double_colon": {
+                  "$ref": "#/definitions/Span"
+                },
+                "method": {
+                  "$ref": "#/definitions/Variable"
+                },
+                "placeholder": {
+                  "$ref": "#/definitions/ArgumentPlaceholder"
+                },
+                "target": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "property_fetch"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "arrow",
+                "property",
+                "target"
+              ],
+              "properties": {
+                "arrow": {
+                  "$ref": "#/definitions/Span"
+                },
+                "property": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "target": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "nullsafe_property_fetch"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "property",
+                "question_arrow",
+                "target"
+              ],
+              "properties": {
+                "property": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "question_arrow": {
+                  "$ref": "#/definitions/Span"
+                },
+                "target": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "static_property_fetch"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "double_colon",
+                "property",
+                "target"
+              ],
+              "properties": {
+                "double_colon": {
+                  "$ref": "#/definitions/Span"
+                },
+                "property": {
+                  "$ref": "#/definitions/Variable"
+                },
+                "target": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "constant_fetch"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "constant",
+                "double_colon",
+                "target"
+              ],
+              "properties": {
+                "constant": {
+                  "$ref": "#/definitions/Identifier"
+                },
+                "double_colon": {
+                  "$ref": "#/definitions/Span"
                 },
                 "target": {
                   "$ref": "#/definitions/Expression"
@@ -5154,138 +5366,6 @@
                   "items": {
                     "$ref": "#/definitions/StringPart"
                   }
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "property_fetch"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "arrow",
-                "property",
-                "target"
-              ],
-              "properties": {
-                "arrow": {
-                  "$ref": "#/definitions/Span"
-                },
-                "property": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "nullsafe_property_fetch"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "property",
-                "question_arrow",
-                "target"
-              ],
-              "properties": {
-                "property": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "question_arrow": {
-                  "$ref": "#/definitions/Span"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "static_property_fetch"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "double_colon",
-                "property",
-                "target"
-              ],
-              "properties": {
-                "double_colon": {
-                  "$ref": "#/definitions/Span"
-                },
-                "property": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "const_fetch"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "constant",
-                "target"
-              ],
-              "properties": {
-                "constant": {
-                  "$ref": "#/definitions/SimpleIdentifier"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
                 }
               }
             }
