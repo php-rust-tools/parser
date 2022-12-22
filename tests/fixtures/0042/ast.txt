@@ -1,33 +1,37 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Echo {
-        echo: Span(
-            1,
-            7,
-        ),
+        echo: Span {
+            line: 1,
+            column: 7,
+            position: 6,
+        },
         values: [
             Literal(
                 Integer(
                     LiteralInteger {
                         value: "1",
-                        span: Span(
-                            1,
-                            12,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 12,
+                            position: 11,
+                        },
                     },
                 ),
             ),
         ],
         ending: Semicolon(
-            Span(
-                1,
-                13,
-            ),
+            Span {
+                line: 1,
+                column: 13,
+                position: 12,
+            },
         ),
     },
 ]

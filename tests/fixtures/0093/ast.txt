@@ -1,41 +1,46 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: Variable(
             BracedVariableVariable(
                 BracedVariableVariable {
-                    start: Span(
-                        1,
-                        7,
-                    ),
+                    start: Span {
+                        line: 1,
+                        column: 7,
+                        position: 6,
+                    },
                     variable: Literal(
                         String(
                             LiteralString {
                                 value: "'foo'",
-                                span: Span(
-                                    1,
-                                    9,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 9,
+                                    position: 8,
+                                },
                             },
                         ),
                     ),
-                    end: Span(
-                        1,
-                        14,
-                    ),
+                    end: Span {
+                        line: 1,
+                        column: 14,
+                        position: 13,
+                    },
                 },
             ),
         ),
         ending: Semicolon(
-            Span(
-                1,
-                15,
-            ),
+            Span {
+                line: 1,
+                column: 15,
+                position: 14,
+            },
         ),
     },
 ]

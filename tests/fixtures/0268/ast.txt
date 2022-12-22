@@ -1,43 +1,49 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     While(
         WhileStatement {
-            while: Span(
-                3,
-                1,
-            ),
+            while: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             condition: Parenthesized {
-                left_parenthesis: Span(
-                    3,
-                    7,
-                ),
+                left_parenthesis: Span {
+                    line: 3,
+                    column: 7,
+                    position: 13,
+                },
                 inner: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                3,
-                                8,
-                            ),
+                            span: Span {
+                                line: 3,
+                                column: 8,
+                                position: 14,
+                            },
                             name: "$foo",
                         },
                     ),
                 ),
-                right_parenthesis: Span(
-                    3,
-                    12,
-                ),
+                right_parenthesis: Span {
+                    line: 3,
+                    column: 12,
+                    position: 18,
+                },
             },
             body: Statement(
                 Noop(
-                    Span(
-                        3,
-                        13,
-                    ),
+                    Span {
+                        line: 3,
+                        column: 13,
+                        position: 19,
+                    },
                 ),
             ),
         },

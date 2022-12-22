@@ -1,50 +1,56 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: ArrayIndex {
             array: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            3,
-                            1,
-                        ),
+                        span: Span {
+                            line: 3,
+                            column: 1,
+                            position: 7,
+                        },
                         name: "$foo",
                     },
                 ),
             ),
-            left_bracket: Span(
-                3,
-                5,
-            ),
+            left_bracket: Span {
+                line: 3,
+                column: 5,
+                position: 11,
+            },
             index: Some(
                 Literal(
                     String(
                         LiteralString {
                             value: "'bar'",
-                            span: Span(
-                                3,
-                                6,
-                            ),
+                            span: Span {
+                                line: 3,
+                                column: 6,
+                                position: 12,
+                            },
                         },
                     ),
                 ),
             ),
-            right_bracket: Span(
-                3,
-                11,
-            ),
+            right_bracket: Span {
+                line: 3,
+                column: 11,
+                position: 17,
+            },
         },
         ending: Semicolon(
-            Span(
-                3,
-                12,
-            ),
+            Span {
+                line: 3,
+                column: 12,
+                position: 18,
+            },
         ),
     },
     Expression {
@@ -53,63 +59,71 @@
                 array: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                5,
-                                1,
-                            ),
+                            span: Span {
+                                line: 5,
+                                column: 1,
+                                position: 21,
+                            },
                             name: "$foo",
                         },
                     ),
                 ),
-                left_bracket: Span(
-                    5,
-                    5,
-                ),
+                left_bracket: Span {
+                    line: 5,
+                    column: 5,
+                    position: 25,
+                },
                 index: Some(
                     Literal(
                         String(
                             LiteralString {
                                 value: "'bar'",
-                                span: Span(
-                                    5,
-                                    6,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 6,
+                                    position: 26,
+                                },
                             },
                         ),
                     ),
                 ),
-                right_bracket: Span(
-                    5,
-                    11,
-                ),
+                right_bracket: Span {
+                    line: 5,
+                    column: 11,
+                    position: 31,
+                },
             },
-            left_bracket: Span(
-                5,
-                12,
-            ),
+            left_bracket: Span {
+                line: 5,
+                column: 12,
+                position: 32,
+            },
             index: Some(
                 Literal(
                     String(
                         LiteralString {
                             value: "'baz'",
-                            span: Span(
-                                5,
-                                13,
-                            ),
+                            span: Span {
+                                line: 5,
+                                column: 13,
+                                position: 33,
+                            },
                         },
                     ),
                 ),
             ),
-            right_bracket: Span(
-                5,
-                18,
-            ),
+            right_bracket: Span {
+                line: 5,
+                column: 18,
+                position: 38,
+            },
         },
         ending: Semicolon(
-            Span(
-                5,
-                19,
-            ),
+            Span {
+                line: 5,
+                column: 19,
+                position: 39,
+            },
         ),
     },
     Expression {
@@ -119,58 +133,65 @@
                     array: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    7,
-                                    1,
-                                ),
+                                span: Span {
+                                    line: 7,
+                                    column: 1,
+                                    position: 42,
+                                },
                                 name: "$foo",
                             },
                         ),
                     ),
-                    left_bracket: Span(
-                        7,
-                        5,
-                    ),
+                    left_bracket: Span {
+                        line: 7,
+                        column: 5,
+                        position: 46,
+                    },
                     index: Some(
                         Literal(
                             String(
                                 LiteralString {
                                     value: "'bar'",
-                                    span: Span(
-                                        7,
-                                        6,
-                                    ),
+                                    span: Span {
+                                        line: 7,
+                                        column: 6,
+                                        position: 47,
+                                    },
                                 },
                             ),
                         ),
                     ),
-                    right_bracket: Span(
-                        7,
-                        11,
-                    ),
+                    right_bracket: Span {
+                        line: 7,
+                        column: 11,
+                        position: 52,
+                    },
                 },
-                equals: Span(
-                    7,
-                    13,
-                ),
+                equals: Span {
+                    line: 7,
+                    column: 13,
+                    position: 54,
+                },
                 right: Literal(
                     String(
                         LiteralString {
                             value: "'baz'",
-                            span: Span(
-                                7,
-                                15,
-                            ),
+                            span: Span {
+                                line: 7,
+                                column: 15,
+                                position: 56,
+                            },
                         },
                     ),
                 ),
             },
         ),
         ending: Semicolon(
-            Span(
-                7,
-                20,
-            ),
+            Span {
+                line: 7,
+                column: 20,
+                position: 61,
+            },
         ),
     },
 ]

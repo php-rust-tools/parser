@@ -1,40 +1,45 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: StaticMethodCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            1,
-                            7,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 7,
+                            position: 6,
+                        },
                         value: "Foo",
                     },
                 ),
             ),
-            double_colon: Span(
-                1,
-                10,
-            ),
+            double_colon: Span {
+                line: 1,
+                column: 10,
+                position: 9,
+            },
             method: Variable(
                 VariableVariable(
                     VariableVariable {
-                        span: Span(
-                            1,
-                            12,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 12,
+                            position: 11,
+                        },
                         variable: SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    1,
-                                    13,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 13,
+                                    position: 12,
+                                },
                                 name: "$a",
                             },
                         ),
@@ -45,22 +50,25 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    1,
-                    15,
-                ),
+                left_parenthesis: Span {
+                    line: 1,
+                    column: 15,
+                    position: 14,
+                },
                 arguments: [],
-                right_parenthesis: Span(
-                    1,
-                    16,
-                ),
+                right_parenthesis: Span {
+                    line: 1,
+                    column: 16,
+                    position: 15,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                1,
-                17,
-            ),
+            Span {
+                line: 1,
+                column: 17,
+                position: 16,
+            },
         ),
     },
 ]

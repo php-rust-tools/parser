@@ -1,37 +1,43 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Try(
         TryBlock {
-            start: Span(
-                3,
-                1,
-            ),
-            end: Span(
-                11,
-                1,
-            ),
+            start: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
+            end: Span {
+                line: 11,
+                column: 1,
+                position: 79,
+            },
             body: [],
             catches: [
                 CatchBlock {
-                    start: Span(
-                        5,
-                        3,
-                    ),
-                    end: Span(
-                        7,
-                        3,
-                    ),
+                    start: Span {
+                        line: 5,
+                        column: 3,
+                        position: 16,
+                    },
+                    end: Span {
+                        line: 7,
+                        column: 3,
+                        position: 42,
+                    },
                     types: Identifier(
                         SimpleIdentifier {
-                            span: Span(
-                                5,
-                                10,
-                            ),
+                            span: Span {
+                                line: 5,
+                                column: 10,
+                                position: 23,
+                            },
                             value: "Exception",
                         },
                     ),
@@ -39,10 +45,11 @@
                         Variable(
                             SimpleVariable(
                                 SimpleVariable {
-                                    span: Span(
-                                        5,
-                                        20,
-                                    ),
+                                    span: Span {
+                                        line: 5,
+                                        column: 20,
+                                        position: 33,
+                                    },
                                     name: "$e",
                                 },
                             ),
@@ -51,20 +58,23 @@
                     body: [],
                 },
                 CatchBlock {
-                    start: Span(
-                        7,
-                        3,
-                    ),
-                    end: Span(
-                        11,
-                        1,
-                    ),
+                    start: Span {
+                        line: 7,
+                        column: 3,
+                        position: 42,
+                    },
+                    end: Span {
+                        line: 11,
+                        column: 1,
+                        position: 79,
+                    },
                     types: Identifier(
                         SimpleIdentifier {
-                            span: Span(
-                                7,
-                                10,
-                            ),
+                            span: Span {
+                                line: 7,
+                                column: 10,
+                                position: 49,
+                            },
                             value: "CustomException",
                         },
                     ),
@@ -72,10 +82,11 @@
                         Variable(
                             SimpleVariable(
                                 SimpleVariable {
-                                    span: Span(
-                                        7,
-                                        26,
-                                    ),
+                                    span: Span {
+                                        line: 7,
+                                        column: 26,
+                                        position: 65,
+                                    },
                                     name: "$e",
                                 },
                             ),
@@ -89,31 +100,36 @@
     ),
     Try(
         TryBlock {
-            start: Span(
-                11,
-                1,
-            ),
-            end: Span(
-                19,
-                1,
-            ),
+            start: Span {
+                line: 11,
+                column: 1,
+                position: 79,
+            },
+            end: Span {
+                line: 19,
+                column: 1,
+                position: 128,
+            },
             body: [],
             catches: [
                 CatchBlock {
-                    start: Span(
-                        13,
-                        3,
-                    ),
-                    end: Span(
-                        15,
-                        3,
-                    ),
+                    start: Span {
+                        line: 13,
+                        column: 3,
+                        position: 88,
+                    },
+                    end: Span {
+                        line: 15,
+                        column: 3,
+                        position: 114,
+                    },
                     types: Identifier(
                         SimpleIdentifier {
-                            span: Span(
-                                13,
-                                10,
-                            ),
+                            span: Span {
+                                line: 13,
+                                column: 10,
+                                position: 95,
+                            },
                             value: "Exception",
                         },
                     ),
@@ -121,10 +137,11 @@
                         Variable(
                             SimpleVariable(
                                 SimpleVariable {
-                                    span: Span(
-                                        13,
-                                        20,
-                                    ),
+                                    span: Span {
+                                        line: 13,
+                                        column: 20,
+                                        position: 105,
+                                    },
                                     name: "$e",
                                 },
                             ),
@@ -135,14 +152,16 @@
             ],
             finally: Some(
                 FinallyBlock {
-                    start: Span(
-                        15,
-                        3,
-                    ),
-                    end: Span(
-                        19,
-                        1,
-                    ),
+                    start: Span {
+                        line: 15,
+                        column: 3,
+                        position: 114,
+                    },
+                    end: Span {
+                        line: 19,
+                        column: 1,
+                        position: 128,
+                    },
                     body: [],
                 },
             ),
@@ -150,26 +169,30 @@
     ),
     Try(
         TryBlock {
-            start: Span(
-                19,
-                1,
-            ),
-            end: Span(
-                23,
-                1,
-            ),
+            start: Span {
+                line: 19,
+                column: 1,
+                position: 128,
+            },
+            end: Span {
+                line: 23,
+                column: 1,
+                position: 149,
+            },
             body: [],
             catches: [],
             finally: Some(
                 FinallyBlock {
-                    start: Span(
-                        21,
-                        3,
-                    ),
-                    end: Span(
-                        23,
-                        1,
-                    ),
+                    start: Span {
+                        line: 21,
+                        column: 3,
+                        position: 137,
+                    },
+                    end: Span {
+                        line: 23,
+                        column: 1,
+                        position: 149,
+                    },
                     body: [],
                 },
             ),
@@ -177,31 +200,36 @@
     ),
     Try(
         TryBlock {
-            start: Span(
-                23,
-                1,
-            ),
-            end: Span(
-                29,
-                1,
-            ),
+            start: Span {
+                line: 23,
+                column: 1,
+                position: 149,
+            },
+            end: Span {
+                line: 29,
+                column: 1,
+                position: 182,
+            },
             body: [],
             catches: [
                 CatchBlock {
-                    start: Span(
-                        25,
-                        3,
-                    ),
-                    end: Span(
-                        29,
-                        1,
-                    ),
+                    start: Span {
+                        line: 25,
+                        column: 3,
+                        position: 158,
+                    },
+                    end: Span {
+                        line: 29,
+                        column: 1,
+                        position: 182,
+                    },
                     types: Identifier(
                         SimpleIdentifier {
-                            span: Span(
-                                25,
-                                10,
-                            ),
+                            span: Span {
+                                line: 25,
+                                column: 10,
+                                position: 165,
+                            },
                             value: "Exception",
                         },
                     ),
@@ -214,31 +242,36 @@
     ),
     Try(
         TryBlock {
-            start: Span(
-                29,
-                1,
-            ),
-            end: Span(
-                34,
-                1,
-            ),
+            start: Span {
+                line: 29,
+                column: 1,
+                position: 182,
+            },
+            end: Span {
+                line: 34,
+                column: 1,
+                position: 217,
+            },
             body: [],
             catches: [
                 CatchBlock {
-                    start: Span(
-                        31,
-                        3,
-                    ),
-                    end: Span(
-                        34,
-                        1,
-                    ),
+                    start: Span {
+                        line: 31,
+                        column: 3,
+                        position: 191,
+                    },
+                    end: Span {
+                        line: 34,
+                        column: 1,
+                        position: 217,
+                    },
                     types: Identifier(
                         SimpleIdentifier {
-                            span: Span(
-                                31,
-                                10,
-                            ),
+                            span: Span {
+                                line: 31,
+                                column: 10,
+                                position: 198,
+                            },
                             value: "Exception",
                         },
                     ),
@@ -246,10 +279,11 @@
                         Variable(
                             SimpleVariable(
                                 SimpleVariable {
-                                    span: Span(
-                                        31,
-                                        20,
-                                    ),
+                                    span: Span {
+                                        line: 31,
+                                        column: 20,
+                                        position: 208,
+                                    },
                                     name: "$e",
                                 },
                             ),

@@ -1,44 +1,49 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: NullsafePropertyFetch {
             target: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            1,
-                            7,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 7,
+                            position: 6,
+                        },
                         name: "$a",
                     },
                 ),
             ),
-            question_arrow: Span(
-                1,
-                9,
-            ),
+            question_arrow: Span {
+                line: 1,
+                column: 9,
+                position: 8,
+            },
             property: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            1,
-                            12,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 12,
+                            position: 11,
+                        },
                         value: "b",
                     },
                 ),
             ),
         },
         ending: Semicolon(
-            Span(
-                1,
-                13,
-            ),
+            Span {
+                line: 1,
+                column: 13,
+                position: 12,
+            },
         ),
     },
 ]

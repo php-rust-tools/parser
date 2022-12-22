@@ -1,55 +1,63 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Declare(
         Declare {
-            declare: Span(
-                1,
-                7,
-            ),
+            declare: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
             entries: DeclareEntryGroup {
-                left_parenthesis: Span(
-                    1,
-                    14,
-                ),
-                right_parenthesis: Span(
-                    1,
-                    20,
-                ),
+                left_parenthesis: Span {
+                    line: 1,
+                    column: 14,
+                    position: 13,
+                },
+                right_parenthesis: Span {
+                    line: 1,
+                    column: 20,
+                    position: 19,
+                },
                 entries: [
                     DeclareEntry {
                         key: SimpleIdentifier {
-                            span: Span(
-                                1,
-                                15,
-                            ),
+                            span: Span {
+                                line: 1,
+                                column: 15,
+                                position: 14,
+                            },
                             value: "A",
                         },
-                        equals: Span(
-                            1,
-                            16,
-                        ),
+                        equals: Span {
+                            line: 1,
+                            column: 16,
+                            position: 15,
+                        },
                         value: String(
                             LiteralString {
                                 value: "'B'",
-                                span: Span(
-                                    1,
-                                    17,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 17,
+                                    position: 16,
+                                },
                             },
                         ),
                     },
                 ],
             },
             body: Noop {
-                semicolon: Span(
-                    1,
-                    21,
-                ),
+                semicolon: Span {
+                    line: 1,
+                    column: 21,
+                    position: 20,
+                },
             },
         },
     ),

@@ -1,61 +1,71 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
-        expression: ShortArray(
-            Bracketed {
-                left_bracket: Span(
-                    3,
-                    1,
-                ),
-                inner: CommaSeparated {
-                    inner: [
-                        ArrayItem {
-                            key: Some(
-                                Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span(
-                                                3,
-                                                2,
-                                            ),
-                                            name: "$foo",
-                                        },
-                                    ),
-                                ),
-                            ),
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            11,
-                                        ),
-                                        name: "$bar",
-                                    },
-                                ),
-                            ),
-                            unpack: false,
-                            by_ref: true,
-                        },
-                    ],
-                    commas: [],
-                },
-                right_bracket: Span(
-                    3,
-                    15,
-                ),
+        expression: ShortArray {
+            start: Span {
+                line: 3,
+                column: 1,
+                position: 7,
             },
-        ),
+            items: CommaSeparated {
+                inner: [
+                    ReferencedKeyValue {
+                        key: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span {
+                                        line: 3,
+                                        column: 2,
+                                        position: 8,
+                                    },
+                                    name: "$foo",
+                                },
+                            ),
+                        ),
+                        double_arrow: Span {
+                            line: 3,
+                            column: 7,
+                            position: 13,
+                        },
+                        ampersand: Span {
+                            line: 3,
+                            column: 10,
+                            position: 16,
+                        },
+                        value: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span {
+                                        line: 3,
+                                        column: 11,
+                                        position: 17,
+                                    },
+                                    name: "$bar",
+                                },
+                            ),
+                        ),
+                    },
+                ],
+                commas: [],
+            },
+            end: Span {
+                line: 3,
+                column: 15,
+                position: 21,
+            },
+        },
         ending: Semicolon(
-            Span(
-                3,
-                16,
-            ),
+            Span {
+                line: 3,
+                column: 16,
+                position: 22,
+            },
         ),
     },
 ]

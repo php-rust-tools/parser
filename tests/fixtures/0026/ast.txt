@@ -1,32 +1,36 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Break(
         BreakStatement {
-            break: Span(
-                1,
-                7,
-            ),
+            break: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
             level: Some(
                 Literal(
                     LiteralInteger {
                         value: "2",
-                        span: Span(
-                            1,
-                            13,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 13,
+                            position: 12,
+                        },
                     },
                 ),
             ),
             ending: Semicolon(
-                Span(
-                    1,
-                    14,
-                ),
+                Span {
+                    line: 1,
+                    column: 14,
+                    position: 13,
+                },
             ),
         },
     ),

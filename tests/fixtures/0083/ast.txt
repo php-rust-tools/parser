@@ -1,86 +1,98 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Declare(
         Declare {
-            declare: Span(
-                1,
-                7,
-            ),
+            declare: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
             entries: DeclareEntryGroup {
-                left_parenthesis: Span(
-                    1,
-                    14,
-                ),
-                right_parenthesis: Span(
-                    1,
-                    20,
-                ),
+                left_parenthesis: Span {
+                    line: 1,
+                    column: 14,
+                    position: 13,
+                },
+                right_parenthesis: Span {
+                    line: 1,
+                    column: 20,
+                    position: 19,
+                },
                 entries: [
                     DeclareEntry {
                         key: SimpleIdentifier {
-                            span: Span(
-                                1,
-                                15,
-                            ),
+                            span: Span {
+                                line: 1,
+                                column: 15,
+                                position: 14,
+                            },
                             value: "A",
                         },
-                        equals: Span(
-                            1,
-                            16,
-                        ),
+                        equals: Span {
+                            line: 1,
+                            column: 16,
+                            position: 15,
+                        },
                         value: String(
                             LiteralString {
                                 value: "'B'",
-                                span: Span(
-                                    1,
-                                    17,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 17,
+                                    position: 16,
+                                },
                             },
                         ),
                     },
                 ],
             },
             body: Braced {
-                left_brace: Span(
-                    1,
-                    22,
-                ),
+                left_brace: Span {
+                    line: 1,
+                    column: 22,
+                    position: 21,
+                },
                 statements: [
                     Echo {
-                        echo: Span(
-                            1,
-                            24,
-                        ),
+                        echo: Span {
+                            line: 1,
+                            column: 24,
+                            position: 23,
+                        },
                         values: [
                             Literal(
                                 String(
                                     LiteralString {
                                         value: "'Hello, world!'",
-                                        span: Span(
-                                            1,
-                                            29,
-                                        ),
+                                        span: Span {
+                                            line: 1,
+                                            column: 29,
+                                            position: 28,
+                                        },
                                     },
                                 ),
                             ),
                         ],
                         ending: Semicolon(
-                            Span(
-                                1,
-                                44,
-                            ),
+                            Span {
+                                line: 1,
+                                column: 44,
+                                position: 43,
+                            },
                         ),
                     },
                 ],
-                right_brace: Span(
-                    1,
-                    46,
-                ),
+                right_brace: Span {
+                    line: 1,
+                    column: 46,
+                    position: 45,
+                },
             },
         },
     ),

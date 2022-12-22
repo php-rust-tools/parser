@@ -1,35 +1,40 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Namespace(
         Braced(
             BracedNamespace {
-                namespace: Span(
-                    3,
-                    1,
-                ),
+                namespace: Span {
+                    line: 3,
+                    column: 1,
+                    position: 7,
+                },
                 name: Some(
                     SimpleIdentifier {
-                        span: Span(
-                            3,
-                            11,
-                        ),
+                        span: Span {
+                            line: 3,
+                            column: 11,
+                            position: 17,
+                        },
                         value: "Foo\Bar",
                     },
                 ),
                 body: BracedNamespaceBody {
-                    start: Span(
-                        3,
-                        19,
-                    ),
-                    end: Span(
-                        5,
-                        1,
-                    ),
+                    start: Span {
+                        line: 3,
+                        column: 19,
+                        position: 25,
+                    },
+                    end: Span {
+                        line: 5,
+                        column: 1,
+                        position: 50,
+                    },
                     statements: [
                         Function(
                             Function {
@@ -37,49 +42,55 @@
                                     comments: [],
                                 },
                                 attributes: [],
-                                function: Span(
-                                    4,
-                                    6,
-                                ),
+                                function: Span {
+                                    line: 4,
+                                    column: 6,
+                                    position: 32,
+                                },
                                 ampersand: None,
                                 name: SimpleIdentifier {
-                                    span: Span(
-                                        4,
-                                        15,
-                                    ),
+                                    span: Span {
+                                        line: 4,
+                                        column: 15,
+                                        position: 41,
+                                    },
                                     value: "foo",
                                 },
                                 parameters: FunctionParameterList {
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    left_parenthesis: Span(
-                                        4,
-                                        18,
-                                    ),
+                                    left_parenthesis: Span {
+                                        line: 4,
+                                        column: 18,
+                                        position: 44,
+                                    },
                                     parameters: CommaSeparated {
                                         inner: [],
                                         commas: [],
                                     },
-                                    right_parenthesis: Span(
-                                        4,
-                                        19,
-                                    ),
+                                    right_parenthesis: Span {
+                                        line: 4,
+                                        column: 19,
+                                        position: 45,
+                                    },
                                 },
                                 return_type: None,
                                 body: FunctionBody {
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    left_brace: Span(
-                                        4,
-                                        21,
-                                    ),
+                                    left_brace: Span {
+                                        line: 4,
+                                        column: 21,
+                                        position: 47,
+                                    },
                                     statements: [],
-                                    right_brace: Span(
-                                        4,
-                                        22,
-                                    ),
+                                    right_brace: Span {
+                                        line: 4,
+                                        column: 22,
+                                        position: 48,
+                                    },
                                 },
                             },
                         ),

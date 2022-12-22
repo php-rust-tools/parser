@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: InterpolatedString {
@@ -15,25 +16,28 @@
                     Variable(
                         BracedVariableVariable(
                             BracedVariableVariable {
-                                start: Span(
-                                    1,
-                                    8,
-                                ),
+                                start: Span {
+                                    line: 1,
+                                    column: 8,
+                                    position: 7,
+                                },
                                 variable: Identifier(
                                     SimpleIdentifier(
                                         SimpleIdentifier {
-                                            span: Span(
-                                                1,
-                                                10,
-                                            ),
+                                            span: Span {
+                                                line: 1,
+                                                column: 10,
+                                                position: 9,
+                                            },
                                             value: "foo",
                                         },
                                     ),
                                 ),
-                                end: Span(
-                                    1,
-                                    13,
-                                ),
+                                end: Span {
+                                    line: 1,
+                                    column: 13,
+                                    position: 12,
+                                },
                             },
                         ),
                     ),
@@ -42,48 +46,54 @@
                     Variable(
                         BracedVariableVariable(
                             BracedVariableVariable {
-                                start: Span(
-                                    1,
-                                    14,
-                                ),
+                                start: Span {
+                                    line: 1,
+                                    column: 14,
+                                    position: 13,
+                                },
                                 variable: ArrayIndex {
                                     array: Identifier(
                                         SimpleIdentifier(
                                             SimpleIdentifier {
-                                                span: Span(
-                                                    1,
-                                                    16,
-                                                ),
+                                                span: Span {
+                                                    line: 1,
+                                                    column: 16,
+                                                    position: 15,
+                                                },
                                                 value: "foo",
                                             },
                                         ),
                                     ),
-                                    left_bracket: Span(
-                                        1,
-                                        19,
-                                    ),
+                                    left_bracket: Span {
+                                        line: 1,
+                                        column: 19,
+                                        position: 18,
+                                    },
                                     index: Some(
                                         Literal(
                                             Integer(
                                                 LiteralInteger {
                                                     value: "0",
-                                                    span: Span(
-                                                        1,
-                                                        20,
-                                                    ),
+                                                    span: Span {
+                                                        line: 1,
+                                                        column: 20,
+                                                        position: 19,
+                                                    },
                                                 },
                                             ),
                                         ),
                                     ),
-                                    right_bracket: Span(
-                                        1,
-                                        21,
-                                    ),
+                                    right_bracket: Span {
+                                        line: 1,
+                                        column: 21,
+                                        position: 20,
+                                    },
                                 },
-                                end: Span(
-                                    1,
-                                    22,
-                                ),
+                                end: Span {
+                                    line: 1,
+                                    column: 22,
+                                    position: 21,
+                                },
                             },
                         ),
                     ),
@@ -92,48 +102,54 @@
                     Variable(
                         BracedVariableVariable(
                             BracedVariableVariable {
-                                start: Span(
-                                    1,
-                                    23,
-                                ),
+                                start: Span {
+                                    line: 1,
+                                    column: 23,
+                                    position: 22,
+                                },
                                 variable: ArrayIndex {
                                     array: Identifier(
                                         SimpleIdentifier(
                                             SimpleIdentifier {
-                                                span: Span(
-                                                    1,
-                                                    25,
-                                                ),
+                                                span: Span {
+                                                    line: 1,
+                                                    column: 25,
+                                                    position: 24,
+                                                },
                                                 value: "foo",
                                             },
                                         ),
                                     ),
-                                    left_bracket: Span(
-                                        1,
-                                        28,
-                                    ),
+                                    left_bracket: Span {
+                                        line: 1,
+                                        column: 28,
+                                        position: 27,
+                                    },
                                     index: Some(
                                         Literal(
                                             String(
                                                 LiteralString {
                                                     value: "'bar'",
-                                                    span: Span(
-                                                        1,
-                                                        29,
-                                                    ),
+                                                    span: Span {
+                                                        line: 1,
+                                                        column: 29,
+                                                        position: 28,
+                                                    },
                                                 },
                                             ),
                                         ),
                                     ),
-                                    right_bracket: Span(
-                                        1,
-                                        34,
-                                    ),
+                                    right_bracket: Span {
+                                        line: 1,
+                                        column: 34,
+                                        position: 33,
+                                    },
                                 },
-                                end: Span(
-                                    1,
-                                    35,
-                                ),
+                                end: Span {
+                                    line: 1,
+                                    column: 35,
+                                    position: 34,
+                                },
                             },
                         ),
                     ),
@@ -142,35 +158,40 @@
                     Variable(
                         BracedVariableVariable(
                             BracedVariableVariable {
-                                start: Span(
-                                    1,
-                                    36,
-                                ),
+                                start: Span {
+                                    line: 1,
+                                    column: 36,
+                                    position: 35,
+                                },
                                 variable: Parenthesized {
-                                    start: Span(
-                                        1,
-                                        38,
-                                    ),
+                                    start: Span {
+                                        line: 1,
+                                        column: 38,
+                                        position: 37,
+                                    },
                                     expr: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    1,
-                                                    39,
-                                                ),
+                                                span: Span {
+                                                    line: 1,
+                                                    column: 39,
+                                                    position: 38,
+                                                },
                                                 name: "$foo",
                                             },
                                         ),
                                     ),
-                                    end: Span(
-                                        1,
-                                        43,
-                                    ),
+                                    end: Span {
+                                        line: 1,
+                                        column: 43,
+                                        position: 42,
+                                    },
                                 },
-                                end: Span(
-                                    1,
-                                    44,
-                                ),
+                                end: Span {
+                                    line: 1,
+                                    column: 44,
+                                    position: 43,
+                                },
                             },
                         ),
                     ),
@@ -178,10 +199,11 @@
             ],
         },
         ending: Semicolon(
-            Span(
-                1,
-                46,
-            ),
+            Span {
+                line: 1,
+                column: 46,
+                position: 45,
+            },
         ),
     },
 ]

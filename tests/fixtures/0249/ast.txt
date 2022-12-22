@@ -1,37 +1,43 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Class(
         Class {
             attributes: [
                 AttributeGroup {
-                    start: Span(
-                        3,
-                        1,
-                    ),
-                    end: Span(
-                        3,
-                        20,
-                    ),
+                    start: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
+                    },
+                    end: Span {
+                        line: 3,
+                        column: 20,
+                        position: 26,
+                    },
                     members: [
                         Attribute {
-                            start: Span(
-                                3,
-                                3,
-                            ),
-                            end: Span(
-                                3,
-                                20,
-                            ),
+                            start: Span {
+                                line: 3,
+                                column: 3,
+                                position: 9,
+                            },
+                            end: Span {
+                                line: 3,
+                                column: 20,
+                                position: 26,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    3,
-                                    3,
-                                ),
+                                span: Span {
+                                    line: 3,
+                                    column: 3,
+                                    position: 9,
+                                },
                                 value: "Foo",
                             },
                             arguments: Some(
@@ -39,36 +45,40 @@
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    left_parenthesis: Span(
-                                        3,
-                                        6,
-                                    ),
+                                    left_parenthesis: Span {
+                                        line: 3,
+                                        column: 6,
+                                        position: 12,
+                                    },
                                     arguments: [
                                         Named {
                                             comments: CommentGroup {
                                                 comments: [],
                                             },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    3,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 3,
+                                                    column: 7,
+                                                    position: 13,
+                                                },
                                                 value: "public",
                                             },
-                                            colon: Span(
-                                                3,
-                                                13,
-                                            ),
+                                            colon: Span {
+                                                line: 3,
+                                                column: 13,
+                                                position: 19,
+                                            },
                                             ellipsis: None,
                                             value: Bool {
                                                 value: true,
                                             },
                                         },
                                     ],
-                                    right_parenthesis: Span(
-                                        3,
-                                        19,
-                                    ),
+                                    right_parenthesis: Span {
+                                        line: 3,
+                                        column: 19,
+                                        position: 25,
+                                    },
                                 },
                             ),
                         },
@@ -78,29 +88,33 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                4,
-                1,
-            ),
+            class: Span {
+                line: 4,
+                column: 1,
+                position: 28,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    4,
-                    7,
-                ),
+                span: Span {
+                    line: 4,
+                    column: 7,
+                    position: 34,
+                },
                 value: "Bar",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    4,
-                    11,
-                ),
+                left_brace: Span {
+                    line: 4,
+                    column: 11,
+                    position: 38,
+                },
                 members: [],
-                right_brace: Span(
-                    4,
-                    12,
-                ),
+                right_brace: Span {
+                    line: 4,
+                    column: 12,
+                    position: 39,
+                },
             },
         },
     ),

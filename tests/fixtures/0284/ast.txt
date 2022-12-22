@@ -1,37 +1,43 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Class(
         Class {
             attributes: [
                 AttributeGroup {
-                    start: Span(
-                        6,
-                        1,
-                    ),
-                    end: Span(
-                        6,
-                        64,
-                    ),
+                    start: Span {
+                        line: 6,
+                        column: 1,
+                        position: 229,
+                    },
+                    end: Span {
+                        line: 6,
+                        column: 64,
+                        position: 292,
+                    },
                     members: [
                         Attribute {
-                            start: Span(
-                                6,
-                                3,
-                            ),
-                            end: Span(
-                                6,
-                                19,
-                            ),
+                            start: Span {
+                                line: 6,
+                                column: 3,
+                                position: 231,
+                            },
+                            end: Span {
+                                line: 6,
+                                column: 19,
+                                position: 247,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    6,
-                                    3,
-                                ),
+                                span: Span {
+                                    line: 6,
+                                    column: 3,
+                                    position: 231,
+                                },
                                 value: "foo",
                             },
                             arguments: Some(
@@ -39,35 +45,39 @@
                                     comments: CommentGroup {
                                         comments: [
                                             Comment {
-                                                span: Span(
-                                                    3,
-                                                    1,
-                                                ),
+                                                span: Span {
+                                                    line: 3,
+                                                    column: 1,
+                                                    position: 8,
+                                                },
                                                 format: SingleLine,
                                                 content: "//                                                    |- TODO: static in constant expression is not allowed.",
                                             },
                                             Comment {
-                                                span: Span(
-                                                    4,
-                                                    1,
-                                                ),
+                                                span: Span {
+                                                    line: 4,
+                                                    column: 1,
+                                                    position: 117,
+                                                },
                                                 format: SingleLine,
                                                 content: "//                                                    |",
                                             },
                                             Comment {
-                                                span: Span(
-                                                    5,
-                                                    1,
-                                                ),
+                                                span: Span {
+                                                    line: 5,
+                                                    column: 1,
+                                                    position: 173,
+                                                },
                                                 format: SingleLine,
                                                 content: "//                                                    v",
                                             },
                                         ],
                                     },
-                                    left_parenthesis: Span(
-                                        6,
-                                        6,
-                                    ),
+                                    left_parenthesis: Span {
+                                        line: 6,
+                                        column: 6,
+                                        position: 234,
+                                    },
                                     arguments: [
                                         Positional {
                                             comments: CommentGroup {
@@ -78,45 +88,51 @@
                                                 target: Identifier(
                                                     SimpleIdentifier(
                                                         SimpleIdentifier {
-                                                            span: Span(
-                                                                6,
-                                                                7,
-                                                            ),
+                                                            span: Span {
+                                                                line: 6,
+                                                                column: 7,
+                                                                position: 235,
+                                                            },
                                                             value: "self",
                                                         },
                                                     ),
                                                 ),
                                                 constant: SimpleIdentifier {
-                                                    span: Span(
-                                                        6,
-                                                        13,
-                                                    ),
+                                                    span: Span {
+                                                        line: 6,
+                                                        column: 13,
+                                                        position: 241,
+                                                    },
                                                     value: "class",
                                                 },
                                             },
                                         },
                                     ],
-                                    right_parenthesis: Span(
-                                        6,
-                                        18,
-                                    ),
+                                    right_parenthesis: Span {
+                                        line: 6,
+                                        column: 18,
+                                        position: 246,
+                                    },
                                 },
                             ),
                         },
                         Attribute {
-                            start: Span(
-                                6,
-                                21,
-                            ),
-                            end: Span(
-                                6,
-                                64,
-                            ),
+                            start: Span {
+                                line: 6,
+                                column: 21,
+                                position: 249,
+                            },
+                            end: Span {
+                                line: 6,
+                                column: 64,
+                                position: 292,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    6,
-                                    21,
-                                ),
+                                span: Span {
+                                    line: 6,
+                                    column: 21,
+                                    position: 249,
+                                },
                                 value: "bar",
                             },
                             arguments: Some(
@@ -124,10 +140,11 @@
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    left_parenthesis: Span(
-                                        6,
-                                        24,
-                                    ),
+                                    left_parenthesis: Span {
+                                        line: 6,
+                                        column: 24,
+                                        position: 252,
+                                    },
                                     arguments: [
                                         Positional {
                                             comments: CommentGroup {
@@ -135,25 +152,28 @@
                                             },
                                             ellipsis: None,
                                             value: New {
-                                                new: Span(
-                                                    6,
-                                                    25,
-                                                ),
+                                                new: Span {
+                                                    line: 6,
+                                                    column: 25,
+                                                    position: 253,
+                                                },
                                                 target: Self_,
                                                 arguments: Some(
                                                     ArgumentList {
                                                         comments: CommentGroup {
                                                             comments: [],
                                                         },
-                                                        left_parenthesis: Span(
-                                                            6,
-                                                            33,
-                                                        ),
+                                                        left_parenthesis: Span {
+                                                            line: 6,
+                                                            column: 33,
+                                                            position: 261,
+                                                        },
                                                         arguments: [],
-                                                        right_parenthesis: Span(
-                                                            6,
-                                                            34,
-                                                        ),
+                                                        right_parenthesis: Span {
+                                                            line: 6,
+                                                            column: 34,
+                                                            position: 262,
+                                                        },
                                                     },
                                                 ),
                                             },
@@ -164,25 +184,28 @@
                                             },
                                             ellipsis: None,
                                             value: New {
-                                                new: Span(
-                                                    6,
-                                                    37,
-                                                ),
+                                                new: Span {
+                                                    line: 6,
+                                                    column: 37,
+                                                    position: 265,
+                                                },
                                                 target: Parent,
                                                 arguments: Some(
                                                     ArgumentList {
                                                         comments: CommentGroup {
                                                             comments: [],
                                                         },
-                                                        left_parenthesis: Span(
-                                                            6,
-                                                            47,
-                                                        ),
+                                                        left_parenthesis: Span {
+                                                            line: 6,
+                                                            column: 47,
+                                                            position: 275,
+                                                        },
                                                         arguments: [],
-                                                        right_parenthesis: Span(
-                                                            6,
-                                                            48,
-                                                        ),
+                                                        right_parenthesis: Span {
+                                                            line: 6,
+                                                            column: 48,
+                                                            position: 276,
+                                                        },
                                                     },
                                                 ),
                                             },
@@ -193,34 +216,38 @@
                                             },
                                             ellipsis: None,
                                             value: New {
-                                                new: Span(
-                                                    6,
-                                                    51,
-                                                ),
+                                                new: Span {
+                                                    line: 6,
+                                                    column: 51,
+                                                    position: 279,
+                                                },
                                                 target: Static,
                                                 arguments: Some(
                                                     ArgumentList {
                                                         comments: CommentGroup {
                                                             comments: [],
                                                         },
-                                                        left_parenthesis: Span(
-                                                            6,
-                                                            61,
-                                                        ),
+                                                        left_parenthesis: Span {
+                                                            line: 6,
+                                                            column: 61,
+                                                            position: 289,
+                                                        },
                                                         arguments: [],
-                                                        right_parenthesis: Span(
-                                                            6,
-                                                            62,
-                                                        ),
+                                                        right_parenthesis: Span {
+                                                            line: 6,
+                                                            column: 62,
+                                                            position: 290,
+                                                        },
                                                     },
                                                 ),
                                             },
                                         },
                                     ],
-                                    right_parenthesis: Span(
-                                        6,
-                                        63,
-                                    ),
+                                    right_parenthesis: Span {
+                                        line: 6,
+                                        column: 63,
+                                        position: 291,
+                                    },
                                 },
                             ),
                         },
@@ -230,29 +257,33 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                7,
-                1,
-            ),
+            class: Span {
+                line: 7,
+                column: 1,
+                position: 294,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    7,
-                    7,
-                ),
+                span: Span {
+                    line: 7,
+                    column: 7,
+                    position: 300,
+                },
                 value: "a",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    7,
-                    9,
-                ),
+                left_brace: Span {
+                    line: 7,
+                    column: 9,
+                    position: 302,
+                },
                 members: [],
-                right_brace: Span(
-                    9,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 9,
+                    column: 1,
+                    position: 305,
+                },
             },
         },
     ),

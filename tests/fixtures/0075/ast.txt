@@ -1,34 +1,38 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: NullsafeMethodCall {
             target: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            1,
-                            7,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 7,
+                            position: 6,
+                        },
                         name: "$a",
                     },
                 ),
             ),
-            question_arrow: Span(
-                1,
-                9,
-            ),
+            question_arrow: Span {
+                line: 1,
+                column: 9,
+                position: 8,
+            },
             method: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            1,
-                            12,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 12,
+                            position: 11,
+                        },
                         value: "b",
                     },
                 ),
@@ -37,10 +41,11 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    1,
-                    13,
-                ),
+                left_parenthesis: Span {
+                    line: 1,
+                    column: 13,
+                    position: 12,
+                },
                 arguments: [
                     Positional {
                         comments: CommentGroup {
@@ -50,27 +55,30 @@
                         value: Variable(
                             SimpleVariable(
                                 SimpleVariable {
-                                    span: Span(
-                                        1,
-                                        14,
-                                    ),
+                                    span: Span {
+                                        line: 1,
+                                        column: 14,
+                                        position: 13,
+                                    },
                                     name: "$c",
                                 },
                             ),
                         ),
                     },
                 ],
-                right_parenthesis: Span(
-                    1,
-                    16,
-                ),
+                right_parenthesis: Span {
+                    line: 1,
+                    column: 16,
+                    position: 15,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                1,
-                17,
-            ),
+            Span {
+                line: 1,
+                column: 17,
+                position: 16,
+            },
         ),
     },
 ]

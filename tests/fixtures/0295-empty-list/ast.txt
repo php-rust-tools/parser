@@ -1,54 +1,63 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: AssignmentOperation(
             Assign {
                 left: List {
+                    list: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
+                    },
+                    start: Span {
+                        line: 3,
+                        column: 5,
+                        position: 11,
+                    },
                     items: [
-                        ListItem {
-                            key: None,
-                            value: Empty,
-                        },
-                        ListItem {
-                            key: None,
-                            value: Empty,
-                        },
-                        ListItem {
-                            key: None,
-                            value: Empty,
-                        },
-                        ListItem {
-                            key: None,
+                        Skipped,
+                        Skipped,
+                        Skipped,
+                        Value {
                             value: Variable(
                                 SimpleVariable(
                                     SimpleVariable {
-                                        span: Span(
-                                            7,
-                                            5,
-                                        ),
+                                        span: Span {
+                                            line: 7,
+                                            column: 5,
+                                            position: 56,
+                                        },
                                         name: "$a",
                                     },
                                 ),
                             ),
                         },
                     ],
+                    end: Span {
+                        line: 8,
+                        column: 1,
+                        position: 59,
+                    },
                 },
-                equals: Span(
-                    8,
-                    3,
-                ),
+                equals: Span {
+                    line: 8,
+                    column: 3,
+                    position: 61,
+                },
                 right: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                8,
-                                5,
-                            ),
+                            span: Span {
+                                line: 8,
+                                column: 5,
+                                position: 63,
+                            },
                             name: "$b",
                         },
                     ),
@@ -56,10 +65,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                8,
-                7,
-            ),
+            Span {
+                line: 8,
+                column: 7,
+                position: 65,
+            },
         ),
     },
 ]

@@ -42,27 +42,21 @@ impl PromotedPropertyModifierGroup {
     }
 
     pub fn has_readonly(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, PromotedPropertyModifier::Readonly { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, PromotedPropertyModifier::Readonly { .. }))
     }
 
     pub fn visibility(&self) -> Visibility {
-        for modifier in &self.modifiers {
-            if matches!(modifier, PromotedPropertyModifier::Private { .. }) {
-                return Visibility::Private;
-            }
-
-            if matches!(modifier, PromotedPropertyModifier::Protected { .. }) {
-                return Visibility::Protected;
-            }
-        }
-
-        Visibility::Public
+        self.modifiers
+            .iter()
+            .find_map(|modifier| match modifier {
+                PromotedPropertyModifier::Protected { .. } => Some(Visibility::Protected),
+                PromotedPropertyModifier::Private { .. } => Some(Visibility::Private),
+                PromotedPropertyModifier::Public { .. } => Some(Visibility::Public),
+                _ => None,
+            })
+            .unwrap_or(Visibility::Public)
     }
 }
 
@@ -89,37 +83,27 @@ impl PropertyModifierGroup {
     }
 
     pub fn has_readonly(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, PropertyModifier::Readonly { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, PropertyModifier::Readonly { .. }))
     }
 
     pub fn has_static(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, PropertyModifier::Static { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, PropertyModifier::Static { .. }))
     }
 
     pub fn visibility(&self) -> Visibility {
-        for modifier in &self.modifiers {
-            if matches!(modifier, PropertyModifier::Private { .. }) {
-                return Visibility::Private;
-            }
-
-            if matches!(modifier, PropertyModifier::Protected { .. }) {
-                return Visibility::Protected;
-            }
-        }
-
-        Visibility::Public
+        self.modifiers
+            .iter()
+            .find_map(|modifier| match modifier {
+                PropertyModifier::Protected { .. } => Some(Visibility::Protected),
+                PropertyModifier::Private { .. } => Some(Visibility::Private),
+                PropertyModifier::Public { .. } => Some(Visibility::Public),
+                _ => None,
+            })
+            .unwrap_or(Visibility::Public)
     }
 }
 
@@ -160,57 +144,39 @@ impl MethodModifierGroup {
     }
 
     pub fn has_final(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, MethodModifier::Final { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, MethodModifier::Final { .. }))
     }
 
     pub fn has_static(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, MethodModifier::Static { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, MethodModifier::Static { .. }))
     }
 
     pub fn has_abstract(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, MethodModifier::Abstract { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, MethodModifier::Abstract { .. }))
     }
 
     pub fn get_abstract(&self) -> Option<&MethodModifier> {
-        for modifier in &self.modifiers {
-            if matches!(modifier, MethodModifier::Abstract { .. }) {
-                return Some(modifier);
-            }
-        }
-
-        None
+        self.modifiers
+            .iter()
+            .find(|modifier| matches!(modifier, MethodModifier::Abstract { .. }))
     }
 
     pub fn visibility(&self) -> Visibility {
-        for modifier in &self.modifiers {
-            if matches!(modifier, MethodModifier::Private { .. }) {
-                return Visibility::Private;
-            }
-
-            if matches!(modifier, MethodModifier::Protected { .. }) {
-                return Visibility::Protected;
-            }
-        }
-
-        Visibility::Public
+        self.modifiers
+            .iter()
+            .find_map(|modifier| match modifier {
+                MethodModifier::Protected { .. } => Some(Visibility::Protected),
+                MethodModifier::Private { .. } => Some(Visibility::Private),
+                MethodModifier::Public { .. } => Some(Visibility::Public),
+                _ => None,
+            })
+            .unwrap_or(Visibility::Public)
     }
 }
 
@@ -235,33 +201,21 @@ impl ClassModifierGroup {
     }
 
     pub fn has_final(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, ClassModifier::Final { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, ClassModifier::Final { .. }))
     }
 
     pub fn has_readonly(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, ClassModifier::Readonly { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, ClassModifier::Readonly { .. }))
     }
 
     pub fn has_abstract(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, ClassModifier::Abstract { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, ClassModifier::Abstract { .. }))
     }
 }
 
@@ -287,26 +241,20 @@ impl ConstantModifierGroup {
     }
 
     pub fn has_final(&self) -> bool {
-        for modifier in &self.modifiers {
-            if matches!(modifier, ConstantModifier::Final { .. }) {
-                return true;
-            }
-        }
-
-        false
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, ConstantModifier::Final { .. }))
     }
 
     pub fn visibility(&self) -> Visibility {
-        for modifier in &self.modifiers {
-            if matches!(modifier, ConstantModifier::Private { .. }) {
-                return Visibility::Private;
-            }
-
-            if matches!(modifier, ConstantModifier::Protected { .. }) {
-                return Visibility::Protected;
-            }
-        }
-
-        Visibility::Public
+        self.modifiers
+            .iter()
+            .find_map(|modifier| match modifier {
+                ConstantModifier::Protected { .. } => Some(Visibility::Protected),
+                ConstantModifier::Private { .. } => Some(Visibility::Private),
+                ConstantModifier::Public { .. } => Some(Visibility::Public),
+                _ => None,
+            })
+            .unwrap_or(Visibility::Public)
     }
 }

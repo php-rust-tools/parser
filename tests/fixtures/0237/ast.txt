@@ -1,47 +1,53 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: Require {
-            require: Span(
-                3,
-                1,
-            ),
+            require: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             path: Concat {
                 left: MagicConstant(
                     Directory(
-                        Span(
-                            3,
-                            9,
-                        ),
+                        Span {
+                            line: 3,
+                            column: 9,
+                            position: 15,
+                        },
                     ),
                 ),
-                dot: Span(
-                    3,
-                    17,
-                ),
+                dot: Span {
+                    line: 3,
+                    column: 17,
+                    position: 23,
+                },
                 right: Literal(
                     String(
                         LiteralString {
                             value: "'/foo.php'",
-                            span: Span(
-                                3,
-                                19,
-                            ),
+                            span: Span {
+                                line: 3,
+                                column: 19,
+                                position: 25,
+                            },
                         },
                     ),
                 ),
             },
         },
         ending: Semicolon(
-            Span(
-                3,
-                29,
-            ),
+            Span {
+                line: 3,
+                column: 29,
+                position: 35,
+            },
         ),
     },
 ]

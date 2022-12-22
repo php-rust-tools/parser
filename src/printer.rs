@@ -32,8 +32,8 @@ pub fn print(tokens: &[Token]) -> String {
     let mut max_line = 0;
 
     for token in tokens {
-        lines.entry(token.span.0).or_default().push(token);
-        max_line = cmp::max(max_line, token.span.0);
+        lines.entry(token.span.line).or_default().push(token);
+        max_line = cmp::max(max_line, token.span.line);
     }
 
     let mut output = vec![];
@@ -54,11 +54,8 @@ pub fn print(tokens: &[Token]) -> String {
                         break;
                     }
 
-                    let repeat = token
-                        .span
-                        .1
-                        .saturating_sub(1)
-                        .saturating_sub(representation.len());
+                    let repeat = token.span.column - representation.len() - 1;
+
                     representation.push_str(&" ".repeat(repeat));
                     representation.push_str(&token.value.to_string());
                 }

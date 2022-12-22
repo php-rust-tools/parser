@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: AssignmentOperation(
@@ -11,43 +12,48 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                3,
-                                1,
-                            ),
+                            span: Span {
+                                line: 3,
+                                column: 1,
+                                position: 7,
+                            },
                             name: "$a",
                         },
                     ),
                 ),
-                equals: Span(
-                    3,
-                    4,
-                ),
+                equals: Span {
+                    line: 3,
+                    column: 4,
+                    position: 10,
+                },
                 right: ArithmeticOperation(
                     Exponentiation {
                         left: Literal(
                             Integer(
                                 LiteralInteger {
                                     value: "2",
-                                    span: Span(
-                                        3,
-                                        6,
-                                    ),
+                                    span: Span {
+                                        line: 3,
+                                        column: 6,
+                                        position: 12,
+                                    },
                                 },
                             ),
                         ),
-                        pow: Span(
-                            3,
-                            8,
-                        ),
+                        pow: Span {
+                            line: 3,
+                            column: 8,
+                            position: 14,
+                        },
                         right: Literal(
                             Integer(
                                 LiteralInteger {
                                     value: "2",
-                                    span: Span(
-                                        3,
-                                        11,
-                                    ),
+                                    span: Span {
+                                        line: 3,
+                                        column: 11,
+                                        position: 17,
+                                    },
                                 },
                             ),
                         ),
@@ -56,10 +62,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                3,
-                12,
-            ),
+            Span {
+                line: 3,
+                column: 12,
+                position: 18,
+            },
         ),
     },
     Expression {
@@ -68,57 +75,64 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                5,
-                                1,
-                            ),
+                            span: Span {
+                                line: 5,
+                                column: 1,
+                                position: 21,
+                            },
                             name: "$b",
                         },
                     ),
                 ),
-                equals: Span(
-                    5,
-                    4,
-                ),
+                equals: Span {
+                    line: 5,
+                    column: 4,
+                    position: 24,
+                },
                 right: Ternary {
                     condition: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "1",
-                                span: Span(
-                                    5,
-                                    6,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 6,
+                                    position: 26,
+                                },
                             },
                         ),
                     ),
-                    question: Span(
-                        5,
-                        8,
-                    ),
+                    question: Span {
+                        line: 5,
+                        column: 8,
+                        position: 28,
+                    },
                     then: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "2",
-                                span: Span(
-                                    5,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 10,
+                                    position: 30,
+                                },
                             },
                         ),
                     ),
-                    colon: Span(
-                        5,
-                        12,
-                    ),
+                    colon: Span {
+                        line: 5,
+                        column: 12,
+                        position: 32,
+                    },
                     else: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "3",
-                                span: Span(
-                                    5,
-                                    14,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 14,
+                                    position: 34,
+                                },
                             },
                         ),
                     ),
@@ -126,10 +140,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                5,
-                15,
-            ),
+            Span {
+                line: 5,
+                column: 15,
+                position: 35,
+            },
         ),
     },
     Expression {
@@ -138,89 +153,100 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                7,
-                                1,
-                            ),
+                            span: Span {
+                                line: 7,
+                                column: 1,
+                                position: 38,
+                            },
                             name: "$c",
                         },
                     ),
                 ),
-                equals: Span(
-                    7,
-                    4,
-                ),
+                equals: Span {
+                    line: 7,
+                    column: 4,
+                    position: 41,
+                },
                 right: Ternary {
                     condition: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "1",
-                                span: Span(
-                                    7,
-                                    6,
-                                ),
+                                span: Span {
+                                    line: 7,
+                                    column: 6,
+                                    position: 43,
+                                },
                             },
                         ),
                     ),
-                    question: Span(
-                        7,
-                        8,
-                    ),
+                    question: Span {
+                        line: 7,
+                        column: 8,
+                        position: 45,
+                    },
                     then: Ternary {
                         condition: Literal(
                             Integer(
                                 LiteralInteger {
                                     value: "2",
-                                    span: Span(
-                                        7,
-                                        10,
-                                    ),
+                                    span: Span {
+                                        line: 7,
+                                        column: 10,
+                                        position: 47,
+                                    },
                                 },
                             ),
                         ),
-                        question: Span(
-                            7,
-                            12,
-                        ),
+                        question: Span {
+                            line: 7,
+                            column: 12,
+                            position: 49,
+                        },
                         then: Literal(
                             Integer(
                                 LiteralInteger {
                                     value: "3",
-                                    span: Span(
-                                        7,
-                                        14,
-                                    ),
+                                    span: Span {
+                                        line: 7,
+                                        column: 14,
+                                        position: 51,
+                                    },
                                 },
                             ),
                         ),
-                        colon: Span(
-                            7,
-                            16,
-                        ),
+                        colon: Span {
+                            line: 7,
+                            column: 16,
+                            position: 53,
+                        },
                         else: Literal(
                             Integer(
                                 LiteralInteger {
                                     value: "4",
-                                    span: Span(
-                                        7,
-                                        18,
-                                    ),
+                                    span: Span {
+                                        line: 7,
+                                        column: 18,
+                                        position: 55,
+                                    },
                                 },
                             ),
                         ),
                     },
-                    colon: Span(
-                        7,
-                        20,
-                    ),
+                    colon: Span {
+                        line: 7,
+                        column: 20,
+                        position: 57,
+                    },
                     else: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "5",
-                                span: Span(
-                                    7,
-                                    22,
-                                ),
+                                span: Span {
+                                    line: 7,
+                                    column: 22,
+                                    position: 59,
+                                },
                             },
                         ),
                     ),
@@ -228,10 +254,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                7,
-                23,
-            ),
+            Span {
+                line: 7,
+                column: 23,
+                position: 60,
+            },
         ),
     },
     Expression {
@@ -240,58 +267,65 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                9,
-                                1,
-                            ),
+                            span: Span {
+                                line: 9,
+                                column: 1,
+                                position: 63,
+                            },
                             name: "$d",
                         },
                     ),
                 ),
-                equals: Span(
-                    9,
-                    4,
-                ),
+                equals: Span {
+                    line: 9,
+                    column: 4,
+                    position: 66,
+                },
                 right: ShortTernary {
                     condition: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "1",
-                                span: Span(
-                                    9,
-                                    6,
-                                ),
+                                span: Span {
+                                    line: 9,
+                                    column: 6,
+                                    position: 68,
+                                },
                             },
                         ),
                     ),
-                    question_colon: Span(
-                        9,
-                        8,
-                    ),
+                    question_colon: Span {
+                        line: 9,
+                        column: 8,
+                        position: 70,
+                    },
                     else: ShortTernary {
                         condition: Literal(
                             Integer(
                                 LiteralInteger {
                                     value: "2",
-                                    span: Span(
-                                        9,
-                                        11,
-                                    ),
+                                    span: Span {
+                                        line: 9,
+                                        column: 11,
+                                        position: 73,
+                                    },
                                 },
                             ),
                         ),
-                        question_colon: Span(
-                            9,
-                            13,
-                        ),
+                        question_colon: Span {
+                            line: 9,
+                            column: 13,
+                            position: 75,
+                        },
                         else: Literal(
                             Integer(
                                 LiteralInteger {
                                     value: "3",
-                                    span: Span(
-                                        9,
-                                        16,
-                                    ),
+                                    span: Span {
+                                        line: 9,
+                                        column: 16,
+                                        position: 78,
+                                    },
                                 },
                             ),
                         ),
@@ -300,10 +334,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                9,
-                17,
-            ),
+            Span {
+                line: 9,
+                column: 17,
+                position: 79,
+            },
         ),
     },
     Expression {
@@ -312,42 +347,47 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                11,
-                                1,
-                            ),
+                            span: Span {
+                                line: 11,
+                                column: 1,
+                                position: 82,
+                            },
                             name: "$e",
                         },
                     ),
                 ),
-                equals: Span(
-                    11,
-                    4,
-                ),
+                equals: Span {
+                    line: 11,
+                    column: 4,
+                    position: 85,
+                },
                 right: Coalesce {
                     lhs: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "1",
-                                span: Span(
-                                    11,
-                                    6,
-                                ),
+                                span: Span {
+                                    line: 11,
+                                    column: 6,
+                                    position: 87,
+                                },
                             },
                         ),
                     ),
-                    double_question: Span(
-                        11,
-                        8,
-                    ),
+                    double_question: Span {
+                        line: 11,
+                        column: 8,
+                        position: 89,
+                    },
                     rhs: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "2",
-                                span: Span(
-                                    11,
-                                    11,
-                                ),
+                                span: Span {
+                                    line: 11,
+                                    column: 11,
+                                    position: 92,
+                                },
                             },
                         ),
                     ),
@@ -355,10 +395,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                11,
-                12,
-            ),
+            Span {
+                line: 11,
+                column: 12,
+                position: 93,
+            },
         ),
     },
     Expression {
@@ -367,58 +408,65 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                13,
-                                1,
-                            ),
+                            span: Span {
+                                line: 13,
+                                column: 1,
+                                position: 96,
+                            },
                             name: "$f",
                         },
                     ),
                 ),
-                equals: Span(
-                    13,
-                    4,
-                ),
+                equals: Span {
+                    line: 13,
+                    column: 4,
+                    position: 99,
+                },
                 right: Coalesce {
                     lhs: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "1",
-                                span: Span(
-                                    13,
-                                    6,
-                                ),
+                                span: Span {
+                                    line: 13,
+                                    column: 6,
+                                    position: 101,
+                                },
                             },
                         ),
                     ),
-                    double_question: Span(
-                        13,
-                        8,
-                    ),
+                    double_question: Span {
+                        line: 13,
+                        column: 8,
+                        position: 103,
+                    },
                     rhs: Coalesce {
                         lhs: Literal(
                             Integer(
                                 LiteralInteger {
                                     value: "2",
-                                    span: Span(
-                                        13,
-                                        11,
-                                    ),
+                                    span: Span {
+                                        line: 13,
+                                        column: 11,
+                                        position: 106,
+                                    },
                                 },
                             ),
                         ),
-                        double_question: Span(
-                            13,
-                            13,
-                        ),
+                        double_question: Span {
+                            line: 13,
+                            column: 13,
+                            position: 108,
+                        },
                         rhs: Literal(
                             Integer(
                                 LiteralInteger {
                                     value: "3",
-                                    span: Span(
-                                        13,
-                                        16,
-                                    ),
+                                    span: Span {
+                                        line: 13,
+                                        column: 16,
+                                        position: 111,
+                                    },
                                 },
                             ),
                         ),
@@ -427,10 +475,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                13,
-                17,
-            ),
+            Span {
+                line: 13,
+                column: 17,
+                position: 112,
+            },
         ),
     },
 ]

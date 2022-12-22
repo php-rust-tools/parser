@@ -3,34 +3,38 @@
         "<h1>\n    ",
     ),
     FullOpeningTag(
-        Span(
-            2,
-            5,
-        ),
+        Span {
+            line: 2,
+            column: 5,
+            position: 9,
+        },
     ),
     Echo {
-        echo: Span(
-            2,
-            11,
-        ),
+        echo: Span {
+            line: 2,
+            column: 11,
+            position: 15,
+        },
         values: [
             Literal(
                 String(
                     LiteralString {
                         value: ""Hello, world!"",
-                        span: Span(
-                            2,
-                            16,
-                        ),
+                        span: Span {
+                            line: 2,
+                            column: 16,
+                            position: 20,
+                        },
                     },
                 ),
             ),
         ],
         ending: CloseTag(
-            Span(
-                2,
-                32,
-            ),
+            Span {
+                line: 2,
+                column: 32,
+                position: 36,
+            },
         ),
     },
     InlineHtml(

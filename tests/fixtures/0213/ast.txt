@@ -1,30 +1,34 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Interface(
         Interface {
             attributes: [],
-            interface: Span(
-                4,
-                1,
-            ),
+            interface: Span {
+                line: 4,
+                column: 1,
+                position: 8,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    4,
-                    11,
-                ),
+                span: Span {
+                    line: 4,
+                    column: 11,
+                    position: 18,
+                },
                 value: "foo",
             },
             extends: None,
             body: InterfaceBody {
-                left_brace: Span(
-                    4,
-                    15,
-                ),
+                left_brace: Span {
+                    line: 4,
+                    column: 15,
+                    position: 22,
+                },
                 members: [
                     Method(
                         AbstractMethod {
@@ -35,67 +39,76 @@
                             modifiers: MethodModifierGroup {
                                 modifiers: [
                                     Public(
-                                        Span(
-                                            5,
-                                            5,
-                                        ),
+                                        Span {
+                                            line: 5,
+                                            column: 5,
+                                            position: 28,
+                                        },
                                     ),
                                 ],
                             },
-                            function: Span(
-                                5,
-                                12,
-                            ),
+                            function: Span {
+                                line: 5,
+                                column: 12,
+                                position: 35,
+                            },
                             ampersand: None,
                             name: SimpleIdentifier {
-                                span: Span(
-                                    5,
-                                    21,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 21,
+                                    position: 44,
+                                },
                                 value: "bar",
                             },
                             parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                left_parenthesis: Span(
-                                    5,
-                                    24,
-                                ),
+                                left_parenthesis: Span {
+                                    line: 5,
+                                    column: 24,
+                                    position: 47,
+                                },
                                 parameters: CommaSeparated {
                                     inner: [],
                                     commas: [],
                                 },
-                                right_parenthesis: Span(
-                                    5,
-                                    25,
-                                ),
+                                right_parenthesis: Span {
+                                    line: 5,
+                                    column: 25,
+                                    position: 48,
+                                },
                             },
                             return_type: Some(
                                 ReturnType {
-                                    colon: Span(
-                                        5,
-                                        26,
-                                    ),
+                                    colon: Span {
+                                        line: 5,
+                                        column: 26,
+                                        position: 49,
+                                    },
                                     data_type: ParentReference(
-                                        Span(
-                                            5,
-                                            28,
-                                        ),
+                                        Span {
+                                            line: 5,
+                                            column: 28,
+                                            position: 51,
+                                        },
                                     ),
                                 },
                             ),
-                            semicolon: Span(
-                                5,
-                                34,
-                            ),
+                            semicolon: Span {
+                                line: 5,
+                                column: 34,
+                                position: 57,
+                            },
                         },
                     ),
                 ],
-                right_brace: Span(
-                    6,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 6,
+                    column: 1,
+                    position: 59,
+                },
             },
         },
     ),

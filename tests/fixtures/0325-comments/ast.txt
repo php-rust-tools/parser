@@ -1,91 +1,101 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Function(
         Function {
             comments: CommentGroup {
                 comments: [
                     Comment {
-                        span: Span(
-                            3,
-                            1,
-                        ),
+                        span: Span {
+                            line: 3,
+                            column: 1,
+                            position: 7,
+                        },
                         format: Document,
                         content: "/**\n * A function with a lot of comments.\n */",
                     },
                 ],
             },
             attributes: [],
-            function: Span(
-                6,
-                1,
-            ),
+            function: Span {
+                line: 6,
+                column: 1,
+                position: 53,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    6,
-                    10,
-                ),
+                span: Span {
+                    line: 6,
+                    column: 10,
+                    position: 62,
+                },
                 value: "foo",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [
                         Comment {
-                            span: Span(
-                                7,
-                                5,
-                            ),
+                            span: Span {
+                                line: 7,
+                                column: 5,
+                                position: 70,
+                            },
                             format: SingleLine,
                             content: "// a single line comment on all parameters",
                         },
                     ],
                 },
-                left_parenthesis: Span(
-                    8,
-                    5,
-                ),
+                left_parenthesis: Span {
+                    line: 8,
+                    column: 5,
+                    position: 117,
+                },
                 parameters: CommaSeparated {
                     inner: [
                         FunctionParameter {
                             comments: CommentGroup {
                                 comments: [
                                     Comment {
-                                        span: Span(
-                                            9,
-                                            9,
-                                        ),
+                                        span: Span {
+                                            line: 9,
+                                            column: 9,
+                                            position: 127,
+                                        },
                                         format: SingleLine,
                                         content: "// a single line comment on the first parameter",
                                     },
                                     Comment {
-                                        span: Span(
-                                            10,
-                                            16,
-                                        ),
+                                        span: Span {
+                                            line: 10,
+                                            column: 16,
+                                            position: 190,
+                                        },
                                         format: MultiLine,
                                         content: "/* a comment between `string` and `$a` */",
                                     },
                                 ],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    10,
-                                    58,
-                                ),
+                                span: Span {
+                                    line: 10,
+                                    column: 58,
+                                    position: 232,
+                                },
                                 name: "$a",
                             },
                             attributes: [],
                             data_type: Some(
                                 String(
-                                    Span(
-                                        10,
-                                        9,
-                                    ),
+                                    Span {
+                                        line: 10,
+                                        column: 9,
+                                        position: 183,
+                                    },
                                 ),
                             ),
                             ellipsis: None,
@@ -96,37 +106,41 @@
                             comments: CommentGroup {
                                 comments: [
                                     Comment {
-                                        span: Span(
-                                            11,
-                                            9,
-                                        ),
+                                        span: Span {
+                                            line: 11,
+                                            column: 9,
+                                            position: 244,
+                                        },
                                         format: HashMark,
                                         content: "# a hash comment on the second parameter",
                                     },
                                     Comment {
-                                        span: Span(
-                                            12,
-                                            16,
-                                        ),
+                                        span: Span {
+                                            line: 12,
+                                            column: 16,
+                                            position: 300,
+                                        },
                                         format: MultiLine,
                                         content: "/* a comment between `string` and `$b` */",
                                     },
                                 ],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    12,
-                                    58,
-                                ),
+                                span: Span {
+                                    line: 12,
+                                    column: 58,
+                                    position: 342,
+                                },
                                 name: "$b",
                             },
                             attributes: [],
                             data_type: Some(
                                 String(
-                                    Span(
-                                        12,
-                                        9,
-                                    ),
+                                    Span {
+                                        line: 12,
+                                        column: 9,
+                                        position: 293,
+                                    },
                                 ),
                             ),
                             ellipsis: None,
@@ -137,37 +151,41 @@
                             comments: CommentGroup {
                                 comments: [
                                     Comment {
-                                        span: Span(
-                                            13,
-                                            9,
-                                        ),
+                                        span: Span {
+                                            line: 13,
+                                            column: 9,
+                                            position: 354,
+                                        },
                                         format: MultiLine,
                                         content: "/* a multi-line comment on the third parameter */",
                                     },
                                     Comment {
-                                        span: Span(
-                                            14,
-                                            16,
-                                        ),
+                                        span: Span {
+                                            line: 14,
+                                            column: 16,
+                                            position: 419,
+                                        },
                                         format: MultiLine,
                                         content: "/* a comment between `string` and `$c` */",
                                     },
                                 ],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    14,
-                                    58,
-                                ),
+                                span: Span {
+                                    line: 14,
+                                    column: 58,
+                                    position: 461,
+                                },
                                 name: "$c",
                             },
                             attributes: [],
                             data_type: Some(
                                 String(
-                                    Span(
-                                        14,
-                                        9,
-                                    ),
+                                    Span {
+                                        line: 14,
+                                        column: 9,
+                                        position: 412,
+                                    },
                                 ),
                             ),
                             ellipsis: None,
@@ -178,37 +196,41 @@
                             comments: CommentGroup {
                                 comments: [
                                     Comment {
-                                        span: Span(
-                                            15,
-                                            9,
-                                        ),
+                                        span: Span {
+                                            line: 15,
+                                            column: 9,
+                                            position: 473,
+                                        },
                                         format: Document,
                                         content: "/** a document comment on the fourth parameter */",
                                     },
                                     Comment {
-                                        span: Span(
-                                            16,
-                                            16,
-                                        ),
+                                        span: Span {
+                                            line: 16,
+                                            column: 16,
+                                            position: 538,
+                                        },
                                         format: MultiLine,
                                         content: "/* a comment between `string` and `$d` */",
                                     },
                                 ],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    16,
-                                    58,
-                                ),
+                                span: Span {
+                                    line: 16,
+                                    column: 58,
+                                    position: 580,
+                                },
                                 name: "$d",
                             },
                             attributes: [],
                             data_type: Some(
                                 String(
-                                    Span(
-                                        16,
-                                        9,
-                                    ),
+                                    Span {
+                                        line: 16,
+                                        column: 9,
+                                        position: 531,
+                                    },
                                 ),
                             ),
                             ellipsis: None,
@@ -217,43 +239,50 @@
                         },
                     ],
                     commas: [
-                        Span(
-                            10,
-                            60,
-                        ),
-                        Span(
-                            12,
-                            60,
-                        ),
-                        Span(
-                            14,
-                            60,
-                        ),
-                        Span(
-                            16,
-                            60,
-                        ),
+                        Span {
+                            line: 10,
+                            column: 60,
+                            position: 234,
+                        },
+                        Span {
+                            line: 12,
+                            column: 60,
+                            position: 344,
+                        },
+                        Span {
+                            line: 14,
+                            column: 60,
+                            position: 463,
+                        },
+                        Span {
+                            line: 16,
+                            column: 60,
+                            position: 582,
+                        },
                     ],
                 },
-                right_parenthesis: Span(
-                    17,
-                    5,
-                ),
+                right_parenthesis: Span {
+                    line: 17,
+                    column: 5,
+                    position: 588,
+                },
             },
             return_type: None,
             body: FunctionBody {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    18,
-                    1,
-                ),
+                left_brace: Span {
+                    line: 18,
+                    column: 1,
+                    position: 590,
+                },
                 statements: [],
-                right_brace: Span(
-                    18,
-                    2,
-                ),
+                right_brace: Span {
+                    line: 18,
+                    column: 2,
+                    position: 591,
+                },
             },
         },
     ),

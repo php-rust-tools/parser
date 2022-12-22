@@ -1,49 +1,54 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
-        expression: ShortArray(
-            Bracketed {
-                left_bracket: Span(
-                    3,
-                    1,
-                ),
-                inner: CommaSeparated {
-                    inner: [
-                        ArrayItem {
-                            key: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            3,
-                                        ),
-                                        name: "$foo",
-                                    },
-                                ),
-                            ),
-                            unpack: false,
-                            by_ref: true,
-                        },
-                    ],
-                    commas: [],
-                },
-                right_bracket: Span(
-                    3,
-                    7,
-                ),
+        expression: ShortArray {
+            start: Span {
+                line: 3,
+                column: 1,
+                position: 7,
             },
-        ),
+            items: CommaSeparated {
+                inner: [
+                    ReferencedValue {
+                        ampersand: Span {
+                            line: 3,
+                            column: 2,
+                            position: 8,
+                        },
+                        value: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span {
+                                        line: 3,
+                                        column: 3,
+                                        position: 9,
+                                    },
+                                    name: "$foo",
+                                },
+                            ),
+                        ),
+                    },
+                ],
+                commas: [],
+            },
+            end: Span {
+                line: 3,
+                column: 7,
+                position: 13,
+            },
+        },
         ending: Semicolon(
-            Span(
-                3,
-                8,
-            ),
+            Span {
+                line: 3,
+                column: 8,
+                position: 14,
+            },
         ),
     },
 ]

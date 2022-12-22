@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: YieldFrom {
@@ -11,19 +12,21 @@
                 Integer(
                     LiteralInteger {
                         value: "1",
-                        span: Span(
-                            1,
-                            18,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 18,
+                            position: 17,
+                        },
                     },
                 ),
             ),
         },
         ending: Semicolon(
-            Span(
-                1,
-                19,
-            ),
+            Span {
+                line: 1,
+                column: 19,
+                position: 18,
+            },
         ),
     },
 ]

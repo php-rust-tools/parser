@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Class(
         Class {
@@ -11,24 +12,27 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                3,
-                1,
-            ),
+            class: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    7,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 7,
+                    position: 13,
+                },
                 value: "a",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    3,
-                    9,
-                ),
+                left_brace: Span {
+                    line: 3,
+                    column: 9,
+                    position: 15,
+                },
                 members: [
                     ConcreteMethod(
                         ConcreteMethod {
@@ -39,51 +43,57 @@
                             modifiers: MethodModifierGroup {
                                 modifiers: [
                                     Public(
-                                        Span(
-                                            4,
-                                            5,
-                                        ),
+                                        Span {
+                                            line: 4,
+                                            column: 5,
+                                            position: 21,
+                                        },
                                     ),
                                 ],
                             },
-                            function: Span(
-                                4,
-                                12,
-                            ),
+                            function: Span {
+                                line: 4,
+                                column: 12,
+                                position: 28,
+                            },
                             ampersand: None,
                             name: SimpleIdentifier {
-                                span: Span(
-                                    4,
-                                    21,
-                                ),
+                                span: Span {
+                                    line: 4,
+                                    column: 21,
+                                    position: 37,
+                                },
                                 value: "foo",
                             },
                             parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                left_parenthesis: Span(
-                                    4,
-                                    24,
-                                ),
+                                left_parenthesis: Span {
+                                    line: 4,
+                                    column: 24,
+                                    position: 40,
+                                },
                                 parameters: CommaSeparated {
                                     inner: [],
                                     commas: [],
                                 },
-                                right_parenthesis: Span(
-                                    4,
-                                    25,
-                                ),
+                                right_parenthesis: Span {
+                                    line: 4,
+                                    column: 25,
+                                    position: 41,
+                                },
                             },
                             return_type: None,
                             body: MethodBody {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                left_brace: Span(
-                                    4,
-                                    27,
-                                ),
+                                left_brace: Span {
+                                    line: 4,
+                                    column: 27,
+                                    position: 43,
+                                },
                                 statements: [
                                     Expression {
                                         expression: AssignmentOperation(
@@ -91,18 +101,20 @@
                                                 left: Variable(
                                                     SimpleVariable(
                                                         SimpleVariable {
-                                                            span: Span(
-                                                                5,
-                                                                9,
-                                                            ),
+                                                            span: Span {
+                                                                line: 5,
+                                                                column: 9,
+                                                                position: 53,
+                                                            },
                                                             name: "$q",
                                                         },
                                                     ),
                                                 ),
-                                                equals: Span(
-                                                    5,
-                                                    12,
-                                                ),
+                                                equals: Span {
+                                                    line: 5,
+                                                    column: 12,
+                                                    position: 56,
+                                                },
                                                 right: Closure(
                                                     Closure {
                                                         comments: CommentGroup {
@@ -110,27 +122,30 @@
                                                         },
                                                         attributes: [],
                                                         static: None,
-                                                        function: Span(
-                                                            5,
-                                                            14,
-                                                        ),
+                                                        function: Span {
+                                                            line: 5,
+                                                            column: 14,
+                                                            position: 58,
+                                                        },
                                                         ampersand: None,
                                                         parameters: FunctionParameterList {
                                                             comments: CommentGroup {
                                                                 comments: [],
                                                             },
-                                                            left_parenthesis: Span(
-                                                                5,
-                                                                22,
-                                                            ),
+                                                            left_parenthesis: Span {
+                                                                line: 5,
+                                                                column: 22,
+                                                                position: 66,
+                                                            },
                                                             parameters: CommaSeparated {
                                                                 inner: [],
                                                                 commas: [],
                                                             },
-                                                            right_parenthesis: Span(
-                                                                5,
-                                                                23,
-                                                            ),
+                                                            right_parenthesis: Span {
+                                                                line: 5,
+                                                                column: 23,
+                                                                position: 67,
+                                                            },
                                                         },
                                                         uses: None,
                                                         return_type: None,
@@ -138,40 +153,45 @@
                                                             comments: CommentGroup {
                                                                 comments: [],
                                                             },
-                                                            left_brace: Span(
-                                                                5,
-                                                                25,
-                                                            ),
+                                                            left_brace: Span {
+                                                                line: 5,
+                                                                column: 25,
+                                                                position: 69,
+                                                            },
                                                             statements: [
                                                                 Return {
-                                                                    return: Span(
-                                                                        6,
-                                                                        13,
-                                                                    ),
+                                                                    return: Span {
+                                                                        line: 6,
+                                                                        column: 13,
+                                                                        position: 83,
+                                                                    },
                                                                     value: Some(
                                                                         StaticMethodCall {
                                                                             target: Identifier(
                                                                                 SimpleIdentifier(
                                                                                     SimpleIdentifier {
-                                                                                        span: Span(
-                                                                                            6,
-                                                                                            20,
-                                                                                        ),
+                                                                                        span: Span {
+                                                                                            line: 6,
+                                                                                            column: 20,
+                                                                                            position: 90,
+                                                                                        },
                                                                                         value: "parent",
                                                                                     },
                                                                                 ),
                                                                             ),
-                                                                            double_colon: Span(
-                                                                                6,
-                                                                                26,
-                                                                            ),
+                                                                            double_colon: Span {
+                                                                                line: 6,
+                                                                                column: 26,
+                                                                                position: 96,
+                                                                            },
                                                                             method: Identifier(
                                                                                 SimpleIdentifier(
                                                                                     SimpleIdentifier {
-                                                                                        span: Span(
-                                                                                            6,
-                                                                                            28,
-                                                                                        ),
+                                                                                        span: Span {
+                                                                                            line: 6,
+                                                                                            column: 28,
+                                                                                            position: 98,
+                                                                                        },
                                                                                         value: "bar",
                                                                                     },
                                                                                 ),
@@ -180,55 +200,62 @@
                                                                                 comments: CommentGroup {
                                                                                     comments: [],
                                                                                 },
-                                                                                left_parenthesis: Span(
-                                                                                    6,
-                                                                                    31,
-                                                                                ),
+                                                                                left_parenthesis: Span {
+                                                                                    line: 6,
+                                                                                    column: 31,
+                                                                                    position: 101,
+                                                                                },
                                                                                 arguments: [],
-                                                                                right_parenthesis: Span(
-                                                                                    6,
-                                                                                    32,
-                                                                                ),
+                                                                                right_parenthesis: Span {
+                                                                                    line: 6,
+                                                                                    column: 32,
+                                                                                    position: 102,
+                                                                                },
                                                                             },
                                                                         },
                                                                     ),
                                                                     ending: Semicolon(
-                                                                        Span(
-                                                                            6,
-                                                                            33,
-                                                                        ),
+                                                                        Span {
+                                                                            line: 6,
+                                                                            column: 33,
+                                                                            position: 103,
+                                                                        },
                                                                     ),
                                                                 },
                                                             ],
-                                                            right_brace: Span(
-                                                                7,
-                                                                9,
-                                                            ),
+                                                            right_brace: Span {
+                                                                line: 7,
+                                                                column: 9,
+                                                                position: 113,
+                                                            },
                                                         },
                                                     },
                                                 ),
                                             },
                                         ),
                                         ending: Semicolon(
-                                            Span(
-                                                7,
-                                                10,
-                                            ),
+                                            Span {
+                                                line: 7,
+                                                column: 10,
+                                                position: 114,
+                                            },
                                         ),
                                     },
                                 ],
-                                right_brace: Span(
-                                    8,
-                                    5,
-                                ),
+                                right_brace: Span {
+                                    line: 8,
+                                    column: 5,
+                                    position: 120,
+                                },
                             },
                         },
                     ),
                 ],
-                right_brace: Span(
-                    9,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 9,
+                    column: 1,
+                    position: 122,
+                },
             },
         },
     ),

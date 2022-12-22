@@ -39,7 +39,6 @@ use crate::parser::ast::operators::LogicalOperation;
 use crate::parser::ast::traits::Trait;
 use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::utils::Braced;
-use crate::parser::ast::utils::Bracketed;
 use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::utils::Parenthesized;
 use crate::parser::ast::variables::Variable;
@@ -259,10 +258,6 @@ pub enum Expression {
         expr: Box<Self>,
         end: Span,
     },
-    // list($a, $b)
-    List {
-        items: Vec<ListItem>,
-    },
     Empty,
     // @foo()
     ErrorSuppress {
@@ -343,12 +338,23 @@ pub enum Expression {
     // `parent`
     Parent,
     // `[1, 2, 3]`
-    ShortArray(Bracketed<CommaSeparated<ArrayItem>>),
+    ShortArray {
+        start: Span,                      // `[`
+        items: CommaSeparated<ArrayItem>, // `1, 2, 3`
+        end: Span,                        // `]`
+    },
     // `array(1, 2, 3)`
     Array {
-        array: Span,           // `array`
+        array: Span,                      // `array`
+        start: Span,                      // `(`
+        items: CommaSeparated<ArrayItem>, // `1, 2, 3`
+        end: Span,                        // `)`
+    },
+    // list($a, $b)
+    List {
+        list: Span,            // `list`
         start: Span,           // `(`
-        items: Vec<ArrayItem>, // `1, 2, 3`
+        items: Vec<ListEntry>, // `$a, $b`
         end: Span,             // `)`
     },
     // `function() {}`
@@ -504,17 +510,43 @@ pub enum StringPart {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub struct ArrayItem {
-    pub key: Option<Expression>,
-    pub value: Expression,
-    pub unpack: bool,
-    pub by_ref: bool,
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+pub enum ArrayItem {
+    Skipped,
+    Value {
+        value: Expression, // `$foo`
+    },
+    ReferencedValue {
+        ampersand: Span,   // `&`
+        value: Expression, // `$foo`
+    },
+    SpreadValue {
+        ellipsis: Span,    // `...`
+        value: Expression, // `$foo`
+    },
+    KeyValue {
+        key: Expression,    // `$foo`
+        double_arrow: Span, // `=>`
+        value: Expression,  // `$bar`
+    },
+    ReferencedKeyValue {
+        key: Expression,    // `$foo`
+        double_arrow: Span, // `=>`
+        ampersand: Span,    // `&`
+        value: Expression,  // `$bar`
+    },
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub struct ListItem {
-    pub key: Option<Expression>,
-    pub value: Expression,
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+pub enum ListEntry {
+    Skipped,
+    Value {
+        value: Expression, // `$foo`
+    },
+    KeyValue {
+        key: Expression,    // `$foo`
+        double_arrow: Span, // `=>`
+        value: Expression,  // `$bar`
+    },
 }

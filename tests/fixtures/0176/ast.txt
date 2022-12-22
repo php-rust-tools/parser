@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Function(
         Function {
@@ -11,26 +12,29 @@
                 comments: [],
             },
             attributes: [],
-            function: Span(
-                3,
-                1,
-            ),
+            function: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    10,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 10,
+                    position: 16,
+                },
                 value: "foo",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    3,
-                    13,
-                ),
+                left_parenthesis: Span {
+                    line: 3,
+                    column: 13,
+                    position: 19,
+                },
                 parameters: CommaSeparated {
                     inner: [
                         FunctionParameter {
@@ -38,19 +42,21 @@
                                 comments: [],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    4,
-                                    12,
-                                ),
+                                span: Span {
+                                    line: 4,
+                                    column: 12,
+                                    position: 32,
+                                },
                                 name: "$a",
                             },
                             attributes: [],
                             data_type: Some(
                                 String(
-                                    Span(
-                                        4,
-                                        5,
-                                    ),
+                                    Span {
+                                        line: 4,
+                                        column: 5,
+                                        position: 25,
+                                    },
                                 ),
                             ),
                             ellipsis: None,
@@ -62,19 +68,21 @@
                                 comments: [],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    5,
-                                    9,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 9,
+                                    position: 44,
+                                },
                                 name: "$bar",
                             },
                             attributes: [],
                             data_type: Some(
                                 Integer(
-                                    Span(
-                                        5,
-                                        5,
-                                    ),
+                                    Span {
+                                        line: 5,
+                                        column: 5,
+                                        position: 40,
+                                    },
                                 ),
                             ),
                             ellipsis: None,
@@ -86,19 +94,21 @@
                                 comments: [],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    6,
-                                    11,
-                                ),
+                                span: Span {
+                                    line: 6,
+                                    column: 11,
+                                    position: 60,
+                                },
                                 name: "$baz",
                             },
                             attributes: [],
                             data_type: Some(
                                 Float(
-                                    Span(
-                                        6,
-                                        5,
-                                    ),
+                                    Span {
+                                        line: 6,
+                                        column: 5,
+                                        position: 54,
+                                    },
                                 ),
                             ),
                             ellipsis: None,
@@ -107,39 +117,45 @@
                         },
                     ],
                     commas: [
-                        Span(
-                            4,
-                            14,
-                        ),
-                        Span(
-                            5,
-                            13,
-                        ),
-                        Span(
-                            6,
-                            15,
-                        ),
+                        Span {
+                            line: 4,
+                            column: 14,
+                            position: 34,
+                        },
+                        Span {
+                            line: 5,
+                            column: 13,
+                            position: 48,
+                        },
+                        Span {
+                            line: 6,
+                            column: 15,
+                            position: 64,
+                        },
                     ],
                 },
-                right_parenthesis: Span(
-                    7,
-                    1,
-                ),
+                right_parenthesis: Span {
+                    line: 7,
+                    column: 1,
+                    position: 66,
+                },
             },
             return_type: None,
             body: FunctionBody {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    7,
-                    3,
-                ),
+                left_brace: Span {
+                    line: 7,
+                    column: 3,
+                    position: 68,
+                },
                 statements: [],
-                right_brace: Span(
-                    7,
-                    4,
-                ),
+                right_brace: Span {
+                    line: 7,
+                    column: 4,
+                    position: 69,
+                },
             },
         },
     ),

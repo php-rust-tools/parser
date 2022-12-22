@@ -1,61 +1,69 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     If(
         IfStatement {
-            if: Span(
-                1,
-                7,
-            ),
+            if: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
             condition: Parenthesized {
-                left_parenthesis: Span(
-                    1,
-                    9,
-                ),
+                left_parenthesis: Span {
+                    line: 1,
+                    column: 9,
+                    position: 8,
+                },
                 inner: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                1,
-                                10,
-                            ),
+                            span: Span {
+                                line: 1,
+                                column: 10,
+                                position: 9,
+                            },
                             name: "$foo",
                         },
                     ),
                 ),
-                right_parenthesis: Span(
-                    1,
-                    14,
-                ),
+                right_parenthesis: Span {
+                    line: 1,
+                    column: 14,
+                    position: 13,
+                },
             },
             body: Statement {
                 statement: Return {
-                    return: Span(
-                        1,
-                        16,
-                    ),
+                    return: Span {
+                        line: 1,
+                        column: 16,
+                        position: 15,
+                    },
                     value: Some(
                         Variable(
                             SimpleVariable(
                                 SimpleVariable {
-                                    span: Span(
-                                        1,
-                                        23,
-                                    ),
+                                    span: Span {
+                                        line: 1,
+                                        column: 23,
+                                        position: 22,
+                                    },
                                     name: "$foo",
                                 },
                             ),
                         ),
                     ),
                     ending: Semicolon(
-                        Span(
-                            1,
-                            27,
-                        ),
+                        Span {
+                            line: 1,
+                            column: 27,
+                            position: 26,
+                        },
                     ),
                 },
                 elseifs: [],

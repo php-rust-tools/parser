@@ -1,40 +1,45 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: PropertyFetch {
             target: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            1,
-                            7,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 7,
+                            position: 6,
+                        },
                         name: "$a",
                     },
                 ),
             ),
-            arrow: Span(
-                1,
-                9,
-            ),
+            arrow: Span {
+                line: 1,
+                column: 9,
+                position: 8,
+            },
             property: Variable(
                 VariableVariable(
                     VariableVariable {
-                        span: Span(
-                            1,
-                            11,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 11,
+                            position: 10,
+                        },
                         variable: SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    1,
-                                    12,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 12,
+                                    position: 11,
+                                },
                                 name: "$b",
                             },
                         ),
@@ -43,10 +48,11 @@
             ),
         },
         ending: Semicolon(
-            Span(
-                1,
-                14,
-            ),
+            Span {
+                line: 1,
+                column: 14,
+                position: 13,
+            },
         ),
     },
 ]
