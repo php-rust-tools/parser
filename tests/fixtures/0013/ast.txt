@@ -1,26 +1,29 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     GroupUse {
         prefix: SimpleIdentifier {
-            span: Span(
-                3,
-                5,
-            ),
+            span: Span {
+                line: 3,
+                column: 5,
+                position: 11,
+            },
             value: "Foo\",
         },
         kind: Normal,
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        3,
-                        10,
-                    ),
+                    span: Span {
+                        line: 3,
+                        column: 10,
+                        position: 16,
+                    },
                     value: "Bar",
                 },
                 alias: None,
@@ -28,18 +31,20 @@
             },
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        3,
-                        15,
-                    ),
+                    span: Span {
+                        line: 3,
+                        column: 15,
+                        position: 21,
+                    },
                     value: "Baz",
                 },
                 alias: Some(
                     SimpleIdentifier {
-                        span: Span(
-                            3,
-                            22,
-                        ),
+                        span: Span {
+                            line: 3,
+                            column: 22,
+                            position: 28,
+                        },
                         value: "Bob",
                     },
                 ),
@@ -47,10 +52,11 @@
             },
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        3,
-                        27,
-                    ),
+                    span: Span {
+                        line: 3,
+                        column: 27,
+                        position: 33,
+                    },
                     value: "Car",
                 },
                 alias: None,
@@ -60,20 +66,22 @@
     },
     GroupUse {
         prefix: SimpleIdentifier {
-            span: Span(
-                4,
-                5,
-            ),
+            span: Span {
+                line: 4,
+                column: 5,
+                position: 43,
+            },
             value: "Bar\",
         },
         kind: Normal,
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        4,
-                        10,
-                    ),
+                    span: Span {
+                        line: 4,
+                        column: 10,
+                        position: 48,
+                    },
                     value: "Bar0",
                 },
                 alias: None,
@@ -81,10 +89,11 @@
             },
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        4,
-                        16,
-                    ),
+                    span: Span {
+                        line: 4,
+                        column: 16,
+                        position: 54,
+                    },
                     value: "Baz0",
                 },
                 alias: None,
@@ -92,10 +101,11 @@
             },
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        4,
-                        22,
-                    ),
+                    span: Span {
+                        line: 4,
+                        column: 22,
+                        position: 60,
+                    },
                     value: "Car0",
                 },
                 alias: None,
@@ -107,10 +117,11 @@
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        5,
-                        5,
-                    ),
+                    span: Span {
+                        line: 5,
+                        column: 5,
+                        position: 71,
+                    },
                     value: "Foo1",
                 },
                 alias: None,
@@ -118,10 +129,11 @@
             },
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        5,
-                        11,
-                    ),
+                    span: Span {
+                        line: 5,
+                        column: 11,
+                        position: 77,
+                    },
                     value: "Bar1",
                 },
                 alias: None,
@@ -129,10 +141,11 @@
             },
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        5,
-                        17,
-                    ),
+                    span: Span {
+                        line: 5,
+                        column: 17,
+                        position: 83,
+                    },
                     value: "Baz1",
                 },
                 alias: None,
@@ -145,18 +158,20 @@
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        6,
-                        5,
-                    ),
+                    span: Span {
+                        line: 6,
+                        column: 5,
+                        position: 93,
+                    },
                     value: "Foo",
                 },
                 alias: Some(
                     SimpleIdentifier {
-                        span: Span(
-                            6,
-                            12,
-                        ),
+                        span: Span {
+                            line: 6,
+                            column: 12,
+                            position: 100,
+                        },
                         value: "Qux",
                     },
                 ),
@@ -169,10 +184,11 @@
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        7,
-                        5,
-                    ),
+                    span: Span {
+                        line: 7,
+                        column: 5,
+                        position: 109,
+                    },
                     value: "Foo",
                 },
                 alias: None,
@@ -185,10 +201,11 @@
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        9,
-                        11,
-                    ),
+                    span: Span {
+                        line: 9,
+                        column: 11,
+                        position: 125,
+                    },
                     value: "FOO",
                 },
                 alias: None,
@@ -201,10 +218,11 @@
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        10,
-                        11,
-                    ),
+                    span: Span {
+                        line: 10,
+                        column: 11,
+                        position: 140,
+                    },
                     value: "Foo\Bar\Baz\QUX",
                 },
                 alias: None,
@@ -217,10 +235,11 @@
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        12,
-                        14,
-                    ),
+                    span: Span {
+                        line: 12,
+                        column: 14,
+                        position: 171,
+                    },
                     value: "f",
                 },
                 alias: None,
@@ -233,10 +252,11 @@
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        13,
-                        11,
-                    ),
+                    span: Span {
+                        line: 13,
+                        column: 11,
+                        position: 184,
+                    },
                     value: "Pop\Bar\f",
                 },
                 alias: None,

@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Function(
         Function {
@@ -11,46 +12,52 @@
                 comments: [],
             },
             attributes: [],
-            function: Span(
-                3,
-                1,
-            ),
+            function: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    10,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 10,
+                    position: 16,
+                },
                 value: "foo",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    3,
-                    13,
-                ),
+                left_parenthesis: Span {
+                    line: 3,
+                    column: 13,
+                    position: 19,
+                },
                 parameters: CommaSeparated {
                     inner: [],
                     commas: [],
                 },
-                right_parenthesis: Span(
-                    3,
-                    14,
-                ),
+                right_parenthesis: Span {
+                    line: 3,
+                    column: 14,
+                    position: 20,
+                },
             },
             return_type: Some(
                 ReturnType {
-                    colon: Span(
-                        3,
-                        15,
-                    ),
+                    colon: Span {
+                        line: 3,
+                        column: 15,
+                        position: 21,
+                    },
                     data_type: Iterable(
-                        Span(
-                            3,
-                            17,
-                        ),
+                        Span {
+                            line: 3,
+                            column: 17,
+                            position: 23,
+                        },
                     ),
                 },
             ),
@@ -58,10 +65,11 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    3,
-                    26,
-                ),
+                left_brace: Span {
+                    line: 3,
+                    column: 26,
+                    position: 32,
+                },
                 statements: [
                     Expression {
                         expression: Yield {
@@ -71,20 +79,22 @@
                                     Integer(
                                         LiteralInteger {
                                             value: "1",
-                                            span: Span(
-                                                4,
-                                                11,
-                                            ),
+                                            span: Span {
+                                                line: 4,
+                                                column: 11,
+                                                position: 44,
+                                            },
                                         },
                                     ),
                                 ),
                             ),
                         },
                         ending: Semicolon(
-                            Span(
-                                4,
-                                12,
-                            ),
+                            Span {
+                                line: 4,
+                                column: 12,
+                                position: 45,
+                            },
                         ),
                     },
                     Expression {
@@ -93,10 +103,11 @@
                             value: None,
                         },
                         ending: Semicolon(
-                            Span(
-                                5,
-                                10,
-                            ),
+                            Span {
+                                line: 5,
+                                column: 10,
+                                position: 56,
+                            },
                         ),
                     },
                     Expression {
@@ -106,10 +117,11 @@
                                     Integer(
                                         LiteralInteger {
                                             value: "123",
-                                            span: Span(
-                                                6,
-                                                11,
-                                            ),
+                                            span: Span {
+                                                line: 6,
+                                                column: 11,
+                                                position: 68,
+                                            },
                                         },
                                     ),
                                 ),
@@ -119,20 +131,22 @@
                                     Integer(
                                         LiteralInteger {
                                             value: "41",
-                                            span: Span(
-                                                6,
-                                                18,
-                                            ),
+                                            span: Span {
+                                                line: 6,
+                                                column: 18,
+                                                position: 75,
+                                            },
                                         },
                                     ),
                                 ),
                             ),
                         },
                         ending: Semicolon(
-                            Span(
-                                6,
-                                20,
-                            ),
+                            Span {
+                                line: 6,
+                                column: 20,
+                                position: 77,
+                            },
                         ),
                     },
                     Expression {
@@ -142,10 +156,11 @@
                                 Variable(
                                     SimpleVariable(
                                         SimpleVariable {
-                                            span: Span(
-                                                7,
-                                                11,
-                                            ),
+                                            span: Span {
+                                                line: 7,
+                                                column: 11,
+                                                position: 89,
+                                            },
                                             name: "$a",
                                         },
                                     ),
@@ -153,10 +168,11 @@
                             ),
                         },
                         ending: Semicolon(
-                            Span(
-                                7,
-                                13,
-                            ),
+                            Span {
+                                line: 7,
+                                column: 13,
+                                position: 91,
+                            },
                         ),
                     },
                     Expression {
@@ -165,17 +181,19 @@
                             value: Some(
                                 ArithmeticOperation(
                                     PreIncrement {
-                                        increment: Span(
-                                            9,
-                                            11,
-                                        ),
+                                        increment: Span {
+                                            line: 9,
+                                            column: 11,
+                                            position: 104,
+                                        },
                                         right: Variable(
                                             SimpleVariable(
                                                 SimpleVariable {
-                                                    span: Span(
-                                                        9,
-                                                        13,
-                                                    ),
+                                                    span: Span {
+                                                        line: 9,
+                                                        column: 13,
+                                                        position: 106,
+                                                    },
                                                     name: "$a",
                                                 },
                                             ),
@@ -185,10 +203,11 @@
                             ),
                         },
                         ending: Semicolon(
-                            Span(
-                                9,
-                                15,
-                            ),
+                            Span {
+                                line: 9,
+                                column: 15,
+                                position: 108,
+                            },
                         ),
                     },
                     Expression {
@@ -200,27 +219,30 @@
                                         left: Variable(
                                             SimpleVariable(
                                                 SimpleVariable {
-                                                    span: Span(
-                                                        10,
-                                                        11,
-                                                    ),
+                                                    span: Span {
+                                                        line: 10,
+                                                        column: 11,
+                                                        position: 120,
+                                                    },
                                                     name: "$b",
                                                 },
                                             ),
                                         ),
-                                        increment: Span(
-                                            10,
-                                            13,
-                                        ),
+                                        increment: Span {
+                                            line: 10,
+                                            column: 13,
+                                            position: 122,
+                                        },
                                     },
                                 ),
                             ),
                         },
                         ending: Semicolon(
-                            Span(
-                                10,
-                                15,
-                            ),
+                            Span {
+                                line: 10,
+                                column: 15,
+                                position: 124,
+                            },
                         ),
                     },
                     Expression {
@@ -228,17 +250,19 @@
                             key: Some(
                                 ArithmeticOperation(
                                     PreIncrement {
-                                        increment: Span(
-                                            12,
-                                            11,
-                                        ),
+                                        increment: Span {
+                                            line: 12,
+                                            column: 11,
+                                            position: 137,
+                                        },
                                         right: Variable(
                                             SimpleVariable(
                                                 SimpleVariable {
-                                                    span: Span(
-                                                        12,
-                                                        13,
-                                                    ),
+                                                    span: Span {
+                                                        line: 12,
+                                                        column: 13,
+                                                        position: 139,
+                                                    },
                                                     name: "$a",
                                                 },
                                             ),
@@ -251,40 +275,45 @@
                                     condition: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    12,
-                                                    19,
-                                                ),
+                                                span: Span {
+                                                    line: 12,
+                                                    column: 19,
+                                                    position: 145,
+                                                },
                                                 name: "$a",
                                             },
                                         ),
                                     ),
-                                    question: Span(
-                                        12,
-                                        22,
-                                    ),
+                                    question: Span {
+                                        line: 12,
+                                        column: 22,
+                                        position: 148,
+                                    },
                                     then: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    12,
-                                                    24,
-                                                ),
+                                                span: Span {
+                                                    line: 12,
+                                                    column: 24,
+                                                    position: 150,
+                                                },
                                                 name: "$m",
                                             },
                                         ),
                                     ),
-                                    colon: Span(
-                                        12,
-                                        27,
-                                    ),
+                                    colon: Span {
+                                        line: 12,
+                                        column: 27,
+                                        position: 153,
+                                    },
                                     else: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    12,
-                                                    29,
-                                                ),
+                                                span: Span {
+                                                    line: 12,
+                                                    column: 29,
+                                                    position: 155,
+                                                },
                                                 name: "$s",
                                             },
                                         ),
@@ -293,10 +322,11 @@
                             ),
                         },
                         ending: Semicolon(
-                            Span(
-                                12,
-                                31,
-                            ),
+                            Span {
+                                line: 12,
+                                column: 31,
+                                position: 157,
+                            },
                         ),
                     },
                     Expression {
@@ -305,49 +335,55 @@
                                 Ternary {
                                     condition: ArithmeticOperation(
                                         PreIncrement {
-                                            increment: Span(
-                                                13,
-                                                11,
-                                            ),
+                                            increment: Span {
+                                                line: 13,
+                                                column: 11,
+                                                position: 169,
+                                            },
                                             right: Variable(
                                                 SimpleVariable(
                                                     SimpleVariable {
-                                                        span: Span(
-                                                            13,
-                                                            13,
-                                                        ),
+                                                        span: Span {
+                                                            line: 13,
+                                                            column: 13,
+                                                            position: 171,
+                                                        },
                                                         name: "$a",
                                                     },
                                                 ),
                                             ),
                                         },
                                     ),
-                                    question: Span(
-                                        13,
-                                        16,
-                                    ),
+                                    question: Span {
+                                        line: 13,
+                                        column: 16,
+                                        position: 174,
+                                    },
                                     then: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    13,
-                                                    18,
-                                                ),
+                                                span: Span {
+                                                    line: 13,
+                                                    column: 18,
+                                                    position: 176,
+                                                },
                                                 name: "$m",
                                             },
                                         ),
                                     ),
-                                    colon: Span(
-                                        13,
-                                        21,
-                                    ),
+                                    colon: Span {
+                                        line: 13,
+                                        column: 21,
+                                        position: 179,
+                                    },
                                     else: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    13,
-                                                    23,
-                                                ),
+                                                span: Span {
+                                                    line: 13,
+                                                    column: 23,
+                                                    position: 181,
+                                                },
                                                 name: "$s",
                                             },
                                         ),
@@ -358,49 +394,55 @@
                                 Ternary {
                                     condition: ArithmeticOperation(
                                         PreIncrement {
-                                            increment: Span(
-                                                13,
-                                                29,
-                                            ),
+                                            increment: Span {
+                                                line: 13,
+                                                column: 29,
+                                                position: 187,
+                                            },
                                             right: Variable(
                                                 SimpleVariable(
                                                     SimpleVariable {
-                                                        span: Span(
-                                                            13,
-                                                            31,
-                                                        ),
+                                                        span: Span {
+                                                            line: 13,
+                                                            column: 31,
+                                                            position: 189,
+                                                        },
                                                         name: "$a",
                                                     },
                                                 ),
                                             ),
                                         },
                                     ),
-                                    question: Span(
-                                        13,
-                                        34,
-                                    ),
+                                    question: Span {
+                                        line: 13,
+                                        column: 34,
+                                        position: 192,
+                                    },
                                     then: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    13,
-                                                    36,
-                                                ),
+                                                span: Span {
+                                                    line: 13,
+                                                    column: 36,
+                                                    position: 194,
+                                                },
                                                 name: "$m",
                                             },
                                         ),
                                     ),
-                                    colon: Span(
-                                        13,
-                                        39,
-                                    ),
+                                    colon: Span {
+                                        line: 13,
+                                        column: 39,
+                                        position: 197,
+                                    },
                                     else: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    13,
-                                                    41,
-                                                ),
+                                                span: Span {
+                                                    line: 13,
+                                                    column: 41,
+                                                    position: 199,
+                                                },
                                                 name: "$s",
                                             },
                                         ),
@@ -409,10 +451,11 @@
                             ),
                         },
                         ending: Semicolon(
-                            Span(
-                                13,
-                                43,
-                            ),
+                            Span {
+                                line: 13,
+                                column: 43,
+                                position: 201,
+                            },
                         ),
                     },
                     Expression {
@@ -423,18 +466,20 @@
                                         left: Variable(
                                             SimpleVariable(
                                                 SimpleVariable {
-                                                    span: Span(
-                                                        15,
-                                                        11,
-                                                    ),
+                                                    span: Span {
+                                                        line: 15,
+                                                        column: 11,
+                                                        position: 214,
+                                                    },
                                                     name: "$a",
                                                 },
                                             ),
                                         ),
-                                        increment: Span(
-                                            15,
-                                            13,
-                                        ),
+                                        increment: Span {
+                                            line: 15,
+                                            column: 13,
+                                            position: 216,
+                                        },
                                     },
                                 ),
                             ),
@@ -443,40 +488,45 @@
                                     condition: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    15,
-                                                    19,
-                                                ),
+                                                span: Span {
+                                                    line: 15,
+                                                    column: 19,
+                                                    position: 222,
+                                                },
                                                 name: "$a",
                                             },
                                         ),
                                     ),
-                                    question: Span(
-                                        15,
-                                        22,
-                                    ),
+                                    question: Span {
+                                        line: 15,
+                                        column: 22,
+                                        position: 225,
+                                    },
                                     then: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    15,
-                                                    24,
-                                                ),
+                                                span: Span {
+                                                    line: 15,
+                                                    column: 24,
+                                                    position: 227,
+                                                },
                                                 name: "$m",
                                             },
                                         ),
                                     ),
-                                    colon: Span(
-                                        15,
-                                        27,
-                                    ),
+                                    colon: Span {
+                                        line: 15,
+                                        column: 27,
+                                        position: 230,
+                                    },
                                     else: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    15,
-                                                    29,
-                                                ),
+                                                span: Span {
+                                                    line: 15,
+                                                    column: 29,
+                                                    position: 232,
+                                                },
                                                 name: "$s",
                                             },
                                         ),
@@ -485,10 +535,11 @@
                             ),
                         },
                         ending: Semicolon(
-                            Span(
-                                15,
-                                31,
-                            ),
+                            Span {
+                                line: 15,
+                                column: 31,
+                                position: 234,
+                            },
                         ),
                     },
                     Expression {
@@ -500,46 +551,52 @@
                                             left: Variable(
                                                 SimpleVariable(
                                                     SimpleVariable {
-                                                        span: Span(
-                                                            16,
-                                                            11,
-                                                        ),
+                                                        span: Span {
+                                                            line: 16,
+                                                            column: 11,
+                                                            position: 246,
+                                                        },
                                                         name: "$a",
                                                     },
                                                 ),
                                             ),
-                                            increment: Span(
-                                                16,
-                                                13,
-                                            ),
+                                            increment: Span {
+                                                line: 16,
+                                                column: 13,
+                                                position: 248,
+                                            },
                                         },
                                     ),
-                                    question: Span(
-                                        16,
-                                        16,
-                                    ),
+                                    question: Span {
+                                        line: 16,
+                                        column: 16,
+                                        position: 251,
+                                    },
                                     then: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    16,
-                                                    18,
-                                                ),
+                                                span: Span {
+                                                    line: 16,
+                                                    column: 18,
+                                                    position: 253,
+                                                },
                                                 name: "$m",
                                             },
                                         ),
                                     ),
-                                    colon: Span(
-                                        16,
-                                        21,
-                                    ),
+                                    colon: Span {
+                                        line: 16,
+                                        column: 21,
+                                        position: 256,
+                                    },
                                     else: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    16,
-                                                    23,
-                                                ),
+                                                span: Span {
+                                                    line: 16,
+                                                    column: 23,
+                                                    position: 258,
+                                                },
                                                 name: "$s",
                                             },
                                         ),
@@ -553,46 +610,52 @@
                                             left: Variable(
                                                 SimpleVariable(
                                                     SimpleVariable {
-                                                        span: Span(
-                                                            16,
-                                                            29,
-                                                        ),
+                                                        span: Span {
+                                                            line: 16,
+                                                            column: 29,
+                                                            position: 264,
+                                                        },
                                                         name: "$a",
                                                     },
                                                 ),
                                             ),
-                                            increment: Span(
-                                                16,
-                                                31,
-                                            ),
+                                            increment: Span {
+                                                line: 16,
+                                                column: 31,
+                                                position: 266,
+                                            },
                                         },
                                     ),
-                                    question: Span(
-                                        16,
-                                        34,
-                                    ),
+                                    question: Span {
+                                        line: 16,
+                                        column: 34,
+                                        position: 269,
+                                    },
                                     then: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    16,
-                                                    36,
-                                                ),
+                                                span: Span {
+                                                    line: 16,
+                                                    column: 36,
+                                                    position: 271,
+                                                },
                                                 name: "$m",
                                             },
                                         ),
                                     ),
-                                    colon: Span(
-                                        16,
-                                        39,
-                                    ),
+                                    colon: Span {
+                                        line: 16,
+                                        column: 39,
+                                        position: 274,
+                                    },
                                     else: Variable(
                                         SimpleVariable(
                                             SimpleVariable {
-                                                span: Span(
-                                                    16,
-                                                    41,
-                                                ),
+                                                span: Span {
+                                                    line: 16,
+                                                    column: 41,
+                                                    position: 276,
+                                                },
                                                 name: "$s",
                                             },
                                         ),
@@ -601,17 +664,19 @@
                             ),
                         },
                         ending: Semicolon(
-                            Span(
-                                16,
-                                43,
-                            ),
+                            Span {
+                                line: 16,
+                                column: 43,
+                                position: 278,
+                            },
                         ),
                     },
                 ],
-                right_brace: Span(
-                    17,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 17,
+                    column: 1,
+                    position: 280,
+                },
             },
         },
     ),

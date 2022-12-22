@@ -1,72 +1,82 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Foreach(
         ForeachStatement {
-            foreach: Span(
-                3,
-                1,
-            ),
+            foreach: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             iterator: Parenthesized {
-                left_parenthesis: Span(
-                    3,
-                    9,
-                ),
+                left_parenthesis: Span {
+                    line: 3,
+                    column: 9,
+                    position: 15,
+                },
                 inner: Value {
                     expression: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    3,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 3,
+                                    column: 10,
+                                    position: 16,
+                                },
                                 name: "$a",
                             },
                         ),
                     ),
-                    as: Span(
-                        3,
-                        13,
-                    ),
+                    as: Span {
+                        line: 3,
+                        column: 13,
+                        position: 19,
+                    },
                     ampersand: Some(
-                        Span(
-                            3,
-                            16,
-                        ),
+                        Span {
+                            line: 3,
+                            column: 16,
+                            position: 22,
+                        },
                     ),
                     value: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    3,
-                                    17,
-                                ),
+                                span: Span {
+                                    line: 3,
+                                    column: 17,
+                                    position: 23,
+                                },
                                 name: "$b",
                             },
                         ),
                     ),
                 },
-                right_parenthesis: Span(
-                    3,
-                    19,
-                ),
+                right_parenthesis: Span {
+                    line: 3,
+                    column: 19,
+                    position: 25,
+                },
             },
             body: Statement(
                 Block(
                     Braced {
-                        left_brace: Span(
-                            3,
-                            21,
-                        ),
+                        left_brace: Span {
+                            line: 3,
+                            column: 21,
+                            position: 27,
+                        },
                         inner: [],
-                        right_brace: Span(
-                            3,
-                            22,
-                        ),
+                        right_brace: Span {
+                            line: 3,
+                            column: 22,
+                            position: 28,
+                        },
                     },
                 ),
             ),
@@ -74,81 +84,92 @@
     ),
     Foreach(
         ForeachStatement {
-            foreach: Span(
-                5,
-                1,
-            ),
+            foreach: Span {
+                line: 5,
+                column: 1,
+                position: 31,
+            },
             iterator: Parenthesized {
-                left_parenthesis: Span(
-                    5,
-                    9,
-                ),
+                left_parenthesis: Span {
+                    line: 5,
+                    column: 9,
+                    position: 39,
+                },
                 inner: KeyAndValue {
                     expression: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    5,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 10,
+                                    position: 40,
+                                },
                                 name: "$a",
                             },
                         ),
                     ),
-                    as: Span(
-                        5,
-                        13,
-                    ),
+                    as: Span {
+                        line: 5,
+                        column: 13,
+                        position: 43,
+                    },
                     ampersand: Some(
-                        Span(
-                            5,
-                            22,
-                        ),
+                        Span {
+                            line: 5,
+                            column: 22,
+                            position: 52,
+                        },
                     ),
                     key: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    5,
-                                    16,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 16,
+                                    position: 46,
+                                },
                                 name: "$b",
                             },
                         ),
                     ),
-                    double_arrow: Span(
-                        5,
-                        19,
-                    ),
+                    double_arrow: Span {
+                        line: 5,
+                        column: 19,
+                        position: 49,
+                    },
                     value: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    5,
-                                    23,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 23,
+                                    position: 53,
+                                },
                                 name: "$c",
                             },
                         ),
                     ),
                 },
-                right_parenthesis: Span(
-                    5,
-                    25,
-                ),
+                right_parenthesis: Span {
+                    line: 5,
+                    column: 25,
+                    position: 55,
+                },
             },
             body: Statement(
                 Block(
                     Braced {
-                        left_brace: Span(
-                            5,
-                            27,
-                        ),
+                        left_brace: Span {
+                            line: 5,
+                            column: 27,
+                            position: 57,
+                        },
                         inner: [],
-                        right_brace: Span(
-                            5,
-                            28,
-                        ),
+                        right_brace: Span {
+                            line: 5,
+                            column: 28,
+                            position: 58,
+                        },
                     },
                 ),
             ),
@@ -156,25 +177,28 @@
     ),
     Switch {
         condition: Parenthesized {
-            left_parenthesis: Span(
-                7,
-                8,
-            ),
+            left_parenthesis: Span {
+                line: 7,
+                column: 8,
+                position: 68,
+            },
             inner: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            7,
-                            9,
-                        ),
+                        span: Span {
+                            line: 7,
+                            column: 9,
+                            position: 69,
+                        },
                         name: "$a",
                     },
                 ),
             ),
-            right_parenthesis: Span(
-                7,
-                11,
-            ),
+            right_parenthesis: Span {
+                line: 7,
+                column: 11,
+                position: 71,
+            },
         },
         cases: [
             Case {
@@ -183,10 +207,11 @@
                         Integer(
                             LiteralInteger {
                                 value: "0",
-                                span: Span(
-                                    8,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 8,
+                                    column: 10,
+                                    position: 84,
+                                },
                             },
                         ),
                     ),
@@ -194,16 +219,18 @@
                 body: [
                     Break(
                         BreakStatement {
-                            break: Span(
-                                9,
-                                9,
-                            ),
+                            break: Span {
+                                line: 9,
+                                column: 9,
+                                position: 95,
+                            },
                             level: None,
                             ending: Semicolon(
-                                Span(
-                                    9,
-                                    14,
-                                ),
+                                Span {
+                                    line: 9,
+                                    column: 14,
+                                    position: 100,
+                                },
                             ),
                         },
                     ),
@@ -215,10 +242,11 @@
                         Integer(
                             LiteralInteger {
                                 value: "1",
-                                span: Span(
-                                    10,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 10,
+                                    column: 10,
+                                    position: 111,
+                                },
                             },
                         ),
                     ),
@@ -233,104 +261,108 @@
     },
     Foreach(
         ForeachStatement {
-            foreach: Span(
-                14,
-                1,
-            ),
+            foreach: Span {
+                line: 14,
+                column: 1,
+                position: 130,
+            },
             iterator: Parenthesized {
-                left_parenthesis: Span(
-                    14,
-                    9,
-                ),
+                left_parenthesis: Span {
+                    line: 14,
+                    column: 9,
+                    position: 138,
+                },
                 inner: Value {
                     expression: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    14,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 14,
+                                    column: 10,
+                                    position: 139,
+                                },
                                 name: "$foo",
                             },
                         ),
                     ),
-                    as: Span(
-                        14,
-                        15,
-                    ),
+                    as: Span {
+                        line: 14,
+                        column: 15,
+                        position: 144,
+                    },
                     ampersand: None,
-                    value: ShortArray(
-                        Bracketed {
-                            left_bracket: Span(
-                                14,
-                                18,
-                            ),
-                            inner: CommaSeparated {
-                                inner: [
-                                    ArrayItem {
-                                        key: None,
-                                        value: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span(
-                                                        14,
-                                                        19,
-                                                    ),
-                                                    name: "$baz",
-                                                },
-                                            ),
-                                        ),
-                                        unpack: false,
-                                        by_ref: false,
-                                    },
-                                    ArrayItem {
-                                        key: None,
-                                        value: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span(
-                                                        14,
-                                                        25,
-                                                    ),
-                                                    name: "$car",
-                                                },
-                                            ),
-                                        ),
-                                        unpack: false,
-                                        by_ref: false,
-                                    },
-                                ],
-                                commas: [
-                                    Span(
-                                        14,
-                                        23,
-                                    ),
-                                ],
-                            },
-                            right_bracket: Span(
-                                14,
-                                29,
-                            ),
+                    value: ShortArray {
+                        start: Span {
+                            line: 14,
+                            column: 18,
+                            position: 147,
                         },
-                    ),
+                        items: CommaSeparated {
+                            inner: [
+                                Value {
+                                    value: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 14,
+                                                    column: 19,
+                                                    position: 148,
+                                                },
+                                                name: "$baz",
+                                            },
+                                        ),
+                                    ),
+                                },
+                                Value {
+                                    value: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 14,
+                                                    column: 25,
+                                                    position: 154,
+                                                },
+                                                name: "$car",
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            commas: [
+                                Span {
+                                    line: 14,
+                                    column: 23,
+                                    position: 152,
+                                },
+                            ],
+                        },
+                        end: Span {
+                            line: 14,
+                            column: 29,
+                            position: 158,
+                        },
+                    },
                 },
-                right_parenthesis: Span(
-                    14,
-                    30,
-                ),
+                right_parenthesis: Span {
+                    line: 14,
+                    column: 30,
+                    position: 159,
+                },
             },
             body: Statement(
                 Block(
                     Braced {
-                        left_brace: Span(
-                            14,
-                            32,
-                        ),
+                        left_brace: Span {
+                            line: 14,
+                            column: 32,
+                            position: 161,
+                        },
                         inner: [],
-                        right_brace: Span(
-                            14,
-                            33,
-                        ),
+                        right_brace: Span {
+                            line: 14,
+                            column: 33,
+                            position: 162,
+                        },
                     },
                 ),
             ),
@@ -338,76 +370,86 @@
     ),
     Foreach(
         ForeachStatement {
-            foreach: Span(
-                16,
-                1,
-            ),
+            foreach: Span {
+                line: 16,
+                column: 1,
+                position: 165,
+            },
             iterator: Parenthesized {
-                left_parenthesis: Span(
-                    16,
-                    9,
-                ),
+                left_parenthesis: Span {
+                    line: 16,
+                    column: 9,
+                    position: 173,
+                },
                 inner: KeyAndValue {
                     expression: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    16,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 16,
+                                    column: 10,
+                                    position: 174,
+                                },
                                 name: "$foo",
                             },
                         ),
                     ),
-                    as: Span(
-                        16,
-                        15,
-                    ),
+                    as: Span {
+                        line: 16,
+                        column: 15,
+                        position: 179,
+                    },
                     ampersand: None,
                     key: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    16,
-                                    18,
-                                ),
+                                span: Span {
+                                    line: 16,
+                                    column: 18,
+                                    position: 182,
+                                },
                                 name: "$bar",
                             },
                         ),
                     ),
-                    double_arrow: Span(
-                        16,
-                        23,
-                    ),
+                    double_arrow: Span {
+                        line: 16,
+                        column: 23,
+                        position: 187,
+                    },
                     value: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    16,
-                                    26,
-                                ),
+                                span: Span {
+                                    line: 16,
+                                    column: 26,
+                                    position: 190,
+                                },
                                 name: "$baz",
                             },
                         ),
                     ),
                 },
-                right_parenthesis: Span(
-                    16,
-                    30,
-                ),
+                right_parenthesis: Span {
+                    line: 16,
+                    column: 30,
+                    position: 194,
+                },
             },
             body: Statement(
                 Block(
                     Braced {
-                        left_brace: Span(
-                            16,
-                            32,
-                        ),
+                        left_brace: Span {
+                            line: 16,
+                            column: 32,
+                            position: 196,
+                        },
                         inner: [],
-                        right_brace: Span(
-                            16,
-                            33,
-                        ),
+                        right_brace: Span {
+                            line: 16,
+                            column: 33,
+                            position: 197,
+                        },
                     },
                 ),
             ),
@@ -415,61 +457,69 @@
     ),
     Foreach(
         ForeachStatement {
-            foreach: Span(
-                18,
-                1,
-            ),
+            foreach: Span {
+                line: 18,
+                column: 1,
+                position: 200,
+            },
             iterator: Parenthesized {
-                left_parenthesis: Span(
-                    18,
-                    9,
-                ),
+                left_parenthesis: Span {
+                    line: 18,
+                    column: 9,
+                    position: 208,
+                },
                 inner: Value {
                     expression: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    18,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 18,
+                                    column: 10,
+                                    position: 209,
+                                },
                                 name: "$foo",
                             },
                         ),
                     ),
-                    as: Span(
-                        18,
-                        15,
-                    ),
+                    as: Span {
+                        line: 18,
+                        column: 15,
+                        position: 214,
+                    },
                     ampersand: None,
                     value: Variable(
                         SimpleVariable(
                             SimpleVariable {
-                                span: Span(
-                                    18,
-                                    18,
-                                ),
+                                span: Span {
+                                    line: 18,
+                                    column: 18,
+                                    position: 217,
+                                },
                                 name: "$bar",
                             },
                         ),
                     ),
                 },
-                right_parenthesis: Span(
-                    18,
-                    22,
-                ),
+                right_parenthesis: Span {
+                    line: 18,
+                    column: 22,
+                    position: 221,
+                },
             },
             body: Statement(
                 Block(
                     Braced {
-                        left_brace: Span(
-                            18,
-                            24,
-                        ),
+                        left_brace: Span {
+                            line: 18,
+                            column: 24,
+                            position: 223,
+                        },
                         inner: [],
-                        right_brace: Span(
-                            18,
-                            25,
-                        ),
+                        right_brace: Span {
+                            line: 18,
+                            column: 25,
+                            position: 224,
+                        },
                     },
                 ),
             ),

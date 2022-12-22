@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Function(
         Function {
@@ -11,96 +12,107 @@
                 comments: [],
             },
             attributes: [],
-            function: Span(
-                3,
-                1,
-            ),
+            function: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    10,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 10,
+                    position: 16,
+                },
                 value: "foo",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    3,
-                    13,
-                ),
+                left_parenthesis: Span {
+                    line: 3,
+                    column: 13,
+                    position: 19,
+                },
                 parameters: CommaSeparated {
                     inner: [
                         FunctionParameter {
                             comments: CommentGroup {
                                 comments: [
                                     Comment {
-                                        span: Span(
-                                            5,
-                                            1,
-                                        ),
+                                        span: Span {
+                                            line: 5,
+                                            column: 1,
+                                            position: 27,
+                                        },
                                         format: HashMark,
                                         content: "#if __PHP__",
                                     },
                                     Comment {
-                                        span: Span(
-                                            7,
-                                            1,
-                                        ),
+                                        span: Span {
+                                            line: 7,
+                                            column: 1,
+                                            position: 41,
+                                        },
                                         format: HashMark,
                                         content: "#endif",
                                     },
                                 ],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    8,
-                                    1,
-                                ),
+                                span: Span {
+                                    line: 8,
+                                    column: 1,
+                                    position: 48,
+                                },
                                 name: "$bodies",
                             },
                             attributes: [],
                             data_type: Some(
                                 Array(
-                                    Span(
-                                        4,
-                                        1,
-                                    ),
+                                    Span {
+                                        line: 4,
+                                        column: 1,
+                                        position: 21,
+                                    },
                                 ),
                             ),
                             ellipsis: None,
                             default: None,
                             ampersand: Some(
-                                Span(
-                                    8,
-                                    1,
-                                ),
+                                Span {
+                                    line: 8,
+                                    column: 1,
+                                    position: 48,
+                                },
                             ),
                         },
                     ],
                     commas: [],
                 },
-                right_parenthesis: Span(
-                    9,
-                    1,
-                ),
+                right_parenthesis: Span {
+                    line: 9,
+                    column: 1,
+                    position: 56,
+                },
             },
             return_type: None,
             body: FunctionBody {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    10,
-                    1,
-                ),
+                left_brace: Span {
+                    line: 10,
+                    column: 1,
+                    position: 58,
+                },
                 statements: [],
-                right_brace: Span(
-                    11,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 11,
+                    column: 1,
+                    position: 60,
+                },
             },
         },
     ),

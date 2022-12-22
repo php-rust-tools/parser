@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Function(
         Function {
@@ -11,54 +12,60 @@
                 comments: [],
             },
             attributes: [],
-            function: Span(
-                3,
-                1,
-            ),
+            function: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    10,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 10,
+                    position: 16,
+                },
                 value: "foo",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    3,
-                    13,
-                ),
+                left_parenthesis: Span {
+                    line: 3,
+                    column: 13,
+                    position: 19,
+                },
                 parameters: CommaSeparated {
                     inner: [],
                     commas: [],
                 },
-                right_parenthesis: Span(
-                    3,
-                    14,
-                ),
+                right_parenthesis: Span {
+                    line: 3,
+                    column: 14,
+                    position: 20,
+                },
             },
             return_type: None,
             body: FunctionBody {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    3,
-                    16,
-                ),
+                left_brace: Span {
+                    line: 3,
+                    column: 16,
+                    position: 22,
+                },
                 statements: [
                     Static {
                         vars: [
                             StaticVar {
                                 var: SimpleVariable(
                                     SimpleVariable {
-                                        span: Span(
-                                            4,
-                                            12,
-                                        ),
+                                        span: Span {
+                                            line: 4,
+                                            column: 12,
+                                            position: 35,
+                                        },
                                         name: "$a",
                                     },
                                 ),
@@ -67,10 +74,11 @@
                             StaticVar {
                                 var: SimpleVariable(
                                     SimpleVariable {
-                                        span: Span(
-                                            4,
-                                            16,
-                                        ),
+                                        span: Span {
+                                            line: 4,
+                                            column: 16,
+                                            position: 39,
+                                        },
                                         name: "$b",
                                     },
                                 ),
@@ -79,10 +87,11 @@
                         ],
                     },
                 ],
-                right_brace: Span(
-                    5,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 5,
+                    column: 1,
+                    position: 43,
+                },
             },
         },
     ),

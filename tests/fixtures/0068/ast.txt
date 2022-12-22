@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Class(
         Class {
@@ -11,24 +12,27 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                2,
-                1,
-            ),
+            class: Span {
+                line: 2,
+                column: 1,
+                position: 6,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    2,
-                    7,
-                ),
+                span: Span {
+                    line: 2,
+                    column: 7,
+                    position: 12,
+                },
                 value: "MyClass",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    2,
-                    15,
-                ),
+                left_brace: Span {
+                    line: 2,
+                    column: 15,
+                    position: 20,
+                },
                 members: [
                     Property(
                         Property {
@@ -36,10 +40,11 @@
                             modifiers: PropertyModifierGroup {
                                 modifiers: [
                                     Protected(
-                                        Span(
-                                            3,
-                                            5,
-                                        ),
+                                        Span {
+                                            line: 3,
+                                            column: 5,
+                                            position: 26,
+                                        },
                                     ),
                                 ],
                             },
@@ -47,25 +52,28 @@
                             entries: [
                                 Uninitialized {
                                     variable: SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            15,
-                                        ),
+                                        span: Span {
+                                            line: 3,
+                                            column: 15,
+                                            position: 36,
+                                        },
                                         name: "$a",
                                     },
                                 },
                             ],
-                            end: Span(
-                                3,
-                                17,
-                            ),
+                            end: Span {
+                                line: 3,
+                                column: 17,
+                                position: 38,
+                            },
                         },
                     ),
                 ],
-                right_brace: Span(
-                    5,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 5,
+                    column: 1,
+                    position: 58,
+                },
             },
         },
     ),

@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Class(
         Class {
@@ -11,60 +12,68 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                3,
-                1,
-            ),
+            class: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    7,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 7,
+                    position: 13,
+                },
                 value: "Foo",
             },
             extends: None,
             implements: Some(
                 ClassImplements {
-                    implements: Span(
-                        3,
-                        11,
-                    ),
+                    implements: Span {
+                        line: 3,
+                        column: 11,
+                        position: 17,
+                    },
                     interfaces: CommaSeparated {
                         inner: [
                             SimpleIdentifier {
-                                span: Span(
-                                    3,
-                                    22,
-                                ),
+                                span: Span {
+                                    line: 3,
+                                    column: 22,
+                                    position: 28,
+                                },
                                 value: "Bar",
                             },
                             SimpleIdentifier {
-                                span: Span(
-                                    3,
-                                    27,
-                                ),
+                                span: Span {
+                                    line: 3,
+                                    column: 27,
+                                    position: 33,
+                                },
                                 value: "Baz",
                             },
                         ],
                         commas: [
-                            Span(
-                                3,
-                                25,
-                            ),
+                            Span {
+                                line: 3,
+                                column: 25,
+                                position: 31,
+                            },
                         ],
                     },
                 },
             ),
             body: ClassBody {
-                left_brace: Span(
-                    3,
-                    31,
-                ),
+                left_brace: Span {
+                    line: 3,
+                    column: 31,
+                    position: 37,
+                },
                 members: [],
-                right_brace: Span(
-                    3,
-                    32,
-                ),
+                right_brace: Span {
+                    line: 3,
+                    column: 32,
+                    position: 38,
+                },
             },
         },
     ),

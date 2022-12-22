@@ -4,7 +4,6 @@ use crate::lexer::token::Span;
 pub struct Source<'a> {
     input: &'a [u8],
     length: usize,
-    cursor: usize,
     span: Span,
 }
 
@@ -16,8 +15,7 @@ impl<'a> Source<'a> {
         Self {
             input,
             length,
-            cursor: 0,
-            span: Span(1, 1),
+            span: Span::new(1, 1, 0),
         }
     }
 
@@ -26,21 +24,21 @@ impl<'a> Source<'a> {
     }
 
     pub const fn eof(&self) -> bool {
-        self.cursor >= self.length
+        self.span.position >= self.length
     }
 
     pub fn next(&mut self) {
         if !self.eof() {
-            match self.input[self.cursor] {
+            match self.input[self.span.position] {
                 b'\n' => {
-                    self.span.0 += 1;
-                    self.span.1 = 1;
+                    self.span.line += 1;
+                    self.span.column = 1;
                 }
-                _ => self.span.1 += 1,
+                _ => self.span.column += 1,
             }
         }
 
-        self.cursor += 1;
+        self.span.position += 1;
     }
 
     pub fn skip(&mut self, count: usize) {
@@ -58,10 +56,10 @@ impl<'a> Source<'a> {
     }
 
     pub fn current(&self) -> Option<&'a u8> {
-        if self.cursor >= self.length {
+        if self.span.position >= self.length {
             None
         } else {
-            Some(&self.input[self.cursor])
+            Some(&self.input[self.span.position])
         }
     }
 
@@ -73,10 +71,10 @@ impl<'a> Source<'a> {
 
     #[inline(always)]
     pub fn read_remaining(&self) -> &'a [u8] {
-        &self.input[(if self.cursor >= self.length {
+        &self.input[(if self.span.position >= self.length {
             self.length
         } else {
-            self.cursor
+            self.span.position
         })..]
     }
 
@@ -93,7 +91,7 @@ impl<'a> Source<'a> {
     }
 
     pub fn peek(&self, i: usize, n: usize) -> &'a [u8] {
-        let from = self.cursor + i;
+        let from = self.span.position + i;
         if from >= self.length {
             return &self.input[self.length..self.length];
         }
@@ -126,16 +124,16 @@ impl<'a> Source<'a> {
     }
 
     const fn to_bound(&self, n: usize) -> (usize, usize) {
-        if self.cursor >= self.length {
+        if self.span.position >= self.length {
             return (self.length, self.length);
         }
 
-        let mut until = self.cursor + n;
+        let mut until = self.span.position + n;
 
         if until >= self.length {
             until = self.length;
         }
 
-        (self.cursor, until)
+        (self.span.position, until)
     }
 }

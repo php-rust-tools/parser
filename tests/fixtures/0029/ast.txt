@@ -1,44 +1,49 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: PropertyFetch {
             target: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            1,
-                            7,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 7,
+                            position: 6,
+                        },
                         name: "$foo",
                     },
                 ),
             ),
-            arrow: Span(
-                1,
-                11,
-            ),
+            arrow: Span {
+                line: 1,
+                column: 11,
+                position: 10,
+            },
             property: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            1,
-                            13,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 13,
+                            position: 12,
+                        },
                         value: "bar",
                     },
                 ),
             ),
         },
         ending: Semicolon(
-            Span(
-                1,
-                16,
-            ),
+            Span {
+                line: 1,
+                column: 16,
+                position: 15,
+            },
         ),
     },
     Expression {
@@ -47,51 +52,57 @@
                 target: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                1,
-                                18,
-                            ),
+                            span: Span {
+                                line: 1,
+                                column: 18,
+                                position: 17,
+                            },
                             name: "$foo",
                         },
                     ),
                 ),
-                arrow: Span(
-                    1,
-                    22,
-                ),
+                arrow: Span {
+                    line: 1,
+                    column: 22,
+                    position: 21,
+                },
                 property: Identifier(
                     SimpleIdentifier(
                         SimpleIdentifier {
-                            span: Span(
-                                1,
-                                24,
-                            ),
+                            span: Span {
+                                line: 1,
+                                column: 24,
+                                position: 23,
+                            },
                             value: "bar",
                         },
                     ),
                 ),
             },
-            arrow: Span(
-                1,
-                27,
-            ),
+            arrow: Span {
+                line: 1,
+                column: 27,
+                position: 26,
+            },
             property: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            1,
-                            29,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 29,
+                            position: 28,
+                        },
                         value: "baz",
                     },
                 ),
             ),
         },
         ending: Semicolon(
-            Span(
-                1,
-                32,
-            ),
+            Span {
+                line: 1,
+                column: 32,
+                position: 31,
+            },
         ),
     },
 ]

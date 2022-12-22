@@ -356,49 +356,6 @@ impl Lexer {
                 state.source.next();
                 (TokenKind::NamespaceSeparator, b"\\".into())
             }
-            [b @ ident_start!(), ..] => {
-                state.source.next();
-                let mut qualified = false;
-                let mut last_was_slash = false;
-
-                let mut buffer = vec![*b];
-                while let Some(next @ ident!() | next @ b'\\') = state.source.current() {
-                    if matches!(next, ident!()) {
-                        buffer.push(*next);
-                        state.source.next();
-                        last_was_slash = false;
-                        continue;
-                    }
-
-                    if *next == b'\\' && !last_was_slash {
-                        qualified = true;
-                        last_was_slash = true;
-                        buffer.push(*next);
-                        state.source.next();
-                        continue;
-                    }
-
-                    break;
-                }
-
-                if qualified {
-                    (TokenKind::QualifiedIdentifier, buffer.into())
-                } else {
-                    let kind = identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier);
-
-                    if kind == TokenKind::HaltCompiler {
-                        match state.source.read(3) {
-                            [b'(', b')', b';'] => {
-                                state.source.skip(3);
-                                state.replace(StackFrame::Halted);
-                            }
-                            _ => return Err(SyntaxError::InvalidHaltCompiler(state.source.span())),
-                        }
-                    }
-
-                    (kind, buffer.into())
-                }
-            }
             [b'/', b'*', ..] => {
                 state.source.next();
                 let mut buffer = vec![b'/'];
@@ -825,11 +782,54 @@ impl Lexer {
                 state.source.next();
                 (TokenKind::BitwiseNot, b"~".into())
             }
+            [b @ ident_start!(), ..] => {
+                state.source.next();
+                let mut qualified = false;
+                let mut last_was_slash = false;
+
+                let mut buffer = vec![*b];
+                while let Some(next @ ident!() | next @ b'\\') = state.source.current() {
+                    if matches!(next, ident!()) {
+                        buffer.push(*next);
+                        state.source.next();
+                        last_was_slash = false;
+                        continue;
+                    }
+
+                    if *next == b'\\' && !last_was_slash {
+                        qualified = true;
+                        last_was_slash = true;
+                        buffer.push(*next);
+                        state.source.next();
+                        continue;
+                    }
+
+                    break;
+                }
+
+                if qualified {
+                    (TokenKind::QualifiedIdentifier, buffer.into())
+                } else {
+                    let kind = identifier_to_keyword(&buffer).unwrap_or(TokenKind::Identifier);
+
+                    if kind == TokenKind::HaltCompiler {
+                        match state.source.read(3) {
+                            [b'(', b')', b';'] => {
+                                state.source.skip(3);
+                                state.replace(StackFrame::Halted);
+                            }
+                            _ => return Err(SyntaxError::InvalidHaltCompiler(state.source.span())),
+                        }
+                    }
+
+                    (kind, buffer.into())
+                }
+            }
             [b, ..] => unimplemented!(
                 "<scripting> char: {}, line: {}, col: {}",
                 *b as char,
-                state.source.span().0,
-                state.source.span().1
+                state.source.span().line,
+                state.source.span().column
             ),
             // We should never reach this point since we have the empty checks surrounding
             // the call to this function, but it's better to be safe than sorry.

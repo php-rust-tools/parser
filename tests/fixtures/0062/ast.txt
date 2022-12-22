@@ -1,59 +1,67 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: New {
-            new: Span(
-                1,
-                7,
-            ),
+            new: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
             target: AnonymousClass(
                 AnonymousClass {
                     attributes: [],
-                    class: Span(
-                        1,
-                        11,
-                    ),
+                    class: Span {
+                        line: 1,
+                        column: 11,
+                        position: 10,
+                    },
                     extends: Some(
                         ClassExtends {
-                            extends: Span(
-                                1,
-                                17,
-                            ),
+                            extends: Span {
+                                line: 1,
+                                column: 17,
+                                position: 16,
+                            },
                             parent: SimpleIdentifier {
-                                span: Span(
-                                    1,
-                                    25,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 25,
+                                    position: 24,
+                                },
                                 value: "Foo",
                             },
                         },
                     ),
                     implements: None,
                     body: AnonymousClassBody {
-                        left_brace: Span(
-                            1,
-                            29,
-                        ),
+                        left_brace: Span {
+                            line: 1,
+                            column: 29,
+                            position: 28,
+                        },
                         members: [],
-                        right_brace: Span(
-                            1,
-                            30,
-                        ),
+                        right_brace: Span {
+                            line: 1,
+                            column: 30,
+                            position: 29,
+                        },
                     },
                 },
             ),
             arguments: None,
         },
         ending: Semicolon(
-            Span(
-                1,
-                31,
-            ),
+            Span {
+                line: 1,
+                column: 31,
+                position: 30,
+            },
         ),
     },
 ]

@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Class(
         Class {
@@ -11,43 +12,49 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                3,
-                1,
-            ),
+            class: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    7,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 7,
+                    position: 13,
+                },
                 value: "Foo",
             },
             extends: Some(
                 ClassExtends {
-                    extends: Span(
-                        3,
-                        11,
-                    ),
+                    extends: Span {
+                        line: 3,
+                        column: 11,
+                        position: 17,
+                    },
                     parent: SimpleIdentifier {
-                        span: Span(
-                            3,
-                            19,
-                        ),
+                        span: Span {
+                            line: 3,
+                            column: 19,
+                            position: 25,
+                        },
                         value: "Bar",
                     },
                 },
             ),
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    3,
-                    23,
-                ),
+                left_brace: Span {
+                    line: 3,
+                    column: 23,
+                    position: 29,
+                },
                 members: [],
-                right_brace: Span(
-                    3,
-                    24,
-                ),
+                right_brace: Span {
+                    line: 3,
+                    column: 24,
+                    position: 30,
+                },
             },
         },
     ),

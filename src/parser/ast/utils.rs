@@ -22,14 +22,6 @@ pub struct Braced<T> {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Bracketed<T> {
-    pub left_bracket: Span, // `[`
-    pub inner: T,
-    pub right_bracket: Span, // `]`
-}
-
-#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
 pub struct SemicolonTerminated<T> {
     pub inner: T,
     pub semicolon: Span, // `;`

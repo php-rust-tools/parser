@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: AssignmentOperation(
@@ -11,36 +12,40 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                4,
-                                1,
-                            ),
+                            span: Span {
+                                line: 4,
+                                column: 1,
+                                position: 8,
+                            },
                             name: "$a",
                         },
                     ),
                 ),
-                equals: Span(
-                    4,
-                    4,
-                ),
+                equals: Span {
+                    line: 4,
+                    column: 4,
+                    position: 11,
+                },
                 right: Literal(
                     Integer(
                         LiteralInteger {
                             value: "4",
-                            span: Span(
-                                4,
-                                6,
-                            ),
+                            span: Span {
+                                line: 4,
+                                column: 6,
+                                position: 13,
+                            },
                         },
                     ),
                 ),
             },
         ),
         ending: Semicolon(
-            Span(
-                4,
-                7,
-            ),
+            Span {
+                line: 4,
+                column: 7,
+                position: 14,
+            },
         ),
     },
     Expression {
@@ -49,43 +54,49 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                6,
-                                1,
-                            ),
+                            span: Span {
+                                line: 6,
+                                column: 1,
+                                position: 17,
+                            },
                             name: "$b",
                         },
                     ),
                 ),
-                equals: Span(
-                    6,
-                    4,
-                ),
+                equals: Span {
+                    line: 6,
+                    column: 4,
+                    position: 20,
+                },
                 right: Match {
-                    keyword: Span(
-                        6,
-                        6,
-                    ),
+                    keyword: Span {
+                        line: 6,
+                        column: 6,
+                        position: 22,
+                    },
                     condition: Parenthesized {
-                        left_parenthesis: Span(
-                            6,
-                            12,
-                        ),
+                        left_parenthesis: Span {
+                            line: 6,
+                            column: 12,
+                            position: 28,
+                        },
                         inner: Variable(
                             SimpleVariable(
                                 SimpleVariable {
-                                    span: Span(
-                                        6,
-                                        13,
-                                    ),
+                                    span: Span {
+                                        line: 6,
+                                        column: 13,
+                                        position: 29,
+                                    },
                                     name: "$a",
                                 },
                             ),
                         ),
-                        right_parenthesis: Span(
-                            6,
-                            15,
-                        ),
+                        right_parenthesis: Span {
+                            line: 6,
+                            column: 15,
+                            position: 31,
+                        },
                     },
                     default: None,
                     arms: [
@@ -95,10 +106,11 @@
                                     Integer(
                                         LiteralInteger {
                                             value: "1",
-                                            span: Span(
-                                                7,
-                                                5,
-                                            ),
+                                            span: Span {
+                                                line: 7,
+                                                column: 5,
+                                                position: 39,
+                                            },
                                         },
                                     ),
                                 ),
@@ -106,10 +118,11 @@
                                     Integer(
                                         LiteralInteger {
                                             value: "2",
-                                            span: Span(
-                                                7,
-                                                7,
-                                            ),
+                                            span: Span {
+                                                line: 7,
+                                                column: 7,
+                                                position: 41,
+                                            },
                                         },
                                     ),
                                 ),
@@ -117,10 +130,11 @@
                                     Integer(
                                         LiteralInteger {
                                             value: "3",
-                                            span: Span(
-                                                7,
-                                                9,
-                                            ),
+                                            span: Span {
+                                                line: 7,
+                                                column: 9,
+                                                position: 43,
+                                            },
                                         },
                                     ),
                                 ),
@@ -128,18 +142,20 @@
                                     Integer(
                                         LiteralInteger {
                                             value: "4",
-                                            span: Span(
-                                                7,
-                                                11,
-                                            ),
+                                            span: Span {
+                                                line: 7,
+                                                column: 11,
+                                                position: 45,
+                                            },
                                         },
                                     ),
                                 ),
                             ],
-                            arrow: Span(
-                                7,
-                                14,
-                            ),
+                            arrow: Span {
+                                line: 7,
+                                column: 14,
+                                position: 48,
+                            },
                             body: Null,
                         },
                     ],
@@ -147,10 +163,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                8,
-                2,
-            ),
+            Span {
+                line: 8,
+                column: 2,
+                position: 58,
+            },
         ),
     },
 ]

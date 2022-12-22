@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Class(
         Class {
@@ -11,112 +12,128 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                4,
-                1,
-            ),
+            class: Span {
+                line: 4,
+                column: 1,
+                position: 9,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    4,
-                    7,
-                ),
+                span: Span {
+                    line: 4,
+                    column: 7,
+                    position: 15,
+                },
                 value: "enum",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    4,
-                    12,
-                ),
+                left_brace: Span {
+                    line: 4,
+                    column: 12,
+                    position: 20,
+                },
                 members: [],
-                right_brace: Span(
-                    4,
-                    13,
-                ),
+                right_brace: Span {
+                    line: 4,
+                    column: 13,
+                    position: 21,
+                },
             },
         },
     ),
     Interface(
         Interface {
             attributes: [],
-            interface: Span(
-                5,
-                1,
-            ),
+            interface: Span {
+                line: 5,
+                column: 1,
+                position: 23,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    5,
-                    11,
-                ),
+                span: Span {
+                    line: 5,
+                    column: 11,
+                    position: 33,
+                },
                 value: "enum",
             },
             extends: None,
             body: InterfaceBody {
-                left_brace: Span(
-                    5,
-                    16,
-                ),
+                left_brace: Span {
+                    line: 5,
+                    column: 16,
+                    position: 38,
+                },
                 members: [],
-                right_brace: Span(
-                    5,
-                    17,
-                ),
+                right_brace: Span {
+                    line: 5,
+                    column: 17,
+                    position: 39,
+                },
             },
         },
     ),
     Trait(
         Trait {
-            trait: Span(
-                6,
-                1,
-            ),
+            trait: Span {
+                line: 6,
+                column: 1,
+                position: 41,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    6,
-                    7,
-                ),
+                span: Span {
+                    line: 6,
+                    column: 7,
+                    position: 47,
+                },
                 value: "enum",
             },
             attributes: [],
             body: TraitBody {
-                left_brace: Span(
-                    6,
-                    12,
-                ),
+                left_brace: Span {
+                    line: 6,
+                    column: 12,
+                    position: 52,
+                },
                 members: [],
-                right_brace: Span(
-                    6,
-                    13,
-                ),
+                right_brace: Span {
+                    line: 6,
+                    column: 13,
+                    position: 53,
+                },
             },
         },
     ),
     UnitEnum(
         UnitEnum {
             attributes: [],
-            enum: Span(
-                7,
-                1,
-            ),
+            enum: Span {
+                line: 7,
+                column: 1,
+                position: 55,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    7,
-                    6,
-                ),
+                span: Span {
+                    line: 7,
+                    column: 6,
+                    position: 60,
+                },
                 value: "enum",
             },
             implements: [],
             body: UnitEnumBody {
-                left_brace: Span(
-                    7,
-                    11,
-                ),
+                left_brace: Span {
+                    line: 7,
+                    column: 11,
+                    position: 65,
+                },
                 members: [],
-                right_brace: Span(
-                    7,
-                    12,
-                ),
+                right_brace: Span {
+                    line: 7,
+                    column: 12,
+                    position: 66,
+                },
             },
         },
     ),
@@ -126,46 +143,52 @@
                 comments: [],
             },
             attributes: [],
-            function: Span(
-                8,
-                1,
-            ),
+            function: Span {
+                line: 8,
+                column: 1,
+                position: 68,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    8,
-                    10,
-                ),
+                span: Span {
+                    line: 8,
+                    column: 10,
+                    position: 77,
+                },
                 value: "enum",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    8,
-                    14,
-                ),
+                left_parenthesis: Span {
+                    line: 8,
+                    column: 14,
+                    position: 81,
+                },
                 parameters: CommaSeparated {
                     inner: [],
                     commas: [],
                 },
-                right_parenthesis: Span(
-                    8,
-                    15,
-                ),
+                right_parenthesis: Span {
+                    line: 8,
+                    column: 15,
+                    position: 82,
+                },
             },
             return_type: Some(
                 ReturnType {
-                    colon: Span(
-                        8,
-                        16,
-                    ),
+                    colon: Span {
+                        line: 8,
+                        column: 16,
+                        position: 83,
+                    },
                     data_type: Named(
-                        Span(
-                            8,
-                            18,
-                        ),
+                        Span {
+                            line: 8,
+                            column: 18,
+                            position: 85,
+                        },
                         "enum",
                     ),
                 },
@@ -174,15 +197,17 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    8,
-                    23,
-                ),
+                left_brace: Span {
+                    line: 8,
+                    column: 23,
+                    position: 90,
+                },
                 statements: [],
-                right_brace: Span(
-                    8,
-                    24,
-                ),
+                right_brace: Span {
+                    line: 8,
+                    column: 24,
+                    position: 91,
+                },
             },
         },
     ),
@@ -192,112 +217,128 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                10,
-                1,
-            ),
+            class: Span {
+                line: 10,
+                column: 1,
+                position: 94,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    10,
-                    7,
-                ),
+                span: Span {
+                    line: 10,
+                    column: 7,
+                    position: 100,
+                },
                 value: "from",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    10,
-                    12,
-                ),
+                left_brace: Span {
+                    line: 10,
+                    column: 12,
+                    position: 105,
+                },
                 members: [],
-                right_brace: Span(
-                    10,
-                    13,
-                ),
+                right_brace: Span {
+                    line: 10,
+                    column: 13,
+                    position: 106,
+                },
             },
         },
     ),
     Interface(
         Interface {
             attributes: [],
-            interface: Span(
-                11,
-                1,
-            ),
+            interface: Span {
+                line: 11,
+                column: 1,
+                position: 108,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    11,
-                    11,
-                ),
+                span: Span {
+                    line: 11,
+                    column: 11,
+                    position: 118,
+                },
                 value: "from",
             },
             extends: None,
             body: InterfaceBody {
-                left_brace: Span(
-                    11,
-                    16,
-                ),
+                left_brace: Span {
+                    line: 11,
+                    column: 16,
+                    position: 123,
+                },
                 members: [],
-                right_brace: Span(
-                    11,
-                    17,
-                ),
+                right_brace: Span {
+                    line: 11,
+                    column: 17,
+                    position: 124,
+                },
             },
         },
     ),
     Trait(
         Trait {
-            trait: Span(
-                12,
-                1,
-            ),
+            trait: Span {
+                line: 12,
+                column: 1,
+                position: 126,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    12,
-                    7,
-                ),
+                span: Span {
+                    line: 12,
+                    column: 7,
+                    position: 132,
+                },
                 value: "from",
             },
             attributes: [],
             body: TraitBody {
-                left_brace: Span(
-                    12,
-                    12,
-                ),
+                left_brace: Span {
+                    line: 12,
+                    column: 12,
+                    position: 137,
+                },
                 members: [],
-                right_brace: Span(
-                    12,
-                    13,
-                ),
+                right_brace: Span {
+                    line: 12,
+                    column: 13,
+                    position: 138,
+                },
             },
         },
     ),
     UnitEnum(
         UnitEnum {
             attributes: [],
-            enum: Span(
-                13,
-                1,
-            ),
+            enum: Span {
+                line: 13,
+                column: 1,
+                position: 140,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    13,
-                    6,
-                ),
+                span: Span {
+                    line: 13,
+                    column: 6,
+                    position: 145,
+                },
                 value: "from",
             },
             implements: [],
             body: UnitEnumBody {
-                left_brace: Span(
-                    13,
-                    11,
-                ),
+                left_brace: Span {
+                    line: 13,
+                    column: 11,
+                    position: 150,
+                },
                 members: [],
-                right_brace: Span(
-                    13,
-                    12,
-                ),
+                right_brace: Span {
+                    line: 13,
+                    column: 12,
+                    position: 151,
+                },
             },
         },
     ),
@@ -307,46 +348,52 @@
                 comments: [],
             },
             attributes: [],
-            function: Span(
-                14,
-                1,
-            ),
+            function: Span {
+                line: 14,
+                column: 1,
+                position: 153,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    14,
-                    10,
-                ),
+                span: Span {
+                    line: 14,
+                    column: 10,
+                    position: 162,
+                },
                 value: "from",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    14,
-                    14,
-                ),
+                left_parenthesis: Span {
+                    line: 14,
+                    column: 14,
+                    position: 166,
+                },
                 parameters: CommaSeparated {
                     inner: [],
                     commas: [],
                 },
-                right_parenthesis: Span(
-                    14,
-                    15,
-                ),
+                right_parenthesis: Span {
+                    line: 14,
+                    column: 15,
+                    position: 167,
+                },
             },
             return_type: Some(
                 ReturnType {
-                    colon: Span(
-                        14,
-                        16,
-                    ),
+                    colon: Span {
+                        line: 14,
+                        column: 16,
+                        position: 168,
+                    },
                     data_type: Named(
-                        Span(
-                            14,
-                            18,
-                        ),
+                        Span {
+                            line: 14,
+                            column: 18,
+                            position: 170,
+                        },
                         "from",
                     ),
                 },
@@ -355,15 +402,17 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    14,
-                    23,
-                ),
+                left_brace: Span {
+                    line: 14,
+                    column: 23,
+                    position: 175,
+                },
                 statements: [],
-                right_brace: Span(
-                    14,
-                    24,
-                ),
+                right_brace: Span {
+                    line: 14,
+                    column: 24,
+                    position: 176,
+                },
             },
         },
     ),
@@ -372,10 +421,11 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            16,
-                            1,
-                        ),
+                        span: Span {
+                            line: 16,
+                            column: 1,
+                            position: 179,
+                        },
                         value: "from",
                     },
                 ),
@@ -384,22 +434,25 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    16,
-                    5,
-                ),
+                left_parenthesis: Span {
+                    line: 16,
+                    column: 5,
+                    position: 183,
+                },
                 arguments: [],
-                right_parenthesis: Span(
-                    16,
-                    6,
-                ),
+                right_parenthesis: Span {
+                    line: 16,
+                    column: 6,
+                    position: 184,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                16,
-                7,
-            ),
+            Span {
+                line: 16,
+                column: 7,
+                position: 185,
+            },
         ),
     },
     Expression {
@@ -407,10 +460,11 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            17,
-                            1,
-                        ),
+                        span: Span {
+                            line: 17,
+                            column: 1,
+                            position: 187,
+                        },
                         value: "enum",
                     },
                 ),
@@ -419,22 +473,25 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    17,
-                    5,
-                ),
+                left_parenthesis: Span {
+                    line: 17,
+                    column: 5,
+                    position: 191,
+                },
                 arguments: [],
-                right_parenthesis: Span(
-                    17,
-                    6,
-                ),
+                right_parenthesis: Span {
+                    line: 17,
+                    column: 6,
+                    position: 192,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                17,
-                7,
-            ),
+            Span {
+                line: 17,
+                column: 7,
+                position: 193,
+            },
         ),
     },
     Expression {
@@ -442,10 +499,11 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            19,
-                            1,
-                        ),
+                        span: Span {
+                            line: 19,
+                            column: 1,
+                            position: 196,
+                        },
                         value: "frOm",
                     },
                 ),
@@ -454,22 +512,25 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    19,
-                    5,
-                ),
+                left_parenthesis: Span {
+                    line: 19,
+                    column: 5,
+                    position: 200,
+                },
                 arguments: [],
-                right_parenthesis: Span(
-                    19,
-                    6,
-                ),
+                right_parenthesis: Span {
+                    line: 19,
+                    column: 6,
+                    position: 201,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                19,
-                7,
-            ),
+            Span {
+                line: 19,
+                column: 7,
+                position: 202,
+            },
         ),
     },
     Expression {
@@ -477,10 +538,11 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            20,
-                            1,
-                        ),
+                        span: Span {
+                            line: 20,
+                            column: 1,
+                            position: 204,
+                        },
                         value: "eNum",
                     },
                 ),
@@ -489,22 +551,25 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    20,
-                    5,
-                ),
+                left_parenthesis: Span {
+                    line: 20,
+                    column: 5,
+                    position: 208,
+                },
                 arguments: [],
-                right_parenthesis: Span(
-                    20,
-                    6,
-                ),
+                right_parenthesis: Span {
+                    line: 20,
+                    column: 6,
+                    position: 209,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                20,
-                7,
-            ),
+            Span {
+                line: 20,
+                column: 7,
+                position: 210,
+            },
         ),
     },
     Expression {
@@ -512,25 +577,28 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            22,
-                            1,
-                        ),
+                        span: Span {
+                            line: 22,
+                            column: 1,
+                            position: 213,
+                        },
                         value: "Enum",
                     },
                 ),
             ),
-            double_colon: Span(
-                22,
-                5,
-            ),
+            double_colon: Span {
+                line: 22,
+                column: 5,
+                position: 217,
+            },
             method: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            22,
-                            7,
-                        ),
+                        span: Span {
+                            line: 22,
+                            column: 7,
+                            position: 219,
+                        },
                         value: "foo",
                     },
                 ),
@@ -539,22 +607,25 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    22,
-                    10,
-                ),
+                left_parenthesis: Span {
+                    line: 22,
+                    column: 10,
+                    position: 222,
+                },
                 arguments: [],
-                right_parenthesis: Span(
-                    22,
-                    11,
-                ),
+                right_parenthesis: Span {
+                    line: 22,
+                    column: 11,
+                    position: 223,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                22,
-                12,
-            ),
+            Span {
+                line: 22,
+                column: 12,
+                position: 224,
+            },
         ),
     },
     Expression {
@@ -562,25 +633,28 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            23,
-                            1,
-                        ),
+                        span: Span {
+                            line: 23,
+                            column: 1,
+                            position: 226,
+                        },
                         value: "From",
                     },
                 ),
             ),
-            double_colon: Span(
-                23,
-                5,
-            ),
+            double_colon: Span {
+                line: 23,
+                column: 5,
+                position: 230,
+            },
             method: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            23,
-                            7,
-                        ),
+                        span: Span {
+                            line: 23,
+                            column: 7,
+                            position: 232,
+                        },
                         value: "foo",
                     },
                 ),
@@ -589,22 +663,25 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    23,
-                    10,
-                ),
+                left_parenthesis: Span {
+                    line: 23,
+                    column: 10,
+                    position: 235,
+                },
                 arguments: [],
-                right_parenthesis: Span(
-                    23,
-                    11,
-                ),
+                right_parenthesis: Span {
+                    line: 23,
+                    column: 11,
+                    position: 236,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                23,
-                12,
-            ),
+            Span {
+                line: 23,
+                column: 12,
+                position: 237,
+            },
         ),
     },
     Expression {
@@ -612,25 +689,28 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            25,
-                            1,
-                        ),
+                        span: Span {
+                            line: 25,
+                            column: 1,
+                            position: 240,
+                        },
                         value: "enum",
                     },
                 ),
             ),
-            double_colon: Span(
-                25,
-                5,
-            ),
+            double_colon: Span {
+                line: 25,
+                column: 5,
+                position: 244,
+            },
             method: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            25,
-                            7,
-                        ),
+                        span: Span {
+                            line: 25,
+                            column: 7,
+                            position: 246,
+                        },
                         value: "foo",
                     },
                 ),
@@ -639,22 +719,25 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    25,
-                    10,
-                ),
+                left_parenthesis: Span {
+                    line: 25,
+                    column: 10,
+                    position: 249,
+                },
                 arguments: [],
-                right_parenthesis: Span(
-                    25,
-                    11,
-                ),
+                right_parenthesis: Span {
+                    line: 25,
+                    column: 11,
+                    position: 250,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                25,
-                12,
-            ),
+            Span {
+                line: 25,
+                column: 12,
+                position: 251,
+            },
         ),
     },
     Expression {
@@ -662,25 +745,28 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            26,
-                            1,
-                        ),
+                        span: Span {
+                            line: 26,
+                            column: 1,
+                            position: 253,
+                        },
                         value: "from",
                     },
                 ),
             ),
-            double_colon: Span(
-                26,
-                5,
-            ),
+            double_colon: Span {
+                line: 26,
+                column: 5,
+                position: 257,
+            },
             method: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            26,
-                            7,
-                        ),
+                        span: Span {
+                            line: 26,
+                            column: 7,
+                            position: 259,
+                        },
                         value: "foo",
                     },
                 ),
@@ -689,22 +775,25 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    26,
-                    10,
-                ),
+                left_parenthesis: Span {
+                    line: 26,
+                    column: 10,
+                    position: 262,
+                },
                 arguments: [],
-                right_parenthesis: Span(
-                    26,
-                    11,
-                ),
+                right_parenthesis: Span {
+                    line: 26,
+                    column: 11,
+                    position: 263,
+                },
             },
         },
         ending: Semicolon(
-            Span(
-                26,
-                12,
-            ),
+            Span {
+                line: 26,
+                column: 12,
+                position: 264,
+            },
         ),
     },
     Expression {
@@ -712,35 +801,39 @@
             left: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            28,
-                            1,
-                        ),
+                        span: Span {
+                            line: 28,
+                            column: 1,
+                            position: 267,
+                        },
                         name: "$a",
                     },
                 ),
             ),
-            instanceof: Span(
-                28,
-                4,
-            ),
+            instanceof: Span {
+                line: 28,
+                column: 4,
+                position: 270,
+            },
             right: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            28,
-                            15,
-                        ),
+                        span: Span {
+                            line: 28,
+                            column: 15,
+                            position: 281,
+                        },
                         value: "enum",
                     },
                 ),
             ),
         },
         ending: Semicolon(
-            Span(
-                28,
-                19,
-            ),
+            Span {
+                line: 28,
+                column: 19,
+                position: 285,
+            },
         ),
     },
     Expression {
@@ -748,35 +841,39 @@
             left: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            29,
-                            1,
-                        ),
+                        span: Span {
+                            line: 29,
+                            column: 1,
+                            position: 287,
+                        },
                         name: "$a",
                     },
                 ),
             ),
-            instanceof: Span(
-                29,
-                4,
-            ),
+            instanceof: Span {
+                line: 29,
+                column: 4,
+                position: 290,
+            },
             right: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            29,
-                            15,
-                        ),
+                        span: Span {
+                            line: 29,
+                            column: 15,
+                            position: 301,
+                        },
                         value: "from",
                     },
                 ),
             ),
         },
         ending: Semicolon(
-            Span(
-                29,
-                19,
-            ),
+            Span {
+                line: 29,
+                column: 19,
+                position: 305,
+            },
         ),
     },
     Expression {
@@ -784,35 +881,39 @@
             left: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            31,
-                            1,
-                        ),
+                        span: Span {
+                            line: 31,
+                            column: 1,
+                            position: 308,
+                        },
                         name: "$a",
                     },
                 ),
             ),
-            instanceof: Span(
-                31,
-                4,
-            ),
+            instanceof: Span {
+                line: 31,
+                column: 4,
+                position: 311,
+            },
             right: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            31,
-                            15,
-                        ),
+                        span: Span {
+                            line: 31,
+                            column: 15,
+                            position: 322,
+                        },
                         value: "enum",
                     },
                 ),
             ),
         },
         ending: Semicolon(
-            Span(
-                31,
-                19,
-            ),
+            Span {
+                line: 31,
+                column: 19,
+                position: 326,
+            },
         ),
     },
     Expression {
@@ -820,35 +921,39 @@
             left: Variable(
                 SimpleVariable(
                     SimpleVariable {
-                        span: Span(
-                            32,
-                            1,
-                        ),
+                        span: Span {
+                            line: 32,
+                            column: 1,
+                            position: 328,
+                        },
                         name: "$a",
                     },
                 ),
             ),
-            instanceof: Span(
-                32,
-                4,
-            ),
+            instanceof: Span {
+                line: 32,
+                column: 4,
+                position: 331,
+            },
             right: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            32,
-                            15,
-                        ),
+                        span: Span {
+                            line: 32,
+                            column: 15,
+                            position: 342,
+                        },
                         value: "from",
                     },
                 ),
             ),
         },
         ending: Semicolon(
-            Span(
-                32,
-                19,
-            ),
+            Span {
+                line: 32,
+                column: 19,
+                position: 346,
+            },
         ),
     },
     Expression {
@@ -856,27 +961,30 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            34,
-                            1,
-                        ),
+                        span: Span {
+                            line: 34,
+                            column: 1,
+                            position: 349,
+                        },
                         value: "Enum",
                     },
                 ),
             ),
             constant: SimpleIdentifier {
-                span: Span(
-                    34,
-                    7,
-                ),
+                span: Span {
+                    line: 34,
+                    column: 7,
+                    position: 355,
+                },
                 value: "class",
             },
         },
         ending: Semicolon(
-            Span(
-                34,
-                12,
-            ),
+            Span {
+                line: 34,
+                column: 12,
+                position: 360,
+            },
         ),
     },
     Expression {
@@ -884,27 +992,30 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            35,
-                            1,
-                        ),
+                        span: Span {
+                            line: 35,
+                            column: 1,
+                            position: 362,
+                        },
                         value: "From",
                     },
                 ),
             ),
             constant: SimpleIdentifier {
-                span: Span(
-                    35,
-                    7,
-                ),
+                span: Span {
+                    line: 35,
+                    column: 7,
+                    position: 368,
+                },
                 value: "class",
             },
         },
         ending: Semicolon(
-            Span(
-                35,
-                12,
-            ),
+            Span {
+                line: 35,
+                column: 12,
+                position: 373,
+            },
         ),
     },
     Expression {
@@ -912,27 +1023,30 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            36,
-                            1,
-                        ),
+                        span: Span {
+                            line: 36,
+                            column: 1,
+                            position: 375,
+                        },
                         value: "enum",
                     },
                 ),
             ),
             constant: SimpleIdentifier {
-                span: Span(
-                    36,
-                    7,
-                ),
+                span: Span {
+                    line: 36,
+                    column: 7,
+                    position: 381,
+                },
                 value: "class",
             },
         },
         ending: Semicolon(
-            Span(
-                36,
-                12,
-            ),
+            Span {
+                line: 36,
+                column: 12,
+                position: 386,
+            },
         ),
     },
     Expression {
@@ -940,27 +1054,30 @@
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
-                        span: Span(
-                            37,
-                            1,
-                        ),
+                        span: Span {
+                            line: 37,
+                            column: 1,
+                            position: 388,
+                        },
                         value: "from",
                     },
                 ),
             ),
             constant: SimpleIdentifier {
-                span: Span(
-                    37,
-                    7,
-                ),
+                span: Span {
+                    line: 37,
+                    column: 7,
+                    position: 394,
+                },
                 value: "class",
             },
         },
         ending: Semicolon(
-            Span(
-                37,
-                12,
-            ),
+            Span {
+                line: 37,
+                column: 12,
+                position: 399,
+            },
         ),
     },
     GotoLabel(
@@ -969,16 +1086,18 @@
                 comments: [],
             },
             label: SimpleIdentifier {
-                span: Span(
-                    39,
-                    1,
-                ),
+                span: Span {
+                    line: 39,
+                    column: 1,
+                    position: 402,
+                },
                 value: "from",
             },
-            colon: Span(
-                39,
-                5,
-            ),
+            colon: Span {
+                line: 39,
+                column: 5,
+                position: 406,
+            },
         },
     ),
     Expression {
@@ -986,18 +1105,20 @@
             Integer(
                 LiteralInteger {
                     value: "12",
-                    span: Span(
-                        39,
-                        7,
-                    ),
+                    span: Span {
+                        line: 39,
+                        column: 7,
+                        position: 408,
+                    },
                 },
             ),
         ),
         ending: Semicolon(
-            Span(
-                39,
-                9,
-            ),
+            Span {
+                line: 39,
+                column: 9,
+                position: 410,
+            },
         ),
     },
     Goto(
@@ -1005,21 +1126,24 @@
             comments: CommentGroup {
                 comments: [],
             },
-            keyword: Span(
-                41,
-                1,
-            ),
+            keyword: Span {
+                line: 41,
+                column: 1,
+                position: 413,
+            },
             label: SimpleIdentifier {
-                span: Span(
-                    41,
-                    6,
-                ),
+                span: Span {
+                    line: 41,
+                    column: 6,
+                    position: 418,
+                },
                 value: "from",
             },
-            semicolon: Span(
-                41,
-                10,
-            ),
+            semicolon: Span {
+                line: 41,
+                column: 10,
+                position: 422,
+            },
         },
     ),
     GotoLabel(
@@ -1028,16 +1152,18 @@
                 comments: [],
             },
             label: SimpleIdentifier {
-                span: Span(
-                    43,
-                    1,
-                ),
+                span: Span {
+                    line: 43,
+                    column: 1,
+                    position: 425,
+                },
                 value: "enum",
             },
-            colon: Span(
-                43,
-                5,
-            ),
+            colon: Span {
+                line: 43,
+                column: 5,
+                position: 429,
+            },
         },
     ),
     Expression {
@@ -1045,18 +1171,20 @@
             Integer(
                 LiteralInteger {
                     value: "123",
-                    span: Span(
-                        43,
-                        7,
-                    ),
+                    span: Span {
+                        line: 43,
+                        column: 7,
+                        position: 431,
+                    },
                 },
             ),
         ),
         ending: Semicolon(
-            Span(
-                43,
-                10,
-            ),
+            Span {
+                line: 43,
+                column: 10,
+                position: 434,
+            },
         ),
     },
     Goto(
@@ -1064,21 +1192,24 @@
             comments: CommentGroup {
                 comments: [],
             },
-            keyword: Span(
-                45,
-                1,
-            ),
+            keyword: Span {
+                line: 45,
+                column: 1,
+                position: 437,
+            },
             label: SimpleIdentifier {
-                span: Span(
-                    45,
-                    6,
-                ),
+                span: Span {
+                    line: 45,
+                    column: 6,
+                    position: 442,
+                },
                 value: "enum",
             },
-            semicolon: Span(
-                45,
-                10,
-            ),
+            semicolon: Span {
+                line: 45,
+                column: 10,
+                position: 446,
+            },
         },
     ),
 ]

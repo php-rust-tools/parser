@@ -1,29 +1,33 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Echo {
-        echo: Span(
-            3,
-            1,
-        ),
+        echo: Span {
+            line: 3,
+            column: 1,
+            position: 7,
+        },
         values: [
             Cast {
-                cast: Span(
-                    3,
-                    6,
-                ),
+                cast: Span {
+                    line: 3,
+                    column: 6,
+                    position: 12,
+                },
                 kind: String,
                 value: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                3,
-                                15,
-                            ),
+                            span: Span {
+                                line: 3,
+                                column: 15,
+                                position: 21,
+                            },
                             name: "$VAR",
                         },
                     ),
@@ -31,10 +35,11 @@
             },
         ],
         ending: Semicolon(
-            Span(
-                3,
-                19,
-            ),
+            Span {
+                line: 3,
+                column: 19,
+                position: 25,
+            },
         ),
     },
 ]

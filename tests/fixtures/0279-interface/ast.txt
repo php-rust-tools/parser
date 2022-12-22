@@ -1,55 +1,64 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Interface(
         Interface {
             attributes: [
                 AttributeGroup {
-                    start: Span(
-                        3,
-                        1,
-                    ),
-                    end: Span(
-                        3,
-                        7,
-                    ),
+                    start: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
+                    },
+                    end: Span {
+                        line: 3,
+                        column: 7,
+                        position: 13,
+                    },
                     members: [
                         Attribute {
-                            start: Span(
-                                3,
-                                3,
-                            ),
-                            end: Span(
-                                3,
-                                4,
-                            ),
+                            start: Span {
+                                line: 3,
+                                column: 3,
+                                position: 9,
+                            },
+                            end: Span {
+                                line: 3,
+                                column: 4,
+                                position: 10,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    3,
-                                    3,
-                                ),
+                                span: Span {
+                                    line: 3,
+                                    column: 3,
+                                    position: 9,
+                                },
                                 value: "A",
                             },
                             arguments: None,
                         },
                         Attribute {
-                            start: Span(
-                                3,
-                                6,
-                            ),
-                            end: Span(
-                                3,
-                                7,
-                            ),
+                            start: Span {
+                                line: 3,
+                                column: 6,
+                                position: 12,
+                            },
+                            end: Span {
+                                line: 3,
+                                column: 7,
+                                position: 13,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    3,
-                                    6,
-                                ),
+                                span: Span {
+                                    line: 3,
+                                    column: 6,
+                                    position: 12,
+                                },
                                 value: "B",
                             },
                             arguments: None,
@@ -57,47 +66,55 @@
                     ],
                 },
                 AttributeGroup {
-                    start: Span(
-                        4,
-                        1,
-                    ),
-                    end: Span(
-                        4,
-                        7,
-                    ),
+                    start: Span {
+                        line: 4,
+                        column: 1,
+                        position: 15,
+                    },
+                    end: Span {
+                        line: 4,
+                        column: 7,
+                        position: 21,
+                    },
                     members: [
                         Attribute {
-                            start: Span(
-                                4,
-                                3,
-                            ),
-                            end: Span(
-                                4,
-                                4,
-                            ),
+                            start: Span {
+                                line: 4,
+                                column: 3,
+                                position: 17,
+                            },
+                            end: Span {
+                                line: 4,
+                                column: 4,
+                                position: 18,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    4,
-                                    3,
-                                ),
+                                span: Span {
+                                    line: 4,
+                                    column: 3,
+                                    position: 17,
+                                },
                                 value: "C",
                             },
                             arguments: None,
                         },
                         Attribute {
-                            start: Span(
-                                4,
-                                6,
-                            ),
-                            end: Span(
-                                4,
-                                7,
-                            ),
+                            start: Span {
+                                line: 4,
+                                column: 6,
+                                position: 20,
+                            },
+                            end: Span {
+                                line: 4,
+                                column: 7,
+                                position: 21,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    4,
-                                    6,
-                                ),
+                                span: Span {
+                                    line: 4,
+                                    column: 6,
+                                    position: 20,
+                                },
                                 value: "D",
                             },
                             arguments: None,
@@ -105,54 +122,61 @@
                     ],
                 },
             ],
-            interface: Span(
-                5,
-                1,
-            ),
+            interface: Span {
+                line: 5,
+                column: 1,
+                position: 23,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    5,
-                    11,
-                ),
+                span: Span {
+                    line: 5,
+                    column: 11,
+                    position: 33,
+                },
                 value: "A",
             },
             extends: Some(
                 InterfaceExtends {
-                    extends: Span(
-                        5,
-                        13,
-                    ),
+                    extends: Span {
+                        line: 5,
+                        column: 13,
+                        position: 35,
+                    },
                     parents: CommaSeparated {
                         inner: [
                             SimpleIdentifier {
-                                span: Span(
-                                    5,
-                                    21,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 21,
+                                    position: 43,
+                                },
                                 value: "B",
                             },
                             SimpleIdentifier {
-                                span: Span(
-                                    5,
-                                    24,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 24,
+                                    position: 46,
+                                },
                                 value: "C",
                             },
                         ],
                         commas: [
-                            Span(
-                                5,
-                                22,
-                            ),
+                            Span {
+                                line: 5,
+                                column: 22,
+                                position: 44,
+                            },
                         ],
                     },
                 },
             ),
             body: InterfaceBody {
-                left_brace: Span(
-                    5,
-                    26,
-                ),
+                left_brace: Span {
+                    line: 5,
+                    column: 26,
+                    position: 48,
+                },
                 members: [
                     Constant(
                         ClassishConstant {
@@ -161,29 +185,34 @@
                             },
                             attributes: [
                                 AttributeGroup {
-                                    start: Span(
-                                        6,
-                                        5,
-                                    ),
-                                    end: Span(
-                                        6,
-                                        8,
-                                    ),
+                                    start: Span {
+                                        line: 6,
+                                        column: 5,
+                                        position: 54,
+                                    },
+                                    end: Span {
+                                        line: 6,
+                                        column: 8,
+                                        position: 57,
+                                    },
                                     members: [
                                         Attribute {
-                                            start: Span(
-                                                6,
-                                                7,
-                                            ),
-                                            end: Span(
-                                                6,
-                                                8,
-                                            ),
+                                            start: Span {
+                                                line: 6,
+                                                column: 7,
+                                                position: 56,
+                                            },
+                                            end: Span {
+                                                line: 6,
+                                                column: 8,
+                                                position: 57,
+                                            },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    6,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 6,
+                                                    column: 7,
+                                                    position: 56,
+                                                },
                                                 value: "R",
                                             },
                                             arguments: None,
@@ -194,40 +223,45 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [],
                             },
-                            const: Span(
-                                7,
-                                5,
-                            ),
+                            const: Span {
+                                line: 7,
+                                column: 5,
+                                position: 63,
+                            },
                             entries: [
                                 ConstantEntry {
                                     name: SimpleIdentifier {
-                                        span: Span(
-                                            7,
-                                            11,
-                                        ),
+                                        span: Span {
+                                            line: 7,
+                                            column: 11,
+                                            position: 69,
+                                        },
                                         value: "F",
                                     },
-                                    equals: Span(
-                                        7,
-                                        13,
-                                    ),
+                                    equals: Span {
+                                        line: 7,
+                                        column: 13,
+                                        position: 71,
+                                    },
                                     value: Literal(
                                         Integer(
                                             LiteralInteger {
                                                 value: "344",
-                                                span: Span(
-                                                    7,
-                                                    15,
-                                                ),
+                                                span: Span {
+                                                    line: 7,
+                                                    column: 15,
+                                                    position: 73,
+                                                },
                                             },
                                         ),
                                     ),
                                 },
                             ],
-                            semicolon: Span(
-                                7,
-                                18,
-                            ),
+                            semicolon: Span {
+                                line: 7,
+                                column: 18,
+                                position: 76,
+                            },
                         },
                     ),
                     Constant(
@@ -237,29 +271,34 @@
                             },
                             attributes: [
                                 AttributeGroup {
-                                    start: Span(
-                                        9,
-                                        5,
-                                    ),
-                                    end: Span(
-                                        9,
-                                        8,
-                                    ),
+                                    start: Span {
+                                        line: 9,
+                                        column: 5,
+                                        position: 83,
+                                    },
+                                    end: Span {
+                                        line: 9,
+                                        column: 8,
+                                        position: 86,
+                                    },
                                     members: [
                                         Attribute {
-                                            start: Span(
-                                                9,
-                                                7,
-                                            ),
-                                            end: Span(
-                                                9,
-                                                8,
-                                            ),
+                                            start: Span {
+                                                line: 9,
+                                                column: 7,
+                                                position: 85,
+                                            },
+                                            end: Span {
+                                                line: 9,
+                                                column: 8,
+                                                position: 86,
+                                            },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    9,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 9,
+                                                    column: 7,
+                                                    position: 85,
+                                                },
                                                 value: "R",
                                             },
                                             arguments: None,
@@ -270,47 +309,53 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [
                                     Public(
-                                        Span(
-                                            10,
-                                            5,
-                                        ),
+                                        Span {
+                                            line: 10,
+                                            column: 5,
+                                            position: 92,
+                                        },
                                     ),
                                 ],
                             },
-                            const: Span(
-                                10,
-                                12,
-                            ),
+                            const: Span {
+                                line: 10,
+                                column: 12,
+                                position: 99,
+                            },
                             entries: [
                                 ConstantEntry {
                                     name: SimpleIdentifier {
-                                        span: Span(
-                                            10,
-                                            18,
-                                        ),
+                                        span: Span {
+                                            line: 10,
+                                            column: 18,
+                                            position: 105,
+                                        },
                                         value: "O",
                                     },
-                                    equals: Span(
-                                        10,
-                                        20,
-                                    ),
+                                    equals: Span {
+                                        line: 10,
+                                        column: 20,
+                                        position: 107,
+                                    },
                                     value: Literal(
                                         Integer(
                                             LiteralInteger {
                                                 value: "344",
-                                                span: Span(
-                                                    10,
-                                                    22,
-                                                ),
+                                                span: Span {
+                                                    line: 10,
+                                                    column: 22,
+                                                    position: 109,
+                                                },
                                             },
                                         ),
                                     ),
                                 },
                             ],
-                            semicolon: Span(
-                                10,
-                                25,
-                            ),
+                            semicolon: Span {
+                                line: 10,
+                                column: 25,
+                                position: 112,
+                            },
                         },
                     ),
                     Constant(
@@ -320,29 +365,34 @@
                             },
                             attributes: [
                                 AttributeGroup {
-                                    start: Span(
-                                        12,
-                                        5,
-                                    ),
-                                    end: Span(
-                                        12,
-                                        8,
-                                    ),
+                                    start: Span {
+                                        line: 12,
+                                        column: 5,
+                                        position: 119,
+                                    },
+                                    end: Span {
+                                        line: 12,
+                                        column: 8,
+                                        position: 122,
+                                    },
                                     members: [
                                         Attribute {
-                                            start: Span(
-                                                12,
-                                                7,
-                                            ),
-                                            end: Span(
-                                                12,
-                                                8,
-                                            ),
+                                            start: Span {
+                                                line: 12,
+                                                column: 7,
+                                                position: 121,
+                                            },
+                                            end: Span {
+                                                line: 12,
+                                                column: 8,
+                                                position: 122,
+                                            },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    12,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 12,
+                                                    column: 7,
+                                                    position: 121,
+                                                },
                                                 value: "R",
                                             },
                                             arguments: None,
@@ -350,29 +400,34 @@
                                     ],
                                 },
                                 AttributeGroup {
-                                    start: Span(
-                                        13,
-                                        5,
-                                    ),
-                                    end: Span(
-                                        13,
-                                        8,
-                                    ),
+                                    start: Span {
+                                        line: 13,
+                                        column: 5,
+                                        position: 128,
+                                    },
+                                    end: Span {
+                                        line: 13,
+                                        column: 8,
+                                        position: 131,
+                                    },
                                     members: [
                                         Attribute {
-                                            start: Span(
-                                                13,
-                                                7,
-                                            ),
-                                            end: Span(
-                                                13,
-                                                8,
-                                            ),
+                                            start: Span {
+                                                line: 13,
+                                                column: 7,
+                                                position: 130,
+                                            },
+                                            end: Span {
+                                                line: 13,
+                                                column: 8,
+                                                position: 131,
+                                            },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    13,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 13,
+                                                    column: 7,
+                                                    position: 130,
+                                                },
                                                 value: "P",
                                             },
                                             arguments: None,
@@ -383,77 +438,87 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [
                                     Final(
-                                        Span(
-                                            14,
-                                            5,
-                                        ),
+                                        Span {
+                                            line: 14,
+                                            column: 5,
+                                            position: 137,
+                                        },
                                     ),
                                     Public(
-                                        Span(
-                                            14,
-                                            11,
-                                        ),
+                                        Span {
+                                            line: 14,
+                                            column: 11,
+                                            position: 143,
+                                        },
                                     ),
                                 ],
                             },
-                            const: Span(
-                                14,
-                                18,
-                            ),
+                            const: Span {
+                                line: 14,
+                                column: 18,
+                                position: 150,
+                            },
                             entries: [
                                 ConstantEntry {
                                     name: SimpleIdentifier {
-                                        span: Span(
-                                            14,
-                                            24,
-                                        ),
+                                        span: Span {
+                                            line: 14,
+                                            column: 24,
+                                            position: 156,
+                                        },
                                         value: "R",
                                     },
-                                    equals: Span(
-                                        14,
-                                        26,
-                                    ),
+                                    equals: Span {
+                                        line: 14,
+                                        column: 26,
+                                        position: 158,
+                                    },
                                     value: Literal(
                                         Integer(
                                             LiteralInteger {
                                                 value: "344",
-                                                span: Span(
-                                                    14,
-                                                    28,
-                                                ),
+                                                span: Span {
+                                                    line: 14,
+                                                    column: 28,
+                                                    position: 160,
+                                                },
                                             },
                                         ),
                                     ),
                                 },
                                 ConstantEntry {
                                     name: SimpleIdentifier {
-                                        span: Span(
-                                            14,
-                                            33,
-                                        ),
+                                        span: Span {
+                                            line: 14,
+                                            column: 33,
+                                            position: 165,
+                                        },
                                         value: "P",
                                     },
-                                    equals: Span(
-                                        14,
-                                        35,
-                                    ),
+                                    equals: Span {
+                                        line: 14,
+                                        column: 35,
+                                        position: 167,
+                                    },
                                     value: Literal(
                                         Integer(
                                             LiteralInteger {
                                                 value: "214",
-                                                span: Span(
-                                                    14,
-                                                    37,
-                                                ),
+                                                span: Span {
+                                                    line: 14,
+                                                    column: 37,
+                                                    position: 169,
+                                                },
                                             },
                                         ),
                                     ),
                                 },
                             ],
-                            semicolon: Span(
-                                14,
-                                40,
-                            ),
+                            semicolon: Span {
+                                line: 14,
+                                column: 40,
+                                position: 172,
+                            },
                         },
                     ),
                     Constant(
@@ -463,29 +528,34 @@
                             },
                             attributes: [
                                 AttributeGroup {
-                                    start: Span(
-                                        16,
-                                        5,
-                                    ),
-                                    end: Span(
-                                        16,
-                                        8,
-                                    ),
+                                    start: Span {
+                                        line: 16,
+                                        column: 5,
+                                        position: 179,
+                                    },
+                                    end: Span {
+                                        line: 16,
+                                        column: 8,
+                                        position: 182,
+                                    },
                                     members: [
                                         Attribute {
-                                            start: Span(
-                                                16,
-                                                7,
-                                            ),
-                                            end: Span(
-                                                16,
-                                                8,
-                                            ),
+                                            start: Span {
+                                                line: 16,
+                                                column: 7,
+                                                position: 181,
+                                            },
+                                            end: Span {
+                                                line: 16,
+                                                column: 8,
+                                                position: 182,
+                                            },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    16,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 16,
+                                                    column: 7,
+                                                    position: 181,
+                                                },
                                                 value: "R",
                                             },
                                             arguments: None,
@@ -493,29 +563,34 @@
                                     ],
                                 },
                                 AttributeGroup {
-                                    start: Span(
-                                        17,
-                                        5,
-                                    ),
-                                    end: Span(
-                                        17,
-                                        8,
-                                    ),
+                                    start: Span {
+                                        line: 17,
+                                        column: 5,
+                                        position: 188,
+                                    },
+                                    end: Span {
+                                        line: 17,
+                                        column: 8,
+                                        position: 191,
+                                    },
                                     members: [
                                         Attribute {
-                                            start: Span(
-                                                17,
-                                                7,
-                                            ),
-                                            end: Span(
-                                                17,
-                                                8,
-                                            ),
+                                            start: Span {
+                                                line: 17,
+                                                column: 7,
+                                                position: 190,
+                                            },
+                                            end: Span {
+                                                line: 17,
+                                                column: 8,
+                                                position: 191,
+                                            },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    17,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 17,
+                                                    column: 7,
+                                                    position: 190,
+                                                },
                                                 value: "P",
                                             },
                                             arguments: None,
@@ -526,47 +601,53 @@
                             modifiers: ConstantModifierGroup {
                                 modifiers: [
                                     Final(
-                                        Span(
-                                            18,
-                                            5,
-                                        ),
+                                        Span {
+                                            line: 18,
+                                            column: 5,
+                                            position: 197,
+                                        },
                                     ),
                                 ],
                             },
-                            const: Span(
-                                18,
-                                11,
-                            ),
+                            const: Span {
+                                line: 18,
+                                column: 11,
+                                position: 203,
+                            },
                             entries: [
                                 ConstantEntry {
                                     name: SimpleIdentifier {
-                                        span: Span(
-                                            18,
-                                            17,
-                                        ),
+                                        span: Span {
+                                            line: 18,
+                                            column: 17,
+                                            position: 209,
+                                        },
                                         value: "M",
                                     },
-                                    equals: Span(
-                                        18,
-                                        19,
-                                    ),
+                                    equals: Span {
+                                        line: 18,
+                                        column: 19,
+                                        position: 211,
+                                    },
                                     value: Literal(
                                         Integer(
                                             LiteralInteger {
                                                 value: "34",
-                                                span: Span(
-                                                    18,
-                                                    21,
-                                                ),
+                                                span: Span {
+                                                    line: 18,
+                                                    column: 21,
+                                                    position: 213,
+                                                },
                                             },
                                         ),
                                     ),
                                 },
                             ],
-                            semicolon: Span(
-                                18,
-                                23,
-                            ),
+                            semicolon: Span {
+                                line: 18,
+                                column: 23,
+                                position: 215,
+                            },
                         },
                     ),
                     Method(
@@ -576,29 +657,34 @@
                             },
                             attributes: [
                                 AttributeGroup {
-                                    start: Span(
-                                        20,
-                                        5,
-                                    ),
-                                    end: Span(
-                                        20,
-                                        8,
-                                    ),
+                                    start: Span {
+                                        line: 20,
+                                        column: 5,
+                                        position: 222,
+                                    },
+                                    end: Span {
+                                        line: 20,
+                                        column: 8,
+                                        position: 225,
+                                    },
                                     members: [
                                         Attribute {
-                                            start: Span(
-                                                20,
-                                                7,
-                                            ),
-                                            end: Span(
-                                                20,
-                                                8,
-                                            ),
+                                            start: Span {
+                                                line: 20,
+                                                column: 7,
+                                                position: 224,
+                                            },
+                                            end: Span {
+                                                line: 20,
+                                                column: 8,
+                                                position: 225,
+                                            },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    20,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 20,
+                                                    column: 7,
+                                                    position: 224,
+                                                },
                                                 value: "M",
                                             },
                                             arguments: None,
@@ -609,60 +695,68 @@
                             modifiers: MethodModifierGroup {
                                 modifiers: [
                                     Public(
-                                        Span(
-                                            21,
-                                            5,
-                                        ),
+                                        Span {
+                                            line: 21,
+                                            column: 5,
+                                            position: 231,
+                                        },
                                     ),
                                 ],
                             },
-                            function: Span(
-                                21,
-                                12,
-                            ),
+                            function: Span {
+                                line: 21,
+                                column: 12,
+                                position: 238,
+                            },
                             ampersand: None,
                             name: SimpleIdentifier {
-                                span: Span(
-                                    21,
-                                    21,
-                                ),
+                                span: Span {
+                                    line: 21,
+                                    column: 21,
+                                    position: 247,
+                                },
                                 value: "bar",
                             },
                             parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                left_parenthesis: Span(
-                                    21,
-                                    24,
-                                ),
+                                left_parenthesis: Span {
+                                    line: 21,
+                                    column: 24,
+                                    position: 250,
+                                },
                                 parameters: CommaSeparated {
                                     inner: [],
                                     commas: [],
                                 },
-                                right_parenthesis: Span(
-                                    21,
-                                    25,
-                                ),
+                                right_parenthesis: Span {
+                                    line: 21,
+                                    column: 25,
+                                    position: 251,
+                                },
                             },
                             return_type: Some(
                                 ReturnType {
-                                    colon: Span(
-                                        21,
-                                        26,
-                                    ),
+                                    colon: Span {
+                                        line: 21,
+                                        column: 26,
+                                        position: 252,
+                                    },
                                     data_type: Void(
-                                        Span(
-                                            21,
-                                            28,
-                                        ),
+                                        Span {
+                                            line: 21,
+                                            column: 28,
+                                            position: 254,
+                                        },
                                     ),
                                 },
                             ),
-                            semicolon: Span(
-                                21,
-                                32,
-                            ),
+                            semicolon: Span {
+                                line: 21,
+                                column: 32,
+                                position: 258,
+                            },
                         },
                     ),
                     Method(
@@ -672,29 +766,34 @@
                             },
                             attributes: [
                                 AttributeGroup {
-                                    start: Span(
-                                        23,
-                                        5,
-                                    ),
-                                    end: Span(
-                                        23,
-                                        8,
-                                    ),
+                                    start: Span {
+                                        line: 23,
+                                        column: 5,
+                                        position: 265,
+                                    },
+                                    end: Span {
+                                        line: 23,
+                                        column: 8,
+                                        position: 268,
+                                    },
                                     members: [
                                         Attribute {
-                                            start: Span(
-                                                23,
-                                                7,
-                                            ),
-                                            end: Span(
-                                                23,
-                                                8,
-                                            ),
+                                            start: Span {
+                                                line: 23,
+                                                column: 7,
+                                                position: 267,
+                                            },
+                                            end: Span {
+                                                line: 23,
+                                                column: 8,
+                                                position: 268,
+                                            },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    23,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 23,
+                                                    column: 7,
+                                                    position: 267,
+                                                },
                                                 value: "Q",
                                             },
                                             arguments: None,
@@ -702,29 +801,34 @@
                                     ],
                                 },
                                 AttributeGroup {
-                                    start: Span(
-                                        24,
-                                        5,
-                                    ),
-                                    end: Span(
-                                        24,
-                                        8,
-                                    ),
+                                    start: Span {
+                                        line: 24,
+                                        column: 5,
+                                        position: 274,
+                                    },
+                                    end: Span {
+                                        line: 24,
+                                        column: 8,
+                                        position: 277,
+                                    },
                                     members: [
                                         Attribute {
-                                            start: Span(
-                                                24,
-                                                7,
-                                            ),
-                                            end: Span(
-                                                24,
-                                                8,
-                                            ),
+                                            start: Span {
+                                                line: 24,
+                                                column: 7,
+                                                position: 276,
+                                            },
+                                            end: Span {
+                                                line: 24,
+                                                column: 8,
+                                                position: 277,
+                                            },
                                             name: SimpleIdentifier {
-                                                span: Span(
-                                                    24,
-                                                    7,
-                                                ),
+                                                span: Span {
+                                                    line: 24,
+                                                    column: 7,
+                                                    position: 276,
+                                                },
                                                 value: "S",
                                             },
                                             arguments: None,
@@ -735,73 +839,83 @@
                             modifiers: MethodModifierGroup {
                                 modifiers: [
                                     Public(
-                                        Span(
-                                            25,
-                                            5,
-                                        ),
+                                        Span {
+                                            line: 25,
+                                            column: 5,
+                                            position: 283,
+                                        },
                                     ),
                                     Static(
-                                        Span(
-                                            25,
-                                            12,
-                                        ),
+                                        Span {
+                                            line: 25,
+                                            column: 12,
+                                            position: 290,
+                                        },
                                     ),
                                 ],
                             },
-                            function: Span(
-                                25,
-                                19,
-                            ),
+                            function: Span {
+                                line: 25,
+                                column: 19,
+                                position: 297,
+                            },
                             ampersand: None,
                             name: SimpleIdentifier {
-                                span: Span(
-                                    25,
-                                    28,
-                                ),
+                                span: Span {
+                                    line: 25,
+                                    column: 28,
+                                    position: 306,
+                                },
                                 value: "baz",
                             },
                             parameters: FunctionParameterList {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
-                                left_parenthesis: Span(
-                                    25,
-                                    31,
-                                ),
+                                left_parenthesis: Span {
+                                    line: 25,
+                                    column: 31,
+                                    position: 309,
+                                },
                                 parameters: CommaSeparated {
                                     inner: [],
                                     commas: [],
                                 },
-                                right_parenthesis: Span(
-                                    25,
-                                    32,
-                                ),
+                                right_parenthesis: Span {
+                                    line: 25,
+                                    column: 32,
+                                    position: 310,
+                                },
                             },
                             return_type: Some(
                                 ReturnType {
-                                    colon: Span(
-                                        25,
-                                        33,
-                                    ),
+                                    colon: Span {
+                                        line: 25,
+                                        column: 33,
+                                        position: 311,
+                                    },
                                     data_type: Void(
-                                        Span(
-                                            25,
-                                            35,
-                                        ),
+                                        Span {
+                                            line: 25,
+                                            column: 35,
+                                            position: 313,
+                                        },
                                     ),
                                 },
                             ),
-                            semicolon: Span(
-                                25,
-                                39,
-                            ),
+                            semicolon: Span {
+                                line: 25,
+                                column: 39,
+                                position: 317,
+                            },
                         },
                     ),
                 ],
-                right_brace: Span(
-                    26,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 26,
+                    column: 1,
+                    position: 319,
+                },
             },
         },
     ),

@@ -1,28 +1,32 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Namespace(
         Unbraced(
             UnbracedNamespace {
-                start: Span(
-                    3,
-                    1,
-                ),
+                start: Span {
+                    line: 3,
+                    column: 1,
+                    position: 7,
+                },
                 name: SimpleIdentifier {
-                    span: Span(
-                        3,
-                        11,
-                    ),
+                    span: Span {
+                        line: 3,
+                        column: 11,
+                        position: 17,
+                    },
                     value: "Foo\Bar",
                 },
-                end: Span(
-                    3,
-                    18,
-                ),
+                end: Span {
+                    line: 3,
+                    column: 18,
+                    position: 24,
+                },
                 statements: [
                     Class(
                         Class {
@@ -30,31 +34,35 @@
                             modifiers: ClassModifierGroup {
                                 modifiers: [
                                     Final(
-                                        Span(
-                                            5,
-                                            1,
-                                        ),
+                                        Span {
+                                            line: 5,
+                                            column: 1,
+                                            position: 27,
+                                        },
                                     ),
                                 ],
                             },
-                            class: Span(
-                                5,
-                                7,
-                            ),
+                            class: Span {
+                                line: 5,
+                                column: 7,
+                                position: 33,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    5,
-                                    13,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 13,
+                                    position: 39,
+                                },
                                 value: "Baz",
                             },
                             extends: None,
                             implements: None,
                             body: ClassBody {
-                                left_brace: Span(
-                                    5,
-                                    17,
-                                ),
+                                left_brace: Span {
+                                    line: 5,
+                                    column: 17,
+                                    position: 43,
+                                },
                                 members: [
                                     Property(
                                         Property {
@@ -62,49 +70,55 @@
                                             modifiers: PropertyModifierGroup {
                                                 modifiers: [
                                                     Public(
-                                                        Span(
-                                                            6,
-                                                            6,
-                                                        ),
+                                                        Span {
+                                                            line: 6,
+                                                            column: 6,
+                                                            position: 50,
+                                                        },
                                                     ),
                                                     Readonly(
-                                                        Span(
-                                                            6,
-                                                            13,
-                                                        ),
+                                                        Span {
+                                                            line: 6,
+                                                            column: 13,
+                                                            position: 57,
+                                                        },
                                                     ),
                                                 ],
                                             },
                                             type: Some(
                                                 String(
-                                                    Span(
-                                                        6,
-                                                        22,
-                                                    ),
+                                                    Span {
+                                                        line: 6,
+                                                        column: 22,
+                                                        position: 66,
+                                                    },
                                                 ),
                                             ),
                                             entries: [
                                                 Uninitialized {
                                                     variable: SimpleVariable {
-                                                        span: Span(
-                                                            6,
-                                                            29,
-                                                        ),
+                                                        span: Span {
+                                                            line: 6,
+                                                            column: 29,
+                                                            position: 73,
+                                                        },
                                                         name: "$foo",
                                                     },
                                                 },
                                             ],
-                                            end: Span(
-                                                6,
-                                                33,
-                                            ),
+                                            end: Span {
+                                                line: 6,
+                                                column: 33,
+                                                position: 77,
+                                            },
                                         },
                                     ),
                                 ],
-                                right_brace: Span(
-                                    7,
-                                    1,
-                                ),
+                                right_brace: Span {
+                                    line: 7,
+                                    column: 1,
+                                    position: 79,
+                                },
                             },
                         },
                     ),

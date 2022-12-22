@@ -1,1 +1,1 @@
-ForbiddenTypeUsedInProperty("Foo", "$$s", Union([String(Span(4, 12)), Integer(Span(4, 19)), Callable(Span(4, 23))]), Span(4, 32)) -> Parse Error: Property Foo::$$s cannot have type `string|int|callable` on line 4 column 32
+ForbiddenTypeUsedInProperty("Foo", "$$s", Union([String(Span { line: 4, column: 12, position: 30 }), Integer(Span { line: 4, column: 19, position: 37 }), Callable(Span { line: 4, column: 23, position: 41 })]), Span { line: 4, column: 32, position: 50 }) -> Parse Error: Property Foo::$$s cannot have type `string|int|callable` on line 4 column 32

@@ -1,49 +1,55 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Constant(
         Constant {
             comments: CommentGroup {
                 comments: [],
             },
-            const: Span(
-                1,
-                7,
-            ),
+            const: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
             entries: [
                 ConstantEntry {
                     name: SimpleIdentifier {
-                        span: Span(
-                            1,
-                            13,
-                        ),
+                        span: Span {
+                            line: 1,
+                            column: 13,
+                            position: 12,
+                        },
                         value: "FOO",
                     },
-                    equals: Span(
-                        1,
-                        17,
-                    ),
+                    equals: Span {
+                        line: 1,
+                        column: 17,
+                        position: 16,
+                    },
                     value: Literal(
                         Integer(
                             LiteralInteger {
                                 value: "1",
-                                span: Span(
-                                    1,
-                                    19,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 19,
+                                    position: 18,
+                                },
                             },
                         ),
                     ),
                 },
             ],
-            semicolon: Span(
-                1,
-                20,
-            ),
+            semicolon: Span {
+                line: 1,
+                column: 20,
+                position: 19,
+            },
         },
     ),
 ]

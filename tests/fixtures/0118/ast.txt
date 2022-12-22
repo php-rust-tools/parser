@@ -1,76 +1,87 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     UnitEnum(
         UnitEnum {
             attributes: [],
-            enum: Span(
-                3,
-                1,
-            ),
+            enum: Span {
+                line: 3,
+                column: 1,
+                position: 8,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    6,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 6,
+                    position: 13,
+                },
                 value: "Foo",
             },
             implements: [],
             body: UnitEnumBody {
-                left_brace: Span(
-                    3,
-                    10,
-                ),
+                left_brace: Span {
+                    line: 3,
+                    column: 10,
+                    position: 17,
+                },
                 members: [
                     Case(
                         UnitEnumCase {
                             attributes: [],
-                            start: Span(
-                                4,
-                                5,
-                            ),
+                            start: Span {
+                                line: 4,
+                                column: 5,
+                                position: 23,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    4,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 4,
+                                    column: 10,
+                                    position: 28,
+                                },
                                 value: "Bar",
                             },
-                            end: Span(
-                                4,
-                                13,
-                            ),
+                            end: Span {
+                                line: 4,
+                                column: 13,
+                                position: 31,
+                            },
                         },
                     ),
                     Case(
                         UnitEnumCase {
                             attributes: [],
-                            start: Span(
-                                5,
-                                5,
-                            ),
+                            start: Span {
+                                line: 5,
+                                column: 5,
+                                position: 37,
+                            },
                             name: SimpleIdentifier {
-                                span: Span(
-                                    5,
-                                    10,
-                                ),
+                                span: Span {
+                                    line: 5,
+                                    column: 10,
+                                    position: 42,
+                                },
                                 value: "Baz",
                             },
-                            end: Span(
-                                5,
-                                13,
-                            ),
+                            end: Span {
+                                line: 5,
+                                column: 13,
+                                position: 45,
+                            },
                         },
                     ),
                 ],
-                right_brace: Span(
-                    6,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 6,
+                    column: 1,
+                    position: 47,
+                },
             },
         },
     ),

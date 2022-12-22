@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Function(
         Function {
@@ -11,26 +12,29 @@
                 comments: [],
             },
             attributes: [],
-            function: Span(
-                3,
-                1,
-            ),
+            function: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    10,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 10,
+                    position: 16,
+                },
                 value: "bar",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    3,
-                    13,
-                ),
+                left_parenthesis: Span {
+                    line: 3,
+                    column: 13,
+                    position: 19,
+                },
                 parameters: CommaSeparated {
                     inner: [
                         FunctionParameter {
@@ -38,10 +42,11 @@
                                 comments: [],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    4,
-                                    13,
-                                ),
+                                span: Span {
+                                    line: 4,
+                                    column: 13,
+                                    position: 33,
+                                },
                                 name: "$i",
                             },
                             attributes: [],
@@ -49,26 +54,29 @@
                                 Union(
                                     [
                                         Named(
-                                            Span(
-                                                4,
-                                                5,
-                                            ),
+                                            Span {
+                                                line: 4,
+                                                column: 5,
+                                                position: 25,
+                                            },
                                             "A",
                                         ),
                                         Intersection(
                                             [
                                                 Named(
-                                                    Span(
-                                                        4,
-                                                        8,
-                                                    ),
+                                                    Span {
+                                                        line: 4,
+                                                        column: 8,
+                                                        position: 28,
+                                                    },
                                                     "B",
                                                 ),
                                                 Named(
-                                                    Span(
-                                                        4,
-                                                        10,
-                                                    ),
+                                                    Span {
+                                                        line: 4,
+                                                        column: 10,
+                                                        position: 30,
+                                                    },
                                                     "C",
                                                 ),
                                             ],
@@ -83,42 +91,47 @@
                     ],
                     commas: [],
                 },
-                right_parenthesis: Span(
-                    5,
-                    1,
-                ),
+                right_parenthesis: Span {
+                    line: 5,
+                    column: 1,
+                    position: 36,
+                },
             },
             return_type: Some(
                 ReturnType {
-                    colon: Span(
-                        5,
-                        2,
-                    ),
+                    colon: Span {
+                        line: 5,
+                        column: 2,
+                        position: 37,
+                    },
                     data_type: Union(
                         [
                             Intersection(
                                 [
                                     Named(
-                                        Span(
-                                            5,
-                                            5,
-                                        ),
+                                        Span {
+                                            line: 5,
+                                            column: 5,
+                                            position: 40,
+                                        },
                                         "B",
                                     ),
                                     Named(
-                                        Span(
-                                            5,
-                                            7,
-                                        ),
+                                        Span {
+                                            line: 5,
+                                            column: 7,
+                                            position: 42,
+                                        },
                                         "C",
                                     ),
                                 ],
                             ),
                             Named(
-                                Span(
-                                    5,
-                                    10,
-                                ),
+                                Span {
+                                    line: 5,
+                                    column: 10,
+                                    position: 45,
+                                },
                                 "A",
                             ),
                         ],
@@ -129,41 +142,46 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    5,
-                    12,
-                ),
+                left_brace: Span {
+                    line: 5,
+                    column: 12,
+                    position: 47,
+                },
                 statements: [
                     Return {
-                        return: Span(
-                            6,
-                            5,
-                        ),
+                        return: Span {
+                            line: 6,
+                            column: 5,
+                            position: 53,
+                        },
                         value: Some(
                             Variable(
                                 SimpleVariable(
                                     SimpleVariable {
-                                        span: Span(
-                                            6,
-                                            12,
-                                        ),
+                                        span: Span {
+                                            line: 6,
+                                            column: 12,
+                                            position: 60,
+                                        },
                                         name: "$i",
                                     },
                                 ),
                             ),
                         ),
                         ending: Semicolon(
-                            Span(
-                                6,
-                                14,
-                            ),
+                            Span {
+                                line: 6,
+                                column: 14,
+                                position: 62,
+                            },
                         ),
                     },
                 ],
-                right_brace: Span(
-                    7,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 7,
+                    column: 1,
+                    position: 64,
+                },
             },
         },
     ),

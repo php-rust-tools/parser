@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Function(
         Function {
@@ -11,46 +12,52 @@
                 comments: [],
             },
             attributes: [],
-            function: Span(
-                1,
-                7,
-            ),
+            function: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    1,
-                    16,
-                ),
+                span: Span {
+                    line: 1,
+                    column: 16,
+                    position: 15,
+                },
                 value: "foo",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    1,
-                    19,
-                ),
+                left_parenthesis: Span {
+                    line: 1,
+                    column: 19,
+                    position: 18,
+                },
                 parameters: CommaSeparated {
                     inner: [],
                     commas: [],
                 },
-                right_parenthesis: Span(
-                    1,
-                    20,
-                ),
+                right_parenthesis: Span {
+                    line: 1,
+                    column: 20,
+                    position: 19,
+                },
             },
             return_type: Some(
                 ReturnType {
-                    colon: Span(
-                        1,
-                        21,
-                    ),
+                    colon: Span {
+                        line: 1,
+                        column: 21,
+                        position: 20,
+                    },
                     data_type: Void(
-                        Span(
-                            1,
-                            23,
-                        ),
+                        Span {
+                            line: 1,
+                            column: 23,
+                            position: 22,
+                        },
                     ),
                 },
             ),
@@ -58,15 +65,17 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    1,
-                    28,
-                ),
+                left_brace: Span {
+                    line: 1,
+                    column: 28,
+                    position: 27,
+                },
                 statements: [],
-                right_brace: Span(
-                    1,
-                    29,
-                ),
+                right_brace: Span {
+                    line: 1,
+                    column: 29,
+                    position: 28,
+                },
             },
         },
     ),

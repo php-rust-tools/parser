@@ -8,17 +8,19 @@ use crate::lexer::byte_string::ByteString;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Span(pub usize, pub usize);
-
-impl From<(usize, usize)> for Span {
-    fn from((start, end): (usize, usize)) -> Self {
-        Self(start, end)
-    }
+pub struct Span {
+    pub line: usize,
+    pub column: usize,
+    pub position: usize,
 }
 
-impl From<Span> for (usize, usize) {
-    fn from(span: Span) -> Self {
-        (span.0, span.1)
+impl Span {
+    pub fn new(line: usize, column: usize, position: usize) -> Self {
+        Self {
+            line,
+            column,
+            position,
+        }
     }
 }
 
@@ -271,7 +273,7 @@ impl Default for Token {
     fn default() -> Self {
         Self {
             kind: TokenKind::Eof,
-            span: Span(0, 0),
+            span: Span::new(0, 0, 0),
             value: ByteString::default(),
         }
     }

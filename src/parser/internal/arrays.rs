@@ -1,8 +1,7 @@
-use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::ArrayItem;
 use crate::parser::ast::Expression;
-use crate::parser::ast::ListItem;
+use crate::parser::ast::ListEntry;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
@@ -10,220 +9,193 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
-    utils::skip(state, TokenKind::List)?;
-    utils::skip_left_parenthesis(state)?;
+    Ok(Expression::List {
+        list: utils::skip(state, TokenKind::List)?,
+        start: utils::skip_left_parenthesis(state)?,
+        items: {
+            let mut items = Vec::new();
+            let mut has_atleast_one_key = false;
 
-    let mut items = Vec::new();
-    let mut has_atleast_one_key = false;
+            let mut current = state.stream.current();
+            while current.kind != TokenKind::RightParen {
+                if current.kind == TokenKind::Comma {
+                    state.stream.next();
 
-    while state.stream.current().kind != TokenKind::RightParen {
-        if state.stream.current().kind == TokenKind::Comma {
-            items.push(ListItem {
-                key: None,
-                value: Expression::Empty,
-            });
+                    items.push(ListEntry::Skipped);
 
-            state.stream.next();
+                    current = state.stream.current();
 
-            continue;
-        }
+                    continue;
+                }
 
-        let mut key = None;
+                if current.kind == TokenKind::Ellipsis {
+                    return Err(ParseError::IllegalSpreadOperator(current.span));
+                }
 
-        if state.stream.current().kind == TokenKind::Ellipsis {
-            return Err(ParseError::IllegalSpreadOperator(
-                state.stream.current().span,
-            ));
-        }
+                if current.kind == TokenKind::Ampersand {
+                    return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
+                        current.span,
+                    ));
+                }
 
-        if state.stream.current().kind == TokenKind::Ampersand {
-            return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
-                state.stream.current().span,
-            ));
-        }
+                let mut value = expressions::create(state)?;
+                current = state.stream.current();
+                if current.kind == TokenKind::DoubleArrow {
+                    if !has_atleast_one_key && !items.is_empty() {
+                        return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(current.span));
+                    }
 
-        let span = state.stream.current().span;
-        let mut value = expressions::create(state)?;
+                    let double_arrow = current.span;
 
-        if state.stream.current().kind == TokenKind::DoubleArrow {
-            if !has_atleast_one_key && !items.is_empty() {
-                return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(span));
+                    state.stream.next();
+
+                    current = state.stream.current();
+                    if current.kind == TokenKind::Ellipsis {
+                        return Err(ParseError::IllegalSpreadOperator(current.span));
+                    }
+
+                    if current.kind == TokenKind::Ampersand {
+                        return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
+                            current.span,
+                        ));
+                    }
+
+                    let mut key = expressions::create(state)?;
+                    current = state.stream.current();
+
+                    std::mem::swap(&mut key, &mut value);
+
+                    items.push(ListEntry::KeyValue {
+                        key,
+                        double_arrow,
+                        value,
+                    });
+
+                    has_atleast_one_key = true;
+                } else if has_atleast_one_key {
+                    return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(current.span));
+                } else {
+                    items.push(ListEntry::Value { value });
+                }
+
+                if current.kind == TokenKind::Comma {
+                    state.stream.next();
+                    current = state.stream.current();
+                } else {
+                    break;
+                }
             }
 
-            state.stream.next();
-
-            key = Some(value);
-
-            if state.stream.current().kind == TokenKind::Ellipsis {
-                return Err(ParseError::IllegalSpreadOperator(
-                    state.stream.current().span,
-                ));
+            if current.kind == TokenKind::Comma {
+                state.stream.next();
             }
 
-            if state.stream.current().kind == TokenKind::Ampersand {
-                return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
-                    state.stream.current().span,
-                ));
-            }
-
-            has_atleast_one_key = true;
-            value = expressions::create(state)?;
-        } else if has_atleast_one_key {
-            return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(span));
-        }
-
-        items.push(ListItem { key, value });
-
-        if state.stream.current().kind == TokenKind::Comma {
-            state.stream.next();
-        } else {
-            break;
-        }
-    }
-
-    utils::skip_right_parenthesis(state)?;
-
-    Ok(Expression::List { items })
+            items
+        },
+        end: utils::skip_right_parenthesis(state)?,
+    })
 }
 
 pub fn short_array_expression(state: &mut State) -> ParseResult<Expression> {
-    Ok(Expression::ShortArray(utils::bracketed(state, &|state| {
-        utils::comma_separated(
+    Ok(Expression::ShortArray {
+        start: utils::skip(state, TokenKind::LeftBracket)?,
+        items: utils::comma_separated(
             state,
             &|state| {
-                // TODO: return an error here instead of
-                // an empty array element
-                // see: https://3v4l.org/uLTVA
-                if state.stream.current().kind == TokenKind::Comma {
-                    Ok(ArrayItem {
-                        key: None,
-                        value: Expression::Empty,
-                        unpack: false,
-                        by_ref: false,
-                    })
+                let current = state.stream.current();
+                if current.kind == TokenKind::Comma {
+                    Ok(ArrayItem::Skipped)
                 } else {
                     array_pair(state)
                 }
             },
             TokenKind::RightBracket,
-        )
-    })?))
+        )?,
+        end: utils::skip(state, TokenKind::RightBracket)?,
+    })
 }
 
 pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
-    let span = utils::skip(state, TokenKind::Array)?;
-    let start = utils::skip_left_parenthesis(state)?;
-
-    let mut items = vec![];
-
-    while state.stream.current().kind != TokenKind::RightParen {
-        let mut key = None;
-        let unpack = if state.stream.current().kind == TokenKind::Ellipsis {
-            state.stream.next();
-            true
-        } else {
-            false
-        };
-
-        let (mut by_ref, amper_span) = if state.stream.current().kind == TokenKind::Ampersand {
-            let span = state.stream.current().span;
-            state.stream.next();
-            (true, span)
-        } else {
-            (false, Span(0, 0))
-        };
-
-        let mut value = expressions::create(state)?;
-
-        // TODO: return error for `[...$a => $b]`.
-        if state.stream.current().kind == TokenKind::DoubleArrow {
-            state.stream.next();
-
-            if by_ref {
-                return Err(ParseError::UnexpectedToken(
-                    TokenKind::Ampersand.to_string(),
-                    amper_span,
-                ));
-            }
-
-            key = Some(value);
-
-            by_ref = if state.stream.current().kind == TokenKind::Ampersand {
-                state.stream.next();
-                true
-            } else {
-                false
-            };
-
-            value = expressions::create(state)?;
-        }
-
-        items.push(ArrayItem {
-            key,
-            value,
-            unpack,
-            by_ref,
-        });
-
-        if state.stream.current().kind == TokenKind::Comma {
-            state.stream.next();
-        } else {
-            break;
-        }
-    }
-
-    let end = utils::skip_right_parenthesis(state)?;
-
     Ok(Expression::Array {
-        array: span,
-        start,
-        items,
-        end,
+        array: utils::skip(state, TokenKind::Array)?,
+        start: utils::skip_left_parenthesis(state)?,
+        items: utils::comma_separated(state, &array_pair, TokenKind::RightParen)?,
+        end: utils::skip_right_parenthesis(state)?,
     })
 }
 
 fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
-    let mut key = None;
-    let unpack = if state.stream.current().kind == TokenKind::Ellipsis {
+    let mut current = state.stream.current();
+    let ellipsis = if current.kind == TokenKind::Ellipsis {
         state.stream.next();
-        true
+        current = state.stream.current();
+
+        Some(current.span)
     } else {
-        false
+        None
     };
 
-    let (mut by_ref, amper_span) = if state.stream.current().kind == TokenKind::Ampersand {
-        let span = state.stream.current().span;
+    let mut ampersand = if current.kind == TokenKind::Ampersand {
         state.stream.next();
-        (true, span)
+
+        Some(current.span)
     } else {
-        (false, Span(0, 0))
+        None
     };
 
     let mut value = expressions::create(state)?;
-    if state.stream.current().kind == TokenKind::DoubleArrow {
-        state.stream.next();
 
-        if by_ref {
-            return Err(ParseError::UnexpectedToken(
-                TokenKind::Ampersand.to_string(),
-                amper_span,
+    if let Some(ellipsis) = ellipsis {
+        if let Some(ampersand) = ampersand {
+            return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
+                ampersand,
             ));
         }
 
-        key = Some(value);
-        by_ref = if state.stream.current().kind == TokenKind::Ampersand {
-            state.stream.next();
-            true
-        } else {
-            false
-        };
-        value = expressions::create(state)?;
+        return Ok(ArrayItem::SpreadValue { ellipsis, value });
     }
 
-    Ok(ArrayItem {
-        key,
-        value,
-        unpack,
-        by_ref,
-    })
+    if let Some(ampersand) = ampersand {
+        return Ok(ArrayItem::ReferencedValue { ampersand, value });
+    }
+
+    let mut current = state.stream.current();
+    if current.kind == TokenKind::DoubleArrow {
+        let double_arrow = current.span;
+
+        state.stream.next();
+
+        current = state.stream.current();
+        if current.kind == TokenKind::Ellipsis {
+            return Err(ParseError::IllegalSpreadOperator(current.span));
+        }
+
+        ampersand = if current.kind == TokenKind::Ampersand {
+            state.stream.next();
+
+            Some(current.span)
+        } else {
+            None
+        };
+
+        let mut key = expressions::create(state)?;
+
+        std::mem::swap(&mut key, &mut value);
+
+        return match ampersand {
+            Some(ampersand) => Ok(ArrayItem::ReferencedKeyValue {
+                key,
+                double_arrow,
+                value,
+                ampersand,
+            }),
+            None => Ok(ArrayItem::KeyValue {
+                key,
+                double_arrow,
+                value,
+            }),
+        };
+    }
+
+    Ok(ArrayItem::Value { value })
 }

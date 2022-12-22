@@ -1,7 +1,6 @@
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::utils::Braced;
-use crate::parser::ast::utils::Bracketed;
 use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::utils::Parenthesized;
 use crate::parser::ast::utils::SemicolonTerminated;
@@ -177,25 +176,6 @@ pub fn braced<T>(
         left_brace,
         inner,
         right_brace,
-    })
-}
-
-/// Parse an item that is surrounded by brackets.
-///
-/// This function will skip the left bracket, call the given function,
-/// and then skip the right bracket.
-pub fn bracketed<T>(
-    state: &mut State,
-    func: &(dyn Fn(&mut State) -> ParseResult<T>),
-) -> ParseResult<Bracketed<T>> {
-    let left_bracket = skip_left_bracket(state)?;
-    let inner = func(state)?;
-    let right_bracket = skip_right_bracket(state)?;
-
-    Ok(Bracketed {
-        left_bracket,
-        inner,
-        right_bracket,
     })
 }
 

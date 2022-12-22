@@ -1,27 +1,30 @@
 [
     EchoOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: Literal(
             String(
                 LiteralString {
                     value: ""<?php\n"",
-                    span: Span(
-                        1,
-                        5,
-                    ),
+                    span: Span {
+                        line: 1,
+                        column: 5,
+                        position: 4,
+                    },
                 },
             ),
         ),
         ending: CloseTag(
-            Span(
-                1,
-                15,
-            ),
+            Span {
+                line: 1,
+                column: 15,
+                position: 14,
+            },
         ),
     },
     InlineHtml(

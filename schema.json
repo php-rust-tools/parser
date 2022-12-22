@@ -824,33 +824,180 @@
       ]
     },
     "ArrayItem": {
-      "type": "object",
-      "required": [
-        "by_ref",
-        "unpack",
-        "value"
-      ],
-      "properties": {
-        "by_ref": {
-          "type": "boolean"
-        },
-        "key": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Expression"
-            },
-            {
-              "type": "null"
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "skipped"
+              ]
             }
-          ]
+          }
         },
-        "unpack": {
-          "type": "boolean"
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "value"
+              ],
+              "properties": {
+                "value": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
         },
-        "value": {
-          "$ref": "#/definitions/Expression"
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "referenced_value"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "ampersand",
+                "value"
+              ],
+              "properties": {
+                "ampersand": {
+                  "$ref": "#/definitions/Span"
+                },
+                "value": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "spread_value"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "ellipsis",
+                "value"
+              ],
+              "properties": {
+                "ellipsis": {
+                  "$ref": "#/definitions/Span"
+                },
+                "value": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "key_value"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "double_arrow",
+                "key",
+                "value"
+              ],
+              "properties": {
+                "double_arrow": {
+                  "$ref": "#/definitions/Span"
+                },
+                "key": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "value": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "referenced_key_value"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "ampersand",
+                "double_arrow",
+                "key",
+                "value"
+              ],
+              "properties": {
+                "ampersand": {
+                  "$ref": "#/definitions/Span"
+                },
+                "double_arrow": {
+                  "$ref": "#/definitions/Span"
+                },
+                "key": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "value": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
         }
-      }
+      ]
     },
     "ArrowFunction": {
       "type": "object",
@@ -1946,25 +2093,6 @@
           "$ref": "#/definitions/Span"
         },
         "right_brace": {
-          "$ref": "#/definitions/Span"
-        }
-      }
-    },
-    "Bracketed_for_CommaSeparated_for_ArrayItem": {
-      "type": "object",
-      "required": [
-        "inner",
-        "left_bracket",
-        "right_bracket"
-      ],
-      "properties": {
-        "inner": {
-          "$ref": "#/definitions/CommaSeparated_for_ArrayItem"
-        },
-        "left_bracket": {
-          "$ref": "#/definitions/Span"
-        },
-        "right_bracket": {
           "$ref": "#/definitions/Span"
         }
       }
@@ -4240,35 +4368,6 @@
         {
           "type": "object",
           "required": [
-            "type",
-            "value"
-          ],
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "list"
-              ]
-            },
-            "value": {
-              "type": "object",
-              "required": [
-                "items"
-              ],
-              "properties": {
-                "items": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/ListItem"
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": [
             "type"
           ],
           "properties": {
@@ -4772,7 +4871,23 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Bracketed_for_CommaSeparated_for_ArrayItem"
+              "type": "object",
+              "required": [
+                "end",
+                "items",
+                "start"
+              ],
+              "properties": {
+                "end": {
+                  "$ref": "#/definitions/Span"
+                },
+                "items": {
+                  "$ref": "#/definitions/CommaSeparated_for_ArrayItem"
+                },
+                "start": {
+                  "$ref": "#/definitions/Span"
+                }
+              }
             }
           }
         },
@@ -4805,10 +4920,48 @@
                   "$ref": "#/definitions/Span"
                 },
                 "items": {
+                  "$ref": "#/definitions/CommaSeparated_for_ArrayItem"
+                },
+                "start": {
+                  "$ref": "#/definitions/Span"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "list"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "end",
+                "items",
+                "list",
+                "start"
+              ],
+              "properties": {
+                "end": {
+                  "$ref": "#/definitions/Span"
+                },
+                "items": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/ArrayItem"
+                    "$ref": "#/definitions/ListEntry"
                   }
+                },
+                "list": {
+                  "$ref": "#/definitions/Span"
                 },
                 "start": {
                   "$ref": "#/definitions/Span"
@@ -6530,26 +6683,83 @@
         }
       ]
     },
-    "ListItem": {
-      "type": "object",
-      "required": [
-        "value"
-      ],
-      "properties": {
-        "key": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Expression"
-            },
-            {
-              "type": "null"
+    "ListEntry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "skipped"
+              ]
             }
-          ]
+          }
         },
-        "value": {
-          "$ref": "#/definitions/Expression"
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "value"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "value"
+              ],
+              "properties": {
+                "value": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "key_value"
+              ]
+            },
+            "value": {
+              "type": "object",
+              "required": [
+                "double_arrow",
+                "key",
+                "value"
+              ],
+              "properties": {
+                "double_arrow": {
+                  "$ref": "#/definitions/Span"
+                },
+                "key": {
+                  "$ref": "#/definitions/Expression"
+                },
+                "value": {
+                  "$ref": "#/definitions/Expression"
+                }
+              }
+            }
+          }
         }
-      }
+      ]
     },
     "Literal": {
       "oneOf": [
@@ -7634,21 +7844,29 @@
       }
     },
     "Span": {
-      "type": "array",
-      "items": [
-        {
+      "type": "object",
+      "required": [
+        "column",
+        "line",
+        "position"
+      ],
+      "properties": {
+        "column": {
           "type": "integer",
           "format": "uint",
           "minimum": 0.0
         },
-        {
+        "line": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0.0
+        },
+        "position": {
           "type": "integer",
           "format": "uint",
           "minimum": 0.0
         }
-      ],
-      "maxItems": 2,
-      "minItems": 2
+      }
     },
     "Statement": {
       "oneOf": [

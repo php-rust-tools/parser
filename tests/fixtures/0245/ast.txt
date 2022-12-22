@@ -1,65 +1,67 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
-        expression: ShortArray(
-            Bracketed {
-                left_bracket: Span(
-                    3,
-                    1,
-                ),
-                inner: CommaSeparated {
-                    inner: [
-                        ArrayItem {
-                            key: None,
-                            value: FunctionCall {
-                                target: Identifier(
-                                    SimpleIdentifier(
-                                        SimpleIdentifier {
-                                            span: Span(
-                                                3,
-                                                2,
-                                            ),
-                                            value: "foo",
+        expression: ShortArray {
+            start: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
+            items: CommaSeparated {
+                inner: [
+                    Value {
+                        value: FunctionCall {
+                            target: Identifier(
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: Span {
+                                            line: 3,
+                                            column: 2,
+                                            position: 8,
                                         },
-                                    ),
-                                ),
-                                arguments: ArgumentList {
-                                    comments: CommentGroup {
-                                        comments: [],
+                                        value: "foo",
                                     },
-                                    left_parenthesis: Span(
-                                        3,
-                                        5,
-                                    ),
-                                    arguments: [],
-                                    right_parenthesis: Span(
-                                        3,
-                                        24,
-                                    ),
+                                ),
+                            ),
+                            arguments: ArgumentList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span {
+                                    line: 3,
+                                    column: 5,
+                                    position: 11,
+                                },
+                                arguments: [],
+                                right_parenthesis: Span {
+                                    line: 3,
+                                    column: 24,
+                                    position: 30,
                                 },
                             },
-                            unpack: false,
-                            by_ref: false,
                         },
-                    ],
-                    commas: [],
-                },
-                right_bracket: Span(
-                    3,
-                    25,
-                ),
+                    },
+                ],
+                commas: [],
             },
-        ),
+            end: Span {
+                line: 3,
+                column: 25,
+                position: 31,
+            },
+        },
         ending: Semicolon(
-            Span(
-                3,
-                26,
-            ),
+            Span {
+                line: 3,
+                column: 26,
+                position: 32,
+            },
         ),
     },
 ]

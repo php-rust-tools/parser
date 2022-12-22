@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Class(
         Class {
@@ -11,37 +12,42 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                3,
-                1,
-            ),
+            class: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    3,
-                    7,
-                ),
+                span: Span {
+                    line: 3,
+                    column: 7,
+                    position: 13,
+                },
                 value: "Foo2",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    3,
-                    12,
-                ),
+                left_brace: Span {
+                    line: 3,
+                    column: 12,
+                    position: 18,
+                },
                 members: [
                     TraitUsage(
                         TraitUsage {
-                            use: Span(
-                                4,
-                                5,
-                            ),
+                            use: Span {
+                                line: 4,
+                                column: 5,
+                                position: 24,
+                            },
                             traits: [
                                 SimpleIdentifier {
-                                    span: Span(
-                                        4,
-                                        9,
-                                    ),
+                                    span: Span {
+                                        line: 4,
+                                        column: 9,
+                                        position: 28,
+                                    },
                                     value: "B",
                                 },
                             ],
@@ -49,25 +55,28 @@
                                 Alias {
                                     trait: None,
                                     method: SimpleIdentifier {
-                                        span: Span(
-                                            5,
-                                            9,
-                                        ),
+                                        span: Span {
+                                            line: 5,
+                                            column: 9,
+                                            position: 40,
+                                        },
                                         value: "foo",
                                     },
                                     alias: SimpleIdentifier {
-                                        span: Span(
-                                            5,
-                                            26,
-                                        ),
+                                        span: Span {
+                                            line: 5,
+                                            column: 26,
+                                            position: 57,
+                                        },
                                         value: "bar",
                                     },
                                     visibility: Some(
                                         Protected(
-                                            Span(
-                                                5,
-                                                16,
-                                            ),
+                                            Span {
+                                                line: 5,
+                                                column: 16,
+                                                position: 47,
+                                            },
                                         ),
                                     ),
                                 },
@@ -75,10 +84,11 @@
                         },
                     ),
                 ],
-                right_brace: Span(
-                    7,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 7,
+                    column: 1,
+                    position: 68,
+                },
             },
         },
     ),
@@ -88,44 +98,50 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                9,
-                1,
-            ),
+            class: Span {
+                line: 9,
+                column: 1,
+                position: 71,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    9,
-                    7,
-                ),
+                span: Span {
+                    line: 9,
+                    column: 7,
+                    position: 77,
+                },
                 value: "Bar2",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    9,
-                    12,
-                ),
+                left_brace: Span {
+                    line: 9,
+                    column: 12,
+                    position: 82,
+                },
                 members: [
                     TraitUsage(
                         TraitUsage {
-                            use: Span(
-                                10,
-                                5,
-                            ),
+                            use: Span {
+                                line: 10,
+                                column: 5,
+                                position: 89,
+                            },
                             traits: [
                                 SimpleIdentifier {
-                                    span: Span(
-                                        10,
-                                        9,
-                                    ),
+                                    span: Span {
+                                        line: 10,
+                                        column: 9,
+                                        position: 93,
+                                    },
                                     value: "B",
                                 },
                                 SimpleIdentifier {
-                                    span: Span(
-                                        11,
-                                        9,
-                                    ),
+                                    span: Span {
+                                        line: 11,
+                                        column: 9,
+                                        position: 104,
+                                    },
                                     value: "C",
                                 },
                             ],
@@ -133,26 +149,29 @@
                                 Precedence {
                                     trait: Some(
                                         SimpleIdentifier {
-                                            span: Span(
-                                                12,
-                                                13,
-                                            ),
+                                            span: Span {
+                                                line: 12,
+                                                column: 13,
+                                                position: 121,
+                                            },
                                             value: "B",
                                         },
                                     ),
                                     method: SimpleIdentifier {
-                                        span: Span(
-                                            12,
-                                            16,
-                                        ),
+                                        span: Span {
+                                            line: 12,
+                                            column: 16,
+                                            position: 124,
+                                        },
                                         value: "foo",
                                     },
                                     insteadof: [
                                         SimpleIdentifier {
-                                            span: Span(
-                                                12,
-                                                30,
-                                            ),
+                                            span: Span {
+                                                line: 12,
+                                                column: 30,
+                                                position: 138,
+                                            },
                                             value: "C",
                                         },
                                     ],
@@ -161,10 +180,11 @@
                         },
                     ),
                 ],
-                right_brace: Span(
-                    14,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 14,
+                    column: 1,
+                    position: 151,
+                },
             },
         },
     ),
@@ -174,37 +194,42 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                16,
-                1,
-            ),
+            class: Span {
+                line: 16,
+                column: 1,
+                position: 154,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    16,
-                    7,
-                ),
+                span: Span {
+                    line: 16,
+                    column: 7,
+                    position: 160,
+                },
                 value: "Bar3",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    16,
-                    12,
-                ),
+                left_brace: Span {
+                    line: 16,
+                    column: 12,
+                    position: 165,
+                },
                 members: [
                     TraitUsage(
                         TraitUsage {
-                            use: Span(
-                                17,
-                                5,
-                            ),
+                            use: Span {
+                                line: 17,
+                                column: 5,
+                                position: 171,
+                            },
                             traits: [
                                 SimpleIdentifier {
-                                    span: Span(
-                                        17,
-                                        9,
-                                    ),
+                                    span: Span {
+                                        line: 17,
+                                        column: 9,
+                                        position: 175,
+                                    },
                                     value: "B",
                                 },
                             ],
@@ -212,25 +237,28 @@
                                 Alias {
                                     trait: Some(
                                         SimpleIdentifier {
-                                            span: Span(
-                                                17,
-                                                13,
-                                            ),
+                                            span: Span {
+                                                line: 17,
+                                                column: 13,
+                                                position: 179,
+                                            },
                                             value: "B",
                                         },
                                     ),
                                     method: SimpleIdentifier {
-                                        span: Span(
-                                            17,
-                                            16,
-                                        ),
+                                        span: Span {
+                                            line: 17,
+                                            column: 16,
+                                            position: 182,
+                                        },
                                         value: "foo",
                                     },
                                     alias: SimpleIdentifier {
-                                        span: Span(
-                                            17,
-                                            23,
-                                        ),
+                                        span: Span {
+                                            line: 17,
+                                            column: 23,
+                                            position: 189,
+                                        },
                                         value: "bar",
                                     },
                                     visibility: None,
@@ -239,10 +267,11 @@
                         },
                     ),
                 ],
-                right_brace: Span(
-                    18,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 18,
+                    column: 1,
+                    position: 196,
+                },
             },
         },
     ),
@@ -252,37 +281,42 @@
             modifiers: ClassModifierGroup {
                 modifiers: [],
             },
-            class: Span(
-                20,
-                1,
-            ),
+            class: Span {
+                line: 20,
+                column: 1,
+                position: 199,
+            },
             name: SimpleIdentifier {
-                span: Span(
-                    20,
-                    7,
-                ),
+                span: Span {
+                    line: 20,
+                    column: 7,
+                    position: 205,
+                },
                 value: "Bar4",
             },
             extends: None,
             implements: None,
             body: ClassBody {
-                left_brace: Span(
-                    20,
-                    12,
-                ),
+                left_brace: Span {
+                    line: 20,
+                    column: 12,
+                    position: 210,
+                },
                 members: [
                     TraitUsage(
                         TraitUsage {
-                            use: Span(
-                                21,
-                                5,
-                            ),
+                            use: Span {
+                                line: 21,
+                                column: 5,
+                                position: 216,
+                            },
                             traits: [
                                 SimpleIdentifier {
-                                    span: Span(
-                                        21,
-                                        9,
-                                    ),
+                                    span: Span {
+                                        line: 21,
+                                        column: 9,
+                                        position: 220,
+                                    },
                                     value: "B",
                                 },
                             ],
@@ -290,17 +324,19 @@
                                 Alias {
                                     trait: None,
                                     method: SimpleIdentifier {
-                                        span: Span(
-                                            21,
-                                            13,
-                                        ),
+                                        span: Span {
+                                            line: 21,
+                                            column: 13,
+                                            position: 224,
+                                        },
                                         value: "foo",
                                     },
                                     alias: SimpleIdentifier {
-                                        span: Span(
-                                            21,
-                                            20,
-                                        ),
+                                        span: Span {
+                                            line: 21,
+                                            column: 20,
+                                            position: 231,
+                                        },
                                         value: "bar",
                                     },
                                     visibility: None,
@@ -309,10 +345,11 @@
                         },
                     ),
                 ],
-                right_brace: Span(
-                    22,
-                    1,
-                ),
+                right_brace: Span {
+                    line: 22,
+                    column: 1,
+                    position: 238,
+                },
             },
         },
     ),

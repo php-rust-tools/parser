@@ -1,18 +1,20 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Use {
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        4,
-                        13,
-                    ),
+                    span: Span {
+                        line: 4,
+                        column: 13,
+                        position: 27,
+                    },
                     value: "foo",
                 },
                 alias: None,
@@ -25,10 +27,11 @@
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        5,
-                        13,
-                    ),
+                    span: Span {
+                        line: 5,
+                        column: 13,
+                        position: 52,
+                    },
                     value: "bar",
                 },
                 alias: None,
@@ -39,28 +42,31 @@
     },
     GroupUse {
         prefix: SimpleIdentifier {
-            span: Span(
-                6,
-                5,
-            ),
+            span: Span {
+                line: 6,
+                column: 5,
+                position: 78,
+            },
             value: "bar\",
         },
         kind: Normal,
         uses: [
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        7,
-                        13,
-                    ),
+                    span: Span {
+                        line: 7,
+                        column: 13,
+                        position: 97,
+                    },
                     value: "w",
                 },
                 alias: Some(
                     SimpleIdentifier {
-                        span: Span(
-                            7,
-                            36,
-                        ),
+                        span: Span {
+                            line: 7,
+                            column: 36,
+                            position: 120,
+                        },
                         value: "b",
                     },
                 ),
@@ -68,10 +74,11 @@
             },
             Use {
                 name: SimpleIdentifier {
-                    span: Span(
-                        8,
-                        13,
-                    ),
+                    span: Span {
+                        line: 8,
+                        column: 13,
+                        position: 144,
+                    },
                     value: "z",
                 },
                 alias: None,
@@ -84,160 +91,180 @@
             comments: CommentGroup {
                 comments: [
                     Comment {
-                        span: Span(
-                            3,
-                            1,
-                        ),
+                        span: Span {
+                            line: 3,
+                            column: 1,
+                            position: 7,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            4,
-                            5,
-                        ),
+                        span: Span {
+                            line: 4,
+                            column: 5,
+                            position: 19,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            4,
-                            18,
-                        ),
+                        span: Span {
+                            line: 4,
+                            column: 18,
+                            position: 32,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            5,
-                            5,
-                        ),
+                        span: Span {
+                            line: 5,
+                            column: 5,
+                            position: 44,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            5,
-                            17,
-                        ),
+                        span: Span {
+                            line: 5,
+                            column: 17,
+                            position: 56,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            5,
-                            26,
-                        ),
+                        span: Span {
+                            line: 5,
+                            column: 26,
+                            position: 65,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            7,
-                            4,
-                        ),
+                        span: Span {
+                            line: 7,
+                            column: 4,
+                            position: 88,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            7,
-                            15,
-                        ),
+                        span: Span {
+                            line: 7,
+                            column: 15,
+                            position: 99,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            7,
-                            27,
-                        ),
+                        span: Span {
+                            line: 7,
+                            column: 27,
+                            position: 111,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            7,
-                            39,
-                        ),
+                        span: Span {
+                            line: 7,
+                            column: 39,
+                            position: 123,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            8,
-                            4,
-                        ),
+                        span: Span {
+                            line: 8,
+                            column: 4,
+                            position: 135,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            8,
-                            16,
-                        ),
+                        span: Span {
+                            line: 8,
+                            column: 16,
+                            position: 147,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            9,
-                            3,
-                        ),
+                        span: Span {
+                            line: 9,
+                            column: 3,
+                            position: 158,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                     Comment {
-                        span: Span(
-                            10,
-                            1,
-                        ),
+                        span: Span {
+                            line: 10,
+                            column: 1,
+                            position: 167,
+                        },
                         format: MultiLine,
                         content: "/* a */",
                     },
                 ],
             },
             attributes: [],
-            function: Span(
-                12,
-                1,
-            ),
+            function: Span {
+                line: 12,
+                column: 1,
+                position: 176,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    12,
-                    10,
-                ),
+                span: Span {
+                    line: 12,
+                    column: 10,
+                    position: 185,
+                },
                 value: "qux",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    12,
-                    13,
-                ),
+                left_parenthesis: Span {
+                    line: 12,
+                    column: 13,
+                    position: 188,
+                },
                 parameters: CommaSeparated {
                     inner: [],
                     commas: [],
                 },
-                right_parenthesis: Span(
-                    12,
-                    14,
-                ),
+                right_parenthesis: Span {
+                    line: 12,
+                    column: 14,
+                    position: 189,
+                },
             },
             return_type: Some(
                 ReturnType {
-                    colon: Span(
-                        12,
-                        15,
-                    ),
+                    colon: Span {
+                        line: 12,
+                        column: 15,
+                        position: 190,
+                    },
                     data_type: Void(
-                        Span(
-                            12,
-                            17,
-                        ),
+                        Span {
+                            line: 12,
+                            column: 17,
+                            position: 192,
+                        },
                     ),
                 },
             ),
@@ -245,15 +272,17 @@
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    12,
-                    22,
-                ),
+                left_brace: Span {
+                    line: 12,
+                    column: 22,
+                    position: 197,
+                },
                 statements: [],
-                right_brace: Span(
-                    12,
-                    23,
-                ),
+                right_brace: Span {
+                    line: 12,
+                    column: 23,
+                    position: 198,
+                },
             },
         },
     ),

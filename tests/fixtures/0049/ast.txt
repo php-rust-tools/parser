@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Function(
         Function {
@@ -11,26 +12,29 @@
                 comments: [],
             },
             attributes: [],
-            function: Span(
-                1,
-                7,
-            ),
+            function: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
             ampersand: None,
             name: SimpleIdentifier {
-                span: Span(
-                    1,
-                    16,
-                ),
+                span: Span {
+                    line: 1,
+                    column: 16,
+                    position: 15,
+                },
                 value: "foo",
             },
             parameters: FunctionParameterList {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_parenthesis: Span(
-                    1,
-                    19,
-                ),
+                left_parenthesis: Span {
+                    line: 1,
+                    column: 19,
+                    position: 18,
+                },
                 parameters: CommaSeparated {
                     inner: [
                         FunctionParameter {
@@ -38,10 +42,11 @@
                                 comments: [],
                             },
                             name: SimpleVariable {
-                                span: Span(
-                                    1,
-                                    51,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 51,
+                                    position: 50,
+                                },
                                 name: "$b",
                             },
                             attributes: [],
@@ -49,28 +54,32 @@
                                 Union(
                                     [
                                         String(
-                                            Span(
-                                                1,
-                                                20,
-                                            ),
+                                            Span {
+                                                line: 1,
+                                                column: 20,
+                                                position: 19,
+                                            },
                                         ),
                                         Array(
-                                            Span(
-                                                1,
-                                                27,
-                                            ),
+                                            Span {
+                                                line: 1,
+                                                column: 27,
+                                                position: 26,
+                                            },
                                         ),
                                         Iterable(
-                                            Span(
-                                                1,
-                                                33,
-                                            ),
+                                            Span {
+                                                line: 1,
+                                                column: 33,
+                                                position: 32,
+                                            },
                                         ),
                                         Callable(
-                                            Span(
-                                                1,
-                                                42,
-                                            ),
+                                            Span {
+                                                line: 1,
+                                                column: 42,
+                                                position: 41,
+                                            },
                                         ),
                                     ],
                                 ),
@@ -82,25 +91,28 @@
                     ],
                     commas: [],
                 },
-                right_parenthesis: Span(
-                    1,
-                    53,
-                ),
+                right_parenthesis: Span {
+                    line: 1,
+                    column: 53,
+                    position: 52,
+                },
             },
             return_type: None,
             body: FunctionBody {
                 comments: CommentGroup {
                     comments: [],
                 },
-                left_brace: Span(
-                    1,
-                    55,
-                ),
+                left_brace: Span {
+                    line: 1,
+                    column: 55,
+                    position: 54,
+                },
                 statements: [],
-                right_brace: Span(
-                    1,
-                    56,
-                ),
+                right_brace: Span {
+                    line: 1,
+                    column: 56,
+                    position: 55,
+                },
             },
         },
     ),

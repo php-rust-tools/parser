@@ -1,54 +1,77 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: AssignmentOperation(
             Assign {
                 left: List {
+                    list: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
+                    },
+                    start: Span {
+                        line: 3,
+                        column: 5,
+                        position: 11,
+                    },
                     items: [
-                        ListItem {
-                            key: Some(
-                                Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'foo'",
-                                            span: Span(
-                                                3,
-                                                6,
-                                            ),
+                        KeyValue {
+                            key: Literal(
+                                String(
+                                    LiteralString {
+                                        value: "'foo'",
+                                        span: Span {
+                                            line: 3,
+                                            column: 6,
+                                            position: 12,
                                         },
-                                    ),
+                                    },
                                 ),
                             ),
+                            double_arrow: Span {
+                                line: 3,
+                                column: 12,
+                                position: 18,
+                            },
                             value: Variable(
                                 SimpleVariable(
                                     SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            15,
-                                        ),
+                                        span: Span {
+                                            line: 3,
+                                            column: 15,
+                                            position: 21,
+                                        },
                                         name: "$a",
                                     },
                                 ),
                             ),
                         },
                     ],
+                    end: Span {
+                        line: 3,
+                        column: 17,
+                        position: 23,
+                    },
                 },
-                equals: Span(
-                    3,
-                    19,
-                ),
+                equals: Span {
+                    line: 3,
+                    column: 19,
+                    position: 25,
+                },
                 right: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                3,
-                                21,
-                            ),
+                            span: Span {
+                                line: 3,
+                                column: 21,
+                                position: 27,
+                            },
                             name: "$foo",
                         },
                     ),
@@ -56,10 +79,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                3,
-                25,
-            ),
+            Span {
+                line: 3,
+                column: 25,
+                position: 31,
+            },
         ),
     },
 ]

@@ -1,80 +1,108 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: AssignmentOperation(
             Assign {
                 left: List {
+                    list: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
+                    },
+                    start: Span {
+                        line: 3,
+                        column: 5,
+                        position: 11,
+                    },
                     items: [
-                        ListItem {
-                            key: Some(
-                                Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'foo'",
-                                            span: Span(
-                                                3,
-                                                6,
-                                            ),
+                        KeyValue {
+                            key: Literal(
+                                String(
+                                    LiteralString {
+                                        value: "'foo'",
+                                        span: Span {
+                                            line: 3,
+                                            column: 6,
+                                            position: 12,
                                         },
-                                    ),
+                                    },
                                 ),
                             ),
+                            double_arrow: Span {
+                                line: 3,
+                                column: 12,
+                                position: 18,
+                            },
                             value: Variable(
                                 SimpleVariable(
                                     SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            15,
-                                        ),
+                                        span: Span {
+                                            line: 3,
+                                            column: 15,
+                                            position: 21,
+                                        },
                                         name: "$a",
                                     },
                                 ),
                             ),
                         },
-                        ListItem {
-                            key: Some(
-                                Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'bar'",
-                                            span: Span(
-                                                3,
-                                                19,
-                                            ),
+                        KeyValue {
+                            key: Literal(
+                                String(
+                                    LiteralString {
+                                        value: "'bar'",
+                                        span: Span {
+                                            line: 3,
+                                            column: 19,
+                                            position: 25,
                                         },
-                                    ),
+                                    },
                                 ),
                             ),
+                            double_arrow: Span {
+                                line: 3,
+                                column: 25,
+                                position: 31,
+                            },
                             value: Variable(
                                 SimpleVariable(
                                     SimpleVariable {
-                                        span: Span(
-                                            3,
-                                            28,
-                                        ),
+                                        span: Span {
+                                            line: 3,
+                                            column: 28,
+                                            position: 34,
+                                        },
                                         name: "$b",
                                     },
                                 ),
                             ),
                         },
                     ],
+                    end: Span {
+                        line: 3,
+                        column: 30,
+                        position: 36,
+                    },
                 },
-                equals: Span(
-                    3,
-                    32,
-                ),
+                equals: Span {
+                    line: 3,
+                    column: 32,
+                    position: 38,
+                },
                 right: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                3,
-                                34,
-                            ),
+                            span: Span {
+                                line: 3,
+                                column: 34,
+                                position: 40,
+                            },
                             name: "$foo",
                         },
                     ),
@@ -82,10 +110,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                3,
-                38,
-            ),
+            Span {
+                line: 3,
+                column: 38,
+                position: 44,
+            },
         ),
     },
 ]

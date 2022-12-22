@@ -1,9 +1,10 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Expression {
         expression: AssignmentOperation(
@@ -11,44 +12,50 @@
                 left: Variable(
                     SimpleVariable(
                         SimpleVariable {
-                            span: Span(
-                                3,
-                                1,
-                            ),
+                            span: Span {
+                                line: 3,
+                                column: 1,
+                                position: 7,
+                            },
                             name: "$foo",
                         },
                     ),
                 ),
-                equals: Span(
-                    3,
-                    6,
-                ),
+                equals: Span {
+                    line: 3,
+                    column: 6,
+                    position: 12,
+                },
                 right: Require {
-                    require: Span(
-                        3,
-                        8,
-                    ),
+                    require: Span {
+                        line: 3,
+                        column: 8,
+                        position: 14,
+                    },
                     path: Concat {
                         left: MagicConstant(
                             Directory(
-                                Span(
-                                    3,
-                                    16,
-                                ),
+                                Span {
+                                    line: 3,
+                                    column: 16,
+                                    position: 22,
+                                },
                             ),
                         ),
-                        dot: Span(
-                            3,
-                            24,
-                        ),
+                        dot: Span {
+                            line: 3,
+                            column: 24,
+                            position: 30,
+                        },
                         right: Literal(
                             String(
                                 LiteralString {
                                     value: "'/foo.php'",
-                                    span: Span(
-                                        3,
-                                        26,
-                                    ),
+                                    span: Span {
+                                        line: 3,
+                                        column: 26,
+                                        position: 32,
+                                    },
                                 },
                             ),
                         ),
@@ -57,10 +64,11 @@
             },
         ),
         ending: Semicolon(
-            Span(
-                3,
-                36,
-            ),
+            Span {
+                line: 3,
+                column: 36,
+                position: 42,
+            },
         ),
     },
 ]

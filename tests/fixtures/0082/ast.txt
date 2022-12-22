@@ -1,77 +1,88 @@
 [
     FullOpeningTag(
-        Span(
-            1,
-            1,
-        ),
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
     ),
     Declare(
         Declare {
-            declare: Span(
-                1,
-                7,
-            ),
+            declare: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
             entries: DeclareEntryGroup {
-                left_parenthesis: Span(
-                    1,
-                    14,
-                ),
-                right_parenthesis: Span(
-                    1,
-                    27,
-                ),
+                left_parenthesis: Span {
+                    line: 1,
+                    column: 14,
+                    position: 13,
+                },
+                right_parenthesis: Span {
+                    line: 1,
+                    column: 27,
+                    position: 26,
+                },
                 entries: [
                     DeclareEntry {
                         key: SimpleIdentifier {
-                            span: Span(
-                                1,
-                                15,
-                            ),
+                            span: Span {
+                                line: 1,
+                                column: 15,
+                                position: 14,
+                            },
                             value: "A",
                         },
-                        equals: Span(
-                            1,
-                            16,
-                        ),
+                        equals: Span {
+                            line: 1,
+                            column: 16,
+                            position: 15,
+                        },
                         value: String(
                             LiteralString {
                                 value: "'B'",
-                                span: Span(
-                                    1,
-                                    17,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 17,
+                                    position: 16,
+                                },
                             },
                         ),
                     },
                     DeclareEntry {
                         key: SimpleIdentifier {
-                            span: Span(
-                                1,
-                                22,
-                            ),
+                            span: Span {
+                                line: 1,
+                                column: 22,
+                                position: 21,
+                            },
                             value: "C",
                         },
-                        equals: Span(
-                            1,
-                            23,
-                        ),
+                        equals: Span {
+                            line: 1,
+                            column: 23,
+                            position: 22,
+                        },
                         value: String(
                             LiteralString {
                                 value: "'D'",
-                                span: Span(
-                                    1,
-                                    24,
-                                ),
+                                span: Span {
+                                    line: 1,
+                                    column: 24,
+                                    position: 23,
+                                },
                             },
                         ),
                     },
                 ],
             },
             body: Noop {
-                semicolon: Span(
-                    1,
-                    28,
-                ),
+                semicolon: Span {
+                    line: 1,
+                    column: 28,
+                    position: 27,
+                },
             },
         },
     ),
