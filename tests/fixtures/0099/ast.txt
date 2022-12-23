@@ -7,7 +7,7 @@
         },
     ),
     Expression {
-        expression: StaticMethodCall {
+        expression: StaticVariableMethodCall {
             target: Identifier(
                 SimpleIdentifier(
                     SimpleIdentifier {
@@ -25,26 +25,24 @@
                 column: 10,
                 position: 9,
             },
-            method: Variable(
-                VariableVariable(
-                    VariableVariable {
-                        span: Span {
-                            line: 1,
-                            column: 12,
-                            position: 11,
-                        },
-                        variable: SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 1,
-                                    column: 13,
-                                    position: 12,
-                                },
-                                name: "$a",
-                            },
-                        ),
+            method: VariableVariable(
+                VariableVariable {
+                    span: Span {
+                        line: 1,
+                        column: 12,
+                        position: 11,
                     },
-                ),
+                    variable: SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 1,
+                                column: 13,
+                                position: 12,
+                            },
+                            name: "$a",
+                        },
+                    ),
+                },
             ),
             arguments: ArgumentList {
                 comments: CommentGroup {

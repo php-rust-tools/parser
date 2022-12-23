@@ -321,15 +321,53 @@ pub enum Expression {
     StaticMethodCall {
         target: Box<Self>,       // `Foo`
         double_colon: Span,      // `::`
-        method: Box<Self>,       // `bar`
+        method: Identifier,      // `bar`
+        arguments: ArgumentList, // `(1, 2, 3)`
+    },
+    // `Foo::$bar(1, 2, 3)`
+    StaticVariableMethodCall {
+        target: Box<Self>,       // `Foo`
+        double_colon: Span,      // `::`
+        method: Variable,        // `$bar`
         arguments: ArgumentList, // `(1, 2, 3)`
     },
     // `Foo::bar(...)`
     StaticMethodClosureCreation {
         target: Box<Self>,                // `Foo`
         double_colon: Span,               // `::`
-        method: Box<Self>,                // `bar`
+        method: Identifier,               // `bar`
         placeholder: ArgumentPlaceholder, // `(...)`
+    },
+    // `Foo::$bar(...)`
+    StaticVariableMethodClosureCreation {
+        target: Box<Self>,                // `Foo`
+        double_colon: Span,               // `::`
+        method: Variable,                 // `$bar`
+        placeholder: ArgumentPlaceholder, // `(...)`
+    },
+    // `foo()->bar`
+    PropertyFetch {
+        target: Box<Self>,   // `foo()`
+        arrow: Span,         // `->`
+        property: Box<Self>, // `bar`
+    },
+    // `foo()?->bar`
+    NullsafePropertyFetch {
+        target: Box<Self>,    // `foo()`
+        question_arrow: Span, // `?->`
+        property: Box<Self>,  // `bar`
+    },
+    // `foo()::$bar`
+    StaticPropertyFetch {
+        target: Box<Self>,  // `foo()`
+        double_colon: Span, // `::`
+        property: Variable, // `$bar`
+    },
+    // `foo()::bar` or `foo()::{$name}`
+    ConstantFetch {
+        target: Box<Self>,    // `foo()`
+        double_colon: Span,   // `::`
+        constant: Identifier, // `bar`
     },
     // `static`
     Static,
@@ -382,28 +420,6 @@ pub enum Expression {
     // ``foo``
     ShellExec {
         parts: Vec<StringPart>,
-    },
-    // `foo()->bar`
-    PropertyFetch {
-        target: Box<Self>,   // `foo()`
-        arrow: Span,         // `->`
-        property: Box<Self>, // `bar`
-    },
-    // `foo()?->bar`
-    NullsafePropertyFetch {
-        target: Box<Self>,    // `foo()`
-        question_arrow: Span, // `?->`
-        property: Box<Self>,  // `bar`
-    },
-    // `foo()::bar`
-    StaticPropertyFetch {
-        target: Box<Self>,   // `foo()`
-        double_colon: Span,  // `::`
-        property: Box<Self>, // `bar`
-    },
-    ConstFetch {
-        target: Box<Self>,
-        constant: SimpleIdentifier,
     },
     AnonymousClass(AnonymousClass),
     Bool {

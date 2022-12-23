@@ -1127,7 +1127,7 @@ fn unexpected_token(state: &mut State) -> ParseResult<Expression> {
     ))
 }
 
-fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Expression, ParseError> {
+fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> ParseResult<Expression> {
     Ok(match op {
         TokenKind::DoubleQuestion => {
             let double_question = state.stream.current().span;
@@ -1183,8 +1183,6 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
         TokenKind::DoubleColon => {
             let span = utils::skip_double_colon(state)?;
 
-            let mut must_be_method_call = false;
-
             let current = state.stream.current();
 
             let property = match current.kind {
@@ -1197,26 +1195,19 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
                     ))
                 }
                 TokenKind::LeftBrace => {
-                    let start = current.span;
-                    must_be_method_call = true;
                     state.stream.next();
 
-                    let name = create(state)?;
-
-                    let end = utils::skip_right_brace(state)?;
-
                     Expression::Identifier(Identifier::DynamicIdentifier(DynamicIdentifier {
-                        start,
-                        expr: Box::new(name),
-                        end,
+                        start: current.span,
+                        expr: Box::new(create(state)?),
+                        end: utils::skip_right_brace(state)?,
                     }))
                 }
                 TokenKind::Class => {
-                    let span = current.span;
                     state.stream.next();
 
                     Expression::Identifier(Identifier::SimpleIdentifier(SimpleIdentifier {
-                        span,
+                        span: current.span,
                         value: "class".into(),
                     }))
                 }
@@ -1227,58 +1218,73 @@ fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> Result<Express
 
             let lhs = Box::new(lhs);
 
-            match property {
-                // 2. If the current token is a left paren, or if we know the property expression
-                //    is only valid a method call context, we can assume we're parsing a static
-                //    method call.
-                _ if state.stream.current().kind == TokenKind::LeftParen || must_be_method_call => {
-                    // `(...)` closure creation
-                    if state.stream.lookahead(0).kind == TokenKind::Ellipsis
-                        && state.stream.lookahead(1).kind == TokenKind::RightParen
-                    {
-                        let start = utils::skip(state, TokenKind::LeftParen)?;
-                        let ellipsis = utils::skip(state, TokenKind::Ellipsis)?;
-                        let end = utils::skip(state, TokenKind::RightParen)?;
+            if state.stream.current().kind == TokenKind::LeftParen {
+                if state.stream.lookahead(0).kind == TokenKind::Ellipsis
+                    && state.stream.lookahead(1).kind == TokenKind::RightParen
+                {
+                    let start = utils::skip(state, TokenKind::LeftParen)?;
+                    let ellipsis = utils::skip(state, TokenKind::Ellipsis)?;
+                    let end = utils::skip(state, TokenKind::RightParen)?;
 
-                        let placeholder = ArgumentPlaceholder {
-                            comments: state.stream.comments(),
-                            left_parenthesis: start,
-                            ellipsis,
-                            right_parenthesis: end,
-                        };
+                    let placeholder = ArgumentPlaceholder {
+                        comments: state.stream.comments(),
+                        left_parenthesis: start,
+                        ellipsis,
+                        right_parenthesis: end,
+                    };
 
-                        Expression::StaticMethodClosureCreation {
-                            target: lhs,
-                            double_colon: span,
-                            method: Box::new(property),
-                            placeholder,
+                    match property {
+                        Expression::Identifier(identifier) => {
+                            Expression::StaticMethodClosureCreation {
+                                target: lhs,
+                                double_colon: span,
+                                method: identifier,
+                                placeholder,
+                            }
                         }
-                    } else {
-                        let arguments = parameters::argument_list(state)?;
+                        Expression::Variable(variable) => {
+                            Expression::StaticVariableMethodClosureCreation {
+                                target: lhs,
+                                double_colon: span,
+                                method: variable,
+                                placeholder,
+                            }
+                        }
+                        _ => unreachable!(),
+                    }
+                } else {
+                    let arguments = parameters::argument_list(state)?;
 
-                        Expression::StaticMethodCall {
+                    match property {
+                        Expression::Identifier(identifier) => Expression::StaticMethodCall {
                             target: lhs,
                             double_colon: span,
-                            method: Box::new(property),
+                            method: identifier,
                             arguments,
-                        }
+                        },
+                        Expression::Variable(variable) => Expression::StaticVariableMethodCall {
+                            target: lhs,
+                            double_colon: span,
+                            method: variable,
+                            arguments,
+                        },
+                        _ => unreachable!(),
                     }
                 }
-                // 1. If we have an identifier and the current token is not a left paren,
-                //    the resulting expression must be a constant fetch.
-                Expression::Identifier(Identifier::SimpleIdentifier(identifier)) => {
-                    Expression::ConstFetch {
+            } else {
+                match property {
+                    Expression::Identifier(identifier) => Expression::ConstantFetch {
                         target: lhs,
+                        double_colon: span,
                         constant: identifier,
-                    }
+                    },
+                    Expression::Variable(variable) => Expression::StaticPropertyFetch {
+                        target: lhs,
+                        double_colon: span,
+                        property: variable,
+                    },
+                    _ => unreachable!(),
                 }
-                // 3. If we haven't met any of the previous conditions, we can assume
-                //    that we're parsing a static property fetch.
-                _ => Expression::StaticPropertyFetch {
-                    target: lhs,
-                    double_colon: span,
-                    property: Box::new(property),
-                },
             }
         }
         TokenKind::Arrow | TokenKind::QuestionArrow => {

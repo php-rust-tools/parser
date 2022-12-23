@@ -25,33 +25,31 @@
                 column: 10,
                 position: 9,
             },
-            method: Identifier(
-                DynamicIdentifier(
-                    DynamicIdentifier {
-                        start: Span {
-                            line: 1,
-                            column: 12,
-                            position: 11,
-                        },
-                        expr: Literal(
-                            String(
-                                LiteralString {
-                                    value: "'foo'",
-                                    span: Span {
-                                        line: 1,
-                                        column: 13,
-                                        position: 12,
-                                    },
-                                },
-                            ),
-                        ),
-                        end: Span {
-                            line: 1,
-                            column: 18,
-                            position: 17,
-                        },
+            method: DynamicIdentifier(
+                DynamicIdentifier {
+                    start: Span {
+                        line: 1,
+                        column: 12,
+                        position: 11,
                     },
-                ),
+                    expr: Literal(
+                        String(
+                            LiteralString {
+                                value: "'foo'",
+                                span: Span {
+                                    line: 1,
+                                    column: 13,
+                                    position: 12,
+                                },
+                            },
+                        ),
+                    ),
+                    end: Span {
+                        line: 1,
+                        column: 18,
+                        position: 17,
+                    },
+                },
             ),
             arguments: ArgumentList {
                 comments: CommentGroup {
