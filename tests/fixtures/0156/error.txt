@@ -1,0 +1,12 @@
+[E033] Error: readonly property `Foo\Bar\Baz::$foo` cannot have a default value
+   ,-[code.php:6:34]
+   |
+ 6 |      public readonly string $foo = "foo";
+   *             ^^^^|^^^        ^^|^ |  
+   *                 |             `----- property `$foo` is declared here
+   *                 |                |  
+   *                 `------------------- property is declared as `readonly` here
+   *                                  |  
+   *                                  `-- try removing this `=`
+---'
+

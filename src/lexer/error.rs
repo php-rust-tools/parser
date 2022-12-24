@@ -19,6 +19,24 @@ pub enum SyntaxError {
     UnrecognisedToken(u8, Span),
 }
 
+impl SyntaxError {
+    pub fn span(&self) -> Span {
+        match self {
+            Self::UnexpectedEndOfFile(span) => *span,
+            Self::UnexpectedError(span) => *span,
+            Self::UnexpectedCharacter(_, span) => *span,
+            Self::InvalidHaltCompiler(span) => *span,
+            Self::InvalidOctalEscape(span) => *span,
+            Self::InvalidOctalLiteral(span) => *span,
+            Self::InvalidUnicodeEscape(span) => *span,
+            Self::UnpredictableState(span) => *span,
+            Self::InvalidDocIndentation(span) => *span,
+            Self::InvalidDocBodyIndentationLevel(_, span) => *span,
+            Self::UnrecognisedToken(_, span) => *span,
+        }
+    }
+}
+
 impl Display for SyntaxError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {

@@ -1,0 +1,11 @@
+[E017] Error: cannot declare magic method `EnumWithWakeUp::__set_state` in enum
+   ,-[code.php:4:28]
+   |
+ 3 | enum EnumWithWakeUp {
+   *      ^^^^^^^|^^^^^^  
+   *             `-------- enum `EnumWithWakeUp` is declared here
+ 4 |     public static function __set_state($s) {}
+   *                            ^^^^^|^^^^^  
+   *                                 `------- magic method `__set_state` is declared here, try removing it
+---'
+

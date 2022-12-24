@@ -1,0 +1,11 @@
+[E017] Error: cannot declare magic method `EnumWithGet::__get` in enum
+   ,-[code.php:4:21]
+   |
+ 3 | enum EnumWithGet {
+   *      ^^^^^|^^^^^  
+   *           `------- enum `EnumWithGet` is declared here
+ 4 |     public function __get($v) {}
+   *                     ^^|^^  
+   *                       `---- magic method `__get` is declared here, try removing it
+---'
+

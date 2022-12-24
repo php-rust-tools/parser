@@ -1,7 +1,7 @@
 use crate::expected_token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::data_type::Type;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
@@ -29,7 +29,7 @@ pub fn data_type(state: &mut State) -> ParseResult<Type> {
             TokenKind::Variable | TokenKind::Ellipsis | TokenKind::Ampersand
         )
     {
-        return instersection(state, ty, false);
+        return intersection(state, ty, false);
     }
 
     Ok(ty)
@@ -59,7 +59,7 @@ pub fn optional_data_type(state: &mut State) -> ParseResult<Option<Type>> {
                     TokenKind::Variable | TokenKind::Ellipsis | TokenKind::Ampersand
                 )
             {
-                return instersection(state, ty, false).map(Some);
+                return intersection(state, ty, false).map(Some);
             }
 
             Ok(Some(ty))
@@ -78,16 +78,16 @@ fn dnf(state: &mut State) -> ParseResult<Type> {
 
             utils::skip_right_parenthesis(state)?;
 
-            instersection(state, union, false)
+            intersection(state, union, false)
         },
         TokenKind::Ampersand => {
-            let intersection = instersection(state, ty, true)?;
+            let intersection = intersection(state, ty, true)?;
 
             utils::skip_right_parenthesis(state)?;
 
             union(state, intersection, false)
         },
-    ], state, ["`|`", "`&`"])
+    ], state, ["|", "&"])
 }
 
 fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
@@ -187,35 +187,35 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
 }
 
 fn simple_data_type(state: &mut State) -> ParseResult<Type> {
+    // TODO(azjezz): add a better error message here.
     optional_simple_data_type(state)?.ok_or_else(|| expected_token!(["a type"], state))
 }
 
 fn nullable(state: &mut State) -> ParseResult<Type> {
+    let current = state.stream.current();
+
     state.stream.next();
 
     let ty = simple_data_type(state)?;
 
     if ty.standalone() {
-        return Err(ParseError::StandaloneTypeUsedInCombination(
-            ty,
-            state.stream.current().span,
-        ));
+        return Err(error::standalone_type_used_as_nullable(&ty, current.span));
     }
 
-    Ok(Type::Nullable(Box::new(ty)))
+    Ok(Type::Nullable(current.span, Box::new(ty)))
 }
 
 fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> {
     if other.standalone() {
-        return Err(ParseError::StandaloneTypeUsedInCombination(
-            other,
+        return Err(error::standalone_type_used_in_union(
+            &other,
             state.stream.current().span,
         ));
     }
 
     let mut types = vec![other];
 
-    utils::skip(state, TokenKind::Pipe)?;
+    let mut last_pipe = utils::skip(state, TokenKind::Pipe)?;
 
     loop {
         let current = state.stream.current();
@@ -225,22 +225,22 @@ fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> 
                 //
                 // examples on how we got here:
                 //
-                // v-- get_intersection_type: within_dnf = fasle
+                // v-- get_intersection_type: within_dnf = false
                 //     v-- get_union_type: within_dnf = true
                 //      v-- error
                 // F&(A|(D&S))
                 //
-                // v-- get_intersection_type: within_dnf = fasle
+                // v-- get_intersection_type: within_dnf = false
                 //     v-- get_union_type: within_dnf = true
                 //        v-- error
                 // F&(A|B|(D&S))
-                return Err(ParseError::NestedDisjunctiveNormalFormTypes(current.span));
+                return Err(error::nested_disjunctive_normal_form_types(current.span));
             }
 
             state.stream.next();
 
             let other = simple_data_type(state)?;
-            let ty = instersection(state, other, true)?;
+            let ty = intersection(state, other, true)?;
 
             utils::skip_right_parenthesis(state)?;
 
@@ -248,10 +248,7 @@ fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> 
         } else {
             let ty = simple_data_type(state)?;
             if ty.standalone() {
-                return Err(ParseError::StandaloneTypeUsedInCombination(
-                    ty,
-                    state.stream.current().span,
-                ));
+                return Err(error::standalone_type_used_in_union(&ty, last_pipe));
             }
 
             ty
@@ -260,7 +257,7 @@ fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> 
         types.push(ty);
 
         if state.stream.current().kind == TokenKind::Pipe {
-            state.stream.next();
+            last_pipe = utils::skip(state, TokenKind::Pipe)?;
         } else {
             break;
         }
@@ -269,17 +266,17 @@ fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> 
     Ok(Type::Union(types))
 }
 
-fn instersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> {
+fn intersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> {
     if other.standalone() {
-        return Err(ParseError::StandaloneTypeUsedInCombination(
-            other,
+        return Err(error::standalone_type_used_in_intersection(
+            &other,
             state.stream.current().span,
         ));
     }
 
     let mut types = vec![other];
 
-    utils::skip(state, TokenKind::Ampersand)?;
+    let mut last_ampersand = utils::skip(state, TokenKind::Ampersand)?;
 
     loop {
         let current = state.stream.current();
@@ -289,16 +286,16 @@ fn instersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResul
                 //
                 // examples on how we got here:
                 //
-                //  v-- get_union_type: within_dnf = fasle
+                //  v-- get_union_type: within_dnf = false
                 //     v-- get_intersection_type: within_dnf = true
                 //      v-- error
                 // F|(A&(D|S))
                 //
-                //  v-- get_union_type: within_dnf = fasle
+                //  v-- get_union_type: within_dnf = false
                 //     v-- get_intersection_type: within_dnf = true
                 //        v-- error
                 // F|(A&B&(D|S))
-                return Err(ParseError::NestedDisjunctiveNormalFormTypes(current.span));
+                return Err(error::nested_disjunctive_normal_form_types(current.span));
             }
 
             state.stream.next();
@@ -312,9 +309,9 @@ fn instersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResul
         } else {
             let ty = simple_data_type(state)?;
             if ty.standalone() {
-                return Err(ParseError::StandaloneTypeUsedInCombination(
-                    ty,
-                    state.stream.current().span,
+                return Err(error::standalone_type_used_in_intersection(
+                    &ty,
+                    last_ampersand,
                 ));
             }
 
@@ -329,7 +326,7 @@ fn instersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResul
                 TokenKind::Variable | TokenKind::Ellipsis | TokenKind::Ampersand
             )
         {
-            state.stream.next();
+            last_ampersand = utils::skip(state, TokenKind::Ampersand)?;
         } else {
             break;
         }

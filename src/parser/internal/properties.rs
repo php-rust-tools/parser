@@ -3,7 +3,7 @@ use crate::parser::ast::modifiers::PropertyModifierGroup;
 use crate::parser::ast::properties::Property;
 use crate::parser::ast::properties::PropertyEntry;
 use crate::parser::ast::properties::VariableProperty;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::data_type;
@@ -21,36 +21,38 @@ pub fn parse(
     let mut entries = vec![];
     let mut type_checked = false;
     loop {
-        let current = state.stream.current();
         let variable = variables::simple_variable(state)?;
 
         if !type_checked {
             type_checked = true;
             if modifiers.has_readonly() && modifiers.has_static() {
-                return Err(ParseError::StaticPropertyUsingReadonlyModifier(
-                    class_name.to_owned(),
+                return Err(error::static_property_cannot_be_readonly(
+                    state.named(class_name),
                     variable.to_string(),
-                    current.span,
+                    variable.span,
+                    modifiers.get_static().unwrap().span(),
+                    modifiers.get_readonly().unwrap().span(),
                 ));
             }
 
             match &ty {
                 Some(ty) => {
                     if ty.includes_callable() || ty.is_bottom() {
-                        return Err(ParseError::ForbiddenTypeUsedInProperty(
-                            class_name.to_owned(),
+                        return Err(error::forbidden_type_used_in_property(
+                            state.named(class_name),
                             variable.to_string(),
+                            variable.span,
                             ty.clone(),
-                            current.span,
                         ));
                     }
                 }
                 None => {
-                    if modifiers.has_readonly() {
-                        return Err(ParseError::MissingTypeForReadonlyProperty(
-                            class_name.to_owned(),
+                    if let Some(modifier) = modifiers.get_readonly() {
+                        return Err(error::missing_type_for_readonly_property(
+                            state.named(class_name),
                             variable.to_string(),
-                            current.span,
+                            variable.span,
+                            modifier.span(),
                         ));
                     }
                 }
@@ -59,10 +61,12 @@ pub fn parse(
 
         let current = state.stream.current();
         if current.kind == TokenKind::Equals {
-            if modifiers.has_readonly() {
-                return Err(ParseError::ReadonlyPropertyHasDefaultValue(
-                    class_name.to_owned(),
+            if let Some(modifier) = modifiers.get_readonly() {
+                return Err(error::readonly_property_has_default_value(
+                    state.named(class_name),
                     variable.to_string(),
+                    variable.span,
+                    modifier.span(),
                     current.span,
                 ));
             }
@@ -112,11 +116,11 @@ pub fn parse_var(state: &mut State, class_name: &str) -> ParseResult<VariablePro
 
             if let Some(ty) = &ty {
                 if ty.includes_callable() || ty.is_bottom() {
-                    return Err(ParseError::ForbiddenTypeUsedInProperty(
-                        class_name.to_owned(),
+                    return Err(error::forbidden_type_used_in_property(
+                        state.named(class_name),
                         variable.to_string(),
+                        variable.span,
                         ty.clone(),
-                        state.stream.current().span,
                     ));
                 }
             }

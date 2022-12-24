@@ -8,7 +8,7 @@ use crate::parser::ast::namespaces::Namespace;
 use crate::parser::ast::namespaces::UnbracedNamespace;
 use crate::parser::ast::Block;
 use crate::parser::ast::Statement;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::utils;
@@ -26,7 +26,7 @@ pub fn namespace(state: &mut State) -> ParseResult<Statement> {
     if let Some(name) = &name {
         if current.kind != TokenKind::LeftBrace {
             if let Some(NamespaceType::Braced) = state.namespace_type() {
-                return Err(ParseError::MixingBracedAndUnBracedNamespaceDeclarations(
+                return Err(error::unbraced_namespace_declarations_in_braced_context(
                     current.span,
                 ));
             }
@@ -37,10 +37,10 @@ pub fn namespace(state: &mut State) -> ParseResult<Statement> {
 
     match state.namespace_type() {
         Some(NamespaceType::Unbraced) => Err(
-            ParseError::MixingBracedAndUnBracedNamespaceDeclarations(current.span),
+            error::braced_namespace_declarations_in_unbraced_context(current.span),
         ),
         Some(NamespaceType::Braced) if state.namespace().is_some() => {
-            Err(ParseError::NestedNamespaceDeclarations(current.span))
+            Err(error::nested_namespace_declarations(start))
         }
         _ => braced_namespace(state, start, name),
     }

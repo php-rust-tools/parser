@@ -9242,7 +9242,17 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Type"
+              "type": "array",
+              "items": [
+                {
+                  "$ref": "#/definitions/Span"
+                },
+                {
+                  "$ref": "#/definitions/Type"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2
             }
           }
         },

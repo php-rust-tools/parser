@@ -1,0 +1,13 @@
+[E015] Error: cannot declare method `foo::bar` abstract, as `foo` class is not abstract
+   ,-[code.php:4:28]
+   |
+ 3 | class foo {
+   *       ^|^  
+   *        `--- class `foo` is not declared abstract
+ 4 |     abstract function bar();
+   *     ^^^^|^^^          ^|^  
+   *         `------------------ `bar` method is declared as abstract here, try removing this
+   *                        |   
+   *                        `--- `bar` method is declared here
+---'
+

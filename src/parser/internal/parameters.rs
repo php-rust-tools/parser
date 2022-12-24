@@ -5,6 +5,7 @@ use crate::parser::ast::functions::ConstructorParameter;
 use crate::parser::ast::functions::ConstructorParameterList;
 use crate::parser::ast::functions::FunctionParameter;
 use crate::parser::ast::functions::FunctionParameterList;
+use crate::parser::error;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
@@ -102,38 +103,44 @@ pub fn constructor_parameter_list(
                 None
             };
 
-            let ellipsis = if matches!(current.kind, TokenKind::Ellipsis) {
+            let (ellipsis, var) = if matches!(current.kind, TokenKind::Ellipsis) {
                 state.stream.next();
+                let var = variables::simple_variable(state)?;
                 if !modifiers.is_empty() {
-                    return Err(ParseError::VariadicPromotedProperty(current.span));
+                    return Err(error::variadic_promoted_property(
+                        state.named(class_name),
+                        var.to_string(),
+                        current.span,
+                        modifiers.modifiers.first().unwrap(),
+                    ));
                 }
 
-                Some(current.span)
+                (Some(current.span), var)
             } else {
-                None
+                (None, variables::simple_variable(state)?)
             };
 
             // 2. Then expect a variable.
-            let var = variables::simple_variable(state)?;
 
             if !modifiers.is_empty() {
                 match &ty {
                     Some(ty) => {
                         if ty.includes_callable() || ty.is_bottom() {
-                            return Err(ParseError::ForbiddenTypeUsedInProperty(
+                            return Err(error::forbidden_type_used_in_property(
                                 state.named(class_name),
                                 var.to_string(),
+                                var.span,
                                 ty.clone(),
-                                state.stream.current().span,
                             ));
                         }
                     }
                     None => {
-                        if modifiers.has_readonly() {
-                            return Err(ParseError::MissingTypeForReadonlyProperty(
+                        if let Some(modifier) = modifiers.get_readonly() {
+                            return Err(error::missing_type_for_readonly_property(
                                 state.named(class_name),
                                 var.to_string(),
-                                state.stream.current().span,
+                                var.span,
+                                modifier.span(),
                             ));
                         }
                     }
@@ -183,8 +190,9 @@ pub fn argument_list(state: &mut State) -> ParseResult<ArgumentList> {
         if named {
             has_used_named_arguments = true;
         } else if has_used_named_arguments {
-            return Err(ParseError::CannotUsePositionalArgumentAfterNamedArgument(
+            return Err(error::cannot_use_positional_argument_after_named_argument(
                 span,
+                state.stream.current().span,
             ));
         }
 

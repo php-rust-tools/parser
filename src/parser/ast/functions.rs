@@ -165,6 +165,24 @@ pub struct ConcreteConstructor {
     pub body: MethodBody,
 }
 
+impl ConcreteConstructor {
+    pub fn first_span(&self) -> Span {
+        self.comments
+            .comments
+            .first()
+            .map(|c| c.span)
+            .unwrap_or_else(|| {
+                self.attributes.first().map(|a| a.start).unwrap_or_else(|| {
+                    self.modifiers
+                        .modifiers
+                        .first()
+                        .map(|m| m.span())
+                        .unwrap_or_else(|| self.function)
+                })
+            })
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct AbstractMethod {

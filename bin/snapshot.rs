@@ -1,16 +1,13 @@
 use std::env;
 use std::fs::read_dir;
+use std::io;
 use std::path::PathBuf;
 
-use php_parser_rs::construct;
-use php_parser_rs::lexer::Lexer;
+use php_parser_rs::parse;
 
-static LEXER: Lexer = Lexer::new();
-
-fn main() {
+fn main() -> io::Result<()> {
     let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-    let mut entries = read_dir(manifest.join("tests").join("fixtures"))
-        .unwrap()
+    let mut entries = read_dir(manifest.join("tests").join("fixtures"))?
         .flatten()
         .map(|entry| entry.path())
         .filter(|entry| entry.is_dir())
@@ -21,57 +18,37 @@ fn main() {
     for entry in entries {
         let code_filename = entry.join("code.php");
         let ast_filename = entry.join("ast.txt");
-        let lexer_error_filename = entry.join("lexer-error.txt");
-        let parser_error_filename = entry.join("parser-error.txt");
+        let error_filename = entry.join("error.txt");
 
         if !code_filename.exists() {
             continue;
         }
 
         if ast_filename.exists() {
-            std::fs::remove_file(&ast_filename).unwrap();
+            std::fs::remove_file(&ast_filename)?;
         }
 
-        if lexer_error_filename.exists() {
-            std::fs::remove_file(&lexer_error_filename).unwrap();
+        if error_filename.exists() {
+            std::fs::remove_file(&error_filename)?;
         }
 
-        if parser_error_filename.exists() {
-            std::fs::remove_file(&parser_error_filename).unwrap();
-        }
+        let code = std::fs::read_to_string(&code_filename)?;
 
-        let code = std::fs::read(&code_filename).unwrap();
-        let tokens = LEXER.tokenize(&code);
-
-        match tokens {
-            Ok(tokens) => {
-                let ast = construct(&tokens);
-                match ast {
-                    Ok(ast) => {
-                        std::fs::write(ast_filename, format!("{:#?}\n", ast)).unwrap();
-                        println!("✅ generated `ast.txt` for `{}`", entry.to_string_lossy());
-                    }
-                    Err(error) => {
-                        std::fs::write(
-                            parser_error_filename,
-                            format!("{:?} -> {}\n", error, error),
-                        )
-                        .unwrap();
-                        println!(
-                            "✅ generated `parser-error.txt` for `{}`",
-                            entry.to_string_lossy()
-                        );
-                    }
-                }
+        match parse(&code) {
+            Ok(ast) => {
+                std::fs::write(ast_filename, format!("{:#?}\n", ast))?;
+                println!("✅ generated `ast.txt` for `{}`", entry.to_string_lossy());
             }
             Err(error) => {
-                std::fs::write(lexer_error_filename, format!("{:?} -> {}\n", error, error))
-                    .unwrap();
-                println!(
-                    "✅ generated `lexer-error.txt` for `{}`",
-                    entry.to_string_lossy()
-                );
+                std::fs::write(
+                    error_filename,
+                    format!("{}\n", error.report(&code, Some("code.php"), false, true)?),
+                )?;
+
+                println!("✅ generated `error.txt` for `{}`", entry.to_string_lossy());
             }
         }
     }
+
+    Ok(())
 }

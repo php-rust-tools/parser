@@ -15,7 +15,7 @@ use crate::parser::ast::operators::BitwiseOperation;
 use crate::parser::ast::operators::ComparisonOperation;
 use crate::parser::ast::operators::LogicalOperation;
 use crate::parser::ast::{Expression, MagicConstant};
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::arrays;
 use crate::parser::internal::attributes;
@@ -30,6 +30,7 @@ use crate::parser::internal::strings;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;
 use crate::parser::state::State;
+
 pub fn create(state: &mut State) -> ParseResult<Expression> {
     for_precedence(state, Precedence::Lowest)
 }
@@ -77,7 +78,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
             }
 
             if rpred == precedence && matches!(rpred.associativity(), Some(Associativity::Non)) {
-                return Err(ParseError::UnexpectedToken(kind.to_string(), span));
+                return Err(error::unexpected_token(vec![], current));
             }
 
             state.stream.next();
@@ -503,7 +504,7 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
 
 fn left(state: &mut State) -> ParseResult<Expression> {
     if state.stream.is_eof() {
-        return Err(ParseError::UnexpectedEndOfFile);
+        return Err(error::unexpected_token(vec![], state.stream.current()));
     }
 
     attributes(state)
@@ -548,10 +549,9 @@ expressions! {
             TokenKind::Function => functions::anonymous_function(state),
             TokenKind::Fn => functions::arrow_function(state),
             _ => {
-                // Note, we can get attributes and know their span, maybe use that in the
-                // error in the future?
-                Err(ParseError::ExpectedItemDefinitionAfterAttributes(
-                    current.span,
+                Err(error::missing_item_definition_after_attributes(
+                    &state.attributes,
+                    current,
                 ))
             }
         }
@@ -1121,10 +1121,7 @@ expressions! {
 fn unexpected_token(state: &mut State) -> ParseResult<Expression> {
     let current = state.stream.current();
 
-    Err(ParseError::UnexpectedToken(
-        current.to_string(),
-        current.span,
-    ))
+    Err(error::unexpected_token(vec![], current))
 }
 
 fn postfix(state: &mut State, lhs: Expression, op: &TokenKind) -> ParseResult<Expression> {

@@ -2,7 +2,7 @@ use crate::lexer::token::TokenKind;
 use crate::parser::ast::ArrayItem;
 use crate::parser::ast::Expression;
 use crate::parser::ast::ListEntry;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::utils;
@@ -14,7 +14,7 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
         start: utils::skip_left_parenthesis(state)?,
         items: {
             let mut items = Vec::new();
-            let mut has_atleast_one_key = false;
+            let mut has_at_least_one_key = false;
 
             let mut current = state.stream.current();
             while current.kind != TokenKind::RightParen {
@@ -29,11 +29,11 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
                 }
 
                 if current.kind == TokenKind::Ellipsis {
-                    return Err(ParseError::IllegalSpreadOperator(current.span));
+                    return Err(error::illegal_spread_operator_usage(current.span));
                 }
 
                 if current.kind == TokenKind::Ampersand {
-                    return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
+                    return Err(error::cannot_assign_reference_to_non_referencable_value(
                         current.span,
                     ));
                 }
@@ -41,8 +41,8 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
                 let mut value = expressions::create(state)?;
                 current = state.stream.current();
                 if current.kind == TokenKind::DoubleArrow {
-                    if !has_atleast_one_key && !items.is_empty() {
-                        return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(current.span));
+                    if !has_at_least_one_key && !items.is_empty() {
+                        return Err(error::mixing_keyed_and_unkeyed_list_entries(current.span));
                     }
 
                     let double_arrow = current.span;
@@ -51,11 +51,11 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
 
                     current = state.stream.current();
                     if current.kind == TokenKind::Ellipsis {
-                        return Err(ParseError::IllegalSpreadOperator(current.span));
+                        return Err(error::illegal_spread_operator_usage(current.span));
                     }
 
                     if current.kind == TokenKind::Ampersand {
-                        return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
+                        return Err(error::cannot_assign_reference_to_non_referencable_value(
                             current.span,
                         ));
                     }
@@ -71,9 +71,9 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
                         value,
                     });
 
-                    has_atleast_one_key = true;
-                } else if has_atleast_one_key {
-                    return Err(ParseError::CannotMixKeyedAndUnkeyedEntries(current.span));
+                    has_at_least_one_key = true;
+                } else if has_at_least_one_key {
+                    return Err(error::mixing_keyed_and_unkeyed_list_entries(current.span));
                 } else {
                     items.push(ListEntry::Value { value });
                 }
@@ -147,7 +147,7 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
 
     if let Some(ellipsis) = ellipsis {
         if let Some(ampersand) = ampersand {
-            return Err(ParseError::CannotAssignReferenceToNonReferencableValue(
+            return Err(error::cannot_assign_reference_to_non_referencable_value(
                 ampersand,
             ));
         }
@@ -167,7 +167,7 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
 
         current = state.stream.current();
         if current.kind == TokenKind::Ellipsis {
-            return Err(ParseError::IllegalSpreadOperator(current.span));
+            return Err(error::illegal_spread_operator_usage(current.span));
         }
 
         ampersand = if current.kind == TokenKind::Ampersand {

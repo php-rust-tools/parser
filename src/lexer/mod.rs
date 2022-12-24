@@ -465,14 +465,14 @@ impl Lexer {
 
                 let label: ByteString = match self.peek_identifier(state) {
                     Some(_) => self.consume_identifier(state).into(),
-                    None => match state.source.current() {
-                        Some(c) => {
-                            return Err(SyntaxError::UnexpectedCharacter(*c, state.source.span()))
+                    None => {
+                        return match state.source.current() {
+                            Some(c) => {
+                                Err(SyntaxError::UnexpectedCharacter(*c, state.source.span()))
+                            }
+                            None => Err(SyntaxError::UnexpectedEndOfFile(state.source.span())),
                         }
-                        None => {
-                            return Err(SyntaxError::UnexpectedEndOfFile(state.source.span()));
-                        }
-                    },
+                    }
                 };
 
                 buffer.extend_from_slice(&label);

@@ -10,8 +10,9 @@ use crate::parser::ast::enums::UnitEnumBody;
 use crate::parser::ast::enums::UnitEnumCase;
 use crate::parser::ast::enums::UnitEnumMember;
 use crate::parser::ast::functions::ConcreteMethod;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Statement;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::attributes;
@@ -57,14 +58,13 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     }
 
     let attributes = state.get_attributes();
-    let enum_name = name.value.to_string();
     if let Some(backed_type) = backed_type {
         let body = BackedEnumBody {
             left_brace: utils::skip_left_brace(state)?,
             members: {
                 let mut members = Vec::new();
                 while state.stream.current().kind != TokenKind::RightBrace {
-                    members.push(backed_member(state, &enum_name)?);
+                    members.push(backed_member(state, &name)?);
                 }
                 members
             },
@@ -85,7 +85,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
             members: {
                 let mut members = Vec::new();
                 while state.stream.current().kind != TokenKind::RightBrace {
-                    members.push(unit_member(state, &enum_name)?);
+                    members.push(unit_member(state, &name)?);
                 }
                 members
             },
@@ -102,7 +102,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     }
 }
 
-fn unit_member(state: &mut State, enum_name: &str) -> ParseResult<UnitEnumMember> {
+fn unit_member(state: &mut State, enum_name: &SimpleIdentifier) -> ParseResult<UnitEnumMember> {
     attributes::gather_attributes(state)?;
 
     let current = state.stream.current();
@@ -116,9 +116,11 @@ fn unit_member(state: &mut State, enum_name: &str) -> ParseResult<UnitEnumMember
 
         let current = state.stream.current();
         if current.kind == TokenKind::Equals {
-            return Err(ParseError::CaseValueForUnitEnum(
+            return Err(error::case_value_for_unit_enum(
+                state.named(&enum_name.value),
+                enum_name.span,
                 name.to_string(),
-                state.named(enum_name),
+                name.span,
                 current.span,
             ));
         }
@@ -143,7 +145,7 @@ fn unit_member(state: &mut State, enum_name: &str) -> ParseResult<UnitEnumMember
     method(state, modifiers, enum_name).map(UnitEnumMember::Method)
 }
 
-fn backed_member(state: &mut State, enum_name: &str) -> ParseResult<BackedEnumMember> {
+fn backed_member(state: &mut State, enum_name: &SimpleIdentifier) -> ParseResult<BackedEnumMember> {
     attributes::gather_attributes(state)?;
 
     let current = state.stream.current();
@@ -157,9 +159,11 @@ fn backed_member(state: &mut State, enum_name: &str) -> ParseResult<BackedEnumMe
 
         let current = state.stream.current();
         if current.kind == TokenKind::SemiColon {
-            return Err(ParseError::MissingCaseValueForBackedEnum(
+            return Err(error::missing_case_value_for_backed_enum(
+                state.named(&enum_name.value),
+                enum_name.span,
                 name.to_string(),
-                state.named(enum_name),
+                name.span,
                 current.span,
             ));
         }
@@ -193,18 +197,19 @@ fn backed_member(state: &mut State, enum_name: &str) -> ParseResult<BackedEnumMe
 fn method(
     state: &mut State,
     modifiers: Vec<(Span, TokenKind)>,
-    enum_name: &str,
+    enum_name: &SimpleIdentifier,
 ) -> ParseResult<ConcreteMethod> {
     let method = functions::method(
         state,
         functions::MethodType::Concrete,
         modifiers::enum_method_group(modifiers)?,
-        enum_name,
+        &enum_name.value.to_string(),
     )?;
 
     match method {
-        Method::ConcreteConstructor(constructor) => Err(ParseError::ConstructorInEnum(
+        Method::ConcreteConstructor(constructor) => Err(error::constructor_in_enum(
             state.named(&enum_name),
+            enum_name.span,
             constructor.name.span,
         )),
         Method::Concrete(method) => {
@@ -212,8 +217,9 @@ fn method(
                 b"__get" | b"__set" | b"__serialize" | b"__unserialize" | b"__destruct"
                 | b"__wakeup" | b"__sleep" | b"__set_state" | b"__unset" | b"__isset"
                 | b"__debuginfo" | b"__clone" | b"__tostring" => {
-                    return Err(ParseError::EnumMayNotIncludesMagicMethod(
+                    return Err(error::magic_method_in_enum(
                         state.named(&enum_name),
+                        enum_name.span,
                         method.name.to_string(),
                         method.name.span,
                     ))

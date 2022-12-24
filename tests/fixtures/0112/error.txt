@@ -1,0 +1,10 @@
+[E014] Error: missing type for readonly property `foo::$e`
+   ,-[code.php:5:26]
+   |
+ 5 |         public readonly &$e,
+   *                ^^^|^^^   ^|  
+   *                   |       `-- try adding a type before `$e`
+   *                   |          
+   *                   `---------- property is declared as readonly here
+---'
+
