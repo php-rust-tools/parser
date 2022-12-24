@@ -1,6 +1,9 @@
 use std::fmt::{Display, Formatter};
 
 use ariadne::{CharSet, Color, Config, Label, Report, ReportKind, Source};
+use schemars::JsonSchema;
+use serde::Deserialize;
+use serde::Serialize;
 
 use crate::lexer::error::SyntaxError;
 use crate::lexer::token::{Span, Token, TokenKind};
@@ -8,23 +11,28 @@ use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::data_type::Type;
 use crate::parser::ast::modifiers::PromotedPropertyModifier;
 
+use super::ast::identifiers::SimpleIdentifier;
+use super::ast::variables::SimpleVariable;
+use super::state::State;
+
 pub type ParseResult<T> = Result<T, ParseError>;
 
-#[derive(Debug, Eq, PartialEq)]
-pub enum ParseErrorAnnotationSeverity {
-    Info,
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub enum ParseErrorAnnotationType {
+    Highlight,
     Error,
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 pub struct ParseErrorAnnotation {
-    pub severity: ParseErrorAnnotationSeverity,
+    pub r#type: ParseErrorAnnotationType,
     pub message: String,
     pub position: usize,
     pub length: usize,
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 pub struct ParseError {
     pub id: String,
     pub message: String,
@@ -44,10 +52,10 @@ impl ParseError {
         }
     }
 
-    pub fn info<T: ToString>(mut self, message: T, position: usize, length: usize) -> Self {
+    pub fn highlight(mut self, position: usize, length: usize) -> Self {
         self.annotations.push(ParseErrorAnnotation {
-            severity: ParseErrorAnnotationSeverity::Info,
-            message: message.to_string(),
+            r#type: ParseErrorAnnotationType::Highlight,
+            message: "".to_owned(),
             position,
             length,
         });
@@ -57,7 +65,7 @@ impl ParseError {
 
     pub fn error<T: ToString>(mut self, message: T, position: usize, length: usize) -> Self {
         self.annotations.push(ParseErrorAnnotation {
-            severity: ParseErrorAnnotationSeverity::Error,
+            r#type: ParseErrorAnnotationType::Error,
             message: message.to_string(),
             position,
             length,
@@ -99,13 +107,16 @@ impl ParseError {
                 origin,
                 annotation.position..annotation.position + annotation.length,
             ))
-            .with_message(&annotation.message)
             .with_order(order.try_into().unwrap());
 
+            if !annotation.message.is_empty() {
+                label = label.with_message(&annotation.message);
+            }
+
             if colored {
-                label = match annotation.severity {
-                    ParseErrorAnnotationSeverity::Info => label.with_color(Color::Cyan),
-                    ParseErrorAnnotationSeverity::Error => label.with_color(Color::Red),
+                label = match annotation.r#type {
+                    ParseErrorAnnotationType::Highlight => label.with_color(Color::Cyan),
+                    ParseErrorAnnotationType::Error => label.with_color(Color::Red),
                 };
             }
 
@@ -221,11 +232,7 @@ pub fn multiple_modifiers(modifier: String, first: Span, second: Span) -> ParseE
         format!("multiple `{}` modifiers are not allowed", modifier),
         second,
     )
-    .info(
-        format!("the `{}` modifier is first seen here", modifier),
-        first.position,
-        modifier.len(),
-    )
+    .highlight(first.position, modifier.len())
     .error("try removing this", second.position, modifier.len())
 }
 
@@ -238,11 +245,7 @@ pub fn multiple_visibility_modifiers(first: (String, Span), second: (String, Spa
         ),
         second.1,
     )
-    .info(
-        format!("`{}` used here", first.0),
-        first.1.position,
-        first.0.len(),
-    )
+    .highlight(first.1.position, first.0.len())
     .error("try removing this", second.1.position, second.0.len())
 }
 
@@ -256,11 +259,7 @@ pub fn standalone_type_used_as_nullable(ty: &Type, span: Span) -> ParseError {
         type_span,
     )
     .error("try removing this", span.position, 1)
-    .info(
-        format!("`{}` used here", type_string),
-        type_span.position,
-        type_string.len(),
-    )
+    .highlight(type_span.position, type_string.len())
     .note("`never`, `void`, and `mixed` cannot be nullable")
 }
 
@@ -281,7 +280,7 @@ pub fn standalone_type_used_in_union(ty: &Type, span: Span) -> ParseError {
         type_span.position,
         type_string.len(),
     )
-    .info("union is created here", span.position, 1)
+    .highlight(span.position, 1)
     .note("`never`, `void`, `mixed`, and nullable types cannot be used in a union")
 }
 
@@ -302,7 +301,7 @@ pub fn standalone_type_used_in_intersection(ty: &Type, span: Span) -> ParseError
         type_span.position,
         type_string.len(),
     )
-    .info("intersection is created here", span.position, 1)
+    .highlight(span.position, 1)
     .note("`never`, `void`, `mixed`, and nullable types cannot be used in an intersection")
 }
 
@@ -312,66 +311,76 @@ pub fn try_without_catch_or_finally(try_span: Span, last_right_brace: Span) -> P
         "cannot use `try` without `catch` or `finally`",
         try_span,
     )
-    .info(
-        "try adding a `catch`, or `finally` block after `}`",
+    .highlight(
         try_span.position,
         last_right_brace.position - try_span.position + 1,
     )
 }
 
 pub fn variadic_promoted_property(
-    class_name: String,
-    property_name: String,
+    state: &mut State,
+    class: Option<&SimpleIdentifier>,
+    property: &SimpleVariable,
     span: Span,
     modifier: &PromotedPropertyModifier,
 ) -> ParseError {
-    ParseError::new(
+    let error = ParseError::new(
         "E013",
         &format!(
             "promoted property `{}::{}` cannot declare variadic",
-            class_name, property_name
+            class
+                .map(|c| state.named(c))
+                .unwrap_or_else(|| "anonymous@class".to_string()),
+            property.name
         ),
         span,
     )
-    .error("try removing this variadic declaration", span.position, 3)
-    .info(
-        "property is promoted here",
-        modifier.span().position,
-        modifier.to_string().len(),
-    )
+    .highlight(modifier.span().position, modifier.to_string().len())
+    .highlight(property.span.position, property.name.len())
+    .error("try removing this variadic declaration", span.position, 3);
+
+    if let Some(class) = class {
+        error.highlight(class.span.position, class.value.len())
+    } else {
+        error
+    }
 }
 
 pub fn missing_type_for_readonly_property(
-    class_name: String,
-    property_name: String,
-    property_span: Span,
+    state: &mut State,
+    class: Option<&SimpleIdentifier>,
+    property: &SimpleVariable,
     readonly_span: Span,
 ) -> ParseError {
-    ParseError::new(
+    let error = ParseError::new(
         "E014",
         format!(
             "missing type for readonly property `{}::{}`",
-            class_name, property_name
+            class
+                .map(|c| state.named(c))
+                .unwrap_or_else(|| "anonymous@class".to_string()),
+            property.name
         ),
-        property_span,
+        property.span,
     )
     .error(
-        format!("try adding a type before `{}`", property_name),
-        property_span.position,
-        property_name.len(),
+        format!("try adding a type before `{}`", property.name),
+        property.span.position,
+        property.name.len(),
     )
-    .info(
-        "property is declared as readonly here",
-        readonly_span.position,
-        7,
-    )
+    .highlight(readonly_span.position, 7);
+
+    if let Some(class) = class {
+        error.highlight(class.span.position, class.value.len())
+    } else {
+        error
+    }
 }
 
 pub fn abstract_method_on_a_non_abstract_class(
-    class_name: String,
-    method_name: String,
-    class_name_span: Span,
-    method_name_span: Span,
+    state: &mut State,
+    class: &SimpleIdentifier,
+    method: &SimpleIdentifier,
     abstract_span: Span,
     semicolon_span: Span,
 ) -> ParseError {
@@ -379,135 +388,104 @@ pub fn abstract_method_on_a_non_abstract_class(
         "E015",
         format!(
             "cannot declare method `{}::{}` abstract, as `{}` class is not abstract",
-            class_name, method_name, class_name,
+            state.named(&class),
+            method.value,
+            class,
         ),
         semicolon_span,
     )
     .error(
-        format!(
-            "`{}` method is declared as abstract here, try removing this",
-            method_name
-        ),
+        "try removing this `abstract` modifier",
         abstract_span.position,
         "abstract".len(),
     )
-    .info(
-        format!("class `{}` is not declared abstract", class_name),
-        class_name_span.position,
-        class_name.len(),
-    )
-    .info(
-        format!("`{}` method is declared here", method_name),
-        method_name_span.position,
-        method_name.len(),
-    )
+    .highlight(class.span.position, class.value.len())
+    .highlight(method.span.position, method.value.len())
 }
 
 pub fn constructor_in_enum(
-    enum_name: String,
-    enum_name_span: Span,
-    constructor_span: Span,
+    state: &mut State,
+    r#enum: &SimpleIdentifier,
+    constructor: &SimpleIdentifier,
 ) -> ParseError {
     ParseError::new(
         "E016",
-        format!("cannot declare a constructor on enum `{}`", enum_name),
-        constructor_span,
+        format!(
+            "cannot declare a constructor on enum `{}`",
+            state.named(&r#enum)
+        ),
+        constructor.span,
     )
     .error(
-        "constructor is declared here, try removing it",
-        constructor_span.position,
-        "__constructor".len(),
+        "try removing this constructor",
+        constructor.span.position,
+        constructor.value.len(),
     )
-    .info(
-        format!("enum `{}` is declared here", enum_name),
-        enum_name_span.position,
-        enum_name.len(),
-    )
+    .highlight(r#enum.span.position, r#enum.value.len())
 }
 
 pub fn magic_method_in_enum(
-    enum_name: String,
-    enum_name_span: Span,
-    method_name: String,
-    method_name_span: Span,
+    state: &mut State,
+    r#enum: &SimpleIdentifier,
+    method: &SimpleIdentifier,
 ) -> ParseError {
     ParseError::new(
         "E017",
         format!(
-            "cannot declare magic method `{}::{}` in enum",
-            enum_name, method_name
+            "cannot declare magic method `{}::{}` in an enum",
+            state.named(&r#enum),
+            method.value
         ),
-        method_name_span,
+        method.span,
     )
     .error(
-        format!(
-            "magic method `{}` is declared here, try removing it",
-            method_name
-        ),
-        method_name_span.position,
-        method_name.len(),
+        "try removing this magic method",
+        method.span.position,
+        method.value.len(),
     )
-    .info(
-        format!("enum `{}` is declared here", enum_name),
-        enum_name_span.position,
-        enum_name.len(),
-    )
+    .highlight(r#enum.span.position, r#enum.value.len())
 }
 
 pub fn missing_case_value_for_backed_enum(
-    enum_name: String,
-    enum_name_span: Span,
-    case_name: String,
-    case_name_span: Span,
+    state: &mut State,
+    r#enum: &SimpleIdentifier,
+    case: &SimpleIdentifier,
     semicolon_span: Span,
 ) -> ParseError {
     ParseError::new(
         "E018",
         format!(
-            "case `{}` of backed enum `{}` must have a value",
-            case_name, enum_name
+            "case `{}::{}` of backed enum `{}` must have a value",
+            state.named(&r#enum),
+            case,
+            r#enum
         ),
         semicolon_span,
     )
-    .error("try adding a value here", semicolon_span.position, 1)
-    .info(
-        format!("case `{}` is declared here", case_name),
-        case_name_span.position,
-        case_name.len(),
-    )
-    .info(
-        format!("enum `{}` is declared here", enum_name),
-        enum_name_span.position,
-        enum_name.len(),
-    )
+    .error("try adding a value", semicolon_span.position, 1)
+    .highlight(case.span.position, case.value.len())
+    .highlight(r#enum.span.position, r#enum.value.len())
 }
 
 pub fn case_value_for_unit_enum(
-    enum_name: String,
-    enum_name_span: Span,
-    case_name: String,
-    case_name_span: Span,
+    state: &mut State,
+    r#enum: &SimpleIdentifier,
+    case: &SimpleIdentifier,
     equals_span: Span,
 ) -> ParseError {
     ParseError::new(
         "E019",
         format!(
-            "case `{}` of unit enum `{}` cannot have a value",
-            case_name, enum_name
+            "case `{}::{}` of unit enum `{}` cannot have a value",
+            state.named(&r#enum),
+            case,
+            r#enum
         ),
         equals_span,
     )
     .error("try replacing this with `;`", equals_span.position, 1)
-    .info(
-        format!("case `{}` is declared here", case_name),
-        case_name_span.position,
-        case_name.len(),
-    )
-    .info(
-        format!("enum `{}` is declared here", enum_name),
-        enum_name_span.position,
-        enum_name.len(),
-    )
+    .highlight(case.span.position, case.value.len())
+    .highlight(r#enum.span.position, r#enum.value.len())
 }
 
 pub fn modifier_cannot_be_used_for_constant(modifier: String, modifier_span: Span) -> ParseError {
@@ -633,11 +611,7 @@ pub fn final_and_abstract_modifiers_combined_for_class(
         "cannot declare a `final` class as `abstract`",
         abstract_span,
     )
-    .info(
-        "class is declared as `final` here",
-        final_span.position,
-        "final".len(),
-    )
+    .highlight(final_span.position, "final".len())
     .error(
         "try removing this",
         abstract_span.position,
@@ -654,11 +628,7 @@ pub fn final_and_abstract_modifiers_combined_for_class_member(
         "cannot declare a `final` class member as `abstract`",
         abstract_span,
     )
-    .info(
-        "class member is declared as `final` here",
-        final_span.position,
-        "final".len(),
-    )
+    .highlight(final_span.position, "final".len())
     .error(
         "try removing this",
         abstract_span.position,
@@ -675,11 +645,7 @@ pub fn final_and_private_modifiers_combined_for_constant(
         "cannot declare a `private` constant as `final`",
         final_span,
     )
-    .info(
-        "constant is declared as `private` here",
-        private_span.position,
-        "private".len(),
-    )
+    .highlight(private_span.position, "private".len())
     .error("try removing this", final_span.position, "final".len())
     .note("private constants cannot be final as they are not visible to other classes")
 }
@@ -693,59 +659,63 @@ pub fn reached_unpredictable_state(span: Span) -> ParseError {
 }
 
 pub fn static_property_cannot_be_readonly(
-    class_name: String,
-    property_name: String,
-    property_name_span: Span,
+    state: &mut State,
+    class: Option<&SimpleIdentifier>,
+    property: &SimpleVariable,
     static_span: Span,
     readonly_span: Span,
 ) -> ParseError {
-    ParseError::new(
+    let error = ParseError::new(
         "E032",
         format!(
             "cannot declare `readonly` property `{}::{}` as 'static'",
-            class_name, property_name
+            class
+                .map(|c| state.named(c))
+                .unwrap_or_else(|| "anonymous@class".to_string()),
+            property.name,
         ),
         static_span,
     )
-    .info(
-        format!("property `{}` is declared here", property_name),
-        property_name_span.position,
-        property_name.len(),
-    )
-    .info(
-        "property is declared as `readonly` here",
-        readonly_span.position,
-        "readonly".len(),
-    )
-    .error("try removing this", static_span.position, "static".len())
+    .highlight(property.span.position, property.name.len())
+    .highlight(readonly_span.position, "readonly".len())
+    .error("try removing this", static_span.position, "static".len());
+
+    // If the class is anonymous, we don't have a span to highlight
+    if let Some(class) = class {
+        error.highlight(class.span.position, class.value.len())
+    } else {
+        error
+    }
 }
 
 pub fn readonly_property_has_default_value(
-    class_name: String,
-    property_name: String,
-    property_name_span: Span,
+    state: &mut State,
+    class: Option<&SimpleIdentifier>,
+    property: &SimpleVariable,
     readonly_span: Span,
     equals_span: Span,
 ) -> ParseError {
-    ParseError::new(
+    let error = ParseError::new(
         "E033",
         format!(
             "readonly property `{}::{}` cannot have a default value",
-            class_name, property_name
+            class
+                .map(|c| state.named(c))
+                .unwrap_or_else(|| "anonymous@class".to_string()),
+            property.name,
         ),
         equals_span,
     )
-    .info(
-        format!("property `{}` is declared here", property_name),
-        property_name_span.position,
-        property_name.len(),
-    )
-    .info(
-        "property is declared as `readonly` here",
-        readonly_span.position,
-        "readonly".len(),
-    )
-    .error("try removing this `=`", equals_span.position, 1)
+    .highlight(property.span.position, property.name.len())
+    .highlight(readonly_span.position, "readonly".len())
+    .error("try removing this `=`", equals_span.position, 1);
+
+    // If the class is anonymous, we don't have a span to highlight
+    if let Some(class) = class {
+        error.highlight(class.span.position, class.value.len())
+    } else {
+        error
+    }
 }
 
 pub fn unbraced_namespace_declarations_in_braced_context(span: Span) -> ParseError {
@@ -775,33 +745,40 @@ pub fn nested_namespace_declarations(span: Span) -> ParseError {
 }
 
 pub fn forbidden_type_used_in_property(
-    class_name: String,
-    property_name: String,
-    property_name_span: Span,
+    state: &mut State,
+    class: Option<&SimpleIdentifier>,
+    property: &SimpleVariable,
     ty: Type,
 ) -> ParseError {
     let type_string = ty.to_string();
     let type_span = ty.first_span();
 
-    ParseError::new(
+    let error = ParseError::new(
         "E037".to_string(),
         format!(
             "property `{}::{}` cannot have type `{}`",
-            class_name, property_name, type_string
+            class
+                .map(|c| state.named(c))
+                .unwrap_or_else(|| "anonymous@class".to_string()),
+            property.name,
+            type_string
         ),
         type_span,
     )
-    .info(
-        format!("property `{}` is declared here", property_name),
-        property_name_span.position,
-        property_name.len(),
-    )
+    .highlight(property.span.position, property.name.len())
     .error(
         "try using a different type",
         type_span.position,
         type_string.len(),
     )
-    .note("`void`, `never`, and `callable` types are not allowed in properties")
+    .note("`void`, `never`, and `callable` types are not allowed in properties");
+
+    // If the class is anonymous, we don't have a span to highlight
+    if let Some(class) = class {
+        error.highlight(class.span.position, class.value.len())
+    } else {
+        error
+    }
 }
 
 pub fn match_expression_has_multiple_default_arms(first: Span, second: Span) -> ParseError {
@@ -810,11 +787,7 @@ pub fn match_expression_has_multiple_default_arms(first: Span, second: Span) -> 
         "match expression cannot have more than one default arm",
         second,
     )
-    .info(
-        "first default arm is specified here",
-        first.position,
-        "default".len(),
-    )
+    .highlight(first.position, "default".len())
     .error("try removing this arm", second.position, "default".len())
 }
 
@@ -826,8 +799,8 @@ pub fn missing_item_definition_after_attributes(
 
     for attribute in attributes {
         annotations.push(ParseErrorAnnotation {
-            severity: ParseErrorAnnotationSeverity::Info,
-            message: "attribute group is specified here".to_string(),
+            r#type: ParseErrorAnnotationType::Highlight,
+            message: "".to_string(),
             position: attribute.start.position,
             length: attribute.end.position - attribute.start.position,
         });
@@ -835,17 +808,14 @@ pub fn missing_item_definition_after_attributes(
 
     annotations.push(match current.kind {
         TokenKind::Eof => ParseErrorAnnotation {
-            severity: ParseErrorAnnotationSeverity::Error,
+            r#type: ParseErrorAnnotationType::Error,
             message: "reached end of file before an item definition".to_string(),
             position: current.span.position,
             length: current.value.len(),
         },
         _ => ParseErrorAnnotation {
-            severity: ParseErrorAnnotationSeverity::Error,
-            message: format!(
-                "expected an item definition here, found `{}`",
-                current.value
-            ),
+            r#type: ParseErrorAnnotationType::Error,
+            message: format!("expected an item definition, found `{}`", current.value),
             position: current.span.position,
             length: current.value.len(),
         },
@@ -892,7 +862,7 @@ pub fn mixing_keyed_and_unkeyed_list_entries(span: Span) -> ParseError {
         "cannot mix keyed and un-keyed list entries",
         span,
     )
-    .error("mixing detected here", span.position, 1)
+    .error("", span.position, 1)
 }
 
 pub fn cannot_use_positional_argument_after_named_argument(
@@ -905,7 +875,7 @@ pub fn cannot_use_positional_argument_after_named_argument(
         span,
     )
     .error(
-        "try add a name for this argument",
+        "try adding a name for this argument",
         span.position,
         current_span.position - span.position,
     )
@@ -917,11 +887,7 @@ pub fn cannot_use_reserved_keyword_as_a_type_name(span: Span, keyword: String) -
         format!("cannot use reserved keyword `{}` as a type name", keyword),
         span,
     )
-    .error(
-        "try using a different name here",
-        span.position,
-        keyword.len(),
-    )
+    .error("try using a different name", span.position, keyword.len())
 }
 
 pub fn cannot_use_reserved_keyword_as_a_goto_label(span: Span, keyword: String) -> ParseError {
@@ -930,11 +896,7 @@ pub fn cannot_use_reserved_keyword_as_a_goto_label(span: Span, keyword: String) 
         format!("cannot use reserved keyword `{}` as a goto label", keyword),
         span,
     )
-    .error(
-        "try using a different name here",
-        span.position,
-        keyword.len(),
-    )
+    .error("try using a different name", span.position, keyword.len())
 }
 
 pub fn cannot_use_reserved_keyword_as_a_constant_name(span: Span, keyword: String) -> ParseError {
@@ -946,11 +908,7 @@ pub fn cannot_use_reserved_keyword_as_a_constant_name(span: Span, keyword: Strin
         ),
         span,
     )
-    .error(
-        "try using a different name here",
-        span.position,
-        keyword.len(),
-    )
+    .error("try using a different name", span.position, keyword.len())
 }
 
 impl From<SyntaxError> for ParseError {

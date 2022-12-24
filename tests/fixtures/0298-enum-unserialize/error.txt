@@ -1,11 +1,11 @@
-[E017] Error: cannot declare magic method `EnumWithUnserialize::__unserialize` in enum
+[E017] Error: cannot declare magic method `EnumWithUnserialize::__unserialize` in an enum
    ,-[code.php:4:21]
    |
  3 | enum EnumWithUnserialize {
-   *      ^^^^^^^^^|^^^^^^^^^  
-   *               `----------- enum `EnumWithUnserialize` is declared here
+   *      ^^^^^^^^^^^^^^^^^^^  
+   *                            
  4 |     public function __unserialize(array $data) {}
    *                     ^^^^^^|^^^^^^  
-   *                           `-------- magic method `__unserialize` is declared here, try removing it
+   *                           `-------- try removing this magic method
 ---'
 

@@ -1,11 +1,11 @@
-[E017] Error: cannot declare magic method `EnumWithDtor::__destruct` in enum
+[E017] Error: cannot declare magic method `EnumWithDtor::__destruct` in an enum
    ,-[code.php:4:21]
    |
  3 | enum EnumWithDtor {
-   *      ^^^^^^|^^^^^  
-   *            `------- enum `EnumWithDtor` is declared here
+   *      ^^^^^^^^^^^^  
+   *                     
  4 |     public function __destruct() {}
    *                     ^^^^^|^^^^  
-   *                          `------ magic method `__destruct` is declared here, try removing it
+   *                          `------ try removing this magic method
 ---'
 

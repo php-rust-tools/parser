@@ -1,11 +1,11 @@
-[E017] Error: cannot declare magic method `EnumWithWakeUp::__toString` in enum
+[E017] Error: cannot declare magic method `EnumWithWakeUp::__toString` in an enum
    ,-[code.php:4:21]
    |
  3 | enum EnumWithWakeUp {
-   *      ^^^^^^^|^^^^^^  
-   *             `-------- enum `EnumWithWakeUp` is declared here
+   *      ^^^^^^^^^^^^^^  
+   *                       
  4 |     public function __toString() {}
    *                     ^^^^^|^^^^  
-   *                          `------ magic method `__toString` is declared here, try removing it
+   *                          `------ try removing this magic method
 ---'
 

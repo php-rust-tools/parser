@@ -1,11 +1,11 @@
-[E017] Error: cannot declare magic method `EnumWithSet::__set` in enum
+[E017] Error: cannot declare magic method `EnumWithSet::__set` in an enum
    ,-[code.php:4:21]
    |
  3 | enum EnumWithSet {
-   *      ^^^^^|^^^^^  
-   *           `------- enum `EnumWithSet` is declared here
+   *      ^^^^^^^^^^^  
+   *                    
  4 |     public function __set($k, $v) {}
    *                     ^^|^^  
-   *                       `---- magic method `__set` is declared here, try removing it
+   *                       `---- try removing this magic method
 ---'
 

@@ -1,9 +1,12 @@
 [E037] Error: property `Foo::$s` cannot have type `callable`
    ,-[code.php:4:12]
    |
+ 3 | class Foo {
+   *       ^^^  
+   *             
  4 |     public callable $s;
-   *            ^^^^|^^^ ^|  
-   *                |     `-- property `$s` is declared here
+   *            ^^^^|^^^ ^^  
+   *                |         
    *                |        
    *                `-------- try using a different type
    * 

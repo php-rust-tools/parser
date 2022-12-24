@@ -1,11 +1,11 @@
-[E017] Error: cannot declare magic method `EnumWithSleep::__sleep` in enum
+[E017] Error: cannot declare magic method `EnumWithSleep::__sleep` in an enum
    ,-[code.php:4:21]
    |
  3 | enum EnumWithSleep {
-   *      ^^^^^^|^^^^^^  
-   *            `-------- enum `EnumWithSleep` is declared here
+   *      ^^^^^^^^^^^^^  
+   *                      
  4 |     public function __sleep() {}
    *                     ^^^|^^^  
-   *                        `----- magic method `__sleep` is declared here, try removing it
+   *                        `----- try removing this magic method
 ---'
 

@@ -169,7 +169,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         members: {
             let mut members = Vec::new();
             while state.stream.current().kind != TokenKind::RightBrace && !state.stream.is_eof() {
-                members.push(member(state, &name.value.to_string())?);
+                members.push(member(state, &name)?);
             }
             members
         },
@@ -184,7 +184,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     }))
 }
 
-fn member(state: &mut State, class_name: &str) -> ParseResult<TraitMember> {
+fn member(state: &mut State, class_name: &SimpleIdentifier) -> ParseResult<TraitMember> {
     let has_attributes = attributes::gather_attributes(state)?;
 
     if !has_attributes && state.stream.current().kind == TokenKind::Use {
@@ -192,7 +192,7 @@ fn member(state: &mut State, class_name: &str) -> ParseResult<TraitMember> {
     }
 
     if state.stream.current().kind == TokenKind::Var {
-        return properties::parse_var(state, class_name).map(TraitMember::VariableProperty);
+        return properties::parse_var(state, Some(class_name)).map(TraitMember::VariableProperty);
     }
 
     let modifiers = modifiers::collect(state)?;
@@ -207,7 +207,7 @@ fn member(state: &mut State, class_name: &str) -> ParseResult<TraitMember> {
             state,
             MethodType::DependingOnModifiers,
             modifiers::method_group(modifiers)?,
-            class_name,
+            Some(class_name),
         )?;
 
         return match method {
@@ -218,6 +218,10 @@ fn member(state: &mut State, class_name: &str) -> ParseResult<TraitMember> {
         };
     }
 
-    properties::parse(state, class_name, modifiers::property_group(modifiers)?)
-        .map(TraitMember::Property)
+    properties::parse(
+        state,
+        Some(class_name),
+        modifiers::property_group(modifiers)?,
+    )
+    .map(TraitMember::Property)
 }

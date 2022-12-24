@@ -1,11 +1,11 @@
 [E016] Error: cannot declare a constructor on enum `Foo\Bar`
    ,-[code.php:6:22]
    |
- 5 | ,-> enum Bar {
- 6 | |->      public function __construct() {
-   * |                        ^^^^^^|^^^^^^     
-   * |                              `----------- constructor is declared here, try removing it
-   * |                                          
-   * `------------------------------------------ enum `Foo\Bar` is declared here
+ 5 | enum Bar {
+   *      ^^^  
+   *            
+ 6 |      public function __construct() {
+   *                      ^^^^^|^^^^^  
+   *                           `------- try removing this constructor
 ---'
 

@@ -23,6 +23,7 @@ lint:
 fix:
     cargo fmt
     cargo clippy --fix --allow-dirty --allow-staged
+    cargo fix --allow-dirty --allow-staged
 
 # dump AST for the given file.
 dump file *args:

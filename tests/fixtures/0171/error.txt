@@ -1,9 +1,12 @@
 [E037] Error: property `Foo::$s` cannot have type `string|int|callable`
    ,-[code.php:4:12]
    |
+ 3 | class Foo {
+   *       ^^^  
+   *             
  4 |     public string|int|callable $s;
-   *            ^^^^^^^^^|^^^^^^^^^ ^|  
-   *                     |           `-- property `$s` is declared here
+   *            ^^^^^^^^^|^^^^^^^^^ ^^  
+   *                     |               
    *                     |              
    *                     `-------------- try using a different type
    * 

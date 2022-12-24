@@ -1,14 +1,14 @@
-[E018] Error: case `Bar` of backed enum `Foo` must have a value
+[E018] Error: case `Foo::Bar` of backed enum `Foo` must have a value
    ,-[code.php:5:13]
    |
  3 | enum Foo: string
-   *      ^|^  
-   *       `--- enum `Foo` is declared here
+   *      ^^^  
+   *            
    * 
  5 |     case Bar;
-   *          ^|^|  
-   *           | `-- try adding a value here
-   *           |    
-   *           `---- case `Bar` is declared here
+   *          ^^^|  
+   *             `-- try adding a value
+   *                
+   *                 
 ---'
 
