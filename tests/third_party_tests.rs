@@ -348,7 +348,7 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
     let manifest = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let out_dir = manifest.join("target").join("third-party");
     if !out_dir.exists() {
-        std::fs::create_dir(&out_dir).unwrap();
+        fs::create_dir(&out_dir).unwrap();
     }
 
     let out_path = out_dir.join(name);
@@ -464,6 +464,17 @@ fn read_directory(
 
     entries.sort();
 
+    let ignored_prefixes = [
+        "vendor/symfony",
+        "vendor/doctrine/orm",
+        "vendor/doctrine/dbal",
+        "vendor/api-platform/core",
+        "vendor/rector/rector",
+        "vendor/phpstan/phpstan",
+        "vendor/phpstan/php-8-stubs",
+        "vendor/jetbrains/phpstorm-stubs",
+    ];
+
     for entry in entries {
         let path = &entry
             .as_path()
@@ -472,17 +483,10 @@ fn read_directory(
             .to_str()
             .unwrap();
 
-        if name != "php-standard-library"
-            && (path.starts_with("vendor/symfony")
-                || path.starts_with("vendor/doctrine/orm")
-                || path.starts_with("vendor/doctrine/dbal")
-                || path.starts_with("vendor/api-platform/core")
-                || path.starts_with("vendor/rector/rector")
-                || path.starts_with("vendor/phpstan/phpstan")
-                || path.starts_with("vendor/phpstan/php-8-stubs")
-                || path.starts_with("vendor/jetbrains/phpstorm-stubs"))
-        {
-            continue;
+        if name != "php-standard-library" {
+            if let Some(_) = ignored_prefixes.iter().find(|p| path.starts_with(*p)) {
+                continue;
+            }
         }
 
         if entry.is_dir() {
@@ -491,13 +495,9 @@ fn read_directory(
             continue;
         }
 
-        if entry.is_file()
-            && entry.extension().unwrap_or_default() == "php"
-            && !ignore.contains(path)
-        {
-            let name_entry = entry.clone();
-            let fullanme_string = name_entry.to_string_lossy();
-            let name = fullanme_string
+        if entry.extension().unwrap_or_default() == "php" && !ignore.contains(path) {
+            let fullname_string = &entry.to_string_lossy();
+            let name = fullname_string
                 .strip_prefix(root.to_str().unwrap())
                 .unwrap();
 
