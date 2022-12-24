@@ -1,8 +1,8 @@
-use std::io::Result;
 use clap::Parser;
+use std::io::Result;
 
-#[derive(Parser,Default,Debug)]
-#[clap(version, about="A PHP Parser")]
+#[derive(Parser, Default, Debug)]
+#[clap(version, about = "A PHP Parser")]
 struct Arguments {
     file: String,
     #[clap(short, long)]
@@ -10,7 +10,7 @@ struct Arguments {
     silent: bool,
     #[clap(short, long)]
     /// Print as json
-    json: bool
+    json: bool,
 }
 
 fn main() -> Result<()> {

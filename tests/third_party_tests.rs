@@ -402,7 +402,7 @@ fn test_repository(name: &str, repository: &str, ignore: &[&str]) {
 
             let mut results = vec![];
             for (name, filename) in entries {
-                let code = std::fs::read(&filename).unwrap();
+                let code = std::fs::read(filename).unwrap();
 
                 match Lexer::new().tokenize(&code) {
                     Ok(tokens) => match php_parser_rs::construct(&tokens) {
@@ -456,7 +456,7 @@ fn read_directory(
     ignore: &[&str],
 ) -> Vec<(String, PathBuf)> {
     let mut results = vec![];
-    let mut entries = fs::read_dir(&directory)
+    let mut entries = fs::read_dir(directory)
         .unwrap()
         .flatten()
         .map(|entry| entry.path())
