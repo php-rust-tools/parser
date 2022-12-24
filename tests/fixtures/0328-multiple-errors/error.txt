@@ -1,0 +1,182 @@
+[E040] Error: cannot nest disjunctive normal form types
+   ,-[code.php:3:24]
+   |
+ 3 | function bar(): a&(b|c|(d&eeeef)) {}
+   *                        |  
+   *                        `-- try removing this
+---'
+
+[E009] Error: standalone type `never` cannot be nullable
+   ,-[code.php:9:18]
+   |
+ 9 | function foo(): ?never {}
+   *                 |^^^^^  
+   *                 `------- try removing this
+   *                         
+   *                          
+   * 
+   * Note: `never`, `void`, and `mixed` cannot be nullable
+---'
+
+[E018] Error: case `Foo::Baz` of backed enum `Foo` must have a value
+    ,-[code.php:13:11]
+    |
+ 11 | enum Foo: int {
+    *      ^^^  
+    *            
+    * 
+ 13 |   case Baz;
+    *        ^^^|  
+    *           `-- try adding a value
+    *              
+    *               
+----'
+
+[E019] Error: case `Bar::Qux` of unit enum `Bar` cannot have a value
+    ,-[code.php:18:12]
+    |
+ 16 | enum Bar {
+    *      ^^^  
+    *            
+    * 
+ 18 |   case Qux = 1;
+    *        ^^^ |  
+    *            `-- try replacing this with `;`
+    *               
+    *                
+----'
+
+[E016] Error: cannot declare a constructor on enum `Baz`
+    ,-[code.php:22:21]
+    |
+ 21 | enum Baz: int {
+    *      ^^^  
+    *            
+ 22 |     public function __construct() {}
+    *                     ^^^^^|^^^^^  
+    *                          `------- try removing this constructor
+----'
+
+[E017] Error: cannot declare magic method `Qux::__set` in an enum
+    ,-[code.php:26:21]
+    |
+ 25 | enum Qux: int {
+    *      ^^^  
+    *            
+ 26 |     public function __set($_, $_) {}
+    *                     ^^|^^  
+    *                       `---- try removing this magic method
+----'
+
+[E008] Error: multiple visibility modifiers are not allowed
+    ,-[code.php:30:13]
+    |
+ 30 |     private protected public readonly static $foo;
+    *     ^^^^^^^ ^^^^|^^^^  
+    *                 |       
+    *                 |      
+    *                 `------ try removing this
+----'
+
+[E008] Error: multiple visibility modifiers are not allowed
+    ,-[code.php:30:23]
+    |
+ 30 |     private protected public readonly static $foo;
+    *     ^^^^^^^           ^^^|^^  
+    *                          |     
+    *                          |    
+    *                          `---- try removing this
+----'
+
+[E032] Error: cannot declare `readonly` property `Hello::$foo` as 'static'
+    ,-[code.php:30:39]
+    |
+ 29 | class Hello {
+    *       ^^^^^  
+    *               
+ 30 |     private protected public readonly static $foo;
+    *                              ^^^^^^^^ ^^^|^^ ^^^^  
+    *                                          |          
+    *                                          |         
+    *                                          |          
+    *                                          |         
+    *                                          `--------- try removing this
+----'
+
+[E014] Error: missing type for readonly property `Hello::$foo`
+    ,-[code.php:30:46]
+    |
+ 29 | class Hello {
+    *       ^^^^^  
+    *               
+ 30 |     private protected public readonly static $foo;
+    *                              ^^^^^^^^        ^^|^  
+    *                                                `--- try adding a type before `$foo`
+    *                                                    
+    *                                                     
+----'
+
+[E046] Error: cannot use reserved keyword `self` as a goto label
+    ,-[code.php:33:1]
+    |
+ 33 | self:
+    * ^^|^  
+    *   `--- try using a different name
+----'
+
+[E046] Error: cannot use reserved keyword `interface` as a goto label
+    ,-[code.php:34:10]
+    |
+ 34 |     goto interface;
+    *          ^^^^|^^^^  
+    *              `------ try using a different name
+----'
+
+[E046] Error: cannot use reserved keyword `parent` as a goto label
+    ,-[code.php:35:5]
+    |
+ 35 |     parent:
+    *     ^^^|^^  
+    *        `---- try using a different name
+----'
+
+[E046] Error: cannot use reserved keyword `class` as a goto label
+    ,-[code.php:36:14]
+    |
+ 36 |         goto class;
+    *              ^^|^^  
+    *                `---- try using a different name
+----'
+
+[E046] Error: cannot use reserved keyword `static` as a goto label
+    ,-[code.php:37:13]
+    |
+ 37 |             static:
+    *             ^^^|^^  
+    *                `---- try using a different name
+----'
+
+[E047] Error: cannot use reserved keyword `foreach` as a constant name
+    ,-[code.php:39:7]
+    |
+ 39 | const foreach = 1;
+    *       ^^^|^^^  
+    *          `----- try using a different name
+----'
+
+[E045] Error: cannot use reserved keyword `Foreach` as a type name
+    ,-[code.php:41:7]
+    |
+ 41 | class Foreach {}
+    *       ^^^|^^^  
+    *          `----- try using a different name
+----'
+
+[E045] Error: cannot use reserved keyword `For` as a type name
+    ,-[code.php:42:7]
+    |
+ 42 | class For {}
+    *       ^|^  
+    *        `--- try using a different name
+----'
+

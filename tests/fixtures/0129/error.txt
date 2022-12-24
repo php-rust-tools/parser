@@ -1,4 +1,4 @@
-[E008] Error: multiple visibility modifiers are not allowed, first `public`, second `protected`
+[E008] Error: multiple visibility modifiers are not allowed
    ,-[code.php:5:25]
    |
  5 |         readonly public protected private string $s = "h",
@@ -6,5 +6,15 @@
    *                             |       
    *                             |      
    *                             `------ try removing this
+---'
+
+[E008] Error: multiple visibility modifiers are not allowed
+   ,-[code.php:5:35]
+   |
+ 5 |         readonly public protected private string $s = "h",
+   *                  ^^^^^^           ^^^|^^^  
+   *                                      |      
+   *                                      |     
+   *                                      `----- try removing this
 ---'
 

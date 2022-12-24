@@ -64,8 +64,11 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
             members: {
                 let mut members = Vec::new();
                 while state.stream.current().kind != TokenKind::RightBrace {
-                    members.push(backed_member(state, &name)?);
+                    if let Some(member) = backed_member(state, &name)? {
+                        members.push(member);
+                    }
                 }
+
                 members
             },
             right_brace: utils::skip_right_brace(state)?,
@@ -85,7 +88,9 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
             members: {
                 let mut members = Vec::new();
                 while state.stream.current().kind != TokenKind::RightBrace {
-                    members.push(unit_member(state, &name)?);
+                    if let Some(member) = unit_member(state, &name)? {
+                        members.push(member);
+                    }
                 }
                 members
             },
@@ -102,7 +107,10 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     }
 }
 
-fn unit_member(state: &mut State, enum_name: &SimpleIdentifier) -> ParseResult<UnitEnumMember> {
+fn unit_member(
+    state: &mut State,
+    enum_name: &SimpleIdentifier,
+) -> ParseResult<Option<UnitEnumMember>> {
     attributes::gather_attributes(state)?;
 
     let current = state.stream.current();
@@ -116,35 +124,43 @@ fn unit_member(state: &mut State, enum_name: &SimpleIdentifier) -> ParseResult<U
 
         let current = state.stream.current();
         if current.kind == TokenKind::Equals {
-            return Err(error::case_value_for_unit_enum(
-                state,
-                enum_name,
-                &name,
-                current.span,
-            ));
+            // parse the value, but don't do anything with it.
+            let _ = utils::skip(state, TokenKind::Equals)?;
+            let _ = expressions::create(state)?;
+            let _ = utils::skip_semicolon(state)?;
+
+            let error = error::case_value_for_unit_enum(state, enum_name, &name, current.span);
+
+            state.record(error);
+
+            return Ok(None);
         }
 
         let end = utils::skip_semicolon(state)?;
 
-        return Ok(UnitEnumMember::Case(UnitEnumCase {
+        return Ok(Some(UnitEnumMember::Case(UnitEnumCase {
             start,
             end,
             name,
             attributes,
-        }));
+        })));
     }
 
     let modifiers = modifiers::collect(state)?;
 
     if state.stream.current().kind == TokenKind::Const {
         return constants::classish(state, modifiers::constant_group(modifiers)?)
-            .map(UnitEnumMember::Constant);
+            .map(UnitEnumMember::Constant)
+            .map(Some);
     }
 
-    method(state, modifiers, enum_name).map(UnitEnumMember::Method)
+    method(state, modifiers, enum_name).map(|method| method.map(UnitEnumMember::Method))
 }
 
-fn backed_member(state: &mut State, enum_name: &SimpleIdentifier) -> ParseResult<BackedEnumMember> {
+fn backed_member(
+    state: &mut State,
+    enum_name: &SimpleIdentifier,
+) -> ParseResult<Option<BackedEnumMember>> {
     attributes::gather_attributes(state)?;
 
     let current = state.stream.current();
@@ -158,12 +174,15 @@ fn backed_member(state: &mut State, enum_name: &SimpleIdentifier) -> ParseResult
 
         let current = state.stream.current();
         if current.kind == TokenKind::SemiColon {
-            return Err(error::missing_case_value_for_backed_enum(
-                state,
-                enum_name,
-                &name,
-                current.span,
-            ));
+            // parse the semicolon, but don't do anything with it.
+            let _ = utils::skip_semicolon(state)?;
+
+            let error =
+                error::missing_case_value_for_backed_enum(state, enum_name, &name, current.span);
+
+            state.record(error);
+
+            return Ok(None);
         }
 
         let equals = utils::skip(state, TokenKind::Equals)?;
@@ -172,31 +191,32 @@ fn backed_member(state: &mut State, enum_name: &SimpleIdentifier) -> ParseResult
 
         let semicolon = utils::skip_semicolon(state)?;
 
-        return Ok(BackedEnumMember::Case(BackedEnumCase {
+        return Ok(Some(BackedEnumMember::Case(BackedEnumCase {
             attributes,
             case,
             name,
             equals,
             value,
             semicolon,
-        }));
+        })));
     }
 
     let modifiers = modifiers::collect(state)?;
 
     if state.stream.current().kind == TokenKind::Const {
         return constants::classish(state, modifiers::constant_group(modifiers)?)
-            .map(BackedEnumMember::Constant);
+            .map(BackedEnumMember::Constant)
+            .map(Some);
     }
 
-    method(state, modifiers, enum_name).map(BackedEnumMember::Method)
+    method(state, modifiers, enum_name).map(|method| method.map(BackedEnumMember::Method))
 }
 
 fn method(
     state: &mut State,
     modifiers: Vec<(Span, TokenKind)>,
     enum_name: &SimpleIdentifier,
-) -> ParseResult<ConcreteMethod> {
+) -> ParseResult<Option<ConcreteMethod>> {
     let method = functions::method(
         state,
         functions::MethodType::Concrete,
@@ -205,22 +225,26 @@ fn method(
     )?;
 
     match method {
-        Method::ConcreteConstructor(constructor) => Err(error::constructor_in_enum(
-            state,
-            enum_name,
-            &constructor.name,
-        )),
+        Method::ConcreteConstructor(constructor) => {
+            let error = error::constructor_in_enum(state, enum_name, &constructor.name);
+
+            state.record(error);
+
+            Ok(None)
+        }
         Method::Concrete(method) => {
             match method.name.value[..].to_ascii_lowercase().as_slice() {
                 b"__get" | b"__set" | b"__serialize" | b"__unserialize" | b"__destruct"
                 | b"__wakeup" | b"__sleep" | b"__set_state" | b"__unset" | b"__isset"
                 | b"__debuginfo" | b"__clone" | b"__tostring" => {
-                    return Err(error::magic_method_in_enum(state, enum_name, &method.name))
+                    let error = error::magic_method_in_enum(state, enum_name, &method.name);
+
+                    state.record(error);
                 }
                 _ => {}
             }
 
-            Ok(method)
+            Ok(Some(method))
         }
         Method::Abstract(_) | Method::AbstractConstructor(_) => unreachable!(),
     }

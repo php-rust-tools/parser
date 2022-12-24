@@ -27,34 +27,40 @@ pub fn parse(
         if !type_checked {
             type_checked = true;
             if modifiers.has_readonly() && modifiers.has_static() {
-                return Err(error::static_property_cannot_be_readonly(
+                let error = error::static_property_cannot_be_readonly(
                     state,
                     class_name,
                     &variable,
                     modifiers.get_static().unwrap().span(),
                     modifiers.get_readonly().unwrap().span(),
-                ));
+                );
+
+                state.record(error);
             }
 
             match &ty {
                 Some(ty) => {
                     if ty.includes_callable() || ty.is_bottom() {
-                        return Err(error::forbidden_type_used_in_property(
+                        let error = error::forbidden_type_used_in_property(
                             state,
                             class_name,
                             &variable,
                             ty.clone(),
-                        ));
+                        );
+
+                        state.record(error);
                     }
                 }
                 None => {
                     if let Some(modifier) = modifiers.get_readonly() {
-                        return Err(error::missing_type_for_readonly_property(
+                        let error = error::missing_type_for_readonly_property(
                             state,
                             class_name,
                             &variable,
                             modifier.span(),
-                        ));
+                        );
+
+                        state.record(error);
                     }
                 }
             }
@@ -63,13 +69,15 @@ pub fn parse(
         let current = state.stream.current();
         if current.kind == TokenKind::Equals {
             if let Some(modifier) = modifiers.get_readonly() {
-                return Err(error::readonly_property_has_default_value(
+                let error = error::readonly_property_has_default_value(
                     state,
                     class_name,
                     &variable,
                     modifier.span(),
                     current.span,
-                ));
+                );
+
+                state.record(error);
             }
 
             state.stream.next();
@@ -120,12 +128,14 @@ pub fn parse_var(
 
             if let Some(ty) = &ty {
                 if ty.includes_callable() || ty.is_bottom() {
-                    return Err(error::forbidden_type_used_in_property(
+                    let error = error::forbidden_type_used_in_property(
                         state,
                         class_name,
                         &variable,
                         ty.clone(),
-                    ));
+                    );
+
+                    state.record(error);
                 }
             }
         }

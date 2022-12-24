@@ -29,11 +29,15 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
                 }
 
                 if current.kind == TokenKind::Ellipsis {
-                    return Err(error::illegal_spread_operator_usage(current.span));
+                    state.stream.next();
+
+                    state.record(error::illegal_spread_operator_usage(current.span));
                 }
 
                 if current.kind == TokenKind::Ampersand {
-                    return Err(error::cannot_assign_reference_to_non_referencable_value(
+                    state.stream.next();
+
+                    state.record(error::cannot_assign_reference_to_non_referencable_value(
                         current.span,
                     ));
                 }
@@ -42,7 +46,7 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
                 current = state.stream.current();
                 if current.kind == TokenKind::DoubleArrow {
                     if !has_at_least_one_key && !items.is_empty() {
-                        return Err(error::mixing_keyed_and_unkeyed_list_entries(current.span));
+                        state.record(error::mixing_keyed_and_unkeyed_list_entries(current.span));
                     }
 
                     let double_arrow = current.span;
@@ -51,11 +55,15 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
 
                     current = state.stream.current();
                     if current.kind == TokenKind::Ellipsis {
-                        return Err(error::illegal_spread_operator_usage(current.span));
+                        state.stream.next();
+
+                        state.record(error::illegal_spread_operator_usage(current.span));
                     }
 
                     if current.kind == TokenKind::Ampersand {
-                        return Err(error::cannot_assign_reference_to_non_referencable_value(
+                        state.stream.next();
+
+                        state.record(error::cannot_assign_reference_to_non_referencable_value(
                             current.span,
                         ));
                     }
@@ -72,9 +80,11 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
                     });
 
                     has_at_least_one_key = true;
-                } else if has_at_least_one_key {
-                    return Err(error::mixing_keyed_and_unkeyed_list_entries(current.span));
                 } else {
+                    if has_at_least_one_key {
+                        state.record(error::mixing_keyed_and_unkeyed_list_entries(current.span));
+                    }
+
                     items.push(ListEntry::Value { value });
                 }
 
@@ -147,7 +157,7 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
 
     if let Some(ellipsis) = ellipsis {
         if let Some(ampersand) = ampersand {
-            return Err(error::cannot_assign_reference_to_non_referencable_value(
+            state.record(error::cannot_assign_reference_to_non_referencable_value(
                 ampersand,
             ));
         }
@@ -167,7 +177,9 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
 
         current = state.stream.current();
         if current.kind == TokenKind::Ellipsis {
-            return Err(error::illegal_spread_operator_usage(current.span));
+            state.stream.next();
+
+            state.record(error::illegal_spread_operator_usage(current.span));
         }
 
         ampersand = if current.kind == TokenKind::Ampersand {

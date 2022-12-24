@@ -274,7 +274,7 @@ pub fn collect(state: &mut State) -> ParseResult<Vec<(Span, TokenKind)>> {
                     TokenKind::Public | TokenKind::Protected | TokenKind::Private
                 )
             }) {
-                return Err(error::multiple_visibility_modifiers(
+                state.record(error::multiple_visibility_modifiers(
                     (visibility.to_string(), *span),
                     (current_kind.to_string(), current_span),
                 ));

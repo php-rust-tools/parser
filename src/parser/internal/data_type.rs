@@ -199,7 +199,7 @@ fn nullable(state: &mut State) -> ParseResult<Type> {
     let ty = simple_data_type(state)?;
 
     if ty.standalone() {
-        return Err(error::standalone_type_used_as_nullable(&ty, current.span));
+        state.record(error::standalone_type_used_as_nullable(&ty, current.span));
     }
 
     Ok(Type::Nullable(current.span, Box::new(ty)))
@@ -207,7 +207,7 @@ fn nullable(state: &mut State) -> ParseResult<Type> {
 
 fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> {
     if other.standalone() {
-        return Err(error::standalone_type_used_in_union(
+        state.record(error::standalone_type_used_in_union(
             &other,
             state.stream.current().span,
         ));
@@ -234,7 +234,7 @@ fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> 
                 //     v-- get_union_type: within_dnf = true
                 //        v-- error
                 // F&(A|B|(D&S))
-                return Err(error::nested_disjunctive_normal_form_types(current.span));
+                state.record(error::nested_disjunctive_normal_form_types(current.span));
             }
 
             state.stream.next();
@@ -248,7 +248,7 @@ fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> 
         } else {
             let ty = simple_data_type(state)?;
             if ty.standalone() {
-                return Err(error::standalone_type_used_in_union(&ty, last_pipe));
+                state.record(error::standalone_type_used_in_union(&ty, last_pipe));
             }
 
             ty
@@ -268,7 +268,7 @@ fn union(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> 
 
 fn intersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResult<Type> {
     if other.standalone() {
-        return Err(error::standalone_type_used_in_intersection(
+        state.record(error::standalone_type_used_in_intersection(
             &other,
             state.stream.current().span,
         ));
@@ -295,7 +295,7 @@ fn intersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResult
                 //     v-- get_intersection_type: within_dnf = true
                 //        v-- error
                 // F|(A&B&(D|S))
-                return Err(error::nested_disjunctive_normal_form_types(current.span));
+                state.record(error::nested_disjunctive_normal_form_types(current.span));
             }
 
             state.stream.next();
@@ -309,7 +309,7 @@ fn intersection(state: &mut State, other: Type, within_dnf: bool) -> ParseResult
         } else {
             let ty = simple_data_type(state)?;
             if ty.standalone() {
-                return Err(error::standalone_type_used_in_intersection(
+                state.record(error::standalone_type_used_in_intersection(
                     &ty,
                     last_ampersand,
                 ));
