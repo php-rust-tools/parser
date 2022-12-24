@@ -14,7 +14,7 @@ use crate::parser::ast::DefaultMatchArm;
 use crate::parser::ast::Expression;
 use crate::parser::ast::MatchArm;
 use crate::parser::ast::Statement;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::blocks;
@@ -30,13 +30,14 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
 
     utils::skip_left_brace(state)?;
 
-    let mut default = None;
+    let mut default: Option<Box<DefaultMatchArm>> = None;
     let mut arms = Vec::new();
     while state.stream.current().kind != TokenKind::RightBrace {
         let current = state.stream.current();
         if current.kind == TokenKind::Default {
-            if default.is_some() {
-                return Err(ParseError::MatchExpressionWithMultipleDefaultArms(
+            if let Some(default_arm) = default {
+                return Err(error::match_expression_has_multiple_default_arms(
+                    default_arm.keyword,
                     current.span,
                 ));
             }

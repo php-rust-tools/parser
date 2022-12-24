@@ -30,8 +30,6 @@ use crate::parser::internal::variables;
 pub use crate::parser::state::stream::TokenStream;
 use crate::parser::state::State;
 
-use self::error::ParseError;
-
 pub mod ast;
 pub mod error;
 
@@ -42,10 +40,7 @@ mod state;
 
 pub fn parse<B: ?Sized + AsRef<[u8]>>(input: &B) -> ParseResult<Program> {
     let lexer = Lexer::new();
-    let tokens = match lexer.tokenize(input) {
-        Ok(tokens) => tokens,
-        Err(error) => return Err(ParseError::SyntaxError(error)),
-    };
+    let tokens = lexer.tokenize(input)?;
 
     construct(&tokens)
 }

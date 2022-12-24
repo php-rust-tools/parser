@@ -210,20 +210,12 @@ fn member(state: &mut State, class_name: &str) -> ParseResult<TraitMember> {
             class_name,
         )?;
 
-        match method {
-            Method::Abstract(method) => {
-                return Ok(TraitMember::AbstractMethod(method));
-            }
-            Method::Concrete(method) => {
-                return Ok(TraitMember::ConcreteMethod(method));
-            }
-            Method::AbstractConstructor(ctor) => {
-                return Ok(TraitMember::AbstractConstructor(ctor));
-            }
-            Method::ConcreteConstructor(ctor) => {
-                return Ok(TraitMember::ConcreteConstructor(ctor));
-            }
-        }
+        return match method {
+            Method::Abstract(method) => Ok(TraitMember::AbstractMethod(method)),
+            Method::Concrete(method) => Ok(TraitMember::ConcreteMethod(method)),
+            Method::AbstractConstructor(ctor) => Ok(TraitMember::AbstractConstructor(ctor)),
+            Method::ConcreteConstructor(ctor) => Ok(TraitMember::ConcreteConstructor(ctor)),
+        };
     }
 
     properties::parse(state, class_name, modifiers::property_group(modifiers)?)

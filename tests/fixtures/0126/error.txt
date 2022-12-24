@@ -1,0 +1,12 @@
+[E030] Error: cannot declare a `private` constant as `final`
+   ,-[code.php:4:5]
+   |
+ 4 |     final private const BAR = 3;
+   *     ^^|^^ ^^^|^^^  
+   *       |      `----- constant is declared as `private` here
+   *       |            
+   *       `------------ try removing this
+   * 
+   * Note: private constants cannot be final as they are not visible to other classes
+---'
+

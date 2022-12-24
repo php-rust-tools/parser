@@ -1,0 +1,12 @@
+[E037] Error: property `Foo::$s` cannot have type `string|int|callable`
+   ,-[code.php:5:16]
+   |
+ 5 |         public string|int|callable $s,
+   *                ^^^^^^^^^|^^^^^^^^^ ^|  
+   *                         |           `-- property `$s` is declared here
+   *                         |              
+   *                         `-------------- try using a different type
+   * 
+   * Note: `void`, `never`, and `callable` types are not allowed in properties
+---'
+

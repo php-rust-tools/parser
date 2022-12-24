@@ -11,7 +11,7 @@ use crate::lexer::token::Span;
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Type {
     Named(Span, ByteString),
-    Nullable(Box<Type>),
+    Nullable(Span, Box<Type>),
     Union(Vec<Type>),
     Intersection(Vec<Type>),
     Void(Span),
@@ -35,11 +35,14 @@ pub enum Type {
 
 impl Type {
     pub fn standalone(&self) -> bool {
-        matches!(self, Type::Mixed(_) | Type::Never(_) | Type::Void(_))
+        matches!(
+            self,
+            Type::Mixed(_) | Type::Never(_) | Type::Void(_) | Type::Nullable(_, _)
+        )
     }
 
     pub fn nullable(&self) -> bool {
-        matches!(self, Type::Nullable(_))
+        matches!(self, Type::Nullable(_, _))
     }
 
     pub fn includes_callable(&self) -> bool {
@@ -65,13 +68,39 @@ impl Type {
     pub fn is_bottom(&self) -> bool {
         matches!(self, Type::Never(_) | Type::Void(_))
     }
+
+    pub fn first_span(&self) -> Span {
+        match &self {
+            Type::Named(span, _) => *span,
+            Type::Nullable(span, _) => *span,
+            Type::Union(inner) => inner[0].first_span(),
+            Type::Intersection(inner) => inner[0].first_span(),
+            Type::Void(span) => *span,
+            Type::Null(span) => *span,
+            Type::True(span) => *span,
+            Type::False(span) => *span,
+            Type::Never(span) => *span,
+            Type::Float(span) => *span,
+            Type::Boolean(span) => *span,
+            Type::Integer(span) => *span,
+            Type::String(span) => *span,
+            Type::Array(span) => *span,
+            Type::Object(span) => *span,
+            Type::Mixed(span) => *span,
+            Type::Callable(span) => *span,
+            Type::Iterable(span) => *span,
+            Type::StaticReference(span) => *span,
+            Type::SelfReference(span) => *span,
+            Type::ParentReference(span) => *span,
+        }
+    }
 }
 
 impl Display for Type {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
             Type::Named(_, inner) => write!(f, "{}", inner),
-            Type::Nullable(inner) => write!(f, "{}", inner),
+            Type::Nullable(_, inner) => write!(f, "?{}", inner),
             Type::Union(inner) => write!(
                 f,
                 "{}",

@@ -1,6 +1,6 @@
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::SimpleIdentifier;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 
@@ -14,10 +14,10 @@ pub fn identifier_of(state: &mut State, kinds: &[&str]) -> ParseResult<SimpleIde
     if kinds.contains(&name.as_str()) {
         Ok(ident)
     } else {
-        Err(ParseError::ExpectedIdentifier(
+        Err(error::unexpected_identifier(
             kinds.iter().map(|s| s.to_string()).collect(),
             name,
-            state.stream.current().span,
+            ident.span,
         ))
     }
 }
@@ -44,14 +44,13 @@ pub fn type_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
+        t if is_reserved_identifier(t) => Err(error::cannot_use_reserved_keyword_as_a_type_name(
+            current.span,
             current.to_string(),
-            current.span,
         )),
-        _ => Err(ParseError::ExpectedToken(
+        _ => Err(error::unexpected_token(
             vec!["an identifier".to_owned()],
-            Some(current.to_string()),
-            current.span,
+            current,
         )),
     }
 }
@@ -78,14 +77,13 @@ pub fn label_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsAGoToLabel(
+        t if is_reserved_identifier(t) => Err(error::cannot_use_reserved_keyword_as_a_goto_label(
+            current.span,
             current.to_string(),
-            current.span,
         )),
-        _ => Err(ParseError::ExpectedToken(
+        _ => Err(error::unexpected_token(
             vec!["an identifier".to_owned()],
-            Some(current.to_string()),
-            current.span,
+            current,
         )),
     }
 }
@@ -112,14 +110,15 @@ pub fn constant_identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsAConstantName(
-            current.to_string(),
-            current.span,
-        )),
-        _ => Err(ParseError::ExpectedToken(
+        t if is_reserved_identifier(t) => {
+            Err(error::cannot_use_reserved_keyword_as_a_constant_name(
+                current.span,
+                current.to_string(),
+            ))
+        }
+        _ => Err(error::unexpected_token(
             vec!["an identifier".to_owned()],
-            Some(current.to_string()),
-            current.span,
+            current,
         )),
     }
 }
@@ -137,10 +136,9 @@ pub fn identifier(state: &mut State) -> ParseResult<SimpleIdentifier> {
             value: current.value.clone(),
         })
     } else {
-        Err(ParseError::ExpectedToken(
+        Err(error::unexpected_token(
             vec!["an identifier".to_owned()],
-            Some(current.to_string()),
-            current.span,
+            current,
         ))
     }
 }
@@ -194,10 +192,9 @@ pub fn full_name(state: &mut State) -> ParseResult<SimpleIdentifier> {
                 value: current.value.clone(),
             })
         }
-        _ => Err(ParseError::ExpectedToken(
+        _ => Err(error::unexpected_token(
             vec!["an identifier".to_owned()],
-            Some(current.to_string()),
-            current.span,
+            current,
         )),
     }
 }
@@ -226,14 +223,13 @@ pub fn full_type_name(state: &mut State) -> ParseResult<SimpleIdentifier> {
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
+        t if is_reserved_identifier(t) => Err(error::cannot_use_reserved_keyword_as_a_type_name(
+            current.span,
             current.to_string(),
-            current.span,
         )),
-        _ => Err(ParseError::ExpectedToken(
+        _ => Err(error::unexpected_token(
             vec!["an identifier".to_owned()],
-            Some(current.to_string()),
-            current.span,
+            current,
         )),
     }
 }
@@ -266,14 +262,13 @@ pub fn full_type_name_including_self(state: &mut State) -> ParseResult<SimpleIde
 
             Ok(SimpleIdentifier { span, value: name })
         }
-        t if is_reserved_identifier(t) => Err(ParseError::CannotUseReservedKeywordAsATypeName(
+        t if is_reserved_identifier(t) => Err(error::cannot_use_reserved_keyword_as_a_type_name(
+            current.span,
             current.to_string(),
-            current.span,
         )),
-        _ => Err(ParseError::ExpectedToken(
+        _ => Err(error::unexpected_token(
             vec!["an identifier".to_owned()],
-            Some(current.to_string()),
-            current.span,
+            current,
         )),
     }
 }

@@ -29,6 +29,28 @@ pub enum PromotedPropertyModifier {
     Readonly(Span),
 }
 
+impl PromotedPropertyModifier {
+    pub fn span(&self) -> Span {
+        match self {
+            PromotedPropertyModifier::Public(span) => *span,
+            PromotedPropertyModifier::Protected(span) => *span,
+            PromotedPropertyModifier::Private(span) => *span,
+            PromotedPropertyModifier::Readonly(span) => *span,
+        }
+    }
+}
+
+impl std::fmt::Display for PromotedPropertyModifier {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PromotedPropertyModifier::Public(_) => write!(f, "public"),
+            PromotedPropertyModifier::Protected(_) => write!(f, "protected"),
+            PromotedPropertyModifier::Private(_) => write!(f, "private"),
+            PromotedPropertyModifier::Readonly(_) => write!(f, "readonly"),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 #[repr(transparent)]
@@ -39,6 +61,12 @@ pub struct PromotedPropertyModifierGroup {
 impl PromotedPropertyModifierGroup {
     pub fn is_empty(&self) -> bool {
         self.modifiers.is_empty()
+    }
+
+    pub fn get_readonly(&self) -> Option<&PromotedPropertyModifier> {
+        self.modifiers
+            .iter()
+            .find(|modifier| matches!(modifier, PromotedPropertyModifier::Readonly { .. }))
     }
 
     pub fn has_readonly(&self) -> bool {
@@ -70,6 +98,18 @@ pub enum PropertyModifier {
     Readonly(Span),
 }
 
+impl PropertyModifier {
+    pub fn span(&self) -> Span {
+        match self {
+            PropertyModifier::Public(span) => *span,
+            PropertyModifier::Protected(span) => *span,
+            PropertyModifier::Private(span) => *span,
+            PropertyModifier::Static(span) => *span,
+            PropertyModifier::Readonly(span) => *span,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 #[repr(transparent)]
@@ -80,6 +120,18 @@ pub struct PropertyModifierGroup {
 impl PropertyModifierGroup {
     pub fn is_empty(&self) -> bool {
         self.modifiers.is_empty()
+    }
+
+    pub fn get_readonly(&self) -> Option<&PropertyModifier> {
+        self.modifiers
+            .iter()
+            .find(|modifier| matches!(modifier, PropertyModifier::Readonly { .. }))
+    }
+
+    pub fn get_static(&self) -> Option<&PropertyModifier> {
+        self.modifiers
+            .iter()
+            .find(|modifier| matches!(modifier, PropertyModifier::Static { .. }))
     }
 
     pub fn has_readonly(&self) -> bool {

@@ -26,7 +26,7 @@ macro_rules! peek_token {
 #[macro_export]
 macro_rules! expect_token {
     ([ $($(|)? $( $pattern:pat_param )|+ $( if $guard: expr )? => $out:expr),+ $(,)? ], $state:expr, [ $($message:literal),+ $(,)? ]) => {{
-        let token = $state.stream.current().clone();
+        let token = $state.stream.current();
         $state.stream.next();
         match token.kind {
             $(
@@ -34,18 +34,10 @@ macro_rules! expect_token {
                     $out
                 },
             )+
-            TokenKind::Eof => {
-                return Err($crate::parser::error::ParseError::ExpectedToken(
-                    vec![$($message.into(),)+],
-                    None,
-                    token.span,
-                ))
-            },
             _ => {
-                return Err($crate::parser::error::ParseError::ExpectedToken(
+                return Err($crate::parser::error::unexpected_token(
                     vec![$($message.into(),)+],
-                    Some(token.to_string()),
-                    token.span,
+                    token,
                 ))
             }
         }
@@ -112,24 +104,10 @@ macro_rules! expected_token_err {
 #[macro_export]
 macro_rules! expected_token {
     ([ $($expected:literal),+ $(,)? ], $state:expr $(,)?) => {{
-        let current = $state.stream.current();
-
-        match &current.kind {
-            TokenKind::Eof => {
-                $crate::parser::error::ParseError::ExpectedToken(
-                    vec![$($expected.into()),+],
-                    None,
-                    current.span,
-                )
-            },
-            _ => {
-                $crate::parser::error::ParseError::ExpectedToken(
-                    vec![$($expected.into()),+],
-                    Some(current.to_string()),
-                    current.span,
-                )
-            }
-        }
+        $crate::parser::error::unexpected_token(
+            vec![$($expected.into()),+],
+            $state.stream.current(),
+        )
     }};
 
     ($expected:literal, $state:expr $(,)?) => {
@@ -145,7 +123,7 @@ macro_rules! expected_scope {
                 $( $pattern )|+ $( if $guard )? => $out,
             )+
             _ => {
-                return Err($crate::parser::error::ParseError::UnpredictableState($state.stream.current().span));
+                return Err($crate::parser::error::reached_unpredictable_state($state.stream.current().span));
             }
         }
     }};

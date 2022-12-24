@@ -1,0 +1,12 @@
+[E032] Error: cannot declare `readonly` property `Foo\Bar\Baz::$foo` as 'static'
+   ,-[code.php:6:22]
+   |
+ 6 |      public readonly static string $foo;
+   *             ^^^^|^^^ ^^^|^^        ^^|^  
+   *                 |       |            `--- property `$foo` is declared here
+   *                 |       |                
+   *                 `------------------------ property is declared as `readonly` here
+   *                         |                
+   *                         `---------------- try removing this
+---'
+

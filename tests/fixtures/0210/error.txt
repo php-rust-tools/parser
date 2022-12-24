@@ -1,0 +1,11 @@
+[E038] Error: match expression cannot have more than one default arm
+   ,-[code.php:6:5]
+   |
+ 5 |     default => 43,
+   *     ^^^|^^^  
+   *        `----- first default arm is specified here
+ 6 |     default => 34,
+   *     ^^^|^^^  
+   *        `----- try removing this arm
+---'
+

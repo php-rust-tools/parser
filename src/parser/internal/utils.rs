@@ -5,7 +5,7 @@ use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::utils::Parenthesized;
 use crate::parser::ast::utils::SemicolonTerminated;
 use crate::parser::ast::Ending;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 
@@ -21,17 +21,7 @@ pub fn skip_ending(state: &mut State) -> ParseResult<Ending> {
 
         Ok(Ending::Semicolon(current.span))
     } else {
-        let found = if state.stream.current().kind == TokenKind::Eof {
-            None
-        } else {
-            Some(state.stream.current().to_string())
-        };
-
-        Err(ParseError::ExpectedToken(
-            vec!["`;`".to_string()],
-            found,
-            current.span,
-        ))
+        Err(error::unexpected_token(vec![";".to_string()], current))
     }
 }
 
@@ -43,17 +33,7 @@ pub fn skip_semicolon(state: &mut State) -> ParseResult<Span> {
 
         Ok(current.span)
     } else {
-        let found = if state.stream.current().kind == TokenKind::Eof {
-            None
-        } else {
-            Some(state.stream.current().to_string())
-        };
-
-        Err(ParseError::ExpectedToken(
-            vec!["`;`".to_string()],
-            found,
-            current.span,
-        ))
+        Err(error::unexpected_token(vec!["`;`".to_string()], current))
     }
 }
 
@@ -94,7 +74,7 @@ pub fn skip_colon(state: &mut State) -> ParseResult<Span> {
 }
 
 pub fn skip(state: &mut State, kind: TokenKind) -> ParseResult<Span> {
-    let current = state.stream.current().clone();
+    let current = state.stream.current();
 
     if current.kind == kind {
         let end = current.span;
@@ -103,22 +83,12 @@ pub fn skip(state: &mut State, kind: TokenKind) -> ParseResult<Span> {
 
         Ok(end)
     } else {
-        let found = if current.kind == TokenKind::Eof {
-            None
-        } else {
-            Some(current.to_string())
-        };
-
-        Err(ParseError::ExpectedToken(
-            vec![format!("`{}`", kind)],
-            found,
-            current.span,
-        ))
+        Err(error::unexpected_token(vec![kind.to_string()], current))
     }
 }
 
 pub fn skip_any_of(state: &mut State, kinds: &[TokenKind]) -> ParseResult<Span> {
-    let current = state.stream.current().clone();
+    let current = state.stream.current();
 
     if kinds.contains(&current.kind) {
         let end = current.span;
@@ -127,16 +97,9 @@ pub fn skip_any_of(state: &mut State, kinds: &[TokenKind]) -> ParseResult<Span> 
 
         Ok(end)
     } else {
-        let found = if current.kind == TokenKind::Eof {
-            None
-        } else {
-            Some(current.to_string())
-        };
-
-        Err(ParseError::ExpectedToken(
-            kinds.iter().map(|kind| format!("`{}`", kind)).collect(),
-            found,
-            current.span,
+        Err(error::unexpected_token(
+            kinds.iter().map(|kind| kind.to_string()).collect(),
+            current,
         ))
     }
 }

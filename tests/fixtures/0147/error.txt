@@ -1,0 +1,14 @@
+[E018] Error: case `Baz` of backed enum `A\B\C\D\E\Foo` must have a value
+   ,-[code.php:7:14]
+   |
+ 5 | ,-> enum Foo: int {
+ 6 | |->      case Bar = 1;
+   * |                        
+   * `------------------------ enum `A\B\C\D\E\Foo` is declared here
+ 7 |          case Baz;
+   *               ^|^|  
+   *                | `-- try adding a value here
+   *                |    
+   *                `---- case `Baz` is declared here
+---'
+

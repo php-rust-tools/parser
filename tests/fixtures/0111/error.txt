@@ -1,0 +1,10 @@
+[E013] Error: promoted property `foo::$e` cannot declare variadic
+   ,-[code.php:5:25]
+   |
+ 5 |         public readonly ...$e,
+   *         ^^^|^^          ^|^  
+   *            |             `--- try removing this variadic declaration
+   *            |                 
+   *            `----------------- property is promoted here
+---'
+

@@ -254,7 +254,7 @@ pub fn method(
     };
 
     if name.to_string().to_lowercase() == "__construct" {
-        if has_body {
+        return if has_body {
             let parameters = parameters::constructor_parameter_list(state, class_name)?;
             let body = MethodBody {
                 comments: state.stream.comments(),
@@ -263,7 +263,7 @@ pub fn method(
                 right_brace: utils::skip_right_brace(state)?,
             };
 
-            return Ok(Method::ConcreteConstructor(ConcreteConstructor {
+            Ok(Method::ConcreteConstructor(ConcreteConstructor {
                 comments,
                 attributes,
                 modifiers,
@@ -272,12 +272,12 @@ pub fn method(
                 name,
                 parameters,
                 body,
-            }));
+            }))
         } else {
             let parameters = parameters::function_parameter_list(state)?;
             let semicolon = utils::skip_semicolon(state)?;
 
-            return Ok(Method::AbstractConstructor(AbstractConstructor {
+            Ok(Method::AbstractConstructor(AbstractConstructor {
                 comments,
                 attributes,
                 modifiers,
@@ -286,8 +286,8 @@ pub fn method(
                 name,
                 parameters,
                 semicolon,
-            }));
-        }
+            }))
+        };
     }
 
     let parameters = parameters::function_parameter_list(state)?;

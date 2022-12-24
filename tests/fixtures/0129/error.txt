@@ -1,0 +1,10 @@
+[E008] Error: multiple visibility modifiers are not allowed, first `public`, second `protected`
+   ,-[code.php:5:25]
+   |
+ 5 |         readonly public protected private string $s = "h",
+   *                  ^^^|^^ ^^^^|^^^^  
+   *                     `-------------- `public` used here
+   *                             |      
+   *                             `------ try removing this
+---'
+

@@ -4,7 +4,7 @@ use crate::parser::ast::try_block::CatchType;
 use crate::parser::ast::try_block::FinallyBlock;
 use crate::parser::ast::try_block::TryBlock;
 use crate::parser::ast::Statement;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
 use crate::parser::internal::blocks;
@@ -20,7 +20,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
 
     let body = blocks::multiple_statements_until(state, &TokenKind::RightBrace)?;
 
-    utils::skip_right_brace(state)?;
+    let last_right_brace = utils::skip_right_brace(state)?;
 
     let mut catches = Vec::new();
     loop {
@@ -78,7 +78,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
     }
 
     if catches.is_empty() && finally.is_none() {
-        return Err(ParseError::TryWithoutCatchOrFinally(start));
+        return Err(error::try_without_catch_or_finally(start, last_right_brace));
     }
 
     let end = state.stream.current().span;

@@ -2,7 +2,7 @@ use crate::lexer::token::TokenKind;
 use crate::parser::ast::Statement;
 use crate::parser::ast::Use;
 use crate::parser::ast::UseKind;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::utils;
@@ -31,9 +31,9 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
             let use_kind = match state.stream.current().kind {
                 TokenKind::Function => {
                     if kind != UseKind::Normal {
-                        return Err(ParseError::UnexpectedToken(
-                            state.stream.current().to_string(),
-                            state.stream.current().span,
+                        return Err(error::unexpected_token(
+                            vec!["an identifier".to_string()],
+                            state.stream.current(),
                         ));
                     }
 
@@ -42,9 +42,9 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
                 }
                 TokenKind::Const => {
                     if kind != UseKind::Normal {
-                        return Err(ParseError::UnexpectedToken(
-                            state.stream.current().to_string(),
-                            state.stream.current().span,
+                        return Err(error::unexpected_token(
+                            vec!["an identifier".to_string()],
+                            state.stream.current(),
                         ));
                     }
 

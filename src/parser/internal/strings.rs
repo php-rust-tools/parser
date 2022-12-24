@@ -11,7 +11,6 @@ use crate::parser::ast::operators::ArithmeticOperation;
 use crate::parser::ast::variables::Variable;
 use crate::parser::ast::Expression;
 use crate::parser::ast::StringPart;
-use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions::create;
 use crate::parser::internal::identifiers;
@@ -91,17 +90,17 @@ pub fn heredoc(state: &mut State) -> ParseResult<Expression> {
                     //    we can return an error early because we know
                     //    the label was indented.
                     if !bytes.starts_with(&[b' ']) && !bytes.starts_with(&[b'\t']) {
-                        return Err(ParseError::SyntaxError(
-                            SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span),
-                        ));
+                        return Err(SyntaxError::InvalidDocBodyIndentationLevel(
+                            indentation_amount,
+                            span,
+                        )
+                        .into());
                     }
 
                     // 2. If this line doesn't start with the correct
                     //    type of whitespace, we can also return an error.
                     if !bytes.starts_with(&[indentation_char]) {
-                        return Err(ParseError::SyntaxError(SyntaxError::InvalidDocIndentation(
-                            span,
-                        )));
+                        return Err(SyntaxError::InvalidDocIndentation(span).into());
                     }
 
                     // 3. We now know that the whitespace at the start of
@@ -112,9 +111,11 @@ pub fn heredoc(state: &mut State) -> ParseResult<Expression> {
                     //    minimum and check using `starts_with()`.
                     let expected_whitespace_buffer = vec![indentation_char; indentation_amount];
                     if !bytes.starts_with(&expected_whitespace_buffer) {
-                        return Err(ParseError::SyntaxError(
-                            SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span),
-                        ));
+                        return Err(SyntaxError::InvalidDocBodyIndentationLevel(
+                            indentation_amount,
+                            span,
+                        )
+                        .into());
                     }
 
                     // 4. All of the above checks have passed, so we know
@@ -170,17 +171,15 @@ pub fn nowdoc(state: &mut State) -> ParseResult<Expression> {
             //    we can return an error early because we know
             //    the label was indented.
             if !line.starts_with(&[b' ']) && !line.starts_with(&[b'\t']) {
-                return Err(ParseError::SyntaxError(
-                    SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span),
-                ));
+                return Err(
+                    SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span).into(),
+                );
             }
 
             // 2. If this line doesn't start with the correct
             //    type of whitespace, we can also return an error.
             if !line.starts_with(&[indentation_char]) {
-                return Err(ParseError::SyntaxError(SyntaxError::InvalidDocIndentation(
-                    span,
-                )));
+                return Err(SyntaxError::InvalidDocIndentation(span).into());
             }
 
             // 3. We now know that the whitespace at the start of
@@ -191,9 +190,9 @@ pub fn nowdoc(state: &mut State) -> ParseResult<Expression> {
             //    minimum and check using `starts_with()`.
             let expected_whitespace_buffer = vec![indentation_char; indentation_amount];
             if !line.starts_with(&expected_whitespace_buffer) {
-                return Err(ParseError::SyntaxError(
-                    SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span),
-                ));
+                return Err(
+                    SyntaxError::InvalidDocBodyIndentationLevel(indentation_amount, span).into(),
+                );
             }
 
             // 4. All of the above checks have passed, so we know

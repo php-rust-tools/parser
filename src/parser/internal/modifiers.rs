@@ -10,36 +10,41 @@ use crate::parser::ast::modifiers::PromotedPropertyModifier;
 use crate::parser::ast::modifiers::PromotedPropertyModifierGroup;
 use crate::parser::ast::modifiers::PropertyModifier;
 use crate::parser::ast::modifiers::PropertyModifierGroup;
-use crate::parser::error::ParseError;
+use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::state::State;
 
 #[inline(always)]
 pub fn class_group(input: Vec<(Span, TokenKind)>) -> ParseResult<ClassModifierGroup> {
-    let mut has_final = false;
-    let mut has_abstract = false;
+    let mut final_span = None;
+    let mut abstract_span = None;
 
     let modifiers = input
         .iter()
         .map(|(span, token)| match token {
             TokenKind::Readonly => Ok(ClassModifier::Readonly(*span)),
             TokenKind::Final => {
-                has_final = true;
-                if has_abstract {
-                    Err(ParseError::FinalModifierOnAbstractClassMember(*span))
+                final_span = Some(*span);
+                if let Some(abstract_span) = abstract_span {
+                    Err(error::final_and_abstract_modifiers_combined_for_class(
+                        *span,
+                        abstract_span,
+                    ))
                 } else {
                     Ok(ClassModifier::Final(*span))
                 }
             }
             TokenKind::Abstract => {
-                has_abstract = true;
-                if has_final {
-                    Err(ParseError::FinalModifierOnAbstractClassMember(*span))
+                abstract_span = Some(*span);
+                if let Some(final_span) = final_span {
+                    Err(error::final_and_abstract_modifiers_combined_for_class(
+                        final_span, *span,
+                    ))
                 } else {
                     Ok(ClassModifier::Abstract(*span))
                 }
             }
-            _ => Err(ParseError::CannotUseModifierOnClass(
+            _ => Err(error::modifier_cannot_be_used_for_class(
                 token.to_string(),
                 *span,
             )),
@@ -51,24 +56,33 @@ pub fn class_group(input: Vec<(Span, TokenKind)>) -> ParseResult<ClassModifierGr
 
 #[inline(always)]
 pub fn method_group(input: Vec<(Span, TokenKind)>) -> ParseResult<MethodModifierGroup> {
-    let mut has_final = false;
-    let mut has_abstract = false;
+    let mut final_span = None;
+    let mut abstract_span = None;
 
     let modifiers = input
         .iter()
         .map(|(span, token)| match token {
             TokenKind::Final => {
-                has_final = true;
-                if has_abstract {
-                    Err(ParseError::FinalModifierOnAbstractClassMember(*span))
+                final_span = Some(*span);
+                if let Some(abstract_span) = abstract_span {
+                    Err(
+                        error::final_and_abstract_modifiers_combined_for_class_member(
+                            *span,
+                            abstract_span,
+                        ),
+                    )
                 } else {
                     Ok(MethodModifier::Final(*span))
                 }
             }
             TokenKind::Abstract => {
-                has_abstract = true;
-                if has_final {
-                    Err(ParseError::FinalModifierOnAbstractClassMember(*span))
+                abstract_span = Some(*span);
+                if let Some(final_span) = final_span {
+                    Err(
+                        error::final_and_abstract_modifiers_combined_for_class_member(
+                            final_span, *span,
+                        ),
+                    )
                 } else {
                     Ok(MethodModifier::Abstract(*span))
                 }
@@ -77,7 +91,7 @@ pub fn method_group(input: Vec<(Span, TokenKind)>) -> ParseResult<MethodModifier
             TokenKind::Protected => Ok(MethodModifier::Protected(*span)),
             TokenKind::Public => Ok(MethodModifier::Public(*span)),
             TokenKind::Static => Ok(MethodModifier::Static(*span)),
-            _ => Err(ParseError::CannotUseModifierOnClassMethod(
+            _ => Err(error::modifier_cannot_be_used_for_class_method(
                 token.to_string(),
                 *span,
             )),
@@ -94,7 +108,7 @@ pub fn interface_method_group(input: Vec<(Span, TokenKind)>) -> ParseResult<Meth
         .map(|(span, token)| match token {
             TokenKind::Public => Ok(MethodModifier::Public(*span)),
             TokenKind::Static => Ok(MethodModifier::Static(*span)),
-            _ => Err(ParseError::CannotUseModifierOnInterfaceMethod(
+            _ => Err(error::modifier_cannot_be_used_for_interface_method(
                 token.to_string(),
                 *span,
             )),
@@ -104,6 +118,7 @@ pub fn interface_method_group(input: Vec<(Span, TokenKind)>) -> ParseResult<Meth
     Ok(MethodModifierGroup { modifiers })
 }
 
+#[inline(always)]
 pub fn enum_method_group(input: Vec<(Span, TokenKind)>) -> ParseResult<MethodModifierGroup> {
     let modifiers = input
         .iter()
@@ -113,7 +128,7 @@ pub fn enum_method_group(input: Vec<(Span, TokenKind)>) -> ParseResult<MethodMod
             TokenKind::Protected => Ok(MethodModifier::Protected(*span)),
             TokenKind::Public => Ok(MethodModifier::Public(*span)),
             TokenKind::Static => Ok(MethodModifier::Static(*span)),
-            _ => Err(ParseError::CannotUseModifierOnEnumMethod(
+            _ => Err(error::modifier_cannot_be_used_for_enum_method(
                 token.to_string(),
                 *span,
             )),
@@ -133,7 +148,7 @@ pub fn property_group(input: Vec<(Span, TokenKind)>) -> ParseResult<PropertyModi
             TokenKind::Public => Ok(PropertyModifier::Public(*span)),
             TokenKind::Protected => Ok(PropertyModifier::Protected(*span)),
             TokenKind::Private => Ok(PropertyModifier::Private(*span)),
-            _ => Err(ParseError::CannotUseModifierOnProperty(
+            _ => Err(error::modifier_cannot_be_used_for_property(
                 token.to_string(),
                 *span,
             )),
@@ -154,7 +169,7 @@ pub fn promoted_property_group(
             TokenKind::Private => Ok(PromotedPropertyModifier::Private(*span)),
             TokenKind::Protected => Ok(PromotedPropertyModifier::Protected(*span)),
             TokenKind::Public => Ok(PromotedPropertyModifier::Public(*span)),
-            _ => Err(ParseError::CannotUseModifierOnPromotedProperty(
+            _ => Err(error::modifier_cannot_be_used_for_promoted_property(
                 token.to_string(),
                 *span,
             )),
@@ -165,8 +180,8 @@ pub fn promoted_property_group(
 }
 
 pub fn constant_group(input: Vec<(Span, TokenKind)>) -> ParseResult<ConstantModifierGroup> {
-    let mut has_final = false;
-    let mut has_private = false;
+    let mut final_span = None;
+    let mut private_span = None;
 
     let modifiers = input
         .iter()
@@ -174,22 +189,27 @@ pub fn constant_group(input: Vec<(Span, TokenKind)>) -> ParseResult<ConstantModi
             TokenKind::Protected => Ok(ConstantModifier::Protected(*span)),
             TokenKind::Public => Ok(ConstantModifier::Public(*span)),
             TokenKind::Private => {
-                has_private = true;
-                if has_final {
-                    Err(ParseError::FinalModifierOnPrivateConstant(*span))
-                } else {
-                    Ok(ConstantModifier::Private(*span))
-                }
-            }
-            TokenKind::Final => {
-                has_final = true;
-                if has_private {
-                    Err(ParseError::FinalModifierOnPrivateConstant(*span))
+                private_span = Some(*span);
+                if let Some(final_span) = final_span {
+                    Err(error::final_and_private_modifiers_combined_for_constant(
+                        final_span, *span,
+                    ))
                 } else {
                     Ok(ConstantModifier::Final(*span))
                 }
             }
-            _ => Err(ParseError::CannotUseModifierOnConstant(
+            TokenKind::Final => {
+                final_span = Some(*span);
+                if let Some(private_span) = private_span {
+                    Err(error::final_and_private_modifiers_combined_for_constant(
+                        *span,
+                        private_span,
+                    ))
+                } else {
+                    Ok(ConstantModifier::Final(*span))
+                }
+            }
+            _ => Err(error::modifier_cannot_be_used_for_constant(
                 token.to_string(),
                 *span,
             )),
@@ -207,7 +227,7 @@ pub fn interface_constant_group(
         .map(|(span, token)| match token {
             TokenKind::Public => Ok(ConstantModifier::Public(*span)),
             TokenKind::Final => Ok(ConstantModifier::Final(*span)),
-            _ => Err(ParseError::CannotUseModifierOnInterfaceConstant(
+            _ => Err(error::modifier_cannot_be_used_for_interface_constant(
                 token.to_string(),
                 *span,
             )),
@@ -219,7 +239,6 @@ pub fn interface_constant_group(
 
 pub fn collect(state: &mut State) -> ParseResult<Vec<(Span, TokenKind)>> {
     let mut collected: Vec<(Span, TokenKind)> = vec![];
-    let mut collected_tokens: Vec<TokenKind> = vec![];
 
     let collectable_tokens = vec![
         TokenKind::Private,
@@ -236,37 +255,32 @@ pub fn collect(state: &mut State) -> ParseResult<Vec<(Span, TokenKind)>> {
     let mut current_span = current.span;
 
     while collectable_tokens.contains(&current_kind) {
-        if collected_tokens.contains(&current_kind) {
-            return Err(ParseError::MultipleModifiers(
+        if let Some((span, _)) = collected.iter().find(|(_, kind)| kind == &current_kind) {
+            return Err(error::multiple_modifiers(
                 current_kind.to_string(),
+                *span,
                 current_span,
             ));
         }
 
-        // garud against multiple visibility modifiers, we don't care where these modifiers are used.
-        match current_kind {
-            TokenKind::Private
-                if collected_tokens.contains(&TokenKind::Protected)
-                    || collected_tokens.contains(&TokenKind::Public) =>
-            {
-                return Err(ParseError::MultipleVisibilityModifiers(current_span));
+        // guard against multiple visibility modifiers, we don't care where these modifiers are used.
+        if matches!(
+            current_kind,
+            TokenKind::Public | TokenKind::Protected | TokenKind::Private
+        ) {
+            if let Some((span, visibility)) = collected.iter().find(|(_, kind)| {
+                matches!(
+                    kind,
+                    TokenKind::Public | TokenKind::Protected | TokenKind::Private
+                )
+            }) {
+                return Err(error::multiple_visibility_modifiers(
+                    (visibility.to_string(), *span),
+                    (current_kind.to_string(), current_span),
+                ));
             }
-            TokenKind::Protected
-                if collected_tokens.contains(&TokenKind::Private)
-                    || collected_tokens.contains(&TokenKind::Public) =>
-            {
-                return Err(ParseError::MultipleVisibilityModifiers(current_span));
-            }
-            TokenKind::Public
-                if collected_tokens.contains(&TokenKind::Private)
-                    || collected_tokens.contains(&TokenKind::Protected) =>
-            {
-                return Err(ParseError::MultipleVisibilityModifiers(current_span));
-            }
-            _ => {}
-        };
+        }
 
-        collected_tokens.push(current_kind.clone());
         collected.push((current_span, current_kind));
 
         state.stream.next();
