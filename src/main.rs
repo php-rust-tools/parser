@@ -1,23 +1,25 @@
 use std::io::Result;
+use clap::Parser;
+
+#[derive(Parser,Default,Debug)]
+#[clap(version, about="A PHP Parser")]
+struct Arguments {
+    file: String,
+    #[clap(short, long)]
+    /// Don't print anything
+    silent: bool,
+    #[clap(short, long)]
+    /// Print as json
+    json: bool
+}
 
 fn main() -> Result<()> {
-    let args = std::env::args().collect::<Vec<String>>();
+    let args = Arguments::parse();
 
-    // if --help is passed, or no file is given, print usage in a pretty way and exit
-    if args.contains(&String::from("--help")) || args.len() < 2 {
-        println!("Usage: php-parser-rs [options] <file>");
-        println!("Options:");
-        println!("  --help     Print this help message");
-        println!("  --silent   Don't print anything");
-        println!("  --json     Print as json");
-        std::process::exit(0);
-    }
-
-    // get file from args or print error and exit
-    let file = args.get(1).unwrap();
-    let silent = args.contains(&String::from("--silent"));
-    let print_json = args.contains(&String::from("--json"));
-    let contents = std::fs::read_to_string(file)?;
+    let file = args.file;
+    let contents = std::fs::read_to_string(&file)?;
+    let silent = args.silent;
+    let print_json = args.json;
 
     match php_parser_rs::parse(&contents) {
         Ok(ast) => {
@@ -42,7 +44,7 @@ fn main() -> Result<()> {
             }
         }
         Err(error) => {
-            println!("{}", error.report(&contents, Some(file), true, false)?);
+            println!("{}", error.report(&contents, Some(&file), true, false)?);
 
             std::process::exit(1);
         }
