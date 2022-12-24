@@ -1,6 +1,6 @@
 # PHP-Parser
 
-A handwritten recursive-descent parser for PHP written in Rust.
+A handwritten fault-tolerant, recursive-descent parser for PHP written in Rust.
 
 [![justforfunnoreally.dev badge](https://img.shields.io/badge/justforfunnoreally-dev-9ff)](https://justforfunnoreally.dev)
 
