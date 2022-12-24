@@ -10,6 +10,7 @@ use crate::lexer::token::{Span, Token, TokenKind};
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::data_type::Type;
 use crate::parser::ast::modifiers::PromotedPropertyModifier;
+use crate::parser::ast::Program;
 
 use super::ast::identifiers::SimpleIdentifier;
 use super::ast::variables::SimpleVariable;
@@ -20,7 +21,7 @@ pub type ParseResult<T> = Result<T, ParseError>;
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub enum ParseErrorAnnotationType {
-    Highlight,
+    Hint,
     Error,
 }
 
@@ -41,6 +42,30 @@ pub struct ParseError {
     pub note: Option<String>,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ParseErrorStack {
+    pub partial: Program,
+    pub errors: Vec<ParseError>,
+}
+
+impl ParseErrorStack {
+    pub fn report<'a>(
+        &self,
+        source: &'a str,
+        origin: Option<&'a str>,
+        colored: bool,
+        ascii: bool,
+    ) -> std::io::Result<String> {
+        let mut reports = Vec::new();
+
+        for error in &self.errors {
+            reports.push(error.report(source, origin, colored, ascii)?);
+        }
+
+        Ok(reports.join("\n"))
+    }
+}
+
 impl ParseError {
     pub fn new<TId: ToString, TMessage: ToString>(id: TId, message: TMessage, span: Span) -> Self {
         Self {
@@ -54,7 +79,7 @@ impl ParseError {
 
     pub fn highlight(mut self, position: usize, length: usize) -> Self {
         self.annotations.push(ParseErrorAnnotation {
-            r#type: ParseErrorAnnotationType::Highlight,
+            r#type: ParseErrorAnnotationType::Hint,
             message: "".to_owned(),
             position,
             length,
@@ -115,7 +140,7 @@ impl ParseError {
 
             if colored {
                 label = match annotation.r#type {
-                    ParseErrorAnnotationType::Highlight => label.with_color(Color::Cyan),
+                    ParseErrorAnnotationType::Hint => label.with_color(Color::Cyan),
                     ParseErrorAnnotationType::Error => label.with_color(Color::Red),
                 };
             }
@@ -239,10 +264,7 @@ pub fn multiple_modifiers(modifier: String, first: Span, second: Span) -> ParseE
 pub fn multiple_visibility_modifiers(first: (String, Span), second: (String, Span)) -> ParseError {
     ParseError::new(
         "E008",
-        format!(
-            "multiple visibility modifiers are not allowed, first `{}`, second `{}`",
-            first.0, second.0
-        ),
+        "multiple visibility modifiers are not allowed",
         second.1,
     )
     .highlight(first.1.position, first.0.len())
@@ -368,7 +390,7 @@ pub fn missing_type_for_readonly_property(
         property.span.position,
         property.name.len(),
     )
-    .highlight(readonly_span.position, 7);
+    .highlight(readonly_span.position, 8);
 
     if let Some(class) = class {
         error.highlight(class.span.position, class.value.len())
@@ -799,7 +821,7 @@ pub fn missing_item_definition_after_attributes(
 
     for attribute in attributes {
         annotations.push(ParseErrorAnnotation {
-            r#type: ParseErrorAnnotationType::Highlight,
+            r#type: ParseErrorAnnotationType::Hint,
             message: "".to_string(),
             position: attribute.start.position,
             length: attribute.end.position - attribute.start.position,
@@ -911,6 +933,15 @@ pub fn cannot_use_reserved_keyword_as_a_constant_name(span: Span, keyword: Strin
     .error("try using a different name", span.position, keyword.len())
 }
 
+pub fn cannot_use_type_in_context(span: Span, ty: String) -> ParseError {
+    ParseError::new(
+        "E048".to_string(),
+        format!("cannot use type `{}` in current context", ty),
+        span,
+    )
+    .error("try using a different type", span.position, ty.len())
+}
+
 impl From<SyntaxError> for ParseError {
     fn from(e: SyntaxError) -> Self {
         Self {
@@ -933,6 +964,16 @@ impl Display for ParseError {
 
         if let Some(note) = &self.note {
             write!(f, ", Note: {}", note)?;
+        }
+
+        Ok(())
+    }
+}
+
+impl Display for ParseErrorStack {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        for error in &self.errors {
+            writeln!(f, "{}", error)?;
         }
 
         Ok(())

@@ -3,6 +3,7 @@ use std::fmt::Display;
 
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
+use crate::parser::error::ParseError;
 use crate::parser::state::stream::TokenStream;
 
 pub mod stream;
@@ -25,6 +26,7 @@ pub struct State<'a> {
     pub stream: &'a mut TokenStream<'a>,
     pub attributes: Vec<AttributeGroup>,
     pub namespace_type: Option<NamespaceType>,
+    pub errors: Vec<ParseError>,
 }
 
 impl<'a> State<'a> {
@@ -34,6 +36,7 @@ impl<'a> State<'a> {
             stream: tokens,
             namespace_type: None,
             attributes: vec![],
+            errors: vec![],
         }
     }
 
@@ -47,6 +50,10 @@ impl<'a> State<'a> {
         std::mem::swap(&mut self.attributes, &mut attributes);
 
         attributes
+    }
+
+    pub fn record(&mut self, error: ParseError) {
+        self.errors.push(error);
     }
 
     /// Return the namespace type used in the current state

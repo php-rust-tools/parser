@@ -9,6 +9,7 @@ use crate::parser::ast::declares::DeclareEntry;
 use crate::parser::ast::declares::DeclareEntryGroup;
 use crate::parser::ast::variables::Variable;
 use crate::parser::ast::{Program, Statement, StaticVar};
+use crate::parser::error::ParseErrorStack;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::attributes;
 use crate::parser::internal::blocks;
@@ -27,8 +28,9 @@ use crate::parser::internal::try_block;
 use crate::parser::internal::uses;
 use crate::parser::internal::utils;
 use crate::parser::internal::variables;
-pub use crate::parser::state::stream::TokenStream;
 use crate::parser::state::State;
+
+pub use crate::parser::state::stream::TokenStream;
 
 pub mod ast;
 pub mod error;
@@ -38,24 +40,53 @@ mod internal;
 mod macros;
 mod state;
 
-pub fn parse<B: ?Sized + AsRef<[u8]>>(input: &B) -> ParseResult<Program> {
+pub fn parse<B: ?Sized + AsRef<[u8]>>(input: &B) -> Result<Program, ParseErrorStack> {
     let lexer = Lexer::new();
-    let tokens = lexer.tokenize(input)?;
+    let tokens = match lexer.tokenize(input) {
+        Ok(tokens) => tokens,
+        Err(error) => {
+            return Err(ParseErrorStack {
+                errors: vec![error.into()],
+                partial: Vec::new(),
+            })
+        }
+    };
 
     construct(&tokens)
 }
 
-pub fn construct(tokens: &[Token]) -> ParseResult<Program> {
+pub fn construct(tokens: &[Token]) -> Result<Program, ParseErrorStack> {
     let mut stream = TokenStream::new(tokens);
     let mut state = State::new(&mut stream);
 
-    let mut ast = Program::new();
+    let mut program = Program::new();
 
     while !state.stream.is_eof() {
-        ast.push(top_level_statement(&mut state)?);
+        let statement = match top_level_statement(&mut state) {
+            Ok(statement) => statement,
+            Err(error) => {
+                let mut previous = state.errors;
+                previous.push(error);
+
+                return Err(ParseErrorStack {
+                    errors: previous,
+                    partial: program,
+                });
+            }
+        };
+
+        program.push(statement);
     }
 
-    Ok(ast.to_vec())
+    let errors = state.errors;
+    if !errors.is_empty() {
+        return Err(ParseErrorStack {
+            errors,
+            partial: program,
+        });
+    }
+
+    Ok(program.to_vec())
 }
 
 fn top_level_statement(state: &mut State) -> ParseResult<Statement> {
