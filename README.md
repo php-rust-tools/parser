@@ -26,28 +26,37 @@ cargo add php-parser-rs --git https://github.com/php-rust-tools/parser
 ### Example
 
 ```rust
-use php_parser_rs::parse;
-use php_parser_rs::lexer::Lexer;
+use std::io::Result;
 
-fn main() -> ParseResult<()> {
-    let code = "
-<?php
+use php_parser_rs::parser;
 
-function hello(): void {
-    echo 'Hello, World!';
+const CODE: &str = r#"<?php
+
+final class User {
+    public function __construct(
+        public readonly string $name,
+        public readonly string $email,
+        public readonly string $password,
+    ) {
+    }
 }
+"#;
 
-hello();
-";
+fn main() -> Result<()> {
+    match parser::parse(CODE) {
+        Ok(ast) => {
+            println!("{:#?}", ast);
+        }
+        Err(err) => {
+            println!("{}", err.report(CODE, None, true, false)?);
 
-    let ast = parse(code.as_bytes())?;
-
-    dbg!(ast);
+            println!("parsed so far: {:#?}", err.partial);
+        }
+    }
 
     Ok(())
 }
 ```
-
 
 ## License
 
