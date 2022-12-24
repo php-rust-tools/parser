@@ -1,9 +1,12 @@
 [E037] Error: property `Foo::$s` cannot have type `never`
    ,-[code.php:4:12]
    |
+ 3 | class Foo {
+   *       ^^^  
+   *             
  4 |     public never $s;
-   *            ^^|^^ ^|  
-   *              |    `-- property `$s` is declared here
+   *            ^^|^^ ^^  
+   *              |        
    *              |       
    *              `------- try using a different type
    * 

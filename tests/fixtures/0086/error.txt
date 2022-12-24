@@ -2,9 +2,11 @@
    ,-[code.php:1:35]
    |
  1 | <?php class Foo { public readonly $bar; }
-   *                          ^^^|^^^  ^^|^  
-   *                             |       `--- try adding a type before `$bar`
-   *                             |           
-   *                             `----------- property is declared as readonly here
+   *             ^^^          ^^^^^^^  ^^|^  
+   *                                     `--- try adding a type before `$bar`
+   *                                         
+   *                                          
+   *                                         
+   *                                          
 ---'
 

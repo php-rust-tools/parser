@@ -1,9 +1,13 @@
 [E037] Error: property `Foo::$s` cannot have type `void`
    ,-[code.php:5:16]
    |
+ 3 | class Foo {
+   *       ^^^  
+   *             
+   * 
  5 |         public void $s,
-   *                ^^|^ ^|  
-   *                  |   `-- property `$s` is declared here
+   *                ^^|^ ^^  
+   *                  |       
    *                  |      
    *                  `------ try using a different type
    * 

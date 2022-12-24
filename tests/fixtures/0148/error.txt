@@ -1,14 +1,14 @@
-[E019] Error: case `Baz` of unit enum `A\B\C\D\E\Foo` cannot have a value
+[E019] Error: case `A\B\C\D\E\Foo::Baz` of unit enum `Foo` cannot have a value
    ,-[code.php:7:15]
    |
- 5 | ,-> enum Foo {
- 6 | |->      case Bar;
-   * |                    
-   * `-------------------- enum `A\B\C\D\E\Foo` is declared here
- 7 |          case Baz = 2;
-   *               ^|^ |  
-   *                |  `-- try replacing this with `;`
-   *                |     
-   *                `----- case `Baz` is declared here
+ 5 | enum Foo {
+   *      ^^^  
+   *            
+   * 
+ 7 |      case Baz = 2;
+   *           ^^^ |  
+   *               `-- try replacing this with `;`
+   *                  
+   *                   
 ---'
 

@@ -11,6 +11,7 @@ use crate::parser::ast::functions::Function;
 use crate::parser::ast::functions::FunctionBody;
 use crate::parser::ast::functions::MethodBody;
 use crate::parser::ast::functions::ReturnType;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::MethodModifierGroup;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
@@ -231,7 +232,7 @@ pub fn method(
     state: &mut State,
     r#type: MethodType,
     modifiers: MethodModifierGroup,
-    class_name: &str,
+    class: Option<&SimpleIdentifier>,
 ) -> ParseResult<Method> {
     let comments = state.stream.comments();
     let attributes = state.get_attributes();
@@ -255,7 +256,7 @@ pub fn method(
 
     if name.to_string().to_lowercase() == "__construct" {
         return if has_body {
-            let parameters = parameters::constructor_parameter_list(state, class_name)?;
+            let parameters = parameters::constructor_parameter_list(state, class)?;
             let body = MethodBody {
                 comments: state.stream.comments(),
                 left_brace: utils::skip_left_brace(state)?,

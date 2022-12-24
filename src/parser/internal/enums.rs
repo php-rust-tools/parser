@@ -117,10 +117,9 @@ fn unit_member(state: &mut State, enum_name: &SimpleIdentifier) -> ParseResult<U
         let current = state.stream.current();
         if current.kind == TokenKind::Equals {
             return Err(error::case_value_for_unit_enum(
-                state.named(&enum_name.value),
-                enum_name.span,
-                name.to_string(),
-                name.span,
+                state,
+                enum_name,
+                &name,
                 current.span,
             ));
         }
@@ -160,10 +159,9 @@ fn backed_member(state: &mut State, enum_name: &SimpleIdentifier) -> ParseResult
         let current = state.stream.current();
         if current.kind == TokenKind::SemiColon {
             return Err(error::missing_case_value_for_backed_enum(
-                state.named(&enum_name.value),
-                enum_name.span,
-                name.to_string(),
-                name.span,
+                state,
+                enum_name,
+                &name,
                 current.span,
             ));
         }
@@ -203,26 +201,21 @@ fn method(
         state,
         functions::MethodType::Concrete,
         modifiers::enum_method_group(modifiers)?,
-        &enum_name.value.to_string(),
+        Some(enum_name),
     )?;
 
     match method {
         Method::ConcreteConstructor(constructor) => Err(error::constructor_in_enum(
-            state.named(&enum_name),
-            enum_name.span,
-            constructor.name.span,
+            state,
+            enum_name,
+            &constructor.name,
         )),
         Method::Concrete(method) => {
             match method.name.value[..].to_ascii_lowercase().as_slice() {
                 b"__get" | b"__set" | b"__serialize" | b"__unserialize" | b"__destruct"
                 | b"__wakeup" | b"__sleep" | b"__set_state" | b"__unset" | b"__isset"
                 | b"__debuginfo" | b"__clone" | b"__tostring" => {
-                    return Err(error::magic_method_in_enum(
-                        state.named(&enum_name),
-                        enum_name.span,
-                        method.name.to_string(),
-                        method.name.span,
-                    ))
+                    return Err(error::magic_method_in_enum(state, enum_name, &method.name))
                 }
                 _ => {}
             }

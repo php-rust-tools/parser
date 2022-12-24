@@ -2,10 +2,10 @@
    ,-[code.php:3:17]
    |
  3 | function foo(): never|string {
-   *                 ^^|^^|  
+   *                 ^^|^^^  
    *                   `----- try using a type other than `never`
-   *                      |  
-   *                      `-- union is created here
+   *                         
+   *                          
    * 
    * Note: `never`, `void`, `mixed`, and nullable types cannot be used in a union
 ---'

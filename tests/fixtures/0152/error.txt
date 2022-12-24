@@ -1,10 +1,14 @@
 [E014] Error: missing type for readonly property `Foo\Bar\Baz::$name`
    ,-[code.php:7:27]
    |
+ 5 | final class Baz {
+   *             ^^^  
+   *                   
+   * 
  7 |           public readonly $name,
-   *                  ^^^|^^^  ^^|^^  
-   *                     |       `---- try adding a type before `$name`
-   *                     |            
-   *                     `------------ property is declared as readonly here
+   *                  ^^^^^^^  ^^|^^  
+   *                             `---- try adding a type before `$name`
+   *                                  
+   *                                   
 ---'
 

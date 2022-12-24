@@ -169,7 +169,6 @@ fn member(
     has_abstract: bool,
     name: &SimpleIdentifier,
 ) -> ParseResult<ClassMember> {
-    let string_class_name = name.value.to_string();
     let has_attributes = attributes::gather_attributes(state)?;
 
     if !has_attributes && state.stream.current().kind == TokenKind::Use {
@@ -177,7 +176,7 @@ fn member(
     }
 
     if state.stream.current().kind == TokenKind::Var {
-        return properties::parse_var(state, &string_class_name).map(ClassMember::VariableProperty);
+        return properties::parse_var(state, Some(name)).map(ClassMember::VariableProperty);
     }
 
     let modifiers = modifiers::collect(state)?;
@@ -191,7 +190,7 @@ fn member(
             state,
             MethodType::DependingOnModifiers,
             modifiers::method_group(modifiers)?,
-            &string_class_name,
+            Some(name),
         )?;
 
         return match method {
@@ -200,10 +199,9 @@ fn member(
                     Ok(ClassMember::AbstractMethod(method))
                 } else {
                     Err(error::abstract_method_on_a_non_abstract_class(
-                        state.named(&name.value),
-                        method.name.value.to_string(),
-                        name.span,
-                        method.name.span,
+                        state,
+                        name,
+                        &method.name,
                         method.modifiers.get_abstract().unwrap().span(),
                         method.semicolon,
                     ))
@@ -215,10 +213,9 @@ fn member(
                     Ok(ClassMember::AbstractConstructor(ctor))
                 } else {
                     Err(error::abstract_method_on_a_non_abstract_class(
-                        state.named(&name.value),
-                        ctor.name.value.to_string(),
-                        name.span,
-                        ctor.name.span,
+                        state,
+                        name,
+                        &ctor.name,
                         ctor.modifiers.get_abstract().unwrap().span(),
                         ctor.semicolon,
                     ))
@@ -231,7 +228,7 @@ fn member(
     // e.g: public static
     let modifiers = modifiers::property_group(modifiers)?;
 
-    properties::parse(state, &string_class_name, modifiers).map(ClassMember::Property)
+    properties::parse(state, Some(name), modifiers).map(ClassMember::Property)
 }
 
 fn anonymous_member(state: &mut State) -> ParseResult<AnonymousClassMember> {
@@ -242,8 +239,7 @@ fn anonymous_member(state: &mut State) -> ParseResult<AnonymousClassMember> {
     }
 
     if state.stream.current().kind == TokenKind::Var {
-        return properties::parse_var(state, "class@anonymous")
-            .map(AnonymousClassMember::VariableProperty);
+        return properties::parse_var(state, None).map(AnonymousClassMember::VariableProperty);
     }
 
     let modifiers = modifiers::collect(state)?;
@@ -258,7 +254,7 @@ fn anonymous_member(state: &mut State) -> ParseResult<AnonymousClassMember> {
             state,
             MethodType::Concrete,
             modifiers::method_group(modifiers)?,
-            "class@anonymous",
+            None,
         )?;
 
         match method {
@@ -275,5 +271,5 @@ fn anonymous_member(state: &mut State) -> ParseResult<AnonymousClassMember> {
     // e.g: public static
     let modifiers = modifiers::property_group(modifiers)?;
 
-    properties::parse(state, "class@anonymous", modifiers).map(AnonymousClassMember::Property)
+    properties::parse(state, None, modifiers).map(AnonymousClassMember::Property)
 }

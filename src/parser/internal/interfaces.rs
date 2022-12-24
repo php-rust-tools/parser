@@ -42,13 +42,12 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
 
     let attributes = state.get_attributes();
 
-    let interface_name = name.value.to_string();
     let body = InterfaceBody {
         left_brace: utils::skip_left_brace(state)?,
         members: {
             let mut members = Vec::new();
             while state.stream.current().kind != TokenKind::RightBrace {
-                members.push(member(state, &interface_name)?);
+                members.push(member(state, &name)?);
             }
 
             members
@@ -65,7 +64,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
     }))
 }
 
-fn member(state: &mut State, interface_name: &str) -> ParseResult<InterfaceMember> {
+fn member(state: &mut State, interface_name: &SimpleIdentifier) -> ParseResult<InterfaceMember> {
     attributes::gather_attributes(state)?;
 
     let modifiers = modifiers::collect(state)?;
@@ -78,7 +77,7 @@ fn member(state: &mut State, interface_name: &str) -> ParseResult<InterfaceMembe
             state,
             MethodType::Abstract,
             modifiers::interface_method_group(modifiers)?,
-            interface_name,
+            Some(interface_name),
         )?;
 
         match method {

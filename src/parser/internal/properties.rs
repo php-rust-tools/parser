@@ -1,4 +1,5 @@
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::PropertyModifierGroup;
 use crate::parser::ast::properties::Property;
 use crate::parser::ast::properties::PropertyEntry;
@@ -13,7 +14,7 @@ use crate::parser::state::State;
 
 pub fn parse(
     state: &mut State,
-    class_name: &str,
+    class_name: Option<&SimpleIdentifier>,
     modifiers: PropertyModifierGroup,
 ) -> ParseResult<Property> {
     let ty = data_type::optional_data_type(state)?;
@@ -27,9 +28,9 @@ pub fn parse(
             type_checked = true;
             if modifiers.has_readonly() && modifiers.has_static() {
                 return Err(error::static_property_cannot_be_readonly(
-                    state.named(class_name),
-                    variable.to_string(),
-                    variable.span,
+                    state,
+                    class_name,
+                    &variable,
                     modifiers.get_static().unwrap().span(),
                     modifiers.get_readonly().unwrap().span(),
                 ));
@@ -39,9 +40,9 @@ pub fn parse(
                 Some(ty) => {
                     if ty.includes_callable() || ty.is_bottom() {
                         return Err(error::forbidden_type_used_in_property(
-                            state.named(class_name),
-                            variable.to_string(),
-                            variable.span,
+                            state,
+                            class_name,
+                            &variable,
                             ty.clone(),
                         ));
                     }
@@ -49,9 +50,9 @@ pub fn parse(
                 None => {
                     if let Some(modifier) = modifiers.get_readonly() {
                         return Err(error::missing_type_for_readonly_property(
-                            state.named(class_name),
-                            variable.to_string(),
-                            variable.span,
+                            state,
+                            class_name,
+                            &variable,
                             modifier.span(),
                         ));
                     }
@@ -63,9 +64,9 @@ pub fn parse(
         if current.kind == TokenKind::Equals {
             if let Some(modifier) = modifiers.get_readonly() {
                 return Err(error::readonly_property_has_default_value(
-                    state.named(class_name),
-                    variable.to_string(),
-                    variable.span,
+                    state,
+                    class_name,
+                    &variable,
                     modifier.span(),
                     current.span,
                 ));
@@ -101,7 +102,10 @@ pub fn parse(
     })
 }
 
-pub fn parse_var(state: &mut State, class_name: &str) -> ParseResult<VariableProperty> {
+pub fn parse_var(
+    state: &mut State,
+    class_name: Option<&SimpleIdentifier>,
+) -> ParseResult<VariableProperty> {
     utils::skip(state, TokenKind::Var)?;
 
     let ty = data_type::optional_data_type(state)?;
@@ -117,9 +121,9 @@ pub fn parse_var(state: &mut State, class_name: &str) -> ParseResult<VariablePro
             if let Some(ty) = &ty {
                 if ty.includes_callable() || ty.is_bottom() {
                     return Err(error::forbidden_type_used_in_property(
-                        state.named(class_name),
-                        variable.to_string(),
-                        variable.span,
+                        state,
+                        class_name,
+                        &variable,
                         ty.clone(),
                     ));
                 }

@@ -5,6 +5,7 @@ use crate::parser::ast::functions::ConstructorParameter;
 use crate::parser::ast::functions::ConstructorParameterList;
 use crate::parser::ast::functions::FunctionParameter;
 use crate::parser::ast::functions::FunctionParameterList;
+use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::error;
 use crate::parser::error::ParseError;
 use crate::parser::error::ParseResult;
@@ -78,7 +79,7 @@ pub fn function_parameter_list(state: &mut State) -> Result<FunctionParameterLis
 
 pub fn constructor_parameter_list(
     state: &mut State,
-    class_name: &str,
+    class: Option<&SimpleIdentifier>,
 ) -> Result<ConstructorParameterList, ParseError> {
     let comments = state.stream.comments();
 
@@ -108,8 +109,9 @@ pub fn constructor_parameter_list(
                 let var = variables::simple_variable(state)?;
                 if !modifiers.is_empty() {
                     return Err(error::variadic_promoted_property(
-                        state.named(class_name),
-                        var.to_string(),
+                        state,
+                        class,
+                        &var,
                         current.span,
                         modifiers.modifiers.first().unwrap(),
                     ));
@@ -127,9 +129,9 @@ pub fn constructor_parameter_list(
                     Some(ty) => {
                         if ty.includes_callable() || ty.is_bottom() {
                             return Err(error::forbidden_type_used_in_property(
-                                state.named(class_name),
-                                var.to_string(),
-                                var.span,
+                                state,
+                                class,
+                                &var,
                                 ty.clone(),
                             ));
                         }
@@ -137,9 +139,9 @@ pub fn constructor_parameter_list(
                     None => {
                         if let Some(modifier) = modifiers.get_readonly() {
                             return Err(error::missing_type_for_readonly_property(
-                                state.named(class_name),
-                                var.to_string(),
-                                var.span,
+                                state,
+                                class,
+                                &var,
                                 modifier.span(),
                             ));
                         }
