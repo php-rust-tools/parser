@@ -184,9 +184,9 @@ pub fn unexpected_token(expected: Vec<String>, found: &Token) -> ParseError {
 
     if expected.is_empty() {
         return if eof {
-            ParseError::new("E002", &format!("unexpected {}", found_name), found.span)
+            ParseError::new("E002", format!("unexpected {}", found_name), found.span)
         } else {
-            ParseError::new("E003", &format!("unexpected {}", found_name), found.span).error(
+            ParseError::new("E003", format!("unexpected {}", found_name), found.span).error(
                 "try removing this".to_string(),
                 found.span.position,
                 found.value.len(),
@@ -348,7 +348,7 @@ pub fn variadic_promoted_property(
 ) -> ParseError {
     let error = ParseError::new(
         "E013",
-        &format!(
+        format!(
             "promoted property `{}::{}` cannot declare variadic",
             class
                 .map(|c| state.named(c))
