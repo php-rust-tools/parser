@@ -989,12 +989,20 @@ expressions! {
         Ok(Expression::MagicConstant(MagicConstant::Namespace(span)))
     })
 
-    #[before(include), current(TokenKind::TraitConstant)]
+    #[before(compiler_halt_offset_magic_constant), current(TokenKind::TraitConstant)]
     trait_magic_constant({
         let span = state.stream.current().span;
         state.stream.next();
 
         Ok(Expression::MagicConstant(MagicConstant::Trait(span)))
+    })
+
+    #[before(include), current(TokenKind::CompilerHaltOffsetConstant)]
+    compiler_halt_offset_magic_constant({
+        let span = state.stream.current().span;
+        state.stream.next();
+
+        Ok(Expression::MagicConstant(MagicConstant::CompilerHaltOffset(span)))
     })
 
     #[before(cast_prefix), current(TokenKind::Include | TokenKind::IncludeOnce | TokenKind::Require | TokenKind::RequireOnce)]

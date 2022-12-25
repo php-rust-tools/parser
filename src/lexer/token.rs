@@ -212,6 +212,7 @@ pub enum TokenKind {
     Namespace,
     NamespaceSeparator,
     NamespaceConstant,
+    CompilerHaltOffsetConstant,
     New,
     Null,
     ObjectCast,
@@ -288,6 +289,7 @@ impl Display for Token {
 impl Display for TokenKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
+            Self::CompilerHaltOffsetConstant => "__COMPILER_HALT_OFFSET__",
             Self::Die => "die",
             Self::Self_ => "self",
             Self::Parent => "parent",

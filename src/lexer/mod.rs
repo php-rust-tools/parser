@@ -1840,6 +1840,7 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
         b"__method__" => TokenKind::MethodConstant,
         b"__trait__" => TokenKind::TraitConstant,
         b"__namespace__" => TokenKind::NamespaceConstant,
+        b"__compiler_halt_offset__" => TokenKind::CompilerHaltOffsetConstant,
         b"while" => TokenKind::While,
         b"insteadof" => TokenKind::Insteadof,
         b"list" => TokenKind::List,
