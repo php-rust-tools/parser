@@ -213,19 +213,25 @@ pub fn name(state: &mut State) -> ParseResult<SimpleIdentifier> {
 pub fn optional_name(state: &mut State) -> Option<SimpleIdentifier> {
     let current = state.stream.current();
 
-    let ident = match &current.kind {
-        TokenKind::Identifier | TokenKind::QualifiedIdentifier => Some(SimpleIdentifier {
-            span: current.span,
-            value: current.value.clone(),
-        }),
+    match &current.kind {
+        TokenKind::Identifier | TokenKind::QualifiedIdentifier => {
+            state.stream.next();
+
+            Some(SimpleIdentifier {
+                span: current.span,
+                value: current.value.clone(),
+            })
+        }
+        t if is_reserved_identifier(t) => {
+            state.stream.next();
+
+            Some(SimpleIdentifier {
+                span: current.span,
+                value: current.value.clone(),
+            })
+        }
         _ => None,
-    };
-
-    if ident.is_some() {
-        state.stream.next();
     }
-
-    ident
 }
 
 /// Expect an unqualified, qualified or fully qualified identifier such as Foo, Foo\Bar or \Foo\Bar.
