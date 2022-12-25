@@ -138,9 +138,10 @@ fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {
     let mut current = state.stream.current();
     let ellipsis = if current.kind == TokenKind::Ellipsis {
         state.stream.next();
+        let span = current.span;
         current = state.stream.current();
 
-        Some(current.span)
+        Some(span)
     } else {
         None
     };

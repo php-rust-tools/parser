@@ -1,0 +1,84 @@
+<?php
+
+namespace True;
+namespace False;
+namespace Null;
+namespace Int;
+namespace Float;
+namespace String;
+namespace Array;
+namespace Object;
+namespace Resource;
+namespace Mixed;
+namespace Num;
+namespace Scalar;
+namespace Callable;
+namespace Void;
+namespace Iterable;
+namespace Never;
+namespace Class;
+namespace Function;
+namespace Fn;
+namespace From;
+
+function foo(): void {
+    \True\foo();
+    \False\foo();
+    \Null\foo();
+    \Int\foo();
+    \Float\foo();
+    \String\foo();
+    \Array\foo();
+    \Object\foo();
+    \Resource\foo();
+    \Mixed\foo();
+    \Num\foo();
+    \Scalar\foo();
+    \Callable\foo();
+    \Void\foo();
+    \Iterable\foo();
+    \Never\foo();
+    \Class\foo();
+    \Function\foo();
+    \From\foo();
+
+    True\foo();
+    False\foo();
+    Null\foo();
+    Int\foo();
+    Float\foo();
+    String\foo();
+    Array\foo();
+    Object\foo();
+    Resource\foo();
+    Mixed\foo();
+    Num\foo();
+    Scalar\foo();
+    Callable\foo();
+    Void\foo();
+    Iterable\foo();
+    Never\foo();
+    Class\foo();
+    Function\foo();
+    From\foo();
+
+    Foo\True\foo();
+    Foo\False\foo();
+    Foo\Null\foo();
+    Foo\Int\foo();
+    Foo\Float\foo();
+    Foo\String\foo();
+    Foo\Array\foo();
+    Foo\Object\foo();
+    Foo\Resource\foo();
+    Foo\Mixed\foo();
+    Foo\Num\foo();
+    Foo\Scalar\foo();
+    Foo\Callable\foo();
+    Foo\Void\foo();
+    Foo\Iterable\foo();
+    Foo\Never\foo();
+    Foo\Class\foo();
+    Foo\Function\foo();
+    Foo\From\foo();
+}
