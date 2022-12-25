@@ -493,6 +493,7 @@ pub fn is_reserved_identifier(kind: &TokenKind) -> bool {
             | TokenKind::DirConstant
             | TokenKind::NamespaceConstant
             | TokenKind::HaltCompiler
+            | TokenKind::CompilerHaltOffsetConstant
             | TokenKind::Fn
             | TokenKind::Match
     )

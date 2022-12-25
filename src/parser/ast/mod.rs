@@ -516,6 +516,7 @@ pub enum MagicConstant {
     Method(Span),
     Namespace(Span),
     Trait(Span),
+    CompilerHaltOffset(Span),
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
