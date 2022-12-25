@@ -483,8 +483,16 @@ fn read_directory(
             .to_str()
             .unwrap();
 
+        if ignore.contains(path) {
+            continue;
+        }
+
         if name != "php-standard-library" {
-            if let Some(_) = ignored_prefixes.iter().find(|p| path.starts_with(*p)) {
+            if ignored_prefixes
+                .iter()
+                .find(|p| path.starts_with(*p))
+                .is_some()
+            {
                 continue;
             }
         }
@@ -495,7 +503,7 @@ fn read_directory(
             continue;
         }
 
-        if entry.extension().unwrap_or_default() == "php" && !ignore.contains(path) {
+        if entry.extension().unwrap_or_default() == "php" {
             let fullname_string = &entry.to_string_lossy();
             let name = fullname_string
                 .strip_prefix(root.to_str().unwrap())
