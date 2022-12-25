@@ -33,6 +33,20 @@ fn laravel_framework() {
 }
 
 #[test]
+fn hyperf_framework() {
+    test_repository(
+        "hyperf-framework",
+        "https://github.com/hyperf/hyperf",
+        &[
+            // files are Hack, not PHP.
+            "vendor/nikic/fast-route/test/HackTypechecker/fixtures/all_options.php",
+            "vendor/nikic/fast-route/test/HackTypechecker/fixtures/empty_options.php",
+            "vendor/nikic/fast-route/test/HackTypechecker/fixtures/no_options.php",
+        ],
+    );
+}
+
+#[test]
 fn symfony_framework() {
     test_repository(
         "symfony-framework",
