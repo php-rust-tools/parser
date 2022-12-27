@@ -246,10 +246,6 @@ pub enum Expression {
         value: Option<Box<Self>>, // 1
         end: Option<Span>,        // `)`
     },
-    // echo "foo"
-    Echo {
-        values: Vec<Self>,
-    },
     Literal(Literal),
     ArithmeticOperation(ArithmeticOperation),
     AssignmentOperation(AssignmentOperation),
