@@ -234,7 +234,10 @@ pub enum Expression {
     },
     // die, die(1)
     Die {
-        value: Option<Box<Self>>,
+        die: Span,                // die
+        start: Option<Span>,      // `(`
+        value: Option<Box<Self>>, // 1
+        end: Option<Span>,        // `)`
     },
     // exit, exit(1)
     Exit {

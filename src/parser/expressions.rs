@@ -605,13 +605,17 @@ expressions! {
 
     #[before(exit), current(TokenKind::Die)]
     die({
+        let mut start = None;
+        let mut end = None;
+        let die = state.stream.current().span;
+
         state.stream.next();
         let value = if state.stream.current().kind == TokenKind::LeftParen {
-            state.stream.next();
+            start = Some(utils::skip_left_parenthesis(state)?);
 
             if state.stream.current().kind != TokenKind::RightParen {
                 let value = Some(Box::new(create(state)?));
-                utils::skip_right_parenthesis(state)?;
+                end = Some(utils::skip_right_parenthesis(state)?);
                 value
             } else {
                 utils::skip_right_parenthesis(state)?;
@@ -621,7 +625,7 @@ expressions! {
             None
         };
 
-        Ok(Expression::Die { value })
+        Ok(Expression::Die { die, start, value, end })
     })
 
     #[before(reserved_identifier_function_call), current(TokenKind::Exit)]
