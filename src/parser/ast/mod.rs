@@ -222,6 +222,10 @@ pub enum Expression {
     Eval {
         value: Box<Self>,
     },
+    // empty($a)
+    Empty {
+        value: Box<Self>,
+    },
     // die, die(1)
     Die {
         value: Option<Box<Self>>,
@@ -263,7 +267,6 @@ pub enum Expression {
         expr: Box<Self>,
         end: Span,
     },
-    Empty,
     // @foo()
     ErrorSuppress {
         at: Span,

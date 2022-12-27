@@ -1,0 +1,80 @@
+[
+    FullOpeningTag(
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
+    ),
+    Expression {
+        expression: Empty {
+            value: Literal(
+                String(
+                    LiteralString {
+                        value: """",
+                        span: Span {
+                            line: 3,
+                            column: 7,
+                            position: 13,
+                        },
+                    },
+                ),
+            ),
+        },
+        ending: Semicolon(
+            Span {
+                line: 3,
+                column: 10,
+                position: 16,
+            },
+        ),
+    },
+    Expression {
+        expression: Empty {
+            value: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
+                            line: 4,
+                            column: 7,
+                            position: 24,
+                        },
+                        name: "$a",
+                    },
+                ),
+            ),
+        },
+        ending: Semicolon(
+            Span {
+                line: 4,
+                column: 10,
+                position: 27,
+            },
+        ),
+    },
+    Expression {
+        expression: Empty {
+            value: Empty {
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 5,
+                                column: 13,
+                                position: 41,
+                            },
+                            name: "$a",
+                        },
+                    ),
+                ),
+            },
+        },
+        ending: Semicolon(
+            Span {
+                line: 5,
+                column: 17,
+                position: 45,
+            },
+        ),
+    },
+]

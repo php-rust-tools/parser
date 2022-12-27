@@ -577,13 +577,22 @@ expressions! {
         functions::anonymous_function(state)
     })
 
-    #[before(die), current(TokenKind::Eval), peek(TokenKind::LeftParen)]
+    #[before(empty), current(TokenKind::Eval), peek(TokenKind::LeftParen)]
     eval({
         state.stream.next();
         utils::skip_left_parenthesis(state)?;
         let value = Box::new(create(state)?);
         utils::skip_right_parenthesis(state)?;
         Ok(Expression::Eval { value })
+    })
+
+    #[before(die), current(TokenKind::Empty), peek(TokenKind::LeftParen)]
+    empty({
+        state.stream.next();
+        utils::skip_left_parenthesis(state)?;
+        let value = Box::new(create(state)?);
+        utils::skip_right_parenthesis(state)?;
+        Ok(Expression::Empty { value })
     })
 
     #[before(exit), current(TokenKind::Die)]

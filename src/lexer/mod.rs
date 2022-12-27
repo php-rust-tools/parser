@@ -1766,6 +1766,7 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
     Some(match ident.to_ascii_lowercase().as_slice() {
         b"eval" => TokenKind::Eval,
         b"die" => TokenKind::Die,
+        b"empty" => TokenKind::Empty,
         b"exit" => TokenKind::Exit,
         b"enddeclare" => TokenKind::EndDeclare,
         b"endswitch" => TokenKind::EndSwitch,
