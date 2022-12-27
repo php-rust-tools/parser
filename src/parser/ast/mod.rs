@@ -224,8 +224,10 @@ pub enum Expression {
     },
     // empty($a)
     Empty {
-        empty: Span,
-        value: Box<Self>,
+        empty: Span,      // empty
+        start: Span,      // `(`
+        value: Box<Self>, // $a
+        end: Span,        // `)`
     },
     // die, die(1)
     Die {

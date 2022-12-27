@@ -13,6 +13,11 @@
                 column: 1,
                 position: 7,
             },
+            start: Span {
+                line: 3,
+                column: 6,
+                position: 12,
+            },
             value: Literal(
                 String(
                     LiteralString {
@@ -25,6 +30,11 @@
                     },
                 ),
             ),
+            end: Span {
+                line: 3,
+                column: 9,
+                position: 15,
+            },
         },
         ending: Semicolon(
             Span {
@@ -41,6 +51,11 @@
                 column: 1,
                 position: 18,
             },
+            start: Span {
+                line: 4,
+                column: 6,
+                position: 23,
+            },
             value: Variable(
                 SimpleVariable(
                     SimpleVariable {
@@ -53,6 +68,11 @@
                     },
                 ),
             ),
+            end: Span {
+                line: 4,
+                column: 9,
+                position: 26,
+            },
         },
         ending: Semicolon(
             Span {
@@ -69,11 +89,21 @@
                 column: 1,
                 position: 29,
             },
+            start: Span {
+                line: 5,
+                column: 6,
+                position: 34,
+            },
             value: Empty {
                 empty: Span {
                     line: 5,
                     column: 7,
                     position: 35,
+                },
+                start: Span {
+                    line: 5,
+                    column: 12,
+                    position: 40,
                 },
                 value: Variable(
                     SimpleVariable(
@@ -87,6 +117,16 @@
                         },
                     ),
                 ),
+                end: Span {
+                    line: 5,
+                    column: 15,
+                    position: 43,
+                },
+            },
+            end: Span {
+                line: 5,
+                column: 16,
+                position: 44,
             },
         },
         ending: Semicolon(
