@@ -294,6 +294,18 @@
                 statements: [
                     Expression {
                         expression: Exit {
+                            exit: Span {
+                                line: 9,
+                                column: 5,
+                                position: 112,
+                            },
+                            start: Some(
+                                Span {
+                                    line: 9,
+                                    column: 9,
+                                    position: 116,
+                                },
+                            ),
                             value: Some(
                                 Literal(
                                     Integer(
@@ -307,6 +319,13 @@
                                         },
                                     ),
                                 ),
+                            ),
+                            end: Some(
+                                Span {
+                                    line: 9,
+                                    column: 11,
+                                    position: 118,
+                                },
                             ),
                         },
                         ending: Semicolon(

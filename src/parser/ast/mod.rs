@@ -241,7 +241,10 @@ pub enum Expression {
     },
     // exit, exit(1)
     Exit {
-        value: Option<Box<Self>>,
+        exit: Span,               // exit
+        start: Option<Span>,      // `(`
+        value: Option<Box<Self>>, // 1
+        end: Option<Span>,        // `)`
     },
     // echo "foo"
     Echo {
