@@ -224,6 +224,7 @@ pub enum Expression {
     },
     // empty($a)
     Empty {
+        empty: Span,
         value: Box<Self>,
     },
     // die, die(1)

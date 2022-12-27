@@ -588,11 +588,15 @@ expressions! {
 
     #[before(die), current(TokenKind::Empty), peek(TokenKind::LeftParen)]
     empty({
+        let current = state.stream.current();
+        let span = current.span;
+
         state.stream.next();
         utils::skip_left_parenthesis(state)?;
         let value = Box::new(create(state)?);
         utils::skip_right_parenthesis(state)?;
-        Ok(Expression::Empty { value })
+
+        Ok(Expression::Empty { value, empty: span })
     })
 
     #[before(exit), current(TokenKind::Die)]
