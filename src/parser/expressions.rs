@@ -579,11 +579,15 @@ expressions! {
 
     #[before(empty), current(TokenKind::Eval), peek(TokenKind::LeftParen)]
     eval({
+        let eval = state.stream.current().span;
+
         state.stream.next();
-        utils::skip_left_parenthesis(state)?;
+
+        let start = utils::skip_left_parenthesis(state)?;
         let value = Box::new(create(state)?);
-        utils::skip_right_parenthesis(state)?;
-        Ok(Expression::Eval { value })
+        let end = utils::skip_right_parenthesis(state)?;
+
+        Ok(Expression::Eval { eval, start, value, end })
     })
 
     #[before(die), current(TokenKind::Empty), peek(TokenKind::LeftParen)]
