@@ -527,7 +527,7 @@ impl Lexer {
             }
             [b'|', b'|', ..] => {
                 state.source.skip(2);
-                (TokenKind::Pipe, b"||".into())
+                (TokenKind::BooleanOr, b"||".into())
             }
             [b'|', b'=', ..] => {
                 state.source.skip(2);
