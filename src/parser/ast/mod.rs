@@ -251,6 +251,11 @@ pub enum Expression {
         isset: Span,             // isset
         arguments: ArgumentList, // `($a, ...)`
     },
+    // unset($a), isset($a, ...)
+    Unset {
+        unset: Span,             // unset
+        arguments: ArgumentList, // `($a, ...)`
+    },
     Literal(Literal),
     ArithmeticOperation(ArithmeticOperation),
     AssignmentOperation(AssignmentOperation),
