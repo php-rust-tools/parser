@@ -246,6 +246,11 @@ pub enum Expression {
         value: Option<Box<Self>>, // 1
         end: Option<Span>,        // `)`
     },
+    // isset($a), isset($a, ...)
+    Isset {
+        isset: Span,             // isset
+        arguments: ArgumentList, // `($a, ...)`
+    },
     Literal(Literal),
     ArithmeticOperation(ArithmeticOperation),
     AssignmentOperation(AssignmentOperation),

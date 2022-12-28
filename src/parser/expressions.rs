@@ -628,7 +628,7 @@ expressions! {
         Ok(Expression::Die { die, start, value, end })
     })
 
-    #[before(reserved_identifier_function_call), current(TokenKind::Exit)]
+    #[before(isset), current(TokenKind::Exit)]
     exit({
         let mut start = None;
         let mut end = None;
@@ -651,6 +651,15 @@ expressions! {
         };
 
         Ok(Expression::Exit { exit, start, value, end })
+    })
+
+    #[before(reserved_identifier_function_call), current(TokenKind::Isset), peek(TokenKind::LeftParen)]
+    isset({
+        let isset = state.stream.current().span;
+        state.stream.next();
+        let arguments = parameters::argument_list(state)?;
+
+        Ok(Expression::Isset { isset, arguments})
     })
 
     #[before(reserved_identifier_static_call), current(

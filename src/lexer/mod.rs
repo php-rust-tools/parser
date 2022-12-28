@@ -1767,6 +1767,7 @@ fn identifier_to_keyword(ident: &[u8]) -> Option<TokenKind> {
         b"eval" => TokenKind::Eval,
         b"die" => TokenKind::Die,
         b"empty" => TokenKind::Empty,
+        b"isset" => TokenKind::Isset,
         b"exit" => TokenKind::Exit,
         b"enddeclare" => TokenKind::EndDeclare,
         b"endswitch" => TokenKind::EndSwitch,
