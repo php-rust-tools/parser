@@ -5,8 +5,8 @@ use serde::Serialize;
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::arguments::ArgumentList;
 use crate::parser::ast::arguments::ArgumentPlaceholder;
+use crate::parser::ast::arguments::{ArgumentList, SingleArgument};
 use crate::parser::ast::classes::AnonymousClass;
 use crate::parser::ast::classes::Class;
 use crate::parser::ast::comments::Comment;
@@ -234,10 +234,8 @@ pub enum Expression {
     },
     // die, die(1)
     Die {
-        die: Span,                // die
-        start: Option<Span>,      // `(`
-        value: Option<Box<Self>>, // 1
-        end: Option<Span>,        // `)`
+        die: Span,                             // die
+        argument: Option<Box<SingleArgument>>, // (1)
     },
     // exit, exit(1)
     Exit {

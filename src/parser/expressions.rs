@@ -605,27 +605,15 @@ expressions! {
 
     #[before(exit), current(TokenKind::Die)]
     die({
-        let mut start = None;
-        let mut end = None;
         let die = state.stream.current().span;
-
         state.stream.next();
-        let value = if state.stream.current().kind == TokenKind::LeftParen {
-            start = Some(utils::skip_left_parenthesis(state)?);
 
-            if state.stream.current().kind != TokenKind::RightParen {
-                let value = Some(Box::new(create(state)?));
-                end = Some(utils::skip_right_parenthesis(state)?);
-                value
-            } else {
-                utils::skip_right_parenthesis(state)?;
-                None
-            }
-        } else {
-            None
+        let argument = match parameters::only_positional_single_argument(state) {
+            Some(arg) => Some(Box::new(arg?)),
+            None => None,
         };
 
-        Ok(Expression::Die { die, start, value, end })
+        Ok(Expression::Die { die, argument })
     })
 
     #[before(isset), current(TokenKind::Exit)]

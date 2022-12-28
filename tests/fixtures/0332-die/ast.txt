@@ -13,9 +13,7 @@
                 column: 1,
                 position: 7,
             },
-            start: None,
-            value: None,
-            end: None,
+            argument: None,
         },
         ending: Semicolon(
             Span {
@@ -32,32 +30,39 @@
                 column: 1,
                 position: 12,
             },
-            start: Some(
-                Span {
-                    line: 4,
-                    column: 4,
-                    position: 15,
-                },
-            ),
-            value: Some(
-                Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 4,
-                                column: 5,
-                                position: 16,
-                            },
+            argument: Some(
+                SingleArgument {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 4,
+                        column: 4,
+                        position: 15,
+                    },
+                    argument: Positional {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                    ),
-                ),
-            ),
-            end: Some(
-                Span {
-                    line: 4,
-                    column: 6,
-                    position: 17,
+                        ellipsis: None,
+                        value: Literal(
+                            Integer(
+                                LiteralInteger {
+                                    value: "1",
+                                    span: Span {
+                                        line: 4,
+                                        column: 5,
+                                        position: 16,
+                                    },
+                                },
+                            ),
+                        ),
+                    },
+                    right_parenthesis: Span {
+                        line: 4,
+                        column: 6,
+                        position: 17,
+                    },
                 },
             ),
         },

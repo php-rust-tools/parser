@@ -1,6 +1,6 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::arguments::Argument;
 use crate::parser::ast::arguments::ArgumentList;
+use crate::parser::ast::arguments::{Argument, SingleArgument};
 use crate::parser::ast::functions::ConstructorParameter;
 use crate::parser::ast::functions::ConstructorParameterList;
 use crate::parser::ast::functions::FunctionParameter;
@@ -215,6 +215,59 @@ pub fn argument_list(state: &mut State) -> ParseResult<ArgumentList> {
         right_parenthesis: end,
         arguments,
     })
+}
+
+pub fn single_argument(
+    state: &mut State,
+    only_positional: bool,
+) -> Option<ParseResult<SingleArgument>> {
+    let comments = state.stream.comments();
+    let start = utils::skip_left_parenthesis(state).ok()?;
+
+    let mut first_argument = None;
+
+    while !state.stream.is_eof() && state.stream.current().kind != TokenKind::RightParen {
+        let span = state.stream.current().span;
+        let (named, argument) = argument(state).ok()?;
+        if only_positional && named {
+            return Some(Err(error::only_positional_arguments_are_accepted(
+                span,
+                state.stream.current().span,
+            )));
+        }
+
+        if first_argument.is_some() {
+            return Some(Err(error::only_one_argument_is_accepted(
+                span,
+                state.stream.current().span,
+            )));
+        }
+
+        first_argument = Some(argument);
+
+        if state.stream.current().kind == TokenKind::Comma {
+            state.stream.next();
+        } else {
+            break;
+        }
+    }
+
+    let end = utils::skip_right_parenthesis(state).ok()?;
+
+    if first_argument.is_none() {
+        return None;
+    }
+
+    Some(Ok(SingleArgument {
+        comments,
+        left_parenthesis: start,
+        right_parenthesis: end,
+        argument: first_argument.unwrap(),
+    }))
+}
+
+pub fn only_positional_single_argument(state: &mut State) -> Option<ParseResult<SingleArgument>> {
+    return single_argument(state, true);
 }
 
 fn argument(state: &mut State) -> ParseResult<(bool, Argument)> {
