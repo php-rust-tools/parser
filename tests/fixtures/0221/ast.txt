@@ -299,32 +299,39 @@
                                 column: 5,
                                 position: 112,
                             },
-                            start: Some(
-                                Span {
-                                    line: 9,
-                                    column: 9,
-                                    position: 116,
-                                },
-                            ),
-                            value: Some(
-                                Literal(
-                                    Integer(
-                                        LiteralInteger {
-                                            value: "0",
-                                            span: Span {
-                                                line: 9,
-                                                column: 10,
-                                                position: 117,
-                                            },
+                            argument: Some(
+                                SingleArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    left_parenthesis: Span {
+                                        line: 9,
+                                        column: 9,
+                                        position: 116,
+                                    },
+                                    argument: Positional {
+                                        comments: CommentGroup {
+                                            comments: [],
                                         },
-                                    ),
-                                ),
-                            ),
-                            end: Some(
-                                Span {
-                                    line: 9,
-                                    column: 11,
-                                    position: 118,
+                                        ellipsis: None,
+                                        value: Literal(
+                                            Integer(
+                                                LiteralInteger {
+                                                    value: "0",
+                                                    span: Span {
+                                                        line: 9,
+                                                        column: 10,
+                                                        position: 117,
+                                                    },
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                    right_parenthesis: Span {
+                                        line: 9,
+                                        column: 11,
+                                        position: 118,
+                                    },
                                 },
                             ),
                         },

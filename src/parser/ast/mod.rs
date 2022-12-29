@@ -235,10 +235,8 @@ pub enum Expression {
     },
     // exit, exit(1)
     Exit {
-        exit: Span,               // exit
-        start: Option<Span>,      // `(`
-        value: Option<Box<Self>>, // 1
-        end: Option<Span>,        // `)`
+        exit: Span,                            // exit
+        argument: Option<Box<SingleArgument>>, // (1)
     },
     // isset($a), isset($a, ...)
     Isset {

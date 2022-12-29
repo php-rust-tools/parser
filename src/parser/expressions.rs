@@ -612,27 +612,15 @@ expressions! {
 
     #[before(isset), current(TokenKind::Exit)]
     exit({
-        let mut start = None;
-        let mut end = None;
         let exit = state.stream.current().span;
-
         state.stream.next();
-        let value = if state.stream.current().kind == TokenKind::LeftParen {
-            start = Some(utils::skip_left_parenthesis(state)?);
 
-            if state.stream.current().kind != TokenKind::RightParen {
-                let value = Some(Box::new(create(state)?));
-                end = Some(utils::skip_right_parenthesis(state)?);
-                value
-            } else {
-                utils::skip_right_parenthesis(state)?;
-                None
-            }
-        } else {
-            None
+        let argument = match parameters::single_argument(state, false, true) {
+            Some(arg) => Some(Box::new(arg?)),
+            None => None,
         };
 
-        Ok(Expression::Exit { exit, start, value, end })
+        Ok(Expression::Exit { exit, argument })
     })
 
     #[before(unset), current(TokenKind::Isset), peek(TokenKind::LeftParen)]

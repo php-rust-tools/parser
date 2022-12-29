@@ -167,32 +167,39 @@
                                 column: 5,
                                 position: 64,
                             },
-                            start: Some(
-                                Span {
-                                    line: 4,
-                                    column: 9,
-                                    position: 68,
-                                },
-                            ),
-                            value: Some(
-                                Literal(
-                                    Integer(
-                                        LiteralInteger {
-                                            value: "1",
-                                            span: Span {
-                                                line: 4,
-                                                column: 10,
-                                                position: 69,
-                                            },
+                            argument: Some(
+                                SingleArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    left_parenthesis: Span {
+                                        line: 4,
+                                        column: 9,
+                                        position: 68,
+                                    },
+                                    argument: Positional {
+                                        comments: CommentGroup {
+                                            comments: [],
                                         },
-                                    ),
-                                ),
-                            ),
-                            end: Some(
-                                Span {
-                                    line: 4,
-                                    column: 11,
-                                    position: 70,
+                                        ellipsis: None,
+                                        value: Literal(
+                                            Integer(
+                                                LiteralInteger {
+                                                    value: "1",
+                                                    span: Span {
+                                                        line: 4,
+                                                        column: 10,
+                                                        position: 69,
+                                                    },
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                    right_parenthesis: Span {
+                                        line: 4,
+                                        column: 11,
+                                        position: 70,
+                                    },
                                 },
                             ),
                         },

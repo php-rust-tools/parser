@@ -113,32 +113,39 @@
                                                 column: 9,
                                                 position: 62,
                                             },
-                                            start: Some(
-                                                Span {
-                                                    line: 5,
-                                                    column: 13,
-                                                    position: 66,
-                                                },
-                                            ),
-                                            value: Some(
-                                                Literal(
-                                                    Integer(
-                                                        LiteralInteger {
-                                                            value: "1",
-                                                            span: Span {
-                                                                line: 5,
-                                                                column: 14,
-                                                                position: 67,
-                                                            },
+                                            argument: Some(
+                                                SingleArgument {
+                                                    comments: CommentGroup {
+                                                        comments: [],
+                                                    },
+                                                    left_parenthesis: Span {
+                                                        line: 5,
+                                                        column: 13,
+                                                        position: 66,
+                                                    },
+                                                    argument: Positional {
+                                                        comments: CommentGroup {
+                                                            comments: [],
                                                         },
-                                                    ),
-                                                ),
-                                            ),
-                                            end: Some(
-                                                Span {
-                                                    line: 5,
-                                                    column: 15,
-                                                    position: 68,
+                                                        ellipsis: None,
+                                                        value: Literal(
+                                                            Integer(
+                                                                LiteralInteger {
+                                                                    value: "1",
+                                                                    span: Span {
+                                                                        line: 5,
+                                                                        column: 14,
+                                                                        position: 67,
+                                                                    },
+                                                                },
+                                                            ),
+                                                        ),
+                                                    },
+                                                    right_parenthesis: Span {
+                                                        line: 5,
+                                                        column: 15,
+                                                        position: 68,
+                                                    },
                                                 },
                                             ),
                                         },
