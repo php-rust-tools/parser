@@ -262,9 +262,7 @@ pub fn single_argument(
 
     let end = utils::skip_right_parenthesis(state).ok()?;
 
-    if first_argument.is_none() {
-        return None;
-    }
+    first_argument.as_ref()?;
 
     Some(Ok(SingleArgument {
         comments,
