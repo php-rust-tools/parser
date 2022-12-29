@@ -219,6 +219,7 @@ pub fn argument_list(state: &mut State) -> ParseResult<ArgumentList> {
 
 pub fn single_argument(
     state: &mut State,
+    required: bool,
     only_positional: bool,
 ) -> Option<ParseResult<SingleArgument>> {
     let comments = state.stream.comments();
@@ -252,6 +253,13 @@ pub fn single_argument(
         }
     }
 
+    if required && first_argument.is_none() {
+        return Some(Err(error::argument_is_required(
+            state.stream.current().span,
+            state.stream.current().span,
+        )));
+    }
+
     let end = utils::skip_right_parenthesis(state).ok()?;
 
     if first_argument.is_none() {
@@ -264,10 +272,6 @@ pub fn single_argument(
         right_parenthesis: end,
         argument: first_argument.unwrap(),
     }))
-}
-
-pub fn only_positional_single_argument(state: &mut State) -> Option<ParseResult<SingleArgument>> {
-    return single_argument(state, true);
 }
 
 fn argument(state: &mut State) -> ParseResult<(bool, Argument)> {

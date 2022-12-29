@@ -963,6 +963,14 @@ pub fn only_one_argument_is_accepted(span: Span, current_span: Span) -> ParseErr
     )
 }
 
+pub fn argument_is_required(span: Span, current_span: Span) -> ParseError {
+    ParseError::new("E051".to_string(), "argument is required", span).error(
+        "try passing an argument",
+        span.position,
+        current_span.position - span.position,
+    )
+}
+
 impl From<SyntaxError> for ParseError {
     fn from(e: SyntaxError) -> Self {
         Self {

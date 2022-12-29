@@ -593,14 +593,11 @@ expressions! {
     #[before(die), current(TokenKind::Empty), peek(TokenKind::LeftParen)]
     empty({
         let empty = state.stream.current().span;
-
         state.stream.next();
 
-        let start = utils::skip_left_parenthesis(state)?;
-        let value = Box::new(create(state)?);
-        let end = utils::skip_right_parenthesis(state)?;
+        let argument = Box::new(parameters::single_argument(state, true, true).unwrap()?);
 
-        Ok(Expression::Empty { empty, start, value, end })
+        Ok(Expression::Empty { empty, argument })
     })
 
     #[before(exit), current(TokenKind::Die)]
@@ -608,7 +605,7 @@ expressions! {
         let die = state.stream.current().span;
         state.stream.next();
 
-        let argument = match parameters::only_positional_single_argument(state) {
+        let argument = match parameters::single_argument(state, false, true) {
             Some(arg) => Some(Box::new(arg?)),
             None => None,
         };
