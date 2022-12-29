@@ -13,39 +13,50 @@
                 column: 1,
                 position: 7,
             },
-            start: Span {
-                line: 3,
-                column: 5,
-                position: 11,
-            },
-            value: InterpolatedString {
-                parts: [
-                    Literal(
-                        """,
-                    ),
-                    Expression(
-                        Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 3,
-                                        column: 7,
-                                        position: 13,
-                                    },
-                                    name: "$a",
-                                },
+            argument: SingleArgument {
+                comments: CommentGroup {
+                    comments: [],
+                },
+                left_parenthesis: Span {
+                    line: 3,
+                    column: 5,
+                    position: 11,
+                },
+                argument: Positional {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    ellipsis: None,
+                    value: InterpolatedString {
+                        parts: [
+                            Literal(
+                                """,
                             ),
-                        ),
-                    ),
-                    Literal(
-                        " = 1;",
-                    ),
-                ],
-            },
-            end: Span {
-                line: 3,
-                column: 15,
-                position: 21,
+                            Expression(
+                                Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 7,
+                                                position: 13,
+                                            },
+                                            name: "$a",
+                                        },
+                                    ),
+                                ),
+                            ),
+                            Literal(
+                                " = 1;",
+                            ),
+                        ],
+                    },
+                },
+                right_parenthesis: Span {
+                    line: 3,
+                    column: 15,
+                    position: 21,
+                },
             },
         },
         ending: Semicolon(

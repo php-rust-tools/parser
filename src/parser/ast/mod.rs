@@ -220,10 +220,8 @@ pub struct Use {
 pub enum Expression {
     // eval("$a = 1")
     Eval {
-        eval: Span,       // eval
-        start: Span,      // `(`
-        value: Box<Self>, // "$a = 1"
-        end: Span,        // `)`
+        eval: Span,                    // eval(
+        argument: Box<SingleArgument>, // ("$a = 1")
     },
     // empty($a)
     Empty {
