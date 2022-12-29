@@ -632,13 +632,30 @@ expressions! {
         Ok(Expression::Isset { isset, arguments})
     })
 
-    #[before(reserved_identifier_function_call), current(TokenKind::Unset), peek(TokenKind::LeftParen)]
+    #[before(print), current(TokenKind::Unset), peek(TokenKind::LeftParen)]
     unset({
         let unset = state.stream.current().span;
         state.stream.next();
         let arguments = parameters::argument_list(state)?;
 
         Ok(Expression::Unset { unset, arguments})
+    })
+
+    #[before(reserved_identifier_function_call), current(TokenKind::Print)]
+    print({
+        let print = state.stream.current().span;
+        state.stream.next();
+
+        let mut value = None;
+        let mut argument = None;
+
+        if let Some(arg) = parameters::single_argument(state, false, true) {
+            argument = Some(Box::new(arg?));
+        } else {
+            value = Some(Box::new(create(state)?));
+        }
+
+        Ok(Expression::Print { print, value, argument })
     })
 
     #[before(reserved_identifier_static_call), current(
@@ -1094,7 +1111,7 @@ expressions! {
         }))
     })
 
-    #[before(print_prefix), current(TokenKind::At)]
+    #[before(bitwise_prefix), current(TokenKind::At)]
     at_prefix({
         let span = state.stream.current().span;
 
@@ -1105,20 +1122,6 @@ expressions! {
         Ok(Expression::ErrorSuppress {
             at: span,
             expr: Box::new(rhs)
-        })
-    })
-
-    #[before(bitwise_prefix), current(TokenKind::Print)]
-    print_prefix({
-        let span = state.stream.current().span;
-
-        state.stream.next();
-
-        let rhs = for_precedence(state, Precedence::Prefix)?;
-
-        Ok(Expression::Print {
-            print: span,
-            value: Box::new(rhs)
         })
     })
 

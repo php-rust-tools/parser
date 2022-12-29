@@ -220,12 +220,12 @@ pub struct Use {
 pub enum Expression {
     // eval("$a = 1")
     Eval {
-        eval: Span,                    // eval(
+        eval: Span,                    // eval
         argument: Box<SingleArgument>, // ("$a = 1")
     },
     // empty($a)
     Empty {
-        empty: Span,                   // empty(
+        empty: Span,                   // empty
         argument: Box<SingleArgument>, // ($a)
     },
     // die, die(1)
@@ -247,6 +247,12 @@ pub enum Expression {
     Unset {
         unset: Span,             // unset
         arguments: ArgumentList, // `($a, ...)`
+    },
+    // print(1), print 1;
+    Print {
+        print: Span,                           // print
+        value: Option<Box<Self>>,              // 1
+        argument: Option<Box<SingleArgument>>, // (1)
     },
     Literal(Literal),
     ArithmeticOperation(ArithmeticOperation),
@@ -493,10 +499,6 @@ pub enum Expression {
         value: Option<Box<Self>>,
     },
     YieldFrom {
-        value: Box<Self>,
-    },
-    Print {
-        print: Span,
         value: Box<Self>,
     },
     Cast {

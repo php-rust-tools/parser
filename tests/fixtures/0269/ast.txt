@@ -352,49 +352,61 @@
                                                 column: 5,
                                                 position: 174,
                                             },
-                                            value: Parenthesized {
-                                                start: Span {
-                                                    line: 11,
-                                                    column: 10,
-                                                    position: 179,
-                                                },
-                                                expr: Concat {
-                                                    left: Variable(
-                                                        SimpleVariable(
-                                                            SimpleVariable {
-                                                                span: Span {
-                                                                    line: 11,
-                                                                    column: 11,
-                                                                    position: 180,
-                                                                },
-                                                                name: "$\xf0\x9f\x93\x83",
-                                                            },
-                                                        ),
-                                                    ),
-                                                    dot: Span {
-                                                        line: 11,
-                                                        column: 17,
-                                                        position: 186,
+                                            value: None,
+                                            argument: Some(
+                                                SingleArgument {
+                                                    comments: CommentGroup {
+                                                        comments: [],
                                                     },
-                                                    right: Identifier(
-                                                        SimpleIdentifier(
-                                                            SimpleIdentifier {
-                                                                span: Span {
-                                                                    line: 11,
-                                                                    column: 19,
-                                                                    position: 188,
-                                                                },
-                                                                value: "\xe2\x86\xaa",
+                                                    left_parenthesis: Span {
+                                                        line: 11,
+                                                        column: 10,
+                                                        position: 179,
+                                                    },
+                                                    argument: Positional {
+                                                        comments: CommentGroup {
+                                                            comments: [],
+                                                        },
+                                                        ellipsis: None,
+                                                        value: Concat {
+                                                            left: Variable(
+                                                                SimpleVariable(
+                                                                    SimpleVariable {
+                                                                        span: Span {
+                                                                            line: 11,
+                                                                            column: 11,
+                                                                            position: 180,
+                                                                        },
+                                                                        name: "$\xf0\x9f\x93\x83",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                            dot: Span {
+                                                                line: 11,
+                                                                column: 17,
+                                                                position: 186,
                                                             },
-                                                        ),
-                                                    ),
+                                                            right: Identifier(
+                                                                SimpleIdentifier(
+                                                                    SimpleIdentifier {
+                                                                        span: Span {
+                                                                            line: 11,
+                                                                            column: 19,
+                                                                            position: 188,
+                                                                        },
+                                                                        value: "\xe2\x86\xaa",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        },
+                                                    },
+                                                    right_parenthesis: Span {
+                                                        line: 11,
+                                                        column: 22,
+                                                        position: 191,
+                                                    },
                                                 },
-                                                end: Span {
-                                                    line: 11,
-                                                    column: 22,
-                                                    position: 191,
-                                                },
-                                            },
+                                            ),
                                         },
                                         ending: Semicolon(
                                             Span {
