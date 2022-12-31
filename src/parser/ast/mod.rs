@@ -38,9 +38,7 @@ use crate::parser::ast::operators::ComparisonOperation;
 use crate::parser::ast::operators::LogicalOperation;
 use crate::parser::ast::traits::Trait;
 use crate::parser::ast::try_block::TryBlock;
-use crate::parser::ast::utils::Braced;
 use crate::parser::ast::utils::CommaSeparated;
-use crate::parser::ast::utils::Parenthesized;
 use crate::parser::ast::variables::Variable;
 
 pub mod arguments;
@@ -121,7 +119,9 @@ pub enum Statement {
     Interface(Interface),
     If(IfStatement),
     Switch {
-        condition: Parenthesized<Expression>,
+        left_parenthesis: Span,
+        condition: Expression,
+        right_parenthesis: Span,
         cases: Vec<Case>,
     },
     Echo {
@@ -152,7 +152,11 @@ pub enum Statement {
     Try(TryBlock),
     UnitEnum(UnitEnum),
     BackedEnum(BackedEnum),
-    Block(Braced<Vec<Statement>>),
+    Block {
+        left_brace: Span,
+        statements: Vec<Statement>,
+        right_brace: Span,
+    },
     Global {
         global: Span,
         variables: Vec<Variable>,
@@ -460,7 +464,9 @@ pub enum Expression {
     // TODO(azjezz): create a separate structure for `Match`
     Match {
         keyword: Span,
-        condition: Parenthesized<Box<Self>>,
+        left_parenthesis: Span,
+        condition: Box<Self>,
+        right_parenthesis: Span,
         // TODO(azjezz): create a separate structure for `default` and `arms` to hold `{` and `}` spans.
         default: Option<Box<DefaultMatchArm>>,
         arms: Vec<MatchArm>,
