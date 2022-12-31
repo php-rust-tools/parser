@@ -16,7 +16,7 @@ fn php_standard_library() {
     test_repository(Repository::new(
         "php-standard-library",
         "https://github.com/azjezz/psl.git",
-        vec![],
+        None,
     ));
 }
 
@@ -25,7 +25,7 @@ fn laravel_framework() {
     test_repository(Repository::new(
         "laravel-framework",
         "https://github.com/laravel/framework",
-        vec!["tests/Foundation/fixtures/bad-syntax-strategy.php"],
+        Some(vec!["tests/Foundation/fixtures/bad-syntax-strategy.php"]),
     ));
 }
 
@@ -34,12 +34,12 @@ fn hyperf_framework() {
     test_repository(Repository::new(
         "hyperf-framework",
         "https://github.com/hyperf/hyperf",
-        vec![
+        Some(vec![
             // files are Hack, not PHP.
             "vendor/nikic/fast-route/test/HackTypechecker/fixtures/all_options.php",
             "vendor/nikic/fast-route/test/HackTypechecker/fixtures/empty_options.php",
             "vendor/nikic/fast-route/test/HackTypechecker/fixtures/no_options.php",
-        ],
+        ]),
     ));
 }
 
@@ -48,7 +48,7 @@ fn symfony_framework() {
     test_repository(Repository::new(
         "symfony-framework",
         "https://github.com/symfony/symfony",
-        vec![
+        Some(vec![
             // stub
             "src/Symfony/Bridge/ProxyManager/Tests/LazyProxy/PhpDumper/Fixtures/proxy-implem.php",
             // file contains syntax error used for testing.
@@ -57,7 +57,7 @@ fn symfony_framework() {
             "src/Symfony/Component/VarExporter/LazyProxyTrait.php",
             // this file contains XML, not PHP.
             "src/Symfony/Component/DependencyInjection/Tests/Fixtures/xml/xml_with_wrong_ext.php",
-        ],
+        ]),
     ));
 }
 
@@ -66,7 +66,7 @@ fn nikic_php_parser() {
     test_repository(Repository::new(
         "nikic/PHP-Parser",
         "https://github.com/nikic/PHP-Parser",
-        vec![
+        Some(vec![
             // Auto-generated parsers with syntax mistakes
             "vendor/ircmaxell/php-yacc/examples/00-basic-usage/parser.template.php",
             "vendor/ircmaxell/php-yacc/examples/01-expression-support/parser.template.php",
@@ -77,7 +77,7 @@ fn nikic_php_parser() {
             "vendor/ircmaxell/php-yacc/examples/20-custom-parser/parser.kmyacc.php",
             "vendor/ircmaxell/php-yacc/examples/20-custom-parser/parser.phpyacc.php",
             "vendor/ircmaxell/php-yacc/examples/20-custom-parser/parser.template.php",
-        ],
+        ]),
     ));
 }
 
@@ -86,10 +86,10 @@ fn yii_framework() {
     test_repository(Repository::new(
         "yii-framework",
         "https://github.com/yiisoft/yii2",
-        vec![
+        Some(vec![
             // Outdated dependency in Yii has an actual syntax error, nothing wrong with parser.
             "vendor/sebastian/diff/tests/ParserTest.php",
-        ],
+        ]),
     ));
 }
 
@@ -98,11 +98,11 @@ fn spiral_framework() {
     test_repository(Repository::new(
         "spiral-framework",
         "https://github.com/spiral/framework",
-        vec![
+        Some(vec![
             // file contains syntax error used for testing.
             "src/Core/tests/Fixtures/CorruptedClass.php",
             "src/Tokenizer/tests/Classes/BrokenClass.php",
-        ],
+        ]),
     ));
 }
 
@@ -111,12 +111,12 @@ fn mezzio_framework() {
     test_repository(Repository::new(
         "mezzio-framework",
         "https://github.com/mezzio/mezzio",
-        vec![
+        Some(vec![
             // files are Hack, not PHP.
             "vendor/nikic/fast-route/test/HackTypechecker/fixtures/all_options.php",
             "vendor/nikic/fast-route/test/HackTypechecker/fixtures/empty_options.php",
             "vendor/nikic/fast-route/test/HackTypechecker/fixtures/no_options.php",
-        ],
+        ]),
     ));
 }
 
@@ -125,7 +125,7 @@ fn symfony_polyfill() {
     test_repository(Repository::new(
         "symfony-polyfill",
         "https://github.com/symfony/polyfill",
-        vec![],
+        None,
     ));
 }
 
@@ -134,7 +134,7 @@ fn madelineproto() {
     test_repository(Repository::new(
         "MadelineProto",
         "https://github.com/danog/MadelineProto",
-        vec![],
+        None,
     ));
 }
 
@@ -143,10 +143,10 @@ fn phabel() {
     test_repository(Repository::new(
         "phabel",
         "https://github.com/phabelio/phabel",
-        vec![
+        Some(vec![
             // Uses non-standard async/await syntax
             "tests/TargetFuture/AwaitTest.php",
-        ],
+        ]),
     ));
 }
 
@@ -155,7 +155,7 @@ fn psalm() {
     test_repository(Repository::new(
         "psalm",
         "https://github.com/vimeo/psalm",
-        vec![],
+        None,
     ));
 }
 
@@ -164,7 +164,7 @@ fn phpstan_bin() {
     test_repository(Repository::new(
         "phpstan",
         "https://github.com/phpstan/phpstan",
-        vec![],
+        None,
     ));
 }
 
@@ -173,7 +173,7 @@ fn phpstan_src() {
     test_repository(Repository::new(
         "phpstan-src",
         "https://github.com/phpstan/phpstan-src",
-        vec![
+        Some(vec![
             // borken files used for testing.
             "tests/PHPStan/Rules/Classes/data/invalid-promoted-properties.php",
             "tests/PHPStan/Rules/Classes/data/trait-use-error.php",
@@ -198,7 +198,7 @@ fn phpstan_src() {
             "tests/PHPStan/Analyser/data/bug-7135.php",
             "tests/PHPStan/Rules/Classes/data/first-class-instantiation-callable.php",
             "tests/PHPStan/Rules/Classes/data/instantiation-callable.php",
-        ],
+        ]),
     ));
 }
 
@@ -207,10 +207,10 @@ fn rector_bin() {
     test_repository(Repository::new(
         "rector",
         "https://github.com/rectorphp/rector",
-        vec![
+        Some(vec![
             // uses PHP 7 $foo{$x}
             "e2e/parse-php7-code/src/Foo.php",
-        ],
+        ]),
     ));
 }
 
@@ -219,10 +219,10 @@ fn rector_src() {
     test_repository(Repository::new(
         "rector-src",
         "https://github.com/rectorphp/rector-src",
-        vec![
+        Some(vec![
             // uses PHP 7 $foo{$x}
             "build/target-repository/e2e/parse-php7-code/src/Foo.php",
-        ],
+        ]),
     ));
 }
 
@@ -231,7 +231,7 @@ fn composer() {
     test_repository(Repository::new(
         "composer",
         "https://github.com/composer/composer",
-        vec![],
+        None,
     ));
 }
 
@@ -240,7 +240,7 @@ fn wordpress() {
     test_repository(Repository::new(
         "wordpress",
         "https://github.com/WordPress/WordPress",
-        vec![],
+        None,
     ));
 }
 
@@ -249,7 +249,7 @@ fn chubbyphp_framework() {
     test_repository(Repository::new(
         "chubbyphp-framework",
         "https://github.com/chubbyphp/chubbyphp-framework",
-        vec![],
+        None,
     ));
 }
 
@@ -258,7 +258,7 @@ fn silverstripe_framework_core() {
     test_repository(Repository::new(
         "silverstripe-framework",
         "https://github.com/silverstripe/silverstripe-framework",
-        vec![],
+        None,
     ));
 }
 
@@ -267,7 +267,7 @@ fn silverstripe_framework_cms() {
     test_repository(Repository::new(
         "silverstripe-cms",
         "https://github.com/silverstripe/silverstripe-cms",
-        vec![],
+        None,
     ));
 }
 
@@ -276,7 +276,7 @@ fn roundcubemail_web() {
     test_repository(Repository::new(
         "roundcubemail",
         "https://github.com/roundcube/roundcubemail",
-        vec![],
+        None,
     ));
 }
 
@@ -285,12 +285,12 @@ fn phpmyadmin_web() {
     test_repository(Repository::new(
         "phpmyadmin",
         "https://github.com/phpmyadmin/phpmyadmin",
-        vec![
+        Some(vec![
             // files are Hack, not PHP.
             "vendor/nikic/fast-route/test/HackTypechecker/fixtures/all_options.php",
             "vendor/nikic/fast-route/test/HackTypechecker/fixtures/empty_options.php",
             "vendor/nikic/fast-route/test/HackTypechecker/fixtures/no_options.php",
-        ],
+        ]),
     ));
 }
 
@@ -299,7 +299,7 @@ fn phpbb() {
     test_repository(Repository::new(
         "phpbb",
         "https://github.com/phpbb/phpbb",
-        vec![],
+        None,
     ));
 }
 
@@ -308,7 +308,7 @@ fn drupal() {
     test_repository(Repository::new(
         "drupal",
         "https://github.com/drupal/core",
-        vec![],
+        None,
     ));
 }
 
@@ -317,10 +317,10 @@ fn api_platform() {
     test_repository(Repository::new(
         "api-platform",
         "https://github.com/api-platform/core",
-        vec![
+        Some(vec![
             "vendor/doctrine/mongodb-odm/lib/Doctrine/ODM/MongoDB/Aggregation/Stage/GraphLookup/Match.php",
             "vendor/doctrine/mongodb-odm/lib/Doctrine/ODM/MongoDB/Aggregation/Stage/Match.php",
-        ],
+        ]),
     ));
 }
 
@@ -329,11 +329,11 @@ fn joomla() {
     test_repository(Repository::new(
         "joomla",
         "https://github.com/joomla/joomla-cms",
-        vec![
+        Some(vec![
             // uses PHP 7 curly brackets array/string access
             "libraries/vendor/hoa/console/Chrome/Text.php",
             "libraries/vendor/phpunit/php-code-coverage/tests/_files/Crash.php",
-        ],
+        ]),
     ));
 }
 
@@ -342,13 +342,13 @@ fn prestashop() {
     test_repository(Repository::new(
         "prestashop",
         "https://github.com/PrestaShop/PrestaShop",
-        vec![
+        Some(vec![
             // uses PHP 7 curly brackets array/string access
             "vendor/marcusschwarz/lesserphp/lessify.inc.php",
             "vendor/greenlion/php-sql-parser/libs/codesniffer/PhOSCo/Sniffs/Commenting/FileCommentSniff.php",
             // broken file used for testing
             "vendor/phpunit/php-code-coverage/tests/_files/Crash.php"
-        ],
+        ]),
     ));
 }
 
@@ -357,10 +357,10 @@ fn sylius() {
     test_repository(Repository::new(
         "sylius",
         "https://github.com/Sylius/Sylius",
-        vec![
+        Some(vec![
             // broken file used for testing
             "vendor/phpunit/php-code-coverage/tests/_files/Crash.php",
-        ],
+        ]),
     ));
 }
 
@@ -369,7 +369,7 @@ fn doctrine_orm() {
     test_repository(Repository::new(
         "doctrine-orm",
         "https://github.com/doctrine/orm",
-        vec![],
+        None,
     ));
 }
 
@@ -378,7 +378,7 @@ fn doctrine_dbal() {
     test_repository(Repository::new(
         "doctrine-dbal",
         "https://github.com/doctrine/dbal",
-        vec![],
+        None,
     ));
 }
 
@@ -387,18 +387,18 @@ fn phpunit() {
     test_repository(Repository::new(
         "phpunit",
         "https://github.com/sebastianbergmann/phpunit",
-        vec![],
+        None,
     ));
 }
 
 struct Repository<'a> {
     name: &'a str,
     repository: &'a str,
-    ignore: Vec<&'a str>,
+    ignore: Option<Vec<&'a str>>,
 }
 
 impl<'a> Repository<'a> {
-    fn new(name: &'a str, repository: &'a str, ignore: Vec<&'a str>) -> Self {
+    fn new(name: &'a str, repository: &'a str, ignore: Option<Vec<&'a str>>) -> Self {
         Self {
             name,
             repository,
@@ -488,6 +488,8 @@ impl<'a> Repository<'a> {
             "vendor/jetbrains/phpstorm-stubs",
         ];
 
+        let ignore = self.ignore.as_deref().unwrap_or_default();
+
         for entry in entries {
             let path = &entry
                 .as_path()
@@ -508,7 +510,7 @@ impl<'a> Repository<'a> {
                 continue;
             }
 
-            if entry.extension().unwrap_or_default() == "php" && !self.ignore.contains(path) {
+            if entry.extension().unwrap_or_default() == "php" && !ignore.contains(path) {
                 let fullname_string = &entry.to_string_lossy();
                 let name = fullname_string
                     .strip_prefix(root.to_str().unwrap())

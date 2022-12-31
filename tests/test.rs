@@ -106,9 +106,7 @@ fn run_test(test_fixture: &TestFixture) -> io::Result<()> {
 
         assert_str_eq!(
             expected.error.trim(),
-            (error.report(&code, Some("code.php"), false, true)?)
-                
-                .trim(),
+            (error.report(&code, Some("code.php"), false, true)?).trim(),
             "error mismatch for fixture `{}`",
             test_fixture.fixture
         );
