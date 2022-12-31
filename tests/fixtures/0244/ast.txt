@@ -13,196 +13,188 @@
                 column: 1,
                 position: 7,
             },
-            iterator: Parenthesized {
-                left_parenthesis: Span {
-                    line: 3,
-                    column: 5,
-                    position: 11,
-                },
-                inner: ForStatementIterator {
-                    initializations: SemicolonTerminated {
-                        inner: CommaSeparated {
-                            inner: [
-                                AssignmentOperation(
-                                    Assign {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 3,
-                                                        column: 6,
-                                                        position: 12,
-                                                    },
-                                                    name: "$i",
-                                                },
-                                            ),
-                                        ),
-                                        equals: Span {
-                                            line: 3,
-                                            column: 9,
-                                            position: 15,
+            left_parenthesis: Span {
+                line: 3,
+                column: 5,
+                position: 11,
+            },
+            iterator: ForStatementIterator {
+                initializations: CommaSeparated {
+                    inner: [
+                        AssignmentOperation(
+                            Assign {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 6,
+                                                position: 12,
+                                            },
+                                            name: "$i",
                                         },
-                                        right: Literal(
-                                            Integer(
-                                                LiteralInteger {
-                                                    value: "0",
-                                                    span: Span {
-                                                        line: 3,
-                                                        column: 11,
-                                                        position: 17,
-                                                    },
-                                                },
-                                            ),
-                                        ),
-                                    },
+                                    ),
                                 ),
-                                AssignmentOperation(
-                                    Assign {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 3,
-                                                        column: 14,
-                                                        position: 20,
-                                                    },
-                                                    name: "$i",
-                                                },
-                                            ),
-                                        ),
-                                        equals: Span {
-                                            line: 3,
-                                            column: 17,
-                                            position: 23,
-                                        },
-                                        right: Literal(
-                                            Integer(
-                                                LiteralInteger {
-                                                    value: "1",
-                                                    span: Span {
-                                                        line: 3,
-                                                        column: 19,
-                                                        position: 25,
-                                                    },
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            ],
-                            commas: [
-                                Span {
+                                equals: Span {
                                     line: 3,
-                                    column: 12,
-                                    position: 18,
+                                    column: 9,
+                                    position: 15,
                                 },
-                            ],
-                        },
-                        semicolon: Span {
-                            line: 3,
-                            column: 20,
-                            position: 26,
-                        },
-                    },
-                    conditions: SemicolonTerminated {
-                        inner: CommaSeparated {
-                            inner: [
-                                ComparisonOperation(
-                                    LessThan {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 3,
-                                                        column: 22,
-                                                        position: 28,
-                                                    },
-                                                    name: "$j",
-                                                },
-                                            ),
-                                        ),
-                                        less_than: Span {
-                                            line: 3,
-                                            column: 25,
-                                            position: 31,
+                                right: Literal(
+                                    Integer(
+                                        LiteralInteger {
+                                            value: "0",
+                                            span: Span {
+                                                line: 3,
+                                                column: 11,
+                                                position: 17,
+                                            },
                                         },
-                                        right: Literal(
-                                            Integer(
-                                                LiteralInteger {
-                                                    value: "2",
-                                                    span: Span {
-                                                        line: 3,
-                                                        column: 27,
-                                                        position: 33,
-                                                    },
-                                                },
-                                            ),
-                                        ),
-                                    },
+                                    ),
                                 ),
-                                ArithmeticOperation(
-                                    PostDecrement {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 3,
-                                                        column: 30,
-                                                        position: 36,
-                                                    },
-                                                    name: "$j",
-                                                },
-                                            ),
-                                        ),
-                                        decrement: Span {
-                                            line: 3,
-                                            column: 32,
-                                            position: 38,
+                            },
+                        ),
+                        AssignmentOperation(
+                            Assign {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 14,
+                                                position: 20,
+                                            },
+                                            name: "$i",
                                         },
-                                    },
+                                    ),
                                 ),
-                            ],
-                            commas: [
-                                Span {
+                                equals: Span {
                                     line: 3,
-                                    column: 28,
-                                    position: 34,
+                                    column: 17,
+                                    position: 23,
                                 },
-                            ],
-                        },
-                        semicolon: Span {
+                                right: Literal(
+                                    Integer(
+                                        LiteralInteger {
+                                            value: "1",
+                                            span: Span {
+                                                line: 3,
+                                                column: 19,
+                                                position: 25,
+                                            },
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    ],
+                    commas: [
+                        Span {
                             line: 3,
-                            column: 34,
-                            position: 40,
+                            column: 12,
+                            position: 18,
                         },
-                    },
-                    loop: CommaSeparated {
-                        inner: [],
-                        commas: [],
-                    },
+                    ],
                 },
-                right_parenthesis: Span {
+                initializations_semicolon: Span {
                     line: 3,
-                    column: 35,
-                    position: 41,
+                    column: 20,
+                    position: 26,
+                },
+                conditions: CommaSeparated {
+                    inner: [
+                        ComparisonOperation(
+                            LessThan {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 22,
+                                                position: 28,
+                                            },
+                                            name: "$j",
+                                        },
+                                    ),
+                                ),
+                                less_than: Span {
+                                    line: 3,
+                                    column: 25,
+                                    position: 31,
+                                },
+                                right: Literal(
+                                    Integer(
+                                        LiteralInteger {
+                                            value: "2",
+                                            span: Span {
+                                                line: 3,
+                                                column: 27,
+                                                position: 33,
+                                            },
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                        ArithmeticOperation(
+                            PostDecrement {
+                                left: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 30,
+                                                position: 36,
+                                            },
+                                            name: "$j",
+                                        },
+                                    ),
+                                ),
+                                decrement: Span {
+                                    line: 3,
+                                    column: 32,
+                                    position: 38,
+                                },
+                            },
+                        ),
+                    ],
+                    commas: [
+                        Span {
+                            line: 3,
+                            column: 28,
+                            position: 34,
+                        },
+                    ],
+                },
+                conditions_semicolon: Span {
+                    line: 3,
+                    column: 34,
+                    position: 40,
+                },
+                loop: CommaSeparated {
+                    inner: [],
+                    commas: [],
                 },
             },
+            right_parenthesis: Span {
+                line: 3,
+                column: 35,
+                position: 41,
+            },
             body: Statement(
-                Block(
-                    Braced {
-                        left_brace: Span {
-                            line: 3,
-                            column: 37,
-                            position: 43,
-                        },
-                        inner: [],
-                        right_brace: Span {
-                            line: 5,
-                            column: 1,
-                            position: 46,
-                        },
+                Block {
+                    left_brace: Span {
+                        line: 3,
+                        column: 37,
+                        position: 43,
                     },
-                ),
+                    statements: [],
+                    right_brace: Span {
+                        line: 5,
+                        column: 1,
+                        position: 46,
+                    },
+                },
             ),
         },
     ),
