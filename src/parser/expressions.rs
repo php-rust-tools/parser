@@ -577,55 +577,85 @@ expressions! {
         functions::anonymous_function(state)
     })
 
-    #[before(die), current(TokenKind::Eval), peek(TokenKind::LeftParen)]
+    #[before(empty), current(TokenKind::Eval), peek(TokenKind::LeftParen)]
     eval({
+        let eval = state.stream.current().span;
         state.stream.next();
-        utils::skip_left_parenthesis(state)?;
-        let value = Box::new(create(state)?);
-        utils::skip_right_parenthesis(state)?;
-        Ok(Expression::Eval { value })
+
+        let argument = Box::new(parameters::single_argument(state, true, true).unwrap()?);
+
+        Ok(Expression::Eval { eval, argument })
+    })
+
+    #[before(die), current(TokenKind::Empty), peek(TokenKind::LeftParen)]
+    empty({
+        let empty = state.stream.current().span;
+        state.stream.next();
+
+        let argument = Box::new(parameters::single_argument(state, true, true).unwrap()?);
+
+        Ok(Expression::Empty { empty, argument })
     })
 
     #[before(exit), current(TokenKind::Die)]
     die({
+        let die = state.stream.current().span;
         state.stream.next();
-        let value = if state.stream.current().kind == TokenKind::LeftParen {
-            state.stream.next();
 
-            if state.stream.current().kind != TokenKind::RightParen {
-                let value = Some(Box::new(create(state)?));
-                utils::skip_right_parenthesis(state)?;
-                value
-            } else {
-                utils::skip_right_parenthesis(state)?;
-                None
-            }
-        } else {
-            None
+        let argument = match parameters::single_argument(state, false, true) {
+            Some(arg) => Some(Box::new(arg?)),
+            None => None,
         };
 
-        Ok(Expression::Die { value })
+        Ok(Expression::Die { die, argument })
     })
 
-    #[before(reserved_identifier_function_call), current(TokenKind::Exit)]
+    #[before(isset), current(TokenKind::Exit)]
     exit({
+        let exit = state.stream.current().span;
         state.stream.next();
-        let value = if state.stream.current().kind == TokenKind::LeftParen {
-            state.stream.next();
 
-            if state.stream.current().kind != TokenKind::RightParen {
-                let value = Some(Box::new(create(state)?));
-                utils::skip_right_parenthesis(state)?;
-                value
-            } else {
-                utils::skip_right_parenthesis(state)?;
-                None
-            }
-        } else {
-            None
+        let argument = match parameters::single_argument(state, false, true) {
+            Some(arg) => Some(Box::new(arg?)),
+            None => None,
         };
 
-        Ok(Expression::Exit { value })
+        Ok(Expression::Exit { exit, argument })
+    })
+
+    #[before(unset), current(TokenKind::Isset), peek(TokenKind::LeftParen)]
+    isset({
+        let isset = state.stream.current().span;
+        state.stream.next();
+        let arguments = parameters::argument_list(state)?;
+
+        Ok(Expression::Isset { isset, arguments})
+    })
+
+    #[before(print), current(TokenKind::Unset), peek(TokenKind::LeftParen)]
+    unset({
+        let unset = state.stream.current().span;
+        state.stream.next();
+        let arguments = parameters::argument_list(state)?;
+
+        Ok(Expression::Unset { unset, arguments})
+    })
+
+    #[before(reserved_identifier_function_call), current(TokenKind::Print)]
+    print({
+        let print = state.stream.current().span;
+        state.stream.next();
+
+        let mut value = None;
+        let mut argument = None;
+
+        if let Some(arg) = parameters::single_argument(state, false, true) {
+            argument = Some(Box::new(arg?));
+        } else {
+            value = Some(Box::new(create(state)?));
+        }
+
+        Ok(Expression::Print { print, value, argument })
     })
 
     #[before(reserved_identifier_static_call), current(
@@ -1081,7 +1111,7 @@ expressions! {
         }))
     })
 
-    #[before(print_prefix), current(TokenKind::At)]
+    #[before(bitwise_prefix), current(TokenKind::At)]
     at_prefix({
         let span = state.stream.current().span;
 
@@ -1092,20 +1122,6 @@ expressions! {
         Ok(Expression::ErrorSuppress {
             at: span,
             expr: Box::new(rhs)
-        })
-    })
-
-    #[before(bitwise_prefix), current(TokenKind::Print)]
-    print_prefix({
-        let span = state.stream.current().span;
-
-        state.stream.next();
-
-        let rhs = for_precedence(state, Precedence::Prefix)?;
-
-        Ok(Expression::Print {
-            print: span,
-            value: Box::new(rhs)
         })
     })
 

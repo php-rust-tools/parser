@@ -127,19 +127,45 @@
                                                 statements: [
                                                     Expression {
                                                         expression: Exit {
-                                                            value: Some(
-                                                                Literal(
-                                                                    Integer(
-                                                                        LiteralInteger {
-                                                                            value: "1",
-                                                                            span: Span {
-                                                                                line: 5,
-                                                                                column: 14,
-                                                                                position: 73,
-                                                                            },
+                                                            exit: Span {
+                                                                line: 5,
+                                                                column: 9,
+                                                                position: 68,
+                                                            },
+                                                            argument: Some(
+                                                                SingleArgument {
+                                                                    comments: CommentGroup {
+                                                                        comments: [],
+                                                                    },
+                                                                    left_parenthesis: Span {
+                                                                        line: 5,
+                                                                        column: 13,
+                                                                        position: 72,
+                                                                    },
+                                                                    argument: Positional {
+                                                                        comments: CommentGroup {
+                                                                            comments: [],
                                                                         },
-                                                                    ),
-                                                                ),
+                                                                        ellipsis: None,
+                                                                        value: Literal(
+                                                                            Integer(
+                                                                                LiteralInteger {
+                                                                                    value: "1",
+                                                                                    span: Span {
+                                                                                        line: 5,
+                                                                                        column: 14,
+                                                                                        position: 73,
+                                                                                    },
+                                                                                },
+                                                                            ),
+                                                                        ),
+                                                                    },
+                                                                    right_parenthesis: Span {
+                                                                        line: 5,
+                                                                        column: 15,
+                                                                        position: 74,
+                                                                    },
+                                                                },
                                                             ),
                                                         },
                                                         ending: Semicolon(

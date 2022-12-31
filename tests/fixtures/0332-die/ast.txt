@@ -7,44 +7,29 @@
         },
     ),
     Expression {
-        expression: Print {
-            print: Span {
+        expression: Die {
+            die: Span {
                 line: 3,
                 column: 1,
-                position: 8,
+                position: 7,
             },
-            value: Some(
-                Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 3,
-                                column: 7,
-                                position: 14,
-                            },
-                            name: "$foo",
-                        },
-                    ),
-                ),
-            ),
             argument: None,
         },
         ending: Semicolon(
             Span {
                 line: 3,
-                column: 11,
-                position: 18,
+                column: 4,
+                position: 10,
             },
         ),
     },
     Expression {
-        expression: Print {
-            print: Span {
+        expression: Die {
+            die: Span {
                 line: 4,
                 column: 1,
-                position: 20,
+                position: 12,
             },
-            value: None,
             argument: Some(
                 SingleArgument {
                     comments: CommentGroup {
@@ -52,31 +37,31 @@
                     },
                     left_parenthesis: Span {
                         line: 4,
-                        column: 6,
-                        position: 25,
+                        column: 4,
+                        position: 15,
                     },
                     argument: Positional {
                         comments: CommentGroup {
                             comments: [],
                         },
                         ellipsis: None,
-                        value: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
+                        value: Literal(
+                            Integer(
+                                LiteralInteger {
+                                    value: "1",
                                     span: Span {
                                         line: 4,
-                                        column: 7,
-                                        position: 26,
+                                        column: 5,
+                                        position: 16,
                                     },
-                                    name: "$foo",
                                 },
                             ),
                         ),
                     },
                     right_parenthesis: Span {
                         line: 4,
-                        column: 11,
-                        position: 30,
+                        column: 6,
+                        position: 17,
                     },
                 },
             ),
@@ -84,8 +69,8 @@
         ending: Semicolon(
             Span {
                 line: 4,
-                column: 12,
-                position: 31,
+                column: 7,
+                position: 18,
             },
         ),
     },

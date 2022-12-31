@@ -5,8 +5,8 @@ use serde::Serialize;
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::arguments::ArgumentList;
 use crate::parser::ast::arguments::ArgumentPlaceholder;
+use crate::parser::ast::arguments::{ArgumentList, SingleArgument};
 use crate::parser::ast::classes::AnonymousClass;
 use crate::parser::ast::classes::Class;
 use crate::parser::ast::comments::Comment;
@@ -220,19 +220,39 @@ pub struct Use {
 pub enum Expression {
     // eval("$a = 1")
     Eval {
-        value: Box<Self>,
+        eval: Span,                    // eval
+        argument: Box<SingleArgument>, // ("$a = 1")
+    },
+    // empty($a)
+    Empty {
+        empty: Span,                   // empty
+        argument: Box<SingleArgument>, // ($a)
     },
     // die, die(1)
     Die {
-        value: Option<Box<Self>>,
+        die: Span,                             // die
+        argument: Option<Box<SingleArgument>>, // (1)
     },
     // exit, exit(1)
     Exit {
-        value: Option<Box<Self>>,
+        exit: Span,                            // exit
+        argument: Option<Box<SingleArgument>>, // (1)
     },
-    // echo "foo"
-    Echo {
-        values: Vec<Self>,
+    // isset($a), isset($a, ...)
+    Isset {
+        isset: Span,             // isset
+        arguments: ArgumentList, // `($a, ...)`
+    },
+    // unset($a), isset($a, ...)
+    Unset {
+        unset: Span,             // unset
+        arguments: ArgumentList, // `($a, ...)`
+    },
+    // print(1), print 1;
+    Print {
+        print: Span,                           // print
+        value: Option<Box<Self>>,              // 1
+        argument: Option<Box<SingleArgument>>, // (1)
     },
     Literal(Literal),
     ArithmeticOperation(ArithmeticOperation),
@@ -263,7 +283,6 @@ pub enum Expression {
         expr: Box<Self>,
         end: Span,
     },
-    Empty,
     // @foo()
     ErrorSuppress {
         at: Span,
@@ -480,10 +499,6 @@ pub enum Expression {
         value: Option<Box<Self>>,
     },
     YieldFrom {
-        value: Box<Self>,
-    },
-    Print {
-        print: Span,
         value: Box<Self>,
     },
     Cast {
