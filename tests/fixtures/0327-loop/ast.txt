@@ -13,511 +13,447 @@
                 column: 1,
                 position: 7,
             },
-            iterator: Parenthesized {
-                left_parenthesis: Span {
-                    line: 3,
-                    column: 4,
-                    position: 10,
+            left_parenthesis: Span {
+                line: 3,
+                column: 4,
+                position: 10,
+            },
+            iterator: ForStatementIterator {
+                initializations: CommaSeparated {
+                    inner: [],
+                    commas: [],
                 },
-                inner: ForStatementIterator {
-                    initializations: SemicolonTerminated {
-                        inner: CommaSeparated {
-                            inner: [],
-                            commas: [],
-                        },
-                        semicolon: Span {
-                            line: 3,
-                            column: 5,
-                            position: 11,
-                        },
-                    },
-                    conditions: SemicolonTerminated {
-                        inner: CommaSeparated {
-                            inner: [],
-                            commas: [],
-                        },
-                        semicolon: Span {
-                            line: 3,
-                            column: 6,
-                            position: 12,
-                        },
-                    },
-                    loop: CommaSeparated {
-                        inner: [],
-                        commas: [],
-                    },
-                },
-                right_parenthesis: Span {
+                initializations_semicolon: Span {
                     line: 3,
-                    column: 7,
-                    position: 13,
+                    column: 5,
+                    position: 11,
+                },
+                conditions: CommaSeparated {
+                    inner: [],
+                    commas: [],
+                },
+                conditions_semicolon: Span {
+                    line: 3,
+                    column: 6,
+                    position: 12,
+                },
+                loop: CommaSeparated {
+                    inner: [],
+                    commas: [],
                 },
             },
+            right_parenthesis: Span {
+                line: 3,
+                column: 7,
+                position: 13,
+            },
             body: Statement(
-                Block(
-                    Braced {
-                        left_brace: Span {
-                            line: 3,
-                            column: 9,
-                            position: 15,
-                        },
-                        inner: [
-                            Break(
-                                BreakStatement {
-                                    break: Span {
-                                        line: 4,
-                                        column: 5,
-                                        position: 21,
-                                    },
-                                    level: Some(
-                                        Parenthesized(
-                                            Parenthesized {
-                                                left_parenthesis: Span {
-                                                    line: 4,
-                                                    column: 10,
-                                                    position: 26,
-                                                },
-                                                inner: Parenthesized(
-                                                    Parenthesized {
-                                                        left_parenthesis: Span {
-                                                            line: 4,
-                                                            column: 11,
-                                                            position: 27,
-                                                        },
-                                                        inner: Parenthesized(
-                                                            Parenthesized {
-                                                                left_parenthesis: Span {
-                                                                    line: 4,
-                                                                    column: 12,
-                                                                    position: 28,
-                                                                },
-                                                                inner: Parenthesized(
-                                                                    Parenthesized {
-                                                                        left_parenthesis: Span {
-                                                                            line: 4,
-                                                                            column: 13,
-                                                                            position: 29,
-                                                                        },
-                                                                        inner: Parenthesized(
-                                                                            Parenthesized {
-                                                                                left_parenthesis: Span {
-                                                                                    line: 4,
-                                                                                    column: 14,
-                                                                                    position: 30,
-                                                                                },
-                                                                                inner: Parenthesized(
-                                                                                    Parenthesized {
-                                                                                        left_parenthesis: Span {
-                                                                                            line: 4,
-                                                                                            column: 15,
-                                                                                            position: 31,
-                                                                                        },
-                                                                                        inner: Parenthesized(
-                                                                                            Parenthesized {
-                                                                                                left_parenthesis: Span {
-                                                                                                    line: 4,
-                                                                                                    column: 16,
-                                                                                                    position: 32,
-                                                                                                },
-                                                                                                inner: Parenthesized(
-                                                                                                    Parenthesized {
-                                                                                                        left_parenthesis: Span {
-                                                                                                            line: 4,
-                                                                                                            column: 17,
-                                                                                                            position: 33,
-                                                                                                        },
-                                                                                                        inner: Parenthesized(
-                                                                                                            Parenthesized {
-                                                                                                                left_parenthesis: Span {
-                                                                                                                    line: 4,
-                                                                                                                    column: 18,
-                                                                                                                    position: 34,
-                                                                                                                },
-                                                                                                                inner: Parenthesized(
-                                                                                                                    Parenthesized {
-                                                                                                                        left_parenthesis: Span {
-                                                                                                                            line: 4,
-                                                                                                                            column: 19,
-                                                                                                                            position: 35,
-                                                                                                                        },
-                                                                                                                        inner: Parenthesized(
-                                                                                                                            Parenthesized {
-                                                                                                                                left_parenthesis: Span {
-                                                                                                                                    line: 4,
-                                                                                                                                    column: 20,
-                                                                                                                                    position: 36,
-                                                                                                                                },
-                                                                                                                                inner: Parenthesized(
-                                                                                                                                    Parenthesized {
-                                                                                                                                        left_parenthesis: Span {
-                                                                                                                                            line: 4,
-                                                                                                                                            column: 21,
-                                                                                                                                            position: 37,
-                                                                                                                                        },
-                                                                                                                                        inner: Parenthesized(
-                                                                                                                                            Parenthesized {
-                                                                                                                                                left_parenthesis: Span {
-                                                                                                                                                    line: 4,
-                                                                                                                                                    column: 22,
-                                                                                                                                                    position: 38,
-                                                                                                                                                },
-                                                                                                                                                inner: Parenthesized(
-                                                                                                                                                    Parenthesized {
-                                                                                                                                                        left_parenthesis: Span {
-                                                                                                                                                            line: 4,
-                                                                                                                                                            column: 23,
-                                                                                                                                                            position: 39,
-                                                                                                                                                        },
-                                                                                                                                                        inner: Literal(
-                                                                                                                                                            LiteralInteger {
-                                                                                                                                                                value: "1",
-                                                                                                                                                                span: Span {
-                                                                                                                                                                    line: 4,
-                                                                                                                                                                    column: 24,
-                                                                                                                                                                    position: 40,
-                                                                                                                                                                },
-                                                                                                                                                            },
-                                                                                                                                                        ),
-                                                                                                                                                        right_parenthesis: Span {
-                                                                                                                                                            line: 4,
-                                                                                                                                                            column: 25,
-                                                                                                                                                            position: 41,
-                                                                                                                                                        },
-                                                                                                                                                    },
-                                                                                                                                                ),
-                                                                                                                                                right_parenthesis: Span {
-                                                                                                                                                    line: 4,
-                                                                                                                                                    column: 26,
-                                                                                                                                                    position: 42,
-                                                                                                                                                },
-                                                                                                                                            },
-                                                                                                                                        ),
-                                                                                                                                        right_parenthesis: Span {
-                                                                                                                                            line: 4,
-                                                                                                                                            column: 27,
-                                                                                                                                            position: 43,
-                                                                                                                                        },
-                                                                                                                                    },
-                                                                                                                                ),
-                                                                                                                                right_parenthesis: Span {
-                                                                                                                                    line: 4,
-                                                                                                                                    column: 28,
-                                                                                                                                    position: 44,
-                                                                                                                                },
-                                                                                                                            },
-                                                                                                                        ),
-                                                                                                                        right_parenthesis: Span {
-                                                                                                                            line: 4,
-                                                                                                                            column: 29,
-                                                                                                                            position: 45,
-                                                                                                                        },
-                                                                                                                    },
-                                                                                                                ),
-                                                                                                                right_parenthesis: Span {
-                                                                                                                    line: 4,
-                                                                                                                    column: 30,
-                                                                                                                    position: 46,
-                                                                                                                },
-                                                                                                            },
-                                                                                                        ),
-                                                                                                        right_parenthesis: Span {
-                                                                                                            line: 4,
-                                                                                                            column: 31,
-                                                                                                            position: 47,
-                                                                                                        },
-                                                                                                    },
-                                                                                                ),
-                                                                                                right_parenthesis: Span {
-                                                                                                    line: 4,
-                                                                                                    column: 32,
-                                                                                                    position: 48,
-                                                                                                },
-                                                                                            },
-                                                                                        ),
-                                                                                        right_parenthesis: Span {
-                                                                                            line: 4,
-                                                                                            column: 33,
-                                                                                            position: 49,
-                                                                                        },
-                                                                                    },
-                                                                                ),
-                                                                                right_parenthesis: Span {
-                                                                                    line: 4,
-                                                                                    column: 34,
-                                                                                    position: 50,
-                                                                                },
-                                                                            },
-                                                                        ),
-                                                                        right_parenthesis: Span {
-                                                                            line: 4,
-                                                                            column: 35,
-                                                                            position: 51,
-                                                                        },
-                                                                    },
-                                                                ),
-                                                                right_parenthesis: Span {
-                                                                    line: 4,
-                                                                    column: 36,
-                                                                    position: 52,
-                                                                },
-                                                            },
-                                                        ),
-                                                        right_parenthesis: Span {
-                                                            line: 4,
-                                                            column: 37,
-                                                            position: 53,
-                                                        },
-                                                    },
-                                                ),
-                                                right_parenthesis: Span {
-                                                    line: 4,
-                                                    column: 38,
-                                                    position: 54,
-                                                },
-                                            },
-                                        ),
-                                    ),
-                                    ending: Semicolon(
-                                        Span {
-                                            line: 4,
-                                            column: 39,
-                                            position: 55,
-                                        },
-                                    ),
-                                },
-                            ),
-                            Continue(
-                                ContinueStatement {
-                                    continue: Span {
-                                        line: 5,
-                                        column: 5,
-                                        position: 61,
-                                    },
-                                    level: Some(
-                                        Parenthesized(
-                                            Parenthesized {
-                                                left_parenthesis: Span {
-                                                    line: 5,
-                                                    column: 13,
-                                                    position: 69,
-                                                },
-                                                inner: Parenthesized(
-                                                    Parenthesized {
-                                                        left_parenthesis: Span {
-                                                            line: 5,
-                                                            column: 14,
-                                                            position: 70,
-                                                        },
-                                                        inner: Parenthesized(
-                                                            Parenthesized {
-                                                                left_parenthesis: Span {
-                                                                    line: 5,
-                                                                    column: 15,
-                                                                    position: 71,
-                                                                },
-                                                                inner: Parenthesized(
-                                                                    Parenthesized {
-                                                                        left_parenthesis: Span {
-                                                                            line: 5,
-                                                                            column: 16,
-                                                                            position: 72,
-                                                                        },
-                                                                        inner: Parenthesized(
-                                                                            Parenthesized {
-                                                                                left_parenthesis: Span {
-                                                                                    line: 5,
-                                                                                    column: 17,
-                                                                                    position: 73,
-                                                                                },
-                                                                                inner: Parenthesized(
-                                                                                    Parenthesized {
-                                                                                        left_parenthesis: Span {
-                                                                                            line: 5,
-                                                                                            column: 18,
-                                                                                            position: 74,
-                                                                                        },
-                                                                                        inner: Parenthesized(
-                                                                                            Parenthesized {
-                                                                                                left_parenthesis: Span {
-                                                                                                    line: 5,
-                                                                                                    column: 19,
-                                                                                                    position: 75,
-                                                                                                },
-                                                                                                inner: Parenthesized(
-                                                                                                    Parenthesized {
-                                                                                                        left_parenthesis: Span {
-                                                                                                            line: 5,
-                                                                                                            column: 20,
-                                                                                                            position: 76,
-                                                                                                        },
-                                                                                                        inner: Parenthesized(
-                                                                                                            Parenthesized {
-                                                                                                                left_parenthesis: Span {
-                                                                                                                    line: 5,
-                                                                                                                    column: 21,
-                                                                                                                    position: 77,
-                                                                                                                },
-                                                                                                                inner: Parenthesized(
-                                                                                                                    Parenthesized {
-                                                                                                                        left_parenthesis: Span {
-                                                                                                                            line: 5,
-                                                                                                                            column: 22,
-                                                                                                                            position: 78,
-                                                                                                                        },
-                                                                                                                        inner: Parenthesized(
-                                                                                                                            Parenthesized {
-                                                                                                                                left_parenthesis: Span {
-                                                                                                                                    line: 5,
-                                                                                                                                    column: 23,
-                                                                                                                                    position: 79,
-                                                                                                                                },
-                                                                                                                                inner: Parenthesized(
-                                                                                                                                    Parenthesized {
-                                                                                                                                        left_parenthesis: Span {
-                                                                                                                                            line: 5,
-                                                                                                                                            column: 24,
-                                                                                                                                            position: 80,
-                                                                                                                                        },
-                                                                                                                                        inner: Parenthesized(
-                                                                                                                                            Parenthesized {
-                                                                                                                                                left_parenthesis: Span {
-                                                                                                                                                    line: 5,
-                                                                                                                                                    column: 25,
-                                                                                                                                                    position: 81,
-                                                                                                                                                },
-                                                                                                                                                inner: Parenthesized(
-                                                                                                                                                    Parenthesized {
-                                                                                                                                                        left_parenthesis: Span {
-                                                                                                                                                            line: 5,
-                                                                                                                                                            column: 26,
-                                                                                                                                                            position: 82,
-                                                                                                                                                        },
-                                                                                                                                                        inner: Literal(
-                                                                                                                                                            LiteralInteger {
-                                                                                                                                                                value: "1",
-                                                                                                                                                                span: Span {
-                                                                                                                                                                    line: 5,
-                                                                                                                                                                    column: 27,
-                                                                                                                                                                    position: 83,
-                                                                                                                                                                },
-                                                                                                                                                            },
-                                                                                                                                                        ),
-                                                                                                                                                        right_parenthesis: Span {
-                                                                                                                                                            line: 5,
-                                                                                                                                                            column: 28,
-                                                                                                                                                            position: 84,
-                                                                                                                                                        },
-                                                                                                                                                    },
-                                                                                                                                                ),
-                                                                                                                                                right_parenthesis: Span {
-                                                                                                                                                    line: 5,
-                                                                                                                                                    column: 29,
-                                                                                                                                                    position: 85,
-                                                                                                                                                },
-                                                                                                                                            },
-                                                                                                                                        ),
-                                                                                                                                        right_parenthesis: Span {
-                                                                                                                                            line: 5,
-                                                                                                                                            column: 30,
-                                                                                                                                            position: 86,
-                                                                                                                                        },
-                                                                                                                                    },
-                                                                                                                                ),
-                                                                                                                                right_parenthesis: Span {
-                                                                                                                                    line: 5,
-                                                                                                                                    column: 31,
-                                                                                                                                    position: 87,
-                                                                                                                                },
-                                                                                                                            },
-                                                                                                                        ),
-                                                                                                                        right_parenthesis: Span {
-                                                                                                                            line: 5,
-                                                                                                                            column: 32,
-                                                                                                                            position: 88,
-                                                                                                                        },
-                                                                                                                    },
-                                                                                                                ),
-                                                                                                                right_parenthesis: Span {
-                                                                                                                    line: 5,
-                                                                                                                    column: 33,
-                                                                                                                    position: 89,
-                                                                                                                },
-                                                                                                            },
-                                                                                                        ),
-                                                                                                        right_parenthesis: Span {
-                                                                                                            line: 5,
-                                                                                                            column: 34,
-                                                                                                            position: 90,
-                                                                                                        },
-                                                                                                    },
-                                                                                                ),
-                                                                                                right_parenthesis: Span {
-                                                                                                    line: 5,
-                                                                                                    column: 35,
-                                                                                                    position: 91,
-                                                                                                },
-                                                                                            },
-                                                                                        ),
-                                                                                        right_parenthesis: Span {
-                                                                                            line: 5,
-                                                                                            column: 36,
-                                                                                            position: 92,
-                                                                                        },
-                                                                                    },
-                                                                                ),
-                                                                                right_parenthesis: Span {
-                                                                                    line: 5,
-                                                                                    column: 37,
-                                                                                    position: 93,
-                                                                                },
-                                                                            },
-                                                                        ),
-                                                                        right_parenthesis: Span {
-                                                                            line: 5,
-                                                                            column: 38,
-                                                                            position: 94,
-                                                                        },
-                                                                    },
-                                                                ),
-                                                                right_parenthesis: Span {
-                                                                    line: 5,
-                                                                    column: 39,
-                                                                    position: 95,
-                                                                },
-                                                            },
-                                                        ),
-                                                        right_parenthesis: Span {
-                                                            line: 5,
-                                                            column: 40,
-                                                            position: 96,
-                                                        },
-                                                    },
-                                                ),
-                                                right_parenthesis: Span {
-                                                    line: 5,
-                                                    column: 41,
-                                                    position: 97,
-                                                },
-                                            },
-                                        ),
-                                    ),
-                                    ending: Semicolon(
-                                        Span {
-                                            line: 5,
-                                            column: 42,
-                                            position: 98,
-                                        },
-                                    ),
-                                },
-                            ),
-                        ],
-                        right_brace: Span {
-                            line: 6,
-                            column: 1,
-                            position: 100,
-                        },
+                Block {
+                    left_brace: Span {
+                        line: 3,
+                        column: 9,
+                        position: 15,
                     },
-                ),
+                    statements: [
+                        Break(
+                            BreakStatement {
+                                break: Span {
+                                    line: 4,
+                                    column: 5,
+                                    position: 21,
+                                },
+                                level: Some(
+                                    Parenthesized {
+                                        left_parenthesis: Span {
+                                            line: 4,
+                                            column: 10,
+                                            position: 26,
+                                        },
+                                        level: Parenthesized {
+                                            left_parenthesis: Span {
+                                                line: 4,
+                                                column: 11,
+                                                position: 27,
+                                            },
+                                            level: Parenthesized {
+                                                left_parenthesis: Span {
+                                                    line: 4,
+                                                    column: 12,
+                                                    position: 28,
+                                                },
+                                                level: Parenthesized {
+                                                    left_parenthesis: Span {
+                                                        line: 4,
+                                                        column: 13,
+                                                        position: 29,
+                                                    },
+                                                    level: Parenthesized {
+                                                        left_parenthesis: Span {
+                                                            line: 4,
+                                                            column: 14,
+                                                            position: 30,
+                                                        },
+                                                        level: Parenthesized {
+                                                            left_parenthesis: Span {
+                                                                line: 4,
+                                                                column: 15,
+                                                                position: 31,
+                                                            },
+                                                            level: Parenthesized {
+                                                                left_parenthesis: Span {
+                                                                    line: 4,
+                                                                    column: 16,
+                                                                    position: 32,
+                                                                },
+                                                                level: Parenthesized {
+                                                                    left_parenthesis: Span {
+                                                                        line: 4,
+                                                                        column: 17,
+                                                                        position: 33,
+                                                                    },
+                                                                    level: Parenthesized {
+                                                                        left_parenthesis: Span {
+                                                                            line: 4,
+                                                                            column: 18,
+                                                                            position: 34,
+                                                                        },
+                                                                        level: Parenthesized {
+                                                                            left_parenthesis: Span {
+                                                                                line: 4,
+                                                                                column: 19,
+                                                                                position: 35,
+                                                                            },
+                                                                            level: Parenthesized {
+                                                                                left_parenthesis: Span {
+                                                                                    line: 4,
+                                                                                    column: 20,
+                                                                                    position: 36,
+                                                                                },
+                                                                                level: Parenthesized {
+                                                                                    left_parenthesis: Span {
+                                                                                        line: 4,
+                                                                                        column: 21,
+                                                                                        position: 37,
+                                                                                    },
+                                                                                    level: Parenthesized {
+                                                                                        left_parenthesis: Span {
+                                                                                            line: 4,
+                                                                                            column: 22,
+                                                                                            position: 38,
+                                                                                        },
+                                                                                        level: Parenthesized {
+                                                                                            left_parenthesis: Span {
+                                                                                                line: 4,
+                                                                                                column: 23,
+                                                                                                position: 39,
+                                                                                            },
+                                                                                            level: Literal(
+                                                                                                LiteralInteger {
+                                                                                                    value: "1",
+                                                                                                    span: Span {
+                                                                                                        line: 4,
+                                                                                                        column: 24,
+                                                                                                        position: 40,
+                                                                                                    },
+                                                                                                },
+                                                                                            ),
+                                                                                            right_parenthesis: Span {
+                                                                                                line: 4,
+                                                                                                column: 25,
+                                                                                                position: 41,
+                                                                                            },
+                                                                                        },
+                                                                                        right_parenthesis: Span {
+                                                                                            line: 4,
+                                                                                            column: 26,
+                                                                                            position: 42,
+                                                                                        },
+                                                                                    },
+                                                                                    right_parenthesis: Span {
+                                                                                        line: 4,
+                                                                                        column: 27,
+                                                                                        position: 43,
+                                                                                    },
+                                                                                },
+                                                                                right_parenthesis: Span {
+                                                                                    line: 4,
+                                                                                    column: 28,
+                                                                                    position: 44,
+                                                                                },
+                                                                            },
+                                                                            right_parenthesis: Span {
+                                                                                line: 4,
+                                                                                column: 29,
+                                                                                position: 45,
+                                                                            },
+                                                                        },
+                                                                        right_parenthesis: Span {
+                                                                            line: 4,
+                                                                            column: 30,
+                                                                            position: 46,
+                                                                        },
+                                                                    },
+                                                                    right_parenthesis: Span {
+                                                                        line: 4,
+                                                                        column: 31,
+                                                                        position: 47,
+                                                                    },
+                                                                },
+                                                                right_parenthesis: Span {
+                                                                    line: 4,
+                                                                    column: 32,
+                                                                    position: 48,
+                                                                },
+                                                            },
+                                                            right_parenthesis: Span {
+                                                                line: 4,
+                                                                column: 33,
+                                                                position: 49,
+                                                            },
+                                                        },
+                                                        right_parenthesis: Span {
+                                                            line: 4,
+                                                            column: 34,
+                                                            position: 50,
+                                                        },
+                                                    },
+                                                    right_parenthesis: Span {
+                                                        line: 4,
+                                                        column: 35,
+                                                        position: 51,
+                                                    },
+                                                },
+                                                right_parenthesis: Span {
+                                                    line: 4,
+                                                    column: 36,
+                                                    position: 52,
+                                                },
+                                            },
+                                            right_parenthesis: Span {
+                                                line: 4,
+                                                column: 37,
+                                                position: 53,
+                                            },
+                                        },
+                                        right_parenthesis: Span {
+                                            line: 4,
+                                            column: 38,
+                                            position: 54,
+                                        },
+                                    },
+                                ),
+                                ending: Semicolon(
+                                    Span {
+                                        line: 4,
+                                        column: 39,
+                                        position: 55,
+                                    },
+                                ),
+                            },
+                        ),
+                        Continue(
+                            ContinueStatement {
+                                continue: Span {
+                                    line: 5,
+                                    column: 5,
+                                    position: 61,
+                                },
+                                level: Some(
+                                    Parenthesized {
+                                        left_parenthesis: Span {
+                                            line: 5,
+                                            column: 13,
+                                            position: 69,
+                                        },
+                                        level: Parenthesized {
+                                            left_parenthesis: Span {
+                                                line: 5,
+                                                column: 14,
+                                                position: 70,
+                                            },
+                                            level: Parenthesized {
+                                                left_parenthesis: Span {
+                                                    line: 5,
+                                                    column: 15,
+                                                    position: 71,
+                                                },
+                                                level: Parenthesized {
+                                                    left_parenthesis: Span {
+                                                        line: 5,
+                                                        column: 16,
+                                                        position: 72,
+                                                    },
+                                                    level: Parenthesized {
+                                                        left_parenthesis: Span {
+                                                            line: 5,
+                                                            column: 17,
+                                                            position: 73,
+                                                        },
+                                                        level: Parenthesized {
+                                                            left_parenthesis: Span {
+                                                                line: 5,
+                                                                column: 18,
+                                                                position: 74,
+                                                            },
+                                                            level: Parenthesized {
+                                                                left_parenthesis: Span {
+                                                                    line: 5,
+                                                                    column: 19,
+                                                                    position: 75,
+                                                                },
+                                                                level: Parenthesized {
+                                                                    left_parenthesis: Span {
+                                                                        line: 5,
+                                                                        column: 20,
+                                                                        position: 76,
+                                                                    },
+                                                                    level: Parenthesized {
+                                                                        left_parenthesis: Span {
+                                                                            line: 5,
+                                                                            column: 21,
+                                                                            position: 77,
+                                                                        },
+                                                                        level: Parenthesized {
+                                                                            left_parenthesis: Span {
+                                                                                line: 5,
+                                                                                column: 22,
+                                                                                position: 78,
+                                                                            },
+                                                                            level: Parenthesized {
+                                                                                left_parenthesis: Span {
+                                                                                    line: 5,
+                                                                                    column: 23,
+                                                                                    position: 79,
+                                                                                },
+                                                                                level: Parenthesized {
+                                                                                    left_parenthesis: Span {
+                                                                                        line: 5,
+                                                                                        column: 24,
+                                                                                        position: 80,
+                                                                                    },
+                                                                                    level: Parenthesized {
+                                                                                        left_parenthesis: Span {
+                                                                                            line: 5,
+                                                                                            column: 25,
+                                                                                            position: 81,
+                                                                                        },
+                                                                                        level: Parenthesized {
+                                                                                            left_parenthesis: Span {
+                                                                                                line: 5,
+                                                                                                column: 26,
+                                                                                                position: 82,
+                                                                                            },
+                                                                                            level: Literal(
+                                                                                                LiteralInteger {
+                                                                                                    value: "1",
+                                                                                                    span: Span {
+                                                                                                        line: 5,
+                                                                                                        column: 27,
+                                                                                                        position: 83,
+                                                                                                    },
+                                                                                                },
+                                                                                            ),
+                                                                                            right_parenthesis: Span {
+                                                                                                line: 5,
+                                                                                                column: 28,
+                                                                                                position: 84,
+                                                                                            },
+                                                                                        },
+                                                                                        right_parenthesis: Span {
+                                                                                            line: 5,
+                                                                                            column: 29,
+                                                                                            position: 85,
+                                                                                        },
+                                                                                    },
+                                                                                    right_parenthesis: Span {
+                                                                                        line: 5,
+                                                                                        column: 30,
+                                                                                        position: 86,
+                                                                                    },
+                                                                                },
+                                                                                right_parenthesis: Span {
+                                                                                    line: 5,
+                                                                                    column: 31,
+                                                                                    position: 87,
+                                                                                },
+                                                                            },
+                                                                            right_parenthesis: Span {
+                                                                                line: 5,
+                                                                                column: 32,
+                                                                                position: 88,
+                                                                            },
+                                                                        },
+                                                                        right_parenthesis: Span {
+                                                                            line: 5,
+                                                                            column: 33,
+                                                                            position: 89,
+                                                                        },
+                                                                    },
+                                                                    right_parenthesis: Span {
+                                                                        line: 5,
+                                                                        column: 34,
+                                                                        position: 90,
+                                                                    },
+                                                                },
+                                                                right_parenthesis: Span {
+                                                                    line: 5,
+                                                                    column: 35,
+                                                                    position: 91,
+                                                                },
+                                                            },
+                                                            right_parenthesis: Span {
+                                                                line: 5,
+                                                                column: 36,
+                                                                position: 92,
+                                                            },
+                                                        },
+                                                        right_parenthesis: Span {
+                                                            line: 5,
+                                                            column: 37,
+                                                            position: 93,
+                                                        },
+                                                    },
+                                                    right_parenthesis: Span {
+                                                        line: 5,
+                                                        column: 38,
+                                                        position: 94,
+                                                    },
+                                                },
+                                                right_parenthesis: Span {
+                                                    line: 5,
+                                                    column: 39,
+                                                    position: 95,
+                                                },
+                                            },
+                                            right_parenthesis: Span {
+                                                line: 5,
+                                                column: 40,
+                                                position: 96,
+                                            },
+                                        },
+                                        right_parenthesis: Span {
+                                            line: 5,
+                                            column: 41,
+                                            position: 97,
+                                        },
+                                    },
+                                ),
+                                ending: Semicolon(
+                                    Span {
+                                        line: 5,
+                                        column: 42,
+                                        position: 98,
+                                    },
+                                ),
+                            },
+                        ),
+                    ],
+                    right_brace: Span {
+                        line: 6,
+                        column: 1,
+                        position: 100,
+                    },
+                },
             ),
         },
     ),

@@ -13,29 +13,27 @@
                 column: 7,
                 position: 6,
             },
-            condition: Parenthesized {
-                left_parenthesis: Span {
-                    line: 1,
-                    column: 9,
-                    position: 8,
-                },
-                inner: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 1,
-                                column: 10,
-                                position: 9,
-                            },
-                            name: "$foo",
+            left_parenthesis: Span {
+                line: 1,
+                column: 9,
+                position: 8,
+            },
+            condition: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
+                            line: 1,
+                            column: 10,
+                            position: 9,
                         },
-                    ),
+                        name: "$foo",
+                    },
                 ),
-                right_parenthesis: Span {
-                    line: 1,
-                    column: 14,
-                    position: 13,
-                },
+            ),
+            right_parenthesis: Span {
+                line: 1,
+                column: 14,
+                position: 13,
             },
             body: Statement {
                 statement: Return {

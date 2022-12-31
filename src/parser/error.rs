@@ -942,6 +942,35 @@ pub fn cannot_use_type_in_context(span: Span, ty: String) -> ParseError {
     .error("try using a different type", span.position, ty.len())
 }
 
+pub fn only_positional_arguments_are_accepted(span: Span, current_span: Span) -> ParseError {
+    ParseError::new(
+        "E049".to_string(),
+        "cannot use named argument, only positional arguments are accepted",
+        span,
+    )
+    .error(
+        "try changing this to a positional argument",
+        span.position,
+        current_span.position - span.position,
+    )
+}
+
+pub fn only_one_argument_is_accepted(span: Span, current_span: Span) -> ParseError {
+    ParseError::new("E050".to_string(), "only one argument are accepted", span).error(
+        "try removing this argument",
+        span.position,
+        current_span.position - span.position,
+    )
+}
+
+pub fn argument_is_required(span: Span, current_span: Span) -> ParseError {
+    ParseError::new("E051".to_string(), "argument is required", span).error(
+        "try passing an argument",
+        span.position,
+        current_span.position - span.position,
+    )
+}
+
 impl From<SyntaxError> for ParseError {
     fn from(e: SyntaxError) -> Self {
         Self {

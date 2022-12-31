@@ -58,29 +58,27 @@
                                     column: 5,
                                     position: 25,
                                 },
-                                condition: Parenthesized {
-                                    left_parenthesis: Span {
-                                        line: 4,
-                                        column: 8,
-                                        position: 28,
-                                    },
-                                    inner: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 4,
-                                                    column: 9,
-                                                    position: 29,
-                                                },
-                                                name: "$foo",
+                                left_parenthesis: Span {
+                                    line: 4,
+                                    column: 8,
+                                    position: 28,
+                                },
+                                condition: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 4,
+                                                column: 9,
+                                                position: 29,
                                             },
-                                        ),
+                                            name: "$foo",
+                                        },
                                     ),
-                                    right_parenthesis: Span {
-                                        line: 4,
-                                        column: 13,
-                                        position: 33,
-                                    },
+                                ),
+                                right_parenthesis: Span {
+                                    line: 4,
+                                    column: 13,
+                                    position: 33,
                                 },
                                 body: Statement {
                                     statement: Expression {

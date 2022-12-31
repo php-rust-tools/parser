@@ -74,29 +74,27 @@
                         column: 6,
                         position: 22,
                     },
-                    condition: Parenthesized {
-                        left_parenthesis: Span {
-                            line: 6,
-                            column: 12,
-                            position: 28,
-                        },
-                        inner: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 6,
-                                        column: 13,
-                                        position: 29,
-                                    },
-                                    name: "$a",
+                    left_parenthesis: Span {
+                        line: 6,
+                        column: 12,
+                        position: 28,
+                    },
+                    condition: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 6,
+                                    column: 13,
+                                    position: 29,
                                 },
-                            ),
+                                name: "$a",
+                            },
                         ),
-                        right_parenthesis: Span {
-                            line: 6,
-                            column: 15,
-                            position: 31,
-                        },
+                    ),
+                    right_parenthesis: Span {
+                        line: 6,
+                        column: 15,
+                        position: 31,
                     },
                     default: Some(
                         DefaultMatchArm {

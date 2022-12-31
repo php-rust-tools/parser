@@ -1,9 +1,6 @@
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::utils::Braced;
 use crate::parser::ast::utils::CommaSeparated;
-use crate::parser::ast::utils::Parenthesized;
-use crate::parser::ast::utils::SemicolonTerminated;
 use crate::parser::ast::Ending;
 use crate::parser::error;
 use crate::parser::error::ParseResult;
@@ -111,16 +108,12 @@ pub fn skip_any_of(state: &mut State, kinds: &[TokenKind]) -> ParseResult<Span> 
 pub fn parenthesized<T>(
     state: &mut State,
     func: &(dyn Fn(&mut State) -> ParseResult<T>),
-) -> ParseResult<Parenthesized<T>> {
+) -> ParseResult<(Span, T, Span)> {
     let left_parenthesis = skip_left_parenthesis(state)?;
     let inner = func(state)?;
     let right_parenthesis = skip_right_parenthesis(state)?;
 
-    Ok(Parenthesized {
-        left_parenthesis,
-        inner,
-        right_parenthesis,
-    })
+    Ok((left_parenthesis, inner, right_parenthesis))
 }
 
 /// Parse an item that is surrounded by braces.
@@ -130,26 +123,21 @@ pub fn parenthesized<T>(
 pub fn braced<T>(
     state: &mut State,
     func: &(dyn Fn(&mut State) -> ParseResult<T>),
-) -> ParseResult<Braced<T>> {
+) -> ParseResult<(Span, T, Span)> {
     let left_brace = skip_left_brace(state)?;
     let inner = func(state)?;
     let right_brace = skip_right_brace(state)?;
 
-    Ok(Braced {
-        left_brace,
-        inner,
-        right_brace,
-    })
+    Ok((left_brace, inner, right_brace))
 }
 
 pub fn semicolon_terminated<T>(
     state: &mut State,
     func: &(dyn Fn(&mut State) -> ParseResult<T>),
-) -> ParseResult<SemicolonTerminated<T>> {
+) -> ParseResult<(Span, T)> {
     let inner = func(state)?;
     let semicolon = skip_semicolon(state)?;
-
-    Ok(SemicolonTerminated { inner, semicolon })
+    Ok((semicolon, inner))
 }
 
 /// Parse a comma-separated list of items, allowing a trailing comma.

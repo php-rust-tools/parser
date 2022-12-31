@@ -5,8 +5,8 @@ use serde::Serialize;
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::arguments::ArgumentList;
 use crate::parser::ast::arguments::ArgumentPlaceholder;
+use crate::parser::ast::arguments::{ArgumentList, SingleArgument};
 use crate::parser::ast::classes::AnonymousClass;
 use crate::parser::ast::classes::Class;
 use crate::parser::ast::comments::Comment;
@@ -38,9 +38,7 @@ use crate::parser::ast::operators::ComparisonOperation;
 use crate::parser::ast::operators::LogicalOperation;
 use crate::parser::ast::traits::Trait;
 use crate::parser::ast::try_block::TryBlock;
-use crate::parser::ast::utils::Braced;
 use crate::parser::ast::utils::CommaSeparated;
-use crate::parser::ast::utils::Parenthesized;
 use crate::parser::ast::variables::Variable;
 
 pub mod arguments;
@@ -121,7 +119,10 @@ pub enum Statement {
     Interface(Interface),
     If(IfStatement),
     Switch {
-        condition: Parenthesized<Expression>,
+        switch: Span,
+        left_parenthesis: Span,
+        condition: Expression,
+        right_parenthesis: Span,
         cases: Vec<Case>,
     },
     Echo {
@@ -152,7 +153,11 @@ pub enum Statement {
     Try(TryBlock),
     UnitEnum(UnitEnum),
     BackedEnum(BackedEnum),
-    Block(Braced<Vec<Statement>>),
+    Block {
+        left_brace: Span,
+        statements: Vec<Statement>,
+        right_brace: Span,
+    },
     Global {
         global: Span,
         variables: Vec<Variable>,
@@ -215,19 +220,39 @@ pub struct Use {
 pub enum Expression {
     // eval("$a = 1")
     Eval {
-        value: Box<Self>,
+        eval: Span,                    // eval
+        argument: Box<SingleArgument>, // ("$a = 1")
+    },
+    // empty($a)
+    Empty {
+        empty: Span,                   // empty
+        argument: Box<SingleArgument>, // ($a)
     },
     // die, die(1)
     Die {
-        value: Option<Box<Self>>,
+        die: Span,                             // die
+        argument: Option<Box<SingleArgument>>, // (1)
     },
     // exit, exit(1)
     Exit {
-        value: Option<Box<Self>>,
+        exit: Span,                            // exit
+        argument: Option<Box<SingleArgument>>, // (1)
     },
-    // echo "foo"
-    Echo {
-        values: Vec<Self>,
+    // isset($a), isset($a, ...)
+    Isset {
+        isset: Span,             // isset
+        arguments: ArgumentList, // `($a, ...)`
+    },
+    // unset($a), isset($a, ...)
+    Unset {
+        unset: Span,             // unset
+        arguments: ArgumentList, // `($a, ...)`
+    },
+    // print(1), print 1;
+    Print {
+        print: Span,                           // print
+        value: Option<Box<Self>>,              // 1
+        argument: Option<Box<SingleArgument>>, // (1)
     },
     Literal(Literal),
     ArithmeticOperation(ArithmeticOperation),
@@ -258,7 +283,6 @@ pub enum Expression {
         expr: Box<Self>,
         end: Span,
     },
-    Empty,
     // @foo()
     ErrorSuppress {
         at: Span,
@@ -460,7 +484,9 @@ pub enum Expression {
     // TODO(azjezz): create a separate structure for `Match`
     Match {
         keyword: Span,
-        condition: Parenthesized<Box<Self>>,
+        left_parenthesis: Span,
+        condition: Box<Self>,
+        right_parenthesis: Span,
         // TODO(azjezz): create a separate structure for `default` and `arms` to hold `{` and `}` spans.
         default: Option<Box<DefaultMatchArm>>,
         arms: Vec<MatchArm>,
@@ -473,10 +499,6 @@ pub enum Expression {
         value: Option<Box<Self>>,
     },
     YieldFrom {
-        value: Box<Self>,
-    },
-    Print {
-        print: Span,
         value: Box<Self>,
     },
     Cast {
@@ -516,6 +538,7 @@ pub enum MagicConstant {
     Method(Span),
     Namespace(Span),
     Trait(Span),
+    CompilerHaltOffset(Span),
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

@@ -6,41 +6,39 @@
             position: 0,
         },
     ),
-    Block(
-        Braced {
-            left_brace: Span {
-                line: 1,
-                column: 7,
-                position: 6,
-            },
-            inner: [
-                Expression {
-                    expression: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 1,
-                                    column: 9,
-                                    position: 8,
-                                },
-                                name: "$a",
+    Block {
+        left_brace: Span {
+            line: 1,
+            column: 7,
+            position: 6,
+        },
+        statements: [
+            Expression {
+                expression: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 1,
+                                column: 9,
+                                position: 8,
                             },
-                        ),
-                    ),
-                    ending: Semicolon(
-                        Span {
-                            line: 1,
-                            column: 11,
-                            position: 10,
+                            name: "$a",
                         },
                     ),
-                },
-            ],
-            right_brace: Span {
-                line: 1,
-                column: 13,
-                position: 12,
+                ),
+                ending: Semicolon(
+                    Span {
+                        line: 1,
+                        column: 11,
+                        position: 10,
+                    },
+                ),
             },
+        ],
+        right_brace: Span {
+            line: 1,
+            column: 13,
+            position: 12,
         },
-    ),
+    },
 ]

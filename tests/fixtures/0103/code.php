@@ -1,1 +1,4 @@
-<?php print $foo;
+<?php 
+
+print $foo;
+print($foo);

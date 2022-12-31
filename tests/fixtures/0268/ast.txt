@@ -13,29 +13,27 @@
                 column: 1,
                 position: 7,
             },
-            condition: Parenthesized {
-                left_parenthesis: Span {
-                    line: 3,
-                    column: 7,
-                    position: 13,
-                },
-                inner: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 3,
-                                column: 8,
-                                position: 14,
-                            },
-                            name: "$foo",
+            left_parenthesis: Span {
+                line: 3,
+                column: 7,
+                position: 13,
+            },
+            condition: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
+                            line: 3,
+                            column: 8,
+                            position: 14,
                         },
-                    ),
+                        name: "$foo",
+                    },
                 ),
-                right_parenthesis: Span {
-                    line: 3,
-                    column: 12,
-                    position: 18,
-                },
+            ),
+            right_parenthesis: Span {
+                line: 3,
+                column: 12,
+                position: 18,
             },
             body: Statement(
                 Noop(

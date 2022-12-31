@@ -13,72 +13,68 @@
                 column: 1,
                 position: 7,
             },
-            iterator: Parenthesized {
-                left_parenthesis: Span {
-                    line: 3,
-                    column: 9,
-                    position: 15,
-                },
-                inner: Value {
-                    expression: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 3,
-                                    column: 10,
-                                    position: 16,
-                                },
-                                name: "$a",
-                            },
-                        ),
-                    ),
-                    as: Span {
-                        line: 3,
-                        column: 13,
-                        position: 19,
-                    },
-                    ampersand: Some(
-                        Span {
-                            line: 3,
-                            column: 16,
-                            position: 22,
-                        },
-                    ),
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 3,
-                                    column: 17,
-                                    position: 23,
-                                },
-                                name: "$b",
-                            },
-                        ),
-                    ),
-                },
-                right_parenthesis: Span {
-                    line: 3,
-                    column: 19,
-                    position: 25,
-                },
+            left_parenthesis: Span {
+                line: 3,
+                column: 9,
+                position: 15,
             },
-            body: Statement(
-                Block(
-                    Braced {
-                        left_brace: Span {
-                            line: 3,
-                            column: 21,
-                            position: 27,
+            iterator: Value {
+                expression: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 3,
+                                column: 10,
+                                position: 16,
+                            },
+                            name: "$a",
                         },
-                        inner: [],
-                        right_brace: Span {
-                            line: 3,
-                            column: 22,
-                            position: 28,
-                        },
+                    ),
+                ),
+                as: Span {
+                    line: 3,
+                    column: 13,
+                    position: 19,
+                },
+                ampersand: Some(
+                    Span {
+                        line: 3,
+                        column: 16,
+                        position: 22,
                     },
                 ),
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 3,
+                                column: 17,
+                                position: 23,
+                            },
+                            name: "$b",
+                        },
+                    ),
+                ),
+            },
+            right_parenthesis: Span {
+                line: 3,
+                column: 19,
+                position: 25,
+            },
+            body: Statement(
+                Block {
+                    left_brace: Span {
+                        line: 3,
+                        column: 21,
+                        position: 27,
+                    },
+                    statements: [],
+                    right_brace: Span {
+                        line: 3,
+                        column: 22,
+                        position: 28,
+                    },
+                },
             ),
         },
     ),
@@ -89,116 +85,115 @@
                 column: 1,
                 position: 31,
             },
-            iterator: Parenthesized {
-                left_parenthesis: Span {
-                    line: 5,
-                    column: 9,
-                    position: 39,
-                },
-                inner: KeyAndValue {
-                    expression: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 5,
-                                    column: 10,
-                                    position: 40,
-                                },
-                                name: "$a",
-                            },
-                        ),
-                    ),
-                    as: Span {
-                        line: 5,
-                        column: 13,
-                        position: 43,
-                    },
-                    ampersand: Some(
-                        Span {
-                            line: 5,
-                            column: 22,
-                            position: 52,
-                        },
-                    ),
-                    key: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 5,
-                                    column: 16,
-                                    position: 46,
-                                },
-                                name: "$b",
-                            },
-                        ),
-                    ),
-                    double_arrow: Span {
-                        line: 5,
-                        column: 19,
-                        position: 49,
-                    },
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 5,
-                                    column: 23,
-                                    position: 53,
-                                },
-                                name: "$c",
-                            },
-                        ),
-                    ),
-                },
-                right_parenthesis: Span {
-                    line: 5,
-                    column: 25,
-                    position: 55,
-                },
+            left_parenthesis: Span {
+                line: 5,
+                column: 9,
+                position: 39,
             },
-            body: Statement(
-                Block(
-                    Braced {
-                        left_brace: Span {
-                            line: 5,
-                            column: 27,
-                            position: 57,
+            iterator: KeyAndValue {
+                expression: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 5,
+                                column: 10,
+                                position: 40,
+                            },
+                            name: "$a",
                         },
-                        inner: [],
-                        right_brace: Span {
-                            line: 5,
-                            column: 28,
-                            position: 58,
-                        },
+                    ),
+                ),
+                as: Span {
+                    line: 5,
+                    column: 13,
+                    position: 43,
+                },
+                ampersand: Some(
+                    Span {
+                        line: 5,
+                        column: 22,
+                        position: 52,
                     },
                 ),
+                key: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 5,
+                                column: 16,
+                                position: 46,
+                            },
+                            name: "$b",
+                        },
+                    ),
+                ),
+                double_arrow: Span {
+                    line: 5,
+                    column: 19,
+                    position: 49,
+                },
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 5,
+                                column: 23,
+                                position: 53,
+                            },
+                            name: "$c",
+                        },
+                    ),
+                ),
+            },
+            right_parenthesis: Span {
+                line: 5,
+                column: 25,
+                position: 55,
+            },
+            body: Statement(
+                Block {
+                    left_brace: Span {
+                        line: 5,
+                        column: 27,
+                        position: 57,
+                    },
+                    statements: [],
+                    right_brace: Span {
+                        line: 5,
+                        column: 28,
+                        position: 58,
+                    },
+                },
             ),
         },
     ),
     Switch {
-        condition: Parenthesized {
-            left_parenthesis: Span {
-                line: 7,
-                column: 8,
-                position: 68,
-            },
-            inner: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span {
-                            line: 7,
-                            column: 9,
-                            position: 69,
-                        },
-                        name: "$a",
+        switch: Span {
+            line: 7,
+            column: 1,
+            position: 61,
+        },
+        left_parenthesis: Span {
+            line: 7,
+            column: 8,
+            position: 68,
+        },
+        condition: Variable(
+            SimpleVariable(
+                SimpleVariable {
+                    span: Span {
+                        line: 7,
+                        column: 9,
+                        position: 69,
                     },
-                ),
+                    name: "$a",
+                },
             ),
-            right_parenthesis: Span {
-                line: 7,
-                column: 11,
-                position: 71,
-            },
+        ),
+        right_parenthesis: Span {
+            line: 7,
+            column: 11,
+            position: 71,
         },
         cases: [
             Case {
@@ -266,105 +261,101 @@
                 column: 1,
                 position: 130,
             },
-            iterator: Parenthesized {
-                left_parenthesis: Span {
-                    line: 14,
-                    column: 9,
-                    position: 138,
-                },
-                inner: Value {
-                    expression: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 14,
-                                    column: 10,
-                                    position: 139,
-                                },
-                                name: "$foo",
+            left_parenthesis: Span {
+                line: 14,
+                column: 9,
+                position: 138,
+            },
+            iterator: Value {
+                expression: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 14,
+                                column: 10,
+                                position: 139,
                             },
-                        ),
+                            name: "$foo",
+                        },
                     ),
-                    as: Span {
-                        line: 14,
-                        column: 15,
-                        position: 144,
-                    },
-                    ampersand: None,
-                    value: ShortArray {
-                        start: Span {
-                            line: 14,
-                            column: 18,
-                            position: 147,
-                        },
-                        items: CommaSeparated {
-                            inner: [
-                                Value {
-                                    value: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 14,
-                                                    column: 19,
-                                                    position: 148,
-                                                },
-                                                name: "$baz",
-                                            },
-                                        ),
-                                    ),
-                                },
-                                Value {
-                                    value: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 14,
-                                                    column: 25,
-                                                    position: 154,
-                                                },
-                                                name: "$car",
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ],
-                            commas: [
-                                Span {
-                                    line: 14,
-                                    column: 23,
-                                    position: 152,
-                                },
-                            ],
-                        },
-                        end: Span {
-                            line: 14,
-                            column: 29,
-                            position: 158,
-                        },
-                    },
-                },
-                right_parenthesis: Span {
+                ),
+                as: Span {
                     line: 14,
-                    column: 30,
-                    position: 159,
+                    column: 15,
+                    position: 144,
+                },
+                ampersand: None,
+                value: ShortArray {
+                    start: Span {
+                        line: 14,
+                        column: 18,
+                        position: 147,
+                    },
+                    items: CommaSeparated {
+                        inner: [
+                            Value {
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 14,
+                                                column: 19,
+                                                position: 148,
+                                            },
+                                            name: "$baz",
+                                        },
+                                    ),
+                                ),
+                            },
+                            Value {
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 14,
+                                                column: 25,
+                                                position: 154,
+                                            },
+                                            name: "$car",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ],
+                        commas: [
+                            Span {
+                                line: 14,
+                                column: 23,
+                                position: 152,
+                            },
+                        ],
+                    },
+                    end: Span {
+                        line: 14,
+                        column: 29,
+                        position: 158,
+                    },
                 },
             },
+            right_parenthesis: Span {
+                line: 14,
+                column: 30,
+                position: 159,
+            },
             body: Statement(
-                Block(
-                    Braced {
-                        left_brace: Span {
-                            line: 14,
-                            column: 32,
-                            position: 161,
-                        },
-                        inner: [],
-                        right_brace: Span {
-                            line: 14,
-                            column: 33,
-                            position: 162,
-                        },
+                Block {
+                    left_brace: Span {
+                        line: 14,
+                        column: 32,
+                        position: 161,
                     },
-                ),
+                    statements: [],
+                    right_brace: Span {
+                        line: 14,
+                        column: 33,
+                        position: 162,
+                    },
+                },
             ),
         },
     ),
@@ -375,83 +366,79 @@
                 column: 1,
                 position: 165,
             },
-            iterator: Parenthesized {
-                left_parenthesis: Span {
+            left_parenthesis: Span {
+                line: 16,
+                column: 9,
+                position: 173,
+            },
+            iterator: KeyAndValue {
+                expression: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 16,
+                                column: 10,
+                                position: 174,
+                            },
+                            name: "$foo",
+                        },
+                    ),
+                ),
+                as: Span {
                     line: 16,
-                    column: 9,
-                    position: 173,
+                    column: 15,
+                    position: 179,
                 },
-                inner: KeyAndValue {
-                    expression: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 16,
-                                    column: 10,
-                                    position: 174,
-                                },
-                                name: "$foo",
+                ampersand: None,
+                key: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 16,
+                                column: 18,
+                                position: 182,
                             },
-                        ),
+                            name: "$bar",
+                        },
                     ),
-                    as: Span {
-                        line: 16,
-                        column: 15,
-                        position: 179,
-                    },
-                    ampersand: None,
-                    key: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 16,
-                                    column: 18,
-                                    position: 182,
-                                },
-                                name: "$bar",
-                            },
-                        ),
-                    ),
-                    double_arrow: Span {
-                        line: 16,
-                        column: 23,
-                        position: 187,
-                    },
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 16,
-                                    column: 26,
-                                    position: 190,
-                                },
-                                name: "$baz",
-                            },
-                        ),
-                    ),
-                },
-                right_parenthesis: Span {
+                ),
+                double_arrow: Span {
                     line: 16,
-                    column: 30,
-                    position: 194,
+                    column: 23,
+                    position: 187,
                 },
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 16,
+                                column: 26,
+                                position: 190,
+                            },
+                            name: "$baz",
+                        },
+                    ),
+                ),
+            },
+            right_parenthesis: Span {
+                line: 16,
+                column: 30,
+                position: 194,
             },
             body: Statement(
-                Block(
-                    Braced {
-                        left_brace: Span {
-                            line: 16,
-                            column: 32,
-                            position: 196,
-                        },
-                        inner: [],
-                        right_brace: Span {
-                            line: 16,
-                            column: 33,
-                            position: 197,
-                        },
+                Block {
+                    left_brace: Span {
+                        line: 16,
+                        column: 32,
+                        position: 196,
                     },
-                ),
+                    statements: [],
+                    right_brace: Span {
+                        line: 16,
+                        column: 33,
+                        position: 197,
+                    },
+                },
             ),
         },
     ),
@@ -462,66 +449,62 @@
                 column: 1,
                 position: 200,
             },
-            iterator: Parenthesized {
-                left_parenthesis: Span {
-                    line: 18,
-                    column: 9,
-                    position: 208,
-                },
-                inner: Value {
-                    expression: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 18,
-                                    column: 10,
-                                    position: 209,
-                                },
-                                name: "$foo",
+            left_parenthesis: Span {
+                line: 18,
+                column: 9,
+                position: 208,
+            },
+            iterator: Value {
+                expression: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 18,
+                                column: 10,
+                                position: 209,
                             },
-                        ),
+                            name: "$foo",
+                        },
                     ),
-                    as: Span {
-                        line: 18,
-                        column: 15,
-                        position: 214,
-                    },
-                    ampersand: None,
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 18,
-                                    column: 18,
-                                    position: 217,
-                                },
-                                name: "$bar",
-                            },
-                        ),
-                    ),
-                },
-                right_parenthesis: Span {
+                ),
+                as: Span {
                     line: 18,
-                    column: 22,
-                    position: 221,
+                    column: 15,
+                    position: 214,
                 },
+                ampersand: None,
+                value: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 18,
+                                column: 18,
+                                position: 217,
+                            },
+                            name: "$bar",
+                        },
+                    ),
+                ),
+            },
+            right_parenthesis: Span {
+                line: 18,
+                column: 22,
+                position: 221,
             },
             body: Statement(
-                Block(
-                    Braced {
-                        left_brace: Span {
-                            line: 18,
-                            column: 24,
-                            position: 223,
-                        },
-                        inner: [],
-                        right_brace: Span {
-                            line: 18,
-                            column: 25,
-                            position: 224,
-                        },
+                Block {
+                    left_brace: Span {
+                        line: 18,
+                        column: 24,
+                        position: 223,
                     },
-                ),
+                    statements: [],
+                    right_brace: Span {
+                        line: 18,
+                        column: 25,
+                        position: 224,
+                    },
+                },
             ),
         },
     ),

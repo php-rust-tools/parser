@@ -35,6 +35,15 @@ pub struct ArgumentList {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
+pub struct SingleArgument {
+    pub comments: CommentGroup,
+    pub left_parenthesis: Span,  // `(`
+    pub argument: Argument,      // `$var`
+    pub right_parenthesis: Span, // `)`
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub struct ArgumentPlaceholder {
     pub comments: CommentGroup,
     pub left_parenthesis: Span,  // `(`

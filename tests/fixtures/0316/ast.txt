@@ -44,75 +44,71 @@
                 column: 5,
                 position: 37,
             },
-            condition: Parenthesized {
-                left_parenthesis: Span {
-                    line: 4,
-                    column: 8,
-                    position: 40,
-                },
-                inner: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 4,
-                                column: 9,
-                                position: 41,
-                            },
-                            name: "$d",
-                        },
-                    ),
-                ),
-                right_parenthesis: Span {
-                    line: 4,
-                    column: 11,
-                    position: 43,
-                },
+            left_parenthesis: Span {
+                line: 4,
+                column: 8,
+                position: 40,
             },
-            body: Statement {
-                statement: Block(
-                    Braced {
-                        left_brace: Span {
+            condition: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
                             line: 4,
-                            column: 13,
-                            position: 45,
+                            column: 9,
+                            position: 41,
                         },
-                        inner: [
-                            Echo {
-                                echo: Span {
-                                    line: 5,
-                                    column: 9,
-                                    position: 55,
-                                },
-                                values: [
-                                    Literal(
-                                        String(
-                                            LiteralString {
-                                                value: ""// "",
-                                                span: Span {
-                                                    line: 5,
-                                                    column: 14,
-                                                    position: 60,
-                                                },
-                                            },
-                                        ),
-                                    ),
-                                ],
-                                ending: Semicolon(
-                                    Span {
-                                        line: 5,
-                                        column: 19,
-                                        position: 65,
-                                    },
-                                ),
-                            },
-                        ],
-                        right_brace: Span {
-                            line: 6,
-                            column: 5,
-                            position: 71,
-                        },
+                        name: "$d",
                     },
                 ),
+            ),
+            right_parenthesis: Span {
+                line: 4,
+                column: 11,
+                position: 43,
+            },
+            body: Statement {
+                statement: Block {
+                    left_brace: Span {
+                        line: 4,
+                        column: 13,
+                        position: 45,
+                    },
+                    statements: [
+                        Echo {
+                            echo: Span {
+                                line: 5,
+                                column: 9,
+                                position: 55,
+                            },
+                            values: [
+                                Literal(
+                                    String(
+                                        LiteralString {
+                                            value: ""// "",
+                                            span: Span {
+                                                line: 5,
+                                                column: 14,
+                                                position: 60,
+                                            },
+                                        },
+                                    ),
+                                ),
+                            ],
+                            ending: Semicolon(
+                                Span {
+                                    line: 5,
+                                    column: 19,
+                                    position: 65,
+                                },
+                            ),
+                        },
+                    ],
+                    right_brace: Span {
+                        line: 6,
+                        column: 5,
+                        position: 71,
+                    },
+                },
                 elseifs: [],
                 else: None,
             },

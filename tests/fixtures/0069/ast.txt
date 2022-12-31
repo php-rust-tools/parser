@@ -13,56 +13,50 @@
                 column: 7,
                 position: 6,
             },
-            body: Block(
-                Braced {
-                    left_brace: Span {
-                        line: 1,
-                        column: 10,
-                        position: 9,
-                    },
-                    inner: [],
-                    right_brace: Span {
-                        line: 1,
-                        column: 12,
-                        position: 11,
-                    },
+            body: Block {
+                left_brace: Span {
+                    line: 1,
+                    column: 10,
+                    position: 9,
                 },
-            ),
+                statements: [],
+                right_brace: Span {
+                    line: 1,
+                    column: 12,
+                    position: 11,
+                },
+            },
             while: Span {
                 line: 1,
                 column: 14,
                 position: 13,
             },
-            condition: SemicolonTerminated {
-                inner: Parenthesized {
-                    left_parenthesis: Span {
-                        line: 1,
-                        column: 20,
-                        position: 19,
+            left_parenthesis: Span {
+                line: 1,
+                column: 20,
+                position: 19,
+            },
+            condition: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
+                            line: 1,
+                            column: 21,
+                            position: 20,
+                        },
+                        name: "$a",
                     },
-                    inner: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 1,
-                                    column: 21,
-                                    position: 20,
-                                },
-                                name: "$a",
-                            },
-                        ),
-                    ),
-                    right_parenthesis: Span {
-                        line: 1,
-                        column: 23,
-                        position: 22,
-                    },
-                },
-                semicolon: Span {
-                    line: 1,
-                    column: 24,
-                    position: 23,
-                },
+                ),
+            ),
+            right_parenthesis: Span {
+                line: 1,
+                column: 23,
+                position: 22,
+            },
+            semicolon: Span {
+                line: 1,
+                column: 24,
+                position: 23,
             },
         },
     ),

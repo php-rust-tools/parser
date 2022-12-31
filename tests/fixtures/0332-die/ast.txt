@@ -1,0 +1,77 @@
+[
+    FullOpeningTag(
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
+    ),
+    Expression {
+        expression: Die {
+            die: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
+            argument: None,
+        },
+        ending: Semicolon(
+            Span {
+                line: 3,
+                column: 4,
+                position: 10,
+            },
+        ),
+    },
+    Expression {
+        expression: Die {
+            die: Span {
+                line: 4,
+                column: 1,
+                position: 12,
+            },
+            argument: Some(
+                SingleArgument {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 4,
+                        column: 4,
+                        position: 15,
+                    },
+                    argument: Positional {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        ellipsis: None,
+                        value: Literal(
+                            Integer(
+                                LiteralInteger {
+                                    value: "1",
+                                    span: Span {
+                                        line: 4,
+                                        column: 5,
+                                        position: 16,
+                                    },
+                                },
+                            ),
+                        ),
+                    },
+                    right_parenthesis: Span {
+                        line: 4,
+                        column: 6,
+                        position: 17,
+                    },
+                },
+            ),
+        },
+        ending: Semicolon(
+            Span {
+                line: 4,
+                column: 7,
+                position: 18,
+            },
+        ),
+    },
+]

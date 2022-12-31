@@ -82,96 +82,92 @@
                                 column: 5,
                                 position: 30,
                             },
-                            condition: Parenthesized {
-                                left_parenthesis: Span {
-                                    line: 4,
-                                    column: 8,
-                                    position: 33,
-                                },
-                                inner: ComparisonOperation(
-                                    LessThan {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 4,
-                                                        column: 9,
-                                                        position: 34,
-                                                    },
-                                                    name: "$n",
+                            left_parenthesis: Span {
+                                line: 4,
+                                column: 8,
+                                position: 33,
+                            },
+                            condition: ComparisonOperation(
+                                LessThan {
+                                    left: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 4,
+                                                    column: 9,
+                                                    position: 34,
                                                 },
-                                            ),
+                                                name: "$n",
+                                            },
                                         ),
-                                        less_than: Span {
-                                            line: 4,
-                                            column: 12,
-                                            position: 37,
-                                        },
-                                        right: Literal(
-                                            Integer(
-                                                LiteralInteger {
-                                                    value: "2",
-                                                    span: Span {
-                                                        line: 4,
-                                                        column: 14,
-                                                        position: 39,
-                                                    },
-                                                },
-                                            ),
-                                        ),
+                                    ),
+                                    less_than: Span {
+                                        line: 4,
+                                        column: 12,
+                                        position: 37,
                                     },
-                                ),
-                                right_parenthesis: Span {
-                                    line: 4,
-                                    column: 15,
-                                    position: 40,
+                                    right: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "2",
+                                                span: Span {
+                                                    line: 4,
+                                                    column: 14,
+                                                    position: 39,
+                                                },
+                                            },
+                                        ),
+                                    ),
                                 },
+                            ),
+                            right_parenthesis: Span {
+                                line: 4,
+                                column: 15,
+                                position: 40,
                             },
                             body: Statement {
-                                statement: Block(
-                                    Braced {
-                                        left_brace: Span {
-                                            line: 4,
-                                            column: 17,
-                                            position: 42,
-                                        },
-                                        inner: [
-                                            Return {
-                                                return: Span {
-                                                    line: 5,
-                                                    column: 9,
-                                                    position: 52,
-                                                },
-                                                value: Some(
-                                                    Variable(
-                                                        SimpleVariable(
-                                                            SimpleVariable {
-                                                                span: Span {
-                                                                    line: 5,
-                                                                    column: 16,
-                                                                    position: 59,
-                                                                },
-                                                                name: "$n",
+                                statement: Block {
+                                    left_brace: Span {
+                                        line: 4,
+                                        column: 17,
+                                        position: 42,
+                                    },
+                                    statements: [
+                                        Return {
+                                            return: Span {
+                                                line: 5,
+                                                column: 9,
+                                                position: 52,
+                                            },
+                                            value: Some(
+                                                Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 5,
+                                                                column: 16,
+                                                                position: 59,
                                                             },
-                                                        ),
+                                                            name: "$n",
+                                                        },
                                                     ),
                                                 ),
-                                                ending: Semicolon(
-                                                    Span {
-                                                        line: 5,
-                                                        column: 18,
-                                                        position: 61,
-                                                    },
-                                                ),
-                                            },
-                                        ],
-                                        right_brace: Span {
-                                            line: 6,
-                                            column: 5,
-                                            position: 67,
+                                            ),
+                                            ending: Semicolon(
+                                                Span {
+                                                    line: 5,
+                                                    column: 18,
+                                                    position: 61,
+                                                },
+                                            ),
                                         },
+                                    ],
+                                    right_brace: Span {
+                                        line: 6,
+                                        column: 5,
+                                        position: 67,
                                     },
-                                ),
+                                },
                                 elseifs: [],
                                 else: None,
                             },
