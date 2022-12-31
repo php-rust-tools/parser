@@ -119,6 +119,7 @@ pub enum Statement {
     Interface(Interface),
     If(IfStatement),
     Switch {
+        switch: Span,
         left_parenthesis: Span,
         condition: Expression,
         right_parenthesis: Span,

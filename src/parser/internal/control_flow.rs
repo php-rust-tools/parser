@@ -106,7 +106,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
 }
 
 pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
-    utils::skip(state, TokenKind::Switch)?;
+    let switch = utils::skip(state, TokenKind::Switch)?;
 
     let (left_parenthesis, condition, right_parenthesis) =
         utils::parenthesized(state, &expressions::create)?;
@@ -177,6 +177,7 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
     }
 
     Ok(Statement::Switch {
+        switch,
         left_parenthesis,
         condition,
         right_parenthesis,
