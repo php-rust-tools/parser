@@ -2075,28 +2075,6 @@
         }
       }
     },
-    "Braced_for_Array_of_Statement": {
-      "type": "object",
-      "required": [
-        "inner",
-        "left_brace",
-        "right_brace"
-      ],
-      "properties": {
-        "inner": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Statement"
-          }
-        },
-        "left_brace": {
-          "$ref": "#/definitions/Span"
-        },
-        "right_brace": {
-          "$ref": "#/definitions/Span"
-        }
-      }
-    },
     "BreakStatement": {
       "type": "object",
       "required": [
@@ -3932,6 +3910,9 @@
         "body",
         "condition",
         "do",
+        "left_parenthesis",
+        "right_parenthesis",
+        "semicolon",
         "while"
       ],
       "properties": {
@@ -3939,9 +3920,18 @@
           "$ref": "#/definitions/Statement"
         },
         "condition": {
-          "$ref": "#/definitions/SemicolonTerminated_for_Parenthesized_for_Expression"
+          "$ref": "#/definitions/Expression"
         },
         "do": {
+          "$ref": "#/definitions/Span"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "semicolon": {
           "$ref": "#/definitions/Span"
         },
         "while": {
@@ -5645,7 +5635,9 @@
               "required": [
                 "arms",
                 "condition",
-                "keyword"
+                "keyword",
+                "left_parenthesis",
+                "right_parenthesis"
               ],
               "properties": {
                 "arms": {
@@ -5655,7 +5647,7 @@
                   }
                 },
                 "condition": {
-                  "$ref": "#/definitions/Parenthesized_for_Expression"
+                  "$ref": "#/definitions/Expression"
                 },
                 "default": {
                   "anyOf": [
@@ -5668,6 +5660,12 @@
                   ]
                 },
                 "keyword": {
+                  "$ref": "#/definitions/Span"
+                },
+                "left_parenthesis": {
+                  "$ref": "#/definitions/Span"
+                },
+                "right_parenthesis": {
                   "$ref": "#/definitions/Span"
                 }
               }
@@ -5873,7 +5871,9 @@
       "required": [
         "body",
         "for",
-        "iterator"
+        "iterator",
+        "left_parenthesis",
+        "right_parenthesis"
       ],
       "properties": {
         "body": {
@@ -5883,7 +5883,13 @@
           "$ref": "#/definitions/Span"
         },
         "iterator": {
-          "$ref": "#/definitions/Parenthesized_for_ForStatementIterator"
+          "$ref": "#/definitions/ForStatementIterator"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -5954,15 +5960,23 @@
       "type": "object",
       "required": [
         "conditions",
+        "conditions_semicolon",
         "initializations",
+        "initializations_semicolon",
         "loop"
       ],
       "properties": {
         "conditions": {
-          "$ref": "#/definitions/SemicolonTerminated_for_CommaSeparated_for_Expression"
+          "$ref": "#/definitions/CommaSeparated_for_Expression"
+        },
+        "conditions_semicolon": {
+          "$ref": "#/definitions/Span"
         },
         "initializations": {
-          "$ref": "#/definitions/SemicolonTerminated_for_CommaSeparated_for_Expression"
+          "$ref": "#/definitions/CommaSeparated_for_Expression"
+        },
+        "initializations_semicolon": {
+          "$ref": "#/definitions/Span"
         },
         "loop": {
           "$ref": "#/definitions/CommaSeparated_for_Expression"
@@ -5974,7 +5988,9 @@
       "required": [
         "body",
         "foreach",
-        "iterator"
+        "iterator",
+        "left_parenthesis",
+        "right_parenthesis"
       ],
       "properties": {
         "body": {
@@ -5984,7 +6000,13 @@
           "$ref": "#/definitions/Span"
         },
         "iterator": {
-          "$ref": "#/definitions/Parenthesized_for_ForeachStatementIterator"
+          "$ref": "#/definitions/ForeachStatementIterator"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -6391,16 +6413,24 @@
       "required": [
         "body",
         "condition",
-        "if"
+        "if",
+        "left_parenthesis",
+        "right_parenthesis"
       ],
       "properties": {
         "body": {
           "$ref": "#/definitions/IfStatementBody"
         },
         "condition": {
-          "$ref": "#/definitions/Parenthesized_for_Expression"
+          "$ref": "#/definitions/Expression"
         },
         "if": {
+          "$ref": "#/definitions/Span"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
           "$ref": "#/definitions/Span"
         }
       }
@@ -6552,13 +6582,21 @@
       "required": [
         "condition",
         "elseif",
+        "left_parenthesis",
+        "right_parenthesis",
         "statement"
       ],
       "properties": {
         "condition": {
-          "$ref": "#/definitions/Parenthesized_for_Expression"
+          "$ref": "#/definitions/Expression"
         },
         "elseif": {
+          "$ref": "#/definitions/Span"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
           "$ref": "#/definitions/Span"
         },
         "statement": {
@@ -6572,6 +6610,8 @@
         "colon",
         "condition",
         "elseif",
+        "left_parenthesis",
+        "right_parenthesis",
         "statements"
       ],
       "properties": {
@@ -6579,9 +6619,15 @@
           "$ref": "#/definitions/Span"
         },
         "condition": {
-          "$ref": "#/definitions/Parenthesized_for_Expression"
+          "$ref": "#/definitions/Expression"
         },
         "elseif": {
+          "$ref": "#/definitions/Span"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
           "$ref": "#/definitions/Span"
         },
         "statements": {
@@ -6757,7 +6803,23 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Parenthesized_for_Level"
+              "type": "object",
+              "required": [
+                "left_parenthesis",
+                "level",
+                "right_parenthesis"
+              ],
+              "properties": {
+                "left_parenthesis": {
+                  "$ref": "#/definitions/Span"
+                },
+                "level": {
+                  "$ref": "#/definitions/Level"
+                },
+                "right_parenthesis": {
+                  "$ref": "#/definitions/Span"
+                }
+              }
             }
           }
         }
@@ -7293,6 +7355,24 @@
               "$ref": "#/definitions/Span"
             }
           }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "compiler_halt_offset"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
+            }
+          }
         }
       ]
     },
@@ -7495,82 +7575,6 @@
           }
         }
       ]
-    },
-    "Parenthesized_for_Expression": {
-      "type": "object",
-      "required": [
-        "inner",
-        "left_parenthesis",
-        "right_parenthesis"
-      ],
-      "properties": {
-        "inner": {
-          "$ref": "#/definitions/Expression"
-        },
-        "left_parenthesis": {
-          "$ref": "#/definitions/Span"
-        },
-        "right_parenthesis": {
-          "$ref": "#/definitions/Span"
-        }
-      }
-    },
-    "Parenthesized_for_ForStatementIterator": {
-      "type": "object",
-      "required": [
-        "inner",
-        "left_parenthesis",
-        "right_parenthesis"
-      ],
-      "properties": {
-        "inner": {
-          "$ref": "#/definitions/ForStatementIterator"
-        },
-        "left_parenthesis": {
-          "$ref": "#/definitions/Span"
-        },
-        "right_parenthesis": {
-          "$ref": "#/definitions/Span"
-        }
-      }
-    },
-    "Parenthesized_for_ForeachStatementIterator": {
-      "type": "object",
-      "required": [
-        "inner",
-        "left_parenthesis",
-        "right_parenthesis"
-      ],
-      "properties": {
-        "inner": {
-          "$ref": "#/definitions/ForeachStatementIterator"
-        },
-        "left_parenthesis": {
-          "$ref": "#/definitions/Span"
-        },
-        "right_parenthesis": {
-          "$ref": "#/definitions/Span"
-        }
-      }
-    },
-    "Parenthesized_for_Level": {
-      "type": "object",
-      "required": [
-        "inner",
-        "left_parenthesis",
-        "right_parenthesis"
-      ],
-      "properties": {
-        "inner": {
-          "$ref": "#/definitions/Level"
-        },
-        "left_parenthesis": {
-          "$ref": "#/definitions/Span"
-        },
-        "right_parenthesis": {
-          "$ref": "#/definitions/Span"
-        }
-      }
     },
     "PromotedPropertyModifier": {
       "oneOf": [
@@ -7860,36 +7864,6 @@
         },
         "data_type": {
           "$ref": "#/definitions/Type"
-        }
-      }
-    },
-    "SemicolonTerminated_for_CommaSeparated_for_Expression": {
-      "type": "object",
-      "required": [
-        "inner",
-        "semicolon"
-      ],
-      "properties": {
-        "inner": {
-          "$ref": "#/definitions/CommaSeparated_for_Expression"
-        },
-        "semicolon": {
-          "$ref": "#/definitions/Span"
-        }
-      }
-    },
-    "SemicolonTerminated_for_Parenthesized_for_Expression": {
-      "type": "object",
-      "required": [
-        "inner",
-        "semicolon"
-      ],
-      "properties": {
-        "inner": {
-          "$ref": "#/definitions/Parenthesized_for_Expression"
-        },
-        "semicolon": {
-          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -8368,7 +8342,9 @@
               "type": "object",
               "required": [
                 "cases",
-                "condition"
+                "condition",
+                "left_parenthesis",
+                "right_parenthesis"
               ],
               "properties": {
                 "cases": {
@@ -8378,7 +8354,13 @@
                   }
                 },
                 "condition": {
-                  "$ref": "#/definitions/Parenthesized_for_Expression"
+                  "$ref": "#/definitions/Expression"
+                },
+                "left_parenthesis": {
+                  "$ref": "#/definitions/Span"
+                },
+                "right_parenthesis": {
+                  "$ref": "#/definitions/Span"
                 }
               }
             }
@@ -8665,7 +8647,26 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Braced_for_Array_of_Statement"
+              "type": "object",
+              "required": [
+                "left_brace",
+                "right_brace",
+                "statements"
+              ],
+              "properties": {
+                "left_brace": {
+                  "$ref": "#/definitions/Span"
+                },
+                "right_brace": {
+                  "$ref": "#/definitions/Span"
+                },
+                "statements": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Statement"
+                  }
+                }
+              }
             }
           }
         },
@@ -10019,6 +10020,8 @@
       "required": [
         "body",
         "condition",
+        "left_parenthesis",
+        "right_parenthesis",
         "while"
       ],
       "properties": {
@@ -10026,7 +10029,13 @@
           "$ref": "#/definitions/WhileStatementBody"
         },
         "condition": {
-          "$ref": "#/definitions/Parenthesized_for_Expression"
+          "$ref": "#/definitions/Expression"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
+          "$ref": "#/definitions/Span"
         },
         "while": {
           "$ref": "#/definitions/Span"
