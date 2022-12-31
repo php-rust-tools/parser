@@ -185,11 +185,13 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
 }
 
 pub fn if_statement(state: &mut State) -> ParseResult<Statement> {
+    let r#if = utils::skip(state, TokenKind::If)?;
+
     let (left_parenthesis, condition, right_parenthesis) =
         utils::parenthesized(state, &expressions::create)?;
 
     Ok(Statement::If(IfStatement {
-        r#if: utils::skip(state, TokenKind::If)?,
+        r#if,
         left_parenthesis,
         condition,
         right_parenthesis,

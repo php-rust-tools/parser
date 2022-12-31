@@ -1,0 +1,72 @@
+[
+    FullOpeningTag(
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
+    ),
+    If(
+        IfStatement {
+            if: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
+            left_parenthesis: Span {
+                line: 1,
+                column: 9,
+                position: 8,
+            },
+            condition: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
+                            line: 1,
+                            column: 10,
+                            position: 9,
+                        },
+                        name: "$foo",
+                    },
+                ),
+            ),
+            right_parenthesis: Span {
+                line: 1,
+                column: 14,
+                position: 13,
+            },
+            body: Statement {
+                statement: Return {
+                    return: Span {
+                        line: 1,
+                        column: 16,
+                        position: 15,
+                    },
+                    value: Some(
+                        Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span {
+                                        line: 1,
+                                        column: 23,
+                                        position: 22,
+                                    },
+                                    name: "$foo",
+                                },
+                            ),
+                        ),
+                    ),
+                    ending: Semicolon(
+                        Span {
+                            line: 1,
+                            column: 27,
+                            position: 26,
+                        },
+                    ),
+                },
+                elseifs: [],
+                else: None,
+            },
+        },
+    ),
+]

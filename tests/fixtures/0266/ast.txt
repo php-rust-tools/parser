@@ -1,0 +1,113 @@
+[
+    FullOpeningTag(
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
+    ),
+    If(
+        IfStatement {
+            if: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
+            left_parenthesis: Span {
+                line: 3,
+                column: 4,
+                position: 10,
+            },
+            condition: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
+                            line: 3,
+                            column: 5,
+                            position: 11,
+                        },
+                        name: "$foo",
+                    },
+                ),
+            ),
+            right_parenthesis: Span {
+                line: 3,
+                column: 9,
+                position: 15,
+            },
+            body: Statement {
+                statement: Block {
+                    left_brace: Span {
+                        line: 3,
+                        column: 11,
+                        position: 17,
+                    },
+                    statements: [],
+                    right_brace: Span {
+                        line: 5,
+                        column: 1,
+                        position: 20,
+                    },
+                },
+                elseifs: [],
+                else: Some(
+                    IfStatementElse {
+                        else: Span {
+                            line: 5,
+                            column: 3,
+                            position: 22,
+                        },
+                        statement: If(
+                            IfStatement {
+                                if: Span {
+                                    line: 5,
+                                    column: 8,
+                                    position: 27,
+                                },
+                                left_parenthesis: Span {
+                                    line: 5,
+                                    column: 11,
+                                    position: 30,
+                                },
+                                condition: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 5,
+                                                column: 12,
+                                                position: 31,
+                                            },
+                                            name: "$bar",
+                                        },
+                                    ),
+                                ),
+                                right_parenthesis: Span {
+                                    line: 5,
+                                    column: 16,
+                                    position: 35,
+                                },
+                                body: Statement {
+                                    statement: Block {
+                                        left_brace: Span {
+                                            line: 5,
+                                            column: 18,
+                                            position: 37,
+                                        },
+                                        statements: [],
+                                        right_brace: Span {
+                                            line: 7,
+                                            column: 1,
+                                            position: 44,
+                                        },
+                                    },
+                                    elseifs: [],
+                                    else: None,
+                                },
+                            },
+                        ),
+                    },
+                ),
+            },
+        },
+    ),
+]

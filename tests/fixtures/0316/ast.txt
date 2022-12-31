@@ -1,0 +1,127 @@
+[
+    EchoOpeningTag(
+        Span {
+            line: 1,
+            column: 1,
+            position: 0,
+        },
+    ),
+    Expression {
+        expression: Literal(
+            String(
+                LiteralString {
+                    value: ""<?php\n"",
+                    span: Span {
+                        line: 1,
+                        column: 5,
+                        position: 4,
+                    },
+                },
+            ),
+        ),
+        ending: CloseTag(
+            Span {
+                line: 1,
+                column: 15,
+                position: 14,
+            },
+        ),
+    },
+    InlineHtml(
+        "\nsome html\n",
+    ),
+    FullOpeningTag(
+        Span {
+            line: 3,
+            column: 1,
+            position: 27,
+        },
+    ),
+    If(
+        IfStatement {
+            if: Span {
+                line: 4,
+                column: 5,
+                position: 37,
+            },
+            left_parenthesis: Span {
+                line: 4,
+                column: 8,
+                position: 40,
+            },
+            condition: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
+                            line: 4,
+                            column: 9,
+                            position: 41,
+                        },
+                        name: "$d",
+                    },
+                ),
+            ),
+            right_parenthesis: Span {
+                line: 4,
+                column: 11,
+                position: 43,
+            },
+            body: Statement {
+                statement: Block {
+                    left_brace: Span {
+                        line: 4,
+                        column: 13,
+                        position: 45,
+                    },
+                    statements: [
+                        Echo {
+                            echo: Span {
+                                line: 5,
+                                column: 9,
+                                position: 55,
+                            },
+                            values: [
+                                Literal(
+                                    String(
+                                        LiteralString {
+                                            value: ""// "",
+                                            span: Span {
+                                                line: 5,
+                                                column: 14,
+                                                position: 60,
+                                            },
+                                        },
+                                    ),
+                                ),
+                            ],
+                            ending: Semicolon(
+                                Span {
+                                    line: 5,
+                                    column: 19,
+                                    position: 65,
+                                },
+                            ),
+                        },
+                    ],
+                    right_brace: Span {
+                        line: 6,
+                        column: 5,
+                        position: 71,
+                    },
+                },
+                elseifs: [],
+                else: None,
+            },
+        },
+    ),
+    ClosingTag(
+        Span {
+            line: 7,
+            column: 1,
+            position: 73,
+        },
+    ),
+    InlineHtml(
+        "\n",
+    ),
+]
