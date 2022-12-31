@@ -7,10 +7,15 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn block_statement(state: &mut State) -> ParseResult<Statement> {
-    Ok(Statement::Block(utils::braced(
-        state,
-        &|state: &mut State| multiple_statements_until(state, &TokenKind::RightBrace),
-    )?))
+    let (left_brace, statements, right_brace) = utils::braced(state, &|state: &mut State| {
+        multiple_statements_until(state, &TokenKind::RightBrace)
+    })?;
+
+    Ok(Statement::Block {
+        left_brace,
+        statements,
+        right_brace,
+    })
 }
 
 pub fn multiple_statements_until(

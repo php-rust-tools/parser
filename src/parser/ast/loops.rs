@@ -5,8 +5,6 @@ use serde::Serialize;
 use crate::lexer::token::Span;
 use crate::parser::ast::literals::LiteralInteger;
 use crate::parser::ast::utils::CommaSeparated;
-use crate::parser::ast::utils::Parenthesized;
-use crate::parser::ast::utils::SemicolonTerminated;
 use crate::parser::ast::Ending;
 use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
@@ -14,9 +12,11 @@ use crate::parser::ast::Statement;
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ForeachStatement {
-    pub foreach: Span,                                     // `foreach`
-    pub iterator: Parenthesized<ForeachStatementIterator>, // `( *expression* as & $var => $value )`
-    pub body: ForeachStatementBody,                        // `{ ... }`
+    pub foreach: Span,                      // `foreach`
+    pub left_parenthesis: Span,             // `(`
+    pub iterator: ForeachStatementIterator, // `( *expression* as & $var => $value )`
+    pub right_parenthesis: Span,            // `)`
+    pub body: ForeachStatementBody,         // `{ ... }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -55,17 +55,21 @@ pub enum ForeachStatementBody {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ForStatement {
-    pub r#for: Span,                                   // `for`
-    pub iterator: Parenthesized<ForStatementIterator>, // `( *expression*; *expression*; *expression* )`
-    pub body: ForStatementBody,                        // `{ ... }`
+    pub r#for: Span,                    // `for`
+    pub left_parenthesis: Span,         // `(`
+    pub iterator: ForStatementIterator, // `*expression*; *expression*; *expression*`
+    pub right_parenthesis: Span,        // `)`
+    pub body: ForStatementBody,         // `{ ... }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ForStatementIterator {
-    pub initializations: SemicolonTerminated<CommaSeparated<Expression>>, // `*expression*;`
-    pub conditions: SemicolonTerminated<CommaSeparated<Expression>>,      // `*expression*;`
-    pub r#loop: CommaSeparated<Expression>,                               // `*expression*`
+    pub initializations: CommaSeparated<Expression>, // `*expression*;`
+    pub initializations_semicolon: Span,             // `;`
+    pub conditions: CommaSeparated<Expression>,      // `*expression*;`
+    pub conditions_semicolon: Span,                  // `;`
+    pub r#loop: CommaSeparated<Expression>,          // `*expression*`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -83,18 +87,23 @@ pub enum ForStatementBody {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct DoWhileStatement {
-    pub r#do: Span,                                                // `do`
-    pub body: Box<Statement>,                                      // `{ ... }`
-    pub r#while: Span,                                             // `while`
-    pub condition: SemicolonTerminated<Parenthesized<Expression>>, // `( *expression* )`
+    pub r#do: Span,              // `do`
+    pub body: Box<Statement>,    // `{ ... }`
+    pub r#while: Span,           // `while`
+    pub left_parenthesis: Span,  // `(`
+    pub condition: Expression,   // `( *expression* )`
+    pub right_parenthesis: Span, // `)`
+    pub semicolon: Span,         // `;`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct WhileStatement {
-    pub r#while: Span,                        // `while`
-    pub condition: Parenthesized<Expression>, // `( *expression* )`
-    pub body: WhileStatementBody,             // `{ ... }`
+    pub r#while: Span,            // `while`
+    pub left_parenthesis: Span,   // `(`
+    pub condition: Expression,    // *expression*
+    pub right_parenthesis: Span,  // `)`
+    pub body: WhileStatementBody, // `{ ... }`
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -113,7 +122,11 @@ pub enum WhileStatementBody {
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Level {
     Literal(LiteralInteger),
-    Parenthesized(Parenthesized<Box<Level>>),
+    Parenthesized {
+        left_parenthesis: Span, // `(`
+        level: Box<Level>,
+        right_parenthesis: Span, // `)`
+    },
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
