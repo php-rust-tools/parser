@@ -44,7 +44,7 @@ fn clone_or_new_precedence(state: &mut State) -> ParseResult<Expression> {
 }
 
 fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expression> {
-    let mut left = left(state)?;
+    let mut left = left(state, &precedence)?;
 
     loop {
         let current = state.stream.current();
@@ -502,12 +502,12 @@ fn for_precedence(state: &mut State, precedence: Precedence) -> ParseResult<Expr
     Ok(left)
 }
 
-fn left(state: &mut State) -> ParseResult<Expression> {
+fn left(state: &mut State, precedence: &Precedence) -> ParseResult<Expression> {
     if state.stream.is_eof() {
         return Err(error::unexpected_token(vec![], state.stream.current()));
     }
 
-    attributes(state)
+    attributes(state, precedence)
 }
 
 macro_rules! expressions {
@@ -515,15 +515,21 @@ macro_rules! expressions {
         using($state:ident):
 
         $(
-            #[before($else:ident), current($(|)? $( $current:pat_param )|+) $(, peek($(|)? $( $peek:pat_param )|+))?]
+            #[before($else:ident), $(precedence($precedence:expr),)? current($(|)? $( $current:pat_param )|+) $(, peek($(|)? $( $peek:pat_param )|+))?]
             $expr:ident($out:tt)
         )+
     ) => {
         $(
-            pub(in crate::parser) fn $expr($state: &mut State) -> ParseResult<Expression> {
+            pub(in crate::parser) fn $expr($state: &mut State, precedence: &Precedence) -> ParseResult<Expression> {
+                $(
+                    if &$precedence < precedence {
+                        return $else($state, precedence);
+                    }
+                )?
+
                 match &$state.stream.current().kind {
                     $( $current )|+ $( if matches!(&$state.stream.peek().kind, $( $peek )|+ ))? => $out,
-                    _ => $else($state),
+                    _ => $else($state, precedence),
                 }
             }
         )+
@@ -658,7 +664,7 @@ expressions! {
         Ok(Expression::Print { print, value, argument })
     })
 
-    #[before(reserved_identifier_static_call), current(
+    #[before(reserved_identifier_static_call), precedence(Precedence::CallDim), current(
         | TokenKind::True       | TokenKind::False | TokenKind::Null
         | TokenKind::Readonly   | TokenKind::Self_ | TokenKind::Parent
         | TokenKind::Enum       | TokenKind::From
@@ -1142,7 +1148,7 @@ expressions! {
     })
 }
 
-fn unexpected_token(state: &mut State) -> ParseResult<Expression> {
+fn unexpected_token(state: &mut State, _: &Precedence) -> ParseResult<Expression> {
     let current = state.stream.current();
 
     Err(error::unexpected_token(vec![], current))

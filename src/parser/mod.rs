@@ -32,6 +32,8 @@ use crate::parser::state::State;
 
 pub use crate::parser::state::stream::TokenStream;
 
+use self::internal::precedences::Precedence;
+
 pub mod ast;
 pub mod error;
 
@@ -143,7 +145,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         &state.stream.lookahead(1).kind,
                     ) {
                         return Ok(Statement::Expression {
-                            expression: expressions::attributes(state)?,
+                            expression: expressions::attributes(state, &Precedence::Lowest)?,
                             ending: utils::skip_ending(state)?,
                         });
                     }
@@ -154,7 +156,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 }
             }
             _ => Statement::Expression {
-                expression: expressions::attributes(state)?,
+                expression: expressions::attributes(state, &Precedence::Lowest)?,
                 ending: utils::skip_ending(state)?,
             },
         }
@@ -207,7 +209,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         &state.stream.lookahead(1).kind,
                     ) {
                         return Ok(Statement::Expression {
-                            expression: expressions::attributes(state)?,
+                            expression: expressions::attributes(state, &Precedence::Lowest)?,
                             ending: utils::skip_ending(state)?,
                         });
                     }
