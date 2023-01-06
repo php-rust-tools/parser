@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::constant::ClassishConstant;
 use crate::parser::ast::functions::AbstractConstructor;
@@ -18,11 +19,27 @@ pub enum InterfaceMember {
     Method(AbstractMethod),           // `public function foo(): void;`
 }
 
+impl Node for InterfaceMember {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            InterfaceMember::Constant(constant) => vec![constant],
+            InterfaceMember::Constructor(constructor) => vec![constructor],
+            InterfaceMember::Method(method) => vec![method],
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct InterfaceExtends {
     pub extends: Span,                             // `extends`
     pub parents: CommaSeparated<SimpleIdentifier>, // `Foo`, `Bar`
+}
+
+impl Node for InterfaceExtends {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.parents.children()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -33,6 +50,12 @@ pub struct InterfaceBody {
     pub right_brace: Span,             // `}`
 }
 
+impl Node for InterfaceBody {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.members.iter().map(|member| member as &dyn Node).collect()
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct InterfaceStatement {
@@ -41,4 +64,14 @@ pub struct InterfaceStatement {
     pub name: SimpleIdentifier,            // `Foo`
     pub extends: Option<InterfaceExtends>, // `extends Bar`
     pub body: InterfaceBody,               // `{ ... }`
+}
+
+impl Node for InterfaceStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.name];
+        if let Some(extends) = &self.extends {
+            children.push(extends);
+        }
+        children
+    }
 }

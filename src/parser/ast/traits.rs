@@ -28,12 +28,33 @@ pub enum TraitMember {
     ConcreteConstructor(ConcreteConstructor),
 }
 
+impl Node for TraitMember {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            TraitMember::Constant(constant) => vec![constant],
+            TraitMember::TraitUsage(usage) => vec![usage],
+            TraitMember::Property(property) => vec![property],
+            TraitMember::VariableProperty(property) => vec![property],
+            TraitMember::AbstractMethod(method) => vec![method],
+            TraitMember::AbstractConstructor(constructor) => vec![constructor],
+            TraitMember::ConcreteMethod(method) => vec![method],
+            TraitMember::ConcreteConstructor(constructor) => vec![constructor],
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct TraitBody {
     pub left_brace: Span,
     pub members: Vec<TraitMember>,
     pub right_brace: Span,
+}
+
+impl Node for TraitBody {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.members.iter().map(|member| member as &dyn Node).collect()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -43,6 +64,12 @@ pub struct TraitStatement {
     pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,
     pub body: TraitBody,
+}
+
+impl Node for TraitStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.name, &self.body]
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
