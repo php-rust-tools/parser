@@ -45,15 +45,29 @@ pub enum IfStatementBody {
 impl Node for IfStatementBody {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
-            IfStatementBody::Statement { statement, elseifs, r#else } => {
+            IfStatementBody::Statement {
+                statement,
+                elseifs,
+                r#else,
+            } => {
                 let mut children: Vec<&dyn Node> = vec![statement.as_ref()];
-                children.extend(elseifs.iter().map(|elseif| elseif as &dyn Node).collect::<Vec<&dyn Node>>());
+                children.extend(
+                    elseifs
+                        .iter()
+                        .map(|elseif| elseif as &dyn Node)
+                        .collect::<Vec<&dyn Node>>(),
+                );
                 if let Some(r#else) = r#else {
                     children.push(r#else as &dyn Node);
                 }
                 children
-            },
-            IfStatementBody::Block { statements, elseifs, r#else, .. } => {
+            }
+            IfStatementBody::Block {
+                statements,
+                elseifs,
+                r#else,
+                ..
+            } => {
                 let mut children: Vec<&dyn Node> = vec![];
                 children.extend(statements.iter().map(|statement| statement as &dyn Node));
                 children.extend(elseifs.iter().map(|elseif| elseif as &dyn Node));
@@ -61,7 +75,7 @@ impl Node for IfStatementBody {
                     children.push(r#else as &dyn Node);
                 }
                 children
-            },
+            }
         }
     }
 }
@@ -109,7 +123,11 @@ pub struct IfStatementElseIfBlock {
 impl Node for IfStatementElseIfBlock {
     fn children(&self) -> Vec<&dyn Node> {
         let mut children: Vec<&dyn Node> = vec![&self.condition];
-        children.extend(self.statements.iter().map(|statement| statement as &dyn Node));
+        children.extend(
+            self.statements
+                .iter()
+                .map(|statement| statement as &dyn Node),
+        );
         children
     }
 }
@@ -124,6 +142,9 @@ pub struct IfStatementElseBlock {
 
 impl Node for IfStatementElseBlock {
     fn children(&self) -> Vec<&dyn Node> {
-        self.statements.iter().map(|statement| statement as &dyn Node).collect()
+        self.statements
+            .iter()
+            .map(|statement| statement as &dyn Node)
+            .collect()
     }
 }

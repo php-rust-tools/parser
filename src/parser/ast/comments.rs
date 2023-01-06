@@ -23,9 +23,7 @@ pub struct Comment {
     pub content: ByteString,
 }
 
-impl Node for Comment {
-    
-}
+impl Node for Comment {}
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]

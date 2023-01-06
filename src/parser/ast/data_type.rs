@@ -147,7 +147,7 @@ impl Node for Type {
             Type::Nullable(_, t) => vec![t.as_ref() as &dyn Node],
             Type::Union(ts) => ts.iter().map(|x| x as &dyn Node).collect(),
             Type::Intersection(ts) => ts.iter().map(|x| x as &dyn Node).collect(),
-            _ => vec![]
+            _ => vec![],
         }
     }
 }

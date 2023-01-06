@@ -27,7 +27,10 @@ pub struct ClassBody {
 
 impl Node for ClassBody {
     fn children(&self) -> Vec<&dyn Node> {
-        self.members.iter().map(|member| member as &dyn Node).collect()
+        self.members
+            .iter()
+            .map(|member| member as &dyn Node)
+            .collect()
     }
 }
 
@@ -68,7 +71,10 @@ pub struct AnonymousClassBody {
 
 impl Node for AnonymousClassBody {
     fn children(&self) -> Vec<&dyn Node> {
-        self.members.iter().map(|member| member as &dyn Node).collect()
+        self.members
+            .iter()
+            .map(|member| member as &dyn Node)
+            .collect()
     }
 }
 

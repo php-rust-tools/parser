@@ -50,7 +50,9 @@ pub enum ForeachStatementIterator {
 impl Node for ForeachStatementIterator {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
-            ForeachStatementIterator::Value { expression, value, .. } => {
+            ForeachStatementIterator::Value {
+                expression, value, ..
+            } => {
                 vec![expression, value]
             }
             ForeachStatementIterator::KeyAndValue {
@@ -138,7 +140,9 @@ impl Node for ForStatementBody {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
             ForStatementBody::Statement(statement) => vec![statement.as_ref()],
-            ForStatementBody::Block { statements, .. } => statements.iter().map(|x| x as &dyn Node).collect(),
+            ForStatementBody::Block { statements, .. } => {
+                statements.iter().map(|x| x as &dyn Node).collect()
+            }
         }
     }
 }
@@ -193,7 +197,9 @@ impl Node for WhileStatementBody {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
             WhileStatementBody::Statement(statement) => vec![statement.as_ref() as &dyn Node],
-            WhileStatementBody::Block { statements, .. } => statements.iter().map(|s| s as &dyn Node).collect(),
+            WhileStatementBody::Block { statements, .. } => {
+                statements.iter().map(|s| s as &dyn Node).collect()
+            }
         }
     }
 }

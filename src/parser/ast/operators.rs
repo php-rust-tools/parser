@@ -68,12 +68,22 @@ pub enum ArithmeticOperation {
 impl Node for ArithmeticOperation {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
-            ArithmeticOperation::Addition { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ArithmeticOperation::Subtraction { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ArithmeticOperation::Multiplication { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ArithmeticOperation::Division { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ArithmeticOperation::Addition { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ArithmeticOperation::Subtraction { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ArithmeticOperation::Multiplication { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ArithmeticOperation::Division { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
             ArithmeticOperation::Modulo { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ArithmeticOperation::Exponentiation { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ArithmeticOperation::Exponentiation { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
             ArithmeticOperation::Negative { right, .. } => vec![right.as_ref()],
             ArithmeticOperation::Positive { right, .. } => vec![right.as_ref()],
             ArithmeticOperation::PreIncrement { right, .. } => vec![right.as_ref()],
@@ -163,19 +173,41 @@ impl Node for AssignmentOperation {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
             AssignmentOperation::Assign { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::Addition { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::Subtraction { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::Multiplication { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::Division { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Addition { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            AssignmentOperation::Subtraction { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            AssignmentOperation::Multiplication { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            AssignmentOperation::Division { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
             AssignmentOperation::Modulo { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::Exponentiation { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Exponentiation { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
             AssignmentOperation::Concat { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::BitwiseAnd { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::BitwiseOr { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::BitwiseXor { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::LeftShift { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::RightShift { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            AssignmentOperation::Coalesce { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::BitwiseAnd { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            AssignmentOperation::BitwiseOr { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            AssignmentOperation::BitwiseXor { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            AssignmentOperation::LeftShift { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            AssignmentOperation::RightShift { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            AssignmentOperation::Coalesce { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
         }
     }
 }
@@ -286,15 +318,33 @@ impl Node for ComparisonOperation {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
             ComparisonOperation::Equal { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ComparisonOperation::Identical { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ComparisonOperation::NotEqual { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ComparisonOperation::AngledNotEqual { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ComparisonOperation::NotIdentical { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ComparisonOperation::LessThan { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ComparisonOperation::GreaterThan { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ComparisonOperation::LessThanOrEqual { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ComparisonOperation::GreaterThanOrEqual { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            ComparisonOperation::Spaceship { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::Identical { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ComparisonOperation::NotEqual { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ComparisonOperation::AngledNotEqual { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ComparisonOperation::NotIdentical { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ComparisonOperation::LessThan { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ComparisonOperation::GreaterThan { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ComparisonOperation::LessThanOrEqual { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ComparisonOperation::GreaterThanOrEqual { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
+            ComparisonOperation::Spaceship { left, right, .. } => {
+                vec![left.as_ref(), right.as_ref()]
+            }
         }
     }
 }

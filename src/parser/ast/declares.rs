@@ -69,11 +69,11 @@ impl Node for DeclareBody {
             DeclareBody::Noop { .. } => vec![],
             DeclareBody::Braced { statements, .. } => {
                 statements.iter().map(|s| s as &dyn Node).collect()
-            },
+            }
             DeclareBody::Expression { expression, .. } => vec![expression],
             DeclareBody::Block { statements, .. } => {
                 statements.iter().map(|s| s as &dyn Node).collect()
-            },
+            }
         }
     }
 }

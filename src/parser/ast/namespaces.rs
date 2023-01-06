@@ -19,7 +19,12 @@ pub struct UnbracedNamespace {
 impl Node for UnbracedNamespace {
     fn children(&self) -> Vec<&dyn Node> {
         let mut children = vec![&self.name as &dyn Node];
-        children.extend(self.statements.iter().map(|s| s as &dyn Node).collect::<Vec<&dyn Node>>());
+        children.extend(
+            self.statements
+                .iter()
+                .map(|s| s as &dyn Node)
+                .collect::<Vec<&dyn Node>>(),
+        );
         children
     }
 }
