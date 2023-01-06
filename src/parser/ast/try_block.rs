@@ -7,6 +7,8 @@ use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Block;
 use crate::parser::ast::Expression;
 
+use super::variables::SimpleVariable;
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum CatchType {
@@ -30,7 +32,7 @@ pub struct CatchBlock {
     pub start: Span,
     pub end: Span,
     pub types: CatchType,
-    pub var: Option<Expression>,
+    pub var: Option<SimpleVariable>,
     pub body: Block,
 }
 

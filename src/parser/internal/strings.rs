@@ -141,7 +141,6 @@ pub fn nowdoc(state: &mut State) -> ParseResult<Expression> {
 
     state.stream.next();
 
-    // TODO(ryangjchandler): this is a hack, but it works for now.
     let mut string_part = state.stream.current().value.clone();
     expect_token!([TokenKind::StringPart => ()], state, "constant string");
 

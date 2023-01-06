@@ -521,7 +521,6 @@ pub enum Expression {
         target: Box<Self>,
     },
 
-    // TODO(azjezz): create a separate structure for `Match`
     Match {
         keyword: Span,
         left_parenthesis: Span,
@@ -549,8 +548,6 @@ pub enum Expression {
     },
     Noop,
 }
-
-// TODO(azjezz): create a separate enum for MatchArm and DefaultMatchArm
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]

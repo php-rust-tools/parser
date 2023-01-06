@@ -12,6 +12,8 @@ use crate::parser::internal::identifiers;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
 
+use super::variables;
+
 pub fn try_block(state: &mut State) -> ParseResult<Statement> {
     let start = state.stream.current().span;
 
@@ -37,8 +39,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
         let var = if state.stream.current().kind == TokenKind::RightParen {
             None
         } else {
-            // TODO(azjezz): this is a variable, no an expression?
-            Some(expressions::create(state)?)
+            Some(variables::simple_variable(state)?)
         };
 
         utils::skip_right_parenthesis(state)?;
