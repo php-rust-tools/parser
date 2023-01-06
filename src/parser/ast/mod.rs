@@ -528,7 +528,6 @@ pub enum Expression {
         condition: Box<Self>,
         right_parenthesis: Span,
         left_brace: Span,
-        // TODO(azjezz): create a separate structure for `default` and `arms` to hold `{` and `}` spans.
         default: Option<Box<DefaultMatchArm>>,
         arms: Vec<MatchArm>,
         right_brace: Span,
