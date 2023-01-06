@@ -710,25 +710,25 @@ pub enum Expression {
 impl Node for Expression {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
-            Expression::Eval { eval, argument } => vec![argument.as_ref()],
-            Expression::Empty { empty, argument } => vec![argument.as_ref()],
-            Expression::Die { die, argument } => {
+            Expression::Eval { eval: _, argument } => vec![argument.as_ref()],
+            Expression::Empty { empty: _, argument } => vec![argument.as_ref()],
+            Expression::Die { die: _, argument } => {
                 if let Some(argument) = argument {
                     vec![argument.as_ref()]
                 } else {
                     vec![]
                 }
             },
-            Expression::Exit { exit, argument } => {
+            Expression::Exit { exit: _, argument } => {
                 if let Some(argument) = argument {
                     vec![argument.as_ref()]
                 } else {
                     vec![]
                 }
             },
-            Expression::Isset { isset, arguments } => vec![arguments],
-            Expression::Unset { unset, arguments } => vec![arguments],
-            Expression::Print { print, value, argument } => {
+            Expression::Isset { isset: _, arguments } => vec![arguments],
+            Expression::Unset { unset: _, arguments } => vec![arguments],
+            Expression::Print { print: _, value, argument } => {
                 if let Some(argument) = argument {
                     vec![argument.as_ref()]
                 } else if let Some(value) = value {
@@ -743,39 +743,39 @@ impl Node for Expression {
             Expression::BitwiseOperation(operation) => vec![operation],
             Expression::ComparisonOperation(operation) => vec![operation],
             Expression::LogicalOperation(operation) => vec![operation],
-            Expression::Concat { left, dot, right } => vec![left.as_ref(), right.as_ref()],
-            Expression::Instanceof { left, instanceof, right } => vec![left.as_ref(), right.as_ref()],
-            Expression::Reference { ampersand, right } => vec![right.as_ref()],
-            Expression::Parenthesized { start, expr, end } => vec![expr.as_ref()],
-            Expression::ErrorSuppress { at, expr } => vec![expr.as_ref()],
+            Expression::Concat { left, dot: _, right } => vec![left.as_ref(), right.as_ref()],
+            Expression::Instanceof { left, instanceof: _, right } => vec![left.as_ref(), right.as_ref()],
+            Expression::Reference { ampersand: _, right } => vec![right.as_ref()],
+            Expression::Parenthesized { start: _, expr, end: _ } => vec![expr.as_ref()],
+            Expression::ErrorSuppress { at: _, expr } => vec![expr.as_ref()],
             Expression::Identifier(identifier) => vec![identifier],
             Expression::Variable(variable) => vec![variable],
-            Expression::Include { include, path } => vec![path.as_ref()],
-            Expression::IncludeOnce { include_once, path } => vec![path.as_ref()],
-            Expression::Require { require, path } => vec![path.as_ref()],
-            Expression::RequireOnce { require_once, path } => vec![path.as_ref()],
+            Expression::Include { include: _, path } => vec![path.as_ref()],
+            Expression::IncludeOnce { include_once: _, path } => vec![path.as_ref()],
+            Expression::Require { require: _, path } => vec![path.as_ref()],
+            Expression::RequireOnce { require_once: _, path } => vec![path.as_ref()],
             Expression::FunctionCall { target, arguments } => vec![target.as_ref(), arguments],
-            Expression::FunctionClosureCreation { target, placeholder } => vec![target.as_ref()],
-            Expression::MethodCall { target, arrow, method, arguments } => vec![target.as_ref(), method.as_ref(), arguments],
-            Expression::MethodClosureCreation { target, arrow, method, placeholder } => vec![target.as_ref(), method.as_ref()],
-            Expression::NullsafeMethodCall { target, question_arrow, method, arguments } => vec![target.as_ref(), method.as_ref(), arguments],
-            Expression::StaticMethodCall { target, double_colon, method, arguments } => vec![target.as_ref(), method, arguments],
-            Expression::StaticVariableMethodCall { target, double_colon, method, arguments } => vec![target.as_ref(), method, arguments],
-            Expression::StaticMethodClosureCreation { target, double_colon, method, placeholder } => vec![target.as_ref(), method],
-            Expression::StaticVariableMethodClosureCreation { target, double_colon, method, placeholder } => vec![target.as_ref(), method],
-            Expression::PropertyFetch { target, arrow, property } => vec![target.as_ref(), property.as_ref()],
-            Expression::NullsafePropertyFetch { target, question_arrow, property } => vec![target.as_ref(), property.as_ref()],
-            Expression::StaticPropertyFetch { target, double_colon, property } => vec![target.as_ref(), property],
-            Expression::ConstantFetch { target, double_colon, constant } => vec![target.as_ref(), constant],
+            Expression::FunctionClosureCreation { target, placeholder: _ } => vec![target.as_ref()],
+            Expression::MethodCall { target, arrow: _, method, arguments } => vec![target.as_ref(), method.as_ref(), arguments],
+            Expression::MethodClosureCreation { target, arrow: _, method, placeholder: _ } => vec![target.as_ref(), method.as_ref()],
+            Expression::NullsafeMethodCall { target, question_arrow: _, method, arguments } => vec![target.as_ref(), method.as_ref(), arguments],
+            Expression::StaticMethodCall { target, double_colon: _, method, arguments } => vec![target.as_ref(), method, arguments],
+            Expression::StaticVariableMethodCall { target, double_colon: _, method, arguments } => vec![target.as_ref(), method, arguments],
+            Expression::StaticMethodClosureCreation { target, double_colon: _, method, placeholder: _ } => vec![target.as_ref(), method],
+            Expression::StaticVariableMethodClosureCreation { target, double_colon: _, method, placeholder: _ } => vec![target.as_ref(), method],
+            Expression::PropertyFetch { target, arrow: _, property } => vec![target.as_ref(), property.as_ref()],
+            Expression::NullsafePropertyFetch { target, question_arrow: _, property } => vec![target.as_ref(), property.as_ref()],
+            Expression::StaticPropertyFetch { target, double_colon: _, property } => vec![target.as_ref(), property],
+            Expression::ConstantFetch { target, double_colon: _, constant } => vec![target.as_ref(), constant],
             Expression::Static => vec![],
             Expression::Self_ => vec![],
             Expression::Parent => vec![],
-            Expression::ShortArray { start, items, end } => vec![items],
-            Expression::Array { array, start, items, end } => vec![items],
-            Expression::List { list, start, items, end } => items.iter().map(|item| item as &dyn Node).collect(),
+            Expression::ShortArray { start: _, items, end: _ } => vec![items],
+            Expression::Array { array: _, start: _, items, end: _ } => vec![items],
+            Expression::List { list: _, start: _, items, end: _ } => items.iter().map(|item| item as &dyn Node).collect(),
             Expression::Closure(closure) => closure.children(),
             Expression::ArrowFunction(function) => function.children(),
-            Expression::New { new, target, arguments } => {
+            Expression::New { new: _, target, arguments } => {
                 let mut children: Vec<&dyn Node> = vec![target.as_ref()];
                 if let Some(arguments) = arguments {
                     children.push(arguments);
@@ -784,11 +784,11 @@ impl Node for Expression {
             },
             Expression::InterpolatedString { parts } => parts.iter().map(|part| part as &dyn Node).collect(),
             Expression::Heredoc { parts } => parts.iter().map(|part| part as &dyn Node).collect(),
-            Expression::Nowdoc { value } => vec![],
+            Expression::Nowdoc { value: _ } => vec![],
             Expression::ShellExec { parts } => parts.iter().map(|part| part as &dyn Node).collect(),
             Expression::AnonymousClass(class) => class.children(),
-            Expression::Bool { value } => vec![],
-            Expression::ArrayIndex { array, left_bracket, index, right_bracket } => {
+            Expression::Bool { value: _ } => vec![],
+            Expression::ArrayIndex { array: _, left_bracket: _, index, right_bracket: _ } => {
                 let mut children: Vec<&dyn Node> = vec![];
                 if let Some(index) = index {
                     children.push(index.as_ref());
@@ -797,11 +797,11 @@ impl Node for Expression {
             },
             Expression::Null => vec![],
             Expression::MagicConstant(constant) => constant.children(),
-            Expression::ShortTernary { condition, question_colon, r#else } => vec![condition.as_ref(), r#else.as_ref()],
-            Expression::Ternary { condition, question, then, colon, r#else } => vec![condition.as_ref(), then.as_ref(), r#else.as_ref()],
-            Expression::Coalesce { lhs, double_question, rhs } => vec![lhs.as_ref(), rhs.as_ref()],
+            Expression::ShortTernary { condition, question_colon: _, r#else } => vec![condition.as_ref(), r#else.as_ref()],
+            Expression::Ternary { condition, question: _, then, colon: _, r#else } => vec![condition.as_ref(), then.as_ref(), r#else.as_ref()],
+            Expression::Coalesce { lhs, double_question: _, rhs } => vec![lhs.as_ref(), rhs.as_ref()],
             Expression::Clone { target } => vec![target.as_ref()],
-            Expression::Match { keyword, left_parenthesis, condition, right_parenthesis, left_brace, default, arms, right_brace } => {
+            Expression::Match { keyword: _, left_parenthesis: _, condition, right_parenthesis: _, left_brace: _, default, arms, right_brace: _ } => {
                 let mut children: Vec<&dyn Node> = vec![condition.as_ref()];
                 if let Some(default) = default {
                     children.push(default.as_ref());
@@ -821,7 +821,7 @@ impl Node for Expression {
                 children
             },
             Expression::YieldFrom { value } => vec![value.as_ref()],
-            Expression::Cast { cast, kind, value } => vec![value.as_ref()],
+            Expression::Cast { cast: _, kind: _, value } => vec![value.as_ref()],
             Expression::Noop => vec![],
         }
     }
@@ -924,10 +924,10 @@ impl Node for ArrayItem {
         match self {
             ArrayItem::Skipped => vec![],
             ArrayItem::Value { value } => vec![value],
-            ArrayItem::ReferencedValue { ampersand, value } => vec![value],
-            ArrayItem::SpreadValue { ellipsis, value } => vec![value],
-            ArrayItem::KeyValue { key, double_arrow, value } => vec![key, value],
-            ArrayItem::ReferencedKeyValue { key, double_arrow, ampersand, value } => vec![key, value],
+            ArrayItem::ReferencedValue { ampersand: _, value } => vec![value],
+            ArrayItem::SpreadValue { ellipsis: _, value } => vec![value],
+            ArrayItem::KeyValue { key, double_arrow: _, value } => vec![key, value],
+            ArrayItem::ReferencedKeyValue { key, double_arrow: _, ampersand: _, value } => vec![key, value],
         }
     }
 }
@@ -951,7 +951,7 @@ impl Node for ListEntry {
         match self {
             ListEntry::Skipped => vec![],
             ListEntry::Value { value } => vec![value],
-            ListEntry::KeyValue { key, double_arrow, value } => vec![key, value],
+            ListEntry::KeyValue { key, double_arrow: _, value } => vec![key, value],
         }
     }
 }
