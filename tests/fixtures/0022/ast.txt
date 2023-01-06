@@ -62,34 +62,36 @@
                     position: 25,
                 },
                 statements: [
-                    Echo {
-                        echo: Span {
-                            line: 4,
-                            column: 5,
-                            position: 32,
-                        },
-                        values: [
-                            Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 4,
-                                            column: 10,
-                                            position: 37,
-                                        },
-                                        name: "$a",
-                                    },
-                                ),
-                            ),
-                        ],
-                        ending: Semicolon(
-                            Span {
+                    Echo(
+                        EchoStatement {
+                            echo: Span {
                                 line: 4,
-                                column: 12,
-                                position: 39,
+                                column: 5,
+                                position: 32,
                             },
-                        ),
-                    },
+                            values: [
+                                Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 4,
+                                                column: 10,
+                                                position: 37,
+                                            },
+                                            name: "$a",
+                                        },
+                                    ),
+                                ),
+                            ],
+                            ending: Semicolon(
+                                Span {
+                                    line: 4,
+                                    column: 12,
+                                    position: 39,
+                                },
+                            ),
+                        },
+                    ),
                 ],
                 endforeach: Span {
                     line: 5,
@@ -133,27 +135,29 @@
                     position: 66,
                 },
                 statements: [
-                    Expression {
-                        expression: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 8,
-                                        column: 5,
-                                        position: 72,
+                    Expression(
+                        ExpressionStatement {
+                            expression: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 8,
+                                            column: 5,
+                                            position: 72,
+                                        },
+                                        name: "$a",
                                     },
-                                    name: "$a",
+                                ),
+                            ),
+                            ending: Semicolon(
+                                Span {
+                                    line: 8,
+                                    column: 7,
+                                    position: 74,
                                 },
                             ),
-                        ),
-                        ending: Semicolon(
-                            Span {
-                                line: 8,
-                                column: 7,
-                                position: 74,
-                            },
-                        ),
-                    },
+                        },
+                    ),
                 ],
                 endwhile: Span {
                     line: 9,
@@ -257,27 +261,29 @@
                     position: 103,
                 },
                 statements: [
-                    Expression {
-                        expression: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 12,
-                                        column: 5,
-                                        position: 110,
+                    Expression(
+                        ExpressionStatement {
+                            expression: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 12,
+                                            column: 5,
+                                            position: 110,
+                                        },
+                                        name: "$d",
                                     },
-                                    name: "$d",
+                                ),
+                            ),
+                            ending: Semicolon(
+                                Span {
+                                    line: 12,
+                                    column: 7,
+                                    position: 112,
                                 },
                             ),
-                        ),
-                        ending: Semicolon(
-                            Span {
-                                line: 12,
-                                column: 7,
-                                position: 112,
-                            },
-                        ),
-                    },
+                        },
+                    ),
                 ],
                 endfor: Span {
                     line: 13,

@@ -6,23 +6,25 @@
             position: 0,
         },
     ),
-    Global {
-        global: Span {
-            line: 1,
-            column: 7,
-            position: 6,
-        },
-        variables: [
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span {
-                        line: 1,
-                        column: 14,
-                        position: 13,
+    Global(
+        GlobalStatement {
+            global: Span {
+                line: 1,
+                column: 7,
+                position: 6,
+            },
+            variables: [
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
+                            line: 1,
+                            column: 14,
+                            position: 13,
+                        },
+                        name: "$a",
                     },
-                    name: "$a",
-                },
-            ),
-        ],
-    },
+                ),
+            ],
+        },
+    ),
 ]

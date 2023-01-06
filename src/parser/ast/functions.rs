@@ -53,7 +53,7 @@ pub struct FunctionBody {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Function {
+pub struct FunctionStatement {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,
     pub function: Span,

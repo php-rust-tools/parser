@@ -7,7 +7,7 @@
         },
     ),
     Class(
-        Class {
+        ClassStatement {
             attributes: [],
             modifiers: ClassModifierGroup {
                 modifiers: [],
@@ -87,34 +87,36 @@
                                     position: 38,
                                 },
                                 statements: [
-                                    Echo {
-                                        echo: Span {
-                                            line: 5,
-                                            column: 9,
-                                            position: 48,
-                                        },
-                                        values: [
-                                            Literal(
-                                                Integer(
-                                                    LiteralInteger {
-                                                        value: "1",
-                                                        span: Span {
-                                                            line: 5,
-                                                            column: 14,
-                                                            position: 53,
-                                                        },
-                                                    },
-                                                ),
-                                            ),
-                                        ],
-                                        ending: Semicolon(
-                                            Span {
+                                    Echo(
+                                        EchoStatement {
+                                            echo: Span {
                                                 line: 5,
-                                                column: 15,
-                                                position: 54,
+                                                column: 9,
+                                                position: 48,
                                             },
-                                        ),
-                                    },
+                                            values: [
+                                                Literal(
+                                                    Integer(
+                                                        LiteralInteger {
+                                                            value: "1",
+                                                            span: Span {
+                                                                line: 5,
+                                                                column: 14,
+                                                                position: 53,
+                                                            },
+                                                        },
+                                                    ),
+                                                ),
+                                            ],
+                                            ending: Semicolon(
+                                                Span {
+                                                    line: 5,
+                                                    column: 15,
+                                                    position: 54,
+                                                },
+                                            ),
+                                        },
+                                    ),
                                 ],
                                 right_brace: Span {
                                     line: 6,

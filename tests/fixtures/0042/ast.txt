@@ -6,32 +6,34 @@
             position: 0,
         },
     ),
-    Echo {
-        echo: Span {
-            line: 1,
-            column: 7,
-            position: 6,
-        },
-        values: [
-            Literal(
-                Integer(
-                    LiteralInteger {
-                        value: "1",
-                        span: Span {
-                            line: 1,
-                            column: 12,
-                            position: 11,
-                        },
-                    },
-                ),
-            ),
-        ],
-        ending: Semicolon(
-            Span {
+    Echo(
+        EchoStatement {
+            echo: Span {
                 line: 1,
-                column: 13,
-                position: 12,
+                column: 7,
+                position: 6,
             },
-        ),
-    },
+            values: [
+                Literal(
+                    Integer(
+                        LiteralInteger {
+                            value: "1",
+                            span: Span {
+                                line: 1,
+                                column: 12,
+                                position: 11,
+                            },
+                        },
+                    ),
+                ),
+            ],
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 13,
+                    position: 12,
+                },
+            ),
+        },
+    ),
 ]

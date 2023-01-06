@@ -6,72 +6,76 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Exit {
-            exit: Span {
-                line: 3,
-                column: 1,
-                position: 7,
+    Expression(
+        ExpressionStatement {
+            expression: Exit {
+                exit: Span {
+                    line: 3,
+                    column: 1,
+                    position: 7,
+                },
+                argument: None,
             },
-            argument: None,
-        },
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 5,
-                position: 11,
-            },
-        ),
-    },
-    Expression {
-        expression: Exit {
-            exit: Span {
-                line: 4,
-                column: 1,
-                position: 13,
-            },
-            argument: Some(
-                SingleArgument {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
-                        line: 4,
-                        column: 5,
-                        position: 17,
-                    },
-                    argument: Positional {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        ellipsis: None,
-                        value: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "1",
-                                    span: Span {
-                                        line: 4,
-                                        column: 6,
-                                        position: 18,
-                                    },
-                                },
-                            ),
-                        ),
-                    },
-                    right_parenthesis: Span {
-                        line: 4,
-                        column: 7,
-                        position: 19,
-                    },
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 5,
+                    position: 11,
                 },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 4,
-                column: 8,
-                position: 20,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: Exit {
+                exit: Span {
+                    line: 4,
+                    column: 1,
+                    position: 13,
+                },
+                argument: Some(
+                    SingleArgument {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        left_parenthesis: Span {
+                            line: 4,
+                            column: 5,
+                            position: 17,
+                        },
+                        argument: Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "1",
+                                        span: Span {
+                                            line: 4,
+                                            column: 6,
+                                            position: 18,
+                                        },
+                                    },
+                                ),
+                            ),
+                        },
+                        right_parenthesis: Span {
+                            line: 4,
+                            column: 7,
+                            position: 19,
+                        },
+                    },
+                ),
             },
-        ),
-    },
+            ending: Semicolon(
+                Span {
+                    line: 4,
+                    column: 8,
+                    position: 20,
+                },
+            ),
+        },
+    ),
 ]

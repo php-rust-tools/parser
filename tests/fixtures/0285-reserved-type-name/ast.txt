@@ -7,7 +7,7 @@
         },
     ),
     Class(
-        Class {
+        ClassStatement {
             attributes: [],
             modifiers: ClassModifierGroup {
                 modifiers: [],
@@ -43,7 +43,7 @@
         },
     ),
     Interface(
-        Interface {
+        InterfaceStatement {
             attributes: [],
             interface: Span {
                 line: 5,
@@ -75,7 +75,7 @@
         },
     ),
     Trait(
-        Trait {
+        TraitStatement {
             trait: Span {
                 line: 6,
                 column: 1,
@@ -106,7 +106,7 @@
         },
     ),
     UnitEnum(
-        UnitEnum {
+        UnitEnumStatement {
             attributes: [],
             enum: Span {
                 line: 7,
@@ -138,7 +138,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -212,7 +212,7 @@
         },
     ),
     Class(
-        Class {
+        ClassStatement {
             attributes: [],
             modifiers: ClassModifierGroup {
                 modifiers: [],
@@ -248,7 +248,7 @@
         },
     ),
     Interface(
-        Interface {
+        InterfaceStatement {
             attributes: [],
             interface: Span {
                 line: 11,
@@ -280,7 +280,7 @@
         },
     ),
     Trait(
-        Trait {
+        TraitStatement {
             trait: Span {
                 line: 12,
                 column: 1,
@@ -311,7 +311,7 @@
         },
     ),
     UnitEnum(
-        UnitEnum {
+        UnitEnumStatement {
             attributes: [],
             enum: Span {
                 line: 13,
@@ -343,7 +343,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -416,692 +416,724 @@
             },
         },
     ),
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 16,
-                            column: 1,
-                            position: 179,
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 16,
+                                column: 1,
+                                position: 179,
+                            },
+                            value: "from",
                         },
-                        value: "from",
-                    },
+                    ),
                 ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 16,
+                        column: 5,
+                        position: 183,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 16,
+                        column: 6,
+                        position: 184,
+                    },
                 },
-                left_parenthesis: Span {
+            },
+            ending: Semicolon(
+                Span {
                     line: 16,
-                    column: 5,
-                    position: 183,
+                    column: 7,
+                    position: 185,
                 },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 16,
-                    column: 6,
-                    position: 184,
-                },
-            },
-        },
-        ending: Semicolon(
-            Span {
-                line: 16,
-                column: 7,
-                position: 185,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 17,
-                            column: 1,
-                            position: 187,
-                        },
-                        value: "enum",
-                    },
-                ),
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 17,
+                                column: 1,
+                                position: 187,
+                            },
+                            value: "enum",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 17,
+                        column: 5,
+                        position: 191,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 17,
+                        column: 6,
+                        position: 192,
+                    },
                 },
-                left_parenthesis: Span {
+            },
+            ending: Semicolon(
+                Span {
                     line: 17,
-                    column: 5,
-                    position: 191,
+                    column: 7,
+                    position: 193,
                 },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 17,
-                    column: 6,
-                    position: 192,
-                },
-            },
-        },
-        ending: Semicolon(
-            Span {
-                line: 17,
-                column: 7,
-                position: 193,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 19,
-                            column: 1,
-                            position: 196,
-                        },
-                        value: "frOm",
-                    },
-                ),
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 19,
-                    column: 5,
-                    position: 200,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 19,
-                    column: 6,
-                    position: 201,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 19,
-                column: 7,
-                position: 202,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 20,
-                            column: 1,
-                            position: 204,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 19,
+                                column: 1,
+                                position: 196,
+                            },
+                            value: "frOm",
                         },
-                        value: "eNum",
-                    },
+                    ),
                 ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 19,
+                        column: 5,
+                        position: 200,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 19,
+                        column: 6,
+                        position: 201,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 19,
+                    column: 7,
+                    position: 202,
+                },
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 20,
-                    column: 5,
-                    position: 208,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 20,
-                    column: 6,
-                    position: 209,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 20,
-                column: 7,
-                position: 210,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 20,
+                                column: 1,
+                                position: 204,
+                            },
+                            value: "eNum",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 20,
+                        column: 5,
+                        position: 208,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 20,
+                        column: 6,
+                        position: 209,
+                    },
+                },
             },
-        ),
-    },
-    Expression {
-        expression: StaticMethodCall {
-            target: Identifier(
-                SimpleIdentifier(
+            ending: Semicolon(
+                Span {
+                    line: 20,
+                    column: 7,
+                    position: 210,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: StaticMethodCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 22,
+                                column: 1,
+                                position: 213,
+                            },
+                            value: "Enum",
+                        },
+                    ),
+                ),
+                double_colon: Span {
+                    line: 22,
+                    column: 5,
+                    position: 217,
+                },
+                method: SimpleIdentifier(
                     SimpleIdentifier {
                         span: Span {
                             line: 22,
-                            column: 1,
-                            position: 213,
+                            column: 7,
+                            position: 219,
                         },
-                        value: "Enum",
+                        value: "foo",
                     },
                 ),
-            ),
-            double_colon: Span {
-                line: 22,
-                column: 5,
-                position: 217,
-            },
-            method: SimpleIdentifier(
-                SimpleIdentifier {
-                    span: Span {
-                        line: 22,
-                        column: 7,
-                        position: 219,
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
                     },
-                    value: "foo",
+                    left_parenthesis: Span {
+                        line: 22,
+                        column: 10,
+                        position: 222,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 22,
+                        column: 11,
+                        position: 223,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 22,
+                    column: 12,
+                    position: 224,
                 },
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 22,
-                    column: 10,
-                    position: 222,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 22,
-                    column: 11,
-                    position: 223,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 22,
-                column: 12,
-                position: 224,
-            },
-        ),
-    },
-    Expression {
-        expression: StaticMethodCall {
-            target: Identifier(
-                SimpleIdentifier(
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: StaticMethodCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 23,
+                                column: 1,
+                                position: 226,
+                            },
+                            value: "From",
+                        },
+                    ),
+                ),
+                double_colon: Span {
+                    line: 23,
+                    column: 5,
+                    position: 230,
+                },
+                method: SimpleIdentifier(
                     SimpleIdentifier {
                         span: Span {
                             line: 23,
-                            column: 1,
-                            position: 226,
+                            column: 7,
+                            position: 232,
                         },
-                        value: "From",
+                        value: "foo",
                     },
                 ),
-            ),
-            double_colon: Span {
-                line: 23,
-                column: 5,
-                position: 230,
-            },
-            method: SimpleIdentifier(
-                SimpleIdentifier {
-                    span: Span {
-                        line: 23,
-                        column: 7,
-                        position: 232,
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
                     },
-                    value: "foo",
+                    left_parenthesis: Span {
+                        line: 23,
+                        column: 10,
+                        position: 235,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 23,
+                        column: 11,
+                        position: 236,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 23,
+                    column: 12,
+                    position: 237,
                 },
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 23,
-                    column: 10,
-                    position: 235,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 23,
-                    column: 11,
-                    position: 236,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 23,
-                column: 12,
-                position: 237,
-            },
-        ),
-    },
-    Expression {
-        expression: StaticMethodCall {
-            target: Identifier(
-                SimpleIdentifier(
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: StaticMethodCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 25,
+                                column: 1,
+                                position: 240,
+                            },
+                            value: "enum",
+                        },
+                    ),
+                ),
+                double_colon: Span {
+                    line: 25,
+                    column: 5,
+                    position: 244,
+                },
+                method: SimpleIdentifier(
                     SimpleIdentifier {
                         span: Span {
                             line: 25,
-                            column: 1,
-                            position: 240,
+                            column: 7,
+                            position: 246,
                         },
-                        value: "enum",
+                        value: "foo",
                     },
                 ),
-            ),
-            double_colon: Span {
-                line: 25,
-                column: 5,
-                position: 244,
-            },
-            method: SimpleIdentifier(
-                SimpleIdentifier {
-                    span: Span {
-                        line: 25,
-                        column: 7,
-                        position: 246,
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
                     },
-                    value: "foo",
+                    left_parenthesis: Span {
+                        line: 25,
+                        column: 10,
+                        position: 249,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 25,
+                        column: 11,
+                        position: 250,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 25,
+                    column: 12,
+                    position: 251,
                 },
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 25,
-                    column: 10,
-                    position: 249,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 25,
-                    column: 11,
-                    position: 250,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 25,
-                column: 12,
-                position: 251,
-            },
-        ),
-    },
-    Expression {
-        expression: StaticMethodCall {
-            target: Identifier(
-                SimpleIdentifier(
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: StaticMethodCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 26,
+                                column: 1,
+                                position: 253,
+                            },
+                            value: "from",
+                        },
+                    ),
+                ),
+                double_colon: Span {
+                    line: 26,
+                    column: 5,
+                    position: 257,
+                },
+                method: SimpleIdentifier(
                     SimpleIdentifier {
                         span: Span {
                             line: 26,
-                            column: 1,
-                            position: 253,
+                            column: 7,
+                            position: 259,
                         },
-                        value: "from",
+                        value: "foo",
                     },
                 ),
-            ),
-            double_colon: Span {
-                line: 26,
-                column: 5,
-                position: 257,
-            },
-            method: SimpleIdentifier(
-                SimpleIdentifier {
-                    span: Span {
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
                         line: 26,
-                        column: 7,
-                        position: 259,
+                        column: 10,
+                        position: 262,
                     },
-                    value: "foo",
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 26,
+                        column: 11,
+                        position: 263,
+                    },
                 },
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
+            },
+            ending: Semicolon(
+                Span {
                     line: 26,
-                    column: 10,
-                    position: 262,
+                    column: 12,
+                    position: 264,
                 },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 26,
-                    column: 11,
-                    position: 263,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: Instanceof {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 28,
+                                column: 1,
+                                position: 267,
+                            },
+                            name: "$a",
+                        },
+                    ),
+                ),
+                instanceof: Span {
+                    line: 28,
+                    column: 4,
+                    position: 270,
                 },
-            },
-        },
-        ending: Semicolon(
-            Span {
-                line: 26,
-                column: 12,
-                position: 264,
-            },
-        ),
-    },
-    Expression {
-        expression: Instanceof {
-            left: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span {
-                            line: 28,
-                            column: 1,
-                            position: 267,
+                right: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 28,
+                                column: 15,
+                                position: 281,
+                            },
+                            value: "enum",
                         },
-                        name: "$a",
-                    },
+                    ),
                 ),
-            ),
-            instanceof: Span {
-                line: 28,
-                column: 4,
-                position: 270,
             },
-            right: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 28,
-                            column: 15,
-                            position: 281,
-                        },
-                        value: "enum",
-                    },
-                ),
+            ending: Semicolon(
+                Span {
+                    line: 28,
+                    column: 19,
+                    position: 285,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 28,
-                column: 19,
-                position: 285,
-            },
-        ),
-    },
-    Expression {
-        expression: Instanceof {
-            left: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span {
-                            line: 29,
-                            column: 1,
-                            position: 287,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: Instanceof {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 29,
+                                column: 1,
+                                position: 287,
+                            },
+                            name: "$a",
                         },
-                        name: "$a",
-                    },
+                    ),
                 ),
-            ),
-            instanceof: Span {
-                line: 29,
-                column: 4,
-                position: 290,
-            },
-            right: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 29,
-                            column: 15,
-                            position: 301,
+                instanceof: Span {
+                    line: 29,
+                    column: 4,
+                    position: 290,
+                },
+                right: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 29,
+                                column: 15,
+                                position: 301,
+                            },
+                            value: "from",
                         },
-                        value: "from",
-                    },
+                    ),
                 ),
-            ),
-        },
-        ending: Semicolon(
-            Span {
-                line: 29,
-                column: 19,
-                position: 305,
             },
-        ),
-    },
-    Expression {
-        expression: Instanceof {
-            left: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span {
-                            line: 31,
-                            column: 1,
-                            position: 308,
-                        },
-                        name: "$a",
-                    },
-                ),
-            ),
-            instanceof: Span {
-                line: 31,
-                column: 4,
-                position: 311,
-            },
-            right: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 31,
-                            column: 15,
-                            position: 322,
-                        },
-                        value: "enum",
-                    },
-                ),
+            ending: Semicolon(
+                Span {
+                    line: 29,
+                    column: 19,
+                    position: 305,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 31,
-                column: 19,
-                position: 326,
-            },
-        ),
-    },
-    Expression {
-        expression: Instanceof {
-            left: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span {
-                            line: 32,
-                            column: 1,
-                            position: 328,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: Instanceof {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 31,
+                                column: 1,
+                                position: 308,
+                            },
+                            name: "$a",
                         },
-                        name: "$a",
-                    },
+                    ),
                 ),
-            ),
-            instanceof: Span {
-                line: 32,
-                column: 4,
-                position: 331,
-            },
-            right: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 32,
-                            column: 15,
-                            position: 342,
+                instanceof: Span {
+                    line: 31,
+                    column: 4,
+                    position: 311,
+                },
+                right: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 31,
+                                column: 15,
+                                position: 322,
+                            },
+                            value: "enum",
                         },
-                        value: "from",
-                    },
+                    ),
                 ),
+            },
+            ending: Semicolon(
+                Span {
+                    line: 31,
+                    column: 19,
+                    position: 326,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 32,
-                column: 19,
-                position: 346,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: Instanceof {
+                left: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 32,
+                                column: 1,
+                                position: 328,
+                            },
+                            name: "$a",
+                        },
+                    ),
+                ),
+                instanceof: Span {
+                    line: 32,
+                    column: 4,
+                    position: 331,
+                },
+                right: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 32,
+                                column: 15,
+                                position: 342,
+                            },
+                            value: "from",
+                        },
+                    ),
+                ),
             },
-        ),
-    },
-    Expression {
-        expression: ConstantFetch {
-            target: Identifier(
-                SimpleIdentifier(
+            ending: Semicolon(
+                Span {
+                    line: 32,
+                    column: 19,
+                    position: 346,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: ConstantFetch {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 34,
+                                column: 1,
+                                position: 349,
+                            },
+                            value: "Enum",
+                        },
+                    ),
+                ),
+                double_colon: Span {
+                    line: 34,
+                    column: 5,
+                    position: 353,
+                },
+                constant: SimpleIdentifier(
                     SimpleIdentifier {
                         span: Span {
                             line: 34,
-                            column: 1,
-                            position: 349,
+                            column: 7,
+                            position: 355,
                         },
-                        value: "Enum",
+                        value: "class",
                     },
                 ),
-            ),
-            double_colon: Span {
-                line: 34,
-                column: 5,
-                position: 353,
             },
-            constant: SimpleIdentifier(
-                SimpleIdentifier {
-                    span: Span {
-                        line: 34,
-                        column: 7,
-                        position: 355,
-                    },
-                    value: "class",
+            ending: Semicolon(
+                Span {
+                    line: 34,
+                    column: 12,
+                    position: 360,
                 },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 34,
-                column: 12,
-                position: 360,
-            },
-        ),
-    },
-    Expression {
-        expression: ConstantFetch {
-            target: Identifier(
-                SimpleIdentifier(
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: ConstantFetch {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 35,
+                                column: 1,
+                                position: 362,
+                            },
+                            value: "From",
+                        },
+                    ),
+                ),
+                double_colon: Span {
+                    line: 35,
+                    column: 5,
+                    position: 366,
+                },
+                constant: SimpleIdentifier(
                     SimpleIdentifier {
                         span: Span {
                             line: 35,
-                            column: 1,
-                            position: 362,
+                            column: 7,
+                            position: 368,
                         },
-                        value: "From",
+                        value: "class",
                     },
                 ),
-            ),
-            double_colon: Span {
-                line: 35,
-                column: 5,
-                position: 366,
             },
-            constant: SimpleIdentifier(
-                SimpleIdentifier {
-                    span: Span {
-                        line: 35,
-                        column: 7,
-                        position: 368,
-                    },
-                    value: "class",
+            ending: Semicolon(
+                Span {
+                    line: 35,
+                    column: 12,
+                    position: 373,
                 },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 35,
-                column: 12,
-                position: 373,
-            },
-        ),
-    },
-    Expression {
-        expression: ConstantFetch {
-            target: Identifier(
-                SimpleIdentifier(
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: ConstantFetch {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 36,
+                                column: 1,
+                                position: 375,
+                            },
+                            value: "enum",
+                        },
+                    ),
+                ),
+                double_colon: Span {
+                    line: 36,
+                    column: 5,
+                    position: 379,
+                },
+                constant: SimpleIdentifier(
                     SimpleIdentifier {
                         span: Span {
                             line: 36,
-                            column: 1,
-                            position: 375,
+                            column: 7,
+                            position: 381,
                         },
-                        value: "enum",
+                        value: "class",
                     },
                 ),
-            ),
-            double_colon: Span {
-                line: 36,
-                column: 5,
-                position: 379,
             },
-            constant: SimpleIdentifier(
-                SimpleIdentifier {
-                    span: Span {
-                        line: 36,
-                        column: 7,
-                        position: 381,
-                    },
-                    value: "class",
+            ending: Semicolon(
+                Span {
+                    line: 36,
+                    column: 12,
+                    position: 386,
                 },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 36,
-                column: 12,
-                position: 386,
-            },
-        ),
-    },
-    Expression {
-        expression: ConstantFetch {
-            target: Identifier(
-                SimpleIdentifier(
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: ConstantFetch {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 37,
+                                column: 1,
+                                position: 388,
+                            },
+                            value: "from",
+                        },
+                    ),
+                ),
+                double_colon: Span {
+                    line: 37,
+                    column: 5,
+                    position: 392,
+                },
+                constant: SimpleIdentifier(
                     SimpleIdentifier {
                         span: Span {
                             line: 37,
-                            column: 1,
-                            position: 388,
+                            column: 7,
+                            position: 394,
                         },
-                        value: "from",
+                        value: "class",
                     },
                 ),
-            ),
-            double_colon: Span {
-                line: 37,
-                column: 5,
-                position: 392,
             },
-            constant: SimpleIdentifier(
-                SimpleIdentifier {
-                    span: Span {
-                        line: 37,
-                        column: 7,
-                        position: 394,
-                    },
-                    value: "class",
+            ending: Semicolon(
+                Span {
+                    line: 37,
+                    column: 12,
+                    position: 399,
                 },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 37,
-                column: 12,
-                position: 399,
-            },
-        ),
-    },
-    GotoLabel(
-        GotoLabel {
+    ),
+    Label(
+        LabelStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -1120,27 +1152,29 @@
             },
         },
     ),
-    Expression {
-        expression: Literal(
-            Integer(
-                LiteralInteger {
-                    value: "12",
-                    span: Span {
-                        line: 39,
-                        column: 7,
-                        position: 408,
+    Expression(
+        ExpressionStatement {
+            expression: Literal(
+                Integer(
+                    LiteralInteger {
+                        value: "12",
+                        span: Span {
+                            line: 39,
+                            column: 7,
+                            position: 408,
+                        },
                     },
+                ),
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 39,
+                    column: 9,
+                    position: 410,
                 },
             ),
-        ),
-        ending: Semicolon(
-            Span {
-                line: 39,
-                column: 9,
-                position: 410,
-            },
-        ),
-    },
+        },
+    ),
     Goto(
         GotoStatement {
             comments: CommentGroup {
@@ -1166,8 +1200,8 @@
             },
         },
     ),
-    GotoLabel(
-        GotoLabel {
+    Label(
+        LabelStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -1186,27 +1220,29 @@
             },
         },
     ),
-    Expression {
-        expression: Literal(
-            Integer(
-                LiteralInteger {
-                    value: "123",
-                    span: Span {
-                        line: 43,
-                        column: 7,
-                        position: 431,
+    Expression(
+        ExpressionStatement {
+            expression: Literal(
+                Integer(
+                    LiteralInteger {
+                        value: "123",
+                        span: Span {
+                            line: 43,
+                            column: 7,
+                            position: 431,
+                        },
                     },
+                ),
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 43,
+                    column: 10,
+                    position: 434,
                 },
             ),
-        ),
-        ending: Semicolon(
-            Span {
-                line: 43,
-                column: 10,
-                position: 434,
-            },
-        ),
-    },
+        },
+    ),
     Goto(
         GotoStatement {
             comments: CommentGroup {

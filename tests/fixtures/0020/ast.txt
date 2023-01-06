@@ -6,1054 +6,1104 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: ArithmeticOperation(
-            Modulo {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 3,
-                                column: 1,
-                                position: 7,
+    Expression(
+        ExpressionStatement {
+            expression: ArithmeticOperation(
+                Modulo {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 3,
+                                    column: 1,
+                                    position: 7,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                percent: Span {
+                    percent: Span {
+                        line: 3,
+                        column: 3,
+                        position: 9,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 3,
+                                    column: 5,
+                                    position: 11,
+                                },
+                            },
+                        ),
+                    ),
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 3,
-                    column: 3,
-                    position: 9,
+                    column: 6,
+                    position: 12,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 3,
-                                column: 5,
-                                position: 11,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: BitwiseOperation(
+                LeftShift {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 4,
+                                    column: 1,
+                                    position: 14,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 6,
-                position: 12,
-            },
-        ),
-    },
-    Expression {
-        expression: BitwiseOperation(
-            LeftShift {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 4,
-                                column: 1,
-                                position: 14,
+                    left_shift: Span {
+                        line: 4,
+                        column: 3,
+                        position: 16,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 4,
+                                    column: 6,
+                                    position: 19,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                left_shift: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 4,
-                    column: 3,
-                    position: 16,
+                    column: 7,
+                    position: 20,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 4,
-                                column: 6,
-                                position: 19,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: BitwiseOperation(
+                RightShift {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 5,
+                                    column: 1,
+                                    position: 22,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 4,
-                column: 7,
-                position: 20,
-            },
-        ),
-    },
-    Expression {
-        expression: BitwiseOperation(
-            RightShift {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 5,
-                                column: 1,
-                                position: 22,
+                    right_shift: Span {
+                        line: 5,
+                        column: 3,
+                        position: 24,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 5,
+                                    column: 6,
+                                    position: 27,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                right_shift: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 5,
-                    column: 3,
-                    position: 24,
+                    column: 7,
+                    position: 28,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 5,
-                                column: 6,
-                                position: 27,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: BitwiseOperation(
+                And {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 6,
+                                    column: 1,
+                                    position: 30,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 5,
-                column: 7,
-                position: 28,
-            },
-        ),
-    },
-    Expression {
-        expression: BitwiseOperation(
-            And {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 6,
-                                column: 1,
-                                position: 30,
+                    and: Span {
+                        line: 6,
+                        column: 3,
+                        position: 32,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 6,
+                                    column: 5,
+                                    position: 34,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                and: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 6,
-                    column: 3,
-                    position: 32,
+                    column: 6,
+                    position: 35,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 6,
-                                column: 5,
-                                position: 34,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: BitwiseOperation(
+                Or {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 7,
+                                    column: 1,
+                                    position: 37,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 6,
-                column: 6,
-                position: 35,
-            },
-        ),
-    },
-    Expression {
-        expression: BitwiseOperation(
-            Or {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 7,
-                                column: 1,
-                                position: 37,
+                    or: Span {
+                        line: 7,
+                        column: 3,
+                        position: 39,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 7,
+                                    column: 5,
+                                    position: 41,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                or: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 7,
-                    column: 3,
-                    position: 39,
+                    column: 6,
+                    position: 42,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 7,
-                                column: 5,
-                                position: 41,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: BitwiseOperation(
+                Xor {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 8,
+                                    column: 1,
+                                    position: 44,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 7,
-                column: 6,
-                position: 42,
-            },
-        ),
-    },
-    Expression {
-        expression: BitwiseOperation(
-            Xor {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 8,
-                                column: 1,
-                                position: 44,
+                    xor: Span {
+                        line: 8,
+                        column: 3,
+                        position: 46,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 8,
+                                    column: 5,
+                                    position: 48,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                xor: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 8,
-                    column: 3,
-                    position: 46,
+                    column: 6,
+                    position: 49,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 8,
-                                column: 5,
-                                position: 48,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: ComparisonOperation(
+                AngledNotEqual {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 9,
+                                    column: 1,
+                                    position: 51,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 8,
-                column: 6,
-                position: 49,
-            },
-        ),
-    },
-    Expression {
-        expression: ComparisonOperation(
-            AngledNotEqual {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 9,
-                                column: 1,
-                                position: 51,
+                    angled_left_right: Span {
+                        line: 9,
+                        column: 3,
+                        position: 53,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 9,
+                                    column: 6,
+                                    position: 56,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                angled_left_right: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 9,
-                    column: 3,
-                    position: 53,
+                    column: 7,
+                    position: 57,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 9,
-                                column: 6,
-                                position: 56,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: ComparisonOperation(
+                Spaceship {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 10,
+                                    column: 1,
+                                    position: 59,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 9,
-                column: 7,
-                position: 57,
-            },
-        ),
-    },
-    Expression {
-        expression: ComparisonOperation(
-            Spaceship {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 10,
-                                column: 1,
-                                position: 59,
+                    spaceship: Span {
+                        line: 10,
+                        column: 3,
+                        position: 61,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 10,
+                                    column: 7,
+                                    position: 65,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                spaceship: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 10,
-                    column: 3,
-                    position: 61,
+                    column: 8,
+                    position: 66,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 10,
-                                column: 7,
-                                position: 65,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: LogicalOperation(
+                LogicalAnd {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 11,
+                                    column: 1,
+                                    position: 68,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 10,
-                column: 8,
-                position: 66,
-            },
-        ),
-    },
-    Expression {
-        expression: LogicalOperation(
-            LogicalAnd {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 11,
-                                column: 1,
-                                position: 68,
+                    and: Span {
+                        line: 11,
+                        column: 3,
+                        position: 70,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 11,
+                                    column: 7,
+                                    position: 74,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                and: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 11,
-                    column: 3,
-                    position: 70,
+                    column: 8,
+                    position: 75,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 11,
-                                column: 7,
-                                position: 74,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: LogicalOperation(
+                LogicalOr {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 12,
+                                    column: 1,
+                                    position: 77,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 11,
-                column: 8,
-                position: 75,
-            },
-        ),
-    },
-    Expression {
-        expression: LogicalOperation(
-            LogicalOr {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 12,
-                                column: 1,
-                                position: 77,
+                    or: Span {
+                        line: 12,
+                        column: 3,
+                        position: 79,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 12,
+                                    column: 6,
+                                    position: 82,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                or: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 12,
-                    column: 3,
-                    position: 79,
+                    column: 7,
+                    position: 83,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 12,
-                                column: 6,
-                                position: 82,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: LogicalOperation(
+                LogicalXor {
+                    left: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "6",
+                                span: Span {
+                                    line: 13,
+                                    column: 1,
+                                    position: 85,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 12,
-                column: 7,
-                position: 83,
-            },
-        ),
-    },
-    Expression {
-        expression: LogicalOperation(
-            LogicalXor {
-                left: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "6",
-                            span: Span {
-                                line: 13,
-                                column: 1,
-                                position: 85,
+                    xor: Span {
+                        line: 13,
+                        column: 3,
+                        position: 87,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "2",
+                                span: Span {
+                                    line: 13,
+                                    column: 7,
+                                    position: 91,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-                xor: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 13,
-                    column: 3,
-                    position: 87,
+                    column: 8,
+                    position: 92,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "2",
-                            span: Span {
-                                line: 13,
-                                column: 7,
-                                position: 91,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 14,
+                                    column: 1,
+                                    position: 94,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 13,
-                column: 8,
-                position: 92,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 14,
-                                column: 1,
-                                position: 94,
+                    equals: Span {
+                        line: 14,
+                        column: 4,
+                        position: 97,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 14,
+                                    column: 6,
+                                    position: 99,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 14,
-                    column: 4,
-                    position: 97,
+                    column: 7,
+                    position: 100,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 14,
-                                column: 6,
-                                position: 99,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Addition {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 15,
+                                    column: 1,
+                                    position: 102,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 14,
-                column: 7,
-                position: 100,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Addition {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 15,
-                                column: 1,
-                                position: 102,
+                    plus_equals: Span {
+                        line: 15,
+                        column: 4,
+                        position: 105,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 15,
+                                    column: 7,
+                                    position: 108,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                plus_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 15,
-                    column: 4,
-                    position: 105,
+                    column: 8,
+                    position: 109,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 15,
-                                column: 7,
-                                position: 108,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Subtraction {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 16,
+                                    column: 1,
+                                    position: 111,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 15,
-                column: 8,
-                position: 109,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Subtraction {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 16,
-                                column: 1,
-                                position: 111,
+                    minus_equals: Span {
+                        line: 16,
+                        column: 4,
+                        position: 114,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 16,
+                                    column: 7,
+                                    position: 117,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                minus_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 16,
-                    column: 4,
-                    position: 114,
+                    column: 8,
+                    position: 118,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 16,
-                                column: 7,
-                                position: 117,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Multiplication {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 17,
+                                    column: 1,
+                                    position: 120,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 16,
-                column: 8,
-                position: 118,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Multiplication {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 17,
-                                column: 1,
-                                position: 120,
+                    asterisk_equals: Span {
+                        line: 17,
+                        column: 4,
+                        position: 123,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 17,
+                                    column: 7,
+                                    position: 126,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                asterisk_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 17,
-                    column: 4,
-                    position: 123,
+                    column: 8,
+                    position: 127,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 17,
-                                column: 7,
-                                position: 126,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Exponentiation {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 18,
+                                    column: 1,
+                                    position: 129,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 17,
-                column: 8,
-                position: 127,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Exponentiation {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 18,
-                                column: 1,
-                                position: 129,
+                    pow_equals: Span {
+                        line: 18,
+                        column: 4,
+                        position: 132,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 18,
+                                    column: 8,
+                                    position: 136,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                pow_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 18,
-                    column: 4,
-                    position: 132,
+                    column: 9,
+                    position: 137,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 18,
-                                column: 8,
-                                position: 136,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Division {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 19,
+                                    column: 1,
+                                    position: 139,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 18,
-                column: 9,
-                position: 137,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Division {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 19,
-                                column: 1,
-                                position: 139,
+                    slash_equals: Span {
+                        line: 19,
+                        column: 4,
+                        position: 142,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 19,
+                                    column: 7,
+                                    position: 145,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                slash_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 19,
-                    column: 4,
-                    position: 142,
+                    column: 8,
+                    position: 146,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 19,
-                                column: 7,
-                                position: 145,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Concat {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 20,
+                                    column: 1,
+                                    position: 148,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 19,
-                column: 8,
-                position: 146,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Concat {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 20,
-                                column: 1,
-                                position: 148,
+                    dot_equals: Span {
+                        line: 20,
+                        column: 4,
+                        position: 151,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 20,
+                                    column: 7,
+                                    position: 154,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                dot_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 20,
-                    column: 4,
-                    position: 151,
+                    column: 8,
+                    position: 155,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 20,
-                                column: 7,
-                                position: 154,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Modulo {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 21,
+                                    column: 1,
+                                    position: 157,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 20,
-                column: 8,
-                position: 155,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Modulo {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 21,
-                                column: 1,
-                                position: 157,
+                    percent_equals: Span {
+                        line: 21,
+                        column: 4,
+                        position: 160,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 21,
+                                    column: 7,
+                                    position: 163,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                percent_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 21,
-                    column: 4,
-                    position: 160,
+                    column: 8,
+                    position: 164,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 21,
-                                column: 7,
-                                position: 163,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                BitwiseAnd {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 22,
+                                    column: 1,
+                                    position: 166,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 21,
-                column: 8,
-                position: 164,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            BitwiseAnd {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 22,
-                                column: 1,
-                                position: 166,
+                    ampersand_equals: Span {
+                        line: 22,
+                        column: 4,
+                        position: 169,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 22,
+                                    column: 7,
+                                    position: 172,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                ampersand_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 22,
-                    column: 4,
-                    position: 169,
+                    column: 8,
+                    position: 173,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 22,
-                                column: 7,
-                                position: 172,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                BitwiseOr {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 23,
+                                    column: 1,
+                                    position: 175,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 22,
-                column: 8,
-                position: 173,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            BitwiseOr {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 23,
-                                column: 1,
-                                position: 175,
+                    pipe_equals: Span {
+                        line: 23,
+                        column: 4,
+                        position: 178,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 23,
+                                    column: 7,
+                                    position: 181,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                pipe_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 23,
-                    column: 4,
-                    position: 178,
+                    column: 8,
+                    position: 182,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 23,
-                                column: 7,
-                                position: 181,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                BitwiseXor {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 24,
+                                    column: 1,
+                                    position: 184,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 23,
-                column: 8,
-                position: 182,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            BitwiseXor {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 24,
-                                column: 1,
-                                position: 184,
+                    caret_equals: Span {
+                        line: 24,
+                        column: 4,
+                        position: 187,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 24,
+                                    column: 7,
+                                    position: 190,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                caret_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 24,
-                    column: 4,
-                    position: 187,
+                    column: 8,
+                    position: 191,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 24,
-                                column: 7,
-                                position: 190,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                LeftShift {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 25,
+                                    column: 1,
+                                    position: 193,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 24,
-                column: 8,
-                position: 191,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            LeftShift {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 25,
-                                column: 1,
-                                position: 193,
+                    left_shift_equals: Span {
+                        line: 25,
+                        column: 4,
+                        position: 196,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 25,
+                                    column: 8,
+                                    position: 200,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                left_shift_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 25,
-                    column: 4,
-                    position: 196,
+                    column: 9,
+                    position: 201,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 25,
-                                column: 8,
-                                position: 200,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                RightShift {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 26,
+                                    column: 1,
+                                    position: 203,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 25,
-                column: 9,
-                position: 201,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            RightShift {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 26,
-                                column: 1,
-                                position: 203,
+                    right_shift_equals: Span {
+                        line: 26,
+                        column: 4,
+                        position: 206,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 26,
+                                    column: 8,
+                                    position: 210,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                right_shift_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 26,
-                    column: 4,
-                    position: 206,
+                    column: 9,
+                    position: 211,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 26,
-                                column: 8,
-                                position: 210,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Coalesce {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 27,
+                                    column: 1,
+                                    position: 213,
+                                },
+                                name: "$a",
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 26,
-                column: 9,
-                position: 211,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Coalesce {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 27,
-                                column: 1,
-                                position: 213,
+                    coalesce_equals: Span {
+                        line: 27,
+                        column: 4,
+                        position: 216,
+                    },
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 27,
+                                    column: 8,
+                                    position: 220,
+                                },
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                coalesce_equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 27,
-                    column: 4,
-                    position: 216,
+                    column: 9,
+                    position: 221,
                 },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 27,
-                                column: 8,
-                                position: 220,
-                            },
-                        },
-                    ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 27,
-                column: 9,
-                position: 221,
-            },
-        ),
-    },
+            ),
+        },
+    ),
 ]

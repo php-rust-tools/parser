@@ -121,19 +121,21 @@
                 position: 28,
             },
             body: Statement(
-                Block {
-                    left_brace: Span {
-                        line: 3,
-                        column: 24,
-                        position: 30,
+                Block(
+                    BlockStatement {
+                        left_brace: Span {
+                            line: 3,
+                            column: 24,
+                            position: 30,
+                        },
+                        statements: [],
+                        right_brace: Span {
+                            line: 5,
+                            column: 1,
+                            position: 37,
+                        },
                     },
-                    statements: [],
-                    right_brace: Span {
-                        line: 5,
-                        column: 1,
-                        position: 37,
-                    },
-                },
+                ),
             ),
         },
     ),

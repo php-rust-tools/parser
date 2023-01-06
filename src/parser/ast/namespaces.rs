@@ -33,7 +33,7 @@ pub struct BracedNamespaceBody {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum Namespace {
+pub enum NamespaceStatement {
     Unbraced(UnbracedNamespace), // `namespace Foo; *statements*`
     Braced(BracedNamespace),     // `namespace Foo { *statements* }`
 }

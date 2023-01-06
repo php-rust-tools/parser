@@ -7,7 +7,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -472,7 +472,7 @@
         },
     ),
     Class(
-        Class {
+        ClassStatement {
             attributes: [
                 AttributeGroup {
                     start: Span {
@@ -1080,7 +1080,7 @@
         },
     ),
     Trait(
-        Trait {
+        TraitStatement {
             trait: Span {
                 line: 37,
                 column: 1,
@@ -1147,7 +1147,7 @@
         },
     ),
     UnitEnum(
-        UnitEnum {
+        UnitEnumStatement {
             attributes: [
                 AttributeGroup {
                     start: Span {
@@ -1215,7 +1215,7 @@
         },
     ),
     BackedEnum(
-        BackedEnum {
+        BackedEnumStatement {
             attributes: [
                 AttributeGroup {
                     start: Span {
@@ -1295,7 +1295,7 @@
         },
     ),
     Interface(
-        Interface {
+        InterfaceStatement {
             attributes: [
                 AttributeGroup {
                     start: Span {
@@ -1363,7 +1363,7 @@
         },
     ),
     Trait(
-        Trait {
+        TraitStatement {
             trait: Span {
                 line: 49,
                 column: 1,
@@ -1429,647 +1429,657 @@
             },
         },
     ),
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 51,
-                                column: 1,
-                                position: 484,
-                            },
-                            name: "$x",
-                        },
-                    ),
-                ),
-                equals: Span {
-                    line: 51,
-                    column: 4,
-                    position: 487,
-                },
-                right: Closure(
-                    Closure {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        attributes: [
-                            AttributeGroup {
-                                start: Span {
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
                                     line: 51,
-                                    column: 6,
-                                    position: 489,
+                                    column: 1,
+                                    position: 484,
                                 },
-                                end: Span {
-                                    line: 51,
-                                    column: 11,
-                                    position: 494,
-                                },
-                                members: [
-                                    Attribute {
-                                        start: Span {
-                                            line: 51,
-                                            column: 8,
-                                            position: 491,
-                                        },
-                                        end: Span {
-                                            line: 51,
-                                            column: 11,
-                                            position: 494,
-                                        },
-                                        name: SimpleIdentifier {
-                                            span: Span {
-                                                line: 51,
-                                                column: 8,
-                                                position: 491,
-                                            },
-                                            value: "A21",
-                                        },
-                                        arguments: None,
-                                    },
-                                ],
-                            },
-                        ],
-                        static: None,
-                        function: Span {
-                            line: 51,
-                            column: 13,
-                            position: 496,
-                        },
-                        ampersand: None,
-                        parameters: FunctionParameterList {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            left_parenthesis: Span {
-                                line: 51,
-                                column: 21,
-                                position: 504,
-                            },
-                            parameters: CommaSeparated {
-                                inner: [],
-                                commas: [],
-                            },
-                            right_parenthesis: Span {
-                                line: 51,
-                                column: 22,
-                                position: 505,
-                            },
-                        },
-                        uses: None,
-                        return_type: None,
-                        body: FunctionBody {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            left_brace: Span {
-                                line: 51,
-                                column: 24,
-                                position: 507,
-                            },
-                            statements: [],
-                            right_brace: Span {
-                                line: 51,
-                                column: 25,
-                                position: 508,
-                            },
-                        },
-                    },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 51,
-                column: 26,
-                position: 509,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 52,
-                                column: 1,
-                                position: 511,
-                            },
-                            name: "$y",
-                        },
-                    ),
-                ),
-                equals: Span {
-                    line: 52,
-                    column: 4,
-                    position: 514,
-                },
-                right: ArrowFunction(
-                    ArrowFunction {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        static: None,
-                        ampersand: None,
-                        fn: Span {
-                            line: 52,
-                            column: 13,
-                            position: 523,
-                        },
-                        attributes: [
-                            AttributeGroup {
-                                start: Span {
-                                    line: 52,
-                                    column: 6,
-                                    position: 516,
-                                },
-                                end: Span {
-                                    line: 52,
-                                    column: 11,
-                                    position: 521,
-                                },
-                                members: [
-                                    Attribute {
-                                        start: Span {
-                                            line: 52,
-                                            column: 8,
-                                            position: 518,
-                                        },
-                                        end: Span {
-                                            line: 52,
-                                            column: 11,
-                                            position: 521,
-                                        },
-                                        name: SimpleIdentifier {
-                                            span: Span {
-                                                line: 52,
-                                                column: 8,
-                                                position: 518,
-                                            },
-                                            value: "A22",
-                                        },
-                                        arguments: None,
-                                    },
-                                ],
-                            },
-                        ],
-                        parameters: FunctionParameterList {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            left_parenthesis: Span {
-                                line: 52,
-                                column: 15,
-                                position: 525,
-                            },
-                            parameters: CommaSeparated {
-                                inner: [],
-                                commas: [],
-                            },
-                            right_parenthesis: Span {
-                                line: 52,
-                                column: 16,
-                                position: 526,
-                            },
-                        },
-                        return_type: None,
-                        double_arrow: Span {
-                            line: 52,
-                            column: 18,
-                            position: 528,
-                        },
-                        body: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "0",
-                                    span: Span {
-                                        line: 52,
-                                        column: 21,
-                                        position: 531,
-                                    },
-                                },
-                            ),
-                        ),
-                    },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 52,
-                column: 22,
-                position: 532,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 53,
-                                column: 1,
-                                position: 534,
-                            },
-                            name: "$a",
-                        },
-                    ),
-                ),
-                equals: Span {
-                    line: 53,
-                    column: 4,
-                    position: 537,
-                },
-                right: Closure(
-                    Closure {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        attributes: [
-                            AttributeGroup {
-                                start: Span {
-                                    line: 53,
-                                    column: 6,
-                                    position: 539,
-                                },
-                                end: Span {
-                                    line: 53,
-                                    column: 11,
-                                    position: 544,
-                                },
-                                members: [
-                                    Attribute {
-                                        start: Span {
-                                            line: 53,
-                                            column: 8,
-                                            position: 541,
-                                        },
-                                        end: Span {
-                                            line: 53,
-                                            column: 11,
-                                            position: 544,
-                                        },
-                                        name: SimpleIdentifier {
-                                            span: Span {
-                                                line: 53,
-                                                column: 8,
-                                                position: 541,
-                                            },
-                                            value: "A23",
-                                        },
-                                        arguments: None,
-                                    },
-                                ],
-                            },
-                        ],
-                        static: Some(
-                            Span {
-                                line: 53,
-                                column: 13,
-                                position: 546,
+                                name: "$x",
                             },
                         ),
-                        function: Span {
-                            line: 53,
-                            column: 20,
-                            position: 553,
-                        },
-                        ampersand: None,
-                        parameters: FunctionParameterList {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            left_parenthesis: Span {
-                                line: 53,
-                                column: 28,
-                                position: 561,
-                            },
-                            parameters: CommaSeparated {
-                                inner: [],
-                                commas: [],
-                            },
-                            right_parenthesis: Span {
-                                line: 53,
-                                column: 29,
-                                position: 562,
-                            },
-                        },
-                        uses: None,
-                        return_type: None,
-                        body: FunctionBody {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            left_brace: Span {
-                                line: 53,
-                                column: 31,
-                                position: 564,
-                            },
-                            statements: [],
-                            right_brace: Span {
-                                line: 53,
-                                column: 32,
-                                position: 565,
-                            },
-                        },
-                    },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 53,
-                column: 33,
-                position: 566,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 54,
-                                column: 1,
-                                position: 568,
-                            },
-                            name: "$b",
-                        },
                     ),
-                ),
-                equals: Span {
-                    line: 54,
-                    column: 4,
-                    position: 571,
-                },
-                right: ArrowFunction(
-                    ArrowFunction {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        static: Some(
-                            Span {
-                                line: 54,
-                                column: 13,
-                                position: 580,
-                            },
-                        ),
-                        ampersand: None,
-                        fn: Span {
-                            line: 54,
-                            column: 20,
-                            position: 587,
-                        },
-                        attributes: [
-                            AttributeGroup {
-                                start: Span {
-                                    line: 54,
-                                    column: 6,
-                                    position: 573,
-                                },
-                                end: Span {
-                                    line: 54,
-                                    column: 11,
-                                    position: 578,
-                                },
-                                members: [
-                                    Attribute {
-                                        start: Span {
-                                            line: 54,
-                                            column: 8,
-                                            position: 575,
-                                        },
-                                        end: Span {
-                                            line: 54,
-                                            column: 11,
-                                            position: 578,
-                                        },
-                                        name: SimpleIdentifier {
-                                            span: Span {
-                                                line: 54,
-                                                column: 8,
-                                                position: 575,
-                                            },
-                                            value: "A24",
-                                        },
-                                        arguments: None,
-                                    },
-                                ],
-                            },
-                        ],
-                        parameters: FunctionParameterList {
+                    equals: Span {
+                        line: 51,
+                        column: 4,
+                        position: 487,
+                    },
+                    right: Closure(
+                        Closure {
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            left_parenthesis: Span {
-                                line: 54,
-                                column: 22,
-                                position: 589,
-                            },
-                            parameters: CommaSeparated {
-                                inner: [],
-                                commas: [],
-                            },
-                            right_parenthesis: Span {
-                                line: 54,
-                                column: 23,
-                                position: 590,
-                            },
-                        },
-                        return_type: None,
-                        double_arrow: Span {
-                            line: 54,
-                            column: 25,
-                            position: 592,
-                        },
-                        body: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "0",
-                                    span: Span {
-                                        line: 54,
-                                        column: 28,
-                                        position: 595,
-                                    },
-                                },
-                            ),
-                        ),
-                    },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 54,
-                column: 29,
-                position: 596,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 55,
-                                column: 1,
-                                position: 598,
-                            },
-                            name: "$z",
-                        },
-                    ),
-                ),
-                equals: Span {
-                    line: 55,
-                    column: 4,
-                    position: 601,
-                },
-                right: New {
-                    new: Span {
-                        line: 55,
-                        column: 6,
-                        position: 603,
-                    },
-                    target: AnonymousClass(
-                        AnonymousClass {
                             attributes: [
                                 AttributeGroup {
                                     start: Span {
-                                        line: 55,
-                                        column: 10,
-                                        position: 607,
+                                        line: 51,
+                                        column: 6,
+                                        position: 489,
                                     },
                                     end: Span {
-                                        line: 55,
-                                        column: 15,
-                                        position: 612,
+                                        line: 51,
+                                        column: 11,
+                                        position: 494,
                                     },
                                     members: [
                                         Attribute {
                                             start: Span {
-                                                line: 55,
-                                                column: 12,
-                                                position: 609,
+                                                line: 51,
+                                                column: 8,
+                                                position: 491,
                                             },
                                             end: Span {
-                                                line: 55,
-                                                column: 15,
-                                                position: 612,
+                                                line: 51,
+                                                column: 11,
+                                                position: 494,
                                             },
                                             name: SimpleIdentifier {
                                                 span: Span {
-                                                    line: 55,
-                                                    column: 12,
-                                                    position: 609,
+                                                    line: 51,
+                                                    column: 8,
+                                                    position: 491,
                                                 },
-                                                value: "A25",
+                                                value: "A21",
                                             },
                                             arguments: None,
                                         },
                                     ],
                                 },
                             ],
-                            class: Span {
-                                line: 55,
-                                column: 17,
-                                position: 614,
+                            static: None,
+                            function: Span {
+                                line: 51,
+                                column: 13,
+                                position: 496,
                             },
-                            extends: None,
-                            implements: None,
-                            body: AnonymousClassBody {
-                                left_brace: Span {
-                                    line: 55,
-                                    column: 23,
-                                    position: 620,
+                            ampersand: None,
+                            parameters: FunctionParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
                                 },
-                                members: [
-                                    VariableProperty(
-                                        VariableProperty {
-                                            attributes: [
-                                                AttributeGroup {
-                                                    start: Span {
-                                                        line: 56,
-                                                        column: 5,
-                                                        position: 626,
-                                                    },
-                                                    end: Span {
-                                                        line: 56,
-                                                        column: 10,
-                                                        position: 631,
-                                                    },
-                                                    members: [
-                                                        Attribute {
-                                                            start: Span {
-                                                                line: 56,
-                                                                column: 7,
-                                                                position: 628,
-                                                            },
-                                                            end: Span {
-                                                                line: 56,
-                                                                column: 10,
-                                                                position: 631,
-                                                            },
-                                                            name: SimpleIdentifier {
-                                                                span: Span {
-                                                                    line: 56,
-                                                                    column: 7,
-                                                                    position: 628,
-                                                                },
-                                                                value: "A26",
-                                                            },
-                                                            arguments: None,
-                                                        },
-                                                    ],
-                                                },
-                                            ],
-                                            type: None,
-                                            entries: [
-                                                Uninitialized {
-                                                    variable: SimpleVariable {
-                                                        span: Span {
-                                                            line: 57,
-                                                            column: 9,
-                                                            position: 641,
-                                                        },
-                                                        name: "$s",
-                                                    },
-                                                },
-                                            ],
-                                            end: Span {
-                                                line: 57,
-                                                column: 11,
-                                                position: 643,
-                                            },
-                                        },
-                                    ),
-                                ],
+                                left_parenthesis: Span {
+                                    line: 51,
+                                    column: 21,
+                                    position: 504,
+                                },
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
+                                right_parenthesis: Span {
+                                    line: 51,
+                                    column: 22,
+                                    position: 505,
+                                },
+                            },
+                            uses: None,
+                            return_type: None,
+                            body: FunctionBody {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_brace: Span {
+                                    line: 51,
+                                    column: 24,
+                                    position: 507,
+                                },
+                                statements: [],
                                 right_brace: Span {
-                                    line: 58,
-                                    column: 1,
-                                    position: 645,
+                                    line: 51,
+                                    column: 25,
+                                    position: 508,
                                 },
                             },
                         },
                     ),
-                    arguments: None,
                 },
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 58,
-                column: 2,
-                position: 646,
-            },
-        ),
-    },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 51,
+                    column: 26,
+                    position: 509,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 52,
+                                    column: 1,
+                                    position: 511,
+                                },
+                                name: "$y",
+                            },
+                        ),
+                    ),
+                    equals: Span {
+                        line: 52,
+                        column: 4,
+                        position: 514,
+                    },
+                    right: ArrowFunction(
+                        ArrowFunction {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            static: None,
+                            ampersand: None,
+                            fn: Span {
+                                line: 52,
+                                column: 13,
+                                position: 523,
+                            },
+                            attributes: [
+                                AttributeGroup {
+                                    start: Span {
+                                        line: 52,
+                                        column: 6,
+                                        position: 516,
+                                    },
+                                    end: Span {
+                                        line: 52,
+                                        column: 11,
+                                        position: 521,
+                                    },
+                                    members: [
+                                        Attribute {
+                                            start: Span {
+                                                line: 52,
+                                                column: 8,
+                                                position: 518,
+                                            },
+                                            end: Span {
+                                                line: 52,
+                                                column: 11,
+                                                position: 521,
+                                            },
+                                            name: SimpleIdentifier {
+                                                span: Span {
+                                                    line: 52,
+                                                    column: 8,
+                                                    position: 518,
+                                                },
+                                                value: "A22",
+                                            },
+                                            arguments: None,
+                                        },
+                                    ],
+                                },
+                            ],
+                            parameters: FunctionParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span {
+                                    line: 52,
+                                    column: 15,
+                                    position: 525,
+                                },
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
+                                right_parenthesis: Span {
+                                    line: 52,
+                                    column: 16,
+                                    position: 526,
+                                },
+                            },
+                            return_type: None,
+                            double_arrow: Span {
+                                line: 52,
+                                column: 18,
+                                position: 528,
+                            },
+                            body: Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "0",
+                                        span: Span {
+                                            line: 52,
+                                            column: 21,
+                                            position: 531,
+                                        },
+                                    },
+                                ),
+                            ),
+                        },
+                    ),
+                },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 52,
+                    column: 22,
+                    position: 532,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 53,
+                                    column: 1,
+                                    position: 534,
+                                },
+                                name: "$a",
+                            },
+                        ),
+                    ),
+                    equals: Span {
+                        line: 53,
+                        column: 4,
+                        position: 537,
+                    },
+                    right: Closure(
+                        Closure {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [
+                                AttributeGroup {
+                                    start: Span {
+                                        line: 53,
+                                        column: 6,
+                                        position: 539,
+                                    },
+                                    end: Span {
+                                        line: 53,
+                                        column: 11,
+                                        position: 544,
+                                    },
+                                    members: [
+                                        Attribute {
+                                            start: Span {
+                                                line: 53,
+                                                column: 8,
+                                                position: 541,
+                                            },
+                                            end: Span {
+                                                line: 53,
+                                                column: 11,
+                                                position: 544,
+                                            },
+                                            name: SimpleIdentifier {
+                                                span: Span {
+                                                    line: 53,
+                                                    column: 8,
+                                                    position: 541,
+                                                },
+                                                value: "A23",
+                                            },
+                                            arguments: None,
+                                        },
+                                    ],
+                                },
+                            ],
+                            static: Some(
+                                Span {
+                                    line: 53,
+                                    column: 13,
+                                    position: 546,
+                                },
+                            ),
+                            function: Span {
+                                line: 53,
+                                column: 20,
+                                position: 553,
+                            },
+                            ampersand: None,
+                            parameters: FunctionParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span {
+                                    line: 53,
+                                    column: 28,
+                                    position: 561,
+                                },
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
+                                right_parenthesis: Span {
+                                    line: 53,
+                                    column: 29,
+                                    position: 562,
+                                },
+                            },
+                            uses: None,
+                            return_type: None,
+                            body: FunctionBody {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_brace: Span {
+                                    line: 53,
+                                    column: 31,
+                                    position: 564,
+                                },
+                                statements: [],
+                                right_brace: Span {
+                                    line: 53,
+                                    column: 32,
+                                    position: 565,
+                                },
+                            },
+                        },
+                    ),
+                },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 53,
+                    column: 33,
+                    position: 566,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 54,
+                                    column: 1,
+                                    position: 568,
+                                },
+                                name: "$b",
+                            },
+                        ),
+                    ),
+                    equals: Span {
+                        line: 54,
+                        column: 4,
+                        position: 571,
+                    },
+                    right: ArrowFunction(
+                        ArrowFunction {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            static: Some(
+                                Span {
+                                    line: 54,
+                                    column: 13,
+                                    position: 580,
+                                },
+                            ),
+                            ampersand: None,
+                            fn: Span {
+                                line: 54,
+                                column: 20,
+                                position: 587,
+                            },
+                            attributes: [
+                                AttributeGroup {
+                                    start: Span {
+                                        line: 54,
+                                        column: 6,
+                                        position: 573,
+                                    },
+                                    end: Span {
+                                        line: 54,
+                                        column: 11,
+                                        position: 578,
+                                    },
+                                    members: [
+                                        Attribute {
+                                            start: Span {
+                                                line: 54,
+                                                column: 8,
+                                                position: 575,
+                                            },
+                                            end: Span {
+                                                line: 54,
+                                                column: 11,
+                                                position: 578,
+                                            },
+                                            name: SimpleIdentifier {
+                                                span: Span {
+                                                    line: 54,
+                                                    column: 8,
+                                                    position: 575,
+                                                },
+                                                value: "A24",
+                                            },
+                                            arguments: None,
+                                        },
+                                    ],
+                                },
+                            ],
+                            parameters: FunctionParameterList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span {
+                                    line: 54,
+                                    column: 22,
+                                    position: 589,
+                                },
+                                parameters: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
+                                right_parenthesis: Span {
+                                    line: 54,
+                                    column: 23,
+                                    position: 590,
+                                },
+                            },
+                            return_type: None,
+                            double_arrow: Span {
+                                line: 54,
+                                column: 25,
+                                position: 592,
+                            },
+                            body: Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "0",
+                                        span: Span {
+                                            line: 54,
+                                            column: 28,
+                                            position: 595,
+                                        },
+                                    },
+                                ),
+                            ),
+                        },
+                    ),
+                },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 54,
+                    column: 29,
+                    position: 596,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 55,
+                                    column: 1,
+                                    position: 598,
+                                },
+                                name: "$z",
+                            },
+                        ),
+                    ),
+                    equals: Span {
+                        line: 55,
+                        column: 4,
+                        position: 601,
+                    },
+                    right: New {
+                        new: Span {
+                            line: 55,
+                            column: 6,
+                            position: 603,
+                        },
+                        target: AnonymousClass(
+                            AnonymousClass {
+                                attributes: [
+                                    AttributeGroup {
+                                        start: Span {
+                                            line: 55,
+                                            column: 10,
+                                            position: 607,
+                                        },
+                                        end: Span {
+                                            line: 55,
+                                            column: 15,
+                                            position: 612,
+                                        },
+                                        members: [
+                                            Attribute {
+                                                start: Span {
+                                                    line: 55,
+                                                    column: 12,
+                                                    position: 609,
+                                                },
+                                                end: Span {
+                                                    line: 55,
+                                                    column: 15,
+                                                    position: 612,
+                                                },
+                                                name: SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 55,
+                                                        column: 12,
+                                                        position: 609,
+                                                    },
+                                                    value: "A25",
+                                                },
+                                                arguments: None,
+                                            },
+                                        ],
+                                    },
+                                ],
+                                class: Span {
+                                    line: 55,
+                                    column: 17,
+                                    position: 614,
+                                },
+                                extends: None,
+                                implements: None,
+                                body: AnonymousClassBody {
+                                    left_brace: Span {
+                                        line: 55,
+                                        column: 23,
+                                        position: 620,
+                                    },
+                                    members: [
+                                        VariableProperty(
+                                            VariableProperty {
+                                                attributes: [
+                                                    AttributeGroup {
+                                                        start: Span {
+                                                            line: 56,
+                                                            column: 5,
+                                                            position: 626,
+                                                        },
+                                                        end: Span {
+                                                            line: 56,
+                                                            column: 10,
+                                                            position: 631,
+                                                        },
+                                                        members: [
+                                                            Attribute {
+                                                                start: Span {
+                                                                    line: 56,
+                                                                    column: 7,
+                                                                    position: 628,
+                                                                },
+                                                                end: Span {
+                                                                    line: 56,
+                                                                    column: 10,
+                                                                    position: 631,
+                                                                },
+                                                                name: SimpleIdentifier {
+                                                                    span: Span {
+                                                                        line: 56,
+                                                                        column: 7,
+                                                                        position: 628,
+                                                                    },
+                                                                    value: "A26",
+                                                                },
+                                                                arguments: None,
+                                                            },
+                                                        ],
+                                                    },
+                                                ],
+                                                type: None,
+                                                entries: [
+                                                    Uninitialized {
+                                                        variable: SimpleVariable {
+                                                            span: Span {
+                                                                line: 57,
+                                                                column: 9,
+                                                                position: 641,
+                                                            },
+                                                            name: "$s",
+                                                        },
+                                                    },
+                                                ],
+                                                end: Span {
+                                                    line: 57,
+                                                    column: 11,
+                                                    position: 643,
+                                                },
+                                            },
+                                        ),
+                                    ],
+                                    right_brace: Span {
+                                        line: 58,
+                                        column: 1,
+                                        position: 645,
+                                    },
+                                },
+                            },
+                        ),
+                        arguments: None,
+                    },
+                },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 58,
+                    column: 2,
+                    position: 646,
+                },
+            ),
+        },
+    ),
 ]

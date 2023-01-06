@@ -1,6 +1,7 @@
 use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::TokenKind;
 use crate::parser;
+use crate::parser::ast::BlockStatement;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::utils;
@@ -11,11 +12,7 @@ pub fn block_statement(state: &mut State) -> ParseResult<Statement> {
         multiple_statements_until(state, &TokenKind::RightBrace)
     })?;
 
-    Ok(Statement::Block {
-        left_brace,
-        statements,
-        right_brace,
-    })
+    Ok(Statement::Block(BlockStatement { left_brace, statements, right_brace }))
 }
 
 pub fn multiple_statements_until(

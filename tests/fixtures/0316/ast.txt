@@ -6,27 +6,29 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Literal(
-            String(
-                LiteralString {
-                    value: ""<?php\n"",
-                    span: Span {
-                        line: 1,
-                        column: 5,
-                        position: 4,
+    Expression(
+        ExpressionStatement {
+            expression: Literal(
+                String(
+                    LiteralString {
+                        value: ""<?php\n"",
+                        span: Span {
+                            line: 1,
+                            column: 5,
+                            position: 4,
+                        },
                     },
+                ),
+            ),
+            ending: CloseTag(
+                Span {
+                    line: 1,
+                    column: 15,
+                    position: 14,
                 },
             ),
-        ),
-        ending: CloseTag(
-            Span {
-                line: 1,
-                column: 15,
-                position: 14,
-            },
-        ),
-    },
+        },
+    ),
     InlineHtml(
         "\nsome html\n",
     ),
@@ -67,48 +69,52 @@
                 position: 43,
             },
             body: Statement {
-                statement: Block {
-                    left_brace: Span {
-                        line: 4,
-                        column: 13,
-                        position: 45,
-                    },
-                    statements: [
-                        Echo {
-                            echo: Span {
-                                line: 5,
-                                column: 9,
-                                position: 55,
-                            },
-                            values: [
-                                Literal(
-                                    String(
-                                        LiteralString {
-                                            value: ""// "",
-                                            span: Span {
-                                                line: 5,
-                                                column: 14,
-                                                position: 60,
-                                            },
+                statement: Block(
+                    BlockStatement {
+                        left_brace: Span {
+                            line: 4,
+                            column: 13,
+                            position: 45,
+                        },
+                        statements: [
+                            Echo(
+                                EchoStatement {
+                                    echo: Span {
+                                        line: 5,
+                                        column: 9,
+                                        position: 55,
+                                    },
+                                    values: [
+                                        Literal(
+                                            String(
+                                                LiteralString {
+                                                    value: ""// "",
+                                                    span: Span {
+                                                        line: 5,
+                                                        column: 14,
+                                                        position: 60,
+                                                    },
+                                                },
+                                            ),
+                                        ),
+                                    ],
+                                    ending: Semicolon(
+                                        Span {
+                                            line: 5,
+                                            column: 19,
+                                            position: 65,
                                         },
                                     ),
-                                ),
-                            ],
-                            ending: Semicolon(
-                                Span {
-                                    line: 5,
-                                    column: 19,
-                                    position: 65,
                                 },
                             ),
+                        ],
+                        right_brace: Span {
+                            line: 6,
+                            column: 5,
+                            position: 71,
                         },
-                    ],
-                    right_brace: Span {
-                        line: 6,
-                        column: 5,
-                        position: 71,
                     },
-                },
+                ),
                 elseifs: [],
                 else: None,
             },

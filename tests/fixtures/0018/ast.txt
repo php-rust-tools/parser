@@ -7,7 +7,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -71,51 +71,55 @@
                     position: 26,
                 },
                 statements: [
-                    Echo {
-                        echo: Span {
-                            line: 4,
-                            column: 5,
-                            position: 32,
-                        },
-                        values: [
-                            Literal(
-                                String(
-                                    LiteralString {
-                                        value: ""looping..\n"",
-                                        span: Span {
-                                            line: 4,
-                                            column: 10,
-                                            position: 37,
-                                        },
-                                    },
-                                ),
-                            ),
-                        ],
-                        ending: Semicolon(
-                            Span {
+                    Echo(
+                        EchoStatement {
+                            echo: Span {
                                 line: 4,
-                                column: 23,
-                                position: 50,
+                                column: 5,
+                                position: 32,
                             },
-                        ),
-                    },
-                    Return {
-                        return: Span {
-                            line: 6,
-                            column: 5,
-                            position: 57,
+                            values: [
+                                Literal(
+                                    String(
+                                        LiteralString {
+                                            value: ""looping..\n"",
+                                            span: Span {
+                                                line: 4,
+                                                column: 10,
+                                                position: 37,
+                                            },
+                                        },
+                                    ),
+                                ),
+                            ],
+                            ending: Semicolon(
+                                Span {
+                                    line: 4,
+                                    column: 23,
+                                    position: 50,
+                                },
+                            ),
                         },
-                        value: Some(
-                            Null,
-                        ),
-                        ending: Semicolon(
-                            Span {
+                    ),
+                    Return(
+                        ReturnStatement {
+                            return: Span {
                                 line: 6,
-                                column: 16,
-                                position: 68,
+                                column: 5,
+                                position: 57,
                             },
-                        ),
-                    },
+                            value: Some(
+                                Null,
+                            ),
+                            ending: Semicolon(
+                                Span {
+                                    line: 6,
+                                    column: 16,
+                                    position: 68,
+                                },
+                            ),
+                        },
+                    ),
                 ],
                 right_brace: Span {
                     line: 7,
@@ -125,72 +129,74 @@
             },
         },
     ),
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 9,
-                                column: 1,
-                                position: 73,
-                            },
-                            name: "$bar",
-                        },
-                    ),
-                ),
-                equals: Span {
-                    line: 9,
-                    column: 6,
-                    position: 78,
-                },
-                right: FunctionClosureCreation {
-                    target: Identifier(
-                        SimpleIdentifier(
-                            SimpleIdentifier {
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
                                 span: Span {
                                     line: 9,
-                                    column: 8,
-                                    position: 80,
+                                    column: 1,
+                                    position: 73,
                                 },
-                                value: "a",
+                                name: "$bar",
                             },
                         ),
                     ),
-                    placeholder: ArgumentPlaceholder {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        left_parenthesis: Span {
-                            line: 9,
-                            column: 9,
-                            position: 81,
-                        },
-                        ellipsis: Span {
-                            line: 9,
-                            column: 10,
-                            position: 82,
-                        },
-                        right_parenthesis: Span {
-                            line: 9,
-                            column: 13,
-                            position: 85,
+                    equals: Span {
+                        line: 9,
+                        column: 6,
+                        position: 78,
+                    },
+                    right: FunctionClosureCreation {
+                        target: Identifier(
+                            SimpleIdentifier(
+                                SimpleIdentifier {
+                                    span: Span {
+                                        line: 9,
+                                        column: 8,
+                                        position: 80,
+                                    },
+                                    value: "a",
+                                },
+                            ),
+                        ),
+                        placeholder: ArgumentPlaceholder {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            left_parenthesis: Span {
+                                line: 9,
+                                column: 9,
+                                position: 81,
+                            },
+                            ellipsis: Span {
+                                line: 9,
+                                column: 10,
+                                position: 82,
+                            },
+                            right_parenthesis: Span {
+                                line: 9,
+                                column: 13,
+                                position: 85,
+                            },
                         },
                     },
                 },
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 9,
-                column: 14,
-                position: 86,
-            },
-        ),
-    },
-    GotoLabel(
-        GotoLabel {
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 9,
+                    column: 14,
+                    position: 86,
+                },
+            ),
+        },
+    ),
+    Label(
+        LabelStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -209,45 +215,47 @@
             },
         },
     ),
-    Expression {
-        expression: FunctionCall {
-            target: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span {
-                            line: 12,
-                            column: 5,
-                            position: 98,
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 12,
+                                column: 5,
+                                position: 98,
+                            },
+                            name: "$bar",
                         },
-                        name: "$bar",
-                    },
+                    ),
                 ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 12,
+                        column: 9,
+                        position: 102,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 12,
+                        column: 10,
+                        position: 103,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 12,
+                    column: 11,
+                    position: 104,
+                },
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 12,
-                    column: 9,
-                    position: 102,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 12,
-                    column: 10,
-                    position: 103,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 12,
-                column: 11,
-                position: 104,
-            },
-        ),
-    },
+    ),
     Goto(
         GotoStatement {
             comments: CommentGroup {

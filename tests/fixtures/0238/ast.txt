@@ -6,69 +6,71 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 3,
-                                column: 1,
-                                position: 7,
-                            },
-                            name: "$foo",
-                        },
-                    ),
-                ),
-                equals: Span {
-                    line: 3,
-                    column: 6,
-                    position: 12,
-                },
-                right: Require {
-                    require: Span {
-                        line: 3,
-                        column: 8,
-                        position: 14,
-                    },
-                    path: Concat {
-                        left: MagicConstant(
-                            Directory(
-                                Span {
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
                                     line: 3,
-                                    column: 16,
-                                    position: 22,
+                                    column: 1,
+                                    position: 7,
                                 },
-                            ),
+                                name: "$foo",
+                            },
                         ),
-                        dot: Span {
+                    ),
+                    equals: Span {
+                        line: 3,
+                        column: 6,
+                        position: 12,
+                    },
+                    right: Require {
+                        require: Span {
                             line: 3,
-                            column: 24,
-                            position: 30,
+                            column: 8,
+                            position: 14,
                         },
-                        right: Literal(
-                            String(
-                                LiteralString {
-                                    value: "'/foo.php'",
-                                    span: Span {
+                        path: Concat {
+                            left: MagicConstant(
+                                Directory(
+                                    Span {
                                         line: 3,
-                                        column: 26,
-                                        position: 32,
+                                        column: 16,
+                                        position: 22,
                                     },
-                                },
+                                ),
                             ),
-                        ),
+                            dot: Span {
+                                line: 3,
+                                column: 24,
+                                position: 30,
+                            },
+                            right: Literal(
+                                String(
+                                    LiteralString {
+                                        value: "'/foo.php'",
+                                        span: Span {
+                                            line: 3,
+                                            column: 26,
+                                            position: 32,
+                                        },
+                                    },
+                                ),
+                            ),
+                        },
                     },
                 },
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 36,
-                position: 42,
-            },
-        ),
-    },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 36,
+                    position: 42,
+                },
+            ),
+        },
+    ),
 ]

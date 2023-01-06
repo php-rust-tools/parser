@@ -26,7 +26,7 @@ pub struct ClassBody {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Class {
+pub struct ClassStatement {
     pub attributes: Vec<AttributeGroup>, // `#[Qux]`
     #[serde(flatten)]
     pub modifiers: ClassModifierGroup, // `abstract`, `final`

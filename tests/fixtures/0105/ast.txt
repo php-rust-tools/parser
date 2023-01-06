@@ -6,17 +6,19 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Yield {
-            key: None,
-            value: None,
-        },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 12,
-                position: 11,
+    Expression(
+        ExpressionStatement {
+            expression: Yield {
+                key: None,
+                value: None,
             },
-        ),
-    },
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 12,
+                    position: 11,
+                },
+            ),
+        },
+    ),
 ]

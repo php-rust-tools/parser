@@ -1,5 +1,5 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::goto::GotoLabel;
+use crate::parser::ast::goto::LabelStatement;
 use crate::parser::ast::goto::GotoStatement;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
@@ -12,7 +12,7 @@ pub fn label_statement(state: &mut State) -> ParseResult<Statement> {
     let label = identifiers::label_identifier(state)?;
     let colon = utils::skip_colon(state)?;
 
-    Ok(Statement::GotoLabel(GotoLabel {
+    Ok(Statement::Label(LabelStatement {
         comments,
         label,
         colon,

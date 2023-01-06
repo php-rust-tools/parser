@@ -36,34 +36,36 @@
                 position: 13,
             },
             body: Statement {
-                statement: Return {
-                    return: Span {
-                        line: 1,
-                        column: 16,
-                        position: 15,
-                    },
-                    value: Some(
-                        Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 1,
-                                        column: 23,
-                                        position: 22,
+                statement: Return(
+                    ReturnStatement {
+                        return: Span {
+                            line: 1,
+                            column: 16,
+                            position: 15,
+                        },
+                        value: Some(
+                            Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 1,
+                                            column: 23,
+                                            position: 22,
+                                        },
+                                        name: "$foo",
                                     },
-                                    name: "$foo",
-                                },
+                                ),
                             ),
                         ),
-                    ),
-                    ending: Semicolon(
-                        Span {
-                            line: 1,
-                            column: 27,
-                            position: 26,
-                        },
-                    ),
-                },
+                        ending: Semicolon(
+                            Span {
+                                line: 1,
+                                column: 27,
+                                position: 26,
+                            },
+                        ),
+                    },
+                ),
                 elseifs: [],
                 else: None,
             },

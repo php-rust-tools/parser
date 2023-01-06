@@ -7,7 +7,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -56,35 +56,37 @@
                     position: 22,
                 },
                 statements: [
-                    Global {
-                        global: Span {
-                            line: 4,
-                            column: 5,
-                            position: 28,
+                    Global(
+                        GlobalStatement {
+                            global: Span {
+                                line: 4,
+                                column: 5,
+                                position: 28,
+                            },
+                            variables: [
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 4,
+                                            column: 12,
+                                            position: 35,
+                                        },
+                                        name: "$a",
+                                    },
+                                ),
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 4,
+                                            column: 16,
+                                            position: 39,
+                                        },
+                                        name: "$b",
+                                    },
+                                ),
+                            ],
                         },
-                        variables: [
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 4,
-                                        column: 12,
-                                        position: 35,
-                                    },
-                                    name: "$a",
-                                },
-                            ),
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 4,
-                                        column: 16,
-                                        position: 39,
-                                    },
-                                    name: "$b",
-                                },
-                            ),
-                        ],
-                    },
+                    ),
                 ],
                 right_brace: Span {
                     line: 5,

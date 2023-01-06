@@ -7,7 +7,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -80,7 +80,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -153,7 +153,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -226,7 +226,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -299,7 +299,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -372,7 +372,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -445,7 +445,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -518,7 +518,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -590,316 +590,332 @@
             },
         },
     ),
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 12,
-                            column: 1,
-                            position: 215,
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 12,
+                                column: 1,
+                                position: 215,
+                            },
+                            value: "true",
                         },
-                        value: "true",
-                    },
+                    ),
                 ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 12,
+                        column: 5,
+                        position: 219,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 12,
+                        column: 6,
+                        position: 220,
+                    },
                 },
-                left_parenthesis: Span {
+            },
+            ending: Semicolon(
+                Span {
                     line: 12,
-                    column: 5,
-                    position: 219,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 12,
-                    column: 6,
-                    position: 220,
-                },
-            },
-        },
-        ending: Semicolon(
-            Span {
-                line: 12,
-                column: 7,
-                position: 221,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 13,
-                            column: 1,
-                            position: 223,
-                        },
-                        value: "false",
-                    },
-                ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 13,
-                    column: 6,
-                    position: 228,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 13,
                     column: 7,
-                    position: 229,
+                    position: 221,
                 },
-            },
-        },
-        ending: Semicolon(
-            Span {
-                line: 13,
-                column: 8,
-                position: 230,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 14,
-                            column: 1,
-                            position: 232,
-                        },
-                        value: "null",
-                    },
-                ),
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 14,
-                    column: 5,
-                    position: 236,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 14,
-                    column: 6,
-                    position: 237,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 14,
-                column: 7,
-                position: 238,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 15,
-                            column: 1,
-                            position: 240,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 13,
+                                column: 1,
+                                position: 223,
+                            },
+                            value: "false",
                         },
-                        value: "readonly",
-                    },
+                    ),
                 ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 15,
-                    column: 9,
-                    position: 248,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 15,
-                    column: 10,
-                    position: 249,
-                },
-            },
-        },
-        ending: Semicolon(
-            Span {
-                line: 15,
-                column: 11,
-                position: 250,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 16,
-                            column: 1,
-                            position: 252,
-                        },
-                        value: "self",
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
                     },
-                ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 16,
-                    column: 5,
-                    position: 256,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 16,
-                    column: 6,
-                    position: 257,
-                },
-            },
-        },
-        ending: Semicolon(
-            Span {
-                line: 16,
-                column: 7,
-                position: 258,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 17,
-                            column: 1,
-                            position: 260,
-                        },
-                        value: "parent",
+                    left_parenthesis: Span {
+                        line: 13,
+                        column: 6,
+                        position: 228,
                     },
-                ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 13,
+                        column: 7,
+                        position: 229,
+                    },
                 },
-                left_parenthesis: Span {
-                    line: 17,
-                    column: 7,
-                    position: 266,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 17,
+            },
+            ending: Semicolon(
+                Span {
+                    line: 13,
                     column: 8,
-                    position: 267,
+                    position: 230,
                 },
-            },
-        },
-        ending: Semicolon(
-            Span {
-                line: 17,
-                column: 9,
-                position: 268,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 18,
-                            column: 1,
-                            position: 270,
-                        },
-                        value: "enum",
-                    },
-                ),
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 18,
-                    column: 5,
-                    position: 274,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 18,
-                    column: 6,
-                    position: 275,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 18,
-                column: 7,
-                position: 276,
-            },
-        ),
-    },
-    Expression {
-        expression: FunctionCall {
-            target: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 19,
-                            column: 1,
-                            position: 278,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 14,
+                                column: 1,
+                                position: 232,
+                            },
+                            value: "null",
                         },
-                        value: "from",
-                    },
+                    ),
                 ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 14,
+                        column: 5,
+                        position: 236,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 14,
+                        column: 6,
+                        position: 237,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 14,
+                    column: 7,
+                    position: 238,
+                },
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 19,
-                    column: 5,
-                    position: 282,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 19,
-                    column: 6,
-                    position: 283,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 19,
-                column: 7,
-                position: 284,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 15,
+                                column: 1,
+                                position: 240,
+                            },
+                            value: "readonly",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 15,
+                        column: 9,
+                        position: 248,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 15,
+                        column: 10,
+                        position: 249,
+                    },
+                },
             },
-        ),
-    },
+            ending: Semicolon(
+                Span {
+                    line: 15,
+                    column: 11,
+                    position: 250,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 16,
+                                column: 1,
+                                position: 252,
+                            },
+                            value: "self",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 16,
+                        column: 5,
+                        position: 256,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 16,
+                        column: 6,
+                        position: 257,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 16,
+                    column: 7,
+                    position: 258,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 17,
+                                column: 1,
+                                position: 260,
+                            },
+                            value: "parent",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 17,
+                        column: 7,
+                        position: 266,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 17,
+                        column: 8,
+                        position: 267,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 17,
+                    column: 9,
+                    position: 268,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 18,
+                                column: 1,
+                                position: 270,
+                            },
+                            value: "enum",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 18,
+                        column: 5,
+                        position: 274,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 18,
+                        column: 6,
+                        position: 275,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 18,
+                    column: 7,
+                    position: 276,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: FunctionCall {
+                target: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 19,
+                                column: 1,
+                                position: 278,
+                            },
+                            value: "from",
+                        },
+                    ),
+                ),
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 19,
+                        column: 5,
+                        position: 282,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 19,
+                        column: 6,
+                        position: 283,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 19,
+                    column: 7,
+                    position: 284,
+                },
+            ),
+        },
+    ),
 ]

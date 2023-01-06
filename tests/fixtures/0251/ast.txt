@@ -7,7 +7,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -148,34 +148,36 @@
                     position: 47,
                 },
                 statements: [
-                    Return {
-                        return: Span {
-                            line: 6,
-                            column: 5,
-                            position: 53,
-                        },
-                        value: Some(
-                            Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 6,
-                                            column: 12,
-                                            position: 60,
+                    Return(
+                        ReturnStatement {
+                            return: Span {
+                                line: 6,
+                                column: 5,
+                                position: 53,
+                            },
+                            value: Some(
+                                Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 6,
+                                                column: 12,
+                                                position: 60,
+                                            },
+                                            name: "$i",
                                         },
-                                        name: "$i",
-                                    },
+                                    ),
                                 ),
                             ),
-                        ),
-                        ending: Semicolon(
-                            Span {
-                                line: 6,
-                                column: 14,
-                                position: 62,
-                            },
-                        ),
-                    },
+                            ending: Semicolon(
+                                Span {
+                                    line: 6,
+                                    column: 14,
+                                    position: 62,
+                                },
+                            ),
+                        },
+                    ),
                 ],
                 right_brace: Span {
                     line: 7,

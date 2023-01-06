@@ -1,11 +1,11 @@
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::enums::BackedEnum;
+use crate::parser::ast::enums::BackedEnumStatement;
 use crate::parser::ast::enums::BackedEnumBody;
 use crate::parser::ast::enums::BackedEnumCase;
 use crate::parser::ast::enums::BackedEnumMember;
 use crate::parser::ast::enums::BackedEnumType;
-use crate::parser::ast::enums::UnitEnum;
+use crate::parser::ast::enums::UnitEnumStatement;
 use crate::parser::ast::enums::UnitEnumBody;
 use crate::parser::ast::enums::UnitEnumCase;
 use crate::parser::ast::enums::UnitEnumMember;
@@ -74,7 +74,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
             right_brace: utils::skip_right_brace(state)?,
         };
 
-        Ok(Statement::BackedEnum(BackedEnum {
+        Ok(Statement::BackedEnum(BackedEnumStatement {
             r#enum: span,
             name,
             backed_type,
@@ -97,7 +97,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
             right_brace: utils::skip_right_brace(state)?,
         };
 
-        Ok(Statement::UnitEnum(UnitEnum {
+        Ok(Statement::UnitEnum(UnitEnumStatement {
             r#enum: span,
             name,
             attributes,

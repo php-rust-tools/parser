@@ -6,53 +6,55 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: ShortArray {
-            start: Span {
-                line: 1,
-                column: 7,
-                position: 6,
-            },
-            items: CommaSeparated {
-                inner: [
-                    SpreadValue {
-                        ellipsis: Span {
-                            line: 1,
-                            column: 8,
-                            position: 7,
-                        },
-                        value: ShortArray {
-                            start: Span {
+    Expression(
+        ExpressionStatement {
+            expression: ShortArray {
+                start: Span {
+                    line: 1,
+                    column: 7,
+                    position: 6,
+                },
+                items: CommaSeparated {
+                    inner: [
+                        SpreadValue {
+                            ellipsis: Span {
                                 line: 1,
-                                column: 11,
-                                position: 10,
+                                column: 8,
+                                position: 7,
                             },
-                            items: CommaSeparated {
-                                inner: [],
-                                commas: [],
-                            },
-                            end: Span {
-                                line: 1,
-                                column: 12,
-                                position: 11,
+                            value: ShortArray {
+                                start: Span {
+                                    line: 1,
+                                    column: 11,
+                                    position: 10,
+                                },
+                                items: CommaSeparated {
+                                    inner: [],
+                                    commas: [],
+                                },
+                                end: Span {
+                                    line: 1,
+                                    column: 12,
+                                    position: 11,
+                                },
                             },
                         },
-                    },
-                ],
-                commas: [],
+                    ],
+                    commas: [],
+                },
+                end: Span {
+                    line: 1,
+                    column: 13,
+                    position: 12,
+                },
             },
-            end: Span {
-                line: 1,
-                column: 13,
-                position: 12,
-            },
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 14,
+                    position: 13,
+                },
+            ),
         },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 14,
-                position: 13,
-            },
-        ),
-    },
+    ),
 ]

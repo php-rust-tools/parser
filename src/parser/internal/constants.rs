@@ -1,6 +1,6 @@
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::constant::ClassishConstant;
-use crate::parser::ast::constant::Constant;
+use crate::parser::ast::constant::ConstantStatement;
 use crate::parser::ast::constant::ConstantEntry;
 use crate::parser::ast::modifiers::ConstantModifierGroup;
 use crate::parser::error::ParseResult;
@@ -9,7 +9,7 @@ use crate::parser::internal::identifiers;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
 
-pub fn parse(state: &mut State) -> ParseResult<Constant> {
+pub fn parse(state: &mut State) -> ParseResult<ConstantStatement> {
     let comments = state.stream.comments();
     let start = utils::skip(state, TokenKind::Const)?;
 
@@ -35,7 +35,7 @@ pub fn parse(state: &mut State) -> ParseResult<Constant> {
 
     let end = utils::skip_semicolon(state)?;
 
-    Ok(Constant {
+    Ok(ConstantStatement {
         comments,
         r#const: start,
         entries,

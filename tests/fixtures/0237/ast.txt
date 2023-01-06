@@ -6,48 +6,50 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Require {
-            require: Span {
-                line: 3,
-                column: 1,
-                position: 7,
-            },
-            path: Concat {
-                left: MagicConstant(
-                    Directory(
-                        Span {
-                            line: 3,
-                            column: 9,
-                            position: 15,
-                        },
-                    ),
-                ),
-                dot: Span {
+    Expression(
+        ExpressionStatement {
+            expression: Require {
+                require: Span {
                     line: 3,
-                    column: 17,
-                    position: 23,
+                    column: 1,
+                    position: 7,
                 },
-                right: Literal(
-                    String(
-                        LiteralString {
-                            value: "'/foo.php'",
-                            span: Span {
+                path: Concat {
+                    left: MagicConstant(
+                        Directory(
+                            Span {
                                 line: 3,
-                                column: 19,
-                                position: 25,
+                                column: 9,
+                                position: 15,
                             },
-                        },
+                        ),
                     ),
-                ),
+                    dot: Span {
+                        line: 3,
+                        column: 17,
+                        position: 23,
+                    },
+                    right: Literal(
+                        String(
+                            LiteralString {
+                                value: "'/foo.php'",
+                                span: Span {
+                                    line: 3,
+                                    column: 19,
+                                    position: 25,
+                                },
+                            },
+                        ),
+                    ),
+                },
             },
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 29,
+                    position: 35,
+                },
+            ),
         },
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 29,
-                position: 35,
-            },
-        ),
-    },
+    ),
 ]

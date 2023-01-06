@@ -6,27 +6,29 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: YieldFrom {
-            value: Literal(
-                Integer(
-                    LiteralInteger {
-                        value: "1",
-                        span: Span {
-                            line: 1,
-                            column: 18,
-                            position: 17,
+    Expression(
+        ExpressionStatement {
+            expression: YieldFrom {
+                value: Literal(
+                    Integer(
+                        LiteralInteger {
+                            value: "1",
+                            span: Span {
+                                line: 1,
+                                column: 18,
+                                position: 17,
+                            },
                         },
-                    },
+                    ),
                 ),
+            },
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 19,
+                    position: 18,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 19,
-                position: 18,
-            },
-        ),
-    },
+    ),
 ]

@@ -2,7 +2,7 @@ use crate::lexer::token::TokenKind;
 use crate::parser::ast::try_block::CatchBlock;
 use crate::parser::ast::try_block::CatchType;
 use crate::parser::ast::try_block::FinallyBlock;
-use crate::parser::ast::try_block::TryBlock;
+use crate::parser::ast::try_block::TryStatement;
 use crate::parser::ast::Statement;
 use crate::parser::error;
 use crate::parser::error::ParseResult;
@@ -83,7 +83,7 @@ pub fn try_block(state: &mut State) -> ParseResult<Statement> {
 
     let end = state.stream.current().span;
 
-    Ok(Statement::Try(TryBlock {
+    Ok(Statement::Try(TryStatement {
         start,
         end,
         body,

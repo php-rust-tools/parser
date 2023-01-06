@@ -6,34 +6,36 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: ShellExec {
-            parts: [
-                Literal(
-                    "Hello, ",
-                ),
-                Expression(
-                    Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 3,
-                                    column: 10,
-                                    position: 16,
+    Expression(
+        ExpressionStatement {
+            expression: ShellExec {
+                parts: [
+                    Literal(
+                        "Hello, ",
+                    ),
+                    Expression(
+                        Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span {
+                                        line: 3,
+                                        column: 10,
+                                        position: 16,
+                                    },
+                                    name: "$name",
                                 },
-                                name: "$name",
-                            },
+                            ),
                         ),
                     ),
-                ),
-            ],
-        },
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 17,
-                position: 23,
+                ],
             },
-        ),
-    },
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 17,
+                    position: 23,
+                },
+            ),
+        },
+    ),
 ]

@@ -6,59 +6,61 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Variable(
-            BracedVariableVariable(
-                BracedVariableVariable {
-                    start: Span {
-                        line: 1,
-                        column: 7,
-                        position: 6,
-                    },
-                    variable: FunctionCall {
-                        target: Identifier(
-                            SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: Span {
-                                        line: 1,
-                                        column: 9,
-                                        position: 8,
+    Expression(
+        ExpressionStatement {
+            expression: Variable(
+                BracedVariableVariable(
+                    BracedVariableVariable {
+                        start: Span {
+                            line: 1,
+                            column: 7,
+                            position: 6,
+                        },
+                        variable: FunctionCall {
+                            target: Identifier(
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: Span {
+                                            line: 1,
+                                            column: 9,
+                                            position: 8,
+                                        },
+                                        value: "foo",
                                     },
-                                    value: "foo",
-                                },
+                                ),
                             ),
-                        ),
-                        arguments: ArgumentList {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            left_parenthesis: Span {
-                                line: 1,
-                                column: 12,
-                                position: 11,
-                            },
-                            arguments: [],
-                            right_parenthesis: Span {
-                                line: 1,
-                                column: 13,
-                                position: 12,
+                            arguments: ArgumentList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span {
+                                    line: 1,
+                                    column: 12,
+                                    position: 11,
+                                },
+                                arguments: [],
+                                right_parenthesis: Span {
+                                    line: 1,
+                                    column: 13,
+                                    position: 12,
+                                },
                             },
                         },
+                        end: Span {
+                            line: 1,
+                            column: 14,
+                            position: 13,
+                        },
                     },
-                    end: Span {
-                        line: 1,
-                        column: 14,
-                        position: 13,
-                    },
+                ),
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 15,
+                    position: 14,
                 },
             ),
-        ),
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 15,
-                position: 14,
-            },
-        ),
-    },
+        },
+    ),
 ]

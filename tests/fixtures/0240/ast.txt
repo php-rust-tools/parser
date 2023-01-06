@@ -6,16 +6,18 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: ShellExec {
-            parts: [],
-        },
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 3,
-                position: 9,
+    Expression(
+        ExpressionStatement {
+            expression: ShellExec {
+                parts: [],
             },
-        ),
-    },
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 3,
+                    position: 9,
+                },
+            ),
+        },
+    ),
 ]

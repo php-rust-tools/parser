@@ -19,7 +19,7 @@ pub struct ConstantEntry {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Constant {
+pub struct ConstantStatement {
     pub comments: CommentGroup,
     pub r#const: Span,               // `const`
     pub entries: Vec<ConstantEntry>, // `FOO = 123`

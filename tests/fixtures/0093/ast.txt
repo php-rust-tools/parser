@@ -6,41 +6,43 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Variable(
-            BracedVariableVariable(
-                BracedVariableVariable {
-                    start: Span {
-                        line: 1,
-                        column: 7,
-                        position: 6,
-                    },
-                    variable: Literal(
-                        String(
-                            LiteralString {
-                                value: "'foo'",
-                                span: Span {
-                                    line: 1,
-                                    column: 9,
-                                    position: 8,
+    Expression(
+        ExpressionStatement {
+            expression: Variable(
+                BracedVariableVariable(
+                    BracedVariableVariable {
+                        start: Span {
+                            line: 1,
+                            column: 7,
+                            position: 6,
+                        },
+                        variable: Literal(
+                            String(
+                                LiteralString {
+                                    value: "'foo'",
+                                    span: Span {
+                                        line: 1,
+                                        column: 9,
+                                        position: 8,
+                                    },
                                 },
-                            },
+                            ),
                         ),
-                    ),
-                    end: Span {
-                        line: 1,
-                        column: 14,
-                        position: 13,
+                        end: Span {
+                            line: 1,
+                            column: 14,
+                            position: 13,
+                        },
                     },
+                ),
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 15,
+                    position: 14,
                 },
             ),
-        ),
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 15,
-                position: 14,
-            },
-        ),
-    },
+        },
+    ),
 ]

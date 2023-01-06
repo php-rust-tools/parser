@@ -16,7 +16,7 @@ pub enum CatchType {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct TryBlock {
+pub struct TryStatement {
     pub start: Span,
     pub end: Span,
     pub body: Block,

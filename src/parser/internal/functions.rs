@@ -7,7 +7,7 @@ use crate::parser::ast::functions::ClosureUse;
 use crate::parser::ast::functions::ClosureUseVariable;
 use crate::parser::ast::functions::ConcreteConstructor;
 use crate::parser::ast::functions::ConcreteMethod;
-use crate::parser::ast::functions::Function;
+use crate::parser::ast::functions::FunctionStatement;
 use crate::parser::ast::functions::FunctionBody;
 use crate::parser::ast::functions::MethodBody;
 use crate::parser::ast::functions::ReturnType;
@@ -216,7 +216,7 @@ pub fn function(state: &mut State) -> ParseResult<Statement> {
         right_brace: utils::skip_right_brace(state)?,
     };
 
-    Ok(Statement::Function(Function {
+    Ok(Statement::Function(FunctionStatement {
         comments,
         function,
         name,

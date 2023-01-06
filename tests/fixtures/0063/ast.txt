@@ -6,81 +6,83 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: New {
-            new: Span {
-                line: 1,
-                column: 7,
-                position: 6,
-            },
-            target: AnonymousClass(
-                AnonymousClass {
-                    attributes: [],
-                    class: Span {
-                        line: 1,
-                        column: 11,
-                        position: 10,
-                    },
-                    extends: None,
-                    implements: Some(
-                        ClassImplements {
-                            implements: Span {
+    Expression(
+        ExpressionStatement {
+            expression: New {
+                new: Span {
+                    line: 1,
+                    column: 7,
+                    position: 6,
+                },
+                target: AnonymousClass(
+                    AnonymousClass {
+                        attributes: [],
+                        class: Span {
+                            line: 1,
+                            column: 11,
+                            position: 10,
+                        },
+                        extends: None,
+                        implements: Some(
+                            ClassImplements {
+                                implements: Span {
+                                    line: 1,
+                                    column: 17,
+                                    position: 16,
+                                },
+                                interfaces: CommaSeparated {
+                                    inner: [
+                                        SimpleIdentifier {
+                                            span: Span {
+                                                line: 1,
+                                                column: 28,
+                                                position: 27,
+                                            },
+                                            value: "Foo",
+                                        },
+                                        SimpleIdentifier {
+                                            span: Span {
+                                                line: 1,
+                                                column: 33,
+                                                position: 32,
+                                            },
+                                            value: "Bar",
+                                        },
+                                    ],
+                                    commas: [
+                                        Span {
+                                            line: 1,
+                                            column: 31,
+                                            position: 30,
+                                        },
+                                    ],
+                                },
+                            },
+                        ),
+                        body: AnonymousClassBody {
+                            left_brace: Span {
                                 line: 1,
-                                column: 17,
-                                position: 16,
+                                column: 37,
+                                position: 36,
                             },
-                            interfaces: CommaSeparated {
-                                inner: [
-                                    SimpleIdentifier {
-                                        span: Span {
-                                            line: 1,
-                                            column: 28,
-                                            position: 27,
-                                        },
-                                        value: "Foo",
-                                    },
-                                    SimpleIdentifier {
-                                        span: Span {
-                                            line: 1,
-                                            column: 33,
-                                            position: 32,
-                                        },
-                                        value: "Bar",
-                                    },
-                                ],
-                                commas: [
-                                    Span {
-                                        line: 1,
-                                        column: 31,
-                                        position: 30,
-                                    },
-                                ],
+                            members: [],
+                            right_brace: Span {
+                                line: 1,
+                                column: 38,
+                                position: 37,
                             },
-                        },
-                    ),
-                    body: AnonymousClassBody {
-                        left_brace: Span {
-                            line: 1,
-                            column: 37,
-                            position: 36,
-                        },
-                        members: [],
-                        right_brace: Span {
-                            line: 1,
-                            column: 38,
-                            position: 37,
                         },
                     },
+                ),
+                arguments: None,
+            },
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 39,
+                    position: 38,
                 },
             ),
-            arguments: None,
         },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 39,
-                position: 38,
-            },
-        ),
-    },
+    ),
 ]

@@ -36,7 +36,7 @@ pub struct UnitEnumBody {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct UnitEnum {
+pub struct UnitEnumStatement {
     pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
     pub r#enum: Span,                      // `enum`
     pub name: SimpleIdentifier,            // `Foo`
@@ -80,7 +80,7 @@ pub struct BackedEnumBody {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct BackedEnum {
+pub struct BackedEnumStatement {
     pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
     pub r#enum: Span,                      // `enum`
     pub name: SimpleIdentifier,            // `Foo`

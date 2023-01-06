@@ -3,7 +3,7 @@ use crate::lexer::token::TokenKind;
 use crate::parser::ast::classes::AnonymousClass;
 use crate::parser::ast::classes::AnonymousClassBody;
 use crate::parser::ast::classes::AnonymousClassMember;
-use crate::parser::ast::classes::Class;
+use crate::parser::ast::classes::ClassStatement;
 use crate::parser::ast::classes::ClassBody;
 use crate::parser::ast::classes::ClassExtends;
 use crate::parser::ast::classes::ClassImplements;
@@ -80,7 +80,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         right_brace: utils::skip_right_brace(state)?,
     };
 
-    Ok(Statement::Class(Class {
+    Ok(Statement::Class(ClassStatement {
         class,
         name,
         modifiers,

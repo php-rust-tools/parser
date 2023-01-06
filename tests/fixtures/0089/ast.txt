@@ -6,64 +6,66 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: MethodClosureCreation {
-            target: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span {
-                            line: 1,
-                            column: 7,
-                            position: 6,
+    Expression(
+        ExpressionStatement {
+            expression: MethodClosureCreation {
+                target: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 1,
+                                column: 7,
+                                position: 6,
+                            },
+                            name: "$this",
                         },
-                        name: "$this",
-                    },
+                    ),
                 ),
-            ),
-            arrow: Span {
-                line: 1,
-                column: 12,
-                position: 11,
-            },
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 1,
-                            column: 14,
-                            position: 13,
+                arrow: Span {
+                    line: 1,
+                    column: 12,
+                    position: 11,
+                },
+                method: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 1,
+                                column: 14,
+                                position: 13,
+                            },
+                            value: "foo",
                         },
-                        value: "foo",
-                    },
+                    ),
                 ),
-            ),
-            placeholder: ArgumentPlaceholder {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 1,
-                    column: 17,
-                    position: 16,
-                },
-                ellipsis: Span {
-                    line: 1,
-                    column: 18,
-                    position: 17,
-                },
-                right_parenthesis: Span {
-                    line: 1,
-                    column: 21,
-                    position: 20,
+                placeholder: ArgumentPlaceholder {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 1,
+                        column: 17,
+                        position: 16,
+                    },
+                    ellipsis: Span {
+                        line: 1,
+                        column: 18,
+                        position: 17,
+                    },
+                    right_parenthesis: Span {
+                        line: 1,
+                        column: 21,
+                        position: 20,
+                    },
                 },
             },
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 22,
+                    position: 21,
+                },
+            ),
         },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 22,
-                position: 21,
-            },
-        ),
-    },
+    ),
 ]

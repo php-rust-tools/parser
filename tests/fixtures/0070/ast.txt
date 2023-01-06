@@ -13,48 +13,52 @@
                 column: 1,
                 position: 6,
             },
-            body: Block {
-                left_brace: Span {
-                    line: 2,
-                    column: 4,
-                    position: 9,
-                },
-                statements: [
-                    Echo {
-                        echo: Span {
-                            line: 3,
-                            column: 5,
-                            position: 15,
-                        },
-                        values: [
-                            Literal(
-                                String(
-                                    LiteralString {
-                                        value: "'Hi!'",
-                                        span: Span {
-                                            line: 3,
-                                            column: 10,
-                                            position: 20,
-                                        },
+            body: Block(
+                BlockStatement {
+                    left_brace: Span {
+                        line: 2,
+                        column: 4,
+                        position: 9,
+                    },
+                    statements: [
+                        Echo(
+                            EchoStatement {
+                                echo: Span {
+                                    line: 3,
+                                    column: 5,
+                                    position: 15,
+                                },
+                                values: [
+                                    Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'Hi!'",
+                                                span: Span {
+                                                    line: 3,
+                                                    column: 10,
+                                                    position: 20,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                ],
+                                ending: Semicolon(
+                                    Span {
+                                        line: 3,
+                                        column: 15,
+                                        position: 25,
                                     },
                                 ),
-                            ),
-                        ],
-                        ending: Semicolon(
-                            Span {
-                                line: 3,
-                                column: 15,
-                                position: 25,
                             },
                         ),
+                    ],
+                    right_brace: Span {
+                        line: 4,
+                        column: 1,
+                        position: 27,
                     },
-                ],
-                right_brace: Span {
-                    line: 4,
-                    column: 1,
-                    position: 27,
                 },
-            },
+            ),
             while: Span {
                 line: 4,
                 column: 3,

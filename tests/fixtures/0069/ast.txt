@@ -13,19 +13,21 @@
                 column: 7,
                 position: 6,
             },
-            body: Block {
-                left_brace: Span {
-                    line: 1,
-                    column: 10,
-                    position: 9,
+            body: Block(
+                BlockStatement {
+                    left_brace: Span {
+                        line: 1,
+                        column: 10,
+                        position: 9,
+                    },
+                    statements: [],
+                    right_brace: Span {
+                        line: 1,
+                        column: 12,
+                        position: 11,
+                    },
                 },
-                statements: [],
-                right_brace: Span {
-                    line: 1,
-                    column: 12,
-                    position: 11,
-                },
-            },
+            ),
             while: Span {
                 line: 1,
                 column: 14,

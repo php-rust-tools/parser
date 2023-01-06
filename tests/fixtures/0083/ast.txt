@@ -7,7 +7,7 @@
         },
     ),
     Declare(
-        Declare {
+        DeclareStatement {
             declare: Span {
                 line: 1,
                 column: 7,
@@ -59,34 +59,36 @@
                     position: 21,
                 },
                 statements: [
-                    Echo {
-                        echo: Span {
-                            line: 1,
-                            column: 24,
-                            position: 23,
-                        },
-                        values: [
-                            Literal(
-                                String(
-                                    LiteralString {
-                                        value: "'Hello, world!'",
-                                        span: Span {
-                                            line: 1,
-                                            column: 29,
-                                            position: 28,
-                                        },
-                                    },
-                                ),
-                            ),
-                        ],
-                        ending: Semicolon(
-                            Span {
+                    Echo(
+                        EchoStatement {
+                            echo: Span {
                                 line: 1,
-                                column: 44,
-                                position: 43,
+                                column: 24,
+                                position: 23,
                             },
-                        ),
-                    },
+                            values: [
+                                Literal(
+                                    String(
+                                        LiteralString {
+                                            value: "'Hello, world!'",
+                                            span: Span {
+                                                line: 1,
+                                                column: 29,
+                                                position: 28,
+                                            },
+                                        },
+                                    ),
+                                ),
+                            ],
+                            ending: Semicolon(
+                                Span {
+                                    line: 1,
+                                    column: 44,
+                                    position: 43,
+                                },
+                            ),
+                        },
+                    ),
                 ],
                 right_brace: Span {
                     line: 1,

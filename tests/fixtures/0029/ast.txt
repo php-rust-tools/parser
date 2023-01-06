@@ -6,56 +6,16 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: PropertyFetch {
-            target: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span {
-                            line: 1,
-                            column: 7,
-                            position: 6,
-                        },
-                        name: "$foo",
-                    },
-                ),
-            ),
-            arrow: Span {
-                line: 1,
-                column: 11,
-                position: 10,
-            },
-            property: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 1,
-                            column: 13,
-                            position: 12,
-                        },
-                        value: "bar",
-                    },
-                ),
-            ),
-        },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 16,
-                position: 15,
-            },
-        ),
-    },
-    Expression {
-        expression: PropertyFetch {
-            target: PropertyFetch {
+    Expression(
+        ExpressionStatement {
+            expression: PropertyFetch {
                 target: Variable(
                     SimpleVariable(
                         SimpleVariable {
                             span: Span {
                                 line: 1,
-                                column: 18,
-                                position: 17,
+                                column: 7,
+                                position: 6,
                             },
                             name: "$foo",
                         },
@@ -63,46 +23,90 @@
                 ),
                 arrow: Span {
                     line: 1,
-                    column: 22,
-                    position: 21,
+                    column: 11,
+                    position: 10,
                 },
                 property: Identifier(
                     SimpleIdentifier(
                         SimpleIdentifier {
                             span: Span {
                                 line: 1,
-                                column: 24,
-                                position: 23,
+                                column: 13,
+                                position: 12,
                             },
                             value: "bar",
                         },
                     ),
                 ),
             },
-            arrow: Span {
-                line: 1,
-                column: 27,
-                position: 26,
-            },
-            property: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 1,
-                            column: 29,
-                            position: 28,
-                        },
-                        value: "baz",
-                    },
-                ),
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 16,
+                    position: 15,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 32,
-                position: 31,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: PropertyFetch {
+                target: PropertyFetch {
+                    target: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 1,
+                                    column: 18,
+                                    position: 17,
+                                },
+                                name: "$foo",
+                            },
+                        ),
+                    ),
+                    arrow: Span {
+                        line: 1,
+                        column: 22,
+                        position: 21,
+                    },
+                    property: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span {
+                                    line: 1,
+                                    column: 24,
+                                    position: 23,
+                                },
+                                value: "bar",
+                            },
+                        ),
+                    ),
+                },
+                arrow: Span {
+                    line: 1,
+                    column: 27,
+                    position: 26,
+                },
+                property: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 1,
+                                column: 29,
+                                position: 28,
+                            },
+                            value: "baz",
+                        },
+                    ),
+                ),
             },
-        ),
-    },
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 32,
+                    position: 31,
+                },
+            ),
+        },
+    ),
 ]

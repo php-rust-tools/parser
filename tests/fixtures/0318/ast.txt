@@ -6,27 +6,29 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Literal(
-            String(
-                LiteralString {
-                    value: ""<?php\n"",
-                    span: Span {
-                        line: 1,
-                        column: 5,
-                        position: 4,
+    Expression(
+        ExpressionStatement {
+            expression: Literal(
+                String(
+                    LiteralString {
+                        value: ""<?php\n"",
+                        span: Span {
+                            line: 1,
+                            column: 5,
+                            position: 4,
+                        },
                     },
+                ),
+            ),
+            ending: CloseTag(
+                Span {
+                    line: 1,
+                    column: 15,
+                    position: 14,
                 },
             ),
-        ),
-        ending: CloseTag(
-            Span {
-                line: 1,
-                column: 15,
-                position: 14,
-            },
-        ),
-    },
+        },
+    ),
     InlineHtml(
         "\nsome html\n",
     ),
@@ -37,34 +39,36 @@
             position: 27,
         },
     ),
-    Echo {
-        echo: Span {
-            line: 4,
-            column: 5,
-            position: 37,
-        },
-        values: [
-            Literal(
-                String(
-                    LiteralString {
-                        value: ""// "",
-                        span: Span {
-                            line: 4,
-                            column: 10,
-                            position: 42,
-                        },
-                    },
-                ),
-            ),
-        ],
-        ending: Semicolon(
-            Span {
+    Echo(
+        EchoStatement {
+            echo: Span {
                 line: 4,
-                column: 15,
-                position: 47,
+                column: 5,
+                position: 37,
             },
-        ),
-    },
+            values: [
+                Literal(
+                    String(
+                        LiteralString {
+                            value: ""// "",
+                            span: Span {
+                                line: 4,
+                                column: 10,
+                                position: 42,
+                            },
+                        },
+                    ),
+                ),
+            ],
+            ending: Semicolon(
+                Span {
+                    line: 4,
+                    column: 15,
+                    position: 47,
+                },
+            ),
+        },
+    ),
     ClosingTag(
         Span {
             line: 5,

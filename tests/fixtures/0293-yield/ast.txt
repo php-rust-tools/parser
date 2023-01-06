@@ -7,7 +7,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -71,606 +71,626 @@
                     position: 32,
                 },
                 statements: [
-                    Expression {
-                        expression: Yield {
-                            key: None,
-                            value: Some(
-                                Literal(
-                                    Integer(
-                                        LiteralInteger {
-                                            value: "1",
-                                            span: Span {
-                                                line: 4,
-                                                column: 11,
-                                                position: 44,
-                                            },
-                                        },
-                                    ),
-                                ),
-                            ),
-                        },
-                        ending: Semicolon(
-                            Span {
-                                line: 4,
-                                column: 12,
-                                position: 45,
-                            },
-                        ),
-                    },
-                    Expression {
-                        expression: Yield {
-                            key: None,
-                            value: None,
-                        },
-                        ending: Semicolon(
-                            Span {
-                                line: 5,
-                                column: 10,
-                                position: 56,
-                            },
-                        ),
-                    },
-                    Expression {
-                        expression: Yield {
-                            key: Some(
-                                Literal(
-                                    Integer(
-                                        LiteralInteger {
-                                            value: "123",
-                                            span: Span {
-                                                line: 6,
-                                                column: 11,
-                                                position: 68,
-                                            },
-                                        },
-                                    ),
-                                ),
-                            ),
-                            value: Some(
-                                Literal(
-                                    Integer(
-                                        LiteralInteger {
-                                            value: "41",
-                                            span: Span {
-                                                line: 6,
-                                                column: 18,
-                                                position: 75,
-                                            },
-                                        },
-                                    ),
-                                ),
-                            ),
-                        },
-                        ending: Semicolon(
-                            Span {
-                                line: 6,
-                                column: 20,
-                                position: 77,
-                            },
-                        ),
-                    },
-                    Expression {
-                        expression: Yield {
-                            key: None,
-                            value: Some(
-                                Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span {
-                                                line: 7,
-                                                column: 11,
-                                                position: 89,
-                                            },
-                                            name: "$a",
-                                        },
-                                    ),
-                                ),
-                            ),
-                        },
-                        ending: Semicolon(
-                            Span {
-                                line: 7,
-                                column: 13,
-                                position: 91,
-                            },
-                        ),
-                    },
-                    Expression {
-                        expression: Yield {
-                            key: None,
-                            value: Some(
-                                ArithmeticOperation(
-                                    PreIncrement {
-                                        increment: Span {
-                                            line: 9,
-                                            column: 11,
-                                            position: 104,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 9,
-                                                        column: 13,
-                                                        position: 106,
-                                                    },
-                                                    name: "$a",
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: None,
+                                value: Some(
+                                    Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "1",
+                                                span: Span {
+                                                    line: 4,
+                                                    column: 11,
+                                                    position: 44,
                                                 },
-                                            ),
+                                            },
                                         ),
-                                    },
+                                    ),
                                 ),
+                            },
+                            ending: Semicolon(
+                                Span {
+                                    line: 4,
+                                    column: 12,
+                                    position: 45,
+                                },
                             ),
                         },
-                        ending: Semicolon(
-                            Span {
-                                line: 9,
-                                column: 15,
-                                position: 108,
+                    ),
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: None,
+                                value: None,
                             },
-                        ),
-                    },
-                    Expression {
-                        expression: Yield {
-                            key: None,
-                            value: Some(
-                                ArithmeticOperation(
-                                    PostIncrement {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 10,
-                                                        column: 11,
-                                                        position: 120,
-                                                    },
-                                                    name: "$b",
+                            ending: Semicolon(
+                                Span {
+                                    line: 5,
+                                    column: 10,
+                                    position: 56,
+                                },
+                            ),
+                        },
+                    ),
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: Some(
+                                    Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "123",
+                                                span: Span {
+                                                    line: 6,
+                                                    column: 11,
+                                                    position: 68,
                                                 },
-                                            ),
+                                            },
                                         ),
-                                        increment: Span {
-                                            line: 10,
-                                            column: 13,
-                                            position: 122,
-                                        },
-                                    },
+                                    ),
                                 ),
+                                value: Some(
+                                    Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "41",
+                                                span: Span {
+                                                    line: 6,
+                                                    column: 18,
+                                                    position: 75,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                ),
+                            },
+                            ending: Semicolon(
+                                Span {
+                                    line: 6,
+                                    column: 20,
+                                    position: 77,
+                                },
                             ),
                         },
-                        ending: Semicolon(
-                            Span {
-                                line: 10,
-                                column: 15,
-                                position: 124,
+                    ),
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: None,
+                                value: Some(
+                                    Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 7,
+                                                    column: 11,
+                                                    position: 89,
+                                                },
+                                                name: "$a",
+                                            },
+                                        ),
+                                    ),
+                                ),
                             },
-                        ),
-                    },
-                    Expression {
-                        expression: Yield {
-                            key: Some(
-                                ArithmeticOperation(
-                                    PreIncrement {
-                                        increment: Span {
-                                            line: 12,
-                                            column: 11,
-                                            position: 137,
+                            ending: Semicolon(
+                                Span {
+                                    line: 7,
+                                    column: 13,
+                                    position: 91,
+                                },
+                            ),
+                        },
+                    ),
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: None,
+                                value: Some(
+                                    ArithmeticOperation(
+                                        PreIncrement {
+                                            increment: Span {
+                                                line: 9,
+                                                column: 11,
+                                                position: 104,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 9,
+                                                            column: 13,
+                                                            position: 106,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
                                         },
-                                        right: Variable(
+                                    ),
+                                ),
+                            },
+                            ending: Semicolon(
+                                Span {
+                                    line: 9,
+                                    column: 15,
+                                    position: 108,
+                                },
+                            ),
+                        },
+                    ),
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: None,
+                                value: Some(
+                                    ArithmeticOperation(
+                                        PostIncrement {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 10,
+                                                            column: 11,
+                                                            position: 120,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
+                                            increment: Span {
+                                                line: 10,
+                                                column: 13,
+                                                position: 122,
+                                            },
+                                        },
+                                    ),
+                                ),
+                            },
+                            ending: Semicolon(
+                                Span {
+                                    line: 10,
+                                    column: 15,
+                                    position: 124,
+                                },
+                            ),
+                        },
+                    ),
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: Some(
+                                    ArithmeticOperation(
+                                        PreIncrement {
+                                            increment: Span {
+                                                line: 12,
+                                                column: 11,
+                                                position: 137,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 12,
+                                                            column: 13,
+                                                            position: 139,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                ),
+                                value: Some(
+                                    Ternary {
+                                        condition: Variable(
                                             SimpleVariable(
                                                 SimpleVariable {
                                                     span: Span {
                                                         line: 12,
-                                                        column: 13,
-                                                        position: 139,
+                                                        column: 19,
+                                                        position: 145,
                                                     },
                                                     name: "$a",
                                                 },
                                             ),
                                         ),
+                                        question: Span {
+                                            line: 12,
+                                            column: 22,
+                                            position: 148,
+                                        },
+                                        then: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 12,
+                                                        column: 24,
+                                                        position: 150,
+                                                    },
+                                                    name: "$m",
+                                                },
+                                            ),
+                                        ),
+                                        colon: Span {
+                                            line: 12,
+                                            column: 27,
+                                            position: 153,
+                                        },
+                                        else: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 12,
+                                                        column: 29,
+                                                        position: 155,
+                                                    },
+                                                    name: "$s",
+                                                },
+                                            ),
+                                        ),
                                     },
                                 ),
+                            },
+                            ending: Semicolon(
+                                Span {
+                                    line: 12,
+                                    column: 31,
+                                    position: 157,
+                                },
                             ),
-                            value: Some(
-                                Ternary {
-                                    condition: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 12,
-                                                    column: 19,
-                                                    position: 145,
+                        },
+                    ),
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: Some(
+                                    Ternary {
+                                        condition: ArithmeticOperation(
+                                            PreIncrement {
+                                                increment: Span {
+                                                    line: 13,
+                                                    column: 11,
+                                                    position: 169,
                                                 },
-                                                name: "$a",
+                                                right: Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 13,
+                                                                column: 13,
+                                                                position: 171,
+                                                            },
+                                                            name: "$a",
+                                                        },
+                                                    ),
+                                                ),
                                             },
                                         ),
-                                    ),
-                                    question: Span {
-                                        line: 12,
-                                        column: 22,
-                                        position: 148,
-                                    },
-                                    then: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 12,
-                                                    column: 24,
-                                                    position: 150,
+                                        question: Span {
+                                            line: 13,
+                                            column: 16,
+                                            position: 174,
+                                        },
+                                        then: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 13,
+                                                        column: 18,
+                                                        position: 176,
+                                                    },
+                                                    name: "$m",
                                                 },
-                                                name: "$m",
-                                            },
+                                            ),
                                         ),
-                                    ),
-                                    colon: Span {
-                                        line: 12,
-                                        column: 27,
-                                        position: 153,
+                                        colon: Span {
+                                            line: 13,
+                                            column: 21,
+                                            position: 179,
+                                        },
+                                        else: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 13,
+                                                        column: 23,
+                                                        position: 181,
+                                                    },
+                                                    name: "$s",
+                                                },
+                                            ),
+                                        ),
                                     },
-                                    else: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 12,
+                                ),
+                                value: Some(
+                                    Ternary {
+                                        condition: ArithmeticOperation(
+                                            PreIncrement {
+                                                increment: Span {
+                                                    line: 13,
                                                     column: 29,
-                                                    position: 155,
+                                                    position: 187,
                                                 },
-                                                name: "$s",
+                                                right: Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 13,
+                                                                column: 31,
+                                                                position: 189,
+                                                            },
+                                                            name: "$a",
+                                                        },
+                                                    ),
+                                                ),
                                             },
                                         ),
-                                    ),
+                                        question: Span {
+                                            line: 13,
+                                            column: 34,
+                                            position: 192,
+                                        },
+                                        then: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 13,
+                                                        column: 36,
+                                                        position: 194,
+                                                    },
+                                                    name: "$m",
+                                                },
+                                            ),
+                                        ),
+                                        colon: Span {
+                                            line: 13,
+                                            column: 39,
+                                            position: 197,
+                                        },
+                                        else: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 13,
+                                                        column: 41,
+                                                        position: 199,
+                                                    },
+                                                    name: "$s",
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                ),
+                            },
+                            ending: Semicolon(
+                                Span {
+                                    line: 13,
+                                    column: 43,
+                                    position: 201,
                                 },
                             ),
                         },
-                        ending: Semicolon(
-                            Span {
-                                line: 12,
-                                column: 31,
-                                position: 157,
-                            },
-                        ),
-                    },
-                    Expression {
-                        expression: Yield {
-                            key: Some(
-                                Ternary {
-                                    condition: ArithmeticOperation(
-                                        PreIncrement {
-                                            increment: Span {
-                                                line: 13,
-                                                column: 11,
-                                                position: 169,
-                                            },
-                                            right: Variable(
+                    ),
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: Some(
+                                    ArithmeticOperation(
+                                        PostIncrement {
+                                            left: Variable(
                                                 SimpleVariable(
                                                     SimpleVariable {
                                                         span: Span {
-                                                            line: 13,
-                                                            column: 13,
-                                                            position: 171,
+                                                            line: 15,
+                                                            column: 11,
+                                                            position: 214,
                                                         },
                                                         name: "$a",
                                                     },
                                                 ),
                                             ),
-                                        },
-                                    ),
-                                    question: Span {
-                                        line: 13,
-                                        column: 16,
-                                        position: 174,
-                                    },
-                                    then: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 13,
-                                                    column: 18,
-                                                    position: 176,
-                                                },
-                                                name: "$m",
-                                            },
-                                        ),
-                                    ),
-                                    colon: Span {
-                                        line: 13,
-                                        column: 21,
-                                        position: 179,
-                                    },
-                                    else: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 13,
-                                                    column: 23,
-                                                    position: 181,
-                                                },
-                                                name: "$s",
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ),
-                            value: Some(
-                                Ternary {
-                                    condition: ArithmeticOperation(
-                                        PreIncrement {
                                             increment: Span {
-                                                line: 13,
-                                                column: 29,
-                                                position: 187,
+                                                line: 15,
+                                                column: 13,
+                                                position: 216,
                                             },
-                                            right: Variable(
-                                                SimpleVariable(
-                                                    SimpleVariable {
-                                                        span: Span {
-                                                            line: 13,
-                                                            column: 31,
-                                                            position: 189,
-                                                        },
-                                                        name: "$a",
-                                                    },
-                                                ),
-                                            ),
                                         },
                                     ),
-                                    question: Span {
-                                        line: 13,
-                                        column: 34,
-                                        position: 192,
-                                    },
-                                    then: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 13,
-                                                    column: 36,
-                                                    position: 194,
-                                                },
-                                                name: "$m",
-                                            },
-                                        ),
-                                    ),
-                                    colon: Span {
-                                        line: 13,
-                                        column: 39,
-                                        position: 197,
-                                    },
-                                    else: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 13,
-                                                    column: 41,
-                                                    position: 199,
-                                                },
-                                                name: "$s",
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ),
-                        },
-                        ending: Semicolon(
-                            Span {
-                                line: 13,
-                                column: 43,
-                                position: 201,
-                            },
-                        ),
-                    },
-                    Expression {
-                        expression: Yield {
-                            key: Some(
-                                ArithmeticOperation(
-                                    PostIncrement {
-                                        left: Variable(
+                                ),
+                                value: Some(
+                                    Ternary {
+                                        condition: Variable(
                                             SimpleVariable(
                                                 SimpleVariable {
                                                     span: Span {
                                                         line: 15,
-                                                        column: 11,
-                                                        position: 214,
+                                                        column: 19,
+                                                        position: 222,
                                                     },
                                                     name: "$a",
                                                 },
                                             ),
                                         ),
-                                        increment: Span {
+                                        question: Span {
                                             line: 15,
-                                            column: 13,
-                                            position: 216,
+                                            column: 22,
+                                            position: 225,
                                         },
+                                        then: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 15,
+                                                        column: 24,
+                                                        position: 227,
+                                                    },
+                                                    name: "$m",
+                                                },
+                                            ),
+                                        ),
+                                        colon: Span {
+                                            line: 15,
+                                            column: 27,
+                                            position: 230,
+                                        },
+                                        else: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 15,
+                                                        column: 29,
+                                                        position: 232,
+                                                    },
+                                                    name: "$s",
+                                                },
+                                            ),
+                                        ),
                                     },
                                 ),
-                            ),
-                            value: Some(
-                                Ternary {
-                                    condition: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 15,
-                                                    column: 19,
-                                                    position: 222,
-                                                },
-                                                name: "$a",
-                                            },
-                                        ),
-                                    ),
-                                    question: Span {
-                                        line: 15,
-                                        column: 22,
-                                        position: 225,
-                                    },
-                                    then: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 15,
-                                                    column: 24,
-                                                    position: 227,
-                                                },
-                                                name: "$m",
-                                            },
-                                        ),
-                                    ),
-                                    colon: Span {
-                                        line: 15,
-                                        column: 27,
-                                        position: 230,
-                                    },
-                                    else: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 15,
-                                                    column: 29,
-                                                    position: 232,
-                                                },
-                                                name: "$s",
-                                            },
-                                        ),
-                                    ),
+                            },
+                            ending: Semicolon(
+                                Span {
+                                    line: 15,
+                                    column: 31,
+                                    position: 234,
                                 },
                             ),
                         },
-                        ending: Semicolon(
-                            Span {
-                                line: 15,
-                                column: 31,
-                                position: 234,
+                    ),
+                    Expression(
+                        ExpressionStatement {
+                            expression: Yield {
+                                key: Some(
+                                    Ternary {
+                                        condition: ArithmeticOperation(
+                                            PostIncrement {
+                                                left: Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 16,
+                                                                column: 11,
+                                                                position: 246,
+                                                            },
+                                                            name: "$a",
+                                                        },
+                                                    ),
+                                                ),
+                                                increment: Span {
+                                                    line: 16,
+                                                    column: 13,
+                                                    position: 248,
+                                                },
+                                            },
+                                        ),
+                                        question: Span {
+                                            line: 16,
+                                            column: 16,
+                                            position: 251,
+                                        },
+                                        then: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 16,
+                                                        column: 18,
+                                                        position: 253,
+                                                    },
+                                                    name: "$m",
+                                                },
+                                            ),
+                                        ),
+                                        colon: Span {
+                                            line: 16,
+                                            column: 21,
+                                            position: 256,
+                                        },
+                                        else: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 16,
+                                                        column: 23,
+                                                        position: 258,
+                                                    },
+                                                    name: "$s",
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                ),
+                                value: Some(
+                                    Ternary {
+                                        condition: ArithmeticOperation(
+                                            PostIncrement {
+                                                left: Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 16,
+                                                                column: 29,
+                                                                position: 264,
+                                                            },
+                                                            name: "$a",
+                                                        },
+                                                    ),
+                                                ),
+                                                increment: Span {
+                                                    line: 16,
+                                                    column: 31,
+                                                    position: 266,
+                                                },
+                                            },
+                                        ),
+                                        question: Span {
+                                            line: 16,
+                                            column: 34,
+                                            position: 269,
+                                        },
+                                        then: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 16,
+                                                        column: 36,
+                                                        position: 271,
+                                                    },
+                                                    name: "$m",
+                                                },
+                                            ),
+                                        ),
+                                        colon: Span {
+                                            line: 16,
+                                            column: 39,
+                                            position: 274,
+                                        },
+                                        else: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 16,
+                                                        column: 41,
+                                                        position: 276,
+                                                    },
+                                                    name: "$s",
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                ),
                             },
-                        ),
-                    },
-                    Expression {
-                        expression: Yield {
-                            key: Some(
-                                Ternary {
-                                    condition: ArithmeticOperation(
-                                        PostIncrement {
-                                            left: Variable(
-                                                SimpleVariable(
-                                                    SimpleVariable {
-                                                        span: Span {
-                                                            line: 16,
-                                                            column: 11,
-                                                            position: 246,
-                                                        },
-                                                        name: "$a",
-                                                    },
-                                                ),
-                                            ),
-                                            increment: Span {
-                                                line: 16,
-                                                column: 13,
-                                                position: 248,
-                                            },
-                                        },
-                                    ),
-                                    question: Span {
-                                        line: 16,
-                                        column: 16,
-                                        position: 251,
-                                    },
-                                    then: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 16,
-                                                    column: 18,
-                                                    position: 253,
-                                                },
-                                                name: "$m",
-                                            },
-                                        ),
-                                    ),
-                                    colon: Span {
-                                        line: 16,
-                                        column: 21,
-                                        position: 256,
-                                    },
-                                    else: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 16,
-                                                    column: 23,
-                                                    position: 258,
-                                                },
-                                                name: "$s",
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ),
-                            value: Some(
-                                Ternary {
-                                    condition: ArithmeticOperation(
-                                        PostIncrement {
-                                            left: Variable(
-                                                SimpleVariable(
-                                                    SimpleVariable {
-                                                        span: Span {
-                                                            line: 16,
-                                                            column: 29,
-                                                            position: 264,
-                                                        },
-                                                        name: "$a",
-                                                    },
-                                                ),
-                                            ),
-                                            increment: Span {
-                                                line: 16,
-                                                column: 31,
-                                                position: 266,
-                                            },
-                                        },
-                                    ),
-                                    question: Span {
-                                        line: 16,
-                                        column: 34,
-                                        position: 269,
-                                    },
-                                    then: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 16,
-                                                    column: 36,
-                                                    position: 271,
-                                                },
-                                                name: "$m",
-                                            },
-                                        ),
-                                    ),
-                                    colon: Span {
-                                        line: 16,
-                                        column: 39,
-                                        position: 274,
-                                    },
-                                    else: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 16,
-                                                    column: 41,
-                                                    position: 276,
-                                                },
-                                                name: "$s",
-                                            },
-                                        ),
-                                    ),
+                            ending: Semicolon(
+                                Span {
+                                    line: 16,
+                                    column: 43,
+                                    position: 278,
                                 },
                             ),
                         },
-                        ending: Semicolon(
-                            Span {
-                                line: 16,
-                                column: 43,
-                                position: 278,
-                            },
-                        ),
-                    },
+                    ),
                 ],
                 right_brace: Span {
                     line: 17,

@@ -6,79 +6,81 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: NullsafeMethodCall {
-            target: NullsafePropertyFetch {
-                target: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 1,
-                                column: 7,
-                                position: 6,
+    Expression(
+        ExpressionStatement {
+            expression: NullsafeMethodCall {
+                target: NullsafePropertyFetch {
+                    target: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 1,
+                                    column: 7,
+                                    position: 6,
+                                },
+                                name: "$a",
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
+                    question_arrow: Span {
+                        line: 1,
+                        column: 9,
+                        position: 8,
+                    },
+                    property: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span {
+                                    line: 1,
+                                    column: 12,
+                                    position: 11,
+                                },
+                                value: "b",
+                            },
+                        ),
+                    ),
+                },
                 question_arrow: Span {
                     line: 1,
-                    column: 9,
-                    position: 8,
+                    column: 13,
+                    position: 12,
                 },
-                property: Identifier(
+                method: Identifier(
                     SimpleIdentifier(
                         SimpleIdentifier {
                             span: Span {
                                 line: 1,
-                                column: 12,
-                                position: 11,
+                                column: 16,
+                                position: 15,
                             },
-                            value: "b",
+                            value: "c",
                         },
                     ),
                 ),
-            },
-            question_arrow: Span {
-                line: 1,
-                column: 13,
-                position: 12,
-            },
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 1,
-                            column: 16,
-                            position: 15,
-                        },
-                        value: "c",
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
                     },
-                ),
+                    left_parenthesis: Span {
+                        line: 1,
+                        column: 17,
+                        position: 16,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 1,
+                        column: 18,
+                        position: 17,
+                    },
+                },
+            },
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 19,
+                    position: 18,
+                },
             ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 1,
-                    column: 17,
-                    position: 16,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 1,
-                    column: 18,
-                    position: 17,
-                },
-            },
         },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 19,
-                position: 18,
-            },
-        ),
-    },
+    ),
 ]

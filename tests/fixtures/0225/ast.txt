@@ -6,20 +6,22 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Heredoc {
-            parts: [
-                Literal(
-                    "Hello, world!",
-                ),
-            ],
-        },
-        ending: Semicolon(
-            Span {
-                line: 5,
-                column: 4,
-                position: 36,
+    Expression(
+        ExpressionStatement {
+            expression: Heredoc {
+                parts: [
+                    Literal(
+                        "Hello, world!",
+                    ),
+                ],
             },
-        ),
-    },
+            ending: Semicolon(
+                Span {
+                    line: 5,
+                    column: 4,
+                    position: 36,
+                },
+            ),
+        },
+    ),
 ]

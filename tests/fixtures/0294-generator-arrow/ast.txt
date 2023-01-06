@@ -6,124 +6,126 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 3,
-                                column: 1,
-                                position: 7,
-                            },
-                            name: "$e",
-                        },
-                    ),
-                ),
-                equals: Span {
-                    line: 3,
-                    column: 4,
-                    position: 10,
-                },
-                right: FunctionCall {
-                    target: Parenthesized {
-                        start: Span {
-                            line: 3,
-                            column: 6,
-                            position: 12,
-                        },
-                        expr: ArrowFunction(
-                            ArrowFunction {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                static: None,
-                                ampersand: None,
-                                fn: Span {
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
                                     line: 3,
-                                    column: 7,
-                                    position: 13,
+                                    column: 1,
+                                    position: 7,
                                 },
-                                attributes: [],
-                                parameters: FunctionParameterList {
+                                name: "$e",
+                            },
+                        ),
+                    ),
+                    equals: Span {
+                        line: 3,
+                        column: 4,
+                        position: 10,
+                    },
+                    right: FunctionCall {
+                        target: Parenthesized {
+                            start: Span {
+                                line: 3,
+                                column: 6,
+                                position: 12,
+                            },
+                            expr: ArrowFunction(
+                                ArrowFunction {
                                     comments: CommentGroup {
                                         comments: [],
                                     },
-                                    left_parenthesis: Span {
+                                    static: None,
+                                    ampersand: None,
+                                    fn: Span {
                                         line: 3,
-                                        column: 10,
-                                        position: 16,
+                                        column: 7,
+                                        position: 13,
                                     },
-                                    parameters: CommaSeparated {
-                                        inner: [],
-                                        commas: [],
-                                    },
-                                    right_parenthesis: Span {
-                                        line: 3,
-                                        column: 11,
-                                        position: 17,
-                                    },
-                                },
-                                return_type: Some(
-                                    ReturnType {
-                                        colon: Span {
-                                            line: 3,
-                                            column: 12,
-                                            position: 18,
+                                    attributes: [],
+                                    parameters: FunctionParameterList {
+                                        comments: CommentGroup {
+                                            comments: [],
                                         },
-                                        data_type: Named(
-                                            Span {
-                                                line: 3,
-                                                column: 14,
-                                                position: 20,
-                                            },
-                                            "\Generator",
-                                        ),
+                                        left_parenthesis: Span {
+                                            line: 3,
+                                            column: 10,
+                                            position: 16,
+                                        },
+                                        parameters: CommaSeparated {
+                                            inner: [],
+                                            commas: [],
+                                        },
+                                        right_parenthesis: Span {
+                                            line: 3,
+                                            column: 11,
+                                            position: 17,
+                                        },
                                     },
-                                ),
-                                double_arrow: Span {
-                                    line: 3,
-                                    column: 25,
-                                    position: 31,
+                                    return_type: Some(
+                                        ReturnType {
+                                            colon: Span {
+                                                line: 3,
+                                                column: 12,
+                                                position: 18,
+                                            },
+                                            data_type: Named(
+                                                Span {
+                                                    line: 3,
+                                                    column: 14,
+                                                    position: 20,
+                                                },
+                                                "\Generator",
+                                            ),
+                                        },
+                                    ),
+                                    double_arrow: Span {
+                                        line: 3,
+                                        column: 25,
+                                        position: 31,
+                                    },
+                                    body: Yield {
+                                        key: None,
+                                        value: None,
+                                    },
                                 },
-                                body: Yield {
-                                    key: None,
-                                    value: None,
-                                },
+                            ),
+                            end: Span {
+                                line: 3,
+                                column: 33,
+                                position: 39,
                             },
-                        ),
-                        end: Span {
-                            line: 3,
-                            column: 33,
-                            position: 39,
                         },
-                    },
-                    arguments: ArgumentList {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        left_parenthesis: Span {
-                            line: 3,
-                            column: 34,
-                            position: 40,
-                        },
-                        arguments: [],
-                        right_parenthesis: Span {
-                            line: 3,
-                            column: 35,
-                            position: 41,
+                        arguments: ArgumentList {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            left_parenthesis: Span {
+                                line: 3,
+                                column: 34,
+                                position: 40,
+                            },
+                            arguments: [],
+                            right_parenthesis: Span {
+                                line: 3,
+                                column: 35,
+                                position: 41,
+                            },
                         },
                     },
                 },
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 36,
-                position: 42,
-            },
-        ),
-    },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 36,
+                    position: 42,
+                },
+            ),
+        },
+    ),
 ]

@@ -52,7 +52,7 @@ pub enum DeclareBody {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Declare {
+pub struct DeclareStatement {
     pub declare: Span,              // `declare`
     pub entries: DeclareEntryGroup, // `(strict_types = 1)`
     pub body: DeclareBody,          // `;`

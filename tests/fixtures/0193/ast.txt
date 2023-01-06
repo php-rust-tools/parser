@@ -6,107 +6,111 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 4,
-                                column: 1,
-                                position: 8,
-                            },
-                            name: "$a",
-                        },
-                    ),
-                ),
-                equals: Span {
-                    line: 4,
-                    column: 4,
-                    position: 11,
-                },
-                right: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "4",
-                            span: Span {
-                                line: 4,
-                                column: 6,
-                                position: 13,
-                            },
-                        },
-                    ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 4,
-                column: 7,
-                position: 14,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 6,
-                                column: 1,
-                                position: 17,
-                            },
-                            name: "$b",
-                        },
-                    ),
-                ),
-                equals: Span {
-                    line: 6,
-                    column: 4,
-                    position: 20,
-                },
-                right: Match {
-                    keyword: Span {
-                        line: 6,
-                        column: 6,
-                        position: 22,
-                    },
-                    left_parenthesis: Span {
-                        line: 6,
-                        column: 12,
-                        position: 28,
-                    },
-                    condition: Variable(
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
                         SimpleVariable(
                             SimpleVariable {
                                 span: Span {
-                                    line: 6,
-                                    column: 13,
-                                    position: 29,
+                                    line: 4,
+                                    column: 1,
+                                    position: 8,
                                 },
                                 name: "$a",
                             },
                         ),
                     ),
-                    right_parenthesis: Span {
-                        line: 6,
-                        column: 15,
-                        position: 31,
+                    equals: Span {
+                        line: 4,
+                        column: 4,
+                        position: 11,
                     },
-                    default: None,
-                    arms: [],
+                    right: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "4",
+                                span: Span {
+                                    line: 4,
+                                    column: 6,
+                                    position: 13,
+                                },
+                            },
+                        ),
+                    ),
                 },
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 7,
-                column: 2,
-                position: 36,
-            },
-        ),
-    },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 4,
+                    column: 7,
+                    position: 14,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 6,
+                                    column: 1,
+                                    position: 17,
+                                },
+                                name: "$b",
+                            },
+                        ),
+                    ),
+                    equals: Span {
+                        line: 6,
+                        column: 4,
+                        position: 20,
+                    },
+                    right: Match {
+                        keyword: Span {
+                            line: 6,
+                            column: 6,
+                            position: 22,
+                        },
+                        left_parenthesis: Span {
+                            line: 6,
+                            column: 12,
+                            position: 28,
+                        },
+                        condition: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span {
+                                        line: 6,
+                                        column: 13,
+                                        position: 29,
+                                    },
+                                    name: "$a",
+                                },
+                            ),
+                        ),
+                        right_parenthesis: Span {
+                            line: 6,
+                            column: 15,
+                            position: 31,
+                        },
+                        default: None,
+                        arms: [],
+                    },
+                },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 7,
+                    column: 2,
+                    position: 36,
+                },
+            ),
+        },
+    ),
 ]

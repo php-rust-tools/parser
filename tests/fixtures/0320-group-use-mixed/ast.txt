@@ -6,80 +6,82 @@
             position: 0,
         },
     ),
-    GroupUse {
-        prefix: SimpleIdentifier {
-            span: Span {
-                line: 3,
-                column: 5,
-                position: 11,
-            },
-            value: "Uses\",
-        },
-        kind: Normal,
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 4,
-                        column: 5,
-                        position: 22,
-                    },
-                    value: "Baz",
+    GroupUse(
+        GroupUseStatement {
+            prefix: SimpleIdentifier {
+                span: Span {
+                    line: 3,
+                    column: 5,
+                    position: 11,
                 },
-                alias: None,
-                kind: None,
+                value: "Uses\",
             },
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 5,
-                        column: 14,
-                        position: 40,
+            kind: Normal,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 4,
+                            column: 5,
+                            position: 22,
+                        },
+                        value: "Baz",
                     },
-                    value: "Foo",
+                    alias: None,
+                    kind: None,
                 },
-                alias: Some(
-                    SimpleIdentifier {
+                Use {
+                    name: SimpleIdentifier {
                         span: Span {
                             line: 5,
-                            column: 21,
-                            position: 47,
+                            column: 14,
+                            position: 40,
                         },
-                        value: "fooFunctionAgain",
+                        value: "Foo",
                     },
-                ),
-                kind: Some(
-                    Function,
-                ),
-            },
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 6,
-                        column: 11,
-                        position: 75,
-                    },
-                    value: "MY_CONSTANT",
+                    alias: Some(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 5,
+                                column: 21,
+                                position: 47,
+                            },
+                            value: "fooFunctionAgain",
+                        },
+                    ),
+                    kind: Some(
+                        Function,
+                    ),
                 },
-                alias: None,
-                kind: Some(
-                    Const,
-                ),
-            },
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 7,
-                        column: 11,
-                        position: 98,
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 6,
+                            column: 11,
+                            position: 75,
+                        },
+                        value: "MY_CONSTANT",
                     },
-                    value: "OTHER_CONSTANT",
+                    alias: None,
+                    kind: Some(
+                        Const,
+                    ),
                 },
-                alias: None,
-                kind: Some(
-                    Const,
-                ),
-            },
-        ],
-    },
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 7,
+                            column: 11,
+                            position: 98,
+                        },
+                        value: "OTHER_CONSTANT",
+                    },
+                    alias: None,
+                    kind: Some(
+                        Const,
+                    ),
+                },
+            ],
+        },
+    ),
 ]

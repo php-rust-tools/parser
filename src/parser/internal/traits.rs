@@ -3,7 +3,7 @@ use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::VisibilityModifier;
-use crate::parser::ast::traits::Trait;
+use crate::parser::ast::traits::TraitStatement;
 use crate::parser::ast::traits::TraitBody;
 use crate::parser::ast::traits::TraitMember;
 use crate::parser::ast::traits::TraitUsage;
@@ -176,7 +176,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         right_brace: utils::skip_right_brace(state)?,
     };
 
-    Ok(Statement::Trait(Trait {
+    Ok(Statement::Trait(TraitStatement {
         r#trait: span,
         name,
         attributes,

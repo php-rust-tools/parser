@@ -1594,43 +1594,6 @@
         }
       }
     },
-    "BackedEnum": {
-      "type": "object",
-      "required": [
-        "attributes",
-        "backed_type",
-        "body",
-        "enum",
-        "implements",
-        "name"
-      ],
-      "properties": {
-        "attributes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AttributeGroup"
-          }
-        },
-        "backed_type": {
-          "$ref": "#/definitions/BackedEnumType"
-        },
-        "body": {
-          "$ref": "#/definitions/BackedEnumBody"
-        },
-        "enum": {
-          "$ref": "#/definitions/Span"
-        },
-        "implements": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/SimpleIdentifier"
-          }
-        },
-        "name": {
-          "$ref": "#/definitions/SimpleIdentifier"
-        }
-      }
-    },
     "BackedEnumBody": {
       "type": "object",
       "required": [
@@ -1744,6 +1707,43 @@
           }
         }
       ]
+    },
+    "BackedEnumStatement": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "backed_type",
+        "body",
+        "enum",
+        "implements",
+        "name"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "backed_type": {
+          "$ref": "#/definitions/BackedEnumType"
+        },
+        "body": {
+          "$ref": "#/definitions/BackedEnumBody"
+        },
+        "enum": {
+          "$ref": "#/definitions/Span"
+        },
+        "implements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SimpleIdentifier"
+          }
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        }
+      }
     },
     "BackedEnumType": {
       "oneOf": [
@@ -2008,6 +2008,28 @@
           }
         }
       ]
+    },
+    "BlockStatement": {
+      "type": "object",
+      "required": [
+        "left_brace",
+        "right_brace",
+        "statements"
+      ],
+      "properties": {
+        "left_brace": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_brace": {
+          "$ref": "#/definitions/Span"
+        },
+        "statements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Statement"
+          }
+        }
+      }
     },
     "BracedNamespace": {
       "type": "object",
@@ -2309,59 +2331,6 @@
         }
       ]
     },
-    "Class": {
-      "type": "object",
-      "required": [
-        "attributes",
-        "body",
-        "class",
-        "modifiers",
-        "name"
-      ],
-      "properties": {
-        "attributes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AttributeGroup"
-          }
-        },
-        "body": {
-          "$ref": "#/definitions/ClassBody"
-        },
-        "class": {
-          "$ref": "#/definitions/Span"
-        },
-        "extends": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ClassExtends"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "implements": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ClassImplements"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "modifiers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ClassModifier"
-          }
-        },
-        "name": {
-          "$ref": "#/definitions/SimpleIdentifier"
-        }
-      }
-    },
     "ClassBody": {
       "type": "object",
       "required": [
@@ -2619,6 +2588,59 @@
           }
         }
       ]
+    },
+    "ClassStatement": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "body",
+        "class",
+        "modifiers",
+        "name"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "body": {
+          "$ref": "#/definitions/ClassBody"
+        },
+        "class": {
+          "$ref": "#/definitions/Span"
+        },
+        "extends": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ClassExtends"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "implements": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ClassImplements"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClassModifier"
+          }
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        }
+      }
     },
     "ClassishConstant": {
       "type": [
@@ -3453,32 +3475,6 @@
         }
       }
     },
-    "Constant": {
-      "type": "object",
-      "required": [
-        "comments",
-        "const",
-        "entries",
-        "semicolon"
-      ],
-      "properties": {
-        "comments": {
-          "$ref": "#/definitions/CommentGroup"
-        },
-        "const": {
-          "$ref": "#/definitions/Span"
-        },
-        "entries": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ConstantEntry"
-          }
-        },
-        "semicolon": {
-          "$ref": "#/definitions/Span"
-        }
-      }
-    },
     "ConstantEntry": {
       "type": "object",
       "required": [
@@ -3585,6 +3581,32 @@
           "items": {
             "$ref": "#/definitions/ConstantModifier"
           }
+        }
+      }
+    },
+    "ConstantStatement": {
+      "type": "object",
+      "required": [
+        "comments",
+        "const",
+        "entries",
+        "semicolon"
+      ],
+      "properties": {
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "const": {
+          "$ref": "#/definitions/Span"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ConstantEntry"
+          }
+        },
+        "semicolon": {
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -3702,25 +3724,6 @@
               "type": "null"
             }
           ]
-        }
-      }
-    },
-    "Declare": {
-      "type": "object",
-      "required": [
-        "body",
-        "declare",
-        "entries"
-      ],
-      "properties": {
-        "body": {
-          "$ref": "#/definitions/DeclareBody"
-        },
-        "declare": {
-          "$ref": "#/definitions/Span"
-        },
-        "entries": {
-          "$ref": "#/definitions/DeclareEntryGroup"
         }
       }
     },
@@ -3885,6 +3888,25 @@
         }
       }
     },
+    "DeclareStatement": {
+      "type": "object",
+      "required": [
+        "body",
+        "declare",
+        "entries"
+      ],
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/DeclareBody"
+        },
+        "declare": {
+          "$ref": "#/definitions/Span"
+        },
+        "entries": {
+          "$ref": "#/definitions/DeclareEntryGroup"
+        }
+      }
+    },
     "DefaultMatchArm": {
       "type": "object",
       "required": [
@@ -3955,6 +3977,28 @@
         },
         "start": {
           "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "EchoStatement": {
+      "type": "object",
+      "required": [
+        "echo",
+        "ending",
+        "values"
+      ],
+      "properties": {
+        "echo": {
+          "$ref": "#/definitions/Span"
+        },
+        "ending": {
+          "$ref": "#/definitions/Ending"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Expression"
+          }
         }
       }
     },
@@ -5923,6 +5967,21 @@
         }
       ]
     },
+    "ExpressionStatement": {
+      "type": "object",
+      "required": [
+        "ending",
+        "expression"
+      ],
+      "properties": {
+        "ending": {
+          "$ref": "#/definitions/Ending"
+        },
+        "expression": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
     "FinallyBlock": {
       "type": "object",
       "required": [
@@ -6240,60 +6299,6 @@
         }
       ]
     },
-    "Function": {
-      "type": "object",
-      "required": [
-        "attributes",
-        "body",
-        "comments",
-        "function",
-        "name",
-        "parameters"
-      ],
-      "properties": {
-        "ampersand": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/Span"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "attributes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AttributeGroup"
-          }
-        },
-        "body": {
-          "$ref": "#/definitions/FunctionBody"
-        },
-        "comments": {
-          "$ref": "#/definitions/CommentGroup"
-        },
-        "function": {
-          "$ref": "#/definitions/Span"
-        },
-        "name": {
-          "$ref": "#/definitions/SimpleIdentifier"
-        },
-        "parameters": {
-          "$ref": "#/definitions/FunctionParameterList"
-        },
-        "return_type": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/ReturnType"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      }
-    },
     "FunctionBody": {
       "type": "object",
       "required": [
@@ -6405,22 +6410,75 @@
         }
       }
     },
-    "GotoLabel": {
+    "FunctionStatement": {
       "type": "object",
       "required": [
-        "colon",
+        "attributes",
+        "body",
         "comments",
-        "label"
+        "function",
+        "name",
+        "parameters"
       ],
       "properties": {
-        "colon": {
-          "$ref": "#/definitions/Span"
+        "ampersand": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "body": {
+          "$ref": "#/definitions/FunctionBody"
         },
         "comments": {
           "$ref": "#/definitions/CommentGroup"
         },
-        "label": {
+        "function": {
+          "$ref": "#/definitions/Span"
+        },
+        "name": {
           "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "parameters": {
+          "$ref": "#/definitions/FunctionParameterList"
+        },
+        "return_type": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ReturnType"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "GlobalStatement": {
+      "type": "object",
+      "required": [
+        "global",
+        "variables"
+      ],
+      "properties": {
+        "global": {
+          "$ref": "#/definitions/Span"
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Variable"
+          }
         }
       }
     },
@@ -6444,6 +6502,28 @@
         },
         "semicolon": {
           "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "GroupUseStatement": {
+      "type": "object",
+      "required": [
+        "kind",
+        "prefix",
+        "uses"
+      ],
+      "properties": {
+        "kind": {
+          "$ref": "#/definitions/UseKind"
+        },
+        "prefix": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "uses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Use"
+          }
         }
       }
     },
@@ -6732,42 +6812,6 @@
         }
       }
     },
-    "Interface": {
-      "type": "object",
-      "required": [
-        "attributes",
-        "body",
-        "interface",
-        "name"
-      ],
-      "properties": {
-        "attributes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AttributeGroup"
-          }
-        },
-        "body": {
-          "$ref": "#/definitions/InterfaceBody"
-        },
-        "extends": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/InterfaceExtends"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "interface": {
-          "$ref": "#/definitions/Span"
-        },
-        "name": {
-          "$ref": "#/definitions/SimpleIdentifier"
-        }
-      }
-    },
     "InterfaceBody": {
       "type": "object",
       "required": [
@@ -6862,6 +6906,61 @@
           }
         }
       ]
+    },
+    "InterfaceStatement": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "body",
+        "interface",
+        "name"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "body": {
+          "$ref": "#/definitions/InterfaceBody"
+        },
+        "extends": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/InterfaceExtends"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "interface": {
+          "$ref": "#/definitions/Span"
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        }
+      }
+    },
+    "LabelStatement": {
+      "type": "object",
+      "required": [
+        "colon",
+        "comments",
+        "label"
+      ],
+      "properties": {
+        "colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "label": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        }
+      }
     },
     "Level": {
       "oneOf": [
@@ -7630,7 +7729,7 @@
         }
       ]
     },
-    "Namespace": {
+    "NamespaceStatement": {
       "oneOf": [
         {
           "type": "object",
@@ -7946,6 +8045,31 @@
         }
       ]
     },
+    "ReturnStatement": {
+      "type": "object",
+      "required": [
+        "ending",
+        "return"
+      ],
+      "properties": {
+        "ending": {
+          "$ref": "#/definitions/Ending"
+        },
+        "return": {
+          "$ref": "#/definitions/Span"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Expression"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
     "ReturnType": {
       "type": "object",
       "required": [
@@ -8141,11 +8265,11 @@
             "type": {
               "type": "string",
               "enum": [
-                "goto_label"
+                "label"
               ]
             },
             "value": {
-              "$ref": "#/definitions/GotoLabel"
+              "$ref": "#/definitions/LabelStatement"
             }
           }
         },
@@ -8199,18 +8323,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "vars"
-              ],
-              "properties": {
-                "vars": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/StaticVar"
-                  }
-                }
-              }
+              "$ref": "#/definitions/StaticStatement"
             }
           }
         },
@@ -8336,7 +8449,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Constant"
+              "$ref": "#/definitions/ConstantStatement"
             }
           }
         },
@@ -8354,7 +8467,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Function"
+              "$ref": "#/definitions/FunctionStatement"
             }
           }
         },
@@ -8372,7 +8485,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Class"
+              "$ref": "#/definitions/ClassStatement"
             }
           }
         },
@@ -8390,7 +8503,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Trait"
+              "$ref": "#/definitions/TraitStatement"
             }
           }
         },
@@ -8408,7 +8521,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Interface"
+              "$ref": "#/definitions/InterfaceStatement"
             }
           }
         },
@@ -8444,34 +8557,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "cases",
-                "condition",
-                "left_parenthesis",
-                "right_parenthesis",
-                "switch"
-              ],
-              "properties": {
-                "cases": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Case"
-                  }
-                },
-                "condition": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "left_parenthesis": {
-                  "$ref": "#/definitions/Span"
-                },
-                "right_parenthesis": {
-                  "$ref": "#/definitions/Span"
-                },
-                "switch": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/SwitchStatement"
             }
           }
         },
@@ -8489,26 +8575,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "echo",
-                "ending",
-                "values"
-              ],
-              "properties": {
-                "echo": {
-                  "$ref": "#/definitions/Span"
-                },
-                "ending": {
-                  "$ref": "#/definitions/Ending"
-                },
-                "values": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Expression"
-                  }
-                }
-              }
+              "$ref": "#/definitions/EchoStatement"
             }
           }
         },
@@ -8526,19 +8593,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "ending",
-                "expression"
-              ],
-              "properties": {
-                "ending": {
-                  "$ref": "#/definitions/Ending"
-                },
-                "expression": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/ExpressionStatement"
             }
           }
         },
@@ -8556,29 +8611,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "ending",
-                "return"
-              ],
-              "properties": {
-                "ending": {
-                  "$ref": "#/definitions/Ending"
-                },
-                "return": {
-                  "$ref": "#/definitions/Span"
-                },
-                "value": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Expression"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                }
-              }
+              "$ref": "#/definitions/ReturnStatement"
             }
           }
         },
@@ -8596,7 +8629,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Namespace"
+              "$ref": "#/definitions/NamespaceStatement"
             }
           }
         },
@@ -8614,22 +8647,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "kind",
-                "uses"
-              ],
-              "properties": {
-                "kind": {
-                  "$ref": "#/definitions/UseKind"
-                },
-                "uses": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Use"
-                  }
-                }
-              }
+              "$ref": "#/definitions/UseStatement"
             }
           }
         },
@@ -8647,26 +8665,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "kind",
-                "prefix",
-                "uses"
-              ],
-              "properties": {
-                "kind": {
-                  "$ref": "#/definitions/UseKind"
-                },
-                "prefix": {
-                  "$ref": "#/definitions/SimpleIdentifier"
-                },
-                "uses": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Use"
-                  }
-                }
-              }
+              "$ref": "#/definitions/GroupUseStatement"
             }
           }
         },
@@ -8702,7 +8701,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/TryBlock"
+              "$ref": "#/definitions/TryStatement"
             }
           }
         },
@@ -8720,7 +8719,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/UnitEnum"
+              "$ref": "#/definitions/UnitEnumStatement"
             }
           }
         },
@@ -8738,7 +8737,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/BackedEnum"
+              "$ref": "#/definitions/BackedEnumStatement"
             }
           }
         },
@@ -8756,26 +8755,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "left_brace",
-                "right_brace",
-                "statements"
-              ],
-              "properties": {
-                "left_brace": {
-                  "$ref": "#/definitions/Span"
-                },
-                "right_brace": {
-                  "$ref": "#/definitions/Span"
-                },
-                "statements": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Statement"
-                  }
-                }
-              }
+              "$ref": "#/definitions/BlockStatement"
             }
           }
         },
@@ -8793,22 +8773,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "global",
-                "variables"
-              ],
-              "properties": {
-                "global": {
-                  "$ref": "#/definitions/Span"
-                },
-                "variables": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/Variable"
-                  }
-                }
-              }
+              "$ref": "#/definitions/GlobalStatement"
             }
           }
         },
@@ -8826,7 +8791,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Declare"
+              "$ref": "#/definitions/DeclareStatement"
             }
           }
         },
@@ -8849,6 +8814,20 @@
           }
         }
       ]
+    },
+    "StaticStatement": {
+      "type": "object",
+      "required": [
+        "vars"
+      ],
+      "properties": {
+        "vars": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StaticVar"
+          }
+        }
+      }
     },
     "StaticVar": {
       "type": "object",
@@ -8911,28 +8890,32 @@
         }
       ]
     },
-    "Trait": {
+    "SwitchStatement": {
       "type": "object",
       "required": [
-        "attributes",
-        "body",
-        "name",
-        "trait"
+        "cases",
+        "condition",
+        "left_parenthesis",
+        "right_parenthesis",
+        "switch"
       ],
       "properties": {
-        "attributes": {
+        "cases": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/AttributeGroup"
+            "$ref": "#/definitions/Case"
           }
         },
-        "body": {
-          "$ref": "#/definitions/TraitBody"
+        "condition": {
+          "$ref": "#/definitions/Expression"
         },
-        "name": {
-          "$ref": "#/definitions/SimpleIdentifier"
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
         },
-        "trait": {
+        "right_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "switch": {
           "$ref": "#/definitions/Span"
         }
       }
@@ -9107,6 +9090,32 @@
         }
       ]
     },
+    "TraitStatement": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "body",
+        "name",
+        "trait"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "body": {
+          "$ref": "#/definitions/TraitBody"
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "trait": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "TraitUsage": {
       "type": "object",
       "required": [
@@ -9269,7 +9278,7 @@
         }
       ]
     },
-    "TryBlock": {
+    "TryStatement": {
       "type": "object",
       "required": [
         "body",
@@ -9742,39 +9751,6 @@
         }
       }
     },
-    "UnitEnum": {
-      "type": "object",
-      "required": [
-        "attributes",
-        "body",
-        "enum",
-        "implements",
-        "name"
-      ],
-      "properties": {
-        "attributes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AttributeGroup"
-          }
-        },
-        "body": {
-          "$ref": "#/definitions/UnitEnumBody"
-        },
-        "enum": {
-          "$ref": "#/definitions/Span"
-        },
-        "implements": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/SimpleIdentifier"
-          }
-        },
-        "name": {
-          "$ref": "#/definitions/SimpleIdentifier"
-        }
-      }
-    },
     "UnitEnumBody": {
       "type": "object",
       "required": [
@@ -9881,6 +9857,39 @@
         }
       ]
     },
+    "UnitEnumStatement": {
+      "type": "object",
+      "required": [
+        "attributes",
+        "body",
+        "enum",
+        "implements",
+        "name"
+      ],
+      "properties": {
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttributeGroup"
+          }
+        },
+        "body": {
+          "$ref": "#/definitions/UnitEnumBody"
+        },
+        "enum": {
+          "$ref": "#/definitions/Span"
+        },
+        "implements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SimpleIdentifier"
+          }
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        }
+      }
+    },
     "Use": {
       "type": "object",
       "required": [
@@ -9957,6 +9966,24 @@
           }
         }
       ]
+    },
+    "UseStatement": {
+      "type": "object",
+      "required": [
+        "kind",
+        "uses"
+      ],
+      "properties": {
+        "kind": {
+          "$ref": "#/definitions/UseKind"
+        },
+        "uses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Use"
+          }
+        }
+      }
     },
     "Variable": {
       "oneOf": [

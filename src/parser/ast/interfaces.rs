@@ -35,7 +35,7 @@ pub struct InterfaceBody {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Interface {
+pub struct InterfaceStatement {
     pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
     pub interface: Span,                   // `interface`
     pub name: SimpleIdentifier,            // `Foo`

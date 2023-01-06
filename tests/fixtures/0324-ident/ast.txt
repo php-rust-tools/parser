@@ -28,7 +28,7 @@
                     },
                     statements: [
                         Function(
-                            Function {
+                            FunctionStatement {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -77,34 +77,36 @@
                                         position: 39,
                                     },
                                     statements: [
-                                        Echo {
-                                            echo: Span {
-                                                line: 5,
-                                                column: 9,
-                                                position: 49,
-                                            },
-                                            values: [
-                                                Literal(
-                                                    String(
-                                                        LiteralString {
-                                                            value: ""p\n"",
-                                                            span: Span {
-                                                                line: 5,
-                                                                column: 14,
-                                                                position: 54,
-                                                            },
-                                                        },
-                                                    ),
-                                                ),
-                                            ],
-                                            ending: Semicolon(
-                                                Span {
+                                        Echo(
+                                            EchoStatement {
+                                                echo: Span {
                                                     line: 5,
-                                                    column: 19,
-                                                    position: 59,
+                                                    column: 9,
+                                                    position: 49,
                                                 },
-                                            ),
-                                        },
+                                                values: [
+                                                    Literal(
+                                                        String(
+                                                            LiteralString {
+                                                                value: ""p\n"",
+                                                                span: Span {
+                                                                    line: 5,
+                                                                    column: 14,
+                                                                    position: 54,
+                                                                },
+                                                            },
+                                                        ),
+                                                    ),
+                                                ],
+                                                ending: Semicolon(
+                                                    Span {
+                                                        line: 5,
+                                                        column: 19,
+                                                        position: 59,
+                                                    },
+                                                ),
+                                            },
+                                        ),
                                     ],
                                     right_brace: Span {
                                         line: 6,
@@ -150,7 +152,7 @@
                     },
                     statements: [
                         Function(
-                            Function {
+                            FunctionStatement {
                                 comments: CommentGroup {
                                     comments: [],
                                 },
@@ -199,34 +201,36 @@
                                         position: 106,
                                     },
                                     statements: [
-                                        Echo {
-                                            echo: Span {
-                                                line: 11,
-                                                column: 9,
-                                                position: 116,
-                                            },
-                                            values: [
-                                                Literal(
-                                                    String(
-                                                        LiteralString {
-                                                            value: ""n"",
-                                                            span: Span {
-                                                                line: 11,
-                                                                column: 14,
-                                                                position: 121,
-                                                            },
-                                                        },
-                                                    ),
-                                                ),
-                                            ],
-                                            ending: Semicolon(
-                                                Span {
+                                        Echo(
+                                            EchoStatement {
+                                                echo: Span {
                                                     line: 11,
-                                                    column: 17,
-                                                    position: 124,
+                                                    column: 9,
+                                                    position: 116,
                                                 },
-                                            ),
-                                        },
+                                                values: [
+                                                    Literal(
+                                                        String(
+                                                            LiteralString {
+                                                                value: ""n"",
+                                                                span: Span {
+                                                                    line: 11,
+                                                                    column: 14,
+                                                                    position: 121,
+                                                                },
+                                                            },
+                                                        ),
+                                                    ),
+                                                ],
+                                                ending: Semicolon(
+                                                    Span {
+                                                        line: 11,
+                                                        column: 17,
+                                                        position: 124,
+                                                    },
+                                                ),
+                                            },
+                                        ),
                                     ],
                                     right_brace: Span {
                                         line: 12,
@@ -271,233 +275,245 @@
                         position: 276,
                     },
                     statements: [
-                        Use {
-                            uses: [
-                                Use {
-                                    name: SimpleIdentifier {
-                                        span: Span {
-                                            line: 16,
-                                            column: 9,
-                                            position: 159,
+                        Use(
+                            UseStatement {
+                                kind: Normal,
+                                uses: [
+                                    Use {
+                                        name: SimpleIdentifier {
+                                            span: Span {
+                                                line: 16,
+                                                column: 9,
+                                                position: 159,
+                                            },
+                                            value: "bar",
                                         },
-                                        value: "bar",
+                                        alias: None,
+                                        kind: None,
                                     },
-                                    alias: None,
-                                    kind: None,
-                                },
-                            ],
-                            kind: Normal,
-                        },
-                        Use {
-                            uses: [
-                                Use {
-                                    name: SimpleIdentifier {
-                                        span: Span {
-                                            line: 17,
-                                            column: 18,
-                                            position: 181,
-                                        },
-                                        value: "bar\null",
-                                    },
-                                    alias: Some(
-                                        SimpleIdentifier {
+                                ],
+                            },
+                        ),
+                        Use(
+                            UseStatement {
+                                kind: Function,
+                                uses: [
+                                    Use {
+                                        name: SimpleIdentifier {
                                             span: Span {
                                                 line: 17,
-                                                column: 30,
-                                                position: 193,
+                                                column: 18,
+                                                position: 181,
                                             },
-                                            value: "n",
+                                            value: "bar\null",
                                         },
-                                    ),
-                                    kind: None,
-                                },
-                            ],
-                            kind: Function,
-                        },
-                        Echo {
-                            echo: Span {
-                                line: 19,
-                                column: 5,
-                                position: 205,
-                            },
-                            values: [
-                                FunctionCall {
-                                    target: Identifier(
-                                        SimpleIdentifier(
+                                        alias: Some(
                                             SimpleIdentifier {
                                                 span: Span {
-                                                    line: 19,
-                                                    column: 10,
-                                                    position: 210,
+                                                    line: 17,
+                                                    column: 30,
+                                                    position: 193,
                                                 },
                                                 value: "n",
                                             },
                                         ),
-                                    ),
-                                    arguments: ArgumentList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        left_parenthesis: Span {
-                                            line: 19,
-                                            column: 11,
-                                            position: 211,
-                                        },
-                                        arguments: [],
-                                        right_parenthesis: Span {
-                                            line: 19,
-                                            column: 12,
-                                            position: 212,
-                                        },
+                                        kind: None,
                                     },
-                                },
-                            ],
-                            ending: Semicolon(
-                                Span {
+                                ],
+                            },
+                        ),
+                        Echo(
+                            EchoStatement {
+                                echo: Span {
                                     line: 19,
-                                    column: 13,
-                                    position: 213,
+                                    column: 5,
+                                    position: 205,
                                 },
-                            ),
-                        },
-                        Echo {
-                            echo: Span {
-                                line: 20,
-                                column: 5,
-                                position: 219,
-                            },
-                            values: [
-                                FunctionCall {
-                                    target: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span {
-                                                    line: 20,
-                                                    column: 10,
-                                                    position: 224,
+                                values: [
+                                    FunctionCall {
+                                        target: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 19,
+                                                        column: 10,
+                                                        position: 210,
+                                                    },
+                                                    value: "n",
                                                 },
-                                                value: "bar\null",
-                                            },
+                                            ),
                                         ),
-                                    ),
-                                    arguments: ArgumentList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        left_parenthesis: Span {
-                                            line: 20,
-                                            column: 18,
-                                            position: 232,
-                                        },
-                                        arguments: [],
-                                        right_parenthesis: Span {
-                                            line: 20,
-                                            column: 19,
-                                            position: 233,
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span {
+                                                line: 19,
+                                                column: 11,
+                                                position: 211,
+                                            },
+                                            arguments: [],
+                                            right_parenthesis: Span {
+                                                line: 19,
+                                                column: 12,
+                                                position: 212,
+                                            },
                                         },
                                     },
-                                },
-                            ],
-                            ending: Semicolon(
-                                Span {
+                                ],
+                                ending: Semicolon(
+                                    Span {
+                                        line: 19,
+                                        column: 13,
+                                        position: 213,
+                                    },
+                                ),
+                            },
+                        ),
+                        Echo(
+                            EchoStatement {
+                                echo: Span {
                                     line: 20,
-                                    column: 20,
-                                    position: 234,
+                                    column: 5,
+                                    position: 219,
                                 },
-                            ),
-                        },
-                        Echo {
-                            echo: Span {
-                                line: 21,
-                                column: 5,
-                                position: 240,
-                            },
-                            values: [
-                                FunctionCall {
-                                    target: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span {
-                                                    line: 21,
-                                                    column: 10,
-                                                    position: 245,
+                                values: [
+                                    FunctionCall {
+                                        target: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 20,
+                                                        column: 10,
+                                                        position: 224,
+                                                    },
+                                                    value: "bar\null",
                                                 },
-                                                value: "\bar\null",
-                                            },
+                                            ),
                                         ),
-                                    ),
-                                    arguments: ArgumentList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        left_parenthesis: Span {
-                                            line: 21,
-                                            column: 19,
-                                            position: 254,
-                                        },
-                                        arguments: [],
-                                        right_parenthesis: Span {
-                                            line: 21,
-                                            column: 20,
-                                            position: 255,
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span {
+                                                line: 20,
+                                                column: 18,
+                                                position: 232,
+                                            },
+                                            arguments: [],
+                                            right_parenthesis: Span {
+                                                line: 20,
+                                                column: 19,
+                                                position: 233,
+                                            },
                                         },
                                     },
-                                },
-                            ],
-                            ending: Semicolon(
-                                Span {
+                                ],
+                                ending: Semicolon(
+                                    Span {
+                                        line: 20,
+                                        column: 20,
+                                        position: 234,
+                                    },
+                                ),
+                            },
+                        ),
+                        Echo(
+                            EchoStatement {
+                                echo: Span {
                                     line: 21,
-                                    column: 21,
-                                    position: 256,
+                                    column: 5,
+                                    position: 240,
                                 },
-                            ),
-                        },
-                        Echo {
-                            echo: Span {
-                                line: 22,
-                                column: 5,
-                                position: 262,
-                            },
-                            values: [
-                                FunctionCall {
-                                    target: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span {
-                                                    line: 22,
-                                                    column: 10,
-                                                    position: 267,
+                                values: [
+                                    FunctionCall {
+                                        target: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 21,
+                                                        column: 10,
+                                                        position: 245,
+                                                    },
+                                                    value: "\bar\null",
                                                 },
-                                                value: "\null",
-                                            },
+                                            ),
                                         ),
-                                    ),
-                                    arguments: ArgumentList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        left_parenthesis: Span {
-                                            line: 22,
-                                            column: 15,
-                                            position: 272,
-                                        },
-                                        arguments: [],
-                                        right_parenthesis: Span {
-                                            line: 22,
-                                            column: 16,
-                                            position: 273,
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span {
+                                                line: 21,
+                                                column: 19,
+                                                position: 254,
+                                            },
+                                            arguments: [],
+                                            right_parenthesis: Span {
+                                                line: 21,
+                                                column: 20,
+                                                position: 255,
+                                            },
                                         },
                                     },
-                                },
-                            ],
-                            ending: Semicolon(
-                                Span {
+                                ],
+                                ending: Semicolon(
+                                    Span {
+                                        line: 21,
+                                        column: 21,
+                                        position: 256,
+                                    },
+                                ),
+                            },
+                        ),
+                        Echo(
+                            EchoStatement {
+                                echo: Span {
                                     line: 22,
-                                    column: 17,
-                                    position: 274,
+                                    column: 5,
+                                    position: 262,
                                 },
-                            ),
-                        },
+                                values: [
+                                    FunctionCall {
+                                        target: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 22,
+                                                        column: 10,
+                                                        position: 267,
+                                                    },
+                                                    value: "\null",
+                                                },
+                                            ),
+                                        ),
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span {
+                                                line: 22,
+                                                column: 15,
+                                                position: 272,
+                                            },
+                                            arguments: [],
+                                            right_parenthesis: Span {
+                                                line: 22,
+                                                column: 16,
+                                                position: 273,
+                                            },
+                                        },
+                                    },
+                                ],
+                                ending: Semicolon(
+                                    Span {
+                                        line: 22,
+                                        column: 17,
+                                        position: 274,
+                                    },
+                                ),
+                            },
+                        ),
                     ],
                 },
             },

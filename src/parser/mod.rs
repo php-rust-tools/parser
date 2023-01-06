@@ -3,7 +3,7 @@ use crate::lexer::token::OpenTagKind;
 use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use crate::lexer::Lexer;
-use crate::parser::ast::declares::Declare;
+use crate::parser::ast::declares::DeclareStatement;
 use crate::parser::ast::declares::DeclareBody;
 use crate::parser::ast::declares::DeclareEntry;
 use crate::parser::ast::declares::DeclareEntryGroup;
@@ -32,7 +32,12 @@ use crate::parser::state::State;
 
 pub use crate::parser::state::stream::TokenStream;
 
+use self::ast::EchoStatement;
+use self::ast::ExpressionStatement;
+use self::ast::GlobalStatement;
 use self::ast::HaltCompiler;
+use self::ast::ReturnStatement;
+use self::ast::StaticStatement;
 use self::internal::precedences::Precedence;
 
 pub mod ast;
@@ -145,10 +150,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     if !identifiers::is_identifier_maybe_soft_reserved(
                         &state.stream.lookahead(1).kind,
                     ) {
-                        return Ok(Statement::Expression {
+                        return Ok(Statement::Expression(ExpressionStatement {
                             expression: expressions::attributes(state, &Precedence::Lowest)?,
                             ending: utils::skip_ending(state)?,
-                        });
+                        }));
                     }
 
                     functions::function(state)?
@@ -156,10 +161,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     functions::function(state)?
                 }
             }
-            _ => Statement::Expression {
+            _ => Statement::Expression(ExpressionStatement {
                 expression: expressions::attributes(state, &Precedence::Lowest)?,
                 ending: utils::skip_ending(state)?,
-            },
+            }),
         }
     } else {
         match &current.kind {
@@ -209,10 +214,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     if !identifiers::is_identifier_maybe_soft_reserved(
                         &state.stream.lookahead(1).kind,
                     ) {
-                        return Ok(Statement::Expression {
+                        return Ok(Statement::Expression(ExpressionStatement {
                             expression: expressions::attributes(state, &Precedence::Lowest)?,
                             ending: utils::skip_ending(state)?,
-                        });
+                        }));
                     }
 
                     functions::function(state)?
@@ -303,7 +308,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     }
                 };
 
-                Statement::Declare(Declare {
+                Statement::Declare(DeclareStatement {
                     declare: span,
                     entries,
                     body,
@@ -326,10 +331,10 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 }
 
                 utils::skip_semicolon(state)?;
-                Statement::Global {
+                Statement::Global(GlobalStatement {
                     global: span,
                     variables,
-                }
+                })
             }
             TokenKind::Static if matches!(peek.kind, TokenKind::Variable) => {
                 state.stream.next();
@@ -362,7 +367,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
 
                 utils::skip_semicolon(state)?;
 
-                Statement::Static { vars }
+                Statement::Static(StaticStatement { vars })
             }
             TokenKind::InlineHtml => {
                 let html = state.stream.current().value.clone();
@@ -401,11 +406,11 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     }
                 }
 
-                Statement::Echo {
+                Statement::Echo(EchoStatement {
                     echo: current.span,
                     values,
                     ending: utils::skip_ending(state)?,
-                }
+                })
             }
             TokenKind::Return => {
                 state.stream.next();
@@ -419,16 +424,16 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                     expressions::create(state).map(Some)?
                 };
 
-                Statement::Return {
+                Statement::Return(ReturnStatement {
                     r#return: current.span,
                     value,
                     ending: utils::skip_ending(state)?,
-                }
+                })
             }
-            _ => Statement::Expression {
+            _ => Statement::Expression(ExpressionStatement {
                 expression: expressions::create(state)?,
                 ending: utils::skip_ending(state)?,
-            },
+            }),
         }
     };
 

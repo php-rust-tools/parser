@@ -6,52 +6,54 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 3,
-                                column: 1,
-                                position: 7,
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 3,
+                                    column: 1,
+                                    position: 7,
+                                },
+                                name: "$a",
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                equals: Span {
-                    line: 3,
-                    column: 4,
-                    position: 10,
-                },
-                right: ConstantFetch {
-                    target: Static,
-                    double_colon: Span {
+                    equals: Span {
                         line: 3,
-                        column: 12,
-                        position: 18,
+                        column: 4,
+                        position: 10,
                     },
-                    constant: SimpleIdentifier(
-                        SimpleIdentifier {
-                            span: Span {
-                                line: 3,
-                                column: 14,
-                                position: 20,
-                            },
-                            value: "foo",
+                    right: ConstantFetch {
+                        target: Static,
+                        double_colon: Span {
+                            line: 3,
+                            column: 12,
+                            position: 18,
                         },
-                    ),
+                        constant: SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span {
+                                    line: 3,
+                                    column: 14,
+                                    position: 20,
+                                },
+                                value: "foo",
+                            },
+                        ),
+                    },
                 },
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 17,
-                position: 23,
-            },
-        ),
-    },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 17,
+                    position: 23,
+                },
+            ),
+        },
+    ),
 ]

@@ -8,7 +8,7 @@ use crate::parser::ast::identifiers::SimpleIdentifier;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct GotoLabel {
+pub struct LabelStatement {
     pub comments: CommentGroup,
     pub label: SimpleIdentifier, // `foo`
     pub colon: Span,             // `:`

@@ -6,116 +6,124 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Include {
-            include: Span {
-                line: 3,
-                column: 1,
-                position: 7,
-            },
-            path: Literal(
-                String(
-                    LiteralString {
-                        value: "'foo.php'",
-                        span: Span {
-                            line: 3,
-                            column: 9,
-                            position: 15,
+    Expression(
+        ExpressionStatement {
+            expression: Include {
+                include: Span {
+                    line: 3,
+                    column: 1,
+                    position: 7,
+                },
+                path: Literal(
+                    String(
+                        LiteralString {
+                            value: "'foo.php'",
+                            span: Span {
+                                line: 3,
+                                column: 9,
+                                position: 15,
+                            },
                         },
-                    },
+                    ),
                 ),
+            },
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 18,
+                    position: 24,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 18,
-                position: 24,
-            },
-        ),
-    },
-    Expression {
-        expression: IncludeOnce {
-            include_once: Span {
-                line: 5,
-                column: 1,
-                position: 27,
-            },
-            path: Literal(
-                String(
-                    LiteralString {
-                        value: "'bar.php'",
-                        span: Span {
-                            line: 5,
-                            column: 14,
-                            position: 40,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: IncludeOnce {
+                include_once: Span {
+                    line: 5,
+                    column: 1,
+                    position: 27,
+                },
+                path: Literal(
+                    String(
+                        LiteralString {
+                            value: "'bar.php'",
+                            span: Span {
+                                line: 5,
+                                column: 14,
+                                position: 40,
+                            },
                         },
-                    },
+                    ),
                 ),
+            },
+            ending: Semicolon(
+                Span {
+                    line: 5,
+                    column: 23,
+                    position: 49,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 5,
-                column: 23,
-                position: 49,
-            },
-        ),
-    },
-    Expression {
-        expression: Require {
-            require: Span {
-                line: 7,
-                column: 1,
-                position: 52,
-            },
-            path: Literal(
-                String(
-                    LiteralString {
-                        value: "'baz.php'",
-                        span: Span {
-                            line: 7,
-                            column: 9,
-                            position: 60,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: Require {
+                require: Span {
+                    line: 7,
+                    column: 1,
+                    position: 52,
+                },
+                path: Literal(
+                    String(
+                        LiteralString {
+                            value: "'baz.php'",
+                            span: Span {
+                                line: 7,
+                                column: 9,
+                                position: 60,
+                            },
                         },
-                    },
+                    ),
                 ),
+            },
+            ending: Semicolon(
+                Span {
+                    line: 7,
+                    column: 18,
+                    position: 69,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 7,
-                column: 18,
-                position: 69,
-            },
-        ),
-    },
-    Expression {
-        expression: RequireOnce {
-            require_once: Span {
-                line: 9,
-                column: 1,
-                position: 72,
-            },
-            path: Literal(
-                String(
-                    LiteralString {
-                        value: "'qux.php'",
-                        span: Span {
-                            line: 9,
-                            column: 14,
-                            position: 85,
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: RequireOnce {
+                require_once: Span {
+                    line: 9,
+                    column: 1,
+                    position: 72,
+                },
+                path: Literal(
+                    String(
+                        LiteralString {
+                            value: "'qux.php'",
+                            span: Span {
+                                line: 9,
+                                column: 14,
+                                position: 85,
+                            },
                         },
-                    },
+                    ),
                 ),
+            },
+            ending: Semicolon(
+                Span {
+                    line: 9,
+                    column: 23,
+                    position: 94,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 9,
-                column: 23,
-                position: 94,
-            },
-        ),
-    },
+    ),
 ]

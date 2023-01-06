@@ -6,62 +6,64 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: New {
-            new: Span {
-                line: 1,
-                column: 7,
-                position: 6,
-            },
-            target: AnonymousClass(
-                AnonymousClass {
-                    attributes: [],
-                    class: Span {
-                        line: 1,
-                        column: 11,
-                        position: 10,
-                    },
-                    extends: Some(
-                        ClassExtends {
-                            extends: Span {
-                                line: 1,
-                                column: 17,
-                                position: 16,
-                            },
-                            parent: SimpleIdentifier {
-                                span: Span {
+    Expression(
+        ExpressionStatement {
+            expression: New {
+                new: Span {
+                    line: 1,
+                    column: 7,
+                    position: 6,
+                },
+                target: AnonymousClass(
+                    AnonymousClass {
+                        attributes: [],
+                        class: Span {
+                            line: 1,
+                            column: 11,
+                            position: 10,
+                        },
+                        extends: Some(
+                            ClassExtends {
+                                extends: Span {
                                     line: 1,
-                                    column: 25,
-                                    position: 24,
+                                    column: 17,
+                                    position: 16,
                                 },
-                                value: "Foo",
+                                parent: SimpleIdentifier {
+                                    span: Span {
+                                        line: 1,
+                                        column: 25,
+                                        position: 24,
+                                    },
+                                    value: "Foo",
+                                },
+                            },
+                        ),
+                        implements: None,
+                        body: AnonymousClassBody {
+                            left_brace: Span {
+                                line: 1,
+                                column: 29,
+                                position: 28,
+                            },
+                            members: [],
+                            right_brace: Span {
+                                line: 1,
+                                column: 30,
+                                position: 29,
                             },
                         },
-                    ),
-                    implements: None,
-                    body: AnonymousClassBody {
-                        left_brace: Span {
-                            line: 1,
-                            column: 29,
-                            position: 28,
-                        },
-                        members: [],
-                        right_brace: Span {
-                            line: 1,
-                            column: 30,
-                            position: 29,
-                        },
                     },
+                ),
+                arguments: None,
+            },
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 31,
+                    position: 30,
                 },
             ),
-            arguments: None,
         },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 31,
-                position: 30,
-            },
-        ),
-    },
+    ),
 ]

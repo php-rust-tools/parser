@@ -7,7 +7,7 @@
         },
     ),
     Function(
-        Function {
+        FunctionStatement {
             comments: CommentGroup {
                 comments: [],
             },
@@ -56,36 +56,38 @@
                     position: 22,
                 },
                 statements: [
-                    Static {
-                        vars: [
-                            StaticVar {
-                                var: SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 4,
-                                            column: 12,
-                                            position: 35,
+                    Static(
+                        StaticStatement {
+                            vars: [
+                                StaticVar {
+                                    var: SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 4,
+                                                column: 12,
+                                                position: 35,
+                                            },
+                                            name: "$a",
                                         },
-                                        name: "$a",
-                                    },
-                                ),
-                                default: None,
-                            },
-                            StaticVar {
-                                var: SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 4,
-                                            column: 16,
-                                            position: 39,
+                                    ),
+                                    default: None,
+                                },
+                                StaticVar {
+                                    var: SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 4,
+                                                column: 16,
+                                                position: 39,
+                                            },
+                                            name: "$b",
                                         },
-                                        name: "$b",
-                                    },
-                                ),
-                                default: None,
-                            },
-                        ],
-                    },
+                                    ),
+                                    default: None,
+                                },
+                            ],
+                        },
+                    ),
                 ],
                 right_brace: Span {
                     line: 5,

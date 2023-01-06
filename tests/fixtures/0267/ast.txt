@@ -6,122 +6,126 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Closure(
-            Closure {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                attributes: [],
-                static: None,
-                function: Span {
-                    line: 3,
-                    column: 1,
-                    position: 7,
-                },
-                ampersand: None,
-                parameters: FunctionParameterList {
+    Expression(
+        ExpressionStatement {
+            expression: Closure(
+                Closure {
                     comments: CommentGroup {
                         comments: [],
                     },
-                    left_parenthesis: Span {
+                    attributes: [],
+                    static: None,
+                    function: Span {
                         line: 3,
-                        column: 10,
-                        position: 16,
-                    },
-                    parameters: CommaSeparated {
-                        inner: [],
-                        commas: [],
-                    },
-                    right_parenthesis: Span {
-                        line: 3,
-                        column: 11,
-                        position: 17,
-                    },
-                },
-                uses: None,
-                return_type: None,
-                body: FunctionBody {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_brace: Span {
-                        line: 3,
-                        column: 13,
-                        position: 19,
-                    },
-                    statements: [
-                        If(
-                            IfStatement {
-                                if: Span {
-                                    line: 4,
-                                    column: 5,
-                                    position: 25,
-                                },
-                                left_parenthesis: Span {
-                                    line: 4,
-                                    column: 8,
-                                    position: 28,
-                                },
-                                condition: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span {
-                                                line: 4,
-                                                column: 9,
-                                                position: 29,
-                                            },
-                                            name: "$foo",
-                                        },
-                                    ),
-                                ),
-                                right_parenthesis: Span {
-                                    line: 4,
-                                    column: 13,
-                                    position: 33,
-                                },
-                                body: Statement {
-                                    statement: Expression {
-                                        expression: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 4,
-                                                        column: 15,
-                                                        position: 35,
-                                                    },
-                                                    name: "$bar",
-                                                },
-                                            ),
-                                        ),
-                                        ending: Semicolon(
-                                            Span {
-                                                line: 4,
-                                                column: 19,
-                                                position: 39,
-                                            },
-                                        ),
-                                    },
-                                    elseifs: [],
-                                    else: None,
-                                },
-                            },
-                        ),
-                    ],
-                    right_brace: Span {
-                        line: 5,
                         column: 1,
-                        position: 67,
+                        position: 7,
+                    },
+                    ampersand: None,
+                    parameters: FunctionParameterList {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        left_parenthesis: Span {
+                            line: 3,
+                            column: 10,
+                            position: 16,
+                        },
+                        parameters: CommaSeparated {
+                            inner: [],
+                            commas: [],
+                        },
+                        right_parenthesis: Span {
+                            line: 3,
+                            column: 11,
+                            position: 17,
+                        },
+                    },
+                    uses: None,
+                    return_type: None,
+                    body: FunctionBody {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        left_brace: Span {
+                            line: 3,
+                            column: 13,
+                            position: 19,
+                        },
+                        statements: [
+                            If(
+                                IfStatement {
+                                    if: Span {
+                                        line: 4,
+                                        column: 5,
+                                        position: 25,
+                                    },
+                                    left_parenthesis: Span {
+                                        line: 4,
+                                        column: 8,
+                                        position: 28,
+                                    },
+                                    condition: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 4,
+                                                    column: 9,
+                                                    position: 29,
+                                                },
+                                                name: "$foo",
+                                            },
+                                        ),
+                                    ),
+                                    right_parenthesis: Span {
+                                        line: 4,
+                                        column: 13,
+                                        position: 33,
+                                    },
+                                    body: Statement {
+                                        statement: Expression(
+                                            ExpressionStatement {
+                                                expression: Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 4,
+                                                                column: 15,
+                                                                position: 35,
+                                                            },
+                                                            name: "$bar",
+                                                        },
+                                                    ),
+                                                ),
+                                                ending: Semicolon(
+                                                    Span {
+                                                        line: 4,
+                                                        column: 19,
+                                                        position: 39,
+                                                    },
+                                                ),
+                                            },
+                                        ),
+                                        elseifs: [],
+                                        else: None,
+                                    },
+                                },
+                            ),
+                        ],
+                        right_brace: Span {
+                            line: 5,
+                            column: 1,
+                            position: 67,
+                        },
                     },
                 },
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 5,
-                column: 2,
-                position: 68,
-            },
-        ),
-    },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 5,
+                    column: 2,
+                    position: 68,
+                },
+            ),
+        },
+    ),
 ]

@@ -9,34 +9,36 @@
             position: 9,
         },
     ),
-    Echo {
-        echo: Span {
-            line: 2,
-            column: 11,
-            position: 15,
-        },
-        values: [
-            Literal(
-                String(
-                    LiteralString {
-                        value: ""Hello, world!"",
-                        span: Span {
-                            line: 2,
-                            column: 16,
-                            position: 20,
-                        },
-                    },
-                ),
-            ),
-        ],
-        ending: CloseTag(
-            Span {
+    Echo(
+        EchoStatement {
+            echo: Span {
                 line: 2,
-                column: 32,
-                position: 36,
+                column: 11,
+                position: 15,
             },
-        ),
-    },
+            values: [
+                Literal(
+                    String(
+                        LiteralString {
+                            value: ""Hello, world!"",
+                            span: Span {
+                                line: 2,
+                                column: 16,
+                                position: 20,
+                            },
+                        },
+                    ),
+                ),
+            ],
+            ending: CloseTag(
+                Span {
+                    line: 2,
+                    column: 32,
+                    position: 36,
+                },
+            ),
+        },
+    ),
     InlineHtml(
         "\n</h1>",
     ),

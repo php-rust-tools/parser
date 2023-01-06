@@ -6,256 +6,264 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 3,
+                                    column: 1,
+                                    position: 7,
+                                },
+                                name: "$a",
+                            },
+                        ),
+                    ),
+                    equals: Span {
+                        line: 3,
+                        column: 4,
+                        position: 10,
+                    },
+                    right: BitwiseOperation(
+                        Or {
+                            left: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 3,
+                                            column: 6,
+                                            position: 12,
+                                        },
+                                        name: "$a",
+                                    },
+                                ),
+                            ),
+                            or: Span {
                                 line: 3,
-                                column: 1,
-                                position: 7,
+                                column: 9,
+                                position: 15,
                             },
-                            name: "$a",
+                            right: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 3,
+                                            column: 11,
+                                            position: 17,
+                                        },
+                                        name: "$b",
+                                    },
+                                ),
+                            ),
                         },
                     ),
-                ),
-                equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 3,
-                    column: 4,
-                    position: 10,
+                    column: 13,
+                    position: 19,
                 },
-                right: BitwiseOperation(
-                    Or {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 3,
-                                        column: 6,
-                                        position: 12,
-                                    },
-                                    name: "$a",
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 4,
+                                    column: 1,
+                                    position: 21,
                                 },
-                            ),
+                                name: "$a",
+                            },
                         ),
-                        or: Span {
-                            line: 3,
-                            column: 9,
-                            position: 15,
-                        },
-                        right: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 3,
-                                        column: 11,
-                                        position: 17,
-                                    },
-                                    name: "$b",
-                                },
-                            ),
-                        ),
+                    ),
+                    equals: Span {
+                        line: 4,
+                        column: 4,
+                        position: 24,
                     },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 13,
-                position: 19,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
+                    right: LogicalOperation(
+                        Or {
+                            left: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 4,
+                                            column: 6,
+                                            position: 26,
+                                        },
+                                        name: "$a",
+                                    },
+                                ),
+                            ),
+                            double_pipe: Span {
                                 line: 4,
-                                column: 1,
-                                position: 21,
+                                column: 9,
+                                position: 29,
                             },
-                            name: "$a",
+                            right: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 4,
+                                            column: 12,
+                                            position: 32,
+                                        },
+                                        name: "$b",
+                                    },
+                                ),
+                            ),
                         },
                     ),
-                ),
-                equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 4,
-                    column: 4,
-                    position: 24,
+                    column: 14,
+                    position: 34,
                 },
-                right: LogicalOperation(
-                    Or {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 4,
-                                        column: 6,
-                                        position: 26,
-                                    },
-                                    name: "$a",
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 5,
+                                    column: 1,
+                                    position: 36,
                                 },
-                            ),
+                                name: "$a",
+                            },
                         ),
-                        double_pipe: Span {
-                            line: 4,
-                            column: 9,
-                            position: 29,
-                        },
-                        right: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 4,
-                                        column: 12,
-                                        position: 32,
-                                    },
-                                    name: "$b",
-                                },
-                            ),
-                        ),
+                    ),
+                    equals: Span {
+                        line: 5,
+                        column: 4,
+                        position: 39,
                     },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 4,
-                column: 14,
-                position: 34,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
+                    right: BitwiseOperation(
+                        And {
+                            left: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 5,
+                                            column: 6,
+                                            position: 41,
+                                        },
+                                        name: "$a",
+                                    },
+                                ),
+                            ),
+                            and: Span {
                                 line: 5,
-                                column: 1,
-                                position: 36,
+                                column: 9,
+                                position: 44,
                             },
-                            name: "$a",
+                            right: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 5,
+                                            column: 11,
+                                            position: 46,
+                                        },
+                                        name: "$b",
+                                    },
+                                ),
+                            ),
                         },
                     ),
-                ),
-                equals: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 5,
-                    column: 4,
-                    position: 39,
+                    column: 13,
+                    position: 48,
                 },
-                right: BitwiseOperation(
-                    And {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 5,
-                                        column: 6,
-                                        position: 41,
-                                    },
-                                    name: "$a",
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 6,
+                                    column: 1,
+                                    position: 50,
                                 },
-                            ),
-                        ),
-                        and: Span {
-                            line: 5,
-                            column: 9,
-                            position: 44,
-                        },
-                        right: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 5,
-                                        column: 11,
-                                        position: 46,
-                                    },
-                                    name: "$b",
-                                },
-                            ),
-                        ),
-                    },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 5,
-                column: 13,
-                position: 48,
-            },
-        ),
-    },
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 6,
-                                column: 1,
-                                position: 50,
+                                name: "$a",
                             },
-                            name: "$a",
+                        ),
+                    ),
+                    equals: Span {
+                        line: 6,
+                        column: 4,
+                        position: 53,
+                    },
+                    right: LogicalOperation(
+                        And {
+                            left: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 6,
+                                            column: 6,
+                                            position: 55,
+                                        },
+                                        name: "$a",
+                                    },
+                                ),
+                            ),
+                            double_ampersand: Span {
+                                line: 6,
+                                column: 9,
+                                position: 58,
+                            },
+                            right: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 6,
+                                            column: 12,
+                                            position: 61,
+                                        },
+                                        name: "$b",
+                                    },
+                                ),
+                            ),
                         },
                     ),
-                ),
-                equals: Span {
-                    line: 6,
-                    column: 4,
-                    position: 53,
                 },
-                right: LogicalOperation(
-                    And {
-                        left: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 6,
-                                        column: 6,
-                                        position: 55,
-                                    },
-                                    name: "$a",
-                                },
-                            ),
-                        ),
-                        double_ampersand: Span {
-                            line: 6,
-                            column: 9,
-                            position: 58,
-                        },
-                        right: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 6,
-                                        column: 12,
-                                        position: 61,
-                                    },
-                                    name: "$b",
-                                },
-                            ),
-                        ),
-                    },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 6,
-                column: 14,
-                position: 63,
-            },
-        ),
-    },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 6,
+                    column: 14,
+                    position: 63,
+                },
+            ),
+        },
+    ),
 ]

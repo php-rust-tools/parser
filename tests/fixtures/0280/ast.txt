@@ -6,142 +6,150 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: LogicalOperation(
-            Not {
-                bang: Span {
+    Expression(
+        ExpressionStatement {
+            expression: LogicalOperation(
+                Not {
+                    bang: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
+                    },
+                    right: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 3,
+                                    column: 2,
+                                    position: 8,
+                                },
+                                name: "$a",
+                            },
+                        ),
+                    ),
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 3,
-                    column: 1,
-                    position: 7,
+                    column: 4,
+                    position: 10,
                 },
-                right: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 3,
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: LogicalOperation(
+                Not {
+                    bang: Span {
+                        line: 4,
+                        column: 1,
+                        position: 12,
+                    },
+                    right: LogicalOperation(
+                        Not {
+                            bang: Span {
+                                line: 4,
                                 column: 2,
-                                position: 8,
+                                position: 13,
                             },
-                            name: "$a",
+                            right: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 4,
+                                            column: 3,
+                                            position: 14,
+                                        },
+                                        name: "$b",
+                                    },
+                                ),
+                            ),
                         },
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 4,
-                position: 10,
-            },
-        ),
-    },
-    Expression {
-        expression: LogicalOperation(
-            Not {
-                bang: Span {
+                },
+            ),
+            ending: Semicolon(
+                Span {
                     line: 4,
-                    column: 1,
-                    position: 12,
+                    column: 5,
+                    position: 16,
                 },
-                right: LogicalOperation(
-                    Not {
-                        bang: Span {
-                            line: 4,
-                            column: 2,
-                            position: 13,
-                        },
-                        right: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 4,
-                                        column: 3,
-                                        position: 14,
-                                    },
-                                    name: "$b",
-                                },
-                            ),
-                        ),
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: LogicalOperation(
+                Not {
+                    bang: Span {
+                        line: 5,
+                        column: 1,
+                        position: 18,
                     },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 4,
-                column: 5,
-                position: 16,
-            },
-        ),
-    },
-    Expression {
-        expression: LogicalOperation(
-            Not {
-                bang: Span {
-                    line: 5,
-                    column: 1,
-                    position: 18,
-                },
-                right: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 5,
-                                column: 3,
-                                position: 20,
+                    right: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 5,
+                                    column: 3,
+                                    position: 20,
+                                },
+                                name: "$a",
                             },
-                            name: "$a",
+                        ),
+                    ),
+                },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 5,
+                    column: 5,
+                    position: 22,
+                },
+            ),
+        },
+    ),
+    Expression(
+        ExpressionStatement {
+            expression: LogicalOperation(
+                Not {
+                    bang: Span {
+                        line: 6,
+                        column: 1,
+                        position: 24,
+                    },
+                    right: LogicalOperation(
+                        Not {
+                            bang: Span {
+                                line: 6,
+                                column: 3,
+                                position: 26,
+                            },
+                            right: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 6,
+                                            column: 5,
+                                            position: 28,
+                                        },
+                                        name: "$a",
+                                    },
+                                ),
+                            ),
                         },
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 5,
-                column: 5,
-                position: 22,
-            },
-        ),
-    },
-    Expression {
-        expression: LogicalOperation(
-            Not {
-                bang: Span {
-                    line: 6,
-                    column: 1,
-                    position: 24,
                 },
-                right: LogicalOperation(
-                    Not {
-                        bang: Span {
-                            line: 6,
-                            column: 3,
-                            position: 26,
-                        },
-                        right: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 6,
-                                        column: 5,
-                                        position: 28,
-                                    },
-                                    name: "$a",
-                                },
-                            ),
-                        ),
-                    },
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 6,
-                column: 7,
-                position: 30,
-            },
-        ),
-    },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 6,
+                    column: 7,
+                    position: 30,
+                },
+            ),
+        },
+    ),
 ]

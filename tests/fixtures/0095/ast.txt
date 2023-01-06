@@ -6,34 +6,36 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Variable(
-            VariableVariable(
-                VariableVariable {
-                    span: Span {
-                        line: 1,
-                        column: 7,
-                        position: 6,
-                    },
-                    variable: SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 1,
-                                column: 8,
-                                position: 7,
-                            },
-                            name: "$a",
+    Expression(
+        ExpressionStatement {
+            expression: Variable(
+                VariableVariable(
+                    VariableVariable {
+                        span: Span {
+                            line: 1,
+                            column: 7,
+                            position: 6,
                         },
-                    ),
+                        variable: SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 1,
+                                    column: 8,
+                                    position: 7,
+                                },
+                                name: "$a",
+                            },
+                        ),
+                    },
+                ),
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 10,
+                    position: 9,
                 },
             ),
-        ),
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 10,
-                position: 9,
-            },
-        ),
-    },
+        },
+    ),
 ]

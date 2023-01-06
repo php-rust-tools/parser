@@ -7,7 +7,7 @@
         },
     ),
     Class(
-        Class {
+        ClassStatement {
             attributes: [],
             modifiers: ClassModifierGroup {
                 modifiers: [],
@@ -43,7 +43,7 @@
         },
     ),
     Class(
-        Class {
+        ClassStatement {
             attributes: [],
             modifiers: ClassModifierGroup {
                 modifiers: [],
@@ -162,59 +162,61 @@
                                     position: 75,
                                 },
                                 statements: [
-                                    Return {
-                                        return: Span {
-                                            line: 7,
-                                            column: 9,
-                                            position: 85,
-                                        },
-                                        value: Some(
-                                            New {
-                                                new: Span {
-                                                    line: 7,
-                                                    column: 16,
-                                                    position: 92,
-                                                },
-                                                target: Identifier(
-                                                    SimpleIdentifier(
-                                                        SimpleIdentifier {
-                                                            span: Span {
-                                                                line: 7,
-                                                                column: 20,
-                                                                position: 96,
+                                    Return(
+                                        ReturnStatement {
+                                            return: Span {
+                                                line: 7,
+                                                column: 9,
+                                                position: 85,
+                                            },
+                                            value: Some(
+                                                New {
+                                                    new: Span {
+                                                        line: 7,
+                                                        column: 16,
+                                                        position: 92,
+                                                    },
+                                                    target: Identifier(
+                                                        SimpleIdentifier(
+                                                            SimpleIdentifier {
+                                                                span: Span {
+                                                                    line: 7,
+                                                                    column: 20,
+                                                                    position: 96,
+                                                                },
+                                                                value: "s",
                                                             },
-                                                            value: "s",
+                                                        ),
+                                                    ),
+                                                    arguments: Some(
+                                                        ArgumentList {
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
+                                                            left_parenthesis: Span {
+                                                                line: 7,
+                                                                column: 21,
+                                                                position: 97,
+                                                            },
+                                                            arguments: [],
+                                                            right_parenthesis: Span {
+                                                                line: 7,
+                                                                column: 22,
+                                                                position: 98,
+                                                            },
                                                         },
                                                     ),
-                                                ),
-                                                arguments: Some(
-                                                    ArgumentList {
-                                                        comments: CommentGroup {
-                                                            comments: [],
-                                                        },
-                                                        left_parenthesis: Span {
-                                                            line: 7,
-                                                            column: 21,
-                                                            position: 97,
-                                                        },
-                                                        arguments: [],
-                                                        right_parenthesis: Span {
-                                                            line: 7,
-                                                            column: 22,
-                                                            position: 98,
-                                                        },
-                                                    },
-                                                ),
-                                            },
-                                        ),
-                                        ending: Semicolon(
-                                            Span {
-                                                line: 7,
-                                                column: 23,
-                                                position: 99,
-                                            },
-                                        ),
-                                    },
+                                                },
+                                            ),
+                                            ending: Semicolon(
+                                                Span {
+                                                    line: 7,
+                                                    column: 23,
+                                                    position: 99,
+                                                },
+                                            ),
+                                        },
+                                    ),
                                 ],
                                 right_brace: Span {
                                     line: 8,

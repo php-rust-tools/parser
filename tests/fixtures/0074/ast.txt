@@ -6,60 +6,62 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: NullsafeMethodCall {
-            target: Variable(
-                SimpleVariable(
-                    SimpleVariable {
-                        span: Span {
-                            line: 1,
-                            column: 7,
-                            position: 6,
+    Expression(
+        ExpressionStatement {
+            expression: NullsafeMethodCall {
+                target: Variable(
+                    SimpleVariable(
+                        SimpleVariable {
+                            span: Span {
+                                line: 1,
+                                column: 7,
+                                position: 6,
+                            },
+                            name: "$a",
                         },
-                        name: "$a",
-                    },
+                    ),
                 ),
-            ),
-            question_arrow: Span {
-                line: 1,
-                column: 9,
-                position: 8,
-            },
-            method: Identifier(
-                SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 1,
-                            column: 12,
-                            position: 11,
+                question_arrow: Span {
+                    line: 1,
+                    column: 9,
+                    position: 8,
+                },
+                method: Identifier(
+                    SimpleIdentifier(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 1,
+                                column: 12,
+                                position: 11,
+                            },
+                            value: "b",
                         },
-                        value: "b",
-                    },
+                    ),
                 ),
-            ),
-            arguments: ArgumentList {
-                comments: CommentGroup {
-                    comments: [],
-                },
-                left_parenthesis: Span {
-                    line: 1,
-                    column: 13,
-                    position: 12,
-                },
-                arguments: [],
-                right_parenthesis: Span {
-                    line: 1,
-                    column: 14,
-                    position: 13,
+                arguments: ArgumentList {
+                    comments: CommentGroup {
+                        comments: [],
+                    },
+                    left_parenthesis: Span {
+                        line: 1,
+                        column: 13,
+                        position: 12,
+                    },
+                    arguments: [],
+                    right_parenthesis: Span {
+                        line: 1,
+                        column: 14,
+                        position: 13,
+                    },
                 },
             },
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 15,
+                    position: 14,
+                },
+            ),
         },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 15,
-                position: 14,
-            },
-        ),
-    },
+    ),
 ]

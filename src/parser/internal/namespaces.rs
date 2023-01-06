@@ -4,7 +4,7 @@ use crate::parser;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::namespaces::BracedNamespace;
 use crate::parser::ast::namespaces::BracedNamespaceBody;
-use crate::parser::ast::namespaces::Namespace;
+use crate::parser::ast::namespaces::NamespaceStatement;
 use crate::parser::ast::namespaces::UnbracedNamespace;
 use crate::parser::ast::Block;
 use crate::parser::ast::Statement;
@@ -65,7 +65,7 @@ fn unbraced_namespace(
         statements
     });
 
-    Ok(Statement::Namespace(Namespace::Unbraced(
+    Ok(Statement::Namespace(NamespaceStatement::Unbraced(
         UnbracedNamespace {
             start,
             end,
@@ -97,7 +97,7 @@ fn braced_namespace(
         }
     });
 
-    Ok(Statement::Namespace(Namespace::Braced(BracedNamespace {
+    Ok(Statement::Namespace(NamespaceStatement::Braced(BracedNamespace {
         namespace: span,
         name,
         body,

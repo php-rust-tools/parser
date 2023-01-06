@@ -36,19 +36,21 @@
                 position: 15,
             },
             body: Statement {
-                statement: Block {
-                    left_brace: Span {
-                        line: 3,
-                        column: 11,
-                        position: 17,
+                statement: Block(
+                    BlockStatement {
+                        left_brace: Span {
+                            line: 3,
+                            column: 11,
+                            position: 17,
+                        },
+                        statements: [],
+                        right_brace: Span {
+                            line: 5,
+                            column: 1,
+                            position: 20,
+                        },
                     },
-                    statements: [],
-                    right_brace: Span {
-                        line: 5,
-                        column: 1,
-                        position: 20,
-                    },
-                },
+                ),
                 elseifs: [],
                 else: Some(
                     IfStatementElse {
@@ -87,19 +89,21 @@
                                     position: 35,
                                 },
                                 body: Statement {
-                                    statement: Block {
-                                        left_brace: Span {
-                                            line: 5,
-                                            column: 18,
-                                            position: 37,
+                                    statement: Block(
+                                        BlockStatement {
+                                            left_brace: Span {
+                                                line: 5,
+                                                column: 18,
+                                                position: 37,
+                                            },
+                                            statements: [],
+                                            right_brace: Span {
+                                                line: 7,
+                                                column: 1,
+                                                position: 44,
+                                            },
                                         },
-                                        statements: [],
-                                        right_brace: Span {
-                                            line: 7,
-                                            column: 1,
-                                            position: 44,
-                                        },
-                                    },
+                                    ),
                                     elseifs: [],
                                     else: None,
                                 },

@@ -1,7 +1,9 @@
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::GroupUseStatement;
 use crate::parser::ast::Statement;
 use crate::parser::ast::Use;
 use crate::parser::ast::UseKind;
+use crate::parser::ast::UseStatement;
 use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::identifiers;
@@ -76,7 +78,7 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
         utils::skip_right_brace(state)?;
         utils::skip_semicolon(state)?;
 
-        Ok(Statement::GroupUse { prefix, kind, uses })
+        Ok(Statement::GroupUse(GroupUseStatement { prefix, kind, uses }))
     } else {
         let mut uses = Vec::new();
         while !state.stream.is_eof() {
@@ -102,6 +104,6 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
             break;
         }
 
-        Ok(Statement::Use { uses, kind })
+        Ok(Statement::Use(UseStatement { uses, kind }))
     }
 }

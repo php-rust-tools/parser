@@ -8,21 +8,21 @@ use crate::lexer::token::TokenKind;
 use crate::parser::ast::arguments::ArgumentPlaceholder;
 use crate::parser::ast::arguments::{ArgumentList, SingleArgument};
 use crate::parser::ast::classes::AnonymousClass;
-use crate::parser::ast::classes::Class;
+use crate::parser::ast::classes::ClassStatement;
 use crate::parser::ast::comments::Comment;
-use crate::parser::ast::constant::Constant;
+use crate::parser::ast::constant::ConstantStatement;
 use crate::parser::ast::control_flow::IfStatement;
-use crate::parser::ast::declares::Declare;
-use crate::parser::ast::enums::BackedEnum;
-use crate::parser::ast::enums::UnitEnum;
+use crate::parser::ast::declares::DeclareStatement;
+use crate::parser::ast::enums::BackedEnumStatement;
+use crate::parser::ast::enums::UnitEnumStatement;
 use crate::parser::ast::functions::ArrowFunction;
 use crate::parser::ast::functions::Closure;
-use crate::parser::ast::functions::Function;
-use crate::parser::ast::goto::GotoLabel;
+use crate::parser::ast::functions::FunctionStatement;
+use crate::parser::ast::goto::LabelStatement;
 use crate::parser::ast::goto::GotoStatement;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::identifiers::SimpleIdentifier;
-use crate::parser::ast::interfaces::Interface;
+use crate::parser::ast::interfaces::InterfaceStatement;
 use crate::parser::ast::literals::Literal;
 use crate::parser::ast::loops::BreakStatement;
 use crate::parser::ast::loops::ContinueStatement;
@@ -30,14 +30,14 @@ use crate::parser::ast::loops::DoWhileStatement;
 use crate::parser::ast::loops::ForStatement;
 use crate::parser::ast::loops::ForeachStatement;
 use crate::parser::ast::loops::WhileStatement;
-use crate::parser::ast::namespaces::Namespace;
+use crate::parser::ast::namespaces::NamespaceStatement;
 use crate::parser::ast::operators::ArithmeticOperation;
 use crate::parser::ast::operators::AssignmentOperation;
 use crate::parser::ast::operators::BitwiseOperation;
 use crate::parser::ast::operators::ComparisonOperation;
 use crate::parser::ast::operators::LogicalOperation;
-use crate::parser::ast::traits::Trait;
-use crate::parser::ast::try_block::TryBlock;
+use crate::parser::ast::traits::TraitStatement;
+use crate::parser::ast::try_block::TryStatement;
 use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::variables::Variable;
 
@@ -97,6 +97,53 @@ pub struct HaltCompiler {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct StaticStatement {
+    pub vars: Vec<StaticVar>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct SwitchStatement {
+    pub switch: Span,
+    pub left_parenthesis: Span,
+    pub condition: Expression,
+    pub right_parenthesis: Span,
+    pub cases: Vec<Case>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct EchoStatement {
+    pub echo: Span,
+    pub values: Vec<Expression>,
+    pub ending: Ending,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct ReturnStatement {
+    pub r#return: Span,
+    pub value: Option<Expression>,
+    pub ending: Ending,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct UseStatement {
+    pub kind: UseKind,
+    pub uses: Vec<Use>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct GroupUseStatement {
+    pub prefix: SimpleIdentifier,
+    pub kind: UseKind,
+    pub uses: Vec<Use>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Statement {
     FullOpeningTag(Span),
@@ -104,70 +151,59 @@ pub enum Statement {
     EchoOpeningTag(Span),
     ClosingTag(Span),
     InlineHtml(ByteString),
-    GotoLabel(GotoLabel),
+    Label(LabelStatement),
     Goto(GotoStatement),
     HaltCompiler(HaltCompiler),
-    Static {
-        vars: Vec<StaticVar>,
-    },
+    Static(StaticStatement),
     DoWhile(DoWhileStatement),
     While(WhileStatement),
     For(ForStatement),
     Foreach(ForeachStatement),
     Break(BreakStatement),
     Continue(ContinueStatement),
-    Constant(Constant),
-    Function(Function),
-    Class(Class),
-    Trait(Trait),
-    Interface(Interface),
+    Constant(ConstantStatement),
+    Function(FunctionStatement),
+    Class(ClassStatement),
+    Trait(TraitStatement),
+    Interface(InterfaceStatement),
     If(IfStatement),
-    Switch {
-        switch: Span,
-        left_parenthesis: Span,
-        condition: Expression,
-        right_parenthesis: Span,
-        cases: Vec<Case>,
-    },
-    Echo {
-        echo: Span,
-        values: Vec<Expression>,
-        ending: Ending,
-    },
-    Expression {
-        expression: Expression,
-        ending: Ending,
-    },
-    Return {
-        r#return: Span,
-        value: Option<Expression>,
-        ending: Ending,
-    },
-    Namespace(Namespace),
-    Use {
-        uses: Vec<Use>,
-        kind: UseKind,
-    },
-    GroupUse {
-        prefix: SimpleIdentifier,
-        kind: UseKind,
-        uses: Vec<Use>,
-    },
+    Switch(SwitchStatement),
+    Echo(EchoStatement),
+    Expression(ExpressionStatement),
+    Return(ReturnStatement),
+    Namespace(NamespaceStatement),
+    Use(UseStatement),
+    GroupUse(GroupUseStatement),
     Comment(Comment),
-    Try(TryBlock),
-    UnitEnum(UnitEnum),
-    BackedEnum(BackedEnum),
-    Block {
-        left_brace: Span,
-        statements: Vec<Statement>,
-        right_brace: Span,
-    },
-    Global {
-        global: Span,
-        variables: Vec<Variable>,
-    },
-    Declare(Declare),
+    Try(TryStatement),
+    UnitEnum(UnitEnumStatement),
+    BackedEnum(BackedEnumStatement),
+    Block(BlockStatement),
+    Global(GlobalStatement),
+    Declare(DeclareStatement),
     Noop(Span),
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct ExpressionStatement {
+    pub expression: Expression,
+    pub ending: Ending,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct GlobalStatement {
+    pub global: Span,
+    pub variables: Vec<Variable>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct BlockStatement {
+    pub left_brace: Span,
+    pub statements: Vec<Statement>,
+    pub right_brace: Span,
 }
 
 // See https://www.php.net/manual/en/language.types.type-juggling.php#language.types.typecasting for more info.

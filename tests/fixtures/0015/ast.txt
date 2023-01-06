@@ -7,7 +7,7 @@
         },
     ),
     Declare(
-        Declare {
+        DeclareStatement {
             declare: Span {
                 line: 3,
                 column: 1,
@@ -59,27 +59,29 @@
                     position: 20,
                 },
                 statements: [
-                    Expression {
-                        expression: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 4,
-                                        column: 5,
-                                        position: 27,
+                    Expression(
+                        ExpressionStatement {
+                            expression: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 4,
+                                            column: 5,
+                                            position: 27,
+                                        },
+                                        name: "$a",
                                     },
-                                    name: "$a",
+                                ),
+                            ),
+                            ending: Semicolon(
+                                Span {
+                                    line: 4,
+                                    column: 7,
+                                    position: 29,
                                 },
                             ),
-                        ),
-                        ending: Semicolon(
-                            Span {
-                                line: 4,
-                                column: 7,
-                                position: 29,
-                            },
-                        ),
-                    },
+                        },
+                    ),
                 ],
                 end: (
                     Span {
@@ -97,7 +99,7 @@
         },
     ),
     Declare(
-        Declare {
+        DeclareStatement {
             declare: Span {
                 line: 7,
                 column: 1,
@@ -149,27 +151,29 @@
                     position: 58,
                 },
                 statements: [
-                    Expression {
-                        expression: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 8,
-                                        column: 5,
-                                        position: 65,
+                    Expression(
+                        ExpressionStatement {
+                            expression: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 8,
+                                            column: 5,
+                                            position: 65,
+                                        },
+                                        name: "$a",
                                     },
-                                    name: "$a",
+                                ),
+                            ),
+                            ending: Semicolon(
+                                Span {
+                                    line: 8,
+                                    column: 7,
+                                    position: 67,
                                 },
                             ),
-                        ),
-                        ending: Semicolon(
-                            Span {
-                                line: 8,
-                                column: 7,
-                                position: 67,
-                            },
-                        ),
-                    },
+                        },
+                    ),
                 ],
                 end: (
                     Span {
@@ -187,7 +191,7 @@
         },
     ),
     Declare(
-        Declare {
+        DeclareStatement {
             declare: Span {
                 line: 11,
                 column: 1,

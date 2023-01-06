@@ -6,63 +6,65 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Concat {
-            left: Concat {
-                left: Literal(
-                    String(
-                        LiteralString {
-                            value: "'foo'",
-                            span: Span {
-                                line: 1,
-                                column: 7,
-                                position: 6,
+    Expression(
+        ExpressionStatement {
+            expression: Concat {
+                left: Concat {
+                    left: Literal(
+                        String(
+                            LiteralString {
+                                value: "'foo'",
+                                span: Span {
+                                    line: 1,
+                                    column: 7,
+                                    position: 6,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
+                    dot: Span {
+                        line: 1,
+                        column: 13,
+                        position: 12,
+                    },
+                    right: Literal(
+                        String(
+                            LiteralString {
+                                value: "'bar'",
+                                span: Span {
+                                    line: 1,
+                                    column: 15,
+                                    position: 14,
+                                },
+                            },
+                        ),
+                    ),
+                },
                 dot: Span {
                     line: 1,
-                    column: 13,
-                    position: 12,
+                    column: 21,
+                    position: 20,
                 },
                 right: Literal(
                     String(
                         LiteralString {
-                            value: "'bar'",
+                            value: "'baz'",
                             span: Span {
                                 line: 1,
-                                column: 15,
-                                position: 14,
+                                column: 23,
+                                position: 22,
                             },
                         },
                     ),
                 ),
             },
-            dot: Span {
-                line: 1,
-                column: 21,
-                position: 20,
-            },
-            right: Literal(
-                String(
-                    LiteralString {
-                        value: "'baz'",
-                        span: Span {
-                            line: 1,
-                            column: 23,
-                            position: 22,
-                        },
-                    },
-                ),
+            ending: Semicolon(
+                Span {
+                    line: 1,
+                    column: 28,
+                    position: 27,
+                },
             ),
         },
-        ending: Semicolon(
-            Span {
-                line: 1,
-                column: 28,
-                position: 27,
-            },
-        ),
-    },
+    ),
 ]

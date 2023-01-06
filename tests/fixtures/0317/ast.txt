@@ -6,27 +6,29 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Literal(
-            String(
-                LiteralString {
-                    value: ""<?php\n"",
-                    span: Span {
-                        line: 1,
-                        column: 5,
-                        position: 4,
+    Expression(
+        ExpressionStatement {
+            expression: Literal(
+                String(
+                    LiteralString {
+                        value: ""<?php\n"",
+                        span: Span {
+                            line: 1,
+                            column: 5,
+                            position: 4,
+                        },
                     },
+                ),
+            ),
+            ending: CloseTag(
+                Span {
+                    line: 1,
+                    column: 15,
+                    position: 14,
                 },
             ),
-        ),
-        ending: CloseTag(
-            Span {
-                line: 1,
-                column: 15,
-                position: 14,
-            },
-        ),
-    },
+        },
+    ),
     InlineHtml(
         "\nsome html",
     ),

@@ -7,7 +7,7 @@
         },
     ),
     Trait(
-        Trait {
+        TraitStatement {
             trait: Span {
                 line: 3,
                 column: 1,
@@ -133,57 +133,59 @@
                                     position: 169,
                                 },
                                 statements: [
-                                    Expression {
-                                        expression: Exit {
-                                            exit: Span {
-                                                line: 8,
-                                                column: 9,
-                                                position: 179,
-                                            },
-                                            argument: Some(
-                                                SingleArgument {
-                                                    comments: CommentGroup {
-                                                        comments: [],
-                                                    },
-                                                    left_parenthesis: Span {
-                                                        line: 8,
-                                                        column: 13,
-                                                        position: 183,
-                                                    },
-                                                    argument: Positional {
+                                    Expression(
+                                        ExpressionStatement {
+                                            expression: Exit {
+                                                exit: Span {
+                                                    line: 8,
+                                                    column: 9,
+                                                    position: 179,
+                                                },
+                                                argument: Some(
+                                                    SingleArgument {
                                                         comments: CommentGroup {
                                                             comments: [],
                                                         },
-                                                        ellipsis: None,
-                                                        value: Literal(
-                                                            Integer(
-                                                                LiteralInteger {
-                                                                    value: "1",
-                                                                    span: Span {
-                                                                        line: 8,
-                                                                        column: 14,
-                                                                        position: 184,
+                                                        left_parenthesis: Span {
+                                                            line: 8,
+                                                            column: 13,
+                                                            position: 183,
+                                                        },
+                                                        argument: Positional {
+                                                            comments: CommentGroup {
+                                                                comments: [],
+                                                            },
+                                                            ellipsis: None,
+                                                            value: Literal(
+                                                                Integer(
+                                                                    LiteralInteger {
+                                                                        value: "1",
+                                                                        span: Span {
+                                                                            line: 8,
+                                                                            column: 14,
+                                                                            position: 184,
+                                                                        },
                                                                     },
-                                                                },
+                                                                ),
                                                             ),
-                                                        ),
+                                                        },
+                                                        right_parenthesis: Span {
+                                                            line: 8,
+                                                            column: 15,
+                                                            position: 185,
+                                                        },
                                                     },
-                                                    right_parenthesis: Span {
-                                                        line: 8,
-                                                        column: 15,
-                                                        position: 185,
-                                                    },
+                                                ),
+                                            },
+                                            ending: Semicolon(
+                                                Span {
+                                                    line: 8,
+                                                    column: 16,
+                                                    position: 186,
                                                 },
                                             ),
                                         },
-                                        ending: Semicolon(
-                                            Span {
-                                                line: 8,
-                                                column: 16,
-                                                position: 186,
-                                            },
-                                        ),
-                                    },
+                                    ),
                                 ],
                                 right_brace: Span {
                                     line: 9,

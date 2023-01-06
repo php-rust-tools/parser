@@ -36,48 +36,52 @@
                 position: 13,
             },
             body: Statement {
-                statement: Block {
-                    left_brace: Span {
-                        line: 1,
-                        column: 16,
-                        position: 15,
-                    },
-                    statements: [
-                        Return {
-                            return: Span {
-                                line: 1,
-                                column: 18,
-                                position: 17,
-                            },
-                            value: Some(
-                                Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span {
-                                                line: 1,
-                                                column: 25,
-                                                position: 24,
-                                            },
-                                            name: "$foo",
+                statement: Block(
+                    BlockStatement {
+                        left_brace: Span {
+                            line: 1,
+                            column: 16,
+                            position: 15,
+                        },
+                        statements: [
+                            Return(
+                                ReturnStatement {
+                                    return: Span {
+                                        line: 1,
+                                        column: 18,
+                                        position: 17,
+                                    },
+                                    value: Some(
+                                        Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 1,
+                                                        column: 25,
+                                                        position: 24,
+                                                    },
+                                                    name: "$foo",
+                                                },
+                                            ),
+                                        ),
+                                    ),
+                                    ending: Semicolon(
+                                        Span {
+                                            line: 1,
+                                            column: 29,
+                                            position: 28,
                                         },
                                     ),
-                                ),
-                            ),
-                            ending: Semicolon(
-                                Span {
-                                    line: 1,
-                                    column: 29,
-                                    position: 28,
                                 },
                             ),
+                        ],
+                        right_brace: Span {
+                            line: 1,
+                            column: 31,
+                            position: 30,
                         },
-                    ],
-                    right_brace: Span {
-                        line: 1,
-                        column: 31,
-                        position: 30,
                     },
-                },
+                ),
                 elseifs: [
                     IfStatementElseIf {
                         elseif: Span {
@@ -107,48 +111,52 @@
                             column: 44,
                             position: 43,
                         },
-                        statement: Block {
-                            left_brace: Span {
-                                line: 1,
-                                column: 46,
-                                position: 45,
-                            },
-                            statements: [
-                                Return {
-                                    return: Span {
-                                        line: 1,
-                                        column: 48,
-                                        position: 47,
-                                    },
-                                    value: Some(
-                                        Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 1,
-                                                        column: 55,
-                                                        position: 54,
-                                                    },
-                                                    name: "$foo",
+                        statement: Block(
+                            BlockStatement {
+                                left_brace: Span {
+                                    line: 1,
+                                    column: 46,
+                                    position: 45,
+                                },
+                                statements: [
+                                    Return(
+                                        ReturnStatement {
+                                            return: Span {
+                                                line: 1,
+                                                column: 48,
+                                                position: 47,
+                                            },
+                                            value: Some(
+                                                Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 1,
+                                                                column: 55,
+                                                                position: 54,
+                                                            },
+                                                            name: "$foo",
+                                                        },
+                                                    ),
+                                                ),
+                                            ),
+                                            ending: Semicolon(
+                                                Span {
+                                                    line: 1,
+                                                    column: 59,
+                                                    position: 58,
                                                 },
                                             ),
-                                        ),
-                                    ),
-                                    ending: Semicolon(
-                                        Span {
-                                            line: 1,
-                                            column: 59,
-                                            position: 58,
                                         },
                                     ),
+                                ],
+                                right_brace: Span {
+                                    line: 1,
+                                    column: 61,
+                                    position: 60,
                                 },
-                            ],
-                            right_brace: Span {
-                                line: 1,
-                                column: 61,
-                                position: 60,
                             },
-                        },
+                        ),
                     },
                 ],
                 else: Some(
@@ -158,48 +166,52 @@
                             column: 63,
                             position: 62,
                         },
-                        statement: Block {
-                            left_brace: Span {
-                                line: 1,
-                                column: 68,
-                                position: 67,
-                            },
-                            statements: [
-                                Return {
-                                    return: Span {
-                                        line: 1,
-                                        column: 70,
-                                        position: 69,
-                                    },
-                                    value: Some(
-                                        Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 1,
-                                                        column: 77,
-                                                        position: 76,
-                                                    },
-                                                    name: "$foo",
+                        statement: Block(
+                            BlockStatement {
+                                left_brace: Span {
+                                    line: 1,
+                                    column: 68,
+                                    position: 67,
+                                },
+                                statements: [
+                                    Return(
+                                        ReturnStatement {
+                                            return: Span {
+                                                line: 1,
+                                                column: 70,
+                                                position: 69,
+                                            },
+                                            value: Some(
+                                                Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 1,
+                                                                column: 77,
+                                                                position: 76,
+                                                            },
+                                                            name: "$foo",
+                                                        },
+                                                    ),
+                                                ),
+                                            ),
+                                            ending: Semicolon(
+                                                Span {
+                                                    line: 1,
+                                                    column: 81,
+                                                    position: 80,
                                                 },
                                             ),
-                                        ),
-                                    ),
-                                    ending: Semicolon(
-                                        Span {
-                                            line: 1,
-                                            column: 81,
-                                            position: 80,
                                         },
                                     ),
+                                ],
+                                right_brace: Span {
+                                    line: 1,
+                                    column: 83,
+                                    position: 82,
                                 },
-                            ],
-                            right_brace: Span {
-                                line: 1,
-                                column: 83,
-                                position: 82,
                             },
-                        },
+                        ),
                     },
                 ),
             },

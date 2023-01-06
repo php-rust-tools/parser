@@ -6,62 +6,64 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: ShortArray {
-            start: Span {
-                line: 3,
-                column: 1,
-                position: 7,
-            },
-            items: CommaSeparated {
-                inner: [
-                    Value {
-                        value: FunctionCall {
-                            target: Identifier(
-                                SimpleIdentifier(
-                                    SimpleIdentifier {
-                                        span: Span {
-                                            line: 3,
-                                            column: 2,
-                                            position: 8,
+    Expression(
+        ExpressionStatement {
+            expression: ShortArray {
+                start: Span {
+                    line: 3,
+                    column: 1,
+                    position: 7,
+                },
+                items: CommaSeparated {
+                    inner: [
+                        Value {
+                            value: FunctionCall {
+                                target: Identifier(
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: Span {
+                                                line: 3,
+                                                column: 2,
+                                                position: 8,
+                                            },
+                                            value: "foo",
                                         },
-                                        value: "foo",
-                                    },
+                                    ),
                                 ),
-                            ),
-                            arguments: ArgumentList {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                left_parenthesis: Span {
-                                    line: 3,
-                                    column: 5,
-                                    position: 11,
-                                },
-                                arguments: [],
-                                right_parenthesis: Span {
-                                    line: 3,
-                                    column: 24,
-                                    position: 30,
+                                arguments: ArgumentList {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    left_parenthesis: Span {
+                                        line: 3,
+                                        column: 5,
+                                        position: 11,
+                                    },
+                                    arguments: [],
+                                    right_parenthesis: Span {
+                                        line: 3,
+                                        column: 24,
+                                        position: 30,
+                                    },
                                 },
                             },
                         },
-                    },
-                ],
-                commas: [],
+                    ],
+                    commas: [],
+                },
+                end: Span {
+                    line: 3,
+                    column: 25,
+                    position: 31,
+                },
             },
-            end: Span {
-                line: 3,
-                column: 25,
-                position: 31,
-            },
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 26,
+                    position: 32,
+                },
+            ),
         },
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 26,
-                position: 32,
-            },
-        ),
-    },
+    ),
 ]

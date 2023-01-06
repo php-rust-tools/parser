@@ -37,7 +37,7 @@ pub struct TraitBody {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Trait {
+pub struct TraitStatement {
     pub r#trait: Span,
     pub name: SimpleIdentifier,
     pub attributes: Vec<AttributeGroup>,

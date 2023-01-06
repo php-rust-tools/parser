@@ -6,84 +6,86 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: AssignmentOperation(
-            Assign {
-                left: List {
-                    list: Span {
-                        line: 3,
-                        column: 1,
-                        position: 7,
-                    },
-                    start: Span {
-                        line: 3,
-                        column: 5,
-                        position: 11,
-                    },
-                    items: [
-                        KeyValue {
-                            key: Literal(
-                                String(
-                                    LiteralString {
-                                        value: "'foo'",
-                                        span: Span {
-                                            line: 3,
-                                            column: 6,
-                                            position: 12,
-                                        },
-                                    },
-                                ),
-                            ),
-                            double_arrow: Span {
-                                line: 3,
-                                column: 12,
-                                position: 18,
-                            },
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 3,
-                                            column: 15,
-                                            position: 21,
-                                        },
-                                        name: "$a",
-                                    },
-                                ),
-                            ),
+    Expression(
+        ExpressionStatement {
+            expression: AssignmentOperation(
+                Assign {
+                    left: List {
+                        list: Span {
+                            line: 3,
+                            column: 1,
+                            position: 7,
                         },
-                    ],
-                    end: Span {
-                        line: 3,
-                        column: 17,
-                        position: 23,
-                    },
-                },
-                equals: Span {
-                    line: 3,
-                    column: 19,
-                    position: 25,
-                },
-                right: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 3,
-                                column: 21,
-                                position: 27,
-                            },
-                            name: "$foo",
+                        start: Span {
+                            line: 3,
+                            column: 5,
+                            position: 11,
                         },
+                        items: [
+                            KeyValue {
+                                key: Literal(
+                                    String(
+                                        LiteralString {
+                                            value: "'foo'",
+                                            span: Span {
+                                                line: 3,
+                                                column: 6,
+                                                position: 12,
+                                            },
+                                        },
+                                    ),
+                                ),
+                                double_arrow: Span {
+                                    line: 3,
+                                    column: 12,
+                                    position: 18,
+                                },
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 15,
+                                                position: 21,
+                                            },
+                                            name: "$a",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ],
+                        end: Span {
+                            line: 3,
+                            column: 17,
+                            position: 23,
+                        },
+                    },
+                    equals: Span {
+                        line: 3,
+                        column: 19,
+                        position: 25,
+                    },
+                    right: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 3,
+                                    column: 21,
+                                    position: 27,
+                                },
+                                name: "$foo",
+                            },
+                        ),
                     ),
-                ),
-            },
-        ),
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 25,
-                position: 31,
-            },
-        ),
-    },
+                },
+            ),
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 25,
+                    position: 31,
+                },
+            ),
+        },
+    ),
 ]

@@ -62,19 +62,21 @@
                 position: 25,
             },
             body: Statement(
-                Block {
-                    left_brace: Span {
-                        line: 3,
-                        column: 21,
-                        position: 27,
+                Block(
+                    BlockStatement {
+                        left_brace: Span {
+                            line: 3,
+                            column: 21,
+                            position: 27,
+                        },
+                        statements: [],
+                        right_brace: Span {
+                            line: 3,
+                            column: 22,
+                            position: 28,
+                        },
                     },
-                    statements: [],
-                    right_brace: Span {
-                        line: 3,
-                        column: 22,
-                        position: 28,
-                    },
-                },
+                ),
             ),
         },
     ),
@@ -151,109 +153,113 @@
                 position: 55,
             },
             body: Statement(
-                Block {
-                    left_brace: Span {
-                        line: 5,
-                        column: 27,
-                        position: 57,
+                Block(
+                    BlockStatement {
+                        left_brace: Span {
+                            line: 5,
+                            column: 27,
+                            position: 57,
+                        },
+                        statements: [],
+                        right_brace: Span {
+                            line: 5,
+                            column: 28,
+                            position: 58,
+                        },
                     },
-                    statements: [],
-                    right_brace: Span {
-                        line: 5,
-                        column: 28,
-                        position: 58,
-                    },
-                },
+                ),
             ),
         },
     ),
-    Switch {
-        switch: Span {
-            line: 7,
-            column: 1,
-            position: 61,
-        },
-        left_parenthesis: Span {
-            line: 7,
-            column: 8,
-            position: 68,
-        },
-        condition: Variable(
-            SimpleVariable(
-                SimpleVariable {
-                    span: Span {
-                        line: 7,
-                        column: 9,
-                        position: 69,
+    Switch(
+        SwitchStatement {
+            switch: Span {
+                line: 7,
+                column: 1,
+                position: 61,
+            },
+            left_parenthesis: Span {
+                line: 7,
+                column: 8,
+                position: 68,
+            },
+            condition: Variable(
+                SimpleVariable(
+                    SimpleVariable {
+                        span: Span {
+                            line: 7,
+                            column: 9,
+                            position: 69,
+                        },
+                        name: "$a",
                     },
-                    name: "$a",
-                },
-            ),
-        ),
-        right_parenthesis: Span {
-            line: 7,
-            column: 11,
-            position: 71,
-        },
-        cases: [
-            Case {
-                condition: Some(
-                    Literal(
-                        Integer(
-                            LiteralInteger {
-                                value: "0",
-                                span: Span {
-                                    line: 8,
-                                    column: 10,
-                                    position: 84,
-                                },
-                            },
-                        ),
-                    ),
                 ),
-                body: [
-                    Break(
-                        BreakStatement {
-                            break: Span {
-                                line: 9,
-                                column: 9,
-                                position: 95,
-                            },
-                            level: None,
-                            ending: Semicolon(
-                                Span {
-                                    line: 9,
-                                    column: 14,
-                                    position: 100,
+            ),
+            right_parenthesis: Span {
+                line: 7,
+                column: 11,
+                position: 71,
+            },
+            cases: [
+                Case {
+                    condition: Some(
+                        Literal(
+                            Integer(
+                                LiteralInteger {
+                                    value: "0",
+                                    span: Span {
+                                        line: 8,
+                                        column: 10,
+                                        position: 84,
+                                    },
                                 },
                             ),
-                        },
-                    ),
-                ],
-            },
-            Case {
-                condition: Some(
-                    Literal(
-                        Integer(
-                            LiteralInteger {
-                                value: "1",
-                                span: Span {
-                                    line: 10,
-                                    column: 10,
-                                    position: 111,
-                                },
-                            },
                         ),
                     ),
-                ),
-                body: [],
-            },
-            Case {
-                condition: None,
-                body: [],
-            },
-        ],
-    },
+                    body: [
+                        Break(
+                            BreakStatement {
+                                break: Span {
+                                    line: 9,
+                                    column: 9,
+                                    position: 95,
+                                },
+                                level: None,
+                                ending: Semicolon(
+                                    Span {
+                                        line: 9,
+                                        column: 14,
+                                        position: 100,
+                                    },
+                                ),
+                            },
+                        ),
+                    ],
+                },
+                Case {
+                    condition: Some(
+                        Literal(
+                            Integer(
+                                LiteralInteger {
+                                    value: "1",
+                                    span: Span {
+                                        line: 10,
+                                        column: 10,
+                                        position: 111,
+                                    },
+                                },
+                            ),
+                        ),
+                    ),
+                    body: [],
+                },
+                Case {
+                    condition: None,
+                    body: [],
+                },
+            ],
+        },
+    ),
     Foreach(
         ForeachStatement {
             foreach: Span {
@@ -343,19 +349,21 @@
                 position: 159,
             },
             body: Statement(
-                Block {
-                    left_brace: Span {
-                        line: 14,
-                        column: 32,
-                        position: 161,
+                Block(
+                    BlockStatement {
+                        left_brace: Span {
+                            line: 14,
+                            column: 32,
+                            position: 161,
+                        },
+                        statements: [],
+                        right_brace: Span {
+                            line: 14,
+                            column: 33,
+                            position: 162,
+                        },
                     },
-                    statements: [],
-                    right_brace: Span {
-                        line: 14,
-                        column: 33,
-                        position: 162,
-                    },
-                },
+                ),
             ),
         },
     ),
@@ -426,19 +434,21 @@
                 position: 194,
             },
             body: Statement(
-                Block {
-                    left_brace: Span {
-                        line: 16,
-                        column: 32,
-                        position: 196,
+                Block(
+                    BlockStatement {
+                        left_brace: Span {
+                            line: 16,
+                            column: 32,
+                            position: 196,
+                        },
+                        statements: [],
+                        right_brace: Span {
+                            line: 16,
+                            column: 33,
+                            position: 197,
+                        },
                     },
-                    statements: [],
-                    right_brace: Span {
-                        line: 16,
-                        column: 33,
-                        position: 197,
-                    },
-                },
+                ),
             ),
         },
     ),
@@ -492,19 +502,21 @@
                 position: 221,
             },
             body: Statement(
-                Block {
-                    left_brace: Span {
-                        line: 18,
-                        column: 24,
-                        position: 223,
+                Block(
+                    BlockStatement {
+                        left_brace: Span {
+                            line: 18,
+                            column: 24,
+                            position: 223,
+                        },
+                        statements: [],
+                        right_brace: Span {
+                            line: 18,
+                            column: 25,
+                            position: 224,
+                        },
                     },
-                    statements: [],
-                    right_brace: Span {
-                        line: 18,
-                        column: 25,
-                        position: 224,
-                    },
-                },
+                ),
             ),
         },
     ),

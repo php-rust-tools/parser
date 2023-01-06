@@ -6,263 +6,281 @@
             position: 0,
         },
     ),
-    GroupUse {
-        prefix: SimpleIdentifier {
-            span: Span {
-                line: 3,
-                column: 5,
-                position: 11,
-            },
-            value: "Foo\",
-        },
-        kind: Normal,
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 3,
-                        column: 10,
-                        position: 16,
-                    },
-                    value: "Bar",
+    GroupUse(
+        GroupUseStatement {
+            prefix: SimpleIdentifier {
+                span: Span {
+                    line: 3,
+                    column: 5,
+                    position: 11,
                 },
-                alias: None,
-                kind: None,
+                value: "Foo\",
             },
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 3,
-                        column: 15,
-                        position: 21,
-                    },
-                    value: "Baz",
-                },
-                alias: Some(
-                    SimpleIdentifier {
+            kind: Normal,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
                         span: Span {
                             line: 3,
-                            column: 22,
-                            position: 28,
+                            column: 10,
+                            position: 16,
                         },
-                        value: "Bob",
+                        value: "Bar",
                     },
-                ),
-                kind: None,
-            },
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 3,
-                        column: 27,
-                        position: 33,
-                    },
-                    value: "Car",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-        ],
-    },
-    GroupUse {
-        prefix: SimpleIdentifier {
-            span: Span {
-                line: 4,
-                column: 5,
-                position: 43,
-            },
-            value: "Bar\",
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 3,
+                            column: 15,
+                            position: 21,
+                        },
+                        value: "Baz",
+                    },
+                    alias: Some(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 3,
+                                column: 22,
+                                position: 28,
+                            },
+                            value: "Bob",
+                        },
+                    ),
+                    kind: None,
+                },
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 3,
+                            column: 27,
+                            position: 33,
+                        },
+                        value: "Car",
+                    },
+                    alias: None,
+                    kind: None,
+                },
+            ],
         },
-        kind: Normal,
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 4,
-                        column: 10,
-                        position: 48,
-                    },
-                    value: "Bar0",
+    ),
+    GroupUse(
+        GroupUseStatement {
+            prefix: SimpleIdentifier {
+                span: Span {
+                    line: 4,
+                    column: 5,
+                    position: 43,
                 },
-                alias: None,
-                kind: None,
+                value: "Bar\",
             },
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 4,
-                        column: 16,
-                        position: 54,
+            kind: Normal,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 4,
+                            column: 10,
+                            position: 48,
+                        },
+                        value: "Bar0",
                     },
-                    value: "Baz0",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 4,
-                        column: 22,
-                        position: 60,
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 4,
+                            column: 16,
+                            position: 54,
+                        },
+                        value: "Baz0",
                     },
-                    value: "Car0",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-        ],
-    },
-    Use {
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 5,
-                        column: 5,
-                        position: 71,
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 4,
+                            column: 22,
+                            position: 60,
+                        },
+                        value: "Car0",
                     },
-                    value: "Foo1",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 5,
-                        column: 11,
-                        position: 77,
+            ],
+        },
+    ),
+    Use(
+        UseStatement {
+            kind: Normal,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 5,
+                            column: 5,
+                            position: 71,
+                        },
+                        value: "Foo1",
                     },
-                    value: "Bar1",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 5,
-                        column: 17,
-                        position: 83,
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 5,
+                            column: 11,
+                            position: 77,
+                        },
+                        value: "Bar1",
                     },
-                    value: "Baz1",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-        ],
-        kind: Normal,
-    },
-    Use {
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 6,
-                        column: 5,
-                        position: 93,
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 5,
+                            column: 17,
+                            position: 83,
+                        },
+                        value: "Baz1",
                     },
-                    value: "Foo",
+                    alias: None,
+                    kind: None,
                 },
-                alias: Some(
-                    SimpleIdentifier {
+            ],
+        },
+    ),
+    Use(
+        UseStatement {
+            kind: Normal,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
                         span: Span {
                             line: 6,
-                            column: 12,
-                            position: 100,
+                            column: 5,
+                            position: 93,
                         },
-                        value: "Qux",
+                        value: "Foo",
                     },
-                ),
-                kind: None,
-            },
-        ],
-        kind: Normal,
-    },
-    Use {
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 7,
-                        column: 5,
-                        position: 109,
-                    },
-                    value: "Foo",
+                    alias: Some(
+                        SimpleIdentifier {
+                            span: Span {
+                                line: 6,
+                                column: 12,
+                                position: 100,
+                            },
+                            value: "Qux",
+                        },
+                    ),
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-        ],
-        kind: Normal,
-    },
-    Use {
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 9,
-                        column: 11,
-                        position: 125,
+            ],
+        },
+    ),
+    Use(
+        UseStatement {
+            kind: Normal,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 7,
+                            column: 5,
+                            position: 109,
+                        },
+                        value: "Foo",
                     },
-                    value: "FOO",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-        ],
-        kind: Const,
-    },
-    Use {
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 10,
-                        column: 11,
-                        position: 140,
+            ],
+        },
+    ),
+    Use(
+        UseStatement {
+            kind: Const,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 9,
+                            column: 11,
+                            position: 125,
+                        },
+                        value: "FOO",
                     },
-                    value: "Foo\Bar\Baz\QUX",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-        ],
-        kind: Const,
-    },
-    Use {
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 12,
-                        column: 14,
-                        position: 171,
+            ],
+        },
+    ),
+    Use(
+        UseStatement {
+            kind: Const,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 10,
+                            column: 11,
+                            position: 140,
+                        },
+                        value: "Foo\Bar\Baz\QUX",
                     },
-                    value: "f",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-        ],
-        kind: Function,
-    },
-    Use {
-        uses: [
-            Use {
-                name: SimpleIdentifier {
-                    span: Span {
-                        line: 13,
-                        column: 11,
-                        position: 184,
+            ],
+        },
+    ),
+    Use(
+        UseStatement {
+            kind: Function,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 12,
+                            column: 14,
+                            position: 171,
+                        },
+                        value: "f",
                     },
-                    value: "Pop\Bar\f",
+                    alias: None,
+                    kind: None,
                 },
-                alias: None,
-                kind: None,
-            },
-        ],
-        kind: Const,
-    },
+            ],
+        },
+    ),
+    Use(
+        UseStatement {
+            kind: Const,
+            uses: [
+                Use {
+                    name: SimpleIdentifier {
+                        span: Span {
+                            line: 13,
+                            column: 11,
+                            position: 184,
+                        },
+                        value: "Pop\Bar\f",
+                    },
+                    alias: None,
+                    kind: None,
+                },
+            ],
+        },
+    ),
 ]

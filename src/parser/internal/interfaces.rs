@@ -1,6 +1,6 @@
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::SimpleIdentifier;
-use crate::parser::ast::interfaces::Interface;
+use crate::parser::ast::interfaces::InterfaceStatement;
 use crate::parser::ast::interfaces::InterfaceBody;
 use crate::parser::ast::interfaces::InterfaceExtends;
 use crate::parser::ast::interfaces::InterfaceMember;
@@ -55,7 +55,7 @@ pub fn parse(state: &mut State) -> ParseResult<Statement> {
         right_brace: utils::skip_right_brace(state)?,
     };
 
-    Ok(Statement::Interface(Interface {
+    Ok(Statement::Interface(InterfaceStatement {
         interface: span,
         name,
         attributes,

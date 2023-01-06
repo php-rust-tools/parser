@@ -2,6 +2,7 @@ use crate::expected_token_err;
 
 use crate::lexer::token::TokenKind;
 use crate::parser;
+use crate::parser::ast::SwitchStatement;
 use crate::parser::ast::control_flow::IfStatement;
 use crate::parser::ast::control_flow::IfStatementBody;
 use crate::parser::ast::control_flow::IfStatementElse;
@@ -176,13 +177,13 @@ pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {
         utils::skip_right_brace(state)?;
     }
 
-    Ok(Statement::Switch {
+    Ok(Statement::Switch(SwitchStatement {
         switch,
         left_parenthesis,
         condition,
         right_parenthesis,
         cases,
-    })
+    }))
 }
 
 pub fn if_statement(state: &mut State) -> ParseResult<Statement> {

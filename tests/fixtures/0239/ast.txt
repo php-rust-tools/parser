@@ -6,20 +6,22 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: ShellExec {
-            parts: [
-                Literal(
-                    "Hello, world!",
-                ),
-            ],
-        },
-        ending: Semicolon(
-            Span {
-                line: 3,
-                column: 16,
-                position: 22,
+    Expression(
+        ExpressionStatement {
+            expression: ShellExec {
+                parts: [
+                    Literal(
+                        "Hello, world!",
+                    ),
+                ],
             },
-        ),
-    },
+            ending: Semicolon(
+                Span {
+                    line: 3,
+                    column: 16,
+                    position: 22,
+                },
+            ),
+        },
+    ),
 ]

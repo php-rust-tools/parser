@@ -6,16 +6,18 @@
             position: 0,
         },
     ),
-    Expression {
-        expression: Nowdoc {
-            value: "Hello, {$name}!",
-        },
-        ending: Semicolon(
-            Span {
-                line: 5,
-                column: 4,
-                position: 35,
+    Expression(
+        ExpressionStatement {
+            expression: Nowdoc {
+                value: "Hello, {$name}!",
             },
-        ),
-    },
+            ending: Semicolon(
+                Span {
+                    line: 5,
+                    column: 4,
+                    position: 35,
+                },
+            ),
+        },
+    ),
 ]
