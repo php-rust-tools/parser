@@ -67,6 +67,13 @@ pub mod utils;
 pub mod variables;
 
 pub type Block = Vec<Statement>;
+
+impl Node for Block {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.iter().map(|s| s as &dyn Node).collect()
+    }
+}
+
 pub type Program = Block;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -136,12 +143,29 @@ pub struct SwitchStatement {
     pub cases: Vec<Case>,
 }
 
+impl Node for SwitchStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.condition];
+        children.extend(self.cases.iter().map(|c| c as &dyn Node));
+        children
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub struct EchoStatement {
     pub echo: Span,
     pub values: Vec<Expression>,
     pub ending: Ending,
+}
+
+impl Node for EchoStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.values
+            .iter()
+            .map(|v| v as &dyn Node)
+            .collect()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -152,11 +176,30 @@ pub struct ReturnStatement {
     pub ending: Ending,
 }
 
+impl Node for ReturnStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        if let Some(value) = &self.value {
+            vec![value]
+        } else {
+            vec![]
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub struct UseStatement {
     pub kind: UseKind,
     pub uses: Vec<Use>,
+}
+
+impl Node for UseStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.uses
+            .iter()
+            .map(|u| u as &dyn Node)
+            .collect()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -165,6 +208,14 @@ pub struct GroupUseStatement {
     pub prefix: SimpleIdentifier,
     pub kind: UseKind,
     pub uses: Vec<Use>,
+}
+
+impl Node for GroupUseStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.prefix];
+        children.extend(self.uses.iter().map(|u| u as &dyn Node));
+        children
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -253,11 +304,26 @@ pub struct ExpressionStatement {
     pub ending: Ending,
 }
 
+impl Node for ExpressionStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.expression]
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub struct GlobalStatement {
     pub global: Span,
     pub variables: Vec<Variable>,
+}
+
+impl Node for GlobalStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.variables
+            .iter()
+            .map(|v| v as &dyn Node)
+            .collect()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -266,6 +332,15 @@ pub struct BlockStatement {
     pub left_brace: Span,
     pub statements: Vec<Statement>,
     pub right_brace: Span,
+}
+
+impl Node for BlockStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.statements
+            .iter()
+            .map(|s| s as &dyn Node)
+            .collect()
+    }
 }
 
 // See https://www.php.net/manual/en/language.types.type-juggling.php#language.types.typecasting for more info.
@@ -309,12 +384,33 @@ pub struct Case {
     pub body: Block,
 }
 
+impl Node for Case {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![];
+        if let Some(condition) = &self.condition {
+            children.push(condition);
+        }
+        children.extend(self.body.iter().map(|statement| statement as &dyn Node).collect::<Vec<&dyn Node>>());
+        children
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Use {
     pub name: SimpleIdentifier,
     pub alias: Option<SimpleIdentifier>,
     pub kind: Option<UseKind>,
+}
+
+impl Node for Use {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.name];
+        if let Some(alias) = &self.alias {
+            children.push(alias);
+        }
+        children
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

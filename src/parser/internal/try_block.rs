@@ -6,7 +6,6 @@ use crate::parser::ast::try_block::TryStatement;
 use crate::parser::ast::Statement;
 use crate::parser::error;
 use crate::parser::error::ParseResult;
-use crate::parser::expressions;
 use crate::parser::internal::blocks;
 use crate::parser::internal::identifiers;
 use crate::parser::internal::utils;

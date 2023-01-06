@@ -137,7 +137,7 @@ pub enum ForStatementBody {
 impl Node for ForStatementBody {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
-            ForStatementBody::Statement(statement) => vec![statement],
+            ForStatementBody::Statement(statement) => vec![statement.as_ref()],
             ForStatementBody::Block { statements, .. } => statements.iter().map(|x| x as &dyn Node).collect(),
         }
     }
@@ -213,7 +213,7 @@ impl Node for Level {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
             Level::Literal(literal) => vec![literal],
-            Level::Parenthesized { left_parenthesis, level, right_parenthesis } => level.children(),
+            Level::Parenthesized { level, .. } => level.children(),
         }
     }
 }

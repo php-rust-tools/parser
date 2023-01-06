@@ -52,6 +52,6 @@ pub struct DynamicIdentifier {
 
 impl Node for DynamicIdentifier {
     fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.expr]
+        vec![self.expr.as_ref()]
     }
 }

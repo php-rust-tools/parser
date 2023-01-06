@@ -27,7 +27,7 @@ impl Node for Property {
         if let Some(r#type) = &self.r#type {
             children.push(r#type);
         }
-        children.extend(self.entries.iter().map(|e| e as &dyn Node).collect());
+        children.extend(self.entries.iter().map(|e| e as &dyn Node).collect::<Vec<&dyn Node>>());
         children
     }
 }
@@ -47,7 +47,7 @@ impl Node for VariableProperty {
         if let Some(r#type) = &self.r#type {
             children.push(r#type);
         }
-        children.extend(self.entries.iter().map(|e| e as &dyn Node).collect());
+        children.extend(self.entries.iter().map(|e| e as &dyn Node).collect::<Vec<&dyn Node>>());
         children
     }
 }

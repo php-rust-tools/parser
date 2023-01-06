@@ -46,15 +46,15 @@ impl Node for IfStatementBody {
     fn children(&self) -> Vec<&dyn Node> {
         match self {
             IfStatementBody::Statement { statement, elseifs, r#else } => {
-                let mut children = vec![statement.as_ref()];
-                children.extend(elseifs.iter().map(|elseif| elseif as &dyn Node));
+                let mut children: Vec<&dyn Node> = vec![statement.as_ref()];
+                children.extend(elseifs.iter().map(|elseif| elseif as &dyn Node).collect::<Vec<&dyn Node>>());
                 if let Some(r#else) = r#else {
                     children.push(r#else as &dyn Node);
                 }
                 children
             },
-            IfStatementBody::Block { colon, statements, elseifs, r#else, endif, ending } => {
-                let mut children = vec![colon, endif, ending];
+            IfStatementBody::Block { statements, elseifs, r#else, .. } => {
+                let mut children: Vec<&dyn Node> = vec![];
                 children.extend(statements.iter().map(|statement| statement as &dyn Node));
                 children.extend(elseifs.iter().map(|elseif| elseif as &dyn Node));
                 if let Some(r#else) = r#else {

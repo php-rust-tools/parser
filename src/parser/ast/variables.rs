@@ -47,7 +47,7 @@ pub struct VariableVariable {
 
 impl Node for VariableVariable {
     fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.variable]
+        vec![self.variable.as_ref()]
     }
 }
 
@@ -61,7 +61,7 @@ pub struct BracedVariableVariable {
 
 impl Node for BracedVariableVariable {
     fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.variable]
+        vec![self.variable.as_ref()]
     }
 }
 
