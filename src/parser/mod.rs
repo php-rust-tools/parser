@@ -352,7 +352,6 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                         default = Some(expressions::create(state)?);
                     }
 
-                    // TODO: group static vars.
                     vars.push(StaticVar {
                         var: Variable::SimpleVariable(var),
                         default,
