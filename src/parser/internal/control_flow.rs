@@ -2,7 +2,6 @@ use crate::expected_token_err;
 
 use crate::lexer::token::TokenKind;
 use crate::parser;
-use crate::parser::ast::SwitchStatement;
 use crate::parser::ast::control_flow::IfStatement;
 use crate::parser::ast::control_flow::IfStatementBody;
 use crate::parser::ast::control_flow::IfStatementElse;
@@ -15,6 +14,7 @@ use crate::parser::ast::DefaultMatchArm;
 use crate::parser::ast::Expression;
 use crate::parser::ast::MatchArm;
 use crate::parser::ast::Statement;
+use crate::parser::ast::SwitchStatement;
 use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;

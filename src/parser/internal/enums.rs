@@ -1,14 +1,14 @@
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::enums::BackedEnumStatement;
 use crate::parser::ast::enums::BackedEnumBody;
 use crate::parser::ast::enums::BackedEnumCase;
 use crate::parser::ast::enums::BackedEnumMember;
+use crate::parser::ast::enums::BackedEnumStatement;
 use crate::parser::ast::enums::BackedEnumType;
-use crate::parser::ast::enums::UnitEnumStatement;
 use crate::parser::ast::enums::UnitEnumBody;
 use crate::parser::ast::enums::UnitEnumCase;
 use crate::parser::ast::enums::UnitEnumMember;
+use crate::parser::ast::enums::UnitEnumStatement;
 use crate::parser::ast::functions::ConcreteMethod;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Statement;

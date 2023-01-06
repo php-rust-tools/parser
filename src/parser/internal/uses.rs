@@ -78,7 +78,11 @@ pub fn use_statement(state: &mut State) -> ParseResult<Statement> {
         utils::skip_right_brace(state)?;
         utils::skip_semicolon(state)?;
 
-        Ok(Statement::GroupUse(GroupUseStatement { prefix, kind, uses }))
+        Ok(Statement::GroupUse(GroupUseStatement {
+            prefix,
+            kind,
+            uses,
+        }))
     } else {
         let mut uses = Vec::new();
         while !state.stream.is_eof() {

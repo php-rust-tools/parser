@@ -1,9 +1,9 @@
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::identifiers::SimpleIdentifier;
-use crate::parser::ast::interfaces::InterfaceStatement;
 use crate::parser::ast::interfaces::InterfaceBody;
 use crate::parser::ast::interfaces::InterfaceExtends;
 use crate::parser::ast::interfaces::InterfaceMember;
+use crate::parser::ast::interfaces::InterfaceStatement;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::attributes;

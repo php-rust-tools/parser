@@ -12,7 +12,11 @@ pub fn block_statement(state: &mut State) -> ParseResult<Statement> {
         multiple_statements_until(state, &TokenKind::RightBrace)
     })?;
 
-    Ok(Statement::Block(BlockStatement { left_brace, statements, right_brace }))
+    Ok(Statement::Block(BlockStatement {
+        left_brace,
+        statements,
+        right_brace,
+    }))
 }
 
 pub fn multiple_statements_until(

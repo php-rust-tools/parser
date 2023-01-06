@@ -1,6 +1,6 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::goto::LabelStatement;
 use crate::parser::ast::goto::GotoStatement;
+use crate::parser::ast::goto::LabelStatement;
 use crate::parser::ast::Statement;
 use crate::parser::error::ParseResult;
 use crate::parser::internal::identifiers;

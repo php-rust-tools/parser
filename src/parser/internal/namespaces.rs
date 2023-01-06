@@ -97,9 +97,11 @@ fn braced_namespace(
         }
     });
 
-    Ok(Statement::Namespace(NamespaceStatement::Braced(BracedNamespace {
-        namespace: span,
-        name,
-        body,
-    })))
+    Ok(Statement::Namespace(NamespaceStatement::Braced(
+        BracedNamespace {
+            namespace: span,
+            name,
+            body,
+        },
+    )))
 }
