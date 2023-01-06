@@ -32,6 +32,7 @@ use crate::parser::state::State;
 
 pub use crate::parser::state::stream::TokenStream;
 
+use self::ast::HaltCompiler;
 use self::internal::precedences::Precedence;
 
 pub mod ast;
@@ -107,7 +108,7 @@ fn top_level_statement(state: &mut State) -> ParseResult<Statement> {
                 None
             };
 
-            Statement::HaltCompiler { content }
+            Statement::HaltCompiler(HaltCompiler { content })
         }
         _ => statement(state)?,
     };

@@ -91,6 +91,12 @@ pub enum Ending {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case", tag = "type")]
+pub struct HaltCompiler {
+    pub content: Option<ByteString>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Statement {
     FullOpeningTag(Span),
@@ -100,9 +106,7 @@ pub enum Statement {
     InlineHtml(ByteString),
     GotoLabel(GotoLabel),
     Goto(GotoStatement),
-    HaltCompiler {
-        content: Option<ByteString>,
-    },
+    HaltCompiler(HaltCompiler),
     Static {
         vars: Vec<StaticVar>,
     },

@@ -6447,6 +6447,21 @@
         }
       }
     },
+    "HaltCompiler": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ByteString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
     "Identifier": {
       "oneOf": [
         {
@@ -8166,19 +8181,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "properties": {
-                "content": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/ByteString"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                }
-              }
+              "$ref": "#/definitions/HaltCompiler"
             }
           }
         },
