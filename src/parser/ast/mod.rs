@@ -5,6 +5,7 @@ use serde::Serialize;
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
+use crate::node::Node;
 use crate::parser::ast::arguments::ArgumentPlaceholder;
 use crate::parser::ast::arguments::{ArgumentList, SingleArgument};
 use crate::parser::ast::classes::AnonymousClass;
@@ -83,6 +84,16 @@ pub struct StaticVar {
     pub default: Option<Expression>,
 }
 
+impl Node for StaticVar {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.var];
+        if let Some(default) = &self.default {
+            children.push(default);
+        }
+        children
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Ending {
@@ -96,10 +107,23 @@ pub struct HaltCompiler {
     pub content: Option<ByteString>,
 }
 
+impl Node for HaltCompiler {
+
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]
 pub struct StaticStatement {
     pub vars: Vec<StaticVar>,
+}
+
+impl Node for StaticStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.vars
+            .iter()
+            .map(|v| v as &dyn Node)
+            .collect()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -182,6 +206,44 @@ pub enum Statement {
     Global(GlobalStatement),
     Declare(DeclareStatement),
     Noop(Span),
+}
+
+impl Node for Statement {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            Statement::Label(statement) => statement.children(),
+            Statement::Goto(statement) => statement.children(),
+            Statement::HaltCompiler(statement) => statement.children(),
+            Statement::Static(statement) => statement.children(),
+            Statement::DoWhile(statement) => statement.children(),
+            Statement::While(statement) => statement.children(),
+            Statement::For(statement) => statement.children(),
+            Statement::Foreach(statement) => statement.children(),
+            Statement::Break(statement) => statement.children(),
+            Statement::Continue(statement) => statement.children(),
+            Statement::Constant(statement) => statement.children(),
+            Statement::Function(statement) => statement.children(),
+            Statement::Class(statement) => statement.children(),
+            Statement::Trait(statement) => statement.children(),
+            Statement::Interface(statement) => statement.children(),
+            Statement::If(statement) => statement.children(),
+            Statement::Switch(statement) => statement.children(),
+            Statement::Echo(statement) => statement.children(),
+            Statement::Expression(statement) => statement.children(),
+            Statement::Return(statement) => statement.children(),
+            Statement::Namespace(statement) => statement.children(),
+            Statement::Use(statement) => statement.children(),
+            Statement::GroupUse(statement) => statement.children(),
+            Statement::Comment(statement) => statement.children(),
+            Statement::Try(statement) => statement.children(),
+            Statement::UnitEnum(statement) => statement.children(),
+            Statement::BackedEnum(statement) => statement.children(),
+            Statement::Block(statement) => statement.children(),
+            Statement::Global(statement) => statement.children(),
+            Statement::Declare(statement) => statement.children(),
+            _ => vec![],
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -547,6 +609,10 @@ pub enum Expression {
         value: Box<Self>,
     },
     Noop,
+}
+
+impl Node for Expression {
+    
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

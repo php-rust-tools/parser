@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::literals::LiteralInteger;
 use crate::parser::ast::utils::CommaSeparated;
 use crate::parser::ast::Ending;
@@ -17,6 +18,12 @@ pub struct ForeachStatement {
     pub iterator: ForeachStatementIterator, // `( *expression* as & $var => $value )`
     pub right_parenthesis: Span,            // `)`
     pub body: ForeachStatementBody,         // `{ ... }`
+}
+
+impl Node for ForeachStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.iterator, &self.body]
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -40,6 +47,22 @@ pub enum ForeachStatementIterator {
     },
 }
 
+impl Node for ForeachStatementIterator {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            ForeachStatementIterator::Value { expression, value, .. } => {
+                vec![expression, value]
+            }
+            ForeachStatementIterator::KeyAndValue {
+                expression,
+                key,
+                value,
+                ..
+            } => vec![expression, key, value],
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum ForeachStatementBody {
@@ -52,6 +75,17 @@ pub enum ForeachStatementBody {
     },
 }
 
+impl Node for ForeachStatementBody {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            ForeachStatementBody::Statement(statement) => vec![statement.as_ref() as &dyn Node],
+            ForeachStatementBody::Block { statements, .. } => {
+                statements.iter().map(|s| s as &dyn Node).collect()
+            }
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ForStatement {
@@ -62,6 +96,12 @@ pub struct ForStatement {
     pub body: ForStatementBody,         // `{ ... }`
 }
 
+impl Node for ForStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.iterator, &self.body]
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ForStatementIterator {
@@ -70,6 +110,16 @@ pub struct ForStatementIterator {
     pub conditions: CommaSeparated<Expression>,      // `*expression*;`
     pub conditions_semicolon: Span,                  // `;`
     pub r#loop: CommaSeparated<Expression>,          // `*expression*`
+}
+
+impl Node for ForStatementIterator {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children = vec![];
+        children.extend(self.initializations.inner.iter().map(|x| x as &dyn Node));
+        children.extend(self.conditions.inner.iter().map(|x| x as &dyn Node));
+        children.extend(self.r#loop.inner.iter().map(|x| x as &dyn Node));
+        children
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -84,6 +134,15 @@ pub enum ForStatementBody {
     },
 }
 
+impl Node for ForStatementBody {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            ForStatementBody::Statement(statement) => vec![statement],
+            ForStatementBody::Block { statements, .. } => statements.iter().map(|x| x as &dyn Node).collect(),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct DoWhileStatement {
@@ -96,6 +155,12 @@ pub struct DoWhileStatement {
     pub semicolon: Span,         // `;`
 }
 
+impl Node for DoWhileStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![self.body.as_ref() as &dyn Node, &self.condition]
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct WhileStatement {
@@ -104,6 +169,12 @@ pub struct WhileStatement {
     pub condition: Expression,    // *expression*
     pub right_parenthesis: Span,  // `)`
     pub body: WhileStatementBody, // `{ ... }`
+}
+
+impl Node for WhileStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.condition, &self.body]
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -118,6 +189,15 @@ pub enum WhileStatementBody {
     },
 }
 
+impl Node for WhileStatementBody {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            WhileStatementBody::Statement(statement) => vec![statement.as_ref() as &dyn Node],
+            WhileStatementBody::Block { statements, .. } => statements.iter().map(|s| s as &dyn Node).collect(),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Level {
@@ -129,6 +209,15 @@ pub enum Level {
     },
 }
 
+impl Node for Level {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            Level::Literal(literal) => vec![literal],
+            Level::Parenthesized { left_parenthesis, level, right_parenthesis } => level.children(),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct BreakStatement {
@@ -137,10 +226,28 @@ pub struct BreakStatement {
     pub ending: Ending,       // `;` or `?>`
 }
 
+impl Node for BreakStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        match &self.level {
+            Some(level) => vec![level],
+            None => vec![],
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ContinueStatement {
     pub r#continue: Span,     // `continue`
     pub level: Option<Level>, // `2`
     pub ending: Ending,       // `;` or `?>`
+}
+
+impl Node for ContinueStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        match &self.level {
+            Some(level) => vec![level],
+            None => vec![],
+        }
+    }
 }

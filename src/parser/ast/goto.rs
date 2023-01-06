@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::comments::CommentGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 
@@ -14,6 +15,12 @@ pub struct LabelStatement {
     pub colon: Span,             // `:`
 }
 
+impl Node for LabelStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.label]
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct GotoStatement {
@@ -21,4 +28,10 @@ pub struct GotoStatement {
     pub keyword: Span,           // `goto`
     pub label: SimpleIdentifier, // `foo`
     pub semicolon: Span,         // `;`
+}
+
+impl Node for GotoStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.label]
+    }
 }

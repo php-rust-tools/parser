@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::comments::CommentGroup;
 use crate::parser::ast::data_type::Type;
@@ -21,6 +22,12 @@ pub struct ReturnType {
     pub data_type: Type,
 }
 
+impl Node for ReturnType {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.data_type]
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct FunctionParameter {
@@ -33,6 +40,19 @@ pub struct FunctionParameter {
     pub ampersand: Option<Span>,
 }
 
+impl Node for FunctionParameter {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.name];
+        if let Some(data_type) = &self.data_type {
+            children.push(data_type);
+        }
+        if let Some(default) = &self.default {
+            children.push(default);
+        }
+        children
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct FunctionParameterList {
@@ -42,6 +62,12 @@ pub struct FunctionParameterList {
     pub right_parenthesis: Span,
 }
 
+impl Node for FunctionParameterList {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.parameters.children()
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct FunctionBody {
@@ -49,6 +75,12 @@ pub struct FunctionBody {
     pub left_brace: Span,
     pub statements: Vec<Statement>,
     pub right_brace: Span,
+}
+
+impl Node for FunctionBody {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.statements.iter().map(|x| x as &dyn Node).collect()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -62,6 +94,16 @@ pub struct FunctionStatement {
     pub parameters: FunctionParameterList,
     pub return_type: Option<ReturnType>,
     pub body: FunctionBody,
+}
+
+impl Node for FunctionStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.name, &self.parameters, &self.body];
+        if let Some(return_type) = &self.return_type {
+            children.push(return_type);
+        }
+        children
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -124,6 +166,19 @@ pub struct ConstructorParameter {
     pub modifiers: PromotedPropertyModifierGroup,
 }
 
+impl Node for ConstructorParameter {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.name];
+        if let Some(data_type) = &self.data_type {
+            children.push(data_type);
+        }
+        if let Some(default) = &self.default {
+            children.push(default);
+        }
+        children
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ConstructorParameterList {
@@ -131,6 +186,12 @@ pub struct ConstructorParameterList {
     pub left_parenthesis: Span,
     pub parameters: CommaSeparated<ConstructorParameter>,
     pub right_parenthesis: Span,
+}
+
+impl Node for ConstructorParameterList {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.parameters.children()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -149,6 +210,12 @@ pub struct AbstractConstructor {
     pub semicolon: Span,
 }
 
+impl Node for AbstractConstructor {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.name, &self.parameters]
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ConcreteConstructor {
@@ -163,6 +230,12 @@ pub struct ConcreteConstructor {
     pub name: SimpleIdentifier,
     pub parameters: ConstructorParameterList,
     pub body: MethodBody,
+}
+
+impl Node for ConcreteConstructor {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.name, &self.parameters, &self.body]
+    }
 }
 
 impl ConcreteConstructor {
@@ -198,6 +271,16 @@ pub struct AbstractMethod {
     pub semicolon: Span,
 }
 
+impl Node for AbstractMethod {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.name, &self.parameters];
+        if let Some(return_type) = &self.return_type {
+            children.push(return_type);
+        }
+        children
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ConcreteMethod {
@@ -213,6 +296,17 @@ pub struct ConcreteMethod {
     pub body: MethodBody,
 }
 
+impl Node for ConcreteMethod {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.name, &self.parameters];
+        if let Some(return_type) = &self.return_type {
+            children.push(return_type);
+        }
+        children.push(&self.body);
+        children
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct MethodBody {
@@ -220,4 +314,10 @@ pub struct MethodBody {
     pub left_brace: Span, // `{`
     pub statements: Vec<Statement>,
     pub right_brace: Span, // `}`
+}
+
+impl Node for MethodBody {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.statements.iter().map(|s| s as &dyn Node).collect()
+    }
 }

@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::constant::ClassishConstant;
 use crate::parser::ast::functions::AbstractConstructor;
@@ -50,6 +51,12 @@ pub struct TraitUsage {
     pub r#use: Span,
     pub traits: Vec<SimpleIdentifier>,
     pub adaptations: Vec<TraitUsageAdaptation>,
+}
+
+impl Node for TraitUsage {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.traits.iter().map(|t| t as &dyn Node).collect()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::comments::CommentGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
@@ -17,6 +18,12 @@ pub struct ConstantEntry {
     pub value: Expression,      // `123`
 }
 
+impl Node for ConstantEntry {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.name, &self.value]
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ConstantStatement {
@@ -24,6 +31,12 @@ pub struct ConstantStatement {
     pub r#const: Span,               // `const`
     pub entries: Vec<ConstantEntry>, // `FOO = 123`
     pub semicolon: Span,             // `;`
+}
+
+impl Node for ConstantStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.entries.iter().map(|e| e as &dyn Node).collect()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -36,4 +49,10 @@ pub struct ClassishConstant {
     #[serde(flatten)]
     pub entries: Vec<ConstantEntry>, // `FOO = 123`
     pub semicolon: Span,                  // `;`
+}
+
+impl Node for ClassishConstant {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.entries.iter().map(|e| e as &dyn Node).collect()
+    }
 }

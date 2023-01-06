@@ -6,6 +6,7 @@ use serde::Serialize;
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -15,11 +16,24 @@ pub enum Identifier {
     DynamicIdentifier(DynamicIdentifier),
 }
 
+impl Node for Identifier {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            Identifier::SimpleIdentifier(identifier) => identifier.children(),
+            Identifier::DynamicIdentifier(identifier) => identifier.children(),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct SimpleIdentifier {
     pub span: Span,
     pub value: ByteString,
+}
+
+impl Node for SimpleIdentifier {
+    //
 }
 
 impl Display for SimpleIdentifier {
@@ -34,4 +48,10 @@ pub struct DynamicIdentifier {
     pub start: Span,
     pub expr: Box<Expression>,
     pub end: Span,
+}
+
+impl Node for DynamicIdentifier {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.expr]
+    }
 }

@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::constant::ClassishConstant;
 use crate::parser::ast::functions::AbstractConstructor;
@@ -24,6 +25,12 @@ pub struct ClassBody {
     pub right_brace: Span, // `}`
 }
 
+impl Node for ClassBody {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.members.iter().map(|member| member as &dyn Node).collect()
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ClassStatement {
@@ -35,6 +42,20 @@ pub struct ClassStatement {
     pub extends: Option<ClassExtends>,   // `extends Foo`
     pub implements: Option<ClassImplements>, // `implements Bar, Baz`
     pub body: ClassBody,                 // `{ ... }`
+}
+
+impl Node for ClassStatement {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.name];
+        if let Some(extends) = &self.extends {
+            children.push(extends);
+        }
+        if let Some(implements) = &self.implements {
+            children.push(implements);
+        }
+        children.push(&self.body);
+        children
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -62,11 +83,23 @@ pub struct ClassExtends {
     pub parent: SimpleIdentifier, // `Foo`
 }
 
+impl Node for ClassExtends {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.parent]
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ClassImplements {
     pub implements: Span,                             // `implements`
     pub interfaces: CommaSeparated<SimpleIdentifier>, // `Bar, Baz`
+}
+
+impl Node for ClassImplements {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.interfaces.children()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -80,6 +113,21 @@ pub enum ClassMember {
     AbstractConstructor(AbstractConstructor),
     ConcreteMethod(ConcreteMethod),
     ConcreteConstructor(ConcreteConstructor),
+}
+
+impl Node for ClassMember {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            ClassMember::Constant(constant) => vec![constant],
+            ClassMember::TraitUsage(usage) => vec![usage],
+            ClassMember::Property(property) => vec![property],
+            ClassMember::VariableProperty(property) => vec![property],
+            ClassMember::AbstractMethod(method) => vec![method],
+            ClassMember::AbstractConstructor(method) => vec![method],
+            ClassMember::ConcreteMethod(method) => vec![method],
+            ClassMember::ConcreteConstructor(method) => vec![method],
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

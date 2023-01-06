@@ -6,6 +6,7 @@ use std::fmt::Display;
 
 use crate::lexer::byte_string::ByteString;
 use crate::lexer::token::Span;
+use crate::node::Node;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
@@ -136,6 +137,17 @@ impl Display for Type {
             Type::StaticReference(_) => write!(f, "static"),
             Type::SelfReference(_) => write!(f, "self"),
             Type::ParentReference(_) => write!(f, "parent"),
+        }
+    }
+}
+
+impl Node for Type {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            Type::Nullable(_, t) => vec![t.as_ref() as &dyn Node],
+            Type::Union(ts) => ts.iter().map(|x| x as &dyn Node).collect(),
+            Type::Intersection(ts) => ts.iter().map(|x| x as &dyn Node).collect(),
+            _ => vec![]
         }
     }
 }
