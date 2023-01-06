@@ -4,7 +4,7 @@ A handwritten fault-tolerant, recursive-descent parser for PHP written in Rust.
 
 [![justforfunnoreally.dev badge](https://img.shields.io/badge/justforfunnoreally-dev-9ff)](https://justforfunnoreally.dev)
 
-> **Warning**: This crate is not ready for any form of production use _yet_. There are still a lot of things missing from the parser, so please use at your own risk.
+> **Warning** - this is still alpha software and the public API is still subject to change. Please use at your own risk.
 
 ---
 
