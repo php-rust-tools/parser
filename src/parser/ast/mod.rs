@@ -708,7 +708,9 @@ pub enum Expression {
 }
 
 impl Node for Expression {
-    
+    fn children(&self) -> Vec<&dyn Node> {
+        todo!()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
