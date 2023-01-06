@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -62,6 +63,25 @@ pub enum ArithmeticOperation {
         left: Box<Expression>,
         decrement: Span,
     },
+}
+
+impl Node for ArithmeticOperation {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            ArithmeticOperation::Addition { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ArithmeticOperation::Subtraction { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ArithmeticOperation::Multiplication { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ArithmeticOperation::Division { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ArithmeticOperation::Modulo { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ArithmeticOperation::Exponentiation { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ArithmeticOperation::Negative { right, .. } => vec![right.as_ref()],
+            ArithmeticOperation::Positive { right, .. } => vec![right.as_ref()],
+            ArithmeticOperation::PreIncrement { right, .. } => vec![right.as_ref()],
+            ArithmeticOperation::PostIncrement { left, .. } => vec![left.as_ref()],
+            ArithmeticOperation::PreDecrement { right, .. } => vec![right.as_ref()],
+            ArithmeticOperation::PostDecrement { left, .. } => vec![left.as_ref()],
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -139,6 +159,27 @@ pub enum AssignmentOperation {
     },
 }
 
+impl Node for AssignmentOperation {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            AssignmentOperation::Assign { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Addition { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Subtraction { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Multiplication { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Division { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Modulo { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Exponentiation { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Concat { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::BitwiseAnd { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::BitwiseOr { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::BitwiseXor { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::LeftShift { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::RightShift { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Coalesce { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum BitwiseOperation {
@@ -171,6 +212,19 @@ pub enum BitwiseOperation {
         not: Span,
         right: Box<Expression>,
     },
+}
+
+impl Node for BitwiseOperation {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            BitwiseOperation::And { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            BitwiseOperation::Or { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            BitwiseOperation::Xor { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            BitwiseOperation::LeftShift { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            BitwiseOperation::RightShift { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            BitwiseOperation::Not { right, .. } => vec![right.as_ref()],
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -228,6 +282,23 @@ pub enum ComparisonOperation {
     },
 }
 
+impl Node for ComparisonOperation {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            ComparisonOperation::Equal { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::Identical { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::NotEqual { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::AngledNotEqual { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::NotIdentical { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::LessThan { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::GreaterThan { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::LessThanOrEqual { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::GreaterThanOrEqual { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::Spaceship { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum LogicalOperation {
@@ -260,4 +331,17 @@ pub enum LogicalOperation {
         xor: Span,
         right: Box<Expression>,
     },
+}
+
+impl Node for LogicalOperation {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            LogicalOperation::And { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            LogicalOperation::Or { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            LogicalOperation::Not { right, .. } => vec![right.as_ref()],
+            LogicalOperation::LogicalAnd { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            LogicalOperation::LogicalOr { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            LogicalOperation::LogicalXor { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+        }
+    }
 }

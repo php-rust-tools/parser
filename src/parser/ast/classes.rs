@@ -66,6 +66,12 @@ pub struct AnonymousClassBody {
     pub right_brace: Span, // `}`
 }
 
+impl Node for AnonymousClassBody {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.members.iter().map(|member| member as &dyn Node).collect()
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct AnonymousClass {
@@ -74,6 +80,20 @@ pub struct AnonymousClass {
     pub extends: Option<ClassExtends>,       // `extends Foo`
     pub implements: Option<ClassImplements>, // `implements Baz, Baz`
     pub body: AnonymousClassBody,            // `{ ... }`
+}
+
+impl Node for AnonymousClass {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![];
+        if let Some(extends) = &self.extends {
+            children.push(extends);
+        }
+        if let Some(implements) = &self.implements {
+            children.push(implements);
+        }
+        children.push(&self.body);
+        children
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -139,4 +159,17 @@ pub enum AnonymousClassMember {
     VariableProperty(VariableProperty),
     ConcreteMethod(ConcreteMethod),
     ConcreteConstructor(ConcreteConstructor),
+}
+
+impl Node for AnonymousClassMember {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            AnonymousClassMember::Constant(constant) => vec![constant],
+            AnonymousClassMember::TraitUsage(usage) => vec![usage],
+            AnonymousClassMember::Property(property) => vec![property],
+            AnonymousClassMember::VariableProperty(property) => vec![property],
+            AnonymousClassMember::ConcreteMethod(method) => vec![method],
+            AnonymousClassMember::ConcreteConstructor(method) => vec![method],
+        }
+    }
 }

@@ -114,6 +114,12 @@ pub struct ClosureUseVariable {
     pub variable: SimpleVariable,
 }
 
+impl Node for ClosureUseVariable {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.variable]
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ClosureUse {
@@ -122,6 +128,12 @@ pub struct ClosureUse {
     pub left_parenthesis: Span,
     pub variables: CommaSeparated<ClosureUseVariable>,
     pub right_parenthesis: Span,
+}
+
+impl Node for ClosureUse {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.variables.children()
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
@@ -138,6 +150,20 @@ pub struct Closure {
     pub body: FunctionBody,
 }
 
+impl Node for Closure {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.parameters];
+        if let Some(uses) = &self.uses {
+            children.push(uses);
+        }
+        if let Some(return_type) = &self.return_type {
+            children.push(return_type);
+        }
+        children.push(&self.body);
+        children
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ArrowFunction {
@@ -150,6 +176,17 @@ pub struct ArrowFunction {
     pub return_type: Option<ReturnType>,
     pub double_arrow: Span,
     pub body: Box<Expression>,
+}
+
+impl Node for ArrowFunction {
+    fn children(&self) -> Vec<&dyn Node> {
+        let mut children: Vec<&dyn Node> = vec![&self.parameters];
+        if let Some(return_type) = &self.return_type {
+            children.push(return_type);
+        }
+        children.push(self.body.as_ref());
+        children
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

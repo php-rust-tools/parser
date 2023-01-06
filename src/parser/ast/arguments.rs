@@ -3,6 +3,7 @@ use serde::Deserialize;
 use serde::Serialize;
 
 use crate::lexer::token::Span;
+use crate::node::Node;
 use crate::parser::ast::comments::CommentGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
@@ -24,6 +25,15 @@ pub enum Argument {
     },
 }
 
+impl Node for Argument {
+    fn children(&self) -> Vec<&dyn Node> {
+        match self {
+            Argument::Positional { value, .. } => vec![value],
+            Argument::Named { name, value, .. } => vec![name, value],
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct ArgumentList {
@@ -33,6 +43,12 @@ pub struct ArgumentList {
     pub right_parenthesis: Span,  // `)`
 }
 
+impl Node for ArgumentList {
+    fn children(&self) -> Vec<&dyn Node> {
+        self.arguments.iter().map(|a| a as &dyn Node).collect()
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct SingleArgument {
@@ -40,6 +56,12 @@ pub struct SingleArgument {
     pub left_parenthesis: Span,  // `(`
     pub argument: Argument,      // `$var`
     pub right_parenthesis: Span, // `)`
+}
+
+impl Node for SingleArgument {
+    fn children(&self) -> Vec<&dyn Node> {
+        vec![&self.argument]
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
