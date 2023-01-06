@@ -30,7 +30,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
             expressions::create(state).map(Box::new)
         })?;
 
-    utils::skip_left_brace(state)?;
+    let left_brace = utils::skip_left_brace(state)?;
 
     let mut default: Option<Box<DefaultMatchArm>> = None;
     let mut arms = Vec::new();
@@ -94,15 +94,17 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
         }
     }
 
-    utils::skip_right_brace(state)?;
+    let right_brace = utils::skip_right_brace(state)?;
 
     Ok(Expression::Match {
         keyword,
         left_parenthesis,
         condition,
         right_parenthesis,
+        left_brace,
         default,
         arms,
+        right_brace,
     })
 }
 
