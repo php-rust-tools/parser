@@ -1,10 +1,10 @@
 use std::collections::VecDeque;
 use std::fmt::Display;
 
+use crate::lexer::stream::TokenStream;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::error::ParseError;
-use crate::lexer::stream::TokenStream;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum NamespaceType {
