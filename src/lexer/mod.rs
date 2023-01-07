@@ -15,6 +15,7 @@ use crate::lexer::token::TokenKind;
 pub mod byte_string;
 pub mod error;
 pub mod token;
+pub mod stream;
 
 mod state;
 

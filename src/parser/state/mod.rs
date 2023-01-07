@@ -4,9 +4,7 @@ use std::fmt::Display;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::error::ParseError;
-use crate::parser::state::stream::TokenStream;
-
-pub mod stream;
+use crate::lexer::stream::TokenStream;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum NamespaceType {

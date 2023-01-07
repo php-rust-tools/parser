@@ -30,7 +30,7 @@ use crate::parser::internal::utils;
 use crate::parser::internal::variables;
 use crate::parser::state::State;
 
-pub use crate::parser::state::stream::TokenStream;
+pub use crate::lexer::stream::TokenStream;
 
 use self::ast::EchoStatement;
 use self::ast::ExpressionStatement;
