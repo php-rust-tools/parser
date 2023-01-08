@@ -65,6 +65,10 @@ impl Indexer {
             position: span.position,
         }
     }
+
+    pub fn get_index(&self) -> &Index {
+        &self.index
+    }
 }
 
 impl Visitor<IndexerError> for Indexer {
