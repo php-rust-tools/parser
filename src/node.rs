@@ -1,7 +1,7 @@
 use std::any::{Any, TypeId};
 
 pub trait Node: Any {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         vec![]
     }
 }

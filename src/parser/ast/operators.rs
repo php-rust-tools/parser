@@ -66,30 +66,30 @@ pub enum ArithmeticOperation {
 }
 
 impl Node for ArithmeticOperation {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             ArithmeticOperation::Addition { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ArithmeticOperation::Subtraction { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ArithmeticOperation::Multiplication { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ArithmeticOperation::Division { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
-            ArithmeticOperation::Modulo { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ArithmeticOperation::Modulo { left, right, .. } => vec![left.as_mut(), right.as_mut()],
             ArithmeticOperation::Exponentiation { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
-            ArithmeticOperation::Negative { right, .. } => vec![right.as_ref()],
-            ArithmeticOperation::Positive { right, .. } => vec![right.as_ref()],
-            ArithmeticOperation::PreIncrement { right, .. } => vec![right.as_ref()],
-            ArithmeticOperation::PostIncrement { left, .. } => vec![left.as_ref()],
-            ArithmeticOperation::PreDecrement { right, .. } => vec![right.as_ref()],
-            ArithmeticOperation::PostDecrement { left, .. } => vec![left.as_ref()],
+            ArithmeticOperation::Negative { right, .. } => vec![right.as_mut()],
+            ArithmeticOperation::Positive { right, .. } => vec![right.as_mut()],
+            ArithmeticOperation::PreIncrement { right, .. } => vec![right.as_mut()],
+            ArithmeticOperation::PostIncrement { left, .. } => vec![left.as_mut()],
+            ArithmeticOperation::PreDecrement { right, .. } => vec![right.as_mut()],
+            ArithmeticOperation::PostDecrement { left, .. } => vec![left.as_mut()],
         }
     }
 }
@@ -170,43 +170,43 @@ pub enum AssignmentOperation {
 }
 
 impl Node for AssignmentOperation {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            AssignmentOperation::Assign { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Assign { left, right, .. } => vec![left.as_mut(), right.as_mut()],
             AssignmentOperation::Addition { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             AssignmentOperation::Subtraction { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             AssignmentOperation::Multiplication { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             AssignmentOperation::Division { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::Modulo { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Modulo { left, right, .. } => vec![left.as_mut(), right.as_mut()],
             AssignmentOperation::Exponentiation { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::Concat { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            AssignmentOperation::Concat { left, right, .. } => vec![left.as_mut(), right.as_mut()],
             AssignmentOperation::BitwiseAnd { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             AssignmentOperation::BitwiseOr { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             AssignmentOperation::BitwiseXor { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             AssignmentOperation::LeftShift { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             AssignmentOperation::RightShift { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             AssignmentOperation::Coalesce { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
         }
     }
@@ -247,14 +247,14 @@ pub enum BitwiseOperation {
 }
 
 impl Node for BitwiseOperation {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            BitwiseOperation::And { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            BitwiseOperation::Or { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            BitwiseOperation::Xor { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            BitwiseOperation::LeftShift { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            BitwiseOperation::RightShift { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            BitwiseOperation::Not { right, .. } => vec![right.as_ref()],
+            BitwiseOperation::And { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            BitwiseOperation::Or { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            BitwiseOperation::Xor { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            BitwiseOperation::LeftShift { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            BitwiseOperation::RightShift { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            BitwiseOperation::Not { right, .. } => vec![right.as_mut()],
         }
     }
 }
@@ -315,35 +315,35 @@ pub enum ComparisonOperation {
 }
 
 impl Node for ComparisonOperation {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            ComparisonOperation::Equal { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            ComparisonOperation::Equal { left, right, .. } => vec![left.as_mut(), right.as_mut()],
             ComparisonOperation::Identical { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ComparisonOperation::NotEqual { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ComparisonOperation::AngledNotEqual { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ComparisonOperation::NotIdentical { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ComparisonOperation::LessThan { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ComparisonOperation::GreaterThan { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ComparisonOperation::LessThanOrEqual { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ComparisonOperation::GreaterThanOrEqual { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
             ComparisonOperation::Spaceship { left, right, .. } => {
-                vec![left.as_ref(), right.as_ref()]
+                vec![left.as_mut(), right.as_mut()]
             }
         }
     }
@@ -384,14 +384,14 @@ pub enum LogicalOperation {
 }
 
 impl Node for LogicalOperation {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            LogicalOperation::And { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            LogicalOperation::Or { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            LogicalOperation::Not { right, .. } => vec![right.as_ref()],
-            LogicalOperation::LogicalAnd { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            LogicalOperation::LogicalOr { left, right, .. } => vec![left.as_ref(), right.as_ref()],
-            LogicalOperation::LogicalXor { left, right, .. } => vec![left.as_ref(), right.as_ref()],
+            LogicalOperation::And { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            LogicalOperation::Or { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            LogicalOperation::Not { right, .. } => vec![right.as_mut()],
+            LogicalOperation::LogicalAnd { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            LogicalOperation::LogicalOr { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            LogicalOperation::LogicalXor { left, right, .. } => vec![left.as_mut(), right.as_mut()],
         }
     }
 }

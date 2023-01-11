@@ -20,7 +20,7 @@ pub enum InterfaceMember {
 }
 
 impl Node for InterfaceMember {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             InterfaceMember::Constant(constant) => vec![constant],
             InterfaceMember::Constructor(constructor) => vec![constructor],
@@ -37,7 +37,7 @@ pub struct InterfaceExtends {
 }
 
 impl Node for InterfaceExtends {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         self.parents.children()
     }
 }
@@ -51,10 +51,10 @@ pub struct InterfaceBody {
 }
 
 impl Node for InterfaceBody {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         self.members
-            .iter()
-            .map(|member| member as &dyn Node)
+            .iter_mut()
+            .map(|member| member as &mut dyn Node)
             .collect()
     }
 }
@@ -70,9 +70,9 @@ pub struct InterfaceStatement {
 }
 
 impl Node for InterfaceStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name];
-        if let Some(extends) = &self.extends {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.name];
+        if let Some(extends) = &mut self.extends {
             children.push(extends);
         }
         children

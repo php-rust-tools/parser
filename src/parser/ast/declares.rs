@@ -18,8 +18,8 @@ pub struct DeclareEntry {
 }
 
 impl Node for DeclareEntry {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.key, &self.value]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.key, &mut self.value]
     }
 }
 
@@ -32,8 +32,11 @@ pub struct DeclareEntryGroup {
 }
 
 impl Node for DeclareEntryGroup {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.entries.iter().map(|e| e as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.entries
+            .iter_mut()
+            .map(|e| e as &mut dyn Node)
+            .collect()
     }
 }
 
@@ -64,15 +67,15 @@ pub enum DeclareBody {
 }
 
 impl Node for DeclareBody {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             DeclareBody::Noop { .. } => vec![],
             DeclareBody::Braced { statements, .. } => {
-                statements.iter().map(|s| s as &dyn Node).collect()
+                statements.iter_mut().map(|s| s as &mut dyn Node).collect()
             }
             DeclareBody::Expression { expression, .. } => vec![expression],
             DeclareBody::Block { statements, .. } => {
-                statements.iter().map(|s| s as &dyn Node).collect()
+                statements.iter_mut().map(|s| s as &mut dyn Node).collect()
             }
         }
     }
@@ -87,7 +90,7 @@ pub struct DeclareStatement {
 }
 
 impl Node for DeclareStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.entries, &self.body]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.entries, &mut self.body]
     }
 }

@@ -21,8 +21,8 @@ pub struct ForeachStatement {
 }
 
 impl Node for ForeachStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.iterator, &self.body]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.iterator, &mut self.body]
     }
 }
 
@@ -48,7 +48,7 @@ pub enum ForeachStatementIterator {
 }
 
 impl Node for ForeachStatementIterator {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             ForeachStatementIterator::Value {
                 expression, value, ..
@@ -78,11 +78,11 @@ pub enum ForeachStatementBody {
 }
 
 impl Node for ForeachStatementBody {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            ForeachStatementBody::Statement(statement) => vec![statement.as_ref() as &dyn Node],
+            ForeachStatementBody::Statement(statement) => vec![statement.as_mut()],
             ForeachStatementBody::Block { statements, .. } => {
-                statements.iter().map(|s| s as &dyn Node).collect()
+                statements.iter_mut().map(|s| s as &mut dyn Node).collect()
             }
         }
     }
@@ -99,8 +99,8 @@ pub struct ForStatement {
 }
 
 impl Node for ForStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.iterator, &self.body]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.iterator, &mut self.body]
     }
 }
 
@@ -115,11 +115,16 @@ pub struct ForStatementIterator {
 }
 
 impl Node for ForStatementIterator {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         let mut children = vec![];
-        children.extend(self.initializations.inner.iter().map(|x| x as &dyn Node));
-        children.extend(self.conditions.inner.iter().map(|x| x as &dyn Node));
-        children.extend(self.r#loop.inner.iter().map(|x| x as &dyn Node));
+        children.extend(
+            self.initializations
+                .inner
+                .iter_mut()
+                .map(|x| x as &mut dyn Node),
+        );
+        children.extend(self.conditions.inner.iter_mut().map(|x| x as &mut dyn Node));
+        children.extend(self.r#loop.inner.iter_mut().map(|x| x as &mut dyn Node));
         children
     }
 }
@@ -137,11 +142,11 @@ pub enum ForStatementBody {
 }
 
 impl Node for ForStatementBody {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            ForStatementBody::Statement(statement) => vec![statement.as_ref()],
+            ForStatementBody::Statement(statement) => vec![statement.as_mut()],
             ForStatementBody::Block { statements, .. } => {
-                statements.iter().map(|x| x as &dyn Node).collect()
+                statements.iter_mut().map(|x| x as &mut dyn Node).collect()
             }
         }
     }
@@ -160,8 +165,8 @@ pub struct DoWhileStatement {
 }
 
 impl Node for DoWhileStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![self.body.as_ref() as &dyn Node, &self.condition]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.body.as_mut(), &mut self.condition]
     }
 }
 
@@ -176,8 +181,8 @@ pub struct WhileStatement {
 }
 
 impl Node for WhileStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.condition, &self.body]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.condition, &mut self.body]
     }
 }
 
@@ -194,11 +199,11 @@ pub enum WhileStatementBody {
 }
 
 impl Node for WhileStatementBody {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            WhileStatementBody::Statement(statement) => vec![statement.as_ref() as &dyn Node],
+            WhileStatementBody::Statement(statement) => vec![statement.as_mut()],
             WhileStatementBody::Block { statements, .. } => {
-                statements.iter().map(|s| s as &dyn Node).collect()
+                statements.iter_mut().map(|s| s as &mut dyn Node).collect()
             }
         }
     }
@@ -216,7 +221,7 @@ pub enum Level {
 }
 
 impl Node for Level {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             Level::Literal(literal) => vec![literal],
             Level::Parenthesized { level, .. } => level.children(),
@@ -233,8 +238,8 @@ pub struct BreakStatement {
 }
 
 impl Node for BreakStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        match &self.level {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        match &mut self.level {
             Some(level) => vec![level],
             None => vec![],
         }
@@ -250,8 +255,8 @@ pub struct ContinueStatement {
 }
 
 impl Node for ContinueStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        match &self.level {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        match &mut self.level {
             Some(level) => vec![level],
             None => vec![],
         }

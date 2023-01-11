@@ -23,8 +23,8 @@ pub struct ReturnType {
 }
 
 impl Node for ReturnType {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.data_type]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.data_type]
     }
 }
 
@@ -41,12 +41,12 @@ pub struct FunctionParameter {
 }
 
 impl Node for FunctionParameter {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name];
-        if let Some(data_type) = &self.data_type {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.name];
+        if let Some(data_type) = &mut self.data_type {
             children.push(data_type);
         }
-        if let Some(default) = &self.default {
+        if let Some(default) = &mut self.default {
             children.push(default);
         }
         children
@@ -63,7 +63,7 @@ pub struct FunctionParameterList {
 }
 
 impl Node for FunctionParameterList {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         self.parameters.children()
     }
 }
@@ -78,8 +78,11 @@ pub struct FunctionBody {
 }
 
 impl Node for FunctionBody {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.statements.iter().map(|x| x as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.statements
+            .iter_mut()
+            .map(|x| x as &mut dyn Node)
+            .collect()
     }
 }
 
@@ -97,9 +100,10 @@ pub struct FunctionStatement {
 }
 
 impl Node for FunctionStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name, &self.parameters, &self.body];
-        if let Some(return_type) = &self.return_type {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> =
+            vec![&mut self.name, &mut self.parameters, &mut self.body];
+        if let Some(return_type) = &mut self.return_type {
             children.push(return_type);
         }
         children
@@ -115,8 +119,8 @@ pub struct ClosureUseVariable {
 }
 
 impl Node for ClosureUseVariable {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.variable]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.variable]
     }
 }
 
@@ -131,7 +135,7 @@ pub struct ClosureUse {
 }
 
 impl Node for ClosureUse {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         self.variables.children()
     }
 }
@@ -151,15 +155,15 @@ pub struct Closure {
 }
 
 impl Node for Closure {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.parameters];
-        if let Some(uses) = &self.uses {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.parameters];
+        if let Some(uses) = &mut self.uses {
             children.push(uses);
         }
-        if let Some(return_type) = &self.return_type {
+        if let Some(return_type) = &mut self.return_type {
             children.push(return_type);
         }
-        children.push(&self.body);
+        children.push(&mut self.body);
         children
     }
 }
@@ -179,12 +183,12 @@ pub struct ArrowFunction {
 }
 
 impl Node for ArrowFunction {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.parameters];
-        if let Some(return_type) = &self.return_type {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.parameters];
+        if let Some(return_type) = &mut self.return_type {
             children.push(return_type);
         }
-        children.push(self.body.as_ref());
+        children.push(self.body.as_mut());
         children
     }
 }
@@ -204,12 +208,12 @@ pub struct ConstructorParameter {
 }
 
 impl Node for ConstructorParameter {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name];
-        if let Some(data_type) = &self.data_type {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.name];
+        if let Some(data_type) = &mut self.data_type {
             children.push(data_type);
         }
-        if let Some(default) = &self.default {
+        if let Some(default) = &mut self.default {
             children.push(default);
         }
         children
@@ -226,7 +230,7 @@ pub struct ConstructorParameterList {
 }
 
 impl Node for ConstructorParameterList {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         self.parameters.children()
     }
 }
@@ -248,8 +252,8 @@ pub struct AbstractConstructor {
 }
 
 impl Node for AbstractConstructor {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.name, &self.parameters]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.name, &mut self.parameters]
     }
 }
 
@@ -270,8 +274,8 @@ pub struct ConcreteConstructor {
 }
 
 impl Node for ConcreteConstructor {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.name, &self.parameters, &self.body]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.name, &mut self.parameters, &mut self.body]
     }
 }
 
@@ -309,9 +313,9 @@ pub struct AbstractMethod {
 }
 
 impl Node for AbstractMethod {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name, &self.parameters];
-        if let Some(return_type) = &self.return_type {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.name, &mut self.parameters];
+        if let Some(return_type) = &mut self.return_type {
             children.push(return_type);
         }
         children
@@ -334,12 +338,12 @@ pub struct ConcreteMethod {
 }
 
 impl Node for ConcreteMethod {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name, &self.parameters];
-        if let Some(return_type) = &self.return_type {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.name, &mut self.parameters];
+        if let Some(return_type) = &mut self.return_type {
             children.push(return_type);
         }
-        children.push(&self.body);
+        children.push(&mut self.body);
         children
     }
 }
@@ -354,7 +358,10 @@ pub struct MethodBody {
 }
 
 impl Node for MethodBody {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.statements.iter().map(|s| s as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.statements
+            .iter_mut()
+            .map(|s| s as &mut dyn Node)
+            .collect()
     }
 }

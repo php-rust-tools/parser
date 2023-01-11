@@ -15,7 +15,7 @@ pub enum Literal {
 }
 
 impl Node for Literal {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             Literal::String(literal) => vec![literal],
             Literal::Integer(literal) => vec![literal],

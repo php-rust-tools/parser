@@ -17,7 +17,7 @@ pub enum Identifier {
 }
 
 impl Node for Identifier {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             Identifier::SimpleIdentifier(identifier) => identifier.children(),
             Identifier::DynamicIdentifier(identifier) => identifier.children(),
@@ -51,7 +51,7 @@ pub struct DynamicIdentifier {
 }
 
 impl Node for DynamicIdentifier {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![self.expr.as_ref()]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.expr.as_mut()]
     }
 }

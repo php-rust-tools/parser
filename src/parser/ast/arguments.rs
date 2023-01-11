@@ -26,7 +26,7 @@ pub enum Argument {
 }
 
 impl Node for Argument {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             Argument::Positional { value, .. } => vec![value],
             Argument::Named { name, value, .. } => vec![name, value],
@@ -44,8 +44,11 @@ pub struct ArgumentList {
 }
 
 impl Node for ArgumentList {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.arguments.iter().map(|a| a as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.arguments
+            .iter_mut()
+            .map(|a| a as &mut dyn Node)
+            .collect()
     }
 }
 
@@ -59,8 +62,8 @@ pub struct SingleArgument {
 }
 
 impl Node for SingleArgument {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.argument]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.argument]
     }
 }
 

@@ -16,8 +16,8 @@ pub struct LabelStatement {
 }
 
 impl Node for LabelStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.label]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.label]
     }
 }
 
@@ -31,7 +31,7 @@ pub struct GotoStatement {
 }
 
 impl Node for GotoStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.label]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.label]
     }
 }

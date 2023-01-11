@@ -19,8 +19,8 @@ pub struct ConstantEntry {
 }
 
 impl Node for ConstantEntry {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.name, &self.value]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.name, &mut self.value]
     }
 }
 
@@ -34,8 +34,11 @@ pub struct ConstantStatement {
 }
 
 impl Node for ConstantStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.entries.iter().map(|e| e as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.entries
+            .iter_mut()
+            .map(|e| e as &mut dyn Node)
+            .collect()
     }
 }
 
@@ -52,7 +55,10 @@ pub struct ClassishConstant {
 }
 
 impl Node for ClassishConstant {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.entries.iter().map(|e| e as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.entries
+            .iter_mut()
+            .map(|e| e as &mut dyn Node)
+            .collect()
     }
 }

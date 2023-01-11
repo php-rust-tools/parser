@@ -69,8 +69,8 @@ pub mod variables;
 pub type Block = Vec<Statement>;
 
 impl Node for Block {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.iter().map(|s| s as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.iter_mut().map(|s| s as &mut dyn Node).collect()
     }
 }
 
@@ -92,9 +92,9 @@ pub struct StaticVar {
 }
 
 impl Node for StaticVar {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.var];
-        if let Some(default) = &self.default {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.var];
+        if let Some(default) = &mut self.default {
             children.push(default);
         }
         children
@@ -123,8 +123,8 @@ pub struct StaticStatement {
 }
 
 impl Node for StaticStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.vars.iter().map(|v| v as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.vars.iter_mut().map(|v| v as &mut dyn Node).collect()
     }
 }
 
@@ -139,9 +139,9 @@ pub struct SwitchStatement {
 }
 
 impl Node for SwitchStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.condition];
-        children.extend(self.cases.iter().map(|c| c as &dyn Node));
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.condition];
+        children.extend(self.cases.iter_mut().map(|c| c as &mut dyn Node));
         children
     }
 }
@@ -155,8 +155,8 @@ pub struct EchoStatement {
 }
 
 impl Node for EchoStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.values.iter().map(|v| v as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.values.iter_mut().map(|v| v as &mut dyn Node).collect()
     }
 }
 
@@ -169,8 +169,8 @@ pub struct ReturnStatement {
 }
 
 impl Node for ReturnStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        if let Some(value) = &self.value {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        if let Some(value) = &mut self.value {
             vec![value]
         } else {
             vec![]
@@ -186,8 +186,8 @@ pub struct UseStatement {
 }
 
 impl Node for UseStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.uses.iter().map(|u| u as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.uses.iter_mut().map(|u| u as &mut dyn Node).collect()
     }
 }
 
@@ -200,9 +200,9 @@ pub struct GroupUseStatement {
 }
 
 impl Node for GroupUseStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.prefix];
-        children.extend(self.uses.iter().map(|u| u as &dyn Node));
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.prefix];
+        children.extend(self.uses.iter_mut().map(|u| u as &mut dyn Node));
         children
     }
 }
@@ -249,7 +249,7 @@ pub enum Statement {
 }
 
 impl Node for Statement {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             Statement::Label(statement) => vec![statement],
             Statement::Goto(statement) => vec![statement],
@@ -294,8 +294,8 @@ pub struct ExpressionStatement {
 }
 
 impl Node for ExpressionStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.expression]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.expression]
     }
 }
 
@@ -307,8 +307,11 @@ pub struct GlobalStatement {
 }
 
 impl Node for GlobalStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.variables.iter().map(|v| v as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.variables
+            .iter_mut()
+            .map(|v| v as &mut dyn Node)
+            .collect()
     }
 }
 
@@ -321,8 +324,11 @@ pub struct BlockStatement {
 }
 
 impl Node for BlockStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.statements.iter().map(|s| s as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.statements
+            .iter_mut()
+            .map(|s| s as &mut dyn Node)
+            .collect()
     }
 }
 
@@ -368,16 +374,16 @@ pub struct Case {
 }
 
 impl Node for Case {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![];
-        if let Some(condition) = &self.condition {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![];
+        if let Some(condition) = &mut self.condition {
             children.push(condition);
         }
         children.extend(
             self.body
-                .iter()
-                .map(|statement| statement as &dyn Node)
-                .collect::<Vec<&dyn Node>>(),
+                .iter_mut()
+                .map(|statement| statement as &mut dyn Node)
+                .collect::<Vec<&mut dyn Node>>(),
         );
         children
     }
@@ -392,9 +398,9 @@ pub struct Use {
 }
 
 impl Node for Use {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name];
-        if let Some(alias) = &self.alias {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.name];
+        if let Some(alias) = &mut self.alias {
             children.push(alias);
         }
         children
@@ -696,20 +702,20 @@ pub enum Expression {
 }
 
 impl Node for Expression {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            Expression::Eval { eval: _, argument } => vec![argument.as_ref()],
-            Expression::Empty { empty: _, argument } => vec![argument.as_ref()],
+            Expression::Eval { eval: _, argument } => vec![argument.as_mut()],
+            Expression::Empty { empty: _, argument } => vec![argument.as_mut()],
             Expression::Die { die: _, argument } => {
                 if let Some(argument) = argument {
-                    vec![argument.as_ref()]
+                    vec![argument.as_mut()]
                 } else {
                     vec![]
                 }
             }
             Expression::Exit { exit: _, argument } => {
                 if let Some(argument) = argument {
-                    vec![argument.as_ref()]
+                    vec![argument.as_mut()]
                 } else {
                     vec![]
                 }
@@ -728,9 +734,9 @@ impl Node for Expression {
                 argument,
             } => {
                 if let Some(argument) = argument {
-                    vec![argument.as_ref()]
+                    vec![argument.as_mut()]
                 } else if let Some(value) = value {
-                    vec![value.as_ref()]
+                    vec![value.as_mut()]
                 } else {
                     vec![]
                 }
@@ -745,101 +751,101 @@ impl Node for Expression {
                 left,
                 dot: _,
                 right,
-            } => vec![left.as_ref(), right.as_ref()],
+            } => vec![left.as_mut(), right.as_mut()],
             Expression::Instanceof {
                 left,
                 instanceof: _,
                 right,
-            } => vec![left.as_ref(), right.as_ref()],
+            } => vec![left.as_mut(), right.as_mut()],
             Expression::Reference {
                 ampersand: _,
                 right,
-            } => vec![right.as_ref()],
+            } => vec![right.as_mut()],
             Expression::Parenthesized {
                 start: _,
                 expr,
                 end: _,
-            } => vec![expr.as_ref()],
-            Expression::ErrorSuppress { at: _, expr } => vec![expr.as_ref()],
+            } => vec![expr.as_mut()],
+            Expression::ErrorSuppress { at: _, expr } => vec![expr.as_mut()],
             Expression::Identifier(identifier) => vec![identifier],
             Expression::Variable(variable) => vec![variable],
-            Expression::Include { include: _, path } => vec![path.as_ref()],
+            Expression::Include { include: _, path } => vec![path.as_mut()],
             Expression::IncludeOnce {
                 include_once: _,
                 path,
-            } => vec![path.as_ref()],
-            Expression::Require { require: _, path } => vec![path.as_ref()],
+            } => vec![path.as_mut()],
+            Expression::Require { require: _, path } => vec![path.as_mut()],
             Expression::RequireOnce {
                 require_once: _,
                 path,
-            } => vec![path.as_ref()],
-            Expression::FunctionCall { target, arguments } => vec![target.as_ref(), arguments],
+            } => vec![path.as_mut()],
+            Expression::FunctionCall { target, arguments } => vec![target.as_mut(), arguments],
             Expression::FunctionClosureCreation {
                 target,
                 placeholder: _,
-            } => vec![target.as_ref()],
+            } => vec![target.as_mut()],
             Expression::MethodCall {
                 target,
                 arrow: _,
                 method,
                 arguments,
-            } => vec![target.as_ref(), method.as_ref(), arguments],
+            } => vec![target.as_mut(), method.as_mut(), arguments],
             Expression::MethodClosureCreation {
                 target,
                 arrow: _,
                 method,
                 placeholder: _,
-            } => vec![target.as_ref(), method.as_ref()],
+            } => vec![target.as_mut(), method.as_mut()],
             Expression::NullsafeMethodCall {
                 target,
                 question_arrow: _,
                 method,
                 arguments,
-            } => vec![target.as_ref(), method.as_ref(), arguments],
+            } => vec![target.as_mut(), method.as_mut(), arguments],
             Expression::StaticMethodCall {
                 target,
                 double_colon: _,
                 method,
                 arguments,
-            } => vec![target.as_ref(), method, arguments],
+            } => vec![target.as_mut(), method, arguments],
             Expression::StaticVariableMethodCall {
                 target,
                 double_colon: _,
                 method,
                 arguments,
-            } => vec![target.as_ref(), method, arguments],
+            } => vec![target.as_mut(), method, arguments],
             Expression::StaticMethodClosureCreation {
                 target,
                 double_colon: _,
                 method,
                 placeholder: _,
-            } => vec![target.as_ref(), method],
+            } => vec![target.as_mut(), method],
             Expression::StaticVariableMethodClosureCreation {
                 target,
                 double_colon: _,
                 method,
                 placeholder: _,
-            } => vec![target.as_ref(), method],
+            } => vec![target.as_mut(), method],
             Expression::PropertyFetch {
                 target,
                 arrow: _,
                 property,
-            } => vec![target.as_ref(), property.as_ref()],
+            } => vec![target.as_mut(), property.as_mut()],
             Expression::NullsafePropertyFetch {
                 target,
                 question_arrow: _,
                 property,
-            } => vec![target.as_ref(), property.as_ref()],
+            } => vec![target.as_mut(), property.as_mut()],
             Expression::StaticPropertyFetch {
                 target,
                 double_colon: _,
                 property,
-            } => vec![target.as_ref(), property],
+            } => vec![target.as_mut(), property],
             Expression::ConstantFetch {
                 target,
                 double_colon: _,
                 constant,
-            } => vec![target.as_ref(), constant],
+            } => vec![target.as_mut(), constant],
             Expression::Static => vec![],
             Expression::Self_ => vec![],
             Expression::Parent => vec![],
@@ -859,7 +865,7 @@ impl Node for Expression {
                 start: _,
                 items,
                 end: _,
-            } => items.iter().map(|item| item as &dyn Node).collect(),
+            } => items.iter_mut().map(|item| item as &mut dyn Node).collect(),
             Expression::Closure(closure) => closure.children(),
             Expression::ArrowFunction(function) => function.children(),
             Expression::New {
@@ -867,18 +873,22 @@ impl Node for Expression {
                 target,
                 arguments,
             } => {
-                let mut children: Vec<&dyn Node> = vec![target.as_ref()];
+                let mut children: Vec<&mut dyn Node> = vec![target.as_mut()];
                 if let Some(arguments) = arguments {
                     children.push(arguments);
                 }
                 children
             }
             Expression::InterpolatedString { parts } => {
-                parts.iter().map(|part| part as &dyn Node).collect()
+                parts.iter_mut().map(|part| part as &mut dyn Node).collect()
             }
-            Expression::Heredoc { parts } => parts.iter().map(|part| part as &dyn Node).collect(),
+            Expression::Heredoc { parts } => {
+                parts.iter_mut().map(|part| part as &mut dyn Node).collect()
+            }
             Expression::Nowdoc { value: _ } => vec![],
-            Expression::ShellExec { parts } => parts.iter().map(|part| part as &dyn Node).collect(),
+            Expression::ShellExec { parts } => {
+                parts.iter_mut().map(|part| part as &mut dyn Node).collect()
+            }
             Expression::AnonymousClass(class) => class.children(),
             Expression::Bool { value: _ } => vec![],
             Expression::ArrayIndex {
@@ -887,9 +897,9 @@ impl Node for Expression {
                 index,
                 right_bracket: _,
             } => {
-                let mut children: Vec<&dyn Node> = vec![];
+                let mut children: Vec<&mut dyn Node> = vec![];
                 if let Some(index) = index {
-                    children.push(index.as_ref());
+                    children.push(index.as_mut());
                 }
                 children
             }
@@ -899,20 +909,20 @@ impl Node for Expression {
                 condition,
                 question_colon: _,
                 r#else,
-            } => vec![condition.as_ref(), r#else.as_ref()],
+            } => vec![condition.as_mut(), r#else.as_mut()],
             Expression::Ternary {
                 condition,
                 question: _,
                 then,
                 colon: _,
                 r#else,
-            } => vec![condition.as_ref(), then.as_ref(), r#else.as_ref()],
+            } => vec![condition.as_mut(), then.as_mut(), r#else.as_mut()],
             Expression::Coalesce {
                 lhs,
                 double_question: _,
                 rhs,
-            } => vec![lhs.as_ref(), rhs.as_ref()],
-            Expression::Clone { target } => vec![target.as_ref()],
+            } => vec![lhs.as_mut(), rhs.as_mut()],
+            Expression::Clone { target } => vec![target.as_mut()],
             Expression::Match {
                 keyword: _,
                 left_parenthesis: _,
@@ -923,34 +933,34 @@ impl Node for Expression {
                 arms,
                 right_brace: _,
             } => {
-                let mut children: Vec<&dyn Node> = vec![condition.as_ref()];
+                let mut children: Vec<&mut dyn Node> = vec![condition.as_mut()];
                 if let Some(default) = default {
-                    children.push(default.as_ref());
+                    children.push(default.as_mut());
                 }
                 children.extend(
-                    arms.iter()
-                        .map(|arm| arm as &dyn Node)
-                        .collect::<Vec<&dyn Node>>(),
+                    arms.iter_mut()
+                        .map(|arm| arm as &mut dyn Node)
+                        .collect::<Vec<&mut dyn Node>>(),
                 );
                 children
             }
-            Expression::Throw { value } => vec![value.as_ref()],
+            Expression::Throw { value } => vec![value.as_mut()],
             Expression::Yield { key, value } => {
-                let mut children: Vec<&dyn Node> = vec![];
+                let mut children: Vec<&mut dyn Node> = vec![];
                 if let Some(key) = key {
-                    children.push(key.as_ref());
+                    children.push(key.as_mut());
                 }
                 if let Some(value) = value {
-                    children.push(value.as_ref());
+                    children.push(value.as_mut());
                 }
                 children
             }
-            Expression::YieldFrom { value } => vec![value.as_ref()],
+            Expression::YieldFrom { value } => vec![value.as_mut()],
             Expression::Cast {
                 cast: _,
                 kind: _,
                 value,
-            } => vec![value.as_ref()],
+            } => vec![value.as_mut()],
             Expression::Noop => vec![],
         }
     }
@@ -965,8 +975,8 @@ pub struct DefaultMatchArm {
 }
 
 impl Node for DefaultMatchArm {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.body]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.body]
     }
 }
 
@@ -979,13 +989,13 @@ pub struct MatchArm {
 }
 
 impl Node for MatchArm {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = self
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = self
             .conditions
-            .iter()
-            .map(|condition| condition as &dyn Node)
+            .iter_mut()
+            .map(|condition| condition as &mut dyn Node)
             .collect();
-        children.push(&self.body);
+        children.push(&mut self.body);
         children
     }
 }
@@ -1016,10 +1026,10 @@ pub enum StringPart {
 }
 
 impl Node for StringPart {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             StringPart::Literal(_) => vec![],
-            StringPart::Expression(expression) => vec![expression.as_ref()],
+            StringPart::Expression(expression) => vec![expression.as_mut()],
         }
     }
 }
@@ -1053,7 +1063,7 @@ pub enum ArrayItem {
 }
 
 impl Node for ArrayItem {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             ArrayItem::Skipped => vec![],
             ArrayItem::Value { value } => vec![value],
@@ -1092,7 +1102,7 @@ pub enum ListEntry {
 }
 
 impl Node for ListEntry {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             ListEntry::Skipped => vec![],
             ListEntry::Value { value } => vec![value],

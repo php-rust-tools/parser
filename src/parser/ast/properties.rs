@@ -22,16 +22,16 @@ pub struct Property {
 }
 
 impl Node for Property {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![];
-        if let Some(r#type) = &self.r#type {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![];
+        if let Some(r#type) = &mut self.r#type {
             children.push(r#type);
         }
         children.extend(
             self.entries
-                .iter()
-                .map(|e| e as &dyn Node)
-                .collect::<Vec<&dyn Node>>(),
+                .iter_mut()
+                .map(|e| e as &mut dyn Node)
+                .collect::<Vec<&mut dyn Node>>(),
         );
         children
     }
@@ -47,16 +47,16 @@ pub struct VariableProperty {
 }
 
 impl Node for VariableProperty {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![];
-        if let Some(r#type) = &self.r#type {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![];
+        if let Some(r#type) = &mut self.r#type {
             children.push(r#type);
         }
         children.extend(
             self.entries
-                .iter()
-                .map(|e| e as &dyn Node)
-                .collect::<Vec<&dyn Node>>(),
+                .iter_mut()
+                .map(|e| e as &mut dyn Node)
+                .collect::<Vec<&mut dyn Node>>(),
         );
         children
     }
@@ -76,7 +76,7 @@ pub enum PropertyEntry {
 }
 
 impl Node for PropertyEntry {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             PropertyEntry::Uninitialized { variable } => vec![variable],
             PropertyEntry::Initialized {

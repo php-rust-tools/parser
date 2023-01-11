@@ -17,10 +17,12 @@ pub enum CatchType {
 }
 
 impl Node for CatchType {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             CatchType::Identifier(identifier) => vec![identifier],
-            CatchType::Union(identifiers) => identifiers.iter().map(|i| i as &dyn Node).collect(),
+            CatchType::Union(identifiers) => {
+                identifiers.iter_mut().map(|i| i as &mut dyn Node).collect()
+            }
         }
     }
 }
@@ -36,12 +38,12 @@ pub struct TryStatement {
 }
 
 impl Node for TryStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.body];
-        for catch in &self.catches {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.body];
+        for catch in &mut self.catches {
             children.push(catch);
         }
-        if let Some(finally) = &self.finally {
+        if let Some(finally) = &mut self.finally {
             children.push(finally);
         }
         children
@@ -59,12 +61,12 @@ pub struct CatchBlock {
 }
 
 impl Node for CatchBlock {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children = vec![&self.types as &dyn Node];
-        if let Some(var) = &self.var {
-            children.push(var as &dyn Node);
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children = vec![&mut self.types as &mut dyn Node];
+        if let Some(var) = &mut self.var {
+            children.push(var as &mut dyn Node);
         }
-        children.push(&self.body as &dyn Node);
+        children.push(&mut self.body as &mut dyn Node);
         children
     }
 }
@@ -78,7 +80,7 @@ pub struct FinallyBlock {
 }
 
 impl Node for FinallyBlock {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.body as &dyn Node]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.body as &mut dyn Node]
     }
 }

@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use crate::node::Node;
 
 pub trait Visitor<E: Debug> {
-    fn visit_node(&mut self, node: &dyn Node) -> Result<(), E> {
+    fn visit_node(&mut self, node: &mut dyn Node) -> Result<(), E> {
         self.visit(node)?;
 
         for child in node.children() {
@@ -13,5 +13,5 @@ pub trait Visitor<E: Debug> {
         Ok(())
     }
 
-    fn visit(&mut self, node: &dyn Node) -> Result<(), E>;
+    fn visit(&mut self, node: &mut dyn Node) -> Result<(), E>;
 }

@@ -13,7 +13,7 @@ pub struct CommaSeparated<T> {
 }
 
 impl<T: Node> Node for CommaSeparated<T> {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.inner.iter().map(|x| x as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.inner.iter_mut().map(|x| x as &mut dyn Node).collect()
     }
 }

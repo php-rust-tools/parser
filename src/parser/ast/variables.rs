@@ -18,7 +18,7 @@ pub enum Variable {
 }
 
 impl Node for Variable {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             Variable::SimpleVariable(variable) => variable.children(),
             Variable::VariableVariable(variable) => variable.children(),
@@ -46,8 +46,8 @@ pub struct VariableVariable {
 }
 
 impl Node for VariableVariable {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![self.variable.as_ref()]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.variable.as_mut()]
     }
 }
 
@@ -60,8 +60,8 @@ pub struct BracedVariableVariable {
 }
 
 impl Node for BracedVariableVariable {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![self.variable.as_ref()]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.variable.as_mut()]
     }
 }
 

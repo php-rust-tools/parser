@@ -17,13 +17,13 @@ pub struct UnbracedNamespace {
 }
 
 impl Node for UnbracedNamespace {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children = vec![&self.name as &dyn Node];
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children = vec![&mut self.name as &mut dyn Node];
         children.extend(
             self.statements
-                .iter()
-                .map(|s| s as &dyn Node)
-                .collect::<Vec<&dyn Node>>(),
+                .iter_mut()
+                .map(|s| s as &mut dyn Node)
+                .collect::<Vec<&mut dyn Node>>(),
         );
         children
     }
@@ -38,12 +38,12 @@ pub struct BracedNamespace {
 }
 
 impl Node for BracedNamespace {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children = vec![];
-        if let Some(name) = &self.name {
-            children.push(name as &dyn Node);
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![];
+        if let Some(name) = &mut self.name {
+            children.push(name);
         }
-        children.push(&self.body as &dyn Node);
+        children.push(&mut self.body);
         children
     }
 }
@@ -57,8 +57,11 @@ pub struct BracedNamespaceBody {
 }
 
 impl Node for BracedNamespaceBody {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.statements.iter().map(|s| s as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.statements
+            .iter_mut()
+            .map(|s| s as &mut dyn Node)
+            .collect()
     }
 }
 
@@ -70,7 +73,7 @@ pub enum NamespaceStatement {
 }
 
 impl Node for NamespaceStatement {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             NamespaceStatement::Unbraced(namespace) => vec![namespace],
             NamespaceStatement::Braced(namespace) => vec![namespace],

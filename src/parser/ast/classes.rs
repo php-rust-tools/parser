@@ -26,10 +26,10 @@ pub struct ClassBody {
 }
 
 impl Node for ClassBody {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         self.members
-            .iter()
-            .map(|member| member as &dyn Node)
+            .iter_mut()
+            .map(|member| member as &mut dyn Node)
             .collect()
     }
 }
@@ -48,15 +48,15 @@ pub struct ClassStatement {
 }
 
 impl Node for ClassStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name];
-        if let Some(extends) = &self.extends {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.name];
+        if let Some(extends) = &mut self.extends {
             children.push(extends);
         }
-        if let Some(implements) = &self.implements {
+        if let Some(implements) = &mut self.implements {
             children.push(implements);
         }
-        children.push(&self.body);
+        children.push(&mut self.body);
         children
     }
 }
@@ -70,10 +70,10 @@ pub struct AnonymousClassBody {
 }
 
 impl Node for AnonymousClassBody {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         self.members
-            .iter()
-            .map(|member| member as &dyn Node)
+            .iter_mut()
+            .map(|member| member as &mut dyn Node)
             .collect()
     }
 }
@@ -89,15 +89,15 @@ pub struct AnonymousClass {
 }
 
 impl Node for AnonymousClass {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![];
-        if let Some(extends) = &self.extends {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![];
+        if let Some(extends) = &mut self.extends {
             children.push(extends);
         }
-        if let Some(implements) = &self.implements {
+        if let Some(implements) = &mut self.implements {
             children.push(implements);
         }
-        children.push(&self.body);
+        children.push(&mut self.body);
         children
     }
 }
@@ -110,8 +110,8 @@ pub struct ClassExtends {
 }
 
 impl Node for ClassExtends {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.parent]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.parent]
     }
 }
 
@@ -123,7 +123,7 @@ pub struct ClassImplements {
 }
 
 impl Node for ClassImplements {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         self.interfaces.children()
     }
 }
@@ -142,7 +142,7 @@ pub enum ClassMember {
 }
 
 impl Node for ClassMember {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             ClassMember::Constant(constant) => vec![constant],
             ClassMember::TraitUsage(usage) => vec![usage],
@@ -168,7 +168,7 @@ pub enum AnonymousClassMember {
 }
 
 impl Node for AnonymousClassMember {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             AnonymousClassMember::Constant(constant) => vec![constant],
             AnonymousClassMember::TraitUsage(usage) => vec![usage],

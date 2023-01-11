@@ -20,8 +20,8 @@ pub struct UnitEnumCase {
 }
 
 impl Node for UnitEnumCase {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.name as &dyn Node]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.name]
     }
 }
 
@@ -34,7 +34,7 @@ pub enum UnitEnumMember {
 }
 
 impl Node for UnitEnumMember {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             UnitEnumMember::Case(case) => vec![case],
             UnitEnumMember::Method(method) => vec![method],
@@ -52,8 +52,11 @@ pub struct UnitEnumBody {
 }
 
 impl Node for UnitEnumBody {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.members.iter().map(|m| m as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.members
+            .iter_mut()
+            .map(|m| m as &mut dyn Node)
+            .collect()
     }
 }
 
@@ -68,12 +71,12 @@ pub struct UnitEnumStatement {
 }
 
 impl Node for UnitEnumStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name];
-        for implement in &self.implements {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.name];
+        for implement in &mut self.implements {
             children.push(implement);
         }
-        children.push(&self.body);
+        children.push(&mut self.body);
         children
     }
 }
@@ -101,8 +104,8 @@ pub struct BackedEnumCase {
 }
 
 impl Node for BackedEnumCase {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.name, &self.value]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.name, &mut self.value]
     }
 }
 
@@ -115,7 +118,7 @@ pub enum BackedEnumMember {
 }
 
 impl Node for BackedEnumMember {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             BackedEnumMember::Case(case) => vec![case],
             BackedEnumMember::Method(method) => vec![method],
@@ -133,8 +136,11 @@ pub struct BackedEnumBody {
 }
 
 impl Node for BackedEnumBody {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.members.iter().map(|m| m as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.members
+            .iter_mut()
+            .map(|m| m as &mut dyn Node)
+            .collect()
     }
 }
 
@@ -150,12 +156,12 @@ pub struct BackedEnumStatement {
 }
 
 impl Node for BackedEnumStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        let mut children: Vec<&dyn Node> = vec![&self.name, &self.backed_type];
-        for implement in &self.implements {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![&mut self.name, &mut self.backed_type];
+        for implement in &mut self.implements {
             children.push(implement);
         }
-        children.push(&self.body);
+        children.push(&mut self.body);
         children
     }
 }

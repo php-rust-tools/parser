@@ -29,7 +29,7 @@ pub enum TraitMember {
 }
 
 impl Node for TraitMember {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
             TraitMember::Constant(constant) => vec![constant],
             TraitMember::TraitUsage(usage) => vec![usage],
@@ -52,10 +52,10 @@ pub struct TraitBody {
 }
 
 impl Node for TraitBody {
-    fn children(&self) -> Vec<&dyn Node> {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
         self.members
-            .iter()
-            .map(|member| member as &dyn Node)
+            .iter_mut()
+            .map(|member| member as &mut dyn Node)
             .collect()
     }
 }
@@ -70,8 +70,8 @@ pub struct TraitStatement {
 }
 
 impl Node for TraitStatement {
-    fn children(&self) -> Vec<&dyn Node> {
-        vec![&self.name, &self.body]
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.name, &mut self.body]
     }
 }
 
@@ -84,8 +84,8 @@ pub struct TraitUsage {
 }
 
 impl Node for TraitUsage {
-    fn children(&self) -> Vec<&dyn Node> {
-        self.traits.iter().map(|t| t as &dyn Node).collect()
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.traits.iter_mut().map(|t| t as &mut dyn Node).collect()
     }
 }
 
