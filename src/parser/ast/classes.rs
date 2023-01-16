@@ -80,7 +80,7 @@ impl Node for AnonymousClassBody {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct AnonymousClass {
+pub struct AnonymousClassExpression {
     pub attributes: Vec<AttributeGroup>,     // `#[Qux]`
     pub class: Span,                         // `class`
     pub extends: Option<ClassExtends>,       // `extends Foo`
@@ -88,7 +88,7 @@ pub struct AnonymousClass {
     pub body: AnonymousClassBody,            // `{ ... }`
 }
 
-impl Node for AnonymousClass {
+impl Node for AnonymousClassExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         let mut children: Vec<&mut dyn Node> = vec![];
         if let Some(extends) = &mut self.extends {

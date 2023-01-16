@@ -142,7 +142,7 @@ impl Node for ClosureUse {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct Closure {
+pub struct ClosureExpression {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,
     pub r#static: Option<Span>,
@@ -154,7 +154,7 @@ pub struct Closure {
     pub body: FunctionBody,
 }
 
-impl Node for Closure {
+impl Node for ClosureExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         let mut children: Vec<&mut dyn Node> = vec![&mut self.parameters];
         if let Some(uses) = &mut self.uses {
@@ -170,7 +170,7 @@ impl Node for Closure {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct ArrowFunction {
+pub struct ArrowFunctionExpression {
     pub comments: CommentGroup,
     pub r#static: Option<Span>,
     pub ampersand: Option<Span>,
@@ -182,7 +182,7 @@ pub struct ArrowFunction {
     pub body: Box<Expression>,
 }
 
-impl Node for ArrowFunction {
+impl Node for ArrowFunctionExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         let mut children: Vec<&mut dyn Node> = vec![&mut self.parameters];
         if let Some(return_type) = &mut self.return_type {

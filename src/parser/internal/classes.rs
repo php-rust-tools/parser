@@ -1,6 +1,6 @@
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::classes::AnonymousClass;
+use crate::parser::ast::classes::AnonymousClassExpression;
 use crate::parser::ast::classes::AnonymousClassBody;
 use crate::parser::ast::classes::AnonymousClassMember;
 use crate::parser::ast::classes::ClassBody;
@@ -9,7 +9,7 @@ use crate::parser::ast::classes::ClassImplements;
 use crate::parser::ast::classes::ClassMember;
 use crate::parser::ast::classes::ClassStatement;
 use crate::parser::ast::identifiers::SimpleIdentifier;
-use crate::parser::ast::Expression;
+use crate::parser::ast::{Expression, New};
 use crate::parser::ast::Statement;
 use crate::parser::error;
 use crate::parser::error::ParseResult;
@@ -151,8 +151,8 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
         right_brace: utils::skip_right_brace(state)?,
     };
 
-    Ok(Expression::New {
-        target: Box::new(Expression::AnonymousClass(AnonymousClass {
+    Ok(Expression::New(New {
+        target: Box::new(Expression::AnonymousClass(AnonymousClassExpression {
             class,
             extends,
             implements,
@@ -161,7 +161,7 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
         })),
         new,
         arguments,
-    })
+    }))
 }
 
 fn member(

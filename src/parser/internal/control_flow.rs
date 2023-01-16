@@ -8,7 +8,7 @@ use crate::parser::ast::control_flow::IfStatementElse;
 use crate::parser::ast::control_flow::IfStatementElseBlock;
 use crate::parser::ast::control_flow::IfStatementElseIf;
 use crate::parser::ast::control_flow::IfStatementElseIfBlock;
-use crate::parser::ast::Block;
+use crate::parser::ast::{Block, Match};
 use crate::parser::ast::Case;
 use crate::parser::ast::DefaultMatchArm;
 use crate::parser::ast::Expression;
@@ -96,7 +96,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
 
     let right_brace = utils::skip_right_brace(state)?;
 
-    Ok(Expression::Match {
+    Ok(Expression::Match(Match {
         keyword,
         left_parenthesis,
         condition,
@@ -105,7 +105,7 @@ pub fn match_expression(state: &mut State) -> ParseResult<Expression> {
         default,
         arms,
         right_brace,
-    })
+    }))
 }
 
 pub fn switch_statement(state: &mut State) -> ParseResult<Statement> {

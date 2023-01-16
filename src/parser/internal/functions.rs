@@ -1,8 +1,8 @@
 use crate::lexer::token::TokenKind;
 use crate::parser::ast::functions::AbstractConstructor;
 use crate::parser::ast::functions::AbstractMethod;
-use crate::parser::ast::functions::ArrowFunction;
-use crate::parser::ast::functions::Closure;
+use crate::parser::ast::functions::ArrowFunctionExpression;
+use crate::parser::ast::functions::ClosureExpression;
 use crate::parser::ast::functions::ClosureUse;
 use crate::parser::ast::functions::ClosureUseVariable;
 use crate::parser::ast::functions::ConcreteConstructor;
@@ -116,7 +116,7 @@ pub fn anonymous_function(state: &mut State) -> ParseResult<Expression> {
         right_brace: utils::skip_right_brace(state)?,
     };
 
-    Ok(Expression::Closure(Closure {
+    Ok(Expression::Closure(ClosureExpression {
         comments,
         function,
         attributes,
@@ -166,7 +166,7 @@ pub fn arrow_function(state: &mut State) -> ParseResult<Expression> {
 
     let body = Box::new(expressions::create(state)?);
 
-    Ok(Expression::ArrowFunction(ArrowFunction {
+    Ok(Expression::ArrowFunction(ArrowFunctionExpression {
         comments,
         attributes,
         r#static,
