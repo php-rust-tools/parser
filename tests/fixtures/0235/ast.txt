@@ -8,9 +8,11 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: Nowdoc {
-                value: "Hello, {$name}!",
-            },
+            expression: Nowdoc(
+                NowdocExpression {
+                    value: "Hello, {$name}!",
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 5,

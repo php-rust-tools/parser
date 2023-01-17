@@ -8,46 +8,48 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: PropertyFetch {
-                target: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 1,
-                                column: 7,
-                                position: 6,
-                            },
-                            name: "$a",
-                        },
-                    ),
-                ),
-                arrow: Span {
-                    line: 1,
-                    column: 9,
-                    position: 8,
-                },
-                property: Variable(
-                    VariableVariable(
-                        VariableVariable {
-                            span: Span {
-                                line: 1,
-                                column: 11,
-                                position: 10,
-                            },
-                            variable: SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 1,
-                                        column: 12,
-                                        position: 11,
-                                    },
-                                    name: "$b",
+            expression: PropertyFetch(
+                PropertyFetchExpression {
+                    target: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 1,
+                                    column: 7,
+                                    position: 6,
                                 },
-                            ),
-                        },
+                                name: "$a",
+                            },
+                        ),
                     ),
-                ),
-            },
+                    arrow: Span {
+                        line: 1,
+                        column: 9,
+                        position: 8,
+                    },
+                    property: Variable(
+                        VariableVariable(
+                            VariableVariable {
+                                span: Span {
+                                    line: 1,
+                                    column: 11,
+                                    position: 10,
+                                },
+                                variable: SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 1,
+                                            column: 12,
+                                            position: 11,
+                                        },
+                                        name: "$b",
+                                    },
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,

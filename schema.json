@@ -118,7 +118,29 @@
         }
       }
     },
-    "AnonymousClass": {
+    "AnonymousClassBody": {
+      "type": "object",
+      "required": [
+        "left_brace",
+        "members",
+        "right_brace"
+      ],
+      "properties": {
+        "left_brace": {
+          "$ref": "#/definitions/Span"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnonymousClassMember"
+          }
+        },
+        "right_brace": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "AnonymousClassExpression": {
       "type": "object",
       "required": [
         "attributes",
@@ -157,28 +179,6 @@
               "type": "null"
             }
           ]
-        }
-      }
-    },
-    "AnonymousClassBody": {
-      "type": "object",
-      "required": [
-        "left_brace",
-        "members",
-        "right_brace"
-      ],
-      "properties": {
-        "left_brace": {
-          "$ref": "#/definitions/Span"
-        },
-        "members": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/AnonymousClassMember"
-          }
-        },
-        "right_brace": {
-          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -435,7 +435,7 @@
         }
       }
     },
-    "ArithmeticOperation": {
+    "ArithmeticOperationExpression": {
       "oneOf": [
         {
           "type": "object",
@@ -823,6 +823,58 @@
         }
       ]
     },
+    "ArrayExpression": {
+      "type": "object",
+      "required": [
+        "array",
+        "end",
+        "items",
+        "start"
+      ],
+      "properties": {
+        "array": {
+          "$ref": "#/definitions/Span"
+        },
+        "end": {
+          "$ref": "#/definitions/Span"
+        },
+        "items": {
+          "$ref": "#/definitions/CommaSeparated_for_ArrayItem"
+        },
+        "start": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "ArrayIndexExpression": {
+      "type": "object",
+      "required": [
+        "array",
+        "left_bracket",
+        "right_bracket"
+      ],
+      "properties": {
+        "array": {
+          "$ref": "#/definitions/Expression"
+        },
+        "index": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Expression"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "left_bracket": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_bracket": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "ArrayItem": {
       "oneOf": [
         {
@@ -999,7 +1051,7 @@
         }
       ]
     },
-    "ArrowFunction": {
+    "ArrowFunctionExpression": {
       "type": "object",
       "required": [
         "attributes",
@@ -1063,7 +1115,7 @@
         }
       }
     },
-    "AssignmentOperation": {
+    "AssignmentOperationExpression": {
       "oneOf": [
         {
           "type": "object",
@@ -1805,7 +1857,7 @@
         }
       ]
     },
-    "BitwiseOperation": {
+    "BitwiseOperationExpression": {
       "oneOf": [
         {
           "type": "object",
@@ -2031,6 +2083,17 @@
         }
       }
     },
+    "BoolExpression": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "boolean"
+        }
+      }
+    },
     "BracedNamespace": {
       "type": "object",
       "required": [
@@ -2147,6 +2210,25 @@
               "type": "null"
             }
           ]
+        }
+      }
+    },
+    "CastExpression": {
+      "type": "object",
+      "required": [
+        "cast",
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "cast": {
+          "$ref": "#/definitions/Span"
+        },
+        "kind": {
+          "$ref": "#/definitions/CastKind"
+        },
+        "value": {
+          "$ref": "#/definitions/Expression"
         }
       }
     },
@@ -2678,7 +2760,18 @@
         }
       }
     },
-    "Closure": {
+    "CloneExpression": {
+      "type": "object",
+      "required": [
+        "target"
+      ],
+      "properties": {
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "ClosureExpression": {
       "type": "object",
       "required": [
         "attributes",
@@ -2797,6 +2890,25 @@
         },
         "variable": {
           "$ref": "#/definitions/SimpleVariable"
+        }
+      }
+    },
+    "CoalesceExpression": {
+      "type": "object",
+      "required": [
+        "double_question",
+        "lhs",
+        "rhs"
+      ],
+      "properties": {
+        "double_question": {
+          "$ref": "#/definitions/Span"
+        },
+        "lhs": {
+          "$ref": "#/definitions/Expression"
+        },
+        "rhs": {
+          "$ref": "#/definitions/Expression"
         }
       }
     },
@@ -3019,7 +3131,7 @@
         }
       }
     },
-    "ComparisonOperation": {
+    "ComparisonOperationExpression": {
       "oneOf": [
         {
           "type": "object",
@@ -3363,6 +3475,25 @@
         }
       ]
     },
+    "ConcatExpression": {
+      "type": "object",
+      "required": [
+        "dot",
+        "left",
+        "right"
+      ],
+      "properties": {
+        "dot": {
+          "$ref": "#/definitions/Span"
+        },
+        "left": {
+          "$ref": "#/definitions/Expression"
+        },
+        "right": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
     "ConcreteConstructor": {
       "type": "object",
       "required": [
@@ -3490,6 +3621,25 @@
           "$ref": "#/definitions/SimpleIdentifier"
         },
         "value": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "ConstantFetchExpression": {
+      "type": "object",
+      "required": [
+        "constant",
+        "double_colon",
+        "target"
+      ],
+      "properties": {
+        "constant": {
+          "$ref": "#/definitions/Identifier"
+        },
+        "double_colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "target": {
           "$ref": "#/definitions/Expression"
         }
       }
@@ -3926,6 +4076,27 @@
         }
       }
     },
+    "DieExpression": {
+      "type": "object",
+      "required": [
+        "die"
+      ],
+      "properties": {
+        "argument": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/SingleArgument"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "die": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "DoWhileStatement": {
       "type": "object",
       "required": [
@@ -4002,6 +4173,21 @@
         }
       }
     },
+    "EmptyExpression": {
+      "type": "object",
+      "required": [
+        "argument",
+        "empty"
+      ],
+      "properties": {
+        "argument": {
+          "$ref": "#/definitions/SingleArgument"
+        },
+        "empty": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "Ending": {
       "oneOf": [
         {
@@ -4042,6 +4228,57 @@
         }
       ]
     },
+    "ErrorSuppressExpression": {
+      "type": "object",
+      "required": [
+        "at",
+        "expr"
+      ],
+      "properties": {
+        "at": {
+          "$ref": "#/definitions/Span"
+        },
+        "expr": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "EvalExpression": {
+      "type": "object",
+      "required": [
+        "argument",
+        "eval"
+      ],
+      "properties": {
+        "argument": {
+          "$ref": "#/definitions/SingleArgument"
+        },
+        "eval": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "ExitExpression": {
+      "type": "object",
+      "required": [
+        "exit"
+      ],
+      "properties": {
+        "argument": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/SingleArgument"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exit": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "Expression": {
       "oneOf": [
         {
@@ -4058,19 +4295,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "argument",
-                "eval"
-              ],
-              "properties": {
-                "argument": {
-                  "$ref": "#/definitions/SingleArgument"
-                },
-                "eval": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/EvalExpression"
             }
           }
         },
@@ -4088,19 +4313,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "argument",
-                "empty"
-              ],
-              "properties": {
-                "argument": {
-                  "$ref": "#/definitions/SingleArgument"
-                },
-                "empty": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/EmptyExpression"
             }
           }
         },
@@ -4118,25 +4331,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "die"
-              ],
-              "properties": {
-                "argument": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/SingleArgument"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "die": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/DieExpression"
             }
           }
         },
@@ -4154,25 +4349,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "exit"
-              ],
-              "properties": {
-                "argument": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/SingleArgument"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "exit": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/ExitExpression"
             }
           }
         },
@@ -4190,19 +4367,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arguments",
-                "isset"
-              ],
-              "properties": {
-                "arguments": {
-                  "$ref": "#/definitions/ArgumentList"
-                },
-                "isset": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/IssetExpression"
             }
           }
         },
@@ -4220,19 +4385,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arguments",
-                "unset"
-              ],
-              "properties": {
-                "arguments": {
-                  "$ref": "#/definitions/ArgumentList"
-                },
-                "unset": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/UnsetExpression"
             }
           }
         },
@@ -4250,35 +4403,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "print"
-              ],
-              "properties": {
-                "argument": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/SingleArgument"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "print": {
-                  "$ref": "#/definitions/Span"
-                },
-                "value": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Expression"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                }
-              }
+              "$ref": "#/definitions/PrintExpression"
             }
           }
         },
@@ -4314,7 +4439,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/ArithmeticOperation"
+              "$ref": "#/definitions/ArithmeticOperationExpression"
             }
           }
         },
@@ -4332,7 +4457,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/AssignmentOperation"
+              "$ref": "#/definitions/AssignmentOperationExpression"
             }
           }
         },
@@ -4350,7 +4475,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/BitwiseOperation"
+              "$ref": "#/definitions/BitwiseOperationExpression"
             }
           }
         },
@@ -4368,7 +4493,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/ComparisonOperation"
+              "$ref": "#/definitions/ComparisonOperationExpression"
             }
           }
         },
@@ -4386,7 +4511,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/LogicalOperation"
+              "$ref": "#/definitions/LogicalOperationExpression"
             }
           }
         },
@@ -4404,23 +4529,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "dot",
-                "left",
-                "right"
-              ],
-              "properties": {
-                "dot": {
-                  "$ref": "#/definitions/Span"
-                },
-                "left": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "right": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/ConcatExpression"
             }
           }
         },
@@ -4438,23 +4547,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "instanceof",
-                "left",
-                "right"
-              ],
-              "properties": {
-                "instanceof": {
-                  "$ref": "#/definitions/Span"
-                },
-                "left": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "right": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/InstanceofExpression"
             }
           }
         },
@@ -4472,19 +4565,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "ampersand",
-                "right"
-              ],
-              "properties": {
-                "ampersand": {
-                  "$ref": "#/definitions/Span"
-                },
-                "right": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/ReferenceExpression"
             }
           }
         },
@@ -4502,23 +4583,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "end",
-                "expr",
-                "start"
-              ],
-              "properties": {
-                "end": {
-                  "$ref": "#/definitions/Span"
-                },
-                "expr": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "start": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/ParenthesizedExpression"
             }
           }
         },
@@ -4536,19 +4601,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "at",
-                "expr"
-              ],
-              "properties": {
-                "at": {
-                  "$ref": "#/definitions/Span"
-                },
-                "expr": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/ErrorSuppressExpression"
             }
           }
         },
@@ -4602,19 +4655,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "include",
-                "path"
-              ],
-              "properties": {
-                "include": {
-                  "$ref": "#/definitions/Span"
-                },
-                "path": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/IncludeExpression"
             }
           }
         },
@@ -4632,19 +4673,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "include_once",
-                "path"
-              ],
-              "properties": {
-                "include_once": {
-                  "$ref": "#/definitions/Span"
-                },
-                "path": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/IncludeOnceExpression"
             }
           }
         },
@@ -4662,19 +4691,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "path",
-                "require"
-              ],
-              "properties": {
-                "path": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "require": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/RequireExpression"
             }
           }
         },
@@ -4692,19 +4709,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "path",
-                "require_once"
-              ],
-              "properties": {
-                "path": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "require_once": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/RequireOnceExpression"
             }
           }
         },
@@ -4722,19 +4727,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arguments",
-                "target"
-              ],
-              "properties": {
-                "arguments": {
-                  "$ref": "#/definitions/ArgumentList"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/FunctionCallExpression"
             }
           }
         },
@@ -4752,19 +4745,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "placeholder",
-                "target"
-              ],
-              "properties": {
-                "placeholder": {
-                  "$ref": "#/definitions/ArgumentPlaceholder"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/FunctionClosureCreationExpression"
             }
           }
         },
@@ -4782,27 +4763,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arguments",
-                "arrow",
-                "method",
-                "target"
-              ],
-              "properties": {
-                "arguments": {
-                  "$ref": "#/definitions/ArgumentList"
-                },
-                "arrow": {
-                  "$ref": "#/definitions/Span"
-                },
-                "method": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/MethodCallExpression"
             }
           }
         },
@@ -4820,27 +4781,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arrow",
-                "method",
-                "placeholder",
-                "target"
-              ],
-              "properties": {
-                "arrow": {
-                  "$ref": "#/definitions/Span"
-                },
-                "method": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "placeholder": {
-                  "$ref": "#/definitions/ArgumentPlaceholder"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/MethodClosureCreationExpression"
             }
           }
         },
@@ -4858,27 +4799,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arguments",
-                "method",
-                "question_arrow",
-                "target"
-              ],
-              "properties": {
-                "arguments": {
-                  "$ref": "#/definitions/ArgumentList"
-                },
-                "method": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "question_arrow": {
-                  "$ref": "#/definitions/Span"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/NullsafeMethodCallExpression"
             }
           }
         },
@@ -4896,27 +4817,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arguments",
-                "double_colon",
-                "method",
-                "target"
-              ],
-              "properties": {
-                "arguments": {
-                  "$ref": "#/definitions/ArgumentList"
-                },
-                "double_colon": {
-                  "$ref": "#/definitions/Span"
-                },
-                "method": {
-                  "$ref": "#/definitions/Identifier"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/StaticMethodCallExpression"
             }
           }
         },
@@ -4934,27 +4835,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arguments",
-                "double_colon",
-                "method",
-                "target"
-              ],
-              "properties": {
-                "arguments": {
-                  "$ref": "#/definitions/ArgumentList"
-                },
-                "double_colon": {
-                  "$ref": "#/definitions/Span"
-                },
-                "method": {
-                  "$ref": "#/definitions/Variable"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/StaticVariableMethodCallExpression"
             }
           }
         },
@@ -4972,27 +4853,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "double_colon",
-                "method",
-                "placeholder",
-                "target"
-              ],
-              "properties": {
-                "double_colon": {
-                  "$ref": "#/definitions/Span"
-                },
-                "method": {
-                  "$ref": "#/definitions/Identifier"
-                },
-                "placeholder": {
-                  "$ref": "#/definitions/ArgumentPlaceholder"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/StaticMethodClosureCreationExpression"
             }
           }
         },
@@ -5010,27 +4871,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "double_colon",
-                "method",
-                "placeholder",
-                "target"
-              ],
-              "properties": {
-                "double_colon": {
-                  "$ref": "#/definitions/Span"
-                },
-                "method": {
-                  "$ref": "#/definitions/Variable"
-                },
-                "placeholder": {
-                  "$ref": "#/definitions/ArgumentPlaceholder"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/StaticVariableMethodClosureCreationExpression"
             }
           }
         },
@@ -5048,23 +4889,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arrow",
-                "property",
-                "target"
-              ],
-              "properties": {
-                "arrow": {
-                  "$ref": "#/definitions/Span"
-                },
-                "property": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/PropertyFetchExpression"
             }
           }
         },
@@ -5082,23 +4907,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "property",
-                "question_arrow",
-                "target"
-              ],
-              "properties": {
-                "property": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "question_arrow": {
-                  "$ref": "#/definitions/Span"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/NullsafePropertyFetchExpression"
             }
           }
         },
@@ -5116,23 +4925,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "double_colon",
-                "property",
-                "target"
-              ],
-              "properties": {
-                "double_colon": {
-                  "$ref": "#/definitions/Span"
-                },
-                "property": {
-                  "$ref": "#/definitions/Variable"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/StaticPropertyFetchExpression"
             }
           }
         },
@@ -5150,23 +4943,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "constant",
-                "double_colon",
-                "target"
-              ],
-              "properties": {
-                "constant": {
-                  "$ref": "#/definitions/Identifier"
-                },
-                "double_colon": {
-                  "$ref": "#/definitions/Span"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/ConstantFetchExpression"
             }
           }
         },
@@ -5226,23 +5003,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "end",
-                "items",
-                "start"
-              ],
-              "properties": {
-                "end": {
-                  "$ref": "#/definitions/Span"
-                },
-                "items": {
-                  "$ref": "#/definitions/CommaSeparated_for_ArrayItem"
-                },
-                "start": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/ShortArrayExpression"
             }
           }
         },
@@ -5260,27 +5021,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "array",
-                "end",
-                "items",
-                "start"
-              ],
-              "properties": {
-                "array": {
-                  "$ref": "#/definitions/Span"
-                },
-                "end": {
-                  "$ref": "#/definitions/Span"
-                },
-                "items": {
-                  "$ref": "#/definitions/CommaSeparated_for_ArrayItem"
-                },
-                "start": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/ArrayExpression"
             }
           }
         },
@@ -5298,30 +5039,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "end",
-                "items",
-                "list",
-                "start"
-              ],
-              "properties": {
-                "end": {
-                  "$ref": "#/definitions/Span"
-                },
-                "items": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/ListEntry"
-                  }
-                },
-                "list": {
-                  "$ref": "#/definitions/Span"
-                },
-                "start": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/ListExpression"
             }
           }
         },
@@ -5339,7 +5057,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Closure"
+              "$ref": "#/definitions/ClosureExpression"
             }
           }
         },
@@ -5357,7 +5075,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/ArrowFunction"
+              "$ref": "#/definitions/ArrowFunctionExpression"
             }
           }
         },
@@ -5375,29 +5093,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "new",
-                "target"
-              ],
-              "properties": {
-                "arguments": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/ArgumentList"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "new": {
-                  "$ref": "#/definitions/Span"
-                },
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/NewExpression"
             }
           }
         },
@@ -5415,18 +5111,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "parts"
-              ],
-              "properties": {
-                "parts": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/StringPart"
-                  }
-                }
-              }
+              "$ref": "#/definitions/InterpolatedStringExpression"
             }
           }
         },
@@ -5444,18 +5129,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "parts"
-              ],
-              "properties": {
-                "parts": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/StringPart"
-                  }
-                }
-              }
+              "$ref": "#/definitions/HeredocExpression"
             }
           }
         },
@@ -5473,15 +5147,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "value"
-              ],
-              "properties": {
-                "value": {
-                  "$ref": "#/definitions/ByteString"
-                }
-              }
+              "$ref": "#/definitions/NowdocExpression"
             }
           }
         },
@@ -5499,18 +5165,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "parts"
-              ],
-              "properties": {
-                "parts": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/StringPart"
-                  }
-                }
-              }
+              "$ref": "#/definitions/ShellExecExpression"
             }
           }
         },
@@ -5528,7 +5183,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/AnonymousClass"
+              "$ref": "#/definitions/AnonymousClassExpression"
             }
           }
         },
@@ -5546,15 +5201,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "value"
-              ],
-              "properties": {
-                "value": {
-                  "type": "boolean"
-                }
-              }
+              "$ref": "#/definitions/BoolExpression"
             }
           }
         },
@@ -5572,33 +5219,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "array",
-                "left_bracket",
-                "right_bracket"
-              ],
-              "properties": {
-                "array": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "index": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Expression"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "left_bracket": {
-                  "$ref": "#/definitions/Span"
-                },
-                "right_bracket": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/ArrayIndexExpression"
             }
           }
         },
@@ -5630,7 +5251,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/MagicConstant"
+              "$ref": "#/definitions/MagicConstantExpression"
             }
           }
         },
@@ -5648,23 +5269,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "condition",
-                "else",
-                "question_colon"
-              ],
-              "properties": {
-                "condition": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "else": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "question_colon": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/ShortTernaryExpression"
             }
           }
         },
@@ -5682,31 +5287,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "colon",
-                "condition",
-                "else",
-                "question",
-                "then"
-              ],
-              "properties": {
-                "colon": {
-                  "$ref": "#/definitions/Span"
-                },
-                "condition": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "else": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "question": {
-                  "$ref": "#/definitions/Span"
-                },
-                "then": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/TernaryExpression"
             }
           }
         },
@@ -5724,23 +5305,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "double_question",
-                "lhs",
-                "rhs"
-              ],
-              "properties": {
-                "double_question": {
-                  "$ref": "#/definitions/Span"
-                },
-                "lhs": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "rhs": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/CoalesceExpression"
             }
           }
         },
@@ -5758,15 +5323,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "target"
-              ],
-              "properties": {
-                "target": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/CloneExpression"
             }
           }
         },
@@ -5784,52 +5341,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "arms",
-                "condition",
-                "keyword",
-                "left_brace",
-                "left_parenthesis",
-                "right_brace",
-                "right_parenthesis"
-              ],
-              "properties": {
-                "arms": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/MatchArm"
-                  }
-                },
-                "condition": {
-                  "$ref": "#/definitions/Expression"
-                },
-                "default": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/DefaultMatchArm"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "keyword": {
-                  "$ref": "#/definitions/Span"
-                },
-                "left_brace": {
-                  "$ref": "#/definitions/Span"
-                },
-                "left_parenthesis": {
-                  "$ref": "#/definitions/Span"
-                },
-                "right_brace": {
-                  "$ref": "#/definitions/Span"
-                },
-                "right_parenthesis": {
-                  "$ref": "#/definitions/Span"
-                }
-              }
+              "$ref": "#/definitions/MatchExpression"
             }
           }
         },
@@ -5847,15 +5359,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "value"
-              ],
-              "properties": {
-                "value": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/ThrowExpression"
             }
           }
         },
@@ -5873,29 +5377,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "properties": {
-                "key": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Expression"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "value": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Expression"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                }
-              }
+              "$ref": "#/definitions/YieldExpression"
             }
           }
         },
@@ -5913,15 +5395,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "value"
-              ],
-              "properties": {
-                "value": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/YieldFromExpression"
             }
           }
         },
@@ -5939,23 +5413,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "cast",
-                "kind",
-                "value"
-              ],
-              "properties": {
-                "cast": {
-                  "$ref": "#/definitions/Span"
-                },
-                "kind": {
-                  "$ref": "#/definitions/CastKind"
-                },
-                "value": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/CastExpression"
             }
           }
         },
@@ -6333,6 +5791,36 @@
         }
       }
     },
+    "FunctionCallExpression": {
+      "type": "object",
+      "required": [
+        "arguments",
+        "target"
+      ],
+      "properties": {
+        "arguments": {
+          "$ref": "#/definitions/ArgumentList"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "FunctionClosureCreationExpression": {
+      "type": "object",
+      "required": [
+        "placeholder",
+        "target"
+      ],
+      "properties": {
+        "placeholder": {
+          "$ref": "#/definitions/ArgumentPlaceholder"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
     "FunctionParameter": {
       "type": "object",
       "required": [
@@ -6547,6 +6035,20 @@
               "type": "null"
             }
           ]
+        }
+      }
+    },
+    "HeredocExpression": {
+      "type": "object",
+      "required": [
+        "parts"
+      ],
+      "properties": {
+        "parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StringPart"
+          }
         }
       }
     },
@@ -6820,6 +6322,55 @@
         }
       }
     },
+    "IncludeExpression": {
+      "type": "object",
+      "required": [
+        "include",
+        "path"
+      ],
+      "properties": {
+        "include": {
+          "$ref": "#/definitions/Span"
+        },
+        "path": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "IncludeOnceExpression": {
+      "type": "object",
+      "required": [
+        "include_once",
+        "path"
+      ],
+      "properties": {
+        "include_once": {
+          "$ref": "#/definitions/Span"
+        },
+        "path": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "InstanceofExpression": {
+      "type": "object",
+      "required": [
+        "instanceof",
+        "left",
+        "right"
+      ],
+      "properties": {
+        "instanceof": {
+          "$ref": "#/definitions/Span"
+        },
+        "left": {
+          "$ref": "#/definitions/Expression"
+        },
+        "right": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
     "InterfaceBody": {
       "type": "object",
       "required": [
@@ -6948,6 +6499,35 @@
         },
         "name": {
           "$ref": "#/definitions/SimpleIdentifier"
+        }
+      }
+    },
+    "InterpolatedStringExpression": {
+      "type": "object",
+      "required": [
+        "parts"
+      ],
+      "properties": {
+        "parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StringPart"
+          }
+        }
+      }
+    },
+    "IssetExpression": {
+      "type": "object",
+      "required": [
+        "arguments",
+        "isset"
+      ],
+      "properties": {
+        "arguments": {
+          "$ref": "#/definitions/ArgumentList"
+        },
+        "isset": {
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -7104,6 +6684,32 @@
         }
       ]
     },
+    "ListExpression": {
+      "type": "object",
+      "required": [
+        "end",
+        "items",
+        "list",
+        "start"
+      ],
+      "properties": {
+        "end": {
+          "$ref": "#/definitions/Span"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ListEntry"
+          }
+        },
+        "list": {
+          "$ref": "#/definitions/Span"
+        },
+        "start": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "Literal": {
       "oneOf": [
         {
@@ -7207,7 +6813,7 @@
         }
       }
     },
-    "LogicalOperation": {
+    "LogicalOperationExpression": {
       "oneOf": [
         {
           "type": "object",
@@ -7411,7 +7017,7 @@
         }
       ]
     },
-    "MagicConstant": {
+    "MagicConstantExpression": {
       "oneOf": [
         {
           "type": "object",
@@ -7599,6 +7205,54 @@
         }
       }
     },
+    "MatchExpression": {
+      "type": "object",
+      "required": [
+        "arms",
+        "condition",
+        "keyword",
+        "left_brace",
+        "left_parenthesis",
+        "right_brace",
+        "right_parenthesis"
+      ],
+      "properties": {
+        "arms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MatchArm"
+          }
+        },
+        "condition": {
+          "$ref": "#/definitions/Expression"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DefaultMatchArm"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "keyword": {
+          "$ref": "#/definitions/Span"
+        },
+        "left_brace": {
+          "$ref": "#/definitions/Span"
+        },
+        "left_parenthesis": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_brace": {
+          "$ref": "#/definitions/Span"
+        },
+        "right_parenthesis": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "MethodBody": {
       "type": "object",
       "required": [
@@ -7622,6 +7276,52 @@
           "items": {
             "$ref": "#/definitions/Statement"
           }
+        }
+      }
+    },
+    "MethodCallExpression": {
+      "type": "object",
+      "required": [
+        "arguments",
+        "arrow",
+        "method",
+        "target"
+      ],
+      "properties": {
+        "arguments": {
+          "$ref": "#/definitions/ArgumentList"
+        },
+        "arrow": {
+          "$ref": "#/definitions/Span"
+        },
+        "method": {
+          "$ref": "#/definitions/Expression"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "MethodClosureCreationExpression": {
+      "type": "object",
+      "required": [
+        "arrow",
+        "method",
+        "placeholder",
+        "target"
+      ],
+      "properties": {
+        "arrow": {
+          "$ref": "#/definitions/Span"
+        },
+        "method": {
+          "$ref": "#/definitions/Expression"
+        },
+        "placeholder": {
+          "$ref": "#/definitions/ArgumentPlaceholder"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
         }
       }
     },
@@ -7776,6 +7476,134 @@
           }
         }
       ]
+    },
+    "NewExpression": {
+      "type": "object",
+      "required": [
+        "new",
+        "target"
+      ],
+      "properties": {
+        "arguments": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ArgumentList"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "new": {
+          "$ref": "#/definitions/Span"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "NowdocExpression": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/ByteString"
+        }
+      }
+    },
+    "NullsafeMethodCallExpression": {
+      "type": "object",
+      "required": [
+        "arguments",
+        "method",
+        "question_arrow",
+        "target"
+      ],
+      "properties": {
+        "arguments": {
+          "$ref": "#/definitions/ArgumentList"
+        },
+        "method": {
+          "$ref": "#/definitions/Expression"
+        },
+        "question_arrow": {
+          "$ref": "#/definitions/Span"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "NullsafePropertyFetchExpression": {
+      "type": "object",
+      "required": [
+        "property",
+        "question_arrow",
+        "target"
+      ],
+      "properties": {
+        "property": {
+          "$ref": "#/definitions/Expression"
+        },
+        "question_arrow": {
+          "$ref": "#/definitions/Span"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "ParenthesizedExpression": {
+      "type": "object",
+      "required": [
+        "end",
+        "expr",
+        "start"
+      ],
+      "properties": {
+        "end": {
+          "$ref": "#/definitions/Span"
+        },
+        "expr": {
+          "$ref": "#/definitions/Expression"
+        },
+        "start": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "PrintExpression": {
+      "type": "object",
+      "required": [
+        "print"
+      ],
+      "properties": {
+        "argument": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/SingleArgument"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "print": {
+          "$ref": "#/definitions/Span"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Expression"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
     },
     "PromotedPropertyModifier": {
       "oneOf": [
@@ -7959,6 +7787,25 @@
         }
       ]
     },
+    "PropertyFetchExpression": {
+      "type": "object",
+      "required": [
+        "arrow",
+        "property",
+        "target"
+      ],
+      "properties": {
+        "arrow": {
+          "$ref": "#/definitions/Span"
+        },
+        "property": {
+          "$ref": "#/definitions/Expression"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
     "PropertyModifier": {
       "oneOf": [
         {
@@ -8053,6 +7900,51 @@
         }
       ]
     },
+    "ReferenceExpression": {
+      "type": "object",
+      "required": [
+        "ampersand",
+        "right"
+      ],
+      "properties": {
+        "ampersand": {
+          "$ref": "#/definitions/Span"
+        },
+        "right": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "RequireExpression": {
+      "type": "object",
+      "required": [
+        "path",
+        "require"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/definitions/Expression"
+        },
+        "require": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "RequireOnceExpression": {
+      "type": "object",
+      "required": [
+        "path",
+        "require_once"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/definitions/Expression"
+        },
+        "require_once": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "ReturnStatement": {
       "type": "object",
       "required": [
@@ -8090,6 +7982,58 @@
         },
         "data_type": {
           "$ref": "#/definitions/Type"
+        }
+      }
+    },
+    "ShellExecExpression": {
+      "type": "object",
+      "required": [
+        "parts"
+      ],
+      "properties": {
+        "parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StringPart"
+          }
+        }
+      }
+    },
+    "ShortArrayExpression": {
+      "type": "object",
+      "required": [
+        "end",
+        "items",
+        "start"
+      ],
+      "properties": {
+        "end": {
+          "$ref": "#/definitions/Span"
+        },
+        "items": {
+          "$ref": "#/definitions/CommaSeparated_for_ArrayItem"
+        },
+        "start": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "ShortTernaryExpression": {
+      "type": "object",
+      "required": [
+        "condition",
+        "else",
+        "question_colon"
+      ],
+      "properties": {
+        "condition": {
+          "$ref": "#/definitions/Expression"
+        },
+        "else": {
+          "$ref": "#/definitions/Expression"
+        },
+        "question_colon": {
+          "$ref": "#/definitions/Span"
         }
       }
     },
@@ -8823,6 +8767,71 @@
         }
       ]
     },
+    "StaticMethodCallExpression": {
+      "type": "object",
+      "required": [
+        "arguments",
+        "double_colon",
+        "method",
+        "target"
+      ],
+      "properties": {
+        "arguments": {
+          "$ref": "#/definitions/ArgumentList"
+        },
+        "double_colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "method": {
+          "$ref": "#/definitions/Identifier"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "StaticMethodClosureCreationExpression": {
+      "type": "object",
+      "required": [
+        "double_colon",
+        "method",
+        "placeholder",
+        "target"
+      ],
+      "properties": {
+        "double_colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "method": {
+          "$ref": "#/definitions/Identifier"
+        },
+        "placeholder": {
+          "$ref": "#/definitions/ArgumentPlaceholder"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "StaticPropertyFetchExpression": {
+      "type": "object",
+      "required": [
+        "double_colon",
+        "property",
+        "target"
+      ],
+      "properties": {
+        "double_colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "property": {
+          "$ref": "#/definitions/Variable"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
     "StaticStatement": {
       "type": "object",
       "required": [
@@ -8855,6 +8864,52 @@
         },
         "var": {
           "$ref": "#/definitions/Variable"
+        }
+      }
+    },
+    "StaticVariableMethodCallExpression": {
+      "type": "object",
+      "required": [
+        "arguments",
+        "double_colon",
+        "method",
+        "target"
+      ],
+      "properties": {
+        "arguments": {
+          "$ref": "#/definitions/ArgumentList"
+        },
+        "double_colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "method": {
+          "$ref": "#/definitions/Variable"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "StaticVariableMethodClosureCreationExpression": {
+      "type": "object",
+      "required": [
+        "double_colon",
+        "method",
+        "placeholder",
+        "target"
+      ],
+      "properties": {
+        "double_colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "method": {
+          "$ref": "#/definitions/Variable"
+        },
+        "placeholder": {
+          "$ref": "#/definitions/ArgumentPlaceholder"
+        },
+        "target": {
+          "$ref": "#/definitions/Expression"
         }
       }
     },
@@ -8925,6 +8980,44 @@
         },
         "switch": {
           "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "TernaryExpression": {
+      "type": "object",
+      "required": [
+        "colon",
+        "condition",
+        "else",
+        "question",
+        "then"
+      ],
+      "properties": {
+        "colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "condition": {
+          "$ref": "#/definitions/Expression"
+        },
+        "else": {
+          "$ref": "#/definitions/Expression"
+        },
+        "question": {
+          "$ref": "#/definitions/Span"
+        },
+        "then": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
+    "ThrowExpression": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/Expression"
         }
       }
     },
@@ -9898,6 +9991,21 @@
         }
       }
     },
+    "UnsetExpression": {
+      "type": "object",
+      "required": [
+        "arguments",
+        "unset"
+      ],
+      "properties": {
+        "arguments": {
+          "$ref": "#/definitions/ArgumentList"
+        },
+        "unset": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "Use": {
       "type": "object",
       "required": [
@@ -10248,6 +10356,42 @@
           }
         }
       ]
+    },
+    "YieldExpression": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Expression"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Expression"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "YieldFromExpression": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
     }
   }
 }

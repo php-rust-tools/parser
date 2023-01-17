@@ -8,37 +8,39 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: NullsafePropertyFetch {
-                target: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 1,
-                                column: 7,
-                                position: 6,
+            expression: NullsafePropertyFetch(
+                NullsafePropertyFetchExpression {
+                    target: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 1,
+                                    column: 7,
+                                    position: 6,
+                                },
+                                name: "$a",
                             },
-                            name: "$a",
-                        },
+                        ),
                     ),
-                ),
-                question_arrow: Span {
-                    line: 1,
-                    column: 9,
-                    position: 8,
+                    question_arrow: Span {
+                        line: 1,
+                        column: 9,
+                        position: 8,
+                    },
+                    property: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span {
+                                    line: 1,
+                                    column: 12,
+                                    position: 11,
+                                },
+                                value: "b",
+                            },
+                        ),
+                    ),
                 },
-                property: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
-                            span: Span {
-                                line: 1,
-                                column: 12,
-                                position: 11,
-                            },
-                            value: "b",
-                        },
-                    ),
-                ),
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,

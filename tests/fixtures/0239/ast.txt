@@ -8,13 +8,15 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: ShellExec {
-                parts: [
-                    Literal(
-                        "Hello, world!",
-                    ),
-                ],
-            },
+            expression: ShellExec(
+                ShellExecExpression {
+                    parts: [
+                        Literal(
+                            "Hello, world!",
+                        ),
+                    ],
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 3,

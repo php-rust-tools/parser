@@ -8,62 +8,64 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: MethodCall {
-                target: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 1,
-                                column: 7,
-                                position: 6,
-                            },
-                            name: "$a",
-                        },
-                    ),
-                ),
-                arrow: Span {
-                    line: 1,
-                    column: 9,
-                    position: 8,
-                },
-                method: Variable(
-                    VariableVariable(
-                        VariableVariable {
-                            span: Span {
-                                line: 1,
-                                column: 11,
-                                position: 10,
-                            },
-                            variable: SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 1,
-                                        column: 12,
-                                        position: 11,
-                                    },
-                                    name: "$b",
+            expression: MethodCall(
+                MethodCallExpression {
+                    target: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 1,
+                                    column: 7,
+                                    position: 6,
                                 },
-                            ),
-                        },
+                                name: "$a",
+                            },
+                        ),
                     ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
+                    arrow: Span {
                         line: 1,
-                        column: 14,
-                        position: 13,
+                        column: 9,
+                        position: 8,
                     },
-                    arguments: [],
-                    right_parenthesis: Span {
-                        line: 1,
-                        column: 15,
-                        position: 14,
+                    method: Variable(
+                        VariableVariable(
+                            VariableVariable {
+                                span: Span {
+                                    line: 1,
+                                    column: 11,
+                                    position: 10,
+                                },
+                                variable: SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 1,
+                                            column: 12,
+                                            position: 11,
+                                        },
+                                        name: "$b",
+                                    },
+                                ),
+                            },
+                        ),
+                    ),
+                    arguments: ArgumentList {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        left_parenthesis: Span {
+                            line: 1,
+                            column: 14,
+                            position: 13,
+                        },
+                        arguments: [],
+                        right_parenthesis: Span {
+                            line: 1,
+                            column: 15,
+                            position: 14,
+                        },
                     },
                 },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,

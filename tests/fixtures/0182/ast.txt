@@ -8,115 +8,117 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: FunctionCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
-                            span: Span {
-                                line: 3,
-                                column: 1,
-                                position: 7,
-                            },
-                            value: "foo",
-                        },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
-                        line: 3,
-                        column: 4,
-                        position: 10,
-                    },
-                    arguments: [
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 3,
-                                            column: 5,
-                                            position: 11,
-                                        },
-                                        name: "$a",
-                                    },
-                                ),
-                            ),
-                        },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 3,
-                                            column: 9,
-                                            position: 15,
-                                        },
-                                        name: "$b",
-                                    },
-                                ),
-                            ),
-                        },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: None,
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 3,
-                                            column: 13,
-                                            position: 19,
-                                        },
-                                        name: "$c",
-                                    },
-                                ),
-                            ),
-                        },
-                        Positional {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            ellipsis: Some(
-                                Span {
+            expression: FunctionCall(
+                FunctionCallExpression {
+                    target: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span {
                                     line: 3,
-                                    column: 17,
-                                    position: 23,
+                                    column: 1,
+                                    position: 7,
                                 },
-                            ),
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 3,
-                                            column: 20,
-                                            position: 26,
+                                value: "foo",
+                            },
+                        ),
+                    ),
+                    arguments: ArgumentList {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        left_parenthesis: Span {
+                            line: 3,
+                            column: 4,
+                            position: 10,
+                        },
+                        arguments: [
+                            Positional {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                ellipsis: None,
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 5,
+                                                position: 11,
+                                            },
+                                            name: "$a",
                                         },
-                                        name: "$d",
+                                    ),
+                                ),
+                            },
+                            Positional {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                ellipsis: None,
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 9,
+                                                position: 15,
+                                            },
+                                            name: "$b",
+                                        },
+                                    ),
+                                ),
+                            },
+                            Positional {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                ellipsis: None,
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 13,
+                                                position: 19,
+                                            },
+                                            name: "$c",
+                                        },
+                                    ),
+                                ),
+                            },
+                            Positional {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                ellipsis: Some(
+                                    Span {
+                                        line: 3,
+                                        column: 17,
+                                        position: 23,
                                     },
                                 ),
-                            ),
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 20,
+                                                position: 26,
+                                            },
+                                            name: "$d",
+                                        },
+                                    ),
+                                ),
+                            },
+                        ],
+                        right_parenthesis: Span {
+                            line: 3,
+                            column: 22,
+                            position: 28,
                         },
-                    ],
-                    right_parenthesis: Span {
-                        line: 3,
-                        column: 22,
-                        position: 28,
                     },
                 },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 3,

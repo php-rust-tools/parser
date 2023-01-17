@@ -14,26 +14,28 @@
                 position: 7,
             },
             values: [
-                Cast {
-                    cast: Span {
-                        line: 3,
-                        column: 6,
-                        position: 12,
-                    },
-                    kind: String,
-                    value: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 3,
-                                    column: 15,
-                                    position: 21,
+                Cast(
+                    CastExpression {
+                        cast: Span {
+                            line: 3,
+                            column: 6,
+                            position: 12,
+                        },
+                        kind: String,
+                        value: Variable(
+                            SimpleVariable(
+                                SimpleVariable {
+                                    span: Span {
+                                        line: 3,
+                                        column: 15,
+                                        position: 21,
+                                    },
+                                    name: "$VAR",
                                 },
-                                name: "$VAR",
-                            },
+                            ),
                         ),
-                    ),
-                },
+                    },
+                ),
             ],
             ending: Semicolon(
                 Span {

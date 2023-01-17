@@ -80,7 +80,9 @@ impl Node for ArithmeticOperationExpression {
             ArithmeticOperationExpression::Division { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ArithmeticOperationExpression::Modulo { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            ArithmeticOperationExpression::Modulo { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
             ArithmeticOperationExpression::Exponentiation { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
@@ -172,7 +174,9 @@ pub enum AssignmentOperationExpression {
 impl Node for AssignmentOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            AssignmentOperationExpression::Assign { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            AssignmentOperationExpression::Assign { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
             AssignmentOperationExpression::Addition { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
@@ -185,11 +189,15 @@ impl Node for AssignmentOperationExpression {
             AssignmentOperationExpression::Division { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperationExpression::Modulo { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            AssignmentOperationExpression::Modulo { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
             AssignmentOperationExpression::Exponentiation { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperationExpression::Concat { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            AssignmentOperationExpression::Concat { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
             AssignmentOperationExpression::BitwiseAnd { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
@@ -249,11 +257,21 @@ pub enum BitwiseOperationExpression {
 impl Node for BitwiseOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            BitwiseOperationExpression::And { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            BitwiseOperationExpression::Or { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            BitwiseOperationExpression::Xor { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            BitwiseOperationExpression::LeftShift { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            BitwiseOperationExpression::RightShift { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            BitwiseOperationExpression::And { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            BitwiseOperationExpression::Or { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            BitwiseOperationExpression::Xor { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            BitwiseOperationExpression::LeftShift { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            BitwiseOperationExpression::RightShift { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
             BitwiseOperationExpression::Not { right, .. } => vec![right.as_mut()],
         }
     }
@@ -317,7 +335,9 @@ pub enum ComparisonOperationExpression {
 impl Node for ComparisonOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            ComparisonOperationExpression::Equal { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            ComparisonOperationExpression::Equal { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
             ComparisonOperationExpression::Identical { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
@@ -386,12 +406,22 @@ pub enum LogicalOperationExpression {
 impl Node for LogicalOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            LogicalOperationExpression::And { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            LogicalOperationExpression::Or { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            LogicalOperationExpression::And { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            LogicalOperationExpression::Or { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
             LogicalOperationExpression::Not { right, .. } => vec![right.as_mut()],
-            LogicalOperationExpression::LogicalAnd { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            LogicalOperationExpression::LogicalOr { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            LogicalOperationExpression::LogicalXor { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            LogicalOperationExpression::LogicalAnd { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            LogicalOperationExpression::LogicalOr { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            LogicalOperationExpression::LogicalXor { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
         }
     }
 }

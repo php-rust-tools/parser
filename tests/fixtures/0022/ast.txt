@@ -120,9 +120,11 @@
                 column: 7,
                 position: 60,
             },
-            condition: Bool {
-                value: true,
-            },
+            condition: Bool(
+                BoolExpression {
+                    value: true,
+                },
+            ),
             right_parenthesis: Span {
                 line: 7,
                 column: 12,

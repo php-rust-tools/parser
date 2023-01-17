@@ -92,54 +92,56 @@
                         column: 4,
                         position: 24,
                     },
-                    right: Ternary {
-                        condition: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "1",
-                                    span: Span {
-                                        line: 5,
-                                        column: 6,
-                                        position: 26,
+                    right: Ternary(
+                        TernaryExpression {
+                            condition: Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "1",
+                                        span: Span {
+                                            line: 5,
+                                            column: 6,
+                                            position: 26,
+                                        },
                                     },
-                                },
+                                ),
                             ),
-                        ),
-                        question: Span {
-                            line: 5,
-                            column: 8,
-                            position: 28,
+                            question: Span {
+                                line: 5,
+                                column: 8,
+                                position: 28,
+                            },
+                            then: Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "2",
+                                        span: Span {
+                                            line: 5,
+                                            column: 10,
+                                            position: 30,
+                                        },
+                                    },
+                                ),
+                            ),
+                            colon: Span {
+                                line: 5,
+                                column: 12,
+                                position: 32,
+                            },
+                            else: Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "3",
+                                        span: Span {
+                                            line: 5,
+                                            column: 14,
+                                            position: 34,
+                                        },
+                                    },
+                                ),
+                            ),
                         },
-                        then: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "2",
-                                    span: Span {
-                                        line: 5,
-                                        column: 10,
-                                        position: 30,
-                                    },
-                                },
-                            ),
-                        ),
-                        colon: Span {
-                            line: 5,
-                            column: 12,
-                            position: 32,
-                        },
-                        else: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "3",
-                                    span: Span {
-                                        line: 5,
-                                        column: 14,
-                                        position: 34,
-                                    },
-                                },
-                            ),
-                        ),
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(
@@ -172,90 +174,94 @@
                         column: 4,
                         position: 41,
                     },
-                    right: Ternary {
-                        condition: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "1",
-                                    span: Span {
-                                        line: 7,
-                                        column: 6,
-                                        position: 43,
-                                    },
-                                },
-                            ),
-                        ),
-                        question: Span {
-                            line: 7,
-                            column: 8,
-                            position: 45,
-                        },
-                        then: Ternary {
+                    right: Ternary(
+                        TernaryExpression {
                             condition: Literal(
                                 Integer(
                                     LiteralInteger {
-                                        value: "2",
+                                        value: "1",
                                         span: Span {
                                             line: 7,
-                                            column: 10,
-                                            position: 47,
+                                            column: 6,
+                                            position: 43,
                                         },
                                     },
                                 ),
                             ),
                             question: Span {
                                 line: 7,
-                                column: 12,
-                                position: 49,
+                                column: 8,
+                                position: 45,
                             },
-                            then: Literal(
-                                Integer(
-                                    LiteralInteger {
-                                        value: "3",
-                                        span: Span {
-                                            line: 7,
-                                            column: 14,
-                                            position: 51,
-                                        },
+                            then: Ternary(
+                                TernaryExpression {
+                                    condition: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "2",
+                                                span: Span {
+                                                    line: 7,
+                                                    column: 10,
+                                                    position: 47,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                    question: Span {
+                                        line: 7,
+                                        column: 12,
+                                        position: 49,
                                     },
-                                ),
+                                    then: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "3",
+                                                span: Span {
+                                                    line: 7,
+                                                    column: 14,
+                                                    position: 51,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                    colon: Span {
+                                        line: 7,
+                                        column: 16,
+                                        position: 53,
+                                    },
+                                    else: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "4",
+                                                span: Span {
+                                                    line: 7,
+                                                    column: 18,
+                                                    position: 55,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
                             ),
                             colon: Span {
                                 line: 7,
-                                column: 16,
-                                position: 53,
+                                column: 20,
+                                position: 57,
                             },
                             else: Literal(
                                 Integer(
                                     LiteralInteger {
-                                        value: "4",
+                                        value: "5",
                                         span: Span {
                                             line: 7,
-                                            column: 18,
-                                            position: 55,
+                                            column: 22,
+                                            position: 59,
                                         },
                                     },
                                 ),
                             ),
                         },
-                        colon: Span {
-                            line: 7,
-                            column: 20,
-                            position: 57,
-                        },
-                        else: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "5",
-                                    span: Span {
-                                        line: 7,
-                                        column: 22,
-                                        position: 59,
-                                    },
-                                },
-                            ),
-                        ),
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(
@@ -288,56 +294,60 @@
                         column: 4,
                         position: 66,
                     },
-                    right: ShortTernary {
-                        condition: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "1",
-                                    span: Span {
-                                        line: 9,
-                                        column: 6,
-                                        position: 68,
-                                    },
-                                },
-                            ),
-                        ),
-                        question_colon: Span {
-                            line: 9,
-                            column: 8,
-                            position: 70,
-                        },
-                        else: ShortTernary {
+                    right: ShortTernary(
+                        ShortTernaryExpression {
                             condition: Literal(
                                 Integer(
                                     LiteralInteger {
-                                        value: "2",
+                                        value: "1",
                                         span: Span {
                                             line: 9,
-                                            column: 11,
-                                            position: 73,
+                                            column: 6,
+                                            position: 68,
                                         },
                                     },
                                 ),
                             ),
                             question_colon: Span {
                                 line: 9,
-                                column: 13,
-                                position: 75,
+                                column: 8,
+                                position: 70,
                             },
-                            else: Literal(
-                                Integer(
-                                    LiteralInteger {
-                                        value: "3",
-                                        span: Span {
-                                            line: 9,
-                                            column: 16,
-                                            position: 78,
-                                        },
+                            else: ShortTernary(
+                                ShortTernaryExpression {
+                                    condition: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "2",
+                                                span: Span {
+                                                    line: 9,
+                                                    column: 11,
+                                                    position: 73,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                    question_colon: Span {
+                                        line: 9,
+                                        column: 13,
+                                        position: 75,
                                     },
-                                ),
+                                    else: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "3",
+                                                span: Span {
+                                                    line: 9,
+                                                    column: 16,
+                                                    position: 78,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
                             ),
                         },
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(
@@ -370,37 +380,39 @@
                         column: 4,
                         position: 85,
                     },
-                    right: Coalesce {
-                        lhs: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "1",
-                                    span: Span {
-                                        line: 11,
-                                        column: 6,
-                                        position: 87,
+                    right: Coalesce(
+                        CoalesceExpression {
+                            lhs: Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "1",
+                                        span: Span {
+                                            line: 11,
+                                            column: 6,
+                                            position: 87,
+                                        },
                                     },
-                                },
+                                ),
                             ),
-                        ),
-                        double_question: Span {
-                            line: 11,
-                            column: 8,
-                            position: 89,
+                            double_question: Span {
+                                line: 11,
+                                column: 8,
+                                position: 89,
+                            },
+                            rhs: Literal(
+                                Integer(
+                                    LiteralInteger {
+                                        value: "2",
+                                        span: Span {
+                                            line: 11,
+                                            column: 11,
+                                            position: 92,
+                                        },
+                                    },
+                                ),
+                            ),
                         },
-                        rhs: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "2",
-                                    span: Span {
-                                        line: 11,
-                                        column: 11,
-                                        position: 92,
-                                    },
-                                },
-                            ),
-                        ),
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(
@@ -433,56 +445,60 @@
                         column: 4,
                         position: 99,
                     },
-                    right: Coalesce {
-                        lhs: Literal(
-                            Integer(
-                                LiteralInteger {
-                                    value: "1",
-                                    span: Span {
-                                        line: 13,
-                                        column: 6,
-                                        position: 101,
-                                    },
-                                },
-                            ),
-                        ),
-                        double_question: Span {
-                            line: 13,
-                            column: 8,
-                            position: 103,
-                        },
-                        rhs: Coalesce {
+                    right: Coalesce(
+                        CoalesceExpression {
                             lhs: Literal(
                                 Integer(
                                     LiteralInteger {
-                                        value: "2",
+                                        value: "1",
                                         span: Span {
                                             line: 13,
-                                            column: 11,
-                                            position: 106,
+                                            column: 6,
+                                            position: 101,
                                         },
                                     },
                                 ),
                             ),
                             double_question: Span {
                                 line: 13,
-                                column: 13,
-                                position: 108,
+                                column: 8,
+                                position: 103,
                             },
-                            rhs: Literal(
-                                Integer(
-                                    LiteralInteger {
-                                        value: "3",
-                                        span: Span {
-                                            line: 13,
-                                            column: 16,
-                                            position: 111,
-                                        },
+                            rhs: Coalesce(
+                                CoalesceExpression {
+                                    lhs: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "2",
+                                                span: Span {
+                                                    line: 13,
+                                                    column: 11,
+                                                    position: 106,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                    double_question: Span {
+                                        line: 13,
+                                        column: 13,
+                                        position: 108,
                                     },
-                                ),
+                                    rhs: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "3",
+                                                span: Span {
+                                                    line: 13,
+                                                    column: 16,
+                                                    position: 111,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
                             ),
                         },
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(

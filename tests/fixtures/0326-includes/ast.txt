@@ -8,25 +8,27 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: Include {
-                include: Span {
-                    line: 3,
-                    column: 1,
-                    position: 7,
-                },
-                path: Literal(
-                    String(
-                        LiteralString {
-                            value: ""foo.php"",
-                            span: Span {
-                                line: 3,
-                                column: 9,
-                                position: 15,
+            expression: Include(
+                IncludeExpression {
+                    include: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
+                    },
+                    path: Literal(
+                        String(
+                            LiteralString {
+                                value: ""foo.php"",
+                                span: Span {
+                                    line: 3,
+                                    column: 9,
+                                    position: 15,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 3,
@@ -38,25 +40,27 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: IncludeOnce {
-                include_once: Span {
-                    line: 4,
-                    column: 1,
-                    position: 26,
-                },
-                path: Literal(
-                    String(
-                        LiteralString {
-                            value: ""foo.php"",
-                            span: Span {
-                                line: 4,
-                                column: 14,
-                                position: 39,
+            expression: IncludeOnce(
+                IncludeOnceExpression {
+                    include_once: Span {
+                        line: 4,
+                        column: 1,
+                        position: 26,
+                    },
+                    path: Literal(
+                        String(
+                            LiteralString {
+                                value: ""foo.php"",
+                                span: Span {
+                                    line: 4,
+                                    column: 14,
+                                    position: 39,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 4,
@@ -68,25 +72,27 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: Require {
-                require: Span {
-                    line: 5,
-                    column: 1,
-                    position: 50,
-                },
-                path: Literal(
-                    String(
-                        LiteralString {
-                            value: ""foo.php"",
-                            span: Span {
-                                line: 5,
-                                column: 9,
-                                position: 58,
+            expression: Require(
+                RequireExpression {
+                    require: Span {
+                        line: 5,
+                        column: 1,
+                        position: 50,
+                    },
+                    path: Literal(
+                        String(
+                            LiteralString {
+                                value: ""foo.php"",
+                                span: Span {
+                                    line: 5,
+                                    column: 9,
+                                    position: 58,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 5,
@@ -98,25 +104,27 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: RequireOnce {
-                require_once: Span {
-                    line: 6,
-                    column: 1,
-                    position: 69,
-                },
-                path: Literal(
-                    String(
-                        LiteralString {
-                            value: ""foo.php"",
-                            span: Span {
-                                line: 6,
-                                column: 14,
-                                position: 82,
+            expression: RequireOnce(
+                RequireOnceExpression {
+                    require_once: Span {
+                        line: 6,
+                        column: 1,
+                        position: 69,
+                    },
+                    path: Literal(
+                        String(
+                            LiteralString {
+                                value: ""foo.php"",
+                                span: Span {
+                                    line: 6,
+                                    column: 14,
+                                    position: 82,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 6,

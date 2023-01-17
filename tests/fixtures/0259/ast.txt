@@ -10,53 +10,55 @@
         ExpressionStatement {
             expression: AssignmentOperation(
                 Assign {
-                    left: List {
-                        list: Span {
-                            line: 3,
-                            column: 1,
-                            position: 7,
-                        },
-                        start: Span {
-                            line: 3,
-                            column: 5,
-                            position: 11,
-                        },
-                        items: [
-                            Value {
-                                value: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span {
-                                                line: 3,
-                                                column: 6,
-                                                position: 12,
-                                            },
-                                            name: "$a",
-                                        },
-                                    ),
-                                ),
+                    left: List(
+                        ListExpression {
+                            list: Span {
+                                line: 3,
+                                column: 1,
+                                position: 7,
                             },
-                            Value {
-                                value: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span {
-                                                line: 3,
-                                                column: 9,
-                                                position: 15,
-                                            },
-                                            name: "$b",
-                                        },
-                                    ),
-                                ),
+                            start: Span {
+                                line: 3,
+                                column: 5,
+                                position: 11,
                             },
-                        ],
-                        end: Span {
-                            line: 3,
-                            column: 11,
-                            position: 17,
+                            items: [
+                                Value {
+                                    value: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 3,
+                                                    column: 6,
+                                                    position: 12,
+                                                },
+                                                name: "$a",
+                                            },
+                                        ),
+                                    ),
+                                },
+                                Value {
+                                    value: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 3,
+                                                    column: 9,
+                                                    position: 15,
+                                                },
+                                                name: "$b",
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            end: Span {
+                                line: 3,
+                                column: 11,
+                                position: 17,
+                            },
                         },
-                    },
+                    ),
                     equals: Span {
                         line: 3,
                         column: 13,

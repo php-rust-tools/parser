@@ -150,40 +150,42 @@
                         column: 6,
                         position: 78,
                     },
-                    right: FunctionClosureCreation {
-                        target: Identifier(
-                            SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: Span {
-                                        line: 9,
-                                        column: 8,
-                                        position: 80,
+                    right: FunctionClosureCreation(
+                        FunctionClosureCreationExpression {
+                            target: Identifier(
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: Span {
+                                            line: 9,
+                                            column: 8,
+                                            position: 80,
+                                        },
+                                        value: "a",
                                     },
-                                    value: "a",
-                                },
+                                ),
                             ),
-                        ),
-                        placeholder: ArgumentPlaceholder {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            left_parenthesis: Span {
-                                line: 9,
-                                column: 9,
-                                position: 81,
-                            },
-                            ellipsis: Span {
-                                line: 9,
-                                column: 10,
-                                position: 82,
-                            },
-                            right_parenthesis: Span {
-                                line: 9,
-                                column: 13,
-                                position: 85,
+                            placeholder: ArgumentPlaceholder {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span {
+                                    line: 9,
+                                    column: 9,
+                                    position: 81,
+                                },
+                                ellipsis: Span {
+                                    line: 9,
+                                    column: 10,
+                                    position: 82,
+                                },
+                                right_parenthesis: Span {
+                                    line: 9,
+                                    column: 13,
+                                    position: 85,
+                                },
                             },
                         },
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(
@@ -217,36 +219,38 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: FunctionCall {
-                target: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 12,
-                                column: 5,
-                                position: 98,
+            expression: FunctionCall(
+                FunctionCallExpression {
+                    target: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 12,
+                                    column: 5,
+                                    position: 98,
+                                },
+                                name: "$bar",
                             },
-                            name: "$bar",
-                        },
+                        ),
                     ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
-                        line: 12,
-                        column: 9,
-                        position: 102,
-                    },
-                    arguments: [],
-                    right_parenthesis: Span {
-                        line: 12,
-                        column: 10,
-                        position: 103,
+                    arguments: ArgumentList {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        left_parenthesis: Span {
+                            line: 12,
+                            column: 9,
+                            position: 102,
+                        },
+                        arguments: [],
+                        right_parenthesis: Span {
+                            line: 12,
+                            column: 10,
+                            position: 103,
+                        },
                     },
                 },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 12,

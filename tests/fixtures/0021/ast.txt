@@ -210,9 +210,11 @@
                 column: 4,
                 position: 74,
             },
-            condition: Bool {
-                value: true,
-            },
+            condition: Bool(
+                BoolExpression {
+                    value: true,
+                },
+            ),
             right_parenthesis: Span {
                 line: 13,
                 column: 9,
@@ -263,124 +265,130 @@
                         },
                         condition: LogicalOperation(
                             And {
-                                left: MethodCall {
-                                    target: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 15,
-                                                    column: 9,
-                                                    position: 98,
-                                                },
-                                                name: "$foo",
-                                            },
-                                        ),
-                                    ),
-                                    arrow: Span {
-                                        line: 15,
-                                        column: 13,
-                                        position: 102,
-                                    },
-                                    method: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span {
-                                                    line: 15,
-                                                    column: 15,
-                                                    position: 104,
-                                                },
-                                                value: "bar",
-                                            },
-                                        ),
-                                    ),
-                                    arguments: ArgumentList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        left_parenthesis: Span {
-                                            line: 15,
-                                            column: 18,
-                                            position: 107,
-                                        },
-                                        arguments: [],
-                                        right_parenthesis: Span {
-                                            line: 15,
-                                            column: 19,
-                                            position: 108,
-                                        },
-                                    },
-                                },
-                                double_ampersand: Span {
-                                    line: 15,
-                                    column: 21,
-                                    position: 110,
-                                },
-                                right: NullsafeMethodCall {
-                                    target: PropertyFetch {
+                                left: MethodCall(
+                                    MethodCallExpression {
                                         target: Variable(
                                             SimpleVariable(
                                                 SimpleVariable {
                                                     span: Span {
                                                         line: 15,
-                                                        column: 24,
-                                                        position: 113,
+                                                        column: 9,
+                                                        position: 98,
                                                     },
-                                                    name: "$baz",
+                                                    name: "$foo",
                                                 },
                                             ),
                                         ),
                                         arrow: Span {
                                             line: 15,
-                                            column: 28,
-                                            position: 117,
+                                            column: 13,
+                                            position: 102,
                                         },
-                                        property: Identifier(
+                                        method: Identifier(
                                             SimpleIdentifier(
                                                 SimpleIdentifier {
                                                     span: Span {
                                                         line: 15,
-                                                        column: 30,
-                                                        position: 119,
+                                                        column: 15,
+                                                        position: 104,
                                                     },
                                                     value: "bar",
                                                 },
                                             ),
                                         ),
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span {
+                                                line: 15,
+                                                column: 18,
+                                                position: 107,
+                                            },
+                                            arguments: [],
+                                            right_parenthesis: Span {
+                                                line: 15,
+                                                column: 19,
+                                                position: 108,
+                                            },
+                                        },
                                     },
-                                    question_arrow: Span {
-                                        line: 15,
-                                        column: 33,
-                                        position: 122,
-                                    },
-                                    method: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span {
+                                ),
+                                double_ampersand: Span {
+                                    line: 15,
+                                    column: 21,
+                                    position: 110,
+                                },
+                                right: NullsafeMethodCall(
+                                    NullsafeMethodCallExpression {
+                                        target: PropertyFetch(
+                                            PropertyFetchExpression {
+                                                target: Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 15,
+                                                                column: 24,
+                                                                position: 113,
+                                                            },
+                                                            name: "$baz",
+                                                        },
+                                                    ),
+                                                ),
+                                                arrow: Span {
                                                     line: 15,
-                                                    column: 36,
-                                                    position: 125,
+                                                    column: 28,
+                                                    position: 117,
                                                 },
-                                                value: "qux",
+                                                property: Identifier(
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: Span {
+                                                                line: 15,
+                                                                column: 30,
+                                                                position: 119,
+                                                            },
+                                                            value: "bar",
+                                                        },
+                                                    ),
+                                                ),
                                             },
                                         ),
-                                    ),
-                                    arguments: ArgumentList {
-                                        comments: CommentGroup {
-                                            comments: [],
-                                        },
-                                        left_parenthesis: Span {
+                                        question_arrow: Span {
                                             line: 15,
-                                            column: 39,
-                                            position: 128,
+                                            column: 33,
+                                            position: 122,
                                         },
-                                        arguments: [],
-                                        right_parenthesis: Span {
-                                            line: 15,
-                                            column: 40,
-                                            position: 129,
+                                        method: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 15,
+                                                        column: 36,
+                                                        position: 125,
+                                                    },
+                                                    value: "qux",
+                                                },
+                                            ),
+                                        ),
+                                        arguments: ArgumentList {
+                                            comments: CommentGroup {
+                                                comments: [],
+                                            },
+                                            left_parenthesis: Span {
+                                                line: 15,
+                                                column: 39,
+                                                position: 128,
+                                            },
+                                            arguments: [],
+                                            right_parenthesis: Span {
+                                                line: 15,
+                                                column: 40,
+                                                position: 129,
+                                            },
                                         },
                                     },
-                                },
+                                ),
                             },
                         ),
                         right_parenthesis: Span {
@@ -448,9 +456,11 @@
                 column: 4,
                 position: 152,
             },
-            condition: Bool {
-                value: true,
-            },
+            condition: Bool(
+                BoolExpression {
+                    value: true,
+                },
+            ),
             right_parenthesis: Span {
                 line: 19,
                 column: 9,
@@ -499,9 +509,11 @@
                             column: 8,
                             position: 175,
                         },
-                        condition: Bool {
-                            value: true,
-                        },
+                        condition: Bool(
+                            BoolExpression {
+                                value: true,
+                            },
+                        ),
                         right_parenthesis: Span {
                             line: 21,
                             column: 13,
@@ -549,9 +561,11 @@
                             column: 8,
                             position: 198,
                         },
-                        condition: Bool {
-                            value: true,
-                        },
+                        condition: Bool(
+                            BoolExpression {
+                                value: true,
+                            },
+                        ),
                         right_parenthesis: Span {
                             line: 23,
                             column: 13,

@@ -8,27 +8,29 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: ShellExec {
-                parts: [
-                    Literal(
-                        "Hello, ",
-                    ),
-                    Expression(
-                        Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 3,
-                                        column: 10,
-                                        position: 16,
+            expression: ShellExec(
+                ShellExecExpression {
+                    parts: [
+                        Literal(
+                            "Hello, ",
+                        ),
+                        Expression(
+                            Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 3,
+                                            column: 10,
+                                            position: 16,
+                                        },
+                                        name: "$name",
                                     },
-                                    name: "$name",
-                                },
+                                ),
                             ),
                         ),
-                    ),
-                ],
-            },
+                    ],
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 3,
