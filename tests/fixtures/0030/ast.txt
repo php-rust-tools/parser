@@ -8,53 +8,55 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: MethodCall {
-                target: Variable(
-                    SimpleVariable(
-                        SimpleVariable {
-                            span: Span {
-                                line: 1,
-                                column: 7,
-                                position: 6,
+            expression: MethodCall(
+                MethodCallExpression {
+                    target: Variable(
+                        SimpleVariable(
+                            SimpleVariable {
+                                span: Span {
+                                    line: 1,
+                                    column: 7,
+                                    position: 6,
+                                },
+                                name: "$foo",
                             },
-                            name: "$foo",
-                        },
+                        ),
                     ),
-                ),
-                arrow: Span {
-                    line: 1,
-                    column: 11,
-                    position: 10,
-                },
-                method: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
-                            span: Span {
-                                line: 1,
-                                column: 13,
-                                position: 12,
+                    arrow: Span {
+                        line: 1,
+                        column: 11,
+                        position: 10,
+                    },
+                    method: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span {
+                                    line: 1,
+                                    column: 13,
+                                    position: 12,
+                                },
+                                value: "bar",
                             },
-                            value: "bar",
-                        },
+                        ),
                     ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
-                        line: 1,
-                        column: 16,
-                        position: 15,
-                    },
-                    arguments: [],
-                    right_parenthesis: Span {
-                        line: 1,
-                        column: 17,
-                        position: 16,
+                    arguments: ArgumentList {
+                        comments: CommentGroup {
+                            comments: [],
+                        },
+                        left_parenthesis: Span {
+                            line: 1,
+                            column: 16,
+                            position: 15,
+                        },
+                        arguments: [],
+                        right_parenthesis: Span {
+                            line: 1,
+                            column: 17,
+                            position: 16,
+                        },
                     },
                 },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,
@@ -66,34 +68,71 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: MethodCall {
-                target: MethodCall {
-                    target: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 1,
-                                    column: 20,
-                                    position: 19,
-                                },
-                                name: "$foo",
+            expression: MethodCall(
+                MethodCallExpression {
+                    target: MethodCall(
+                        MethodCallExpression {
+                            target: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 1,
+                                            column: 20,
+                                            position: 19,
+                                        },
+                                        name: "$foo",
+                                    },
+                                ),
+                            ),
+                            arrow: Span {
+                                line: 1,
+                                column: 24,
+                                position: 23,
                             },
-                        ),
+                            method: Identifier(
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: Span {
+                                            line: 1,
+                                            column: 26,
+                                            position: 25,
+                                        },
+                                        value: "bar",
+                                    },
+                                ),
+                            ),
+                            arguments: ArgumentList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span {
+                                    line: 1,
+                                    column: 29,
+                                    position: 28,
+                                },
+                                arguments: [],
+                                right_parenthesis: Span {
+                                    line: 1,
+                                    column: 30,
+                                    position: 29,
+                                },
+                            },
+                        },
                     ),
                     arrow: Span {
                         line: 1,
-                        column: 24,
-                        position: 23,
+                        column: 31,
+                        position: 30,
                     },
                     method: Identifier(
                         SimpleIdentifier(
                             SimpleIdentifier {
                                 span: Span {
                                     line: 1,
-                                    column: 26,
-                                    position: 25,
+                                    column: 33,
+                                    position: 32,
                                 },
-                                value: "bar",
+                                value: "baz",
                             },
                         ),
                     ),
@@ -103,51 +142,18 @@
                         },
                         left_parenthesis: Span {
                             line: 1,
-                            column: 29,
-                            position: 28,
+                            column: 36,
+                            position: 35,
                         },
                         arguments: [],
                         right_parenthesis: Span {
                             line: 1,
-                            column: 30,
-                            position: 29,
+                            column: 37,
+                            position: 36,
                         },
                     },
                 },
-                arrow: Span {
-                    line: 1,
-                    column: 31,
-                    position: 30,
-                },
-                method: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
-                            span: Span {
-                                line: 1,
-                                column: 33,
-                                position: 32,
-                            },
-                            value: "baz",
-                        },
-                    ),
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
-                        line: 1,
-                        column: 36,
-                        position: 35,
-                    },
-                    arguments: [],
-                    right_parenthesis: Span {
-                        line: 1,
-                        column: 37,
-                        position: 36,
-                    },
-                },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,
@@ -159,36 +165,56 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: FunctionCall {
-                target: MethodCall {
-                    target: Variable(
-                        SimpleVariable(
-                            SimpleVariable {
-                                span: Span {
-                                    line: 1,
-                                    column: 40,
-                                    position: 39,
-                                },
-                                name: "$foo",
+            expression: FunctionCall(
+                FunctionCallExpression {
+                    target: MethodCall(
+                        MethodCallExpression {
+                            target: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 1,
+                                            column: 40,
+                                            position: 39,
+                                        },
+                                        name: "$foo",
+                                    },
+                                ),
+                            ),
+                            arrow: Span {
+                                line: 1,
+                                column: 44,
+                                position: 43,
                             },
-                        ),
-                    ),
-                    arrow: Span {
-                        line: 1,
-                        column: 44,
-                        position: 43,
-                    },
-                    method: Identifier(
-                        SimpleIdentifier(
-                            SimpleIdentifier {
-                                span: Span {
-                                    line: 1,
-                                    column: 46,
-                                    position: 45,
+                            method: Identifier(
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: Span {
+                                            line: 1,
+                                            column: 46,
+                                            position: 45,
+                                        },
+                                        value: "bar",
+                                    },
+                                ),
+                            ),
+                            arguments: ArgumentList {
+                                comments: CommentGroup {
+                                    comments: [],
                                 },
-                                value: "bar",
+                                left_parenthesis: Span {
+                                    line: 1,
+                                    column: 49,
+                                    position: 48,
+                                },
+                                arguments: [],
+                                right_parenthesis: Span {
+                                    line: 1,
+                                    column: 50,
+                                    position: 49,
+                                },
                             },
-                        ),
+                        },
                     ),
                     arguments: ArgumentList {
                         comments: CommentGroup {
@@ -196,34 +222,18 @@
                         },
                         left_parenthesis: Span {
                             line: 1,
-                            column: 49,
-                            position: 48,
+                            column: 51,
+                            position: 50,
                         },
                         arguments: [],
                         right_parenthesis: Span {
                             line: 1,
-                            column: 50,
-                            position: 49,
+                            column: 52,
+                            position: 51,
                         },
                     },
                 },
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
-                        line: 1,
-                        column: 51,
-                        position: 50,
-                    },
-                    arguments: [],
-                    right_parenthesis: Span {
-                        line: 1,
-                        column: 52,
-                        position: 51,
-                    },
-                },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,

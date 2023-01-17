@@ -8,93 +8,95 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: New {
-                new: Span {
-                    line: 1,
-                    column: 7,
-                    position: 6,
+            expression: New(
+                NewExpression {
+                    new: Span {
+                        line: 1,
+                        column: 7,
+                        position: 6,
+                    },
+                    target: AnonymousClass(
+                        AnonymousClassExpression {
+                            attributes: [],
+                            class: Span {
+                                line: 1,
+                                column: 11,
+                                position: 10,
+                            },
+                            extends: None,
+                            implements: None,
+                            body: AnonymousClassBody {
+                                left_brace: Span {
+                                    line: 1,
+                                    column: 23,
+                                    position: 22,
+                                },
+                                members: [],
+                                right_brace: Span {
+                                    line: 1,
+                                    column: 24,
+                                    position: 23,
+                                },
+                            },
+                        },
+                    ),
+                    arguments: Some(
+                        ArgumentList {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            left_parenthesis: Span {
+                                line: 1,
+                                column: 16,
+                                position: 15,
+                            },
+                            arguments: [
+                                Positional {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "1",
+                                                span: Span {
+                                                    line: 1,
+                                                    column: 17,
+                                                    position: 16,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
+                                Positional {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "2",
+                                                span: Span {
+                                                    line: 1,
+                                                    column: 20,
+                                                    position: 19,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            right_parenthesis: Span {
+                                line: 1,
+                                column: 21,
+                                position: 20,
+                            },
+                        },
+                    ),
                 },
-                target: AnonymousClass(
-                    AnonymousClass {
-                        attributes: [],
-                        class: Span {
-                            line: 1,
-                            column: 11,
-                            position: 10,
-                        },
-                        extends: None,
-                        implements: None,
-                        body: AnonymousClassBody {
-                            left_brace: Span {
-                                line: 1,
-                                column: 23,
-                                position: 22,
-                            },
-                            members: [],
-                            right_brace: Span {
-                                line: 1,
-                                column: 24,
-                                position: 23,
-                            },
-                        },
-                    },
-                ),
-                arguments: Some(
-                    ArgumentList {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        left_parenthesis: Span {
-                            line: 1,
-                            column: 16,
-                            position: 15,
-                        },
-                        arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    Integer(
-                                        LiteralInteger {
-                                            value: "1",
-                                            span: Span {
-                                                line: 1,
-                                                column: 17,
-                                                position: 16,
-                                            },
-                                        },
-                                    ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    Integer(
-                                        LiteralInteger {
-                                            value: "2",
-                                            span: Span {
-                                                line: 1,
-                                                column: 20,
-                                                position: 19,
-                                            },
-                                        },
-                                    ),
-                                ),
-                            },
-                        ],
-                        right_parenthesis: Span {
-                            line: 1,
-                            column: 21,
-                            position: 20,
-                        },
-                    },
-                ),
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,

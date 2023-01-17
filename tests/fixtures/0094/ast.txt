@@ -16,36 +16,38 @@
                             column: 7,
                             position: 6,
                         },
-                        variable: FunctionCall {
-                            target: Identifier(
-                                SimpleIdentifier(
-                                    SimpleIdentifier {
-                                        span: Span {
-                                            line: 1,
-                                            column: 9,
-                                            position: 8,
+                        variable: FunctionCall(
+                            FunctionCallExpression {
+                                target: Identifier(
+                                    SimpleIdentifier(
+                                        SimpleIdentifier {
+                                            span: Span {
+                                                line: 1,
+                                                column: 9,
+                                                position: 8,
+                                            },
+                                            value: "foo",
                                         },
-                                        value: "foo",
-                                    },
+                                    ),
                                 ),
-                            ),
-                            arguments: ArgumentList {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                left_parenthesis: Span {
-                                    line: 1,
-                                    column: 12,
-                                    position: 11,
-                                },
-                                arguments: [],
-                                right_parenthesis: Span {
-                                    line: 1,
-                                    column: 13,
-                                    position: 12,
+                                arguments: ArgumentList {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    left_parenthesis: Span {
+                                        line: 1,
+                                        column: 12,
+                                        position: 11,
+                                    },
+                                    arguments: [],
+                                    right_parenthesis: Span {
+                                        line: 1,
+                                        column: 13,
+                                        position: 12,
+                                    },
                                 },
                             },
-                        },
+                        ),
                         end: Span {
                             line: 1,
                             column: 14,

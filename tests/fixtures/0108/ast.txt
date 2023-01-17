@@ -8,20 +8,22 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: YieldFrom {
-                value: Literal(
-                    Integer(
-                        LiteralInteger {
-                            value: "1",
-                            span: Span {
-                                line: 1,
-                                column: 18,
-                                position: 17,
+            expression: YieldFrom(
+                YieldFromExpression {
+                    value: Literal(
+                        Integer(
+                            LiteralInteger {
+                                value: "1",
+                                span: Span {
+                                    line: 1,
+                                    column: 18,
+                                    position: 17,
+                                },
                             },
-                        },
+                        ),
                     ),
-                ),
-            },
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,

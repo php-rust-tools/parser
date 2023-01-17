@@ -1,7 +1,7 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::ArrayItem;
 use crate::parser::ast::Expression;
 use crate::parser::ast::ListEntry;
+use crate::parser::ast::{ArrayExpression, ArrayItem, ListExpression, ShortArrayExpression};
 use crate::parser::error;
 use crate::parser::error::ParseResult;
 use crate::parser::expressions;
@@ -9,7 +9,7 @@ use crate::parser::internal::utils;
 use crate::parser::state::State;
 
 pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
-    Ok(Expression::List {
+    Ok(Expression::List(ListExpression {
         list: utils::skip(state, TokenKind::List)?,
         start: utils::skip_left_parenthesis(state)?,
         items: {
@@ -103,11 +103,11 @@ pub fn list_expression(state: &mut State) -> ParseResult<Expression> {
             items
         },
         end: utils::skip_right_parenthesis(state)?,
-    })
+    }))
 }
 
 pub fn short_array_expression(state: &mut State) -> ParseResult<Expression> {
-    Ok(Expression::ShortArray {
+    Ok(Expression::ShortArray(ShortArrayExpression {
         start: utils::skip(state, TokenKind::LeftBracket)?,
         items: utils::comma_separated(
             state,
@@ -122,16 +122,16 @@ pub fn short_array_expression(state: &mut State) -> ParseResult<Expression> {
             TokenKind::RightBracket,
         )?,
         end: utils::skip(state, TokenKind::RightBracket)?,
-    })
+    }))
 }
 
 pub fn array_expression(state: &mut State) -> ParseResult<Expression> {
-    Ok(Expression::Array {
+    Ok(Expression::Array(ArrayExpression {
         array: utils::skip(state, TokenKind::Array)?,
         start: utils::skip_left_parenthesis(state)?,
         items: utils::comma_separated(state, &array_pair, TokenKind::RightParen)?,
         end: utils::skip_right_parenthesis(state)?,
-    })
+    }))
 }
 
 fn array_pair(state: &mut State) -> ParseResult<ArrayItem> {

@@ -8,58 +8,62 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: Eval {
-                eval: Span {
-                    line: 3,
-                    column: 1,
-                    position: 7,
-                },
-                argument: SingleArgument {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
+            expression: Eval(
+                EvalExpression {
+                    eval: Span {
                         line: 3,
-                        column: 5,
-                        position: 11,
+                        column: 1,
+                        position: 7,
                     },
-                    argument: Positional {
+                    argument: SingleArgument {
                         comments: CommentGroup {
                             comments: [],
                         },
-                        ellipsis: None,
-                        value: InterpolatedString {
-                            parts: [
-                                Literal(
-                                    """,
-                                ),
-                                Expression(
-                                    Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 3,
-                                                    column: 7,
-                                                    position: 13,
-                                                },
-                                                name: "$a",
-                                            },
+                        left_parenthesis: Span {
+                            line: 3,
+                            column: 5,
+                            position: 11,
+                        },
+                        argument: Positional {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            ellipsis: None,
+                            value: InterpolatedString(
+                                InterpolatedStringExpression {
+                                    parts: [
+                                        Literal(
+                                            """,
                                         ),
-                                    ),
-                                ),
-                                Literal(
-                                    " = 1;",
-                                ),
-                            ],
+                                        Expression(
+                                            Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 3,
+                                                            column: 7,
+                                                            position: 13,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                        ),
+                                        Literal(
+                                            " = 1;",
+                                        ),
+                                    ],
+                                },
+                            ),
+                        },
+                        right_parenthesis: Span {
+                            line: 3,
+                            column: 15,
+                            position: 21,
                         },
                     },
-                    right_parenthesis: Span {
-                        line: 3,
-                        column: 15,
-                        position: 21,
-                    },
                 },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 3,

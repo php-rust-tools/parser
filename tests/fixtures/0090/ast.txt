@@ -8,55 +8,57 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: StaticMethodClosureCreation {
-                target: Identifier(
-                    SimpleIdentifier(
+            expression: StaticMethodClosureCreation(
+                StaticMethodClosureCreationExpression {
+                    target: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span {
+                                    line: 1,
+                                    column: 7,
+                                    position: 6,
+                                },
+                                value: "A",
+                            },
+                        ),
+                    ),
+                    double_colon: Span {
+                        line: 1,
+                        column: 8,
+                        position: 7,
+                    },
+                    method: SimpleIdentifier(
                         SimpleIdentifier {
                             span: Span {
                                 line: 1,
-                                column: 7,
-                                position: 6,
+                                column: 10,
+                                position: 9,
                             },
-                            value: "A",
+                            value: "foo",
                         },
                     ),
-                ),
-                double_colon: Span {
-                    line: 1,
-                    column: 8,
-                    position: 7,
-                },
-                method: SimpleIdentifier(
-                    SimpleIdentifier {
-                        span: Span {
-                            line: 1,
-                            column: 10,
-                            position: 9,
+                    placeholder: ArgumentPlaceholder {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        value: "foo",
-                    },
-                ),
-                placeholder: ArgumentPlaceholder {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
-                        line: 1,
-                        column: 13,
-                        position: 12,
-                    },
-                    ellipsis: Span {
-                        line: 1,
-                        column: 14,
-                        position: 13,
-                    },
-                    right_parenthesis: Span {
-                        line: 1,
-                        column: 17,
-                        position: 16,
+                        left_parenthesis: Span {
+                            line: 1,
+                            column: 13,
+                            position: 12,
+                        },
+                        ellipsis: Span {
+                            line: 1,
+                            column: 14,
+                            position: 13,
+                        },
+                        right_parenthesis: Span {
+                            line: 1,
+                            column: 17,
+                            position: 16,
+                        },
                     },
                 },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,

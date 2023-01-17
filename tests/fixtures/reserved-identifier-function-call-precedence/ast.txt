@@ -8,34 +8,38 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: New {
-                new: Span {
-                    line: 3,
-                    column: 1,
-                    position: 7,
-                },
-                target: Bool {
-                    value: true,
-                },
-                arguments: Some(
-                    ArgumentList {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        left_parenthesis: Span {
-                            line: 3,
-                            column: 9,
-                            position: 15,
-                        },
-                        arguments: [],
-                        right_parenthesis: Span {
-                            line: 3,
-                            column: 10,
-                            position: 16,
-                        },
+            expression: New(
+                NewExpression {
+                    new: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
                     },
-                ),
-            },
+                    target: Bool(
+                        BoolExpression {
+                            value: true,
+                        },
+                    ),
+                    arguments: Some(
+                        ArgumentList {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            left_parenthesis: Span {
+                                line: 3,
+                                column: 9,
+                                position: 15,
+                            },
+                            arguments: [],
+                            right_parenthesis: Span {
+                                line: 3,
+                                column: 10,
+                                position: 16,
+                            },
+                        },
+                    ),
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 3,

@@ -7,10 +7,14 @@ use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::literals::Literal;
 use crate::parser::ast::literals::LiteralInteger;
 use crate::parser::ast::literals::LiteralString;
-use crate::parser::ast::operators::ArithmeticOperation;
+use crate::parser::ast::operators::ArithmeticOperationExpression;
 use crate::parser::ast::variables::Variable;
-use crate::parser::ast::Expression;
 use crate::parser::ast::StringPart;
+use crate::parser::ast::{
+    ArrayIndexExpression, Expression, HeredocExpression, InterpolatedStringExpression,
+    NowdocExpression, NullsafePropertyFetchExpression, PropertyFetchExpression,
+    ShellExecExpression,
+};
 use crate::parser::error::ParseResult;
 use crate::parser::expressions::create;
 use crate::parser::internal::identifiers;
@@ -30,7 +34,9 @@ pub fn interpolated(state: &mut State) -> ParseResult<Expression> {
 
     state.stream.next();
 
-    Ok(Expression::InterpolatedString { parts })
+    Ok(Expression::InterpolatedString(
+        InterpolatedStringExpression { parts },
+    ))
 }
 
 #[inline(always)]
@@ -47,7 +53,7 @@ pub fn shell_exec(state: &mut State) -> ParseResult<Expression> {
 
     state.stream.next();
 
-    Ok(Expression::ShellExec { parts })
+    Ok(Expression::ShellExec(ShellExecExpression { parts }))
 }
 
 #[inline(always)]
@@ -132,7 +138,7 @@ pub fn heredoc(state: &mut State) -> ParseResult<Expression> {
         }
     }
 
-    Ok(Expression::Heredoc { parts })
+    Ok(Expression::Heredoc(HeredocExpression { parts }))
 }
 
 #[inline(always)]
@@ -213,7 +219,7 @@ pub fn nowdoc(state: &mut State) -> ParseResult<Expression> {
         string_part = bytes.into();
     }
 
-    Ok(Expression::Nowdoc { value: string_part })
+    Ok(Expression::Nowdoc(NowdocExpression { value: string_part }))
 }
 
 fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
@@ -270,15 +276,17 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                             if let TokenKind::LiteralInteger = &literal.kind {
                                 state.stream.next();
 
-                                Expression::ArithmeticOperation(ArithmeticOperation::Negative {
-                                    minus: span,
-                                    right: Box::new(Expression::Literal(Literal::Integer(
-                                        LiteralInteger {
-                                            span: literal.span,
-                                            value: literal.value.clone(),
-                                        },
-                                    ))),
-                                })
+                                Expression::ArithmeticOperation(
+                                    ArithmeticOperationExpression::Negative {
+                                        minus: span,
+                                        right: Box::new(Expression::Literal(Literal::Integer(
+                                            LiteralInteger {
+                                                span: literal.span,
+                                                value: literal.value.clone(),
+                                            },
+                                        ))),
+                                    },
+                                )
                             } else {
                                 return expected_token_err!("an integer", state);
                             }
@@ -304,34 +312,34 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
 
                     let right_bracket = utils::skip_right_bracket(state)?;
 
-                    Expression::ArrayIndex {
+                    Expression::ArrayIndex(ArrayIndexExpression {
                         array: Box::new(variable),
                         left_bracket,
                         index: Some(Box::new(index)),
                         right_bracket,
-                    }
+                    })
                 }
                 TokenKind::Arrow => {
                     let span = current.span;
                     state.stream.next();
-                    Expression::PropertyFetch {
+                    Expression::PropertyFetch(PropertyFetchExpression {
                         target: Box::new(variable),
                         arrow: span,
                         property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             identifiers::identifier_maybe_reserved(state)?,
                         ))),
-                    }
+                    })
                 }
                 TokenKind::QuestionArrow => {
                     let span = current.span;
                     state.stream.next();
-                    Expression::NullsafePropertyFetch {
+                    Expression::NullsafePropertyFetch(NullsafePropertyFetchExpression {
                         target: Box::new(variable),
                         question_arrow: span,
                         property: Box::new(Expression::Identifier(Identifier::SimpleIdentifier(
                             identifiers::identifier_maybe_reserved(state)?,
                         ))),
-                    }
+                    })
                 }
                 _ => variable,
             };

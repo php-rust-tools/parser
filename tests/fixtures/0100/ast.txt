@@ -8,67 +8,69 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: StaticMethodCall {
-                target: Identifier(
-                    SimpleIdentifier(
-                        SimpleIdentifier {
-                            span: Span {
-                                line: 1,
-                                column: 7,
-                                position: 6,
+            expression: StaticMethodCall(
+                StaticMethodCallExpression {
+                    target: Identifier(
+                        SimpleIdentifier(
+                            SimpleIdentifier {
+                                span: Span {
+                                    line: 1,
+                                    column: 7,
+                                    position: 6,
+                                },
+                                value: "Foo",
                             },
-                            value: "Foo",
+                        ),
+                    ),
+                    double_colon: Span {
+                        line: 1,
+                        column: 10,
+                        position: 9,
+                    },
+                    method: DynamicIdentifier(
+                        DynamicIdentifier {
+                            start: Span {
+                                line: 1,
+                                column: 12,
+                                position: 11,
+                            },
+                            expr: Literal(
+                                String(
+                                    LiteralString {
+                                        value: "'foo'",
+                                        span: Span {
+                                            line: 1,
+                                            column: 13,
+                                            position: 12,
+                                        },
+                                    },
+                                ),
+                            ),
+                            end: Span {
+                                line: 1,
+                                column: 18,
+                                position: 17,
+                            },
                         },
                     ),
-                ),
-                double_colon: Span {
-                    line: 1,
-                    column: 10,
-                    position: 9,
-                },
-                method: DynamicIdentifier(
-                    DynamicIdentifier {
-                        start: Span {
-                            line: 1,
-                            column: 12,
-                            position: 11,
+                    arguments: ArgumentList {
+                        comments: CommentGroup {
+                            comments: [],
                         },
-                        expr: Literal(
-                            String(
-                                LiteralString {
-                                    value: "'foo'",
-                                    span: Span {
-                                        line: 1,
-                                        column: 13,
-                                        position: 12,
-                                    },
-                                },
-                            ),
-                        ),
-                        end: Span {
+                        left_parenthesis: Span {
                             line: 1,
-                            column: 18,
-                            position: 17,
+                            column: 19,
+                            position: 18,
+                        },
+                        arguments: [],
+                        right_parenthesis: Span {
+                            line: 1,
+                            column: 20,
+                            position: 19,
                         },
                     },
-                ),
-                arguments: ArgumentList {
-                    comments: CommentGroup {
-                        comments: [],
-                    },
-                    left_parenthesis: Span {
-                        line: 1,
-                        column: 19,
-                        position: 18,
-                    },
-                    arguments: [],
-                    right_parenthesis: Span {
-                        line: 1,
-                        column: 20,
-                        position: 19,
-                    },
                 },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,

@@ -8,39 +8,41 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: New {
-                new: Span {
-                    line: 1,
-                    column: 7,
-                    position: 6,
-                },
-                target: AnonymousClass(
-                    AnonymousClass {
-                        attributes: [],
-                        class: Span {
-                            line: 1,
-                            column: 11,
-                            position: 10,
-                        },
-                        extends: None,
-                        implements: None,
-                        body: AnonymousClassBody {
-                            left_brace: Span {
-                                line: 1,
-                                column: 16,
-                                position: 15,
-                            },
-                            members: [],
-                            right_brace: Span {
-                                line: 1,
-                                column: 17,
-                                position: 16,
-                            },
-                        },
+            expression: New(
+                NewExpression {
+                    new: Span {
+                        line: 1,
+                        column: 7,
+                        position: 6,
                     },
-                ),
-                arguments: None,
-            },
+                    target: AnonymousClass(
+                        AnonymousClassExpression {
+                            attributes: [],
+                            class: Span {
+                                line: 1,
+                                column: 11,
+                                position: 10,
+                            },
+                            extends: None,
+                            implements: None,
+                            body: AnonymousClassBody {
+                                left_brace: Span {
+                                    line: 1,
+                                    column: 16,
+                                    position: 15,
+                                },
+                                members: [],
+                                right_brace: Span {
+                                    line: 1,
+                                    column: 17,
+                                    position: 16,
+                                },
+                            },
+                        },
+                    ),
+                    arguments: None,
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 1,

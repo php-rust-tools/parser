@@ -291,57 +291,59 @@
                     position: 144,
                 },
                 ampersand: None,
-                value: ShortArray {
-                    start: Span {
-                        line: 14,
-                        column: 18,
-                        position: 147,
-                    },
-                    items: CommaSeparated {
-                        inner: [
-                            Value {
-                                value: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span {
-                                                line: 14,
-                                                column: 19,
-                                                position: 148,
+                value: ShortArray(
+                    ShortArrayExpression {
+                        start: Span {
+                            line: 14,
+                            column: 18,
+                            position: 147,
+                        },
+                        items: CommaSeparated {
+                            inner: [
+                                Value {
+                                    value: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 14,
+                                                    column: 19,
+                                                    position: 148,
+                                                },
+                                                name: "$baz",
                                             },
-                                            name: "$baz",
-                                        },
+                                        ),
                                     ),
-                                ),
-                            },
-                            Value {
-                                value: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span {
-                                                line: 14,
-                                                column: 25,
-                                                position: 154,
+                                },
+                                Value {
+                                    value: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 14,
+                                                    column: 25,
+                                                    position: 154,
+                                                },
+                                                name: "$car",
                                             },
-                                            name: "$car",
-                                        },
+                                        ),
                                     ),
-                                ),
-                            },
-                        ],
-                        commas: [
-                            Span {
-                                line: 14,
-                                column: 23,
-                                position: 152,
-                            },
-                        ],
+                                },
+                            ],
+                            commas: [
+                                Span {
+                                    line: 14,
+                                    column: 23,
+                                    position: 152,
+                                },
+                            ],
+                        },
+                        end: Span {
+                            line: 14,
+                            column: 29,
+                            position: 158,
+                        },
                     },
-                    end: Span {
-                        line: 14,
-                        column: 29,
-                        position: 158,
-                    },
-                },
+                ),
             },
             right_parenthesis: Span {
                 line: 14,

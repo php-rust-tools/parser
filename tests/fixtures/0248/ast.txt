@@ -8,59 +8,61 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: ShortArray {
-                start: Span {
-                    line: 3,
-                    column: 1,
-                    position: 7,
-                },
-                items: CommaSeparated {
-                    inner: [
-                        ReferencedKeyValue {
-                            key: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 3,
-                                            column: 2,
-                                            position: 8,
+            expression: ShortArray(
+                ShortArrayExpression {
+                    start: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
+                    },
+                    items: CommaSeparated {
+                        inner: [
+                            ReferencedKeyValue {
+                                key: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 2,
+                                                position: 8,
+                                            },
+                                            name: "$foo",
                                         },
-                                        name: "$foo",
-                                    },
+                                    ),
                                 ),
-                            ),
-                            double_arrow: Span {
-                                line: 3,
-                                column: 7,
-                                position: 13,
-                            },
-                            ampersand: Span {
-                                line: 3,
-                                column: 10,
-                                position: 16,
-                            },
-                            value: Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 3,
-                                            column: 11,
-                                            position: 17,
+                                double_arrow: Span {
+                                    line: 3,
+                                    column: 7,
+                                    position: 13,
+                                },
+                                ampersand: Span {
+                                    line: 3,
+                                    column: 10,
+                                    position: 16,
+                                },
+                                value: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 11,
+                                                position: 17,
+                                            },
+                                            name: "$bar",
                                         },
-                                        name: "$bar",
-                                    },
+                                    ),
                                 ),
-                            ),
-                        },
-                    ],
-                    commas: [],
+                            },
+                        ],
+                        commas: [],
+                    },
+                    end: Span {
+                        line: 3,
+                        column: 15,
+                        position: 21,
+                    },
                 },
-                end: Span {
-                    line: 3,
-                    column: 15,
-                    position: 21,
-                },
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 3,

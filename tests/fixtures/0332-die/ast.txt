@@ -8,14 +8,16 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: Die {
-                die: Span {
-                    line: 3,
-                    column: 1,
-                    position: 7,
+            expression: Die(
+                DieExpression {
+                    die: Span {
+                        line: 3,
+                        column: 1,
+                        position: 7,
+                    },
+                    argument: None,
                 },
-                argument: None,
-            },
+            ),
             ending: Semicolon(
                 Span {
                     line: 3,
@@ -27,48 +29,50 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: Die {
-                die: Span {
-                    line: 4,
-                    column: 1,
-                    position: 12,
-                },
-                argument: Some(
-                    SingleArgument {
-                        comments: CommentGroup {
-                            comments: [],
-                        },
-                        left_parenthesis: Span {
-                            line: 4,
-                            column: 4,
-                            position: 15,
-                        },
-                        argument: Positional {
+            expression: Die(
+                DieExpression {
+                    die: Span {
+                        line: 4,
+                        column: 1,
+                        position: 12,
+                    },
+                    argument: Some(
+                        SingleArgument {
                             comments: CommentGroup {
                                 comments: [],
                             },
-                            ellipsis: None,
-                            value: Literal(
-                                Integer(
-                                    LiteralInteger {
-                                        value: "1",
-                                        span: Span {
-                                            line: 4,
-                                            column: 5,
-                                            position: 16,
+                            left_parenthesis: Span {
+                                line: 4,
+                                column: 4,
+                                position: 15,
+                            },
+                            argument: Positional {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                ellipsis: None,
+                                value: Literal(
+                                    Integer(
+                                        LiteralInteger {
+                                            value: "1",
+                                            span: Span {
+                                                line: 4,
+                                                column: 5,
+                                                position: 16,
+                                            },
                                         },
-                                    },
+                                    ),
                                 ),
-                            ),
+                            },
+                            right_parenthesis: Span {
+                                line: 4,
+                                column: 6,
+                                position: 17,
+                            },
                         },
-                        right_parenthesis: Span {
-                            line: 4,
-                            column: 6,
-                            position: 17,
-                        },
-                    },
-                ),
-            },
+                    ),
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 4,

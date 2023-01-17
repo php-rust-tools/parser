@@ -10,42 +10,44 @@
         ExpressionStatement {
             expression: AssignmentOperation(
                 Assign {
-                    left: List {
-                        list: Span {
-                            line: 3,
-                            column: 1,
-                            position: 7,
-                        },
-                        start: Span {
-                            line: 3,
-                            column: 5,
-                            position: 11,
-                        },
-                        items: [
-                            Skipped,
-                            Skipped,
-                            Skipped,
-                            Value {
-                                value: Variable(
-                                    SimpleVariable(
-                                        SimpleVariable {
-                                            span: Span {
-                                                line: 7,
-                                                column: 5,
-                                                position: 56,
-                                            },
-                                            name: "$a",
-                                        },
-                                    ),
-                                ),
+                    left: List(
+                        ListExpression {
+                            list: Span {
+                                line: 3,
+                                column: 1,
+                                position: 7,
                             },
-                        ],
-                        end: Span {
-                            line: 8,
-                            column: 1,
-                            position: 59,
+                            start: Span {
+                                line: 3,
+                                column: 5,
+                                position: 11,
+                            },
+                            items: [
+                                Skipped,
+                                Skipped,
+                                Skipped,
+                                Value {
+                                    value: Variable(
+                                        SimpleVariable(
+                                            SimpleVariable {
+                                                span: Span {
+                                                    line: 7,
+                                                    column: 5,
+                                                    position: 56,
+                                                },
+                                                name: "$a",
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            end: Span {
+                                line: 8,
+                                column: 1,
+                                position: 59,
+                            },
                         },
-                    },
+                    ),
                     equals: Span {
                         line: 8,
                         column: 3,

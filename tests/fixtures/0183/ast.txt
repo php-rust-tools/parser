@@ -27,95 +27,97 @@
                         column: 4,
                         position: 10,
                     },
-                    right: ShortArray {
-                        start: Span {
-                            line: 3,
-                            column: 6,
-                            position: 12,
+                    right: ShortArray(
+                        ShortArrayExpression {
+                            start: Span {
+                                line: 3,
+                                column: 6,
+                                position: 12,
+                            },
+                            items: CommaSeparated {
+                                inner: [
+                                    Value {
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 3,
+                                                        column: 7,
+                                                        position: 13,
+                                                    },
+                                                    name: "$a",
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                    Value {
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 3,
+                                                        column: 11,
+                                                        position: 17,
+                                                    },
+                                                    name: "$b",
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                    Value {
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 3,
+                                                        column: 15,
+                                                        position: 21,
+                                                    },
+                                                    name: "$c",
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                    Value {
+                                        value: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 3,
+                                                        column: 19,
+                                                        position: 25,
+                                                    },
+                                                    name: "$d",
+                                                },
+                                            ),
+                                        ),
+                                    },
+                                ],
+                                commas: [
+                                    Span {
+                                        line: 3,
+                                        column: 9,
+                                        position: 15,
+                                    },
+                                    Span {
+                                        line: 3,
+                                        column: 13,
+                                        position: 19,
+                                    },
+                                    Span {
+                                        line: 3,
+                                        column: 17,
+                                        position: 23,
+                                    },
+                                ],
+                            },
+                            end: Span {
+                                line: 3,
+                                column: 21,
+                                position: 27,
+                            },
                         },
-                        items: CommaSeparated {
-                            inner: [
-                                Value {
-                                    value: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 3,
-                                                    column: 7,
-                                                    position: 13,
-                                                },
-                                                name: "$a",
-                                            },
-                                        ),
-                                    ),
-                                },
-                                Value {
-                                    value: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 3,
-                                                    column: 11,
-                                                    position: 17,
-                                                },
-                                                name: "$b",
-                                            },
-                                        ),
-                                    ),
-                                },
-                                Value {
-                                    value: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 3,
-                                                    column: 15,
-                                                    position: 21,
-                                                },
-                                                name: "$c",
-                                            },
-                                        ),
-                                    ),
-                                },
-                                Value {
-                                    value: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 3,
-                                                    column: 19,
-                                                    position: 25,
-                                                },
-                                                name: "$d",
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ],
-                            commas: [
-                                Span {
-                                    line: 3,
-                                    column: 9,
-                                    position: 15,
-                                },
-                                Span {
-                                    line: 3,
-                                    column: 13,
-                                    position: 19,
-                                },
-                                Span {
-                                    line: 3,
-                                    column: 17,
-                                    position: 23,
-                                },
-                            ],
-                        },
-                        end: Span {
-                            line: 3,
-                            column: 21,
-                            position: 27,
-                        },
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(

@@ -8,7 +8,7 @@ use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum ArithmeticOperation {
+pub enum ArithmeticOperationExpression {
     Addition {
         left: Box<Expression>,
         plus: Span,
@@ -65,38 +65,40 @@ pub enum ArithmeticOperation {
     },
 }
 
-impl Node for ArithmeticOperation {
+impl Node for ArithmeticOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            ArithmeticOperation::Addition { left, right, .. } => {
+            ArithmeticOperationExpression::Addition { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ArithmeticOperation::Subtraction { left, right, .. } => {
+            ArithmeticOperationExpression::Subtraction { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ArithmeticOperation::Multiplication { left, right, .. } => {
+            ArithmeticOperationExpression::Multiplication { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ArithmeticOperation::Division { left, right, .. } => {
+            ArithmeticOperationExpression::Division { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ArithmeticOperation::Modulo { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            ArithmeticOperation::Exponentiation { left, right, .. } => {
+            ArithmeticOperationExpression::Modulo { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ArithmeticOperation::Negative { right, .. } => vec![right.as_mut()],
-            ArithmeticOperation::Positive { right, .. } => vec![right.as_mut()],
-            ArithmeticOperation::PreIncrement { right, .. } => vec![right.as_mut()],
-            ArithmeticOperation::PostIncrement { left, .. } => vec![left.as_mut()],
-            ArithmeticOperation::PreDecrement { right, .. } => vec![right.as_mut()],
-            ArithmeticOperation::PostDecrement { left, .. } => vec![left.as_mut()],
+            ArithmeticOperationExpression::Exponentiation { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            ArithmeticOperationExpression::Negative { right, .. } => vec![right.as_mut()],
+            ArithmeticOperationExpression::Positive { right, .. } => vec![right.as_mut()],
+            ArithmeticOperationExpression::PreIncrement { right, .. } => vec![right.as_mut()],
+            ArithmeticOperationExpression::PostIncrement { left, .. } => vec![left.as_mut()],
+            ArithmeticOperationExpression::PreDecrement { right, .. } => vec![right.as_mut()],
+            ArithmeticOperationExpression::PostDecrement { left, .. } => vec![left.as_mut()],
         }
     }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum AssignmentOperation {
+pub enum AssignmentOperationExpression {
     Assign {
         left: Box<Expression>,
         equals: Span,
@@ -169,43 +171,49 @@ pub enum AssignmentOperation {
     },
 }
 
-impl Node for AssignmentOperation {
+impl Node for AssignmentOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            AssignmentOperation::Assign { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            AssignmentOperation::Addition { left, right, .. } => {
+            AssignmentOperationExpression::Assign { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::Subtraction { left, right, .. } => {
+            AssignmentOperationExpression::Addition { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::Multiplication { left, right, .. } => {
+            AssignmentOperationExpression::Subtraction { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::Division { left, right, .. } => {
+            AssignmentOperationExpression::Multiplication { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::Modulo { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            AssignmentOperation::Exponentiation { left, right, .. } => {
+            AssignmentOperationExpression::Division { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::Concat { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            AssignmentOperation::BitwiseAnd { left, right, .. } => {
+            AssignmentOperationExpression::Modulo { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::BitwiseOr { left, right, .. } => {
+            AssignmentOperationExpression::Exponentiation { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::BitwiseXor { left, right, .. } => {
+            AssignmentOperationExpression::Concat { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::LeftShift { left, right, .. } => {
+            AssignmentOperationExpression::BitwiseAnd { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::RightShift { left, right, .. } => {
+            AssignmentOperationExpression::BitwiseOr { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            AssignmentOperation::Coalesce { left, right, .. } => {
+            AssignmentOperationExpression::BitwiseXor { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            AssignmentOperationExpression::LeftShift { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            AssignmentOperationExpression::RightShift { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            AssignmentOperationExpression::Coalesce { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
         }
@@ -214,7 +222,7 @@ impl Node for AssignmentOperation {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum BitwiseOperation {
+pub enum BitwiseOperationExpression {
     And {
         left: Box<Expression>,
         and: Span,
@@ -246,22 +254,32 @@ pub enum BitwiseOperation {
     },
 }
 
-impl Node for BitwiseOperation {
+impl Node for BitwiseOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            BitwiseOperation::And { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            BitwiseOperation::Or { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            BitwiseOperation::Xor { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            BitwiseOperation::LeftShift { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            BitwiseOperation::RightShift { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            BitwiseOperation::Not { right, .. } => vec![right.as_mut()],
+            BitwiseOperationExpression::And { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            BitwiseOperationExpression::Or { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            BitwiseOperationExpression::Xor { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            BitwiseOperationExpression::LeftShift { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            BitwiseOperationExpression::RightShift { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            BitwiseOperationExpression::Not { right, .. } => vec![right.as_mut()],
         }
     }
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum ComparisonOperation {
+pub enum ComparisonOperationExpression {
     Equal {
         left: Box<Expression>,
         double_equals: Span,
@@ -314,35 +332,37 @@ pub enum ComparisonOperation {
     },
 }
 
-impl Node for ComparisonOperation {
+impl Node for ComparisonOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            ComparisonOperation::Equal { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            ComparisonOperation::Identical { left, right, .. } => {
+            ComparisonOperationExpression::Equal { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ComparisonOperation::NotEqual { left, right, .. } => {
+            ComparisonOperationExpression::Identical { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ComparisonOperation::AngledNotEqual { left, right, .. } => {
+            ComparisonOperationExpression::NotEqual { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ComparisonOperation::NotIdentical { left, right, .. } => {
+            ComparisonOperationExpression::AngledNotEqual { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ComparisonOperation::LessThan { left, right, .. } => {
+            ComparisonOperationExpression::NotIdentical { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ComparisonOperation::GreaterThan { left, right, .. } => {
+            ComparisonOperationExpression::LessThan { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ComparisonOperation::LessThanOrEqual { left, right, .. } => {
+            ComparisonOperationExpression::GreaterThan { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ComparisonOperation::GreaterThanOrEqual { left, right, .. } => {
+            ComparisonOperationExpression::LessThanOrEqual { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
-            ComparisonOperation::Spaceship { left, right, .. } => {
+            ComparisonOperationExpression::GreaterThanOrEqual { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            ComparisonOperationExpression::Spaceship { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
         }
@@ -351,7 +371,7 @@ impl Node for ComparisonOperation {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum LogicalOperation {
+pub enum LogicalOperationExpression {
     And {
         left: Box<Expression>,
         double_ampersand: Span,
@@ -383,15 +403,25 @@ pub enum LogicalOperation {
     },
 }
 
-impl Node for LogicalOperation {
+impl Node for LogicalOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            LogicalOperation::And { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            LogicalOperation::Or { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            LogicalOperation::Not { right, .. } => vec![right.as_mut()],
-            LogicalOperation::LogicalAnd { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            LogicalOperation::LogicalOr { left, right, .. } => vec![left.as_mut(), right.as_mut()],
-            LogicalOperation::LogicalXor { left, right, .. } => vec![left.as_mut(), right.as_mut()],
+            LogicalOperationExpression::And { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            LogicalOperationExpression::Or { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            LogicalOperationExpression::Not { right, .. } => vec![right.as_mut()],
+            LogicalOperationExpression::LogicalAnd { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            LogicalOperationExpression::LogicalOr { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
+            LogicalOperationExpression::LogicalXor { left, right, .. } => {
+                vec![left.as_mut(), right.as_mut()]
+            }
         }
     }
 }

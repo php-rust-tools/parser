@@ -8,7 +8,7 @@ use crate::lexer::token::TokenKind;
 use crate::node::Node;
 use crate::parser::ast::arguments::ArgumentPlaceholder;
 use crate::parser::ast::arguments::{ArgumentList, SingleArgument};
-use crate::parser::ast::classes::AnonymousClass;
+use crate::parser::ast::classes::AnonymousClassExpression;
 use crate::parser::ast::classes::ClassStatement;
 use crate::parser::ast::comments::Comment;
 use crate::parser::ast::constant::ConstantStatement;
@@ -16,8 +16,8 @@ use crate::parser::ast::control_flow::IfStatement;
 use crate::parser::ast::declares::DeclareStatement;
 use crate::parser::ast::enums::BackedEnumStatement;
 use crate::parser::ast::enums::UnitEnumStatement;
-use crate::parser::ast::functions::ArrowFunction;
-use crate::parser::ast::functions::Closure;
+use crate::parser::ast::functions::ArrowFunctionExpression;
+use crate::parser::ast::functions::ClosureExpression;
 use crate::parser::ast::functions::FunctionStatement;
 use crate::parser::ast::goto::GotoStatement;
 use crate::parser::ast::goto::LabelStatement;
@@ -32,11 +32,11 @@ use crate::parser::ast::loops::ForStatement;
 use crate::parser::ast::loops::ForeachStatement;
 use crate::parser::ast::loops::WhileStatement;
 use crate::parser::ast::namespaces::NamespaceStatement;
-use crate::parser::ast::operators::ArithmeticOperation;
-use crate::parser::ast::operators::AssignmentOperation;
-use crate::parser::ast::operators::BitwiseOperation;
-use crate::parser::ast::operators::ComparisonOperation;
-use crate::parser::ast::operators::LogicalOperation;
+use crate::parser::ast::operators::ArithmeticOperationExpression;
+use crate::parser::ast::operators::AssignmentOperationExpression;
+use crate::parser::ast::operators::BitwiseOperationExpression;
+use crate::parser::ast::operators::ComparisonOperationExpression;
+use crate::parser::ast::operators::LogicalOperationExpression;
 use crate::parser::ast::traits::TraitStatement;
 use crate::parser::ast::try_block::TryStatement;
 use crate::parser::ast::utils::CommaSeparated;
@@ -408,183 +408,683 @@ impl Node for Use {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct EvalExpression {
+    pub eval: Span,
+    // eval
+    pub argument: Box<SingleArgument>, // ("$a = 1")
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct EmptyExpression {
+    pub empty: Span,
+    // empty
+    pub argument: Box<SingleArgument>, // ($a)
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct DieExpression {
+    pub die: Span,
+    // die
+    pub argument: Option<Box<SingleArgument>>, // (1)
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ExitExpression {
+    pub exit: Span,
+    // exit
+    pub argument: Option<Box<SingleArgument>>, // (1)
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct IssetExpression {
+    pub isset: Span,
+    // isset
+    pub arguments: ArgumentList, // `($a, ...)`
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct UnsetExpression {
+    pub unset: Span,
+    // unset
+    pub arguments: ArgumentList, // `($a, ...)`
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct PrintExpression {
+    pub print: Span,
+    // print
+    pub value: Option<Box<Expression>>,
+    // 1
+    pub argument: Option<Box<SingleArgument>>, // (1)
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ConcatExpression {
+    pub left: Box<Expression>,
+    pub dot: Span,
+    pub right: Box<Expression>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct InstanceofExpression {
+    pub left: Box<Expression>,
+    pub instanceof: Span,
+    pub right: Box<Expression>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ReferenceExpression {
+    pub ampersand: Span,
+    pub right: Box<Expression>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ParenthesizedExpression {
+    pub start: Span,
+    pub expr: Box<Expression>,
+    pub end: Span,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ErrorSuppressExpression {
+    pub at: Span,
+    pub expr: Box<Expression>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct IncludeExpression {
+    pub include: Span,
+    pub path: Box<Expression>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct IncludeOnceExpression {
+    pub include_once: Span,
+    pub path: Box<Expression>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct RequireExpression {
+    pub require: Span,
+    pub path: Box<Expression>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct RequireOnceExpression {
+    pub require_once: Span,
+    pub path: Box<Expression>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct FunctionCallExpression {
+    pub target: Box<Expression>,
+    // `foo`
+    pub arguments: ArgumentList, // `(1, 2, 3)`
+}
+
+impl Node for FunctionCallExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), &mut self.arguments]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct FunctionClosureCreationExpression {
+    pub target: Box<Expression>,
+    // `foo`
+    pub placeholder: ArgumentPlaceholder, // `(...)`
+}
+
+impl Node for FunctionClosureCreationExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct MethodCallExpression {
+    pub target: Box<Expression>,
+    // `$foo`
+    pub arrow: Span,
+    // `->`
+    pub method: Box<Expression>,
+    // `bar`
+    pub arguments: ArgumentList, // `(1, 2, 3)`
+}
+
+impl Node for MethodCallExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![
+            self.target.as_mut(),
+            self.method.as_mut(),
+            &mut self.arguments,
+        ]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct MethodClosureCreationExpression {
+    pub target: Box<Expression>,
+    // `$foo`
+    pub arrow: Span,
+    // `->`
+    pub method: Box<Expression>,
+    // `bar`
+    pub placeholder: ArgumentPlaceholder, // `(...)`
+}
+
+impl Node for MethodClosureCreationExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), self.method.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct NullsafeMethodCallExpression {
+    pub target: Box<Expression>,
+    // `$foo`
+    pub question_arrow: Span,
+    // `?->`
+    pub method: Box<Expression>,
+    // `bar`
+    pub arguments: ArgumentList, // `(1, 2, 3)`
+}
+
+impl Node for NullsafeMethodCallExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![
+            self.target.as_mut(),
+            self.method.as_mut(),
+            &mut self.arguments,
+        ]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct StaticMethodCallExpression {
+    pub target: Box<Expression>,
+    // `Foo`
+    pub double_colon: Span,
+    // `::`
+    pub method: Identifier,
+    // `bar`
+    pub arguments: ArgumentList, // `(1, 2, 3)`
+}
+
+impl Node for StaticMethodCallExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), &mut self.method, &mut self.arguments]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct StaticVariableMethodCallExpression {
+    pub target: Box<Expression>,
+    // `Foo`
+    pub double_colon: Span,
+    // `::`
+    pub method: Variable,
+    // `$bar`
+    pub arguments: ArgumentList, // `(1, 2, 3)`
+}
+
+impl Node for StaticVariableMethodCallExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), &mut self.method, &mut self.arguments]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct StaticMethodClosureCreationExpression {
+    pub target: Box<Expression>,
+    // `Foo`
+    pub double_colon: Span,
+    // `::`
+    pub method: Identifier,
+    // `bar`
+    pub placeholder: ArgumentPlaceholder, // `(...)`
+}
+
+impl Node for StaticMethodClosureCreationExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), &mut self.method]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct StaticVariableMethodClosureCreationExpression {
+    pub target: Box<Expression>,
+    // `Foo`
+    pub double_colon: Span,
+    // `::`
+    pub method: Variable,
+    // `$bar`
+    pub placeholder: ArgumentPlaceholder, // `(...)`
+}
+
+impl Node for StaticVariableMethodClosureCreationExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), &mut self.method]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct PropertyFetchExpression {
+    pub target: Box<Expression>,
+    // `foo()`
+    pub arrow: Span,
+    // `->`
+    pub property: Box<Expression>, // `bar`
+}
+
+impl Node for PropertyFetchExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), self.property.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct NullsafePropertyFetchExpression {
+    pub target: Box<Expression>,
+    // `foo()`
+    pub question_arrow: Span,
+    // `?->`
+    pub property: Box<Expression>, // `bar`
+}
+
+impl Node for NullsafePropertyFetchExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), self.property.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct StaticPropertyFetchExpression {
+    pub target: Box<Expression>,
+    // `foo()`
+    pub double_colon: Span,
+    // `::`
+    pub property: Variable, // `$bar`
+}
+
+impl Node for StaticPropertyFetchExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), &mut self.property]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ConstantFetchExpression {
+    pub target: Box<Expression>,
+    // `foo()`
+    pub double_colon: Span,
+    // `::`
+    pub constant: Identifier, // `bar`
+}
+
+impl Node for ConstantFetchExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut(), &mut self.constant]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ShortArrayExpression {
+    pub start: Span,
+    // `[`
+    pub items: CommaSeparated<ArrayItem>,
+    // `1, 2, 3`
+    pub end: Span, // `]`
+}
+
+impl Node for ShortArrayExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.items]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ArrayExpression {
+    pub array: Span,
+    // `array`
+    pub start: Span,
+    // `(`
+    pub items: CommaSeparated<ArrayItem>,
+    // `1, 2, 3`
+    pub end: Span, // `)`
+}
+
+impl Node for ArrayExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.items]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ListExpression {
+    pub list: Span,
+    // `list`
+    pub start: Span,
+    // `(`
+    pub items: Vec<ListEntry>,
+    // `$a, $b`
+    pub end: Span, // `)`
+}
+
+impl Node for ListExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.items.iter_mut().map(|i| i as &mut dyn Node).collect()
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct NewExpression {
+    pub new: Span,
+    // `new`
+    pub target: Box<Expression>,
+    // `Foo`
+    pub arguments: Option<ArgumentList>, // `(1, 2, 3)`
+}
+
+impl Node for NewExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![self.target.as_mut()];
+        if let Some(arguments) = &mut self.arguments {
+            children.push(arguments);
+        }
+        children
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct InterpolatedStringExpression {
+    pub parts: Vec<StringPart>,
+}
+
+impl Node for InterpolatedStringExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.parts
+            .iter_mut()
+            .map(|part| part as &mut dyn Node)
+            .collect()
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct HeredocExpression {
+    pub parts: Vec<StringPart>,
+}
+
+impl Node for HeredocExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.parts
+            .iter_mut()
+            .map(|part| part as &mut dyn Node)
+            .collect()
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct NowdocExpression {
+    pub value: ByteString,
+}
+
+impl Node for NowdocExpression {}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ShellExecExpression {
+    pub parts: Vec<StringPart>,
+}
+
+impl Node for ShellExecExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        self.parts
+            .iter_mut()
+            .map(|part| part as &mut dyn Node)
+            .collect()
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct BoolExpression {
+    pub value: bool,
+}
+
+impl Node for BoolExpression {}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ArrayIndexExpression {
+    pub array: Box<Expression>,
+    pub left_bracket: Span,
+    pub index: Option<Box<Expression>>,
+    pub right_bracket: Span,
+}
+
+impl Node for ArrayIndexExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![];
+        if let Some(index) = &mut self.index {
+            children.push(index.as_mut());
+        }
+        children
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ShortTernaryExpression {
+    pub condition: Box<Expression>,
+    // `foo()`
+    pub question_colon: Span,
+    // `?:`
+    pub r#else: Box<Expression>, // `bar()`
+}
+
+impl Node for ShortTernaryExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.condition.as_mut(), self.r#else.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct TernaryExpression {
+    pub condition: Box<Expression>,
+    // `foo()`
+    pub question: Span,
+    // `?`
+    pub then: Box<Expression>,
+    // `bar()`
+    pub colon: Span,
+    // `:`
+    pub r#else: Box<Expression>, // `baz()`
+}
+
+impl Node for TernaryExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![
+            self.condition.as_mut(),
+            self.then.as_mut(),
+            self.r#else.as_mut(),
+        ]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct CoalesceExpression {
+    pub lhs: Box<Expression>,
+    pub double_question: Span,
+    pub rhs: Box<Expression>,
+}
+
+impl Node for CoalesceExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.lhs.as_mut(), self.rhs.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct CloneExpression {
+    pub target: Box<Expression>,
+}
+
+impl Node for CloneExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.target.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct MatchExpression {
+    pub keyword: Span,
+    pub left_parenthesis: Span,
+    pub condition: Box<Expression>,
+    pub right_parenthesis: Span,
+    pub left_brace: Span,
+    pub default: Option<Box<DefaultMatchArm>>,
+    pub arms: Vec<MatchArm>,
+    pub right_brace: Span,
+}
+
+impl Node for MatchExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![self.condition.as_mut()];
+        if let Some(default) = &mut self.default {
+            children.push(default.as_mut());
+        }
+        children.extend(
+            self.arms
+                .iter_mut()
+                .map(|arm| arm as &mut dyn Node)
+                .collect::<Vec<&mut dyn Node>>(),
+        );
+        children
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct ThrowExpression {
+    pub value: Box<Expression>,
+}
+
+impl Node for ThrowExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.value.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct YieldExpression {
+    pub key: Option<Box<Expression>>,
+    pub value: Option<Box<Expression>>,
+}
+
+impl Node for YieldExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        let mut children: Vec<&mut dyn Node> = vec![];
+        if let Some(key) = &mut self.key {
+            children.push(key.as_mut());
+        }
+        if let Some(value) = &mut self.value {
+            children.push(value.as_mut());
+        }
+        children
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct YieldFromExpression {
+    pub value: Box<Expression>,
+}
+
+impl Node for YieldFromExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.value.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct CastExpression {
+    pub cast: Span,
+    pub kind: CastKind,
+    pub value: Box<Expression>,
+}
+
+impl Node for CastExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.value.as_mut()]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Expression {
     // eval("$a = 1")
-    Eval {
-        eval: Span,                    // eval
-        argument: Box<SingleArgument>, // ("$a = 1")
-    },
+    Eval(EvalExpression),
     // empty($a)
-    Empty {
-        empty: Span,                   // empty
-        argument: Box<SingleArgument>, // ($a)
-    },
+    Empty(EmptyExpression),
     // die, die(1)
-    Die {
-        die: Span,                             // die
-        argument: Option<Box<SingleArgument>>, // (1)
-    },
+    Die(DieExpression),
     // exit, exit(1)
-    Exit {
-        exit: Span,                            // exit
-        argument: Option<Box<SingleArgument>>, // (1)
-    },
+    Exit(ExitExpression),
     // isset($a), isset($a, ...)
-    Isset {
-        isset: Span,             // isset
-        arguments: ArgumentList, // `($a, ...)`
-    },
+    Isset(IssetExpression),
     // unset($a), isset($a, ...)
-    Unset {
-        unset: Span,             // unset
-        arguments: ArgumentList, // `($a, ...)`
-    },
+    Unset(UnsetExpression),
     // print(1), print 1;
-    Print {
-        print: Span,                           // print
-        value: Option<Box<Self>>,              // 1
-        argument: Option<Box<SingleArgument>>, // (1)
-    },
+    Print(PrintExpression),
     Literal(Literal),
-    ArithmeticOperation(ArithmeticOperation),
-    AssignmentOperation(AssignmentOperation),
-    BitwiseOperation(BitwiseOperation),
-    ComparisonOperation(ComparisonOperation),
-    LogicalOperation(LogicalOperation),
+    ArithmeticOperation(ArithmeticOperationExpression),
+    AssignmentOperation(AssignmentOperationExpression),
+    BitwiseOperation(BitwiseOperationExpression),
+    ComparisonOperation(ComparisonOperationExpression),
+    LogicalOperation(LogicalOperationExpression),
     // $a . $b
-    Concat {
-        left: Box<Self>,
-        dot: Span,
-        right: Box<Self>,
-    },
+    Concat(ConcatExpression),
     // $foo instanceof Bar
-    Instanceof {
-        left: Box<Self>,
-        instanceof: Span,
-        right: Box<Self>,
-    },
+    Instanceof(InstanceofExpression),
     // &$foo
-    Reference {
-        ampersand: Span,
-        right: Box<Self>,
-    },
+    Reference(ReferenceExpression),
     // ($a && $b)
-    Parenthesized {
-        start: Span,
-        expr: Box<Self>,
-        end: Span,
-    },
+    Parenthesized(ParenthesizedExpression),
     // @foo()
-    ErrorSuppress {
-        at: Span,
-        expr: Box<Self>,
-    },
+    ErrorSuppress(ErrorSuppressExpression),
+    // `foo`, `foo_bar`, etc
     Identifier(Identifier),
+    // `$foo`, `$foo_bar`, etc
     Variable(Variable),
     // include "foo.php"
-    Include {
-        include: Span,
-        path: Box<Self>,
-    },
+    Include(IncludeExpression),
     // include_once "foo.php"
-    IncludeOnce {
-        include_once: Span,
-        path: Box<Self>,
-    },
+    IncludeOnce(IncludeOnceExpression),
     // require "foo.php"
-    Require {
-        require: Span,
-        path: Box<Self>,
-    },
+    Require(RequireExpression),
     // require_once "foo.php"
-    RequireOnce {
-        require_once: Span,
-        path: Box<Self>,
-    },
+    RequireOnce(RequireOnceExpression),
     // `foo(1, 2, 3)`
-    FunctionCall {
-        target: Box<Self>,       // `foo`
-        arguments: ArgumentList, // `(1, 2, 3)`
-    },
+    FunctionCall(FunctionCallExpression),
     // `foo(...)`
-    FunctionClosureCreation {
-        target: Box<Self>,                // `foo`
-        placeholder: ArgumentPlaceholder, // `(...)`
-    },
+    FunctionClosureCreation(FunctionClosureCreationExpression),
     // `$foo->bar(1, 2, 3)`
-    MethodCall {
-        target: Box<Self>,       // `$foo`
-        arrow: Span,             // `->`
-        method: Box<Self>,       // `bar`
-        arguments: ArgumentList, // `(1, 2, 3)`
-    },
+    MethodCall(MethodCallExpression),
     // `$foo->bar(...)`
-    MethodClosureCreation {
-        target: Box<Self>,                // `$foo`
-        arrow: Span,                      // `->`
-        method: Box<Self>,                // `bar`
-        placeholder: ArgumentPlaceholder, // `(...)`
-    },
+    MethodClosureCreation(MethodClosureCreationExpression),
     // `$foo?->bar(1, 2, 3)`
-    NullsafeMethodCall {
-        target: Box<Self>,       // `$foo`
-        question_arrow: Span,    // `?->`
-        method: Box<Self>,       // `bar`
-        arguments: ArgumentList, // `(1, 2, 3)`
-    },
+    NullsafeMethodCall(NullsafeMethodCallExpression),
     // `Foo::bar(1, 2, 3)`
-    StaticMethodCall {
-        target: Box<Self>,       // `Foo`
-        double_colon: Span,      // `::`
-        method: Identifier,      // `bar`
-        arguments: ArgumentList, // `(1, 2, 3)`
-    },
+    StaticMethodCall(StaticMethodCallExpression),
     // `Foo::$bar(1, 2, 3)`
-    StaticVariableMethodCall {
-        target: Box<Self>,       // `Foo`
-        double_colon: Span,      // `::`
-        method: Variable,        // `$bar`
-        arguments: ArgumentList, // `(1, 2, 3)`
-    },
+    StaticVariableMethodCall(StaticVariableMethodCallExpression),
     // `Foo::bar(...)`
-    StaticMethodClosureCreation {
-        target: Box<Self>,                // `Foo`
-        double_colon: Span,               // `::`
-        method: Identifier,               // `bar`
-        placeholder: ArgumentPlaceholder, // `(...)`
-    },
+    StaticMethodClosureCreation(StaticMethodClosureCreationExpression),
     // `Foo::$bar(...)`
-    StaticVariableMethodClosureCreation {
-        target: Box<Self>,                // `Foo`
-        double_colon: Span,               // `::`
-        method: Variable,                 // `$bar`
-        placeholder: ArgumentPlaceholder, // `(...)`
-    },
+    StaticVariableMethodClosureCreation(StaticVariableMethodClosureCreationExpression),
     // `foo()->bar`
-    PropertyFetch {
-        target: Box<Self>,   // `foo()`
-        arrow: Span,         // `->`
-        property: Box<Self>, // `bar`
-    },
+    PropertyFetch(PropertyFetchExpression),
     // `foo()?->bar`
-    NullsafePropertyFetch {
-        target: Box<Self>,    // `foo()`
-        question_arrow: Span, // `?->`
-        property: Box<Self>,  // `bar`
-    },
+    NullsafePropertyFetch(NullsafePropertyFetchExpression),
     // `foo()::$bar`
-    StaticPropertyFetch {
-        target: Box<Self>,  // `foo()`
-        double_colon: Span, // `::`
-        property: Variable, // `$bar`
-    },
+    StaticPropertyFetch(StaticPropertyFetchExpression),
     // `foo()::bar` or `foo()::{$name}`
-    ConstantFetch {
-        target: Box<Self>,    // `foo()`
-        double_colon: Span,   // `::`
-        constant: Identifier, // `bar`
-    },
+    ConstantFetch(ConstantFetchExpression),
     // `static`
     Static,
     // `self`
@@ -592,375 +1092,234 @@ pub enum Expression {
     // `parent`
     Parent,
     // `[1, 2, 3]`
-    ShortArray {
-        start: Span,                      // `[`
-        items: CommaSeparated<ArrayItem>, // `1, 2, 3`
-        end: Span,                        // `]`
-    },
+    ShortArray(ShortArrayExpression),
     // `array(1, 2, 3)`
-    Array {
-        array: Span,                      // `array`
-        start: Span,                      // `(`
-        items: CommaSeparated<ArrayItem>, // `1, 2, 3`
-        end: Span,                        // `)`
-    },
+    Array(ArrayExpression),
     // list($a, $b)
-    List {
-        list: Span,            // `list`
-        start: Span,           // `(`
-        items: Vec<ListEntry>, // `$a, $b`
-        end: Span,             // `)`
-    },
+    List(ListExpression),
     // `function() {}`
-    Closure(Closure),
+    Closure(ClosureExpression),
     // `fn() => $foo`
-    ArrowFunction(ArrowFunction),
+    ArrowFunction(ArrowFunctionExpression),
     // `new Foo(1, 2, 3)`
-    New {
-        new: Span,                       // `new`
-        target: Box<Self>,               // `Foo`
-        arguments: Option<ArgumentList>, // `(1, 2, 3)`
-    },
+    New(NewExpression),
     // `"foo $bar foo"`
-    InterpolatedString {
-        parts: Vec<StringPart>,
-    },
+    InterpolatedString(InterpolatedStringExpression),
     // `<<<"EOT"` / `<<<EOT`
-    Heredoc {
-        parts: Vec<StringPart>,
-    },
+    Heredoc(HeredocExpression),
     // `<<<'EOT'`
-    Nowdoc {
-        value: ByteString,
-    },
+    Nowdoc(NowdocExpression),
     // ``foo``
-    ShellExec {
-        parts: Vec<StringPart>,
-    },
-    AnonymousClass(AnonymousClass),
-    Bool {
-        value: bool,
-    },
-    ArrayIndex {
-        array: Box<Self>,
-        left_bracket: Span,
-        index: Option<Box<Self>>,
-        right_bracket: Span,
-    },
+    ShellExec(ShellExecExpression),
+    // `new class { ... }`
+    AnonymousClass(AnonymousClassExpression),
+    // `true`, `false`
+    Bool(BoolExpression),
+    // `$foo[0]`
+    ArrayIndex(ArrayIndexExpression),
+    // `null`
     Null,
-    MagicConstant(MagicConstant),
+    // `__DIR__`, etc
+    MagicConstant(MagicConstantExpression),
     // `foo() ?: bar()`
-    ShortTernary {
-        condition: Box<Self>, // `foo()`
-        question_colon: Span, // `?:`
-        r#else: Box<Self>,    // `bar()`
-    },
+    ShortTernary(ShortTernaryExpression),
     // `foo() ? bar() : baz()`
-    Ternary {
-        condition: Box<Self>, // `foo()`
-        question: Span,       // `?`
-        then: Box<Self>,      // `bar()`
-        colon: Span,          // `:`
-        r#else: Box<Self>,    // `baz()`
-    },
+    Ternary(TernaryExpression),
     // `foo() ?? bar()`
-    Coalesce {
-        lhs: Box<Self>,
-        double_question: Span,
-        rhs: Box<Self>,
-    },
-    Clone {
-        target: Box<Self>,
-    },
-
-    Match {
-        keyword: Span,
-        left_parenthesis: Span,
-        condition: Box<Self>,
-        right_parenthesis: Span,
-        left_brace: Span,
-        default: Option<Box<DefaultMatchArm>>,
-        arms: Vec<MatchArm>,
-        right_brace: Span,
-    },
-    Throw {
-        value: Box<Self>,
-    },
-    Yield {
-        key: Option<Box<Self>>,
-        value: Option<Box<Self>>,
-    },
-    YieldFrom {
-        value: Box<Self>,
-    },
-    Cast {
-        cast: Span,
-        kind: CastKind,
-        value: Box<Self>,
-    },
+    Coalesce(CoalesceExpression),
+    // `clone $foo`
+    Clone(CloneExpression),
+    // `match ($foo) { ... }`
+    Match(MatchExpression),
+    // `throw new Exception`
+    Throw(ThrowExpression),
+    // `yield $foo`
+    Yield(YieldExpression),
+    // `yield from foo()`
+    YieldFrom(YieldFromExpression),
+    // `(int) "1"`, etc
+    Cast(CastExpression),
+    // ;
     Noop,
+}
+
+impl Node for EvalExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.argument.as_mut()]
+    }
+}
+
+impl Node for EmptyExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.argument.as_mut()]
+    }
+}
+
+impl Node for DieExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        if let Some(argument) = &mut self.argument {
+            vec![argument.as_mut()]
+        } else {
+            vec![]
+        }
+    }
+}
+
+impl Node for ExitExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        if let Some(argument) = &mut self.argument {
+            vec![argument.as_mut()]
+        } else {
+            vec![]
+        }
+    }
+}
+
+impl Node for IssetExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.arguments]
+    }
+}
+
+impl Node for UnsetExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.arguments]
+    }
+}
+
+impl Node for PrintExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        if let Some(argument) = &mut self.argument {
+            vec![argument.as_mut()]
+        } else if let Some(value) = &mut self.value {
+            vec![value.as_mut()]
+        } else {
+            vec![]
+        }
+    }
+}
+
+impl Node for ConcatExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.left.as_mut(), self.right.as_mut()]
+    }
+}
+
+impl Node for InstanceofExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.left.as_mut(), self.right.as_mut()]
+    }
+}
+
+impl Node for ReferenceExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.right.as_mut()]
+    }
+}
+
+impl Node for ParenthesizedExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.expr.as_mut()]
+    }
+}
+
+impl Node for ErrorSuppressExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.expr.as_mut()]
+    }
+}
+
+impl Node for IncludeExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.path.as_mut()]
+    }
+}
+
+impl Node for IncludeOnceExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.path.as_mut()]
+    }
+}
+
+impl Node for RequireExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.path.as_mut()]
+    }
+}
+
+impl Node for RequireOnceExpression {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.path.as_mut()]
+    }
 }
 
 impl Node for Expression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            Expression::Eval { eval: _, argument } => vec![argument.as_mut()],
-            Expression::Empty { empty: _, argument } => vec![argument.as_mut()],
-            Expression::Die { die: _, argument } => {
-                if let Some(argument) = argument {
-                    vec![argument.as_mut()]
-                } else {
-                    vec![]
-                }
-            }
-            Expression::Exit { exit: _, argument } => {
-                if let Some(argument) = argument {
-                    vec![argument.as_mut()]
-                } else {
-                    vec![]
-                }
-            }
-            Expression::Isset {
-                isset: _,
-                arguments,
-            } => vec![arguments],
-            Expression::Unset {
-                unset: _,
-                arguments,
-            } => vec![arguments],
-            Expression::Print {
-                print: _,
-                value,
-                argument,
-            } => {
-                if let Some(argument) = argument {
-                    vec![argument.as_mut()]
-                } else if let Some(value) = value {
-                    vec![value.as_mut()]
-                } else {
-                    vec![]
-                }
-            }
+            Expression::Eval(expression) => vec![expression],
+            Expression::Empty(expression) => vec![expression],
+            Expression::Die(expression) => vec![expression],
+            Expression::Exit(expression) => vec![expression],
+            Expression::Isset(expression) => vec![expression],
+            Expression::Unset(expression) => vec![expression],
+            Expression::Print(expression) => vec![expression],
             Expression::Literal(literal) => vec![literal],
             Expression::ArithmeticOperation(operation) => vec![operation],
             Expression::AssignmentOperation(operation) => vec![operation],
             Expression::BitwiseOperation(operation) => vec![operation],
             Expression::ComparisonOperation(operation) => vec![operation],
             Expression::LogicalOperation(operation) => vec![operation],
-            Expression::Concat {
-                left,
-                dot: _,
-                right,
-            } => vec![left.as_mut(), right.as_mut()],
-            Expression::Instanceof {
-                left,
-                instanceof: _,
-                right,
-            } => vec![left.as_mut(), right.as_mut()],
-            Expression::Reference {
-                ampersand: _,
-                right,
-            } => vec![right.as_mut()],
-            Expression::Parenthesized {
-                start: _,
-                expr,
-                end: _,
-            } => vec![expr.as_mut()],
-            Expression::ErrorSuppress { at: _, expr } => vec![expr.as_mut()],
+            Expression::Concat(expression) => vec![expression],
+            Expression::Instanceof(expression) => vec![expression],
+            Expression::Reference(expression) => vec![expression],
+            Expression::Parenthesized(expression) => vec![expression],
+            Expression::ErrorSuppress(expression) => vec![expression],
             Expression::Identifier(identifier) => vec![identifier],
             Expression::Variable(variable) => vec![variable],
-            Expression::Include { include: _, path } => vec![path.as_mut()],
-            Expression::IncludeOnce {
-                include_once: _,
-                path,
-            } => vec![path.as_mut()],
-            Expression::Require { require: _, path } => vec![path.as_mut()],
-            Expression::RequireOnce {
-                require_once: _,
-                path,
-            } => vec![path.as_mut()],
-            Expression::FunctionCall { target, arguments } => vec![target.as_mut(), arguments],
-            Expression::FunctionClosureCreation {
-                target,
-                placeholder: _,
-            } => vec![target.as_mut()],
-            Expression::MethodCall {
-                target,
-                arrow: _,
-                method,
-                arguments,
-            } => vec![target.as_mut(), method.as_mut(), arguments],
-            Expression::MethodClosureCreation {
-                target,
-                arrow: _,
-                method,
-                placeholder: _,
-            } => vec![target.as_mut(), method.as_mut()],
-            Expression::NullsafeMethodCall {
-                target,
-                question_arrow: _,
-                method,
-                arguments,
-            } => vec![target.as_mut(), method.as_mut(), arguments],
-            Expression::StaticMethodCall {
-                target,
-                double_colon: _,
-                method,
-                arguments,
-            } => vec![target.as_mut(), method, arguments],
-            Expression::StaticVariableMethodCall {
-                target,
-                double_colon: _,
-                method,
-                arguments,
-            } => vec![target.as_mut(), method, arguments],
-            Expression::StaticMethodClosureCreation {
-                target,
-                double_colon: _,
-                method,
-                placeholder: _,
-            } => vec![target.as_mut(), method],
-            Expression::StaticVariableMethodClosureCreation {
-                target,
-                double_colon: _,
-                method,
-                placeholder: _,
-            } => vec![target.as_mut(), method],
-            Expression::PropertyFetch {
-                target,
-                arrow: _,
-                property,
-            } => vec![target.as_mut(), property.as_mut()],
-            Expression::NullsafePropertyFetch {
-                target,
-                question_arrow: _,
-                property,
-            } => vec![target.as_mut(), property.as_mut()],
-            Expression::StaticPropertyFetch {
-                target,
-                double_colon: _,
-                property,
-            } => vec![target.as_mut(), property],
-            Expression::ConstantFetch {
-                target,
-                double_colon: _,
-                constant,
-            } => vec![target.as_mut(), constant],
+            Expression::Include(expression) => vec![expression],
+            Expression::IncludeOnce(expression) => vec![expression],
+            Expression::Require(expression) => vec![expression],
+            Expression::RequireOnce(expression) => vec![expression],
+            Expression::FunctionCall(expression) => vec![expression],
+            Expression::FunctionClosureCreation(expression) => vec![expression],
+            Expression::MethodCall(expression) => vec![expression],
+            Expression::MethodClosureCreation(expression) => vec![expression],
+            Expression::NullsafeMethodCall(expression) => vec![expression],
+            Expression::StaticMethodCall(expression) => vec![expression],
+            Expression::StaticVariableMethodCall(expression) => vec![expression],
+            Expression::StaticMethodClosureCreation(expression) => vec![expression],
+            Expression::StaticVariableMethodClosureCreation(expression) => vec![expression],
+            Expression::PropertyFetch(expression) => vec![expression],
+            Expression::NullsafePropertyFetch(expression) => vec![expression],
+            Expression::StaticPropertyFetch(expression) => vec![expression],
+            Expression::ConstantFetch(expression) => vec![expression],
             Expression::Static => vec![],
             Expression::Self_ => vec![],
             Expression::Parent => vec![],
-            Expression::ShortArray {
-                start: _,
-                items,
-                end: _,
-            } => vec![items],
-            Expression::Array {
-                array: _,
-                start: _,
-                items,
-                end: _,
-            } => vec![items],
-            Expression::List {
-                list: _,
-                start: _,
-                items,
-                end: _,
-            } => items.iter_mut().map(|item| item as &mut dyn Node).collect(),
-            Expression::Closure(closure) => closure.children(),
-            Expression::ArrowFunction(function) => function.children(),
-            Expression::New {
-                new: _,
-                target,
-                arguments,
-            } => {
-                let mut children: Vec<&mut dyn Node> = vec![target.as_mut()];
-                if let Some(arguments) = arguments {
-                    children.push(arguments);
-                }
-                children
-            }
-            Expression::InterpolatedString { parts } => {
-                parts.iter_mut().map(|part| part as &mut dyn Node).collect()
-            }
-            Expression::Heredoc { parts } => {
-                parts.iter_mut().map(|part| part as &mut dyn Node).collect()
-            }
-            Expression::Nowdoc { value: _ } => vec![],
-            Expression::ShellExec { parts } => {
-                parts.iter_mut().map(|part| part as &mut dyn Node).collect()
-            }
-            Expression::AnonymousClass(class) => class.children(),
-            Expression::Bool { value: _ } => vec![],
-            Expression::ArrayIndex {
-                array: _,
-                left_bracket: _,
-                index,
-                right_bracket: _,
-            } => {
-                let mut children: Vec<&mut dyn Node> = vec![];
-                if let Some(index) = index {
-                    children.push(index.as_mut());
-                }
-                children
-            }
+            Expression::ShortArray(expression) => vec![expression],
+            Expression::Array(expression) => vec![expression],
+            Expression::List(expression) => vec![expression],
+            Expression::Closure(expression) => vec![expression],
+            Expression::ArrowFunction(expression) => vec![expression],
+            Expression::New(expression) => vec![expression],
+            Expression::InterpolatedString(expression) => vec![expression],
+            Expression::Heredoc(expression) => vec![expression],
+            Expression::Nowdoc(expression) => vec![expression],
+            Expression::ShellExec(expression) => vec![expression],
+            Expression::AnonymousClass(expression) => vec![expression],
+            Expression::Bool(_) => vec![],
+            Expression::ArrayIndex(expression) => vec![expression],
             Expression::Null => vec![],
-            Expression::MagicConstant(constant) => constant.children(),
-            Expression::ShortTernary {
-                condition,
-                question_colon: _,
-                r#else,
-            } => vec![condition.as_mut(), r#else.as_mut()],
-            Expression::Ternary {
-                condition,
-                question: _,
-                then,
-                colon: _,
-                r#else,
-            } => vec![condition.as_mut(), then.as_mut(), r#else.as_mut()],
-            Expression::Coalesce {
-                lhs,
-                double_question: _,
-                rhs,
-            } => vec![lhs.as_mut(), rhs.as_mut()],
-            Expression::Clone { target } => vec![target.as_mut()],
-            Expression::Match {
-                keyword: _,
-                left_parenthesis: _,
-                condition,
-                right_parenthesis: _,
-                left_brace: _,
-                default,
-                arms,
-                right_brace: _,
-            } => {
-                let mut children: Vec<&mut dyn Node> = vec![condition.as_mut()];
-                if let Some(default) = default {
-                    children.push(default.as_mut());
-                }
-                children.extend(
-                    arms.iter_mut()
-                        .map(|arm| arm as &mut dyn Node)
-                        .collect::<Vec<&mut dyn Node>>(),
-                );
-                children
-            }
-            Expression::Throw { value } => vec![value.as_mut()],
-            Expression::Yield { key, value } => {
-                let mut children: Vec<&mut dyn Node> = vec![];
-                if let Some(key) = key {
-                    children.push(key.as_mut());
-                }
-                if let Some(value) = value {
-                    children.push(value.as_mut());
-                }
-                children
-            }
-            Expression::YieldFrom { value } => vec![value.as_mut()],
-            Expression::Cast {
-                cast: _,
-                kind: _,
-                value,
-            } => vec![value.as_mut()],
+            Expression::MagicConstant(constant) => vec![constant],
+            Expression::ShortTernary(expression) => vec![expression],
+            Expression::Ternary(expression) => vec![expression],
+            Expression::Coalesce(expression) => vec![expression],
+            Expression::Clone(expression) => vec![expression],
+            Expression::Match(expression) => vec![expression],
+            Expression::Throw(expression) => vec![expression],
+            Expression::Yield(expression) => vec![expression],
+            Expression::YieldFrom(expression) => vec![expression],
+            Expression::Cast(expression) => vec![expression],
             Expression::Noop => vec![],
         }
     }
@@ -1002,7 +1361,7 @@ impl Node for MatchArm {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
-pub enum MagicConstant {
+pub enum MagicConstantExpression {
     Directory(Span),
     File(Span),
     Line(Span),
@@ -1014,7 +1373,7 @@ pub enum MagicConstant {
     CompilerHaltOffset(Span),
 }
 
-impl Node for MagicConstant {
+impl Node for MagicConstantExpression {
     //
 }
 

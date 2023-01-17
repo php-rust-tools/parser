@@ -8,9 +8,11 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: ShellExec {
-                parts: [],
-            },
+            expression: ShellExec(
+                ShellExecExpression {
+                    parts: [],
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 3,

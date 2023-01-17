@@ -27,36 +27,38 @@
                         column: 6,
                         position: 13,
                     },
-                    right: FunctionCall {
-                        target: Identifier(
-                            SimpleIdentifier(
-                                SimpleIdentifier {
-                                    span: Span {
-                                        line: 3,
-                                        column: 8,
-                                        position: 15,
+                    right: FunctionCall(
+                        FunctionCallExpression {
+                            target: Identifier(
+                                SimpleIdentifier(
+                                    SimpleIdentifier {
+                                        span: Span {
+                                            line: 3,
+                                            column: 8,
+                                            position: 15,
+                                        },
+                                        value: "give_me_foo",
                                     },
-                                    value: "give_me_foo",
-                                },
+                                ),
                             ),
-                        ),
-                        arguments: ArgumentList {
-                            comments: CommentGroup {
-                                comments: [],
-                            },
-                            left_parenthesis: Span {
-                                line: 3,
-                                column: 19,
-                                position: 26,
-                            },
-                            arguments: [],
-                            right_parenthesis: Span {
-                                line: 3,
-                                column: 20,
-                                position: 27,
+                            arguments: ArgumentList {
+                                comments: CommentGroup {
+                                    comments: [],
+                                },
+                                left_parenthesis: Span {
+                                    line: 3,
+                                    column: 19,
+                                    position: 26,
+                                },
+                                arguments: [],
+                                right_parenthesis: Span {
+                                    line: 3,
+                                    column: 20,
+                                    position: 27,
+                                },
                             },
                         },
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(
@@ -89,169 +91,177 @@
                         column: 4,
                         position: 34,
                     },
-                    right: ShortArray {
-                        start: Span {
-                            line: 5,
-                            column: 6,
-                            position: 36,
-                        },
-                        items: CommaSeparated {
-                            inner: [
-                                KeyValue {
-                                    key: Literal(
-                                        String(
-                                            LiteralString {
-                                                value: "'single'",
-                                                span: Span {
-                                                    line: 6,
-                                                    column: 5,
-                                                    position: 42,
-                                                },
-                                            },
-                                        ),
-                                    ),
-                                    double_arrow: Span {
-                                        line: 6,
-                                        column: 14,
-                                        position: 51,
-                                    },
-                                    value: Instanceof {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
+                    right: ShortArray(
+                        ShortArrayExpression {
+                            start: Span {
+                                line: 5,
+                                column: 6,
+                                position: 36,
+                            },
+                            items: CommaSeparated {
+                                inner: [
+                                    KeyValue {
+                                        key: Literal(
+                                            String(
+                                                LiteralString {
+                                                    value: "'single'",
                                                     span: Span {
                                                         line: 6,
-                                                        column: 17,
-                                                        position: 54,
+                                                        column: 5,
+                                                        position: 42,
                                                     },
-                                                    name: "$foo",
                                                 },
                                             ),
                                         ),
-                                        instanceof: Span {
+                                        double_arrow: Span {
                                             line: 6,
-                                            column: 22,
-                                            position: 59,
+                                            column: 14,
+                                            position: 51,
                                         },
-                                        right: Identifier(
-                                            SimpleIdentifier(
-                                                SimpleIdentifier {
+                                        value: Instanceof(
+                                            InstanceofExpression {
+                                                left: Variable(
+                                                    SimpleVariable(
+                                                        SimpleVariable {
+                                                            span: Span {
+                                                                line: 6,
+                                                                column: 17,
+                                                                position: 54,
+                                                            },
+                                                            name: "$foo",
+                                                        },
+                                                    ),
+                                                ),
+                                                instanceof: Span {
+                                                    line: 6,
+                                                    column: 22,
+                                                    position: 59,
+                                                },
+                                                right: Identifier(
+                                                    SimpleIdentifier(
+                                                        SimpleIdentifier {
+                                                            span: Span {
+                                                                line: 6,
+                                                                column: 33,
+                                                                position: 70,
+                                                            },
+                                                            value: "Foo",
+                                                        },
+                                                    ),
+                                                ),
+                                            },
+                                        ),
+                                    },
+                                    KeyValue {
+                                        key: Literal(
+                                            String(
+                                                LiteralString {
+                                                    value: "'multiple'",
                                                     span: Span {
-                                                        line: 6,
-                                                        column: 33,
-                                                        position: 70,
+                                                        line: 7,
+                                                        column: 5,
+                                                        position: 79,
                                                     },
-                                                    value: "Foo",
                                                 },
                                             ),
                                         ),
-                                    },
-                                },
-                                KeyValue {
-                                    key: Literal(
-                                        String(
-                                            LiteralString {
-                                                value: "'multiple'",
-                                                span: Span {
+                                        double_arrow: Span {
+                                            line: 7,
+                                            column: 16,
+                                            position: 90,
+                                        },
+                                        value: LogicalOperation(
+                                            And {
+                                                left: Instanceof(
+                                                    InstanceofExpression {
+                                                        left: Variable(
+                                                            SimpleVariable(
+                                                                SimpleVariable {
+                                                                    span: Span {
+                                                                        line: 7,
+                                                                        column: 19,
+                                                                        position: 93,
+                                                                    },
+                                                                    name: "$foo",
+                                                                },
+                                                            ),
+                                                        ),
+                                                        instanceof: Span {
+                                                            line: 7,
+                                                            column: 24,
+                                                            position: 98,
+                                                        },
+                                                        right: Identifier(
+                                                            SimpleIdentifier(
+                                                                SimpleIdentifier {
+                                                                    span: Span {
+                                                                        line: 7,
+                                                                        column: 35,
+                                                                        position: 109,
+                                                                    },
+                                                                    value: "Bar",
+                                                                },
+                                                            ),
+                                                        ),
+                                                    },
+                                                ),
+                                                double_ampersand: Span {
                                                     line: 7,
-                                                    column: 5,
-                                                    position: 79,
+                                                    column: 39,
+                                                    position: 113,
                                                 },
+                                                right: Instanceof(
+                                                    InstanceofExpression {
+                                                        left: Variable(
+                                                            SimpleVariable(
+                                                                SimpleVariable {
+                                                                    span: Span {
+                                                                        line: 7,
+                                                                        column: 42,
+                                                                        position: 116,
+                                                                    },
+                                                                    name: "$foo",
+                                                                },
+                                                            ),
+                                                        ),
+                                                        instanceof: Span {
+                                                            line: 7,
+                                                            column: 47,
+                                                            position: 121,
+                                                        },
+                                                        right: Identifier(
+                                                            SimpleIdentifier(
+                                                                SimpleIdentifier {
+                                                                    span: Span {
+                                                                        line: 7,
+                                                                        column: 58,
+                                                                        position: 132,
+                                                                    },
+                                                                    value: "Baz",
+                                                                },
+                                                            ),
+                                                        ),
+                                                    },
+                                                ),
                                             },
                                         ),
-                                    ),
-                                    double_arrow: Span {
-                                        line: 7,
-                                        column: 16,
-                                        position: 90,
                                     },
-                                    value: LogicalOperation(
-                                        And {
-                                            left: Instanceof {
-                                                left: Variable(
-                                                    SimpleVariable(
-                                                        SimpleVariable {
-                                                            span: Span {
-                                                                line: 7,
-                                                                column: 19,
-                                                                position: 93,
-                                                            },
-                                                            name: "$foo",
-                                                        },
-                                                    ),
-                                                ),
-                                                instanceof: Span {
-                                                    line: 7,
-                                                    column: 24,
-                                                    position: 98,
-                                                },
-                                                right: Identifier(
-                                                    SimpleIdentifier(
-                                                        SimpleIdentifier {
-                                                            span: Span {
-                                                                line: 7,
-                                                                column: 35,
-                                                                position: 109,
-                                                            },
-                                                            value: "Bar",
-                                                        },
-                                                    ),
-                                                ),
-                                            },
-                                            double_ampersand: Span {
-                                                line: 7,
-                                                column: 39,
-                                                position: 113,
-                                            },
-                                            right: Instanceof {
-                                                left: Variable(
-                                                    SimpleVariable(
-                                                        SimpleVariable {
-                                                            span: Span {
-                                                                line: 7,
-                                                                column: 42,
-                                                                position: 116,
-                                                            },
-                                                            name: "$foo",
-                                                        },
-                                                    ),
-                                                ),
-                                                instanceof: Span {
-                                                    line: 7,
-                                                    column: 47,
-                                                    position: 121,
-                                                },
-                                                right: Identifier(
-                                                    SimpleIdentifier(
-                                                        SimpleIdentifier {
-                                                            span: Span {
-                                                                line: 7,
-                                                                column: 58,
-                                                                position: 132,
-                                                            },
-                                                            value: "Baz",
-                                                        },
-                                                    ),
-                                                ),
-                                            },
-                                        },
-                                    ),
-                                },
-                            ],
-                            commas: [
-                                Span {
-                                    line: 6,
-                                    column: 36,
-                                    position: 73,
-                                },
-                            ],
+                                ],
+                                commas: [
+                                    Span {
+                                        line: 6,
+                                        column: 36,
+                                        position: 73,
+                                    },
+                                ],
+                            },
+                            end: Span {
+                                line: 8,
+                                column: 1,
+                                position: 136,
+                            },
                         },
-                        end: Span {
-                            line: 8,
-                            column: 1,
-                            position: 136,
-                        },
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(

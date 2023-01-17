@@ -71,47 +71,49 @@
                         column: 4,
                         position: 20,
                     },
-                    right: Match {
-                        keyword: Span {
-                            line: 6,
-                            column: 6,
-                            position: 22,
-                        },
-                        left_parenthesis: Span {
-                            line: 6,
-                            column: 12,
-                            position: 28,
-                        },
-                        condition: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 6,
-                                        column: 13,
-                                        position: 29,
+                    right: Match(
+                        MatchExpression {
+                            keyword: Span {
+                                line: 6,
+                                column: 6,
+                                position: 22,
+                            },
+                            left_parenthesis: Span {
+                                line: 6,
+                                column: 12,
+                                position: 28,
+                            },
+                            condition: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 6,
+                                            column: 13,
+                                            position: 29,
+                                        },
+                                        name: "$a",
                                     },
-                                    name: "$a",
-                                },
+                                ),
                             ),
-                        ),
-                        right_parenthesis: Span {
-                            line: 6,
-                            column: 15,
-                            position: 31,
+                            right_parenthesis: Span {
+                                line: 6,
+                                column: 15,
+                                position: 31,
+                            },
+                            left_brace: Span {
+                                line: 6,
+                                column: 17,
+                                position: 33,
+                            },
+                            default: None,
+                            arms: [],
+                            right_brace: Span {
+                                line: 7,
+                                column: 1,
+                                position: 35,
+                            },
                         },
-                        left_brace: Span {
-                            line: 6,
-                            column: 17,
-                            position: 33,
-                        },
-                        default: None,
-                        arms: [],
-                        right_brace: Span {
-                            line: 7,
-                            column: 1,
-                            position: 35,
-                        },
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(

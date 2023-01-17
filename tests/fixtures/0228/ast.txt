@@ -8,13 +8,15 @@
     ),
     Expression(
         ExpressionStatement {
-            expression: Heredoc {
-                parts: [
-                    Literal(
-                        "Hello, world!\n",
-                    ),
-                ],
-            },
+            expression: Heredoc(
+                HeredocExpression {
+                    parts: [
+                        Literal(
+                            "Hello, world!\n",
+                        ),
+                    ],
+                },
+            ),
             ending: Semicolon(
                 Span {
                     line: 6,

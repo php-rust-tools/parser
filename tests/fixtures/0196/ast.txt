@@ -71,106 +71,108 @@
                         column: 4,
                         position: 20,
                     },
-                    right: Match {
-                        keyword: Span {
-                            line: 6,
-                            column: 6,
-                            position: 22,
-                        },
-                        left_parenthesis: Span {
-                            line: 6,
-                            column: 12,
-                            position: 28,
-                        },
-                        condition: Variable(
-                            SimpleVariable(
-                                SimpleVariable {
-                                    span: Span {
-                                        line: 6,
-                                        column: 13,
-                                        position: 29,
-                                    },
-                                    name: "$a",
-                                },
-                            ),
-                        ),
-                        right_parenthesis: Span {
-                            line: 6,
-                            column: 15,
-                            position: 31,
-                        },
-                        left_brace: Span {
-                            line: 6,
-                            column: 17,
-                            position: 33,
-                        },
-                        default: None,
-                        arms: [
-                            MatchArm {
-                                conditions: [
-                                    Literal(
-                                        Integer(
-                                            LiteralInteger {
-                                                value: "1",
-                                                span: Span {
-                                                    line: 7,
-                                                    column: 5,
-                                                    position: 39,
-                                                },
-                                            },
-                                        ),
-                                    ),
-                                    Literal(
-                                        Integer(
-                                            LiteralInteger {
-                                                value: "2",
-                                                span: Span {
-                                                    line: 7,
-                                                    column: 7,
-                                                    position: 41,
-                                                },
-                                            },
-                                        ),
-                                    ),
-                                    Literal(
-                                        Integer(
-                                            LiteralInteger {
-                                                value: "3",
-                                                span: Span {
-                                                    line: 7,
-                                                    column: 9,
-                                                    position: 43,
-                                                },
-                                            },
-                                        ),
-                                    ),
-                                    Literal(
-                                        Integer(
-                                            LiteralInteger {
-                                                value: "4",
-                                                span: Span {
-                                                    line: 7,
-                                                    column: 11,
-                                                    position: 45,
-                                                },
-                                            },
-                                        ),
-                                    ),
-                                ],
-                                arrow: Span {
-                                    line: 7,
-                                    column: 13,
-                                    position: 47,
-                                },
-                                body: Null,
+                    right: Match(
+                        MatchExpression {
+                            keyword: Span {
+                                line: 6,
+                                column: 6,
+                                position: 22,
                             },
-                        ],
-                        right_brace: Span {
-                            line: 8,
-                            column: 1,
-                            position: 55,
+                            left_parenthesis: Span {
+                                line: 6,
+                                column: 12,
+                                position: 28,
+                            },
+                            condition: Variable(
+                                SimpleVariable(
+                                    SimpleVariable {
+                                        span: Span {
+                                            line: 6,
+                                            column: 13,
+                                            position: 29,
+                                        },
+                                        name: "$a",
+                                    },
+                                ),
+                            ),
+                            right_parenthesis: Span {
+                                line: 6,
+                                column: 15,
+                                position: 31,
+                            },
+                            left_brace: Span {
+                                line: 6,
+                                column: 17,
+                                position: 33,
+                            },
+                            default: None,
+                            arms: [
+                                MatchArm {
+                                    conditions: [
+                                        Literal(
+                                            Integer(
+                                                LiteralInteger {
+                                                    value: "1",
+                                                    span: Span {
+                                                        line: 7,
+                                                        column: 5,
+                                                        position: 39,
+                                                    },
+                                                },
+                                            ),
+                                        ),
+                                        Literal(
+                                            Integer(
+                                                LiteralInteger {
+                                                    value: "2",
+                                                    span: Span {
+                                                        line: 7,
+                                                        column: 7,
+                                                        position: 41,
+                                                    },
+                                                },
+                                            ),
+                                        ),
+                                        Literal(
+                                            Integer(
+                                                LiteralInteger {
+                                                    value: "3",
+                                                    span: Span {
+                                                        line: 7,
+                                                        column: 9,
+                                                        position: 43,
+                                                    },
+                                                },
+                                            ),
+                                        ),
+                                        Literal(
+                                            Integer(
+                                                LiteralInteger {
+                                                    value: "4",
+                                                    span: Span {
+                                                        line: 7,
+                                                        column: 11,
+                                                        position: 45,
+                                                    },
+                                                },
+                                            ),
+                                        ),
+                                    ],
+                                    arrow: Span {
+                                        line: 7,
+                                        column: 13,
+                                        position: 47,
+                                    },
+                                    body: Null,
+                                },
+                            ],
+                            right_brace: Span {
+                                line: 8,
+                                column: 1,
+                                position: 55,
+                            },
                         },
-                    },
+                    ),
                 },
             ),
             ending: Semicolon(
