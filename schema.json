@@ -3830,10 +3830,17 @@
         {
           "type": "object",
           "required": [
-            "noop"
+            "type",
+            "value"
           ],
           "properties": {
-            "noop": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "noop"
+              ]
+            },
+            "value": {
               "type": "object",
               "required": [
                 "semicolon"
@@ -3844,16 +3851,22 @@
                 }
               }
             }
-          },
-          "additionalProperties": false
+          }
         },
         {
           "type": "object",
           "required": [
-            "braced"
+            "type",
+            "value"
           ],
           "properties": {
-            "braced": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "braced"
+              ]
+            },
+            "value": {
               "type": "object",
               "required": [
                 "left_brace",
@@ -3875,16 +3888,22 @@
                 }
               }
             }
-          },
-          "additionalProperties": false
+          }
         },
         {
           "type": "object",
           "required": [
-            "expression"
+            "type",
+            "value"
           ],
           "properties": {
-            "expression": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "expression"
+              ]
+            },
+            "value": {
               "type": "object",
               "required": [
                 "expression",
@@ -3899,16 +3918,22 @@
                 }
               }
             }
-          },
-          "additionalProperties": false
+          }
         },
         {
           "type": "object",
           "required": [
-            "block"
+            "type",
+            "value"
           ],
           "properties": {
-            "block": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "block"
+              ]
+            },
+            "value": {
               "type": "object",
               "required": [
                 "colon",
@@ -3940,8 +3965,7 @@
                 }
               }
             }
-          },
-          "additionalProperties": false
+          }
         }
       ]
     },

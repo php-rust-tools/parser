@@ -41,7 +41,7 @@ impl Node for DeclareEntryGroup {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum DeclareBody {
     // declaration is terminated with `;`
     Noop {
