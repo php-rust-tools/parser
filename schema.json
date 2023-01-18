@@ -5654,9 +5654,16 @@
         {
           "type": "object",
           "required": [
+            "type",
             "value"
           ],
           "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "value"
+              ]
+            },
             "value": {
               "type": "object",
               "required": [
@@ -5686,16 +5693,22 @@
                 }
               }
             }
-          },
-          "additionalProperties": false
+          }
         },
         {
           "type": "object",
           "required": [
-            "key_and_value"
+            "type",
+            "value"
           ],
           "properties": {
-            "key_and_value": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "key_and_value"
+              ]
+            },
+            "value": {
               "type": "object",
               "required": [
                 "as",
@@ -5732,8 +5745,7 @@
                 }
               }
             }
-          },
-          "additionalProperties": false
+          }
         }
       ]
     },
