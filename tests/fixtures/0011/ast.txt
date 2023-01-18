@@ -32,63 +32,67 @@
                             position: 13,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 3,
-                                                column: 8,
-                                                position: 14,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 3,
+                                                    column: 8,
+                                                    position: 14,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: ComparisonOperation(
+                                        Equal {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 3,
+                                                            column: 13,
+                                                            position: 19,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            double_equals: Span {
+                                                line: 3,
+                                                column: 16,
+                                                position: 22,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 3,
+                                                            column: 19,
+                                                            position: 25,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: ComparisonOperation(
-                                    Equal {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 3,
-                                                        column: 13,
-                                                        position: 19,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        double_equals: Span {
-                                            line: 3,
-                                            column: 16,
-                                            position: 22,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 3,
-                                                        column: 19,
-                                                        position: 25,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 3,
@@ -133,63 +137,67 @@
                             position: 36,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 4,
-                                                column: 8,
-                                                position: 37,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 4,
+                                                    column: 8,
+                                                    position: 37,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: ComparisonOperation(
+                                        Identical {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 4,
+                                                            column: 13,
+                                                            position: 42,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            triple_equals: Span {
+                                                line: 4,
+                                                column: 16,
+                                                position: 45,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 4,
+                                                            column: 20,
+                                                            position: 49,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: ComparisonOperation(
-                                    Identical {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 4,
-                                                        column: 13,
-                                                        position: 42,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        triple_equals: Span {
-                                            line: 4,
-                                            column: 16,
-                                            position: 45,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 4,
-                                                        column: 20,
-                                                        position: 49,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 4,
@@ -234,63 +242,67 @@
                             position: 60,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 5,
-                                                column: 8,
-                                                position: 61,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 5,
+                                                    column: 8,
+                                                    position: 61,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: ComparisonOperation(
+                                        NotEqual {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 5,
+                                                            column: 13,
+                                                            position: 66,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            bang_equals: Span {
+                                                line: 5,
+                                                column: 16,
+                                                position: 69,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 5,
+                                                            column: 19,
+                                                            position: 72,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: ComparisonOperation(
-                                    NotEqual {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 5,
-                                                        column: 13,
-                                                        position: 66,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        bang_equals: Span {
-                                            line: 5,
-                                            column: 16,
-                                            position: 69,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 5,
-                                                        column: 19,
-                                                        position: 72,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 5,
@@ -335,63 +347,67 @@
                             position: 83,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 6,
-                                                column: 8,
-                                                position: 84,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 6,
+                                                    column: 8,
+                                                    position: 84,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: ComparisonOperation(
+                                        NotIdentical {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 6,
+                                                            column: 13,
+                                                            position: 89,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            bang_double_equals: Span {
+                                                line: 6,
+                                                column: 16,
+                                                position: 92,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 6,
+                                                            column: 20,
+                                                            position: 96,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: ComparisonOperation(
-                                    NotIdentical {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 6,
-                                                        column: 13,
-                                                        position: 89,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        bang_double_equals: Span {
-                                            line: 6,
-                                            column: 16,
-                                            position: 92,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 6,
-                                                        column: 20,
-                                                        position: 96,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 6,
@@ -436,63 +452,67 @@
                             position: 107,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 7,
-                                                column: 8,
-                                                position: 108,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 7,
+                                                    column: 8,
+                                                    position: 108,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: ArithmeticOperation(
+                                        Addition {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 7,
+                                                            column: 13,
+                                                            position: 113,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            plus: Span {
+                                                line: 7,
+                                                column: 16,
+                                                position: 116,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 7,
+                                                            column: 18,
+                                                            position: 118,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: ArithmeticOperation(
-                                    Addition {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 7,
-                                                        column: 13,
-                                                        position: 113,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        plus: Span {
-                                            line: 7,
-                                            column: 16,
-                                            position: 116,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 7,
-                                                        column: 18,
-                                                        position: 118,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 7,
@@ -537,63 +557,67 @@
                             position: 129,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 8,
-                                                column: 8,
-                                                position: 130,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 8,
+                                                    column: 8,
+                                                    position: 130,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: ArithmeticOperation(
+                                        Subtraction {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 8,
+                                                            column: 13,
+                                                            position: 135,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            minus: Span {
+                                                line: 8,
+                                                column: 16,
+                                                position: 138,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 8,
+                                                            column: 18,
+                                                            position: 140,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: ArithmeticOperation(
-                                    Subtraction {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 8,
-                                                        column: 13,
-                                                        position: 135,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        minus: Span {
-                                            line: 8,
-                                            column: 16,
-                                            position: 138,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 8,
-                                                        column: 18,
-                                                        position: 140,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 8,
@@ -638,63 +662,67 @@
                             position: 151,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 9,
-                                                column: 8,
-                                                position: 152,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 9,
+                                                    column: 8,
+                                                    position: 152,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: ArithmeticOperation(
+                                        Division {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 9,
+                                                            column: 13,
+                                                            position: 157,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            slash: Span {
+                                                line: 9,
+                                                column: 16,
+                                                position: 160,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 9,
+                                                            column: 18,
+                                                            position: 162,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: ArithmeticOperation(
-                                    Division {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 9,
-                                                        column: 13,
-                                                        position: 157,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        slash: Span {
-                                            line: 9,
-                                            column: 16,
-                                            position: 160,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 9,
-                                                        column: 18,
-                                                        position: 162,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 9,
@@ -739,63 +767,67 @@
                             position: 173,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 10,
-                                                column: 8,
-                                                position: 174,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 10,
+                                                    column: 8,
+                                                    position: 174,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: BitwiseOperation(
+                                        Xor {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 10,
+                                                            column: 13,
+                                                            position: 179,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            xor: Span {
+                                                line: 10,
+                                                column: 16,
+                                                position: 182,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 10,
+                                                            column: 18,
+                                                            position: 184,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: BitwiseOperation(
-                                    Xor {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 10,
-                                                        column: 13,
-                                                        position: 179,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        xor: Span {
-                                            line: 10,
-                                            column: 16,
-                                            position: 182,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 10,
-                                                        column: 18,
-                                                        position: 184,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 10,
@@ -840,63 +872,67 @@
                             position: 195,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 11,
-                                                column: 8,
-                                                position: 196,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 11,
+                                                    column: 8,
+                                                    position: 196,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: ArithmeticOperation(
+                                        Multiplication {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 11,
+                                                            column: 13,
+                                                            position: 201,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            asterisk: Span {
+                                                line: 11,
+                                                column: 16,
+                                                position: 204,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 11,
+                                                            column: 18,
+                                                            position: 206,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: ArithmeticOperation(
-                                    Multiplication {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 11,
-                                                        column: 13,
-                                                        position: 201,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        asterisk: Span {
-                                            line: 11,
-                                            column: 16,
-                                            position: 204,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 11,
-                                                        column: 18,
-                                                        position: 206,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 11,
@@ -941,63 +977,67 @@
                             position: 217,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 12,
-                                                column: 8,
-                                                position: 218,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 12,
+                                                    column: 8,
+                                                    position: 218,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: BitwiseOperation(
+                                        RightShift {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 12,
+                                                            column: 13,
+                                                            position: 223,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            right_shift: Span {
+                                                line: 12,
+                                                column: 16,
+                                                position: 226,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 12,
+                                                            column: 19,
+                                                            position: 229,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: BitwiseOperation(
-                                    RightShift {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 12,
-                                                        column: 13,
-                                                        position: 223,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        right_shift: Span {
-                                            line: 12,
-                                            column: 16,
-                                            position: 226,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 12,
-                                                        column: 19,
-                                                        position: 229,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 12,
@@ -1042,63 +1082,67 @@
                             position: 240,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 13,
-                                                column: 8,
-                                                position: 241,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 13,
+                                                    column: 8,
+                                                    position: 241,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: BitwiseOperation(
+                                        LeftShift {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 13,
+                                                            column: 13,
+                                                            position: 246,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            left_shift: Span {
+                                                line: 13,
+                                                column: 16,
+                                                position: 249,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 13,
+                                                            column: 19,
+                                                            position: 252,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: BitwiseOperation(
-                                    LeftShift {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 13,
-                                                        column: 13,
-                                                        position: 246,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        left_shift: Span {
-                                            line: 13,
-                                            column: 16,
-                                            position: 249,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 13,
-                                                        column: 19,
-                                                        position: 252,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 13,
@@ -1143,63 +1187,67 @@
                             position: 263,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 14,
-                                                column: 8,
-                                                position: 264,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 14,
+                                                    column: 8,
+                                                    position: 264,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: BitwiseOperation(
+                                        Or {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 14,
+                                                            column: 13,
+                                                            position: 269,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            or: Span {
+                                                line: 14,
+                                                column: 16,
+                                                position: 272,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 14,
+                                                            column: 18,
+                                                            position: 274,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: BitwiseOperation(
-                                    Or {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 14,
-                                                        column: 13,
-                                                        position: 269,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        or: Span {
-                                            line: 14,
-                                            column: 16,
-                                            position: 272,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 14,
-                                                        column: 18,
-                                                        position: 274,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 14,
@@ -1244,63 +1292,67 @@
                             position: 285,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 15,
-                                                column: 8,
-                                                position: 286,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 15,
+                                                    column: 8,
+                                                    position: 286,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: BitwiseOperation(
+                                        And {
+                                            left: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 15,
+                                                            column: 13,
+                                                            position: 291,
+                                                        },
+                                                        name: "$a",
+                                                    },
+                                                ),
+                                            ),
+                                            and: Span {
+                                                line: 15,
+                                                column: 16,
+                                                position: 294,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 15,
+                                                            column: 18,
+                                                            position: 296,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: BitwiseOperation(
-                                    And {
-                                        left: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 15,
-                                                        column: 13,
-                                                        position: 291,
-                                                    },
-                                                    name: "$a",
-                                                },
-                                            ),
-                                        ),
-                                        and: Span {
-                                            line: 15,
-                                            column: 16,
-                                            position: 294,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 15,
-                                                        column: 18,
-                                                        position: 296,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 15,
@@ -1345,51 +1397,55 @@
                             position: 307,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: Literal(
-                                    String(
-                                        LiteralString {
-                                            value: "'a'",
-                                            span: Span {
-                                                line: 16,
-                                                column: 8,
-                                                position: 308,
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "'a'",
+                                                span: Span {
+                                                    line: 16,
+                                                    column: 8,
+                                                    position: 308,
+                                                },
                                             },
+                                        ),
+                                    ),
+                                },
+                            ),
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
+                                    },
+                                    ellipsis: None,
+                                    value: BitwiseOperation(
+                                        Not {
+                                            not: Span {
+                                                line: 16,
+                                                column: 13,
+                                                position: 313,
+                                            },
+                                            right: Variable(
+                                                SimpleVariable(
+                                                    SimpleVariable {
+                                                        span: Span {
+                                                            line: 16,
+                                                            column: 14,
+                                                            position: 314,
+                                                        },
+                                                        name: "$b",
+                                                    },
+                                                ),
+                                            ),
                                         },
                                     ),
-                                ),
-                            },
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
                                 },
-                                ellipsis: None,
-                                value: BitwiseOperation(
-                                    Not {
-                                        not: Span {
-                                            line: 16,
-                                            column: 13,
-                                            position: 313,
-                                        },
-                                        right: Variable(
-                                            SimpleVariable(
-                                                SimpleVariable {
-                                                    span: Span {
-                                                        line: 16,
-                                                        column: 14,
-                                                        position: 314,
-                                                    },
-                                                    name: "$b",
-                                                },
-                                            ),
-                                        ),
-                                    },
-                                ),
-                            },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 16,

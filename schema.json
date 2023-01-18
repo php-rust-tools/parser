@@ -310,29 +310,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "comments",
-                "value"
-              ],
-              "properties": {
-                "comments": {
-                  "$ref": "#/definitions/CommentGroup"
-                },
-                "ellipsis": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Span"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "value": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/PositionalArgument"
             }
           }
         },
@@ -350,37 +328,7 @@
               ]
             },
             "value": {
-              "type": "object",
-              "required": [
-                "colon",
-                "comments",
-                "name",
-                "value"
-              ],
-              "properties": {
-                "colon": {
-                  "$ref": "#/definitions/Span"
-                },
-                "comments": {
-                  "$ref": "#/definitions/CommentGroup"
-                },
-                "ellipsis": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/definitions/Span"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "name": {
-                  "$ref": "#/definitions/SimpleIdentifier"
-                },
-                "value": {
-                  "$ref": "#/definitions/Expression"
-                }
-              }
+              "$ref": "#/definitions/NamedArgument"
             }
           }
         }
@@ -7437,6 +7385,39 @@
         }
       ]
     },
+    "NamedArgument": {
+      "type": "object",
+      "required": [
+        "colon",
+        "comments",
+        "name",
+        "value"
+      ],
+      "properties": {
+        "colon": {
+          "$ref": "#/definitions/Span"
+        },
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "ellipsis": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {
+          "$ref": "#/definitions/SimpleIdentifier"
+        },
+        "value": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
     "NamespaceStatement": {
       "oneOf": [
         {
@@ -7571,6 +7552,31 @@
         },
         "start": {
           "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "PositionalArgument": {
+      "type": "object",
+      "required": [
+        "comments",
+        "value"
+      ],
+      "properties": {
+        "comments": {
+          "$ref": "#/definitions/CommentGroup"
+        },
+        "ellipsis": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Span"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "value": {
+          "$ref": "#/definitions/Expression"
         }
       }
     },

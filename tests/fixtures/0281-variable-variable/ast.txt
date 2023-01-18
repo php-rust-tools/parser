@@ -671,62 +671,64 @@
                             position: 189,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: ShortArray(
-                                    ShortArrayExpression {
-                                        start: Span {
-                                            line: 15,
-                                            column: 5,
-                                            position: 190,
-                                        },
-                                        items: CommaSeparated {
-                                            inner: [
-                                                KeyValue {
-                                                    key: Literal(
-                                                        Integer(
-                                                            LiteralInteger {
-                                                                value: "3",
-                                                                span: Span {
-                                                                    line: 15,
-                                                                    column: 6,
-                                                                    position: 191,
-                                                                },
-                                                            },
-                                                        ),
-                                                    ),
-                                                    double_arrow: Span {
-                                                        line: 15,
-                                                        column: 8,
-                                                        position: 193,
-                                                    },
-                                                    value: Literal(
-                                                        String(
-                                                            LiteralString {
-                                                                value: "'f'",
-                                                                span: Span {
-                                                                    line: 15,
-                                                                    column: 11,
-                                                                    position: 196,
-                                                                },
-                                                            },
-                                                        ),
-                                                    ),
-                                                },
-                                            ],
-                                            commas: [],
-                                        },
-                                        end: Span {
-                                            line: 15,
-                                            column: 14,
-                                            position: 199,
-                                        },
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
                                     },
-                                ),
-                            },
+                                    ellipsis: None,
+                                    value: ShortArray(
+                                        ShortArrayExpression {
+                                            start: Span {
+                                                line: 15,
+                                                column: 5,
+                                                position: 190,
+                                            },
+                                            items: CommaSeparated {
+                                                inner: [
+                                                    KeyValue {
+                                                        key: Literal(
+                                                            Integer(
+                                                                LiteralInteger {
+                                                                    value: "3",
+                                                                    span: Span {
+                                                                        line: 15,
+                                                                        column: 6,
+                                                                        position: 191,
+                                                                    },
+                                                                },
+                                                            ),
+                                                        ),
+                                                        double_arrow: Span {
+                                                            line: 15,
+                                                            column: 8,
+                                                            position: 193,
+                                                        },
+                                                        value: Literal(
+                                                            String(
+                                                                LiteralString {
+                                                                    value: "'f'",
+                                                                    span: Span {
+                                                                        line: 15,
+                                                                        column: 11,
+                                                                        position: 196,
+                                                                    },
+                                                                },
+                                                            ),
+                                                        ),
+                                                    },
+                                                ],
+                                                commas: [],
+                                            },
+                                            end: Span {
+                                                line: 15,
+                                                column: 14,
+                                                position: 199,
+                                            },
+                                        },
+                                    ),
+                                },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 15,

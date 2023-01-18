@@ -1,5 +1,5 @@
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::arguments::ArgumentList;
+use crate::parser::ast::arguments::{ArgumentList, PositionalArgument, NamedArgument};
 use crate::parser::ast::arguments::{Argument, SingleArgument};
 use crate::parser::ast::functions::ConstructorParameter;
 use crate::parser::ast::functions::ConstructorParameterList;
@@ -287,13 +287,13 @@ fn argument(state: &mut State) -> ParseResult<(bool, Argument)> {
 
         return Ok((
             true,
-            Argument::Named {
+            Argument::Named(NamedArgument {
                 comments: state.stream.comments(),
                 name,
                 colon,
                 ellipsis,
                 value,
-            },
+            }),
         ));
     }
 
@@ -307,10 +307,10 @@ fn argument(state: &mut State) -> ParseResult<(bool, Argument)> {
 
     Ok((
         false,
-        Argument::Positional {
+        Argument::Positional(PositionalArgument {
             comments: state.stream.comments(),
             ellipsis,
-            value,
-        },
+            value
+        }),
     ))
 }

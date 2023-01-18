@@ -51,30 +51,32 @@
                                         position: 12,
                                     },
                                     arguments: [
-                                        Named {
-                                            comments: CommentGroup {
-                                                comments: [],
-                                            },
-                                            name: SimpleIdentifier {
-                                                span: Span {
+                                        Named(
+                                            NamedArgument {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
+                                                name: SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 3,
+                                                        column: 7,
+                                                        position: 13,
+                                                    },
+                                                    value: "public",
+                                                },
+                                                colon: Span {
                                                     line: 3,
-                                                    column: 7,
-                                                    position: 13,
+                                                    column: 13,
+                                                    position: 19,
                                                 },
-                                                value: "public",
+                                                ellipsis: None,
+                                                value: Bool(
+                                                    BoolExpression {
+                                                        value: true,
+                                                    },
+                                                ),
                                             },
-                                            colon: Span {
-                                                line: 3,
-                                                column: 13,
-                                                position: 19,
-                                            },
-                                            ellipsis: None,
-                                            value: Bool(
-                                                BoolExpression {
-                                                    value: true,
-                                                },
-                                            ),
-                                        },
+                                        ),
                                     ],
                                     right_parenthesis: Span {
                                         line: 3,

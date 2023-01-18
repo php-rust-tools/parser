@@ -79,43 +79,45 @@
                                         position: 234,
                                     },
                                     arguments: [
-                                        Positional {
-                                            comments: CommentGroup {
-                                                comments: [],
-                                            },
-                                            ellipsis: None,
-                                            value: ConstantFetch(
-                                                ConstantFetchExpression {
-                                                    target: Identifier(
-                                                        SimpleIdentifier(
+                                        Positional(
+                                            PositionalArgument {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
+                                                ellipsis: None,
+                                                value: ConstantFetch(
+                                                    ConstantFetchExpression {
+                                                        target: Identifier(
+                                                            SimpleIdentifier(
+                                                                SimpleIdentifier {
+                                                                    span: Span {
+                                                                        line: 6,
+                                                                        column: 7,
+                                                                        position: 235,
+                                                                    },
+                                                                    value: "self",
+                                                                },
+                                                            ),
+                                                        ),
+                                                        double_colon: Span {
+                                                            line: 6,
+                                                            column: 11,
+                                                            position: 239,
+                                                        },
+                                                        constant: SimpleIdentifier(
                                                             SimpleIdentifier {
                                                                 span: Span {
                                                                     line: 6,
-                                                                    column: 7,
-                                                                    position: 235,
+                                                                    column: 13,
+                                                                    position: 241,
                                                                 },
-                                                                value: "self",
+                                                                value: "class",
                                                             },
                                                         ),
-                                                    ),
-                                                    double_colon: Span {
-                                                        line: 6,
-                                                        column: 11,
-                                                        position: 239,
                                                     },
-                                                    constant: SimpleIdentifier(
-                                                        SimpleIdentifier {
-                                                            span: Span {
-                                                                line: 6,
-                                                                column: 13,
-                                                                position: 241,
-                                                            },
-                                                            value: "class",
-                                                        },
-                                                    ),
-                                                },
-                                            ),
-                                        },
+                                                ),
+                                            },
+                                        ),
                                     ],
                                     right_parenthesis: Span {
                                         line: 6,
@@ -155,108 +157,114 @@
                                         position: 252,
                                     },
                                     arguments: [
-                                        Positional {
-                                            comments: CommentGroup {
-                                                comments: [],
-                                            },
-                                            ellipsis: None,
-                                            value: New(
-                                                NewExpression {
-                                                    new: Span {
-                                                        line: 6,
-                                                        column: 25,
-                                                        position: 253,
-                                                    },
-                                                    target: Self_,
-                                                    arguments: Some(
-                                                        ArgumentList {
-                                                            comments: CommentGroup {
-                                                                comments: [],
-                                                            },
-                                                            left_parenthesis: Span {
-                                                                line: 6,
-                                                                column: 33,
-                                                                position: 261,
-                                                            },
-                                                            arguments: [],
-                                                            right_parenthesis: Span {
-                                                                line: 6,
-                                                                column: 34,
-                                                                position: 262,
-                                                            },
-                                                        },
-                                                    ),
+                                        Positional(
+                                            PositionalArgument {
+                                                comments: CommentGroup {
+                                                    comments: [],
                                                 },
-                                            ),
-                                        },
-                                        Positional {
-                                            comments: CommentGroup {
-                                                comments: [],
-                                            },
-                                            ellipsis: None,
-                                            value: New(
-                                                NewExpression {
-                                                    new: Span {
-                                                        line: 6,
-                                                        column: 37,
-                                                        position: 265,
-                                                    },
-                                                    target: Parent,
-                                                    arguments: Some(
-                                                        ArgumentList {
-                                                            comments: CommentGroup {
-                                                                comments: [],
-                                                            },
-                                                            left_parenthesis: Span {
-                                                                line: 6,
-                                                                column: 47,
-                                                                position: 275,
-                                                            },
-                                                            arguments: [],
-                                                            right_parenthesis: Span {
-                                                                line: 6,
-                                                                column: 48,
-                                                                position: 276,
-                                                            },
+                                                ellipsis: None,
+                                                value: New(
+                                                    NewExpression {
+                                                        new: Span {
+                                                            line: 6,
+                                                            column: 25,
+                                                            position: 253,
                                                         },
-                                                    ),
-                                                },
-                                            ),
-                                        },
-                                        Positional {
-                                            comments: CommentGroup {
-                                                comments: [],
-                                            },
-                                            ellipsis: None,
-                                            value: New(
-                                                NewExpression {
-                                                    new: Span {
-                                                        line: 6,
-                                                        column: 51,
-                                                        position: 279,
+                                                        target: Self_,
+                                                        arguments: Some(
+                                                            ArgumentList {
+                                                                comments: CommentGroup {
+                                                                    comments: [],
+                                                                },
+                                                                left_parenthesis: Span {
+                                                                    line: 6,
+                                                                    column: 33,
+                                                                    position: 261,
+                                                                },
+                                                                arguments: [],
+                                                                right_parenthesis: Span {
+                                                                    line: 6,
+                                                                    column: 34,
+                                                                    position: 262,
+                                                                },
+                                                            },
+                                                        ),
                                                     },
-                                                    target: Static,
-                                                    arguments: Some(
-                                                        ArgumentList {
-                                                            comments: CommentGroup {
-                                                                comments: [],
-                                                            },
-                                                            left_parenthesis: Span {
-                                                                line: 6,
-                                                                column: 61,
-                                                                position: 289,
-                                                            },
-                                                            arguments: [],
-                                                            right_parenthesis: Span {
-                                                                line: 6,
-                                                                column: 62,
-                                                                position: 290,
-                                                            },
-                                                        },
-                                                    ),
+                                                ),
+                                            },
+                                        ),
+                                        Positional(
+                                            PositionalArgument {
+                                                comments: CommentGroup {
+                                                    comments: [],
                                                 },
-                                            ),
-                                        },
+                                                ellipsis: None,
+                                                value: New(
+                                                    NewExpression {
+                                                        new: Span {
+                                                            line: 6,
+                                                            column: 37,
+                                                            position: 265,
+                                                        },
+                                                        target: Parent,
+                                                        arguments: Some(
+                                                            ArgumentList {
+                                                                comments: CommentGroup {
+                                                                    comments: [],
+                                                                },
+                                                                left_parenthesis: Span {
+                                                                    line: 6,
+                                                                    column: 47,
+                                                                    position: 275,
+                                                                },
+                                                                arguments: [],
+                                                                right_parenthesis: Span {
+                                                                    line: 6,
+                                                                    column: 48,
+                                                                    position: 276,
+                                                                },
+                                                            },
+                                                        ),
+                                                    },
+                                                ),
+                                            },
+                                        ),
+                                        Positional(
+                                            PositionalArgument {
+                                                comments: CommentGroup {
+                                                    comments: [],
+                                                },
+                                                ellipsis: None,
+                                                value: New(
+                                                    NewExpression {
+                                                        new: Span {
+                                                            line: 6,
+                                                            column: 51,
+                                                            position: 279,
+                                                        },
+                                                        target: Static,
+                                                        arguments: Some(
+                                                            ArgumentList {
+                                                                comments: CommentGroup {
+                                                                    comments: [],
+                                                                },
+                                                                left_parenthesis: Span {
+                                                                    line: 6,
+                                                                    column: 61,
+                                                                    position: 289,
+                                                                },
+                                                                arguments: [],
+                                                                right_parenthesis: Span {
+                                                                    line: 6,
+                                                                    column: 62,
+                                                                    position: 290,
+                                                                },
+                                                            },
+                                                        ),
+                                                    },
+                                                ),
+                                            },
+                                        ),
                                     ],
                                     right_parenthesis: Span {
                                         line: 6,

@@ -527,30 +527,32 @@
                             position: 215,
                         },
                         arguments: [
-                            Positional {
-                                comments: CommentGroup {
-                                    comments: [],
-                                },
-                                ellipsis: None,
-                                value: ShortArray(
-                                    ShortArrayExpression {
-                                        start: Span {
-                                            line: 18,
-                                            column: 7,
-                                            position: 216,
-                                        },
-                                        items: CommaSeparated {
-                                            inner: [],
-                                            commas: [],
-                                        },
-                                        end: Span {
-                                            line: 18,
-                                            column: 8,
-                                            position: 217,
-                                        },
+                            Positional(
+                                PositionalArgument {
+                                    comments: CommentGroup {
+                                        comments: [],
                                     },
-                                ),
-                            },
+                                    ellipsis: None,
+                                    value: ShortArray(
+                                        ShortArrayExpression {
+                                            start: Span {
+                                                line: 18,
+                                                column: 7,
+                                                position: 216,
+                                            },
+                                            items: CommaSeparated {
+                                                inner: [],
+                                                commas: [],
+                                            },
+                                            end: Span {
+                                                line: 18,
+                                                column: 8,
+                                                position: 217,
+                                            },
+                                        },
+                                    ),
+                                },
+                            ),
                         ],
                         right_parenthesis: Span {
                             line: 18,

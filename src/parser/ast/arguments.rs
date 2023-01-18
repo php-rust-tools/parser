@@ -9,27 +9,45 @@ use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct PositionalArgument {
+    pub comments: CommentGroup,
+    pub ellipsis: Option<Span>, // `...`
+    pub value: Expression,      // `$var`
+}
+
+impl Node for PositionalArgument {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.value]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub struct NamedArgument {
+    pub comments: CommentGroup,
+    pub name: SimpleIdentifier, // `foo`
+    pub colon: Span,            // `:`
+    pub ellipsis: Option<Span>, // `...`
+    pub value: Expression,      // `$var`
+}
+
+impl Node for NamedArgument {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![&mut self.name, &mut self.value]
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Argument {
-    Positional {
-        comments: CommentGroup,
-        ellipsis: Option<Span>, // `...`
-        value: Expression,      // `$var`
-    },
-    Named {
-        comments: CommentGroup,
-        name: SimpleIdentifier, // `foo`
-        colon: Span,            // `:`
-        ellipsis: Option<Span>, // `...`
-        value: Expression,      // `$var`
-    },
+    Positional(PositionalArgument),
+    Named(NamedArgument),
 }
 
 impl Node for Argument {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            Argument::Positional { value, .. } => vec![value],
-            Argument::Named { name, value, .. } => vec![name, value],
+            Argument::Positional(argument) => vec![argument],
+            Argument::Named(argument) => vec![argument],
         }
     }
 }
