@@ -2719,6 +2719,17 @@
         }
       }
     },
+    "ClosingTagStatement": {
+      "type": "object",
+      "required": [
+        "span"
+      ],
+      "properties": {
+        "span": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "ClosureExpression": {
       "type": "object",
       "required": [
@@ -4119,6 +4130,17 @@
           "$ref": "#/definitions/Expression"
         },
         "start": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
+    "EchoOpeningTagStatement": {
+      "type": "object",
+      "required": [
+        "span"
+      ],
+      "properties": {
+        "span": {
           "$ref": "#/definitions/Span"
         }
       }
@@ -5759,6 +5781,17 @@
           }
         }
       ]
+    },
+    "FullOpeningTagStatement": {
+      "type": "object",
+      "required": [
+        "span"
+      ],
+      "properties": {
+        "span": {
+          "$ref": "#/definitions/Span"
+        }
+      }
     },
     "FunctionBody": {
       "type": "object",
@@ -8082,6 +8115,17 @@
         }
       }
     },
+    "ShortOpeningTagStatement": {
+      "type": "object",
+      "required": [
+        "span"
+      ],
+      "properties": {
+        "span": {
+          "$ref": "#/definitions/Span"
+        }
+      }
+    },
     "ShortTernaryExpression": {
       "type": "object",
       "required": [
@@ -8195,7 +8239,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Span"
+              "$ref": "#/definitions/FullOpeningTagStatement"
             }
           }
         },
@@ -8213,7 +8257,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Span"
+              "$ref": "#/definitions/ShortOpeningTagStatement"
             }
           }
         },
@@ -8231,7 +8275,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Span"
+              "$ref": "#/definitions/EchoOpeningTagStatement"
             }
           }
         },
@@ -8249,7 +8293,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Span"
+              "$ref": "#/definitions/ClosingTagStatement"
             }
           }
         },

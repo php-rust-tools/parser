@@ -32,11 +32,15 @@ use crate::parser::state::State;
 
 pub use crate::lexer::stream::TokenStream;
 
+use self::ast::ClosingTagStatement;
+use self::ast::EchoOpeningTagStatement;
 use self::ast::EchoStatement;
 use self::ast::ExpressionStatement;
+use self::ast::FullOpeningTagStatement;
 use self::ast::GlobalStatement;
 use self::ast::HaltCompiler;
 use self::ast::ReturnStatement;
+use self::ast::ShortOpeningTagStatement;
 use self::ast::StaticStatement;
 use self::internal::precedences::Precedence;
 
@@ -172,25 +176,25 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 let span = current.span;
                 state.stream.next();
 
-                Statement::EchoOpeningTag(span)
+                Statement::EchoOpeningTag(EchoOpeningTagStatement { span })
             }
             TokenKind::OpenTag(OpenTagKind::Full) => {
                 let span = current.span;
                 state.stream.next();
 
-                Statement::FullOpeningTag(span)
+                Statement::FullOpeningTag(FullOpeningTagStatement { span })
             }
             TokenKind::OpenTag(OpenTagKind::Short) => {
                 let span = current.span;
                 state.stream.next();
 
-                Statement::ShortOpeningTag(span)
+                Statement::ShortOpeningTag(ShortOpeningTagStatement { span })
             }
             TokenKind::CloseTag => {
                 let span = current.span;
                 state.stream.next();
 
-                Statement::ClosingTag(span)
+                Statement::ClosingTag(ClosingTagStatement { span })
             }
             TokenKind::Abstract => classes::parse(state)?,
             TokenKind::Readonly if peek.kind != TokenKind::LeftParen => classes::parse(state)?,

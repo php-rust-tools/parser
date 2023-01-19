@@ -1,9 +1,11 @@
 [
     EchoOpeningTag(
-        Span {
-            line: 1,
-            column: 1,
-            position: 0,
+        EchoOpeningTagStatement {
+            span: Span {
+                line: 1,
+                column: 1,
+                position: 0,
+            },
         },
     ),
     Expression(
@@ -33,10 +35,12 @@
         "\nsome html\n",
     ),
     FullOpeningTag(
-        Span {
-            line: 3,
-            column: 1,
-            position: 27,
+        FullOpeningTagStatement {
+            span: Span {
+                line: 3,
+                column: 1,
+                position: 27,
+            },
         },
     ),
     Echo(
@@ -70,10 +74,12 @@
         },
     ),
     ClosingTag(
-        Span {
-            line: 5,
-            column: 1,
-            position: 49,
+        ClosingTagStatement {
+            span: Span {
+                line: 5,
+                column: 1,
+                position: 49,
+            },
         },
     ),
     InlineHtml(

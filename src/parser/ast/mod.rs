@@ -210,10 +210,10 @@ impl Node for GroupUseStatement {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum Statement {
-    FullOpeningTag(Span),
-    ShortOpeningTag(Span),
-    EchoOpeningTag(Span),
-    ClosingTag(Span),
+    FullOpeningTag(FullOpeningTagStatement),
+    ShortOpeningTag(ShortOpeningTagStatement),
+    EchoOpeningTag(EchoOpeningTagStatement),
+    ClosingTag(ClosingTagStatement),
     InlineHtml(ByteString),
     Label(LabelStatement),
     Goto(GotoStatement),
@@ -246,6 +246,30 @@ pub enum Statement {
     Global(GlobalStatement),
     Declare(DeclareStatement),
     Noop(Span),
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct FullOpeningTagStatement {
+    pub span: Span,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct ShortOpeningTagStatement {
+    pub span: Span,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct EchoOpeningTagStatement {
+    pub span: Span,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct ClosingTagStatement {
+    pub span: Span,
 }
 
 impl Node for Statement {
