@@ -38,7 +38,7 @@ use self::ast::EchoStatement;
 use self::ast::ExpressionStatement;
 use self::ast::FullOpeningTagStatement;
 use self::ast::GlobalStatement;
-use self::ast::HaltCompiler;
+use self::ast::HaltCompilerStatement;
 use self::ast::InlineHtmlStatement;
 use self::ast::ReturnStatement;
 use self::ast::ShortOpeningTagStatement;
@@ -118,7 +118,7 @@ fn top_level_statement(state: &mut State) -> ParseResult<Statement> {
                 None
             };
 
-            Statement::HaltCompiler(HaltCompiler { content })
+            Statement::HaltCompiler(HaltCompilerStatement { content })
         }
         _ => statement(state)?,
     };

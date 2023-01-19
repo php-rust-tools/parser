@@ -110,11 +110,11 @@ pub enum Ending {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]
-pub struct HaltCompiler {
+pub struct HaltCompilerStatement {
     pub content: Option<ByteString>,
 }
 
-impl Node for HaltCompiler {}
+impl Node for HaltCompilerStatement {}
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type")]
@@ -217,7 +217,7 @@ pub enum Statement {
     InlineHtml(InlineHtmlStatement),
     Label(LabelStatement),
     Goto(GotoStatement),
-    HaltCompiler(HaltCompiler),
+    HaltCompiler(HaltCompilerStatement),
     Static(StaticStatement),
     DoWhile(DoWhileStatement),
     While(WhileStatement),
