@@ -3,14 +3,14 @@ use crate::expected_token_err;
 use crate::lexer::error::SyntaxError;
 use crate::lexer::token::DocStringIndentationKind;
 use crate::lexer::token::TokenKind;
-use crate::parser::ast::ExpressionStringPart;
-use crate::parser::ast::LiteralStringPart;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::literals::Literal;
 use crate::parser::ast::literals::LiteralInteger;
 use crate::parser::ast::literals::LiteralString;
 use crate::parser::ast::operators::ArithmeticOperationExpression;
 use crate::parser::ast::variables::Variable;
+use crate::parser::ast::ExpressionStringPart;
+use crate::parser::ast::LiteralStringPart;
 use crate::parser::ast::StringPart;
 use crate::parser::ast::{
     ArrayIndexExpression, Expression, HeredocExpression, InterpolatedStringExpression,
@@ -241,9 +241,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
             let variable = variables::dynamic_variable(state)?;
 
             Some(StringPart::Expression(ExpressionStringPart {
-                expression: Box::new(Expression::Variable(
-                    variable,
-                ))
+                expression: Box::new(Expression::Variable(variable)),
             }))
         }
         TokenKind::LeftBrace => {
@@ -251,7 +249,9 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
             state.stream.next();
             let e = create(state)?;
             utils::skip_right_brace(state)?;
-            Some(StringPart::Expression(ExpressionStringPart { expression:  Box::new(e) }))
+            Some(StringPart::Expression(ExpressionStringPart {
+                expression: Box::new(e),
+            }))
         }
         TokenKind::Variable => {
             // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
@@ -347,7 +347,9 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                 }
                 _ => variable,
             };
-            Some(StringPart::Expression(ExpressionStringPart { expression: Box::new(e) }))
+            Some(StringPart::Expression(ExpressionStringPart {
+                expression: Box::new(e),
+            }))
         }
         _ => {
             return expected_token_err!(["`${`", "`{$", "`\"`", "a variable"], state);
