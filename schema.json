@@ -6380,6 +6380,17 @@
         }
       }
     },
+    "InlineHtmlStatement": {
+      "type": "object",
+      "required": [
+        "html"
+      ],
+      "properties": {
+        "html": {
+          "$ref": "#/definitions/ByteString"
+        }
+      }
+    },
     "InstanceofExpression": {
       "type": "object",
       "required": [
@@ -8311,7 +8322,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/ByteString"
+              "$ref": "#/definitions/InlineHtmlStatement"
             }
           }
         },

@@ -214,7 +214,7 @@ pub enum Statement {
     ShortOpeningTag(ShortOpeningTagStatement),
     EchoOpeningTag(EchoOpeningTagStatement),
     ClosingTag(ClosingTagStatement),
-    InlineHtml(ByteString),
+    InlineHtml(InlineHtmlStatement),
     Label(LabelStatement),
     Goto(GotoStatement),
     HaltCompiler(HaltCompiler),
@@ -246,6 +246,12 @@ pub enum Statement {
     Global(GlobalStatement),
     Declare(DeclareStatement),
     Noop(Span),
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct InlineHtmlStatement {
+    pub html: ByteString,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]

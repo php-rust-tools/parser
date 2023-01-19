@@ -39,6 +39,7 @@ use self::ast::ExpressionStatement;
 use self::ast::FullOpeningTagStatement;
 use self::ast::GlobalStatement;
 use self::ast::HaltCompiler;
+use self::ast::InlineHtmlStatement;
 use self::ast::ReturnStatement;
 use self::ast::ShortOpeningTagStatement;
 use self::ast::StaticStatement;
@@ -376,7 +377,7 @@ fn statement(state: &mut State) -> ParseResult<Statement> {
                 let html = state.stream.current().value.clone();
                 state.stream.next();
 
-                Statement::InlineHtml(html)
+                Statement::InlineHtml(InlineHtmlStatement { html })
             }
             TokenKind::Do => loops::do_while_statement(state)?,
             TokenKind::While => loops::while_statement(state)?,
