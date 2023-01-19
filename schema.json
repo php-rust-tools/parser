@@ -5420,6 +5420,17 @@
         }
       }
     },
+    "ExpressionStringPart": {
+      "type": "object",
+      "required": [
+        "expression"
+      ],
+      "properties": {
+        "expression": {
+          "$ref": "#/definitions/Expression"
+        }
+      }
+    },
     "FinallyBlock": {
       "type": "object",
       "required": [
@@ -6792,6 +6803,17 @@
         "span": {
           "$ref": "#/definitions/Span"
         },
+        "value": {
+          "$ref": "#/definitions/ByteString"
+        }
+      }
+    },
+    "LiteralStringPart": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
         "value": {
           "$ref": "#/definitions/ByteString"
         }
@@ -8971,7 +8993,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/ByteString"
+              "$ref": "#/definitions/LiteralStringPart"
             }
           }
         },
@@ -8989,7 +9011,7 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/Expression"
+              "$ref": "#/definitions/ExpressionStringPart"
             }
           }
         }

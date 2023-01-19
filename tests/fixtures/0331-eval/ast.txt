@@ -34,24 +34,30 @@
                                     InterpolatedStringExpression {
                                         parts: [
                                             Literal(
-                                                """,
+                                                LiteralStringPart {
+                                                    value: """,
+                                                },
                                             ),
                                             Expression(
-                                                Variable(
-                                                    SimpleVariable(
-                                                        SimpleVariable {
-                                                            span: Span {
-                                                                line: 3,
-                                                                column: 7,
-                                                                position: 13,
+                                                ExpressionStringPart {
+                                                    expression: Variable(
+                                                        SimpleVariable(
+                                                            SimpleVariable {
+                                                                span: Span {
+                                                                    line: 3,
+                                                                    column: 7,
+                                                                    position: 13,
+                                                                },
+                                                                name: "$a",
                                                             },
-                                                            name: "$a",
-                                                        },
+                                                        ),
                                                     ),
-                                                ),
+                                                },
                                             ),
                                             Literal(
-                                                " = 1;",
+                                                LiteralStringPart {
+                                                    value: " = 1;",
+                                                },
                                             ),
                                         ],
                                     },

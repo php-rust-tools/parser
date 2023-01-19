@@ -1380,15 +1380,37 @@ impl Node for MagicConstantExpression {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(rename_all = "snake_case", tag = "type", content = "value")]
 pub enum StringPart {
-    Literal(ByteString),
-    Expression(Box<Expression>),
+    Literal(LiteralStringPart),
+    Expression(ExpressionStringPart),
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct LiteralStringPart {
+    pub value: ByteString,
+}
+
+impl Node for LiteralStringPart {
+    //
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct ExpressionStringPart {
+    pub expression: Box<Expression>,
+}
+
+impl Node for ExpressionStringPart {
+    fn children(&mut self) -> Vec<&mut dyn Node> {
+        vec![self.expression.as_mut()]
+    }
 }
 
 impl Node for StringPart {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            StringPart::Literal(_) => vec![],
-            StringPart::Expression(expression) => vec![expression.as_mut()],
+            StringPart::Literal(part) => vec![part],
+            StringPart::Expression(part) => vec![part],
         }
     }
 }

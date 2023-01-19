@@ -12,149 +12,165 @@
                 InterpolatedStringExpression {
                     parts: [
                         Literal(
-                            """,
+                            LiteralStringPart {
+                                value: """,
+                            },
                         ),
                         Expression(
-                            Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 1,
-                                            column: 8,
-                                            position: 7,
+                            ExpressionStringPart {
+                                expression: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 1,
+                                                column: 8,
+                                                position: 7,
+                                            },
+                                            name: "$foo",
                                         },
-                                        name: "$foo",
+                                    ),
+                                ),
+                            },
+                        ),
+                        Literal(
+                            LiteralStringPart {
+                                value: " abc ",
+                            },
+                        ),
+                        Expression(
+                            ExpressionStringPart {
+                                expression: PropertyFetch(
+                                    PropertyFetchExpression {
+                                        target: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
+                                                    span: Span {
+                                                        line: 1,
+                                                        column: 12,
+                                                        position: 11,
+                                                    },
+                                                    name: "$bar",
+                                                },
+                                            ),
+                                        ),
+                                        arrow: Span {
+                                            line: 1,
+                                            column: 21,
+                                            position: 20,
+                                        },
+                                        property: Identifier(
+                                            SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 1,
+                                                        column: 23,
+                                                        position: 22,
+                                                    },
+                                                    value: "a",
+                                                },
+                                            ),
+                                        ),
                                     },
                                 ),
-                            ),
+                            },
                         ),
                         Literal(
-                            " abc ",
+                            LiteralStringPart {
+                                value: " def ",
+                            },
                         ),
                         Expression(
-                            PropertyFetch(
-                                PropertyFetchExpression {
-                                    target: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 1,
-                                                    column: 12,
-                                                    position: 11,
-                                                },
-                                                name: "$bar",
-                                            },
-                                        ),
-                                    ),
-                                    arrow: Span {
-                                        line: 1,
-                                        column: 21,
-                                        position: 20,
-                                    },
-                                    property: Identifier(
-                                        SimpleIdentifier(
-                                            SimpleIdentifier {
-                                                span: Span {
-                                                    line: 1,
-                                                    column: 23,
-                                                    position: 22,
-                                                },
-                                                value: "a",
-                                            },
-                                        ),
-                                    ),
-                                },
-                            ),
-                        ),
-                        Literal(
-                            " def ",
-                        ),
-                        Expression(
-                            ArrayIndex(
-                                ArrayIndexExpression {
-                                    array: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 1,
-                                                    column: 24,
-                                                    position: 23,
-                                                },
-                                                name: "$bar",
-                                            },
-                                        ),
-                                    ),
-                                    left_bracket: Span {
-                                        line: 1,
-                                        column: 33,
-                                        position: 32,
-                                    },
-                                    index: Some(
-                                        Literal(
-                                            Integer(
-                                                LiteralInteger {
-                                                    value: "0",
+                            ExpressionStringPart {
+                                expression: ArrayIndex(
+                                    ArrayIndexExpression {
+                                        array: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
                                                     span: Span {
                                                         line: 1,
-                                                        column: 34,
-                                                        position: 33,
+                                                        column: 24,
+                                                        position: 23,
                                                     },
+                                                    name: "$bar",
                                                 },
                                             ),
                                         ),
-                                    ),
-                                    right_bracket: Span {
-                                        line: 1,
-                                        column: 35,
-                                        position: 34,
+                                        left_bracket: Span {
+                                            line: 1,
+                                            column: 33,
+                                            position: 32,
+                                        },
+                                        index: Some(
+                                            Literal(
+                                                Integer(
+                                                    LiteralInteger {
+                                                        value: "0",
+                                                        span: Span {
+                                                            line: 1,
+                                                            column: 34,
+                                                            position: 33,
+                                                        },
+                                                    },
+                                                ),
+                                            ),
+                                        ),
+                                        right_bracket: Span {
+                                            line: 1,
+                                            column: 35,
+                                            position: 34,
+                                        },
                                     },
-                                },
-                            ),
+                                ),
+                            },
                         ),
                         Literal(
-                            " ghi ",
+                            LiteralStringPart {
+                                value: " ghi ",
+                            },
                         ),
                         Expression(
-                            ArrayIndex(
-                                ArrayIndexExpression {
-                                    array: Variable(
-                                        SimpleVariable(
-                                            SimpleVariable {
-                                                span: Span {
-                                                    line: 1,
-                                                    column: 36,
-                                                    position: 35,
-                                                },
-                                                name: "$bar",
-                                            },
-                                        ),
-                                    ),
-                                    left_bracket: Span {
-                                        line: 1,
-                                        column: 45,
-                                        position: 44,
-                                    },
-                                    index: Some(
-                                        Literal(
-                                            String(
-                                                LiteralString {
-                                                    value: "baz",
+                            ExpressionStringPart {
+                                expression: ArrayIndex(
+                                    ArrayIndexExpression {
+                                        array: Variable(
+                                            SimpleVariable(
+                                                SimpleVariable {
                                                     span: Span {
                                                         line: 1,
-                                                        column: 46,
-                                                        position: 45,
+                                                        column: 36,
+                                                        position: 35,
                                                     },
+                                                    name: "$bar",
                                                 },
                                             ),
                                         ),
-                                    ),
-                                    right_bracket: Span {
-                                        line: 1,
-                                        column: 49,
-                                        position: 48,
+                                        left_bracket: Span {
+                                            line: 1,
+                                            column: 45,
+                                            position: 44,
+                                        },
+                                        index: Some(
+                                            Literal(
+                                                String(
+                                                    LiteralString {
+                                                        value: "baz",
+                                                        span: Span {
+                                                            line: 1,
+                                                            column: 46,
+                                                            position: 45,
+                                                        },
+                                                    },
+                                                ),
+                                            ),
+                                        ),
+                                        right_bracket: Span {
+                                            line: 1,
+                                            column: 49,
+                                            position: 48,
+                                        },
                                     },
-                                },
-                            ),
+                                ),
+                            },
                         ),
                     ],
                 },

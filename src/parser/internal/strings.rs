@@ -3,6 +3,8 @@ use crate::expected_token_err;
 use crate::lexer::error::SyntaxError;
 use crate::lexer::token::DocStringIndentationKind;
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::ExpressionStringPart;
+use crate::parser::ast::LiteralStringPart;
 use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::literals::Literal;
 use crate::parser::ast::literals::LiteralInteger;
@@ -91,7 +93,7 @@ pub fn heredoc(state: &mut State) -> ParseResult<Expression> {
             }
 
             match part {
-                StringPart::Literal(bytes) => {
+                StringPart::Literal(LiteralStringPart { value: bytes }) => {
                     // 1. If this line doesn't start with any whitespace,
                     //    we can return an error early because we know
                     //    the label was indented.
@@ -227,7 +229,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
         TokenKind::StringPart => {
             let s = state.stream.current().value.clone();
             let part = if s.len() > 0 {
-                Some(StringPart::Literal(s))
+                Some(StringPart::Literal(LiteralStringPart { value: s }))
             } else {
                 None
             };
@@ -238,16 +240,18 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
         TokenKind::DollarLeftBrace => {
             let variable = variables::dynamic_variable(state)?;
 
-            Some(StringPart::Expression(Box::new(Expression::Variable(
-                variable,
-            ))))
+            Some(StringPart::Expression(ExpressionStringPart {
+                expression: Box::new(Expression::Variable(
+                    variable,
+                ))
+            }))
         }
         TokenKind::LeftBrace => {
             // "{$expr}"
             state.stream.next();
             let e = create(state)?;
             utils::skip_right_brace(state)?;
-            Some(StringPart::Expression(Box::new(e)))
+            Some(StringPart::Expression(ExpressionStringPart { expression:  Box::new(e) }))
         }
         TokenKind::Variable => {
             // "$expr", "$expr[0]", "$expr[name]", "$expr->a"
@@ -343,7 +347,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                 }
                 _ => variable,
             };
-            Some(StringPart::Expression(Box::new(e)))
+            Some(StringPart::Expression(ExpressionStringPart { expression: Box::new(e) }))
         }
         _ => {
             return expected_token_err!(["`${`", "`{$", "`\"`", "a variable"], state);

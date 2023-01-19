@@ -12,21 +12,25 @@
                 ShellExecExpression {
                     parts: [
                         Literal(
-                            "Hello, ",
+                            LiteralStringPart {
+                                value: "Hello, ",
+                            },
                         ),
                         Expression(
-                            Variable(
-                                SimpleVariable(
-                                    SimpleVariable {
-                                        span: Span {
-                                            line: 3,
-                                            column: 10,
-                                            position: 16,
+                            ExpressionStringPart {
+                                expression: Variable(
+                                    SimpleVariable(
+                                        SimpleVariable {
+                                            span: Span {
+                                                line: 3,
+                                                column: 10,
+                                                position: 16,
+                                            },
+                                            name: "$name",
                                         },
-                                        name: "$name",
-                                    },
+                                    ),
                                 ),
-                            ),
+                            },
                         ),
                     ],
                 },
