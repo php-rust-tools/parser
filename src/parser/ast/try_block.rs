@@ -10,7 +10,7 @@ use crate::parser::ast::Block;
 use super::variables::SimpleVariable;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum CatchType {
     Identifier(SimpleIdentifier),
     Union(Vec<SimpleIdentifier>),
@@ -28,7 +28,7 @@ impl Node for CatchType {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct TryStatement {
     pub start: Span,
     pub end: Span,
@@ -51,7 +51,7 @@ impl Node for TryStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct CatchBlock {
     pub start: Span,
     pub end: Span,
@@ -72,7 +72,7 @@ impl Node for CatchBlock {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct FinallyBlock {
     pub start: Span,
     pub end: Span,

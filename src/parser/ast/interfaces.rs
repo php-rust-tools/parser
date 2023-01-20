@@ -12,7 +12,7 @@ use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::utils::CommaSeparated;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum InterfaceMember {
     Constant(ClassishConstant),       // `public const FOO = 123;`
     Constructor(AbstractConstructor), // `public function __construct(): void;`
@@ -30,7 +30,7 @@ impl Node for InterfaceMember {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct InterfaceExtends {
     pub extends: Span,                             // `extends`
     pub parents: CommaSeparated<SimpleIdentifier>, // `Foo`, `Bar`
@@ -43,7 +43,7 @@ impl Node for InterfaceExtends {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct InterfaceBody {
     pub left_brace: Span,              // `{`
     pub members: Vec<InterfaceMember>, // `public const FOO = 123;`, `public function foo(): void;`
@@ -60,7 +60,7 @@ impl Node for InterfaceBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct InterfaceStatement {
     pub attributes: Vec<AttributeGroup>,   // `#[Foo]`
     pub interface: Span,                   // `interface`

@@ -8,7 +8,7 @@ use crate::parser::ast::comments::CommentGroup;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct LabelStatement {
     pub comments: CommentGroup,
     pub label: SimpleIdentifier, // `foo`
@@ -22,7 +22,7 @@ impl Node for LabelStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct GotoStatement {
     pub comments: CommentGroup,
     pub keyword: Span,           // `goto`

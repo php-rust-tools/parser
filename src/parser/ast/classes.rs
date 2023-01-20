@@ -18,7 +18,7 @@ use crate::parser::ast::traits::TraitUsage;
 use crate::parser::ast::utils::CommaSeparated;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ClassBody {
     pub left_brace: Span, // `{`
     pub members: Vec<ClassMember>,
@@ -35,7 +35,7 @@ impl Node for ClassBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ClassStatement {
     pub attributes: Vec<AttributeGroup>, // `#[Qux]`
     #[serde(flatten)]
@@ -62,7 +62,7 @@ impl Node for ClassStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct AnonymousClassBody {
     pub left_brace: Span, // `{`
     pub members: Vec<AnonymousClassMember>,
@@ -79,7 +79,7 @@ impl Node for AnonymousClassBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct AnonymousClassExpression {
     pub attributes: Vec<AttributeGroup>,     // `#[Qux]`
     pub class: Span,                         // `class`
@@ -103,7 +103,7 @@ impl Node for AnonymousClassExpression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ClassExtends {
     pub extends: Span,            // `extends`
     pub parent: SimpleIdentifier, // `Foo`
@@ -116,7 +116,7 @@ impl Node for ClassExtends {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ClassImplements {
     pub implements: Span,                             // `implements`
     pub interfaces: CommaSeparated<SimpleIdentifier>, // `Bar, Baz`
@@ -129,7 +129,7 @@ impl Node for ClassImplements {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ClassMember {
     Constant(ClassishConstant),
     TraitUsage(TraitUsage),
@@ -157,7 +157,7 @@ impl Node for ClassMember {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum AnonymousClassMember {
     Constant(ClassishConstant),
     TraitUsage(TraitUsage),

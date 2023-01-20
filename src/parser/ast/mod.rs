@@ -77,7 +77,7 @@ impl Node for Block {
 pub type Program = Block;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub enum UseKind {
     Normal,
     Function,
@@ -85,7 +85,7 @@ pub enum UseKind {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct StaticVar {
     pub var: Variable,
     pub default: Option<Expression>,
@@ -102,14 +102,14 @@ impl Node for StaticVar {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum Ending {
     Semicolon(Span),
     CloseTag(Span),
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct HaltCompilerStatement {
     pub content: Option<ByteString>,
 }
@@ -117,7 +117,7 @@ pub struct HaltCompilerStatement {
 impl Node for HaltCompilerStatement {}
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct StaticStatement {
     pub vars: Vec<StaticVar>,
 }
@@ -129,7 +129,7 @@ impl Node for StaticStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct SwitchStatement {
     pub switch: Span,
     pub left_parenthesis: Span,
@@ -147,7 +147,7 @@ impl Node for SwitchStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct EchoStatement {
     pub echo: Span,
     pub values: Vec<Expression>,
@@ -161,7 +161,7 @@ impl Node for EchoStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct ReturnStatement {
     pub r#return: Span,
     pub value: Option<Expression>,
@@ -179,7 +179,7 @@ impl Node for ReturnStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct UseStatement {
     pub kind: UseKind,
     pub uses: Vec<Use>,
@@ -192,7 +192,7 @@ impl Node for UseStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct GroupUseStatement {
     pub prefix: SimpleIdentifier,
     pub kind: UseKind,
@@ -208,7 +208,7 @@ impl Node for GroupUseStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum Statement {
     FullOpeningTag(FullOpeningTagStatement),
     ShortOpeningTag(ShortOpeningTagStatement),
@@ -249,31 +249,31 @@ pub enum Statement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct InlineHtmlStatement {
     pub html: ByteString,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct FullOpeningTagStatement {
     pub span: Span,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ShortOpeningTagStatement {
     pub span: Span,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct EchoOpeningTagStatement {
     pub span: Span,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ClosingTagStatement {
     pub span: Span,
 }
@@ -317,7 +317,7 @@ impl Node for Statement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct ExpressionStatement {
     pub expression: Expression,
     pub ending: Ending,
@@ -330,7 +330,7 @@ impl Node for ExpressionStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct GlobalStatement {
     pub global: Span,
     pub variables: Vec<Variable>,
@@ -346,7 +346,7 @@ impl Node for GlobalStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub struct BlockStatement {
     pub left_brace: Span,
     pub statements: Vec<Statement>,
@@ -364,7 +364,7 @@ impl Node for BlockStatement {
 
 // See https://www.php.net/manual/en/language.types.type-juggling.php#language.types.typecasting for more info.
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub enum CastKind {
     Int,
     Bool,
@@ -397,7 +397,7 @@ impl From<&TokenKind> for CastKind {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct Case {
     pub condition: Option<Expression>,
     pub body: Block,
@@ -420,7 +420,7 @@ impl Node for Case {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct Use {
     pub name: SimpleIdentifier,
     pub alias: Option<SimpleIdentifier>,
@@ -1045,7 +1045,7 @@ impl Node for CastExpression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum Expression {
     // eval("$a = 1")
     Eval(EvalExpression),
@@ -1356,7 +1356,7 @@ impl Node for Expression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct DefaultMatchArm {
     pub keyword: Span,      // `default`
     pub double_arrow: Span, // `=>`
@@ -1370,7 +1370,7 @@ impl Node for DefaultMatchArm {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct MatchArm {
     pub conditions: Vec<Expression>,
     pub arrow: Span,
@@ -1390,7 +1390,7 @@ impl Node for MatchArm {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum MagicConstantExpression {
     Directory(Span),
     File(Span),
@@ -1408,14 +1408,14 @@ impl Node for MagicConstantExpression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum StringPart {
     Literal(LiteralStringPart),
     Expression(ExpressionStringPart),
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct LiteralStringPart {
     pub value: ByteString,
 }
@@ -1425,7 +1425,7 @@ impl Node for LiteralStringPart {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ExpressionStringPart {
     pub expression: Box<Expression>,
 }
@@ -1446,7 +1446,7 @@ impl Node for StringPart {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ArrayItem {
     Skipped,
     Value {
@@ -1499,7 +1499,7 @@ impl Node for ArrayItem {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ListEntry {
     Skipped,
     Value {

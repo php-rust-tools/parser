@@ -7,7 +7,7 @@ use crate::parser::ast::arguments::ArgumentList;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct Attribute {
     pub start: Span,
     pub end: Span,
@@ -16,7 +16,7 @@ pub struct Attribute {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct AttributeGroup {
     pub start: Span,
     pub end: Span,

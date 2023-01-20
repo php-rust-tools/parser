@@ -8,7 +8,7 @@ use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Statement;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct UnbracedNamespace {
     pub start: Span,                // `namespace`
     pub name: SimpleIdentifier,     // `Foo`
@@ -30,7 +30,7 @@ impl Node for UnbracedNamespace {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct BracedNamespace {
     pub namespace: Span,                // `namespace`
     pub name: Option<SimpleIdentifier>, // `Foo`
@@ -49,7 +49,7 @@ impl Node for BracedNamespace {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct BracedNamespaceBody {
     pub start: Span,                // `{`
     pub end: Span,                  // `}`
@@ -66,7 +66,7 @@ impl Node for BracedNamespaceBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum NamespaceStatement {
     Unbraced(UnbracedNamespace), // `namespace Foo; *statements*`
     Braced(BracedNamespace),     // `namespace Foo { *statements* }`

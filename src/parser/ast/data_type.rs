@@ -9,7 +9,7 @@ use crate::lexer::token::Span;
 use crate::node::Node;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum Type {
     Named(Span, ByteString),
     Nullable(Span, Box<Type>),

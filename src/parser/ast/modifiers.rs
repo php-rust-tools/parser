@@ -5,7 +5,7 @@ use serde::Serialize;
 use crate::lexer::token::Span;
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub enum Visibility {
     Public,
     Protected,
@@ -13,7 +13,7 @@ pub enum Visibility {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum VisibilityModifier {
     Public(Span),
     Protected(Span),
@@ -21,7 +21,7 @@ pub enum VisibilityModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum PromotedPropertyModifier {
     Public(Span),
     Protected(Span),
@@ -52,7 +52,7 @@ impl std::fmt::Display for PromotedPropertyModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 #[repr(transparent)]
 pub struct PromotedPropertyModifierGroup {
     pub modifiers: Vec<PromotedPropertyModifier>,
@@ -89,7 +89,7 @@ impl PromotedPropertyModifierGroup {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum PropertyModifier {
     Public(Span),
     Protected(Span),
@@ -111,7 +111,7 @@ impl PropertyModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 #[repr(transparent)]
 pub struct PropertyModifierGroup {
     pub modifiers: Vec<PropertyModifier>,
@@ -160,7 +160,7 @@ impl PropertyModifierGroup {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum MethodModifier {
     Final(Span),
     Static(Span),
@@ -184,7 +184,7 @@ impl MethodModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 #[repr(transparent)]
 pub struct MethodModifierGroup {
     pub modifiers: Vec<MethodModifier>,
@@ -233,7 +233,7 @@ impl MethodModifierGroup {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ClassModifier {
     Final(Span),
     Abstract(Span),
@@ -241,7 +241,7 @@ pub enum ClassModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 #[repr(transparent)]
 pub struct ClassModifierGroup {
     pub modifiers: Vec<ClassModifier>,
@@ -272,7 +272,7 @@ impl ClassModifierGroup {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ConstantModifier {
     Final(Span),
     Public(Span),
@@ -281,7 +281,7 @@ pub enum ConstantModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 #[repr(transparent)]
 pub struct ConstantModifierGroup {
     pub modifiers: Vec<ConstantModifier>,

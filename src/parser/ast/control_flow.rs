@@ -9,7 +9,7 @@ use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct IfStatement {
     pub r#if: Span,              // `if`
     pub left_parenthesis: Span,  // `(`
@@ -25,7 +25,7 @@ impl Node for IfStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum IfStatementBody {
     Statement {
         statement: Box<Statement>,       // `*statement*`
@@ -85,7 +85,7 @@ impl Node for IfStatementBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct IfStatementElseIf {
     pub elseif: Span,              // `elseif`
     pub left_parenthesis: Span,    // `(`
@@ -101,7 +101,7 @@ impl Node for IfStatementElseIf {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct IfStatementElse {
     pub r#else: Span,              // `else`
     pub statement: Box<Statement>, // `*statement*`
@@ -114,7 +114,7 @@ impl Node for IfStatementElse {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct IfStatementElseIfBlock {
     pub elseif: Span,               // `elseif`
     pub left_parenthesis: Span,     // `(`
@@ -137,7 +137,7 @@ impl Node for IfStatementElseIfBlock {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct IfStatementElseBlock {
     pub r#else: Span,               // `else`
     pub colon: Span,                // `:`

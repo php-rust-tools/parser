@@ -19,7 +19,7 @@ use super::state::State;
 pub type ParseResult<T> = Result<T, ParseError>;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type")]
+#[serde(tag = "type")]
 pub enum ParseErrorAnnotationType {
     Hint,
     Error,

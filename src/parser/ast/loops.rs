@@ -11,7 +11,7 @@ use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ForeachStatement {
     pub foreach: Span,                      // `foreach`
     pub left_parenthesis: Span,             // `(`
@@ -27,7 +27,7 @@ impl Node for ForeachStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ForeachStatementIterator {
     // `*expression* as &$var`
     Value {
@@ -66,7 +66,7 @@ impl Node for ForeachStatementIterator {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ForeachStatementBody {
     Statement(Box<Statement>),
     Block {
@@ -89,7 +89,7 @@ impl Node for ForeachStatementBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ForStatement {
     pub r#for: Span,                    // `for`
     pub left_parenthesis: Span,         // `(`
@@ -105,7 +105,7 @@ impl Node for ForStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ForStatementIterator {
     pub initializations: CommaSeparated<Expression>, // `*expression*;`
     pub initializations_semicolon: Span,             // `;`
@@ -130,7 +130,7 @@ impl Node for ForStatementIterator {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ForStatementBody {
     Statement(Box<Statement>),
     Block {
@@ -153,7 +153,7 @@ impl Node for ForStatementBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct DoWhileStatement {
     pub r#do: Span,              // `do`
     pub body: Box<Statement>,    // `{ ... }`
@@ -171,7 +171,7 @@ impl Node for DoWhileStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct WhileStatement {
     pub r#while: Span,            // `while`
     pub left_parenthesis: Span,   // `(`
@@ -187,7 +187,7 @@ impl Node for WhileStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum WhileStatementBody {
     Statement(Box<Statement>),
     Block {
@@ -210,7 +210,7 @@ impl Node for WhileStatementBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum Level {
     Literal(LiteralInteger),
     Parenthesized {
@@ -230,7 +230,7 @@ impl Node for Level {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct BreakStatement {
     pub r#break: Span,        // `break`
     pub level: Option<Level>, // `3`
@@ -247,7 +247,7 @@ impl Node for BreakStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ContinueStatement {
     pub r#continue: Span,     // `continue`
     pub level: Option<Level>, // `2`

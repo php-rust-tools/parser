@@ -11,7 +11,7 @@ use crate::parser::ast::modifiers::ConstantModifierGroup;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ConstantEntry {
     pub name: SimpleIdentifier, // `FOO`
     pub equals: Span,           // `=`
@@ -25,7 +25,7 @@ impl Node for ConstantEntry {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ConstantStatement {
     pub comments: CommentGroup,
     pub r#const: Span,               // `const`
@@ -43,7 +43,7 @@ impl Node for ConstantStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ClassishConstant {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,  // `#[Foo]`

@@ -7,7 +7,7 @@ use crate::node::Node;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ArithmeticOperationExpression {
     Addition {
         left: Box<Expression>,
@@ -97,7 +97,7 @@ impl Node for ArithmeticOperationExpression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum AssignmentOperationExpression {
     Assign {
         left: Box<Expression>,
@@ -221,7 +221,7 @@ impl Node for AssignmentOperationExpression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum BitwiseOperationExpression {
     And {
         left: Box<Expression>,
@@ -278,7 +278,7 @@ impl Node for BitwiseOperationExpression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum ComparisonOperationExpression {
     Equal {
         left: Box<Expression>,
@@ -370,7 +370,7 @@ impl Node for ComparisonOperationExpression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum LogicalOperationExpression {
     And {
         left: Box<Expression>,

@@ -7,7 +7,7 @@ use crate::lexer::token::Span;
 use crate::node::Node;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum Literal {
     String(LiteralString),
     Integer(LiteralInteger),
@@ -25,7 +25,7 @@ impl Node for Literal {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct LiteralString {
     pub value: ByteString,
     pub span: Span,
@@ -36,7 +36,7 @@ impl Node for LiteralString {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct LiteralInteger {
     pub value: ByteString,
     pub span: Span,
@@ -47,7 +47,7 @@ impl Node for LiteralInteger {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct LiteralFloat {
     pub value: ByteString,
     pub span: Span,

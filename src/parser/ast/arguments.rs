@@ -37,7 +37,7 @@ impl Node for NamedArgument {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum Argument {
     Positional(PositionalArgument),
     Named(NamedArgument),
@@ -53,7 +53,7 @@ impl Node for Argument {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ArgumentList {
     pub comments: CommentGroup,
     pub left_parenthesis: Span,   // `(`
@@ -71,7 +71,7 @@ impl Node for ArgumentList {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct SingleArgument {
     pub comments: CommentGroup,
     pub left_parenthesis: Span,  // `(`
@@ -86,7 +86,7 @@ impl Node for SingleArgument {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ArgumentPlaceholder {
     pub comments: CommentGroup,
     pub left_parenthesis: Span,  // `(`

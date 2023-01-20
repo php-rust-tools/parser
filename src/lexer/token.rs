@@ -7,7 +7,7 @@ use std::fmt::Display;
 use crate::lexer::byte_string::ByteString;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct Span {
     pub line: usize,
     pub column: usize,
@@ -25,7 +25,7 @@ impl Span {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub enum OpenTagKind {
     Full,  // `<?php`
     Short, // `<?`
@@ -33,7 +33,7 @@ pub enum OpenTagKind {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub enum DocStringKind {
     Heredoc,
     Nowdoc,
@@ -42,7 +42,7 @@ pub enum DocStringKind {
 pub type DocStringIndentationAmount = usize;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub enum DocStringIndentationKind {
     Space,
     Tab,
@@ -71,7 +71,7 @@ impl From<DocStringIndentationKind> for u8 {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub enum TokenKind {
     Die,
     // Can't use `Self` as a name here, so suffixing with an underscore.
@@ -263,7 +263,7 @@ pub enum TokenKind {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct Token {
     pub kind: TokenKind,
     pub span: Span,

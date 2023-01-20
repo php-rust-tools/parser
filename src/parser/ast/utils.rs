@@ -6,7 +6,7 @@ use crate::lexer::token::Span;
 use crate::node::Node;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct CommaSeparated<T> {
     pub inner: Vec<T>,
     pub commas: Vec<Span>, // `,`

@@ -16,7 +16,7 @@ use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ReturnType {
     pub colon: Span,
     pub data_type: Type,
@@ -29,7 +29,7 @@ impl Node for ReturnType {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct FunctionParameter {
     pub comments: CommentGroup,
     pub name: SimpleVariable,
@@ -54,7 +54,7 @@ impl Node for FunctionParameter {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct FunctionParameterList {
     pub comments: CommentGroup,
     pub left_parenthesis: Span,
@@ -69,7 +69,7 @@ impl Node for FunctionParameterList {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct FunctionBody {
     pub comments: CommentGroup,
     pub left_brace: Span,
@@ -87,7 +87,7 @@ impl Node for FunctionBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct FunctionStatement {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,
@@ -111,7 +111,7 @@ impl Node for FunctionStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ClosureUseVariable {
     pub comments: CommentGroup,
     pub ampersand: Option<Span>,
@@ -125,7 +125,7 @@ impl Node for ClosureUseVariable {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ClosureUse {
     pub comments: CommentGroup,
     pub r#use: Span,
@@ -141,7 +141,7 @@ impl Node for ClosureUse {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ClosureExpression {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,
@@ -169,7 +169,7 @@ impl Node for ClosureExpression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ArrowFunctionExpression {
     pub comments: CommentGroup,
     pub r#static: Option<Span>,
@@ -194,7 +194,7 @@ impl Node for ArrowFunctionExpression {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ConstructorParameter {
     pub attributes: Vec<AttributeGroup>,
     pub comments: CommentGroup,
@@ -221,7 +221,7 @@ impl Node for ConstructorParameter {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ConstructorParameterList {
     pub comments: CommentGroup,
     pub left_parenthesis: Span,
@@ -236,7 +236,7 @@ impl Node for ConstructorParameterList {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct AbstractConstructor {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,
@@ -258,7 +258,7 @@ impl Node for AbstractConstructor {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ConcreteConstructor {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,
@@ -298,7 +298,7 @@ impl ConcreteConstructor {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct AbstractMethod {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,
@@ -323,7 +323,7 @@ impl Node for AbstractMethod {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct ConcreteMethod {
     pub comments: CommentGroup,
     pub attributes: Vec<AttributeGroup>,
@@ -349,7 +349,7 @@ impl Node for ConcreteMethod {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct MethodBody {
     pub comments: CommentGroup,
     pub left_brace: Span, // `{`

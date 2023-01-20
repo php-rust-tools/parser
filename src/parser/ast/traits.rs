@@ -16,7 +16,7 @@ use crate::parser::ast::properties::Property;
 use crate::parser::ast::properties::VariableProperty;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum TraitMember {
     Constant(ClassishConstant),
     TraitUsage(TraitUsage),
@@ -44,7 +44,7 @@ impl Node for TraitMember {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct TraitBody {
     pub left_brace: Span,
     pub members: Vec<TraitMember>,
@@ -61,7 +61,7 @@ impl Node for TraitBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct TraitStatement {
     pub r#trait: Span,
     pub name: SimpleIdentifier,
@@ -76,7 +76,7 @@ impl Node for TraitStatement {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct TraitUsage {
     pub r#use: Span,
     pub traits: Vec<SimpleIdentifier>,
@@ -90,7 +90,7 @@ impl Node for TraitUsage {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum TraitUsageAdaptation {
     Alias {
         r#trait: Option<SimpleIdentifier>,

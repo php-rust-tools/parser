@@ -10,7 +10,7 @@ use crate::node::Node;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum Variable {
     SimpleVariable(SimpleVariable),
     VariableVariable(VariableVariable),
@@ -28,7 +28,7 @@ impl Node for Variable {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct SimpleVariable {
     pub span: Span,
     pub name: ByteString,
@@ -39,7 +39,7 @@ impl Node for SimpleVariable {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct VariableVariable {
     pub span: Span,
     pub variable: Box<Variable>,
@@ -52,7 +52,7 @@ impl Node for VariableVariable {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct BracedVariableVariable {
     pub start: Span,
     pub variable: Box<Expression>,

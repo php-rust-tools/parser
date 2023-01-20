@@ -10,7 +10,7 @@ use crate::parser::ast::Expression;
 use crate::parser::ast::Statement;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct DeclareEntry {
     pub key: SimpleIdentifier, // `strict_types`
     pub equals: Span,          // `=`
@@ -24,7 +24,7 @@ impl Node for DeclareEntry {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct DeclareEntryGroup {
     pub left_parenthesis: Span,     // `(`
     pub right_parenthesis: Span,    // `)`
@@ -41,7 +41,7 @@ impl Node for DeclareEntryGroup {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum DeclareBody {
     // declaration is terminated with `;`
     Noop {
@@ -82,7 +82,7 @@ impl Node for DeclareBody {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct DeclareStatement {
     pub declare: Span,              // `declare`
     pub entries: DeclareEntryGroup, // `(strict_types = 1)`

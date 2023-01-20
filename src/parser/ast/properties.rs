@@ -11,7 +11,7 @@ use crate::parser::ast::variables::SimpleVariable;
 use crate::parser::ast::Expression;
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct Property {
     pub attributes: Vec<AttributeGroup>,
     #[serde(flatten)]
@@ -38,7 +38,7 @@ impl Node for Property {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
+
 pub struct VariableProperty {
     pub attributes: Vec<AttributeGroup>,
     pub r#type: Option<Type>,
@@ -63,7 +63,7 @@ impl Node for VariableProperty {
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
-#[serde(rename_all = "snake_case", tag = "type", content = "value")]
+#[serde(tag = "type", content = "value")]
 pub enum PropertyEntry {
     Uninitialized {
         variable: SimpleVariable,
