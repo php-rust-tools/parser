@@ -68,7 +68,9 @@ impl Node for ForeachStatementIterator {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(tag = "type", content = "value")]
 pub enum ForeachStatementBody {
-    Statement(Box<Statement>),
+    Statement {
+        statement: Box<Statement>,
+    },
     Block {
         colon: Span,                // `:`
         statements: Vec<Statement>, // `*statements*`
@@ -80,7 +82,7 @@ pub enum ForeachStatementBody {
 impl Node for ForeachStatementBody {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            ForeachStatementBody::Statement(statement) => vec![statement.as_mut()],
+            ForeachStatementBody::Statement { statement } => vec![statement.as_mut()],
             ForeachStatementBody::Block { statements, .. } => {
                 statements.iter_mut().map(|s| s as &mut dyn Node).collect()
             }
@@ -132,7 +134,9 @@ impl Node for ForStatementIterator {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(tag = "type", content = "value")]
 pub enum ForStatementBody {
-    Statement(Box<Statement>),
+    Statement {
+        statement: Box<Statement>,
+    },
     Block {
         colon: Span,                // `:`
         statements: Vec<Statement>, // `*statements*`
@@ -144,7 +148,7 @@ pub enum ForStatementBody {
 impl Node for ForStatementBody {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            ForStatementBody::Statement(statement) => vec![statement.as_mut()],
+            ForStatementBody::Statement { statement } => vec![statement.as_mut()],
             ForStatementBody::Block { statements, .. } => {
                 statements.iter_mut().map(|x| x as &mut dyn Node).collect()
             }
@@ -189,7 +193,9 @@ impl Node for WhileStatement {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(tag = "type", content = "value")]
 pub enum WhileStatementBody {
-    Statement(Box<Statement>),
+    Statement {
+        statement: Box<Statement>,
+    },
     Block {
         colon: Span,                // `:`
         statements: Vec<Statement>, // `*statements*`
@@ -201,7 +207,7 @@ pub enum WhileStatementBody {
 impl Node for WhileStatementBody {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            WhileStatementBody::Statement(statement) => vec![statement.as_mut()],
+            WhileStatementBody::Statement { statement } => vec![statement.as_mut()],
             WhileStatementBody::Block { statements, .. } => {
                 statements.iter_mut().map(|s| s as &mut dyn Node).collect()
             }

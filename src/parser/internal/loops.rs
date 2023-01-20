@@ -83,7 +83,9 @@ pub fn foreach_statement(state: &mut State) -> ParseResult<Statement> {
             ending: utils::skip_ending(state)?,
         }
     } else {
-        ForeachStatementBody::Statement(parser::statement(state).map(Box::new)?)
+        ForeachStatementBody::Statement {
+            statement: parser::statement(state).map(Box::new)?,
+        }
     };
 
     Ok(Statement::Foreach(ForeachStatement {
@@ -133,7 +135,9 @@ pub fn for_statement(state: &mut State) -> ParseResult<Statement> {
             ending: utils::skip_ending(state)?,
         }
     } else {
-        ForStatementBody::Statement(parser::statement(state).map(Box::new)?)
+        ForStatementBody::Statement {
+            statement: parser::statement(state).map(Box::new)?,
+        }
     };
 
     Ok(Statement::For(ForStatement {
@@ -182,7 +186,9 @@ pub fn while_statement(state: &mut State) -> ParseResult<Statement> {
             ending: utils::skip_ending(state)?,
         }
     } else {
-        WhileStatementBody::Statement(parser::statement(state).map(Box::new)?)
+        WhileStatementBody::Statement {
+            statement: parser::statement(state).map(Box::new)?,
+        }
     };
 
     Ok(Statement::While(WhileStatement {
