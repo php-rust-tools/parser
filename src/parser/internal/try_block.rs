@@ -112,8 +112,8 @@ fn catch_type(state: &mut State) -> ParseResult<CatchType> {
             state.stream.next();
         }
 
-        return Ok(CatchType::Union(types));
+        return Ok(CatchType::Union { identifiers: types });
     }
 
-    Ok(CatchType::Identifier(id))
+    Ok(CatchType::Identifier { identifier: id })
 }

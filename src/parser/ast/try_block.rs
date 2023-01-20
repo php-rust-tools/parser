@@ -12,15 +12,15 @@ use super::variables::SimpleVariable;
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 #[serde(tag = "type", content = "value")]
 pub enum CatchType {
-    Identifier(SimpleIdentifier),
-    Union(Vec<SimpleIdentifier>),
+    Identifier { identifier: SimpleIdentifier },
+    Union { identifiers: Vec<SimpleIdentifier> },
 }
 
 impl Node for CatchType {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            CatchType::Identifier(identifier) => vec![identifier],
-            CatchType::Union(identifiers) => {
+            CatchType::Identifier { identifier } => vec![identifier],
+            CatchType::Union { identifiers } => {
                 identifiers.iter_mut().map(|i| i as &mut dyn Node).collect()
             }
         }

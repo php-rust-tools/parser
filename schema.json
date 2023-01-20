@@ -2334,7 +2334,15 @@
               ]
             },
             "value": {
-              "$ref": "#/definitions/SimpleIdentifier"
+              "type": "object",
+              "required": [
+                "identifier"
+              ],
+              "properties": {
+                "identifier": {
+                  "$ref": "#/definitions/SimpleIdentifier"
+                }
+              }
             }
           }
         },
@@ -2352,9 +2360,17 @@
               ]
             },
             "value": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/SimpleIdentifier"
+              "type": "object",
+              "required": [
+                "identifiers"
+              ],
+              "properties": {
+                "identifiers": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/SimpleIdentifier"
+                  }
+                }
               }
             }
           }

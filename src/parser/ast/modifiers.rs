@@ -52,7 +52,6 @@ impl std::fmt::Display for PromotedPropertyModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-
 #[repr(transparent)]
 pub struct PromotedPropertyModifierGroup {
     pub modifiers: Vec<PromotedPropertyModifier>,
@@ -111,7 +110,6 @@ impl PropertyModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-
 #[repr(transparent)]
 pub struct PropertyModifierGroup {
     pub modifiers: Vec<PropertyModifier>,
@@ -184,7 +182,6 @@ impl MethodModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-
 #[repr(transparent)]
 pub struct MethodModifierGroup {
     pub modifiers: Vec<MethodModifier>,
@@ -241,7 +238,6 @@ pub enum ClassModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-
 #[repr(transparent)]
 pub struct ClassModifierGroup {
     pub modifiers: Vec<ClassModifier>,
@@ -281,7 +277,6 @@ pub enum ConstantModifier {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
-
 #[repr(transparent)]
 pub struct ConstantModifierGroup {
     pub modifiers: Vec<ConstantModifier>,
