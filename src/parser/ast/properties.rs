@@ -87,7 +87,7 @@ impl Node for PropertyEntry {
 }
 
 impl PropertyEntry {
-    fn variable(&self) -> &SimpleVariable {
+    pub fn variable(&self) -> &SimpleVariable {
         match self {
             PropertyEntry::Uninitialized { variable } => variable,
             PropertyEntry::Initialized { variable, .. } => variable,
