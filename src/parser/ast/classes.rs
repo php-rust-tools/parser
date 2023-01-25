@@ -86,6 +86,21 @@ pub struct AnonymousClassBody {
     pub right_brace: Span, // `}`
 }
 
+impl AnonymousClassBody {
+    pub fn iter(&self) -> Iter<'_, AnonymousClassMember> {
+        self.members.iter()
+    }
+}
+
+impl IntoIterator for AnonymousClassBody {
+    type Item = AnonymousClassMember;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.members.into_iter()
+    }
+}
+
 impl Node for AnonymousClassBody {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         self.members
