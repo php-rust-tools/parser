@@ -1,3 +1,5 @@
+use std::slice::Iter;
+
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
@@ -23,6 +25,21 @@ pub struct ClassBody {
     pub left_brace: Span, // `{`
     pub members: Vec<ClassMember>,
     pub right_brace: Span, // `}`
+}
+
+impl ClassBody {
+    pub fn iter(&self) -> Iter<'_, ClassMember> {
+        self.members.iter()
+    }
+}
+
+impl IntoIterator for ClassBody {
+    type Item = ClassMember;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.members.into_iter()
+    }
 }
 
 impl Node for ClassBody {
