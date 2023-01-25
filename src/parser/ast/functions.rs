@@ -1,3 +1,5 @@
+use std::slice::Iter;
+
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
@@ -60,6 +62,21 @@ pub struct FunctionParameterList {
     pub left_parenthesis: Span,
     pub parameters: CommaSeparated<FunctionParameter>,
     pub right_parenthesis: Span,
+}
+
+impl FunctionParameterList {
+    pub fn iter(&self) -> Iter<'_, FunctionParameter> {
+        self.parameters.iter()
+    }
+}
+
+impl IntoIterator for FunctionParameterList {
+    type Item = FunctionParameter;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.parameters.into_iter()
+    }
 }
 
 impl Node for FunctionParameterList {
