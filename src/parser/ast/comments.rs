@@ -1,3 +1,5 @@
+use std::slice::Iter;
+
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
@@ -29,4 +31,19 @@ impl Node for Comment {}
 
 pub struct CommentGroup {
     pub comments: Vec<Comment>,
+}
+
+impl CommentGroup {
+    pub fn iter(&self) -> Iter<'_, Comment> {
+        self.comments.iter()
+    }
+}
+
+impl IntoIterator for CommentGroup {
+    type Item = Comment;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.comments.into_iter()
+    }
 }
