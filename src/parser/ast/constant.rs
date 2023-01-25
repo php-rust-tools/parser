@@ -1,3 +1,5 @@
+use std::slice::Iter;
+
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
@@ -33,6 +35,21 @@ pub struct ConstantStatement {
     pub semicolon: Span,             // `;`
 }
 
+impl ConstantStatement {
+    pub fn iter(&self) -> Iter<'_, ConstantEntry> {
+        self.entries.iter()
+    }
+}
+
+impl IntoIterator for ConstantStatement {
+    type Item = ConstantEntry;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.entries.into_iter()
+    }
+}
+
 impl Node for ConstantStatement {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         self.entries
@@ -52,6 +69,21 @@ pub struct ClassishConstant {
     #[serde(flatten)]
     pub entries: Vec<ConstantEntry>, // `FOO = 123`
     pub semicolon: Span,                  // `;`
+}
+
+impl ClassishConstant {
+    pub fn iter(&self) -> Iter<'_, ConstantEntry> {
+        self.entries.iter()
+    }
+}
+
+impl IntoIterator for ClassishConstant {
+    type Item = ConstantEntry;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.entries.into_iter()
+    }
 }
 
 impl Node for ClassishConstant {
