@@ -1,3 +1,5 @@
+use std::slice::Iter;
+
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde::Serialize;
@@ -59,6 +61,21 @@ pub struct ArgumentList {
     pub left_parenthesis: Span,   // `(`
     pub arguments: Vec<Argument>, // `$var`, `...$var`, `foo: $var`, `foo: ...$var`
     pub right_parenthesis: Span,  // `)`
+}
+
+impl ArgumentList {
+    pub fn iter(&self) -> Iter<'_, Argument> {
+        self.arguments.iter()
+    }
+}
+
+impl IntoIterator for ArgumentList {
+    type Item = Argument;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.arguments.into_iter()
+    }
 }
 
 impl Node for ArgumentList {
