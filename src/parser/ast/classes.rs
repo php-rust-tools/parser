@@ -154,6 +154,21 @@ pub struct ClassImplements {
     pub interfaces: CommaSeparated<SimpleIdentifier>, // `Bar, Baz`
 }
 
+impl ClassImplements {
+    pub fn iter(&self) -> Iter<'_, SimpleIdentifier> {
+        self.interfaces.iter()
+    }
+}
+
+impl IntoIterator for ClassImplements {
+    type Item = SimpleIdentifier;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.interfaces.into_iter()
+    }
+}
+
 impl Node for ClassImplements {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         self.interfaces.children()
