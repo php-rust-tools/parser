@@ -11,7 +11,7 @@ use std::str::from_utf8;
 ///
 /// The Trunk lexer and parser work mainly with byte strings because
 /// valid PHP code is not required to be valid UTF-8.
-#[derive(PartialOrd, PartialEq, Eq, Clone)]
+#[derive(PartialOrd, PartialEq, Eq, Clone, Hash)]
 pub struct ByteString {
     pub bytes: Vec<u8>,
 }
