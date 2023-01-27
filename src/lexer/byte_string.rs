@@ -14,14 +14,11 @@ use std::str::from_utf8;
 #[derive(PartialOrd, PartialEq, Eq, Clone)]
 pub struct ByteString {
     pub bytes: Vec<u8>,
-    pub length: usize,
 }
 
 impl ByteString {
     pub fn new(bytes: Vec<u8>) -> Self {
-        let length = bytes.len();
-
-        ByteString { bytes, length }
+        ByteString { bytes }
     }
 }
 

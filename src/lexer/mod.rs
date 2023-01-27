@@ -334,7 +334,6 @@ impl Lexer {
                     } => {
                         let mut bytes = value;
                         bytes.insert(0, b'\\');
-                        bytes.length += 1;
 
                         (TokenKind::FullyQualifiedIdentifier, bytes)
                     }
