@@ -72,48 +72,14 @@ jobs:
         with:
           command: test
           args: -r --all
-   
-  build_fuzz_targets:
-    name: Build fuzz targets
-    runs-on: 'ubuntu-latest'
-    strategy:
-      fail-fast: false
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-
-      - name: install rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          override: true
-          components: rustfmt, clippy
-
-      - name: install php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.1
-          tools: composer:v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: cache
-        id: cache
-        uses: actions/cache@v3
-        with:
-            path: |
-              ~/.cargo/bin/
-              ~/.cargo/registry/index/
-              ~/.cargo/registry/cache/
-              ~/.cargo/git/db/
-              target/
-            key: rust-${{ inputs.rust }}-os-${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
       - name: install cargo-fuzz
         uses: actions-rs/cargo@v1
         with:
           command: install
           args: cargo-fuzz
 
-      - run: cargo fuzz build
+      - name: fuzz
+        uses: actions-rs/cargo@v1
+        with:
+          command: fuzz
+          args: build
