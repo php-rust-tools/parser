@@ -24,6 +24,8 @@ use crate::parser::internal::modifiers;
 use crate::parser::internal::utils;
 use crate::parser::state::State;
 
+use super::traits;
+
 pub fn parse(state: &mut State) -> ParseResult<Statement> {
     let span = utils::skip(state, TokenKind::Enum)?;
 
@@ -111,7 +113,11 @@ fn unit_member(
     state: &mut State,
     enum_name: &SimpleIdentifier,
 ) -> ParseResult<Option<UnitEnumMember>> {
-    attributes::gather_attributes(state)?;
+    let has_attributes = attributes::gather_attributes(state)?;
+
+    if !has_attributes && state.stream.current().kind == TokenKind::Use {
+        return traits::usage(state).map(UnitEnumMember::TraitUsage).map(Some);
+    }
 
     let current = state.stream.current();
     if current.kind == TokenKind::Case {
@@ -161,7 +167,11 @@ fn backed_member(
     state: &mut State,
     enum_name: &SimpleIdentifier,
 ) -> ParseResult<Option<BackedEnumMember>> {
-    attributes::gather_attributes(state)?;
+    let has_attributes = attributes::gather_attributes(state)?;
+
+    if !has_attributes && state.stream.current().kind == TokenKind::Use {
+        return traits::usage(state).map(BackedEnumMember::TraitUsage).map(Some);
+    }
 
     let current = state.stream.current();
     if current.kind == TokenKind::Case {

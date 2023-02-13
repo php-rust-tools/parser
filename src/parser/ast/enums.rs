@@ -10,6 +10,8 @@ use crate::parser::ast::functions::ConcreteMethod;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::Expression;
 
+use super::traits::TraitUsage;
+
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 
 pub struct UnitEnumCase {
@@ -31,6 +33,7 @@ pub enum UnitEnumMember {
     Case(UnitEnumCase),         // `case Bar;`
     Method(ConcreteMethod),     // `public function foo(): void { ... }`
     Constant(ClassishConstant), // `public const FOO = 123;`
+    TraitUsage(TraitUsage),
 }
 
 impl Node for UnitEnumMember {
@@ -39,6 +42,7 @@ impl Node for UnitEnumMember {
             UnitEnumMember::Case(case) => vec![case],
             UnitEnumMember::Method(method) => vec![method],
             UnitEnumMember::Constant(constant) => vec![constant],
+            UnitEnumMember::TraitUsage(trait_usage) => vec![trait_usage],
         }
     }
 }
@@ -115,6 +119,7 @@ pub enum BackedEnumMember {
     Case(BackedEnumCase),
     Method(ConcreteMethod),
     Constant(ClassishConstant),
+    TraitUsage(TraitUsage),
 }
 
 impl Node for BackedEnumMember {
@@ -123,6 +128,7 @@ impl Node for BackedEnumMember {
             BackedEnumMember::Case(case) => vec![case],
             BackedEnumMember::Method(method) => vec![method],
             BackedEnumMember::Constant(constant) => vec![constant],
+            BackedEnumMember::TraitUsage(trait_usage) => vec![trait_usage],
         }
     }
 }
