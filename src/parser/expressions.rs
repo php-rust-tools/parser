@@ -900,24 +900,16 @@ expressions! {
 
     #[before(parent_identifier), current(TokenKind::Self_)]
     self_identifier({
-        let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::Identifier(Identifier::SimpleIdentifier( SimpleIdentifier {
-            span,
-            value: "self".into()
-        })))
+        Ok(Expression::Self_)
     })
 
     #[before(left_parenthesis), current(TokenKind::Parent)]
     parent_identifier({
-        let span = state.stream.current().span;
         state.stream.next();
 
-        Ok(Expression::Identifier(Identifier::SimpleIdentifier( SimpleIdentifier {
-            span,
-            value: "parent".into()
-        })))
+        Ok(Expression::Parent)
     })
 
     #[before(r#match), current(TokenKind::LeftParen)]
