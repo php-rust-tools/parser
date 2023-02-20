@@ -209,6 +209,25 @@ impl AssignmentOperationExpression {
             AssignmentOperationExpression::Coalesce { right, .. } => right.as_ref(),
         }
     }
+
+    pub fn operator(&self) -> &Span {
+        match self {
+            AssignmentOperationExpression::Assign { equals, .. } => equals,
+            AssignmentOperationExpression::Addition { plus_equals, .. } => plus_equals,
+            AssignmentOperationExpression::Subtraction { minus_equals, .. } => minus_equals,
+            AssignmentOperationExpression::Multiplication { asterisk_equals, .. } => { asterisk_equals }
+            AssignmentOperationExpression::Division { slash_equals, .. } => slash_equals,
+            AssignmentOperationExpression::Modulo { percent_equals, .. } => percent_equals,
+            AssignmentOperationExpression::Exponentiation { pow_equals, .. } => pow_equals,
+            AssignmentOperationExpression::Concat { dot_equals, .. } => dot_equals,
+            AssignmentOperationExpression::BitwiseAnd { ampersand_equals, .. } => { ampersand_equals }
+            AssignmentOperationExpression::BitwiseOr { pipe_equals, .. } => pipe_equals,
+            AssignmentOperationExpression::BitwiseXor { caret_equals, .. } => caret_equals,
+            AssignmentOperationExpression::LeftShift { left_shift_equals, .. } => { left_shift_equals }
+            AssignmentOperationExpression::RightShift { right_shift_equals, .. } => { right_shift_equals }
+            AssignmentOperationExpression::Coalesce { coalesce_equals, .. } => coalesce_equals,
+        }
+    }
 }
 
 impl Node for AssignmentOperationExpression {
