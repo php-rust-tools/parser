@@ -116,7 +116,9 @@ fn unit_member(
     let has_attributes = attributes::gather_attributes(state)?;
 
     if !has_attributes && state.stream.current().kind == TokenKind::Use {
-        return traits::usage(state).map(UnitEnumMember::TraitUsage).map(Some);
+        return traits::usage(state)
+            .map(UnitEnumMember::TraitUsage)
+            .map(Some);
     }
 
     let current = state.stream.current();
@@ -170,7 +172,9 @@ fn backed_member(
     let has_attributes = attributes::gather_attributes(state)?;
 
     if !has_attributes && state.stream.current().kind == TokenKind::Use {
-        return traits::usage(state).map(BackedEnumMember::TraitUsage).map(Some);
+        return traits::usage(state)
+            .map(BackedEnumMember::TraitUsage)
+            .map(Some);
     }
 
     let current = state.stream.current();
