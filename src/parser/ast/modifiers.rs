@@ -32,10 +32,10 @@ pub enum PromotedPropertyModifier {
 impl PromotedPropertyModifier {
     pub fn span(&self) -> Span {
         match self {
-            PromotedPropertyModifier::Public(span) => *span,
-            PromotedPropertyModifier::Protected(span) => *span,
-            PromotedPropertyModifier::Private(span) => *span,
-            PromotedPropertyModifier::Readonly(span) => *span,
+            PromotedPropertyModifier::Public(span)
+            | PromotedPropertyModifier::Protected(span)
+            | PromotedPropertyModifier::Private(span)
+            | PromotedPropertyModifier::Readonly(span) => *span,
         }
     }
 }
@@ -100,11 +100,11 @@ pub enum PropertyModifier {
 impl PropertyModifier {
     pub fn span(&self) -> Span {
         match self {
-            PropertyModifier::Public(span) => *span,
-            PropertyModifier::Protected(span) => *span,
-            PropertyModifier::Private(span) => *span,
-            PropertyModifier::Static(span) => *span,
-            PropertyModifier::Readonly(span) => *span,
+            PropertyModifier::Public(span)
+            | PropertyModifier::Protected(span)
+            | PropertyModifier::Private(span)
+            | PropertyModifier::Static(span)
+            | PropertyModifier::Readonly(span) => *span,
         }
     }
 }
@@ -171,12 +171,12 @@ pub enum MethodModifier {
 impl MethodModifier {
     pub fn span(&self) -> Span {
         match self {
-            MethodModifier::Final(span) => *span,
-            MethodModifier::Static(span) => *span,
-            MethodModifier::Abstract(span) => *span,
-            MethodModifier::Public(span) => *span,
-            MethodModifier::Protected(span) => *span,
-            MethodModifier::Private(span) => *span,
+            MethodModifier::Final(span)
+            | MethodModifier::Static(span)
+            | MethodModifier::Abstract(span)
+            | MethodModifier::Public(span)
+            | MethodModifier::Protected(span)
+            | MethodModifier::Private(span) => *span,
         }
     }
 }

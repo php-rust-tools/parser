@@ -1323,9 +1323,6 @@ impl Node for Expression {
             Expression::NullsafePropertyFetch(expression) => vec![expression],
             Expression::StaticPropertyFetch(expression) => vec![expression],
             Expression::ConstantFetch(expression) => vec![expression],
-            Expression::Static => vec![],
-            Expression::Self_ => vec![],
-            Expression::Parent => vec![],
             Expression::ShortArray(expression) => vec![expression],
             Expression::Array(expression) => vec![expression],
             Expression::List(expression) => vec![expression],
@@ -1337,9 +1334,7 @@ impl Node for Expression {
             Expression::Nowdoc(expression) => vec![expression],
             Expression::ShellExec(expression) => vec![expression],
             Expression::AnonymousClass(expression) => vec![expression],
-            Expression::Bool(_) => vec![],
             Expression::ArrayIndex(expression) => vec![expression],
-            Expression::Null => vec![],
             Expression::MagicConstant(constant) => vec![constant],
             Expression::ShortTernary(expression) => vec![expression],
             Expression::Ternary(expression) => vec![expression],
@@ -1350,7 +1345,14 @@ impl Node for Expression {
             Expression::Yield(expression) => vec![expression],
             Expression::YieldFrom(expression) => vec![expression],
             Expression::Cast(expression) => vec![expression],
-            Expression::Noop => vec![],
+            Expression::Static
+            | Expression::Self_
+            | Expression::Parent
+            | Expression::Noop
+            | Expression::Bool(_)
+            | Expression::Null => {
+                vec![]
+            }
         }
     }
 }

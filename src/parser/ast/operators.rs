@@ -174,39 +174,39 @@ pub enum AssignmentOperationExpression {
 impl AssignmentOperationExpression {
     pub fn left(&self) -> &Expression {
         match self {
-            AssignmentOperationExpression::Assign { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::Addition { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::Subtraction { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::Multiplication { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::Division { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::Modulo { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::Exponentiation { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::Concat { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::BitwiseAnd { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::BitwiseOr { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::BitwiseXor { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::LeftShift { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::RightShift { left, .. } => left.as_ref(),
-            AssignmentOperationExpression::Coalesce { left, .. } => left.as_ref(),
+            AssignmentOperationExpression::Assign { left, .. }
+            | AssignmentOperationExpression::Addition { left, .. }
+            | AssignmentOperationExpression::Subtraction { left, .. }
+            | AssignmentOperationExpression::Multiplication { left, .. }
+            | AssignmentOperationExpression::Division { left, .. }
+            | AssignmentOperationExpression::Modulo { left, .. }
+            | AssignmentOperationExpression::Exponentiation { left, .. }
+            | AssignmentOperationExpression::Concat { left, .. }
+            | AssignmentOperationExpression::BitwiseAnd { left, .. }
+            | AssignmentOperationExpression::BitwiseOr { left, .. }
+            | AssignmentOperationExpression::BitwiseXor { left, .. }
+            | AssignmentOperationExpression::LeftShift { left, .. }
+            | AssignmentOperationExpression::RightShift { left, .. }
+            | AssignmentOperationExpression::Coalesce { left, .. } => left.as_ref(),
         }
     }
 
     pub fn right(&self) -> &Expression {
         match self {
-            AssignmentOperationExpression::Assign { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::Addition { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::Subtraction { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::Multiplication { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::Division { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::Modulo { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::Exponentiation { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::Concat { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::BitwiseAnd { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::BitwiseOr { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::BitwiseXor { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::LeftShift { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::RightShift { right, .. } => right.as_ref(),
-            AssignmentOperationExpression::Coalesce { right, .. } => right.as_ref(),
+            AssignmentOperationExpression::Assign { right, .. }
+            | AssignmentOperationExpression::Addition { right, .. }
+            | AssignmentOperationExpression::Subtraction { right, .. }
+            | AssignmentOperationExpression::Multiplication { right, .. }
+            | AssignmentOperationExpression::Division { right, .. }
+            | AssignmentOperationExpression::Modulo { right, .. }
+            | AssignmentOperationExpression::Exponentiation { right, .. }
+            | AssignmentOperationExpression::Concat { right, .. }
+            | AssignmentOperationExpression::BitwiseAnd { right, .. }
+            | AssignmentOperationExpression::BitwiseOr { right, .. }
+            | AssignmentOperationExpression::BitwiseXor { right, .. }
+            | AssignmentOperationExpression::LeftShift { right, .. }
+            | AssignmentOperationExpression::RightShift { right, .. }
+            | AssignmentOperationExpression::Coalesce { right, .. } => right.as_ref(),
         }
     }
 
@@ -243,46 +243,20 @@ impl AssignmentOperationExpression {
 impl Node for AssignmentOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            AssignmentOperationExpression::Assign { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::Addition { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::Subtraction { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::Multiplication { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::Division { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::Modulo { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::Exponentiation { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::Concat { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::BitwiseAnd { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::BitwiseOr { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::BitwiseXor { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::LeftShift { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::RightShift { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            AssignmentOperationExpression::Coalesce { left, right, .. } => {
+            AssignmentOperationExpression::Assign { left, right, .. }
+            | AssignmentOperationExpression::Addition { left, right, .. }
+            | AssignmentOperationExpression::Subtraction { left, right, .. }
+            | AssignmentOperationExpression::Multiplication { left, right, .. }
+            | AssignmentOperationExpression::Division { left, right, .. }
+            | AssignmentOperationExpression::Modulo { left, right, .. }
+            | AssignmentOperationExpression::Exponentiation { left, right, .. }
+            | AssignmentOperationExpression::Concat { left, right, .. }
+            | AssignmentOperationExpression::BitwiseAnd { left, right, .. }
+            | AssignmentOperationExpression::BitwiseOr { left, right, .. }
+            | AssignmentOperationExpression::BitwiseXor { left, right, .. }
+            | AssignmentOperationExpression::LeftShift { left, right, .. }
+            | AssignmentOperationExpression::RightShift { left, right, .. }
+            | AssignmentOperationExpression::Coalesce { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
         }
@@ -326,19 +300,11 @@ pub enum BitwiseOperationExpression {
 impl Node for BitwiseOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            BitwiseOperationExpression::And { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            BitwiseOperationExpression::Or { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            BitwiseOperationExpression::Xor { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            BitwiseOperationExpression::LeftShift { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            BitwiseOperationExpression::RightShift { left, right, .. } => {
+            BitwiseOperationExpression::And { left, right, .. }
+            | BitwiseOperationExpression::Or { left, right, .. }
+            | BitwiseOperationExpression::Xor { left, right, .. }
+            | BitwiseOperationExpression::LeftShift { left, right, .. }
+            | BitwiseOperationExpression::RightShift { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
             BitwiseOperationExpression::Not { right, .. } => vec![right.as_mut()],
@@ -404,34 +370,16 @@ pub enum ComparisonOperationExpression {
 impl Node for ComparisonOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            ComparisonOperationExpression::Equal { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            ComparisonOperationExpression::Identical { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            ComparisonOperationExpression::NotEqual { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            ComparisonOperationExpression::AngledNotEqual { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            ComparisonOperationExpression::NotIdentical { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            ComparisonOperationExpression::LessThan { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            ComparisonOperationExpression::GreaterThan { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            ComparisonOperationExpression::LessThanOrEqual { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            ComparisonOperationExpression::GreaterThanOrEqual { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            ComparisonOperationExpression::Spaceship { left, right, .. } => {
+            ComparisonOperationExpression::Equal { left, right, .. }
+            | ComparisonOperationExpression::Identical { left, right, .. }
+            | ComparisonOperationExpression::NotEqual { left, right, .. }
+            | ComparisonOperationExpression::AngledNotEqual { left, right, .. }
+            | ComparisonOperationExpression::NotIdentical { left, right, .. }
+            | ComparisonOperationExpression::LessThan { left, right, .. }
+            | ComparisonOperationExpression::GreaterThan { left, right, .. }
+            | ComparisonOperationExpression::LessThanOrEqual { left, right, .. }
+            | ComparisonOperationExpression::GreaterThanOrEqual { left, right, .. }
+            | ComparisonOperationExpression::Spaceship { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
         }
@@ -475,22 +423,14 @@ pub enum LogicalOperationExpression {
 impl Node for LogicalOperationExpression {
     fn children(&mut self) -> Vec<&mut dyn Node> {
         match self {
-            LogicalOperationExpression::And { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            LogicalOperationExpression::Or { left, right, .. } => {
+            LogicalOperationExpression::And { left, right, .. }
+            | LogicalOperationExpression::Or { left, right, .. }
+            | LogicalOperationExpression::LogicalAnd { left, right, .. }
+            | LogicalOperationExpression::LogicalOr { left, right, .. }
+            | LogicalOperationExpression::LogicalXor { left, right, .. } => {
                 vec![left.as_mut(), right.as_mut()]
             }
             LogicalOperationExpression::Not { right, .. } => vec![right.as_mut()],
-            LogicalOperationExpression::LogicalAnd { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            LogicalOperationExpression::LogicalOr { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
-            LogicalOperationExpression::LogicalXor { left, right, .. } => {
-                vec![left.as_mut(), right.as_mut()]
-            }
         }
     }
 }
