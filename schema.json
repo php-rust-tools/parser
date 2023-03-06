@@ -1705,6 +1705,24 @@
               "$ref": "#/definitions/ClassishConstant"
             }
           }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "TraitUsage"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/TraitUsage"
+            }
+          }
         }
       ]
     },
@@ -6101,9 +6119,13 @@
     "HeredocExpression": {
       "type": "object",
       "required": [
+        "label",
         "parts"
       ],
       "properties": {
+        "label": {
+          "$ref": "#/definitions/ByteString"
+        },
         "parts": {
           "type": "array",
           "items": {
@@ -7620,9 +7642,13 @@
     "NowdocExpression": {
       "type": "object",
       "required": [
+        "label",
         "value"
       ],
       "properties": {
+        "label": {
+          "$ref": "#/definitions/ByteString"
+        },
         "value": {
           "$ref": "#/definitions/ByteString"
         }
@@ -10104,6 +10130,24 @@
             },
             "value": {
               "$ref": "#/definitions/ClassishConstant"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "TraitUsage"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/TraitUsage"
             }
           }
         }

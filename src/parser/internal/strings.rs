@@ -61,6 +61,7 @@ pub fn shell_exec(state: &mut State) -> ParseResult<Expression> {
 #[inline(always)]
 pub fn heredoc(state: &mut State) -> ParseResult<Expression> {
     let span = state.stream.current().span;
+    let label = state.stream.current().value.clone();
     state.stream.next();
 
     let mut parts = Vec::new();
@@ -140,12 +141,13 @@ pub fn heredoc(state: &mut State) -> ParseResult<Expression> {
         }
     }
 
-    Ok(Expression::Heredoc(HeredocExpression { parts }))
+    Ok(Expression::Heredoc(HeredocExpression { label, parts }))
 }
 
 #[inline(always)]
 pub fn nowdoc(state: &mut State) -> ParseResult<Expression> {
     let span = state.stream.current().span;
+    let label = state.stream.current().value.clone();
 
     state.stream.next();
 
@@ -221,7 +223,7 @@ pub fn nowdoc(state: &mut State) -> ParseResult<Expression> {
         string_part = bytes.into();
     }
 
-    Ok(Expression::Nowdoc(NowdocExpression { value: string_part }))
+    Ok(Expression::Nowdoc(NowdocExpression { label, value: string_part }))
 }
 
 fn part(state: &mut State) -> ParseResult<Option<StringPart>> {

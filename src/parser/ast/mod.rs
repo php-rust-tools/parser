@@ -842,6 +842,7 @@ impl Node for InterpolatedStringExpression {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 pub struct HeredocExpression {
+    pub label: ByteString,
     pub parts: Vec<StringPart>,
 }
 
@@ -856,6 +857,7 @@ impl Node for HeredocExpression {
 
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 pub struct NowdocExpression {
+    pub label: ByteString,
     pub value: ByteString,
 }
 
