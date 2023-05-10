@@ -33,7 +33,7 @@ impl std::fmt::Display for ByteString {
         for &b in &self.bytes {
             match b {
                 0 => write!(f, "\\0")?,
-                b'\n' | b'\r' | b'\t' => write!(f, "{}", b.escape_ascii())?,
+                b'\n' | b'\r' | b'\t' => write!(f, "{}", b as char)?,
                 0x01..=0x19 | 0x7f..=0xff => write!(f, "\\x{:02x}", b)?,
                 _ => write!(f, "{}", b as char)?,
             }
