@@ -134,7 +134,8 @@ pub enum TokenKind {
     MultiLineComment,
     DocumentComment,
     Const,
-    LiteralString,
+    LiteralSingleQuotedString,
+    LiteralDoubleQuotedString,
     Continue,
     CurlyOpen,
     Declare,
@@ -474,7 +475,8 @@ impl Display for TokenKind {
             | Self::QualifiedIdentifier
             | Self::Identifier
             | Self::FullyQualifiedIdentifier
-            | Self::LiteralString
+            | Self::LiteralSingleQuotedString
+            | Self::LiteralDoubleQuotedString
             | Self::SingleLineComment
             | Self::MultiLineComment
             | Self::HashMarkComment

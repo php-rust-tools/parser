@@ -293,20 +293,20 @@ impl Lexer {
             }
             // Single quoted string.
             [b'\'', ..] => {
-                let opening = state.source.read_and_skip(1);
-                self.tokenize_single_quote_string(state, opening)?
+                state.source.skip(1);
+                self.tokenize_single_quote_string(state)?
             }
             [b'b' | b'B', b'\'', ..] => {
-                let opening = state.source.read_and_skip(2);
-                self.tokenize_single_quote_string(state, opening)?
+                state.source.skip(2);
+                self.tokenize_single_quote_string(state)?
             }
             [b'"', ..] => {
-                let opening = state.source.read_and_skip(1);
-                self.tokenize_double_quote_string(state, opening)?
+                state.source.skip(1);
+                self.tokenize_double_quote_string(state)?
             }
             [b'b' | b'B', b'"', ..] => {
-                let opening = state.source.read_and_skip(2);
-                self.tokenize_double_quote_string(state, opening)?
+                state.source.skip(2);
+                self.tokenize_double_quote_string(state)?
             }
             [b'$', ident_start!(), ..] => self.tokenize_variable(state),
             [b'$', ..] => {
@@ -1470,14 +1470,12 @@ impl Lexer {
     fn tokenize_single_quote_string(
         &self,
         state: &mut State,
-        opening: &[u8],
     ) -> SyntaxResult<(TokenKind, ByteString)> {
-        let mut buffer = opening.to_vec();
+        let mut buffer = vec![];
 
         loop {
             match state.source.read(2) {
                 [b'\'', ..] => {
-                    buffer.push(b'\'');
                     state.source.next();
                     break;
                 }
@@ -1493,20 +1491,18 @@ impl Lexer {
             }
         }
 
-        Ok((TokenKind::LiteralString, buffer.into()))
+        Ok((TokenKind::LiteralSingleQuotedString, buffer.into()))
     }
 
     fn tokenize_double_quote_string(
         &self,
         state: &mut State,
-        opening: &[u8],
     ) -> SyntaxResult<(TokenKind, ByteString)> {
-        let mut buffer = opening.to_vec();
+        let mut buffer = vec![];
 
         let constant = loop {
             match state.source.read(3) {
                 [b'"', ..] => {
-                    buffer.push(b'"');
                     state.source.next();
                     break true;
                 }
@@ -1614,7 +1610,7 @@ impl Lexer {
         };
 
         Ok(if constant {
-            (TokenKind::LiteralString, buffer.into())
+            (TokenKind::LiteralDoubleQuotedString, buffer.into())
         } else {
             state.replace(StackFrame::DoubleQuote);
             (TokenKind::StringPart, buffer.into())

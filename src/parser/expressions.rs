@@ -40,6 +40,7 @@ use crate::parser::internal::utils;
 use crate::parser::internal::variables;
 use crate::parser::state::State;
 
+use super::ast::literals::LiteralStringKind;
 use super::ast::BoolExpression;
 use super::ast::CastExpression;
 use super::ast::CloneExpression;
@@ -848,17 +849,28 @@ expressions! {
         }
     })
 
-    #[before(string_part), current(TokenKind::LiteralString)]
+    #[before(string_part), current(TokenKind::LiteralSingleQuotedString | TokenKind::LiteralDoubleQuotedString)]
     literal_string({
         let current = state.stream.current();
 
-        if let TokenKind::LiteralString = &current.kind {
+        if let TokenKind::LiteralSingleQuotedString = &current.kind {
             state.stream.next();
 
             Ok(Expression::Literal(
                 Literal::String(LiteralString {
                     span: current.span,
-                    value: current.value.clone()
+                    value: current.value.clone(),
+                    kind: LiteralStringKind::SingleQuoted,
+                })
+            ))
+        } else if let TokenKind::LiteralDoubleQuotedString = &current.kind {
+            state.stream.next();
+
+            Ok(Expression::Literal(
+                Literal::String(LiteralString {
+                    span: current.span,
+                    value: current.value.clone(),
+                    kind: LiteralStringKind::DoubleQuoted,
                 })
             ))
         } else {

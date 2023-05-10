@@ -6894,10 +6894,14 @@
     "LiteralString": {
       "type": "object",
       "required": [
+        "kind",
         "span",
         "value"
       ],
       "properties": {
+        "kind": {
+          "$ref": "#/definitions/LiteralStringKind"
+        },
         "span": {
           "$ref": "#/definitions/Span"
         },
@@ -6905,6 +6909,13 @@
           "$ref": "#/definitions/ByteString"
         }
       }
+    },
+    "LiteralStringKind": {
+      "type": "string",
+      "enum": [
+        "SingleQuoted",
+        "DoubleQuoted"
+      ]
     },
     "LiteralStringPart": {
       "type": "object",

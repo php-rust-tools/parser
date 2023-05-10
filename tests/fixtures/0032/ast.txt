@@ -13,11 +13,6 @@
             expression: InterpolatedString(
                 InterpolatedStringExpression {
                     parts: [
-                        Literal(
-                            LiteralStringPart {
-                                value: """,
-                            },
-                        ),
                         Expression(
                             ExpressionStringPart {
                                 expression: Variable(
@@ -143,12 +138,13 @@
                                                         Literal(
                                                             String(
                                                                 LiteralString {
-                                                                    value: "'bar'",
+                                                                    value: "bar",
                                                                     span: Span {
                                                                         line: 1,
                                                                         column: 29,
                                                                         position: 28,
                                                                     },
+                                                                    kind: SingleQuoted,
                                                                 },
                                                             ),
                                                         ),

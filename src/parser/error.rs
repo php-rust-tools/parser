@@ -175,9 +175,10 @@ pub fn unexpected_token(expected: Vec<String>, found: &Token) -> ParseError {
             | TokenKind::QualifiedIdentifier
             | TokenKind::FullyQualifiedIdentifier => ("identifier".to_string(), false),
             TokenKind::Variable => ("variable".to_string(), false),
-            TokenKind::LiteralInteger | TokenKind::LiteralFloat | TokenKind::LiteralString => {
-                ("literal".to_string(), false)
-            }
+            TokenKind::LiteralInteger
+            | TokenKind::LiteralFloat
+            | TokenKind::LiteralSingleQuotedString
+            | TokenKind::LiteralDoubleQuotedString => ("literal".to_string(), false),
             _ => (format!("token `{}`", found.value), false),
         },
     };

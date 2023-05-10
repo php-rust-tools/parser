@@ -73,13 +73,18 @@ macro_rules! expect_literal {
                     },
                 )
             }
-            TokenKind::LiteralString => {
+            TokenKind::LiteralSingleQuotedString | TokenKind::LiteralDoubleQuotedString => {
                 $state.stream.next();
 
                 $crate::parser::ast::literals::Literal::String(
                     $crate::parser::ast::literals::LiteralString {
                         span: current.span,
                         value: current.value.clone(),
+                        kind: if matches!(current.kind, TokenKind::LiteralSingleQuotedString) {
+                            $crate::parser::ast::literals::LiteralStringKind::SingleQuoted
+                        } else {
+                            $crate::parser::ast::literals::LiteralStringKind::DoubleQuoted
+                        },
                     },
                 )
             }

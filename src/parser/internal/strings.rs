@@ -7,6 +7,7 @@ use crate::parser::ast::identifiers::Identifier;
 use crate::parser::ast::literals::Literal;
 use crate::parser::ast::literals::LiteralInteger;
 use crate::parser::ast::literals::LiteralString;
+use crate::parser::ast::literals::LiteralStringKind;
 use crate::parser::ast::operators::ArithmeticOperationExpression;
 use crate::parser::ast::variables::Variable;
 use crate::parser::ast::ExpressionStringPart;
@@ -223,7 +224,10 @@ pub fn nowdoc(state: &mut State) -> ParseResult<Expression> {
         string_part = bytes.into();
     }
 
-    Ok(Expression::Nowdoc(NowdocExpression { label, value: string_part }))
+    Ok(Expression::Nowdoc(NowdocExpression {
+        label,
+        value: string_part,
+    }))
 }
 
 fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
@@ -303,6 +307,7 @@ fn part(state: &mut State) -> ParseResult<Option<StringPart>> {
                             Expression::Literal(Literal::String(LiteralString {
                                 span: current.span,
                                 value: current.value.clone(),
+                                kind: LiteralStringKind::SingleQuoted,
                             }))
                         }
                         TokenKind::Variable => Expression::Variable(Variable::SimpleVariable(

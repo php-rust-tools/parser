@@ -29,6 +29,13 @@ impl Node for Literal {
 pub struct LiteralString {
     pub value: ByteString,
     pub span: Span,
+    pub kind: LiteralStringKind,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+pub enum LiteralStringKind {
+    SingleQuoted,
+    DoubleQuoted,
 }
 
 impl Node for LiteralString {
