@@ -72,3 +72,17 @@ jobs:
         with:
           command: test
           args: -r --all
+
+      - name: install cargo-fuzz
+        uses: actions-rs/cargo@v1
+        if: matrix.rust == 'nightly'
+        with:
+          command: install
+          args: cargo-fuzz
+
+      - name: fuzz
+        uses: actions-rs/cargo@v1
+        if: matrix.rust == 'nightly'
+        with:
+          command: fuzz
+          args: build
