@@ -72,27 +72,26 @@ impl Type {
 
     pub fn first_span(&self) -> Span {
         match &self {
-            Type::Named(span, _) => *span,
-            Type::Nullable(span, _) => *span,
-            Type::Union(inner) => inner[0].first_span(),
-            Type::Intersection(inner) => inner[0].first_span(),
-            Type::Void(span) => *span,
-            Type::Null(span) => *span,
-            Type::True(span) => *span,
-            Type::False(span) => *span,
-            Type::Never(span) => *span,
-            Type::Float(span) => *span,
-            Type::Boolean(span) => *span,
-            Type::Integer(span) => *span,
-            Type::String(span) => *span,
-            Type::Array(span) => *span,
-            Type::Object(span) => *span,
-            Type::Mixed(span) => *span,
-            Type::Callable(span) => *span,
-            Type::Iterable(span) => *span,
-            Type::StaticReference(span) => *span,
-            Type::SelfReference(span) => *span,
-            Type::ParentReference(span) => *span,
+            Type::Union(inner) | Type::Intersection(inner) => inner[0].first_span(),
+            Type::Named(span, _)
+            | Type::Nullable(span, _)
+            | Type::Void(span)
+            | Type::Null(span)
+            | Type::True(span)
+            | Type::False(span)
+            | Type::Never(span)
+            | Type::Float(span)
+            | Type::Boolean(span)
+            | Type::Integer(span)
+            | Type::String(span)
+            | Type::Array(span)
+            | Type::Object(span)
+            | Type::Mixed(span)
+            | Type::Callable(span)
+            | Type::Iterable(span)
+            | Type::StaticReference(span)
+            | Type::SelfReference(span)
+            | Type::ParentReference(span) => *span,
         }
     }
 }

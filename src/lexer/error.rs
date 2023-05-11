@@ -22,17 +22,17 @@ pub enum SyntaxError {
 impl SyntaxError {
     pub fn span(&self) -> Span {
         match self {
-            Self::UnexpectedEndOfFile(span) => *span,
-            Self::UnexpectedError(span) => *span,
-            Self::UnexpectedCharacter(_, span) => *span,
-            Self::InvalidHaltCompiler(span) => *span,
-            Self::InvalidOctalEscape(span) => *span,
-            Self::InvalidOctalLiteral(span) => *span,
-            Self::InvalidUnicodeEscape(span) => *span,
-            Self::UnpredictableState(span) => *span,
-            Self::InvalidDocIndentation(span) => *span,
-            Self::InvalidDocBodyIndentationLevel(_, span) => *span,
-            Self::UnrecognisedToken(_, span) => *span,
+            Self::UnexpectedEndOfFile(span)
+            | Self::UnexpectedError(span)
+            | Self::UnexpectedCharacter(_, span)
+            | Self::InvalidHaltCompiler(span)
+            | Self::InvalidOctalEscape(span)
+            | Self::InvalidOctalLiteral(span)
+            | Self::InvalidUnicodeEscape(span)
+            | Self::UnpredictableState(span)
+            | Self::InvalidDocIndentation(span)
+            | Self::InvalidDocBodyIndentationLevel(_, span)
+            | Self::UnrecognisedToken(_, span) => *span,
         }
     }
 }
