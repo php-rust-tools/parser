@@ -154,10 +154,6 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
             let id = current.value.clone();
             let span = current.span;
 
-            if state.stream.peek().kind == TokenKind::Equals {
-                return Ok(None);
-            }
-
             state.stream.next();
 
             let name = &id[..];
@@ -183,7 +179,6 @@ fn optional_simple_data_type(state: &mut State) -> ParseResult<Option<Type>> {
         TokenKind::QualifiedIdentifier | TokenKind::FullyQualifiedIdentifier => {
             let name = current.value.clone();
             let span = current.span;
-
             state.stream.next();
 
             Ok(Some(Type::Named(span, name)))

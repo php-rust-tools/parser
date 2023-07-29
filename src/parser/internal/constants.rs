@@ -43,7 +43,6 @@ pub fn parse(state: &mut State) -> ParseResult<ConstantStatement> {
     Ok(ConstantStatement {
         comments,
         r#const: start,
-        r#type: None,
         entries,
         semicolon: end,
     })

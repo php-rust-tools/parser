@@ -33,8 +33,7 @@ pub struct ConstantStatement {
     pub comments: CommentGroup,
     pub r#const: Span,               // `const`
     pub entries: Vec<ConstantEntry>, // `FOO = 123`
-    pub r#type: Option<Type>,
-    pub semicolon: Span, // `;`
+    pub semicolon: Span,             // `;`
 }
 
 impl ConstantStatement {
@@ -70,7 +69,7 @@ pub struct ClassishConstant {
     pub r#const: Span,                    // `const`
     pub r#type: Option<Type>,             // `string`
     #[serde(flatten)]
-    pub entries: Vec<ConstantEntry>, // `FOO = 123`
+    pub entries: Vec<ConstantEntry>,      // `FOO = 123`
     pub semicolon: Span,                  // `;`
 }
 
