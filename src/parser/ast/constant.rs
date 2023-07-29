@@ -64,13 +64,13 @@ impl Node for ConstantStatement {
 
 pub struct ClassishConstant {
     pub comments: CommentGroup,
-    pub attributes: Vec<AttributeGroup>,  // `#[Foo]`
-    pub modifiers: ConstantModifierGroup, // `public`
-    pub r#const: Span,                    // `const`
-    pub r#type: Option<Type>,             // `string`
+    pub attributes: Vec<AttributeGroup>, // `#[Foo]`
     #[serde(flatten)]
-    pub entries: Vec<ConstantEntry>,      // `FOO = 123`
-    pub semicolon: Span,                  // `;`
+    pub modifiers: ConstantModifierGroup, // `public`
+    pub r#const: Span,                   // `const`
+    pub r#type: Option<Type>,            // `string`
+    pub entries: Vec<ConstantEntry>,     // `FOO = 123`
+    pub semicolon: Span,                 // `;`
 }
 
 impl ClassishConstant {

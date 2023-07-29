@@ -66,7 +66,7 @@ pub fn classish(
         let name = if state.stream.peek().kind == TokenKind::Equals {
             identifiers::identifier_maybe_reserved(state)?
         } else {
-            if let Err(_) = ty {
+            if ty.is_err() {
                 ty = Ok(data_type::optional_data_type(state)?);
             }
 

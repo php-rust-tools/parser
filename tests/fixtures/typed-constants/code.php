@@ -20,6 +20,10 @@ class MyClass extends MyParentClass {
     const static|null O = null;
     const mixed P = null;
     const Q = '';
+    public const string R = '';
+    protected const string S = '';
+    private const string T = '';
+    const string U = '', V = '';
 }
 
 enum MyEnum {
