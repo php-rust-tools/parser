@@ -767,7 +767,7 @@ pub fn nested_namespace_declarations(span: Span) -> ParseError {
     )
 }
 
-pub fn forbidden_type_used_in_property(
+pub fn forbidden_type_used_in_property_or_constant(
     state: &mut State,
     class: Option<&SimpleIdentifier>,
     property: &SimpleVariable,
@@ -794,7 +794,7 @@ pub fn forbidden_type_used_in_property(
         type_span.position,
         type_string.len(),
     )
-    .note("`void`, `never`, and `callable` types are not allowed in properties");
+    .note("`void`, `never`, and `callable` types are not allowed in properties and constants");
 
     // If the class is anonymous, we don't have a span to highlight
     if let Some(class) = class {

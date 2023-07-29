@@ -1,0 +1,107 @@
+[
+    FullOpeningTag(
+        FullOpeningTagStatement {
+            span: Span {
+                line: 1,
+                column: 1,
+                position: 0,
+            },
+        },
+    ),
+    Class(
+        ClassStatement {
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span {
+                line: 3,
+                column: 1,
+                position: 8,
+            },
+            name: SimpleIdentifier {
+                span: Span {
+                    line: 3,
+                    column: 7,
+                    position: 14,
+                },
+                value: "foo",
+            },
+            extends: None,
+            implements: None,
+            body: ClassBody {
+                left_brace: Span {
+                    line: 3,
+                    column: 11,
+                    position: 18,
+                },
+                members: [
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 4,
+                                column: 5,
+                                position: 24,
+                            },
+                            type: Some(
+                                StaticReference(
+                                    Span {
+                                        line: 4,
+                                        column: 11,
+                                        position: 30,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 4,
+                                            column: 18,
+                                            position: 37,
+                                        },
+                                        value: "BAR",
+                                    },
+                                    equals: Span {
+                                        line: 4,
+                                        column: 22,
+                                        position: 41,
+                                    },
+                                    value: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "34",
+                                                span: Span {
+                                                    line: 4,
+                                                    column: 24,
+                                                    position: 43,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 4,
+                                column: 26,
+                                position: 45,
+                            },
+                        },
+                    ),
+                ],
+                right_brace: Span {
+                    line: 5,
+                    column: 1,
+                    position: 47,
+                },
+            },
+        },
+    ),
+]

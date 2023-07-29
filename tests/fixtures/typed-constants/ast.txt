@@ -1,0 +1,1362 @@
+[
+    FullOpeningTag(
+        FullOpeningTagStatement {
+            span: Span {
+                line: 1,
+                column: 1,
+                position: 0,
+            },
+        },
+    ),
+    Class(
+        ClassStatement {
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span {
+                line: 3,
+                column: 1,
+                position: 7,
+            },
+            name: SimpleIdentifier {
+                span: Span {
+                    line: 3,
+                    column: 7,
+                    position: 13,
+                },
+                value: "MyParentClass",
+            },
+            extends: None,
+            implements: None,
+            body: ClassBody {
+                left_brace: Span {
+                    line: 3,
+                    column: 21,
+                    position: 27,
+                },
+                members: [],
+                right_brace: Span {
+                    line: 3,
+                    column: 22,
+                    position: 28,
+                },
+            },
+        },
+    ),
+    Class(
+        ClassStatement {
+            attributes: [],
+            modifiers: ClassModifierGroup {
+                modifiers: [],
+            },
+            class: Span {
+                line: 5,
+                column: 1,
+                position: 31,
+            },
+            name: SimpleIdentifier {
+                span: Span {
+                    line: 5,
+                    column: 7,
+                    position: 37,
+                },
+                value: "MyClass",
+            },
+            extends: Some(
+                ClassExtends {
+                    extends: Span {
+                        line: 5,
+                        column: 15,
+                        position: 45,
+                    },
+                    parent: SimpleIdentifier {
+                        span: Span {
+                            line: 5,
+                            column: 23,
+                            position: 53,
+                        },
+                        value: "MyParentClass",
+                    },
+                },
+            ),
+            implements: None,
+            body: ClassBody {
+                left_brace: Span {
+                    line: 5,
+                    column: 37,
+                    position: 67,
+                },
+                members: [
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 6,
+                                column: 5,
+                                position: 73,
+                            },
+                            type: Some(
+                                Boolean(
+                                    Span {
+                                        line: 6,
+                                        column: 11,
+                                        position: 79,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 6,
+                                            column: 16,
+                                            position: 84,
+                                        },
+                                        value: "A",
+                                    },
+                                    equals: Span {
+                                        line: 6,
+                                        column: 18,
+                                        position: 86,
+                                    },
+                                    value: Bool(
+                                        BoolExpression {
+                                            value: true,
+                                        },
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 6,
+                                column: 24,
+                                position: 92,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 7,
+                                column: 5,
+                                position: 98,
+                            },
+                            type: Some(
+                                String(
+                                    Span {
+                                        line: 7,
+                                        column: 11,
+                                        position: 104,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 7,
+                                            column: 18,
+                                            position: 111,
+                                        },
+                                        value: "B",
+                                    },
+                                    equals: Span {
+                                        line: 7,
+                                        column: 20,
+                                        position: 113,
+                                    },
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "",
+                                                span: Span {
+                                                    line: 7,
+                                                    column: 22,
+                                                    position: 115,
+                                                },
+                                                kind: SingleQuoted,
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 7,
+                                column: 24,
+                                position: 117,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 8,
+                                column: 5,
+                                position: 123,
+                            },
+                            type: Some(
+                                Nullable(
+                                    Span {
+                                        line: 8,
+                                        column: 11,
+                                        position: 129,
+                                    },
+                                    String(
+                                        Span {
+                                            line: 8,
+                                            column: 12,
+                                            position: 130,
+                                        },
+                                    ),
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 8,
+                                            column: 19,
+                                            position: 137,
+                                        },
+                                        value: "C",
+                                    },
+                                    equals: Span {
+                                        line: 8,
+                                        column: 21,
+                                        position: 139,
+                                    },
+                                    value: Null,
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 8,
+                                column: 27,
+                                position: 145,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 9,
+                                column: 5,
+                                position: 151,
+                            },
+                            type: Some(
+                                Union(
+                                    [
+                                        Null(
+                                            Span {
+                                                line: 9,
+                                                column: 11,
+                                                position: 157,
+                                            },
+                                        ),
+                                        String(
+                                            Span {
+                                                line: 9,
+                                                column: 16,
+                                                position: 162,
+                                            },
+                                        ),
+                                    ],
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 9,
+                                            column: 23,
+                                            position: 169,
+                                        },
+                                        value: "D",
+                                    },
+                                    equals: Span {
+                                        line: 9,
+                                        column: 25,
+                                        position: 171,
+                                    },
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "",
+                                                span: Span {
+                                                    line: 9,
+                                                    column: 27,
+                                                    position: 173,
+                                                },
+                                                kind: SingleQuoted,
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 9,
+                                column: 29,
+                                position: 175,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 10,
+                                column: 5,
+                                position: 181,
+                            },
+                            type: Some(
+                                Integer(
+                                    Span {
+                                        line: 10,
+                                        column: 11,
+                                        position: 187,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 10,
+                                            column: 15,
+                                            position: 191,
+                                        },
+                                        value: "E",
+                                    },
+                                    equals: Span {
+                                        line: 10,
+                                        column: 17,
+                                        position: 193,
+                                    },
+                                    value: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "1",
+                                                span: Span {
+                                                    line: 10,
+                                                    column: 19,
+                                                    position: 195,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 10,
+                                column: 20,
+                                position: 196,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 11,
+                                column: 5,
+                                position: 202,
+                            },
+                            type: Some(
+                                Float(
+                                    Span {
+                                        line: 11,
+                                        column: 11,
+                                        position: 208,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 11,
+                                            column: 17,
+                                            position: 214,
+                                        },
+                                        value: "F",
+                                    },
+                                    equals: Span {
+                                        line: 11,
+                                        column: 19,
+                                        position: 216,
+                                    },
+                                    value: Literal(
+                                        Integer(
+                                            LiteralInteger {
+                                                value: "2",
+                                                span: Span {
+                                                    line: 11,
+                                                    column: 21,
+                                                    position: 218,
+                                                },
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 11,
+                                column: 22,
+                                position: 219,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 12,
+                                column: 5,
+                                position: 225,
+                            },
+                            type: Some(
+                                Union(
+                                    [
+                                        Named(
+                                            Span {
+                                                line: 12,
+                                                column: 11,
+                                                position: 231,
+                                            },
+                                            "\Stringable",
+                                        ),
+                                        Null(
+                                            Span {
+                                                line: 12,
+                                                column: 23,
+                                                position: 243,
+                                            },
+                                        ),
+                                    ],
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 12,
+                                            column: 28,
+                                            position: 248,
+                                        },
+                                        value: "G",
+                                    },
+                                    equals: Span {
+                                        line: 12,
+                                        column: 30,
+                                        position: 250,
+                                    },
+                                    value: Null,
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 12,
+                                column: 36,
+                                position: 256,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 13,
+                                column: 5,
+                                position: 262,
+                            },
+                            type: Some(
+                                Union(
+                                    [
+                                        Intersection(
+                                            [
+                                                Named(
+                                                    Span {
+                                                        line: 13,
+                                                        column: 12,
+                                                        position: 269,
+                                                    },
+                                                    "\Stringable",
+                                                ),
+                                                Named(
+                                                    Span {
+                                                        line: 13,
+                                                        column: 24,
+                                                        position: 281,
+                                                    },
+                                                    "\Countable",
+                                                ),
+                                            ],
+                                        ),
+                                        Null(
+                                            Span {
+                                                line: 13,
+                                                column: 36,
+                                                position: 293,
+                                            },
+                                        ),
+                                    ],
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 13,
+                                            column: 41,
+                                            position: 298,
+                                        },
+                                        value: "H",
+                                    },
+                                    equals: Span {
+                                        line: 13,
+                                        column: 43,
+                                        position: 300,
+                                    },
+                                    value: Null,
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 13,
+                                column: 49,
+                                position: 306,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 14,
+                                column: 5,
+                                position: 312,
+                            },
+                            type: Some(
+                                Union(
+                                    [
+                                        SelfReference(
+                                            Span {
+                                                line: 14,
+                                                column: 11,
+                                                position: 318,
+                                            },
+                                        ),
+                                        Null(
+                                            Span {
+                                                line: 14,
+                                                column: 16,
+                                                position: 323,
+                                            },
+                                        ),
+                                    ],
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 14,
+                                            column: 21,
+                                            position: 328,
+                                        },
+                                        value: "I",
+                                    },
+                                    equals: Span {
+                                        line: 14,
+                                        column: 23,
+                                        position: 330,
+                                    },
+                                    value: Null,
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 14,
+                                column: 29,
+                                position: 336,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 15,
+                                column: 5,
+                                position: 342,
+                            },
+                            type: Some(
+                                Union(
+                                    [
+                                        ParentReference(
+                                            Span {
+                                                line: 15,
+                                                column: 11,
+                                                position: 348,
+                                            },
+                                        ),
+                                        Null(
+                                            Span {
+                                                line: 15,
+                                                column: 18,
+                                                position: 355,
+                                            },
+                                        ),
+                                    ],
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 15,
+                                            column: 23,
+                                            position: 360,
+                                        },
+                                        value: "J",
+                                    },
+                                    equals: Span {
+                                        line: 15,
+                                        column: 25,
+                                        position: 362,
+                                    },
+                                    value: Null,
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 15,
+                                column: 31,
+                                position: 368,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 16,
+                                column: 5,
+                                position: 374,
+                            },
+                            type: Some(
+                                Iterable(
+                                    Span {
+                                        line: 16,
+                                        column: 11,
+                                        position: 380,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 16,
+                                            column: 20,
+                                            position: 389,
+                                        },
+                                        value: "K",
+                                    },
+                                    equals: Span {
+                                        line: 16,
+                                        column: 22,
+                                        position: 391,
+                                    },
+                                    value: ShortArray(
+                                        ShortArrayExpression {
+                                            start: Span {
+                                                line: 16,
+                                                column: 24,
+                                                position: 393,
+                                            },
+                                            items: CommaSeparated {
+                                                inner: [],
+                                                commas: [],
+                                            },
+                                            end: Span {
+                                                line: 16,
+                                                column: 25,
+                                                position: 394,
+                                            },
+                                        },
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 16,
+                                column: 26,
+                                position: 395,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 17,
+                                column: 5,
+                                position: 401,
+                            },
+                            type: Some(
+                                Null(
+                                    Span {
+                                        line: 17,
+                                        column: 11,
+                                        position: 407,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 17,
+                                            column: 16,
+                                            position: 412,
+                                        },
+                                        value: "L",
+                                    },
+                                    equals: Span {
+                                        line: 17,
+                                        column: 18,
+                                        position: 414,
+                                    },
+                                    value: Null,
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 17,
+                                column: 24,
+                                position: 420,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 18,
+                                column: 5,
+                                position: 426,
+                            },
+                            type: Some(
+                                False(
+                                    Span {
+                                        line: 18,
+                                        column: 11,
+                                        position: 432,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 18,
+                                            column: 17,
+                                            position: 438,
+                                        },
+                                        value: "M",
+                                    },
+                                    equals: Span {
+                                        line: 18,
+                                        column: 19,
+                                        position: 440,
+                                    },
+                                    value: Bool(
+                                        BoolExpression {
+                                            value: false,
+                                        },
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 18,
+                                column: 26,
+                                position: 447,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 19,
+                                column: 5,
+                                position: 453,
+                            },
+                            type: Some(
+                                True(
+                                    Span {
+                                        line: 19,
+                                        column: 11,
+                                        position: 459,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 19,
+                                            column: 16,
+                                            position: 464,
+                                        },
+                                        value: "N",
+                                    },
+                                    equals: Span {
+                                        line: 19,
+                                        column: 18,
+                                        position: 466,
+                                    },
+                                    value: Bool(
+                                        BoolExpression {
+                                            value: true,
+                                        },
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 19,
+                                column: 24,
+                                position: 472,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 20,
+                                column: 5,
+                                position: 478,
+                            },
+                            type: Some(
+                                Union(
+                                    [
+                                        StaticReference(
+                                            Span {
+                                                line: 20,
+                                                column: 11,
+                                                position: 484,
+                                            },
+                                        ),
+                                        Null(
+                                            Span {
+                                                line: 20,
+                                                column: 18,
+                                                position: 491,
+                                            },
+                                        ),
+                                    ],
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 20,
+                                            column: 23,
+                                            position: 496,
+                                        },
+                                        value: "O",
+                                    },
+                                    equals: Span {
+                                        line: 20,
+                                        column: 25,
+                                        position: 498,
+                                    },
+                                    value: Null,
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 20,
+                                column: 31,
+                                position: 504,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 21,
+                                column: 5,
+                                position: 510,
+                            },
+                            type: Some(
+                                Mixed(
+                                    Span {
+                                        line: 21,
+                                        column: 11,
+                                        position: 516,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 21,
+                                            column: 17,
+                                            position: 522,
+                                        },
+                                        value: "P",
+                                    },
+                                    equals: Span {
+                                        line: 21,
+                                        column: 19,
+                                        position: 524,
+                                    },
+                                    value: Null,
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 21,
+                                column: 25,
+                                position: 530,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 22,
+                                column: 5,
+                                position: 536,
+                            },
+                            type: None,
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 22,
+                                            column: 11,
+                                            position: 542,
+                                        },
+                                        value: "Q",
+                                    },
+                                    equals: Span {
+                                        line: 22,
+                                        column: 13,
+                                        position: 544,
+                                    },
+                                    value: Literal(
+                                        String(
+                                            LiteralString {
+                                                value: "",
+                                                span: Span {
+                                                    line: 22,
+                                                    column: 15,
+                                                    position: 546,
+                                                },
+                                                kind: SingleQuoted,
+                                            },
+                                        ),
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 22,
+                                column: 17,
+                                position: 548,
+                            },
+                        },
+                    ),
+                ],
+                right_brace: Span {
+                    line: 23,
+                    column: 1,
+                    position: 550,
+                },
+            },
+        },
+    ),
+    UnitEnum(
+        UnitEnumStatement {
+            attributes: [],
+            enum: Span {
+                line: 25,
+                column: 1,
+                position: 553,
+            },
+            name: SimpleIdentifier {
+                span: Span {
+                    line: 25,
+                    column: 6,
+                    position: 558,
+                },
+                value: "MyEnum",
+            },
+            implements: [],
+            body: UnitEnumBody {
+                left_brace: Span {
+                    line: 25,
+                    column: 13,
+                    position: 565,
+                },
+                members: [
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 26,
+                                column: 5,
+                                position: 571,
+                            },
+                            type: Some(
+                                Named(
+                                    Span {
+                                        line: 26,
+                                        column: 11,
+                                        position: 577,
+                                    },
+                                    "MyEnum",
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 26,
+                                            column: 18,
+                                            position: 584,
+                                        },
+                                        value: "A",
+                                    },
+                                    equals: Span {
+                                        line: 26,
+                                        column: 20,
+                                        position: 586,
+                                    },
+                                    value: ConstantFetch(
+                                        ConstantFetchExpression {
+                                            target: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: Span {
+                                                            line: 26,
+                                                            column: 22,
+                                                            position: 588,
+                                                        },
+                                                        value: "MyEnum",
+                                                    },
+                                                ),
+                                            ),
+                                            double_colon: Span {
+                                                line: 26,
+                                                column: 28,
+                                                position: 594,
+                                            },
+                                            constant: SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 26,
+                                                        column: 30,
+                                                        position: 596,
+                                                    },
+                                                    value: "Foo",
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 26,
+                                column: 33,
+                                position: 599,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 27,
+                                column: 5,
+                                position: 605,
+                            },
+                            type: Some(
+                                SelfReference(
+                                    Span {
+                                        line: 27,
+                                        column: 11,
+                                        position: 611,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 27,
+                                            column: 16,
+                                            position: 616,
+                                        },
+                                        value: "B",
+                                    },
+                                    equals: Span {
+                                        line: 27,
+                                        column: 18,
+                                        position: 618,
+                                    },
+                                    value: ConstantFetch(
+                                        ConstantFetchExpression {
+                                            target: Self_,
+                                            double_colon: Span {
+                                                line: 27,
+                                                column: 24,
+                                                position: 624,
+                                            },
+                                            constant: SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 27,
+                                                        column: 26,
+                                                        position: 626,
+                                                    },
+                                                    value: "Foo",
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 27,
+                                column: 29,
+                                position: 629,
+                            },
+                        },
+                    ),
+                    Constant(
+                        ClassishConstant {
+                            comments: CommentGroup {
+                                comments: [],
+                            },
+                            attributes: [],
+                            modifiers: ConstantModifierGroup {
+                                modifiers: [],
+                            },
+                            const: Span {
+                                line: 28,
+                                column: 5,
+                                position: 635,
+                            },
+                            type: Some(
+                                StaticReference(
+                                    Span {
+                                        line: 28,
+                                        column: 11,
+                                        position: 641,
+                                    },
+                                ),
+                            ),
+                            entries: [
+                                ConstantEntry {
+                                    name: SimpleIdentifier {
+                                        span: Span {
+                                            line: 28,
+                                            column: 18,
+                                            position: 648,
+                                        },
+                                        value: "C",
+                                    },
+                                    equals: Span {
+                                        line: 28,
+                                        column: 20,
+                                        position: 650,
+                                    },
+                                    value: ConstantFetch(
+                                        ConstantFetchExpression {
+                                            target: Identifier(
+                                                SimpleIdentifier(
+                                                    SimpleIdentifier {
+                                                        span: Span {
+                                                            line: 28,
+                                                            column: 22,
+                                                            position: 652,
+                                                        },
+                                                        value: "MyEnum",
+                                                    },
+                                                ),
+                                            ),
+                                            double_colon: Span {
+                                                line: 28,
+                                                column: 28,
+                                                position: 658,
+                                            },
+                                            constant: SimpleIdentifier(
+                                                SimpleIdentifier {
+                                                    span: Span {
+                                                        line: 28,
+                                                        column: 30,
+                                                        position: 660,
+                                                    },
+                                                    value: "Foo",
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ],
+                            semicolon: Span {
+                                line: 28,
+                                column: 33,
+                                position: 663,
+                            },
+                        },
+                    ),
+                    Case(
+                        UnitEnumCase {
+                            attributes: [],
+                            start: Span {
+                                line: 30,
+                                column: 5,
+                                position: 670,
+                            },
+                            name: SimpleIdentifier {
+                                span: Span {
+                                    line: 30,
+                                    column: 10,
+                                    position: 675,
+                                },
+                                value: "FOO",
+                            },
+                            end: Span {
+                                line: 30,
+                                column: 13,
+                                position: 678,
+                            },
+                        },
+                    ),
+                ],
+                right_brace: Span {
+                    line: 31,
+                    column: 1,
+                    position: 680,
+                },
+            },
+        },
+    ),
+]

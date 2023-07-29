@@ -182,7 +182,8 @@ fn member(
     let modifiers = modifiers::collect(state)?;
 
     if state.stream.current().kind == TokenKind::Const {
-        return classish(state, modifiers::constant_group(modifiers)?).map(ClassMember::Constant);
+        return classish(state, Some(name), modifiers::constant_group(modifiers)?)
+            .map(ClassMember::Constant);
     }
 
     if state.stream.current().kind == TokenKind::Function {
@@ -245,7 +246,7 @@ fn anonymous_member(state: &mut State) -> ParseResult<AnonymousClassMember> {
     let modifiers = modifiers::collect(state)?;
 
     if state.stream.current().kind == TokenKind::Const {
-        return classish(state, modifiers::constant_group(modifiers)?)
+        return classish(state, None, modifiers::constant_group(modifiers)?)
             .map(AnonymousClassMember::Constant);
     }
 

@@ -198,8 +198,12 @@ fn member(state: &mut State, class_name: &SimpleIdentifier) -> ParseResult<Trait
     let modifiers = modifiers::collect(state)?;
 
     if state.stream.current().kind == TokenKind::Const {
-        return constants::classish(state, modifiers::constant_group(modifiers)?)
-            .map(TraitMember::Constant);
+        return constants::classish(
+            state,
+            Some(class_name),
+            modifiers::constant_group(modifiers)?,
+        )
+        .map(TraitMember::Constant);
     }
 
     if state.stream.current().kind == TokenKind::Function {

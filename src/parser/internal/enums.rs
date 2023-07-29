@@ -157,9 +157,13 @@ fn unit_member(
     let modifiers = modifiers::collect(state)?;
 
     if state.stream.current().kind == TokenKind::Const {
-        return constants::classish(state, modifiers::constant_group(modifiers)?)
-            .map(UnitEnumMember::Constant)
-            .map(Some);
+        return constants::classish(
+            state,
+            Some(enum_name),
+            modifiers::constant_group(modifiers)?,
+        )
+        .map(UnitEnumMember::Constant)
+        .map(Some);
     }
 
     method(state, modifiers, enum_name).map(|method| method.map(UnitEnumMember::Method))
@@ -218,9 +222,13 @@ fn backed_member(
     let modifiers = modifiers::collect(state)?;
 
     if state.stream.current().kind == TokenKind::Const {
-        return constants::classish(state, modifiers::constant_group(modifiers)?)
-            .map(BackedEnumMember::Constant)
-            .map(Some);
+        return constants::classish(
+            state,
+            Some(enum_name),
+            modifiers::constant_group(modifiers)?,
+        )
+        .map(BackedEnumMember::Constant)
+        .map(Some);
     }
 
     method(state, modifiers, enum_name).map(|method| method.map(BackedEnumMember::Method))

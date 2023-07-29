@@ -128,7 +128,7 @@ pub fn constructor_parameter_list(
                 match &ty {
                     Some(ty) => {
                         if ty.includes_callable() || ty.is_bottom() {
-                            return Err(error::forbidden_type_used_in_property(
+                            return Err(error::forbidden_type_used_in_property_or_constant(
                                 state,
                                 class,
                                 &var,
