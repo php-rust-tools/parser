@@ -8,6 +8,7 @@ use crate::lexer::token::Span;
 use crate::node::Node;
 use crate::parser::ast::attributes::AttributeGroup;
 use crate::parser::ast::comments::CommentGroup;
+use crate::parser::ast::data_type::Type;
 use crate::parser::ast::identifiers::SimpleIdentifier;
 use crate::parser::ast::modifiers::ConstantModifierGroup;
 use crate::parser::ast::Expression;
@@ -63,12 +64,13 @@ impl Node for ConstantStatement {
 
 pub struct ClassishConstant {
     pub comments: CommentGroup,
-    pub attributes: Vec<AttributeGroup>,  // `#[Foo]`
-    pub modifiers: ConstantModifierGroup, // `public`
-    pub r#const: Span,                    // `const`
+    pub attributes: Vec<AttributeGroup>, // `#[Foo]`
     #[serde(flatten)]
-    pub entries: Vec<ConstantEntry>, // `FOO = 123`
-    pub semicolon: Span,                  // `;`
+    pub modifiers: ConstantModifierGroup, // `public`
+    pub r#const: Span,                   // `const`
+    pub r#type: Option<Type>,            // `string`
+    pub entries: Vec<ConstantEntry>,     // `FOO = 123`
+    pub semicolon: Span,                 // `;`
 }
 
 impl ClassishConstant {

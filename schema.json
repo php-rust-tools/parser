@@ -2707,17 +2707,12 @@
       }
     },
     "ClassishConstant": {
-      "type": [
-        "object",
-        "array"
-      ],
-      "items": {
-        "$ref": "#/definitions/ConstantEntry"
-      },
+      "type": "object",
       "required": [
         "attributes",
         "comments",
         "const",
+        "entries",
         "modifiers",
         "semicolon"
       ],
@@ -2734,11 +2729,30 @@
         "const": {
           "$ref": "#/definitions/Span"
         },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ConstantEntry"
+          }
+        },
         "modifiers": {
-          "$ref": "#/definitions/ConstantModifierGroup"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ConstantModifier"
+          }
         },
         "semicolon": {
           "$ref": "#/definitions/Span"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Type"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       }
     },
@@ -3712,20 +3726,6 @@
           }
         }
       ]
-    },
-    "ConstantModifierGroup": {
-      "type": "object",
-      "required": [
-        "modifiers"
-      ],
-      "properties": {
-        "modifiers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ConstantModifier"
-          }
-        }
-      }
     },
     "ConstantStatement": {
       "type": "object",

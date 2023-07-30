@@ -41,7 +41,7 @@ pub fn parse(
             match &ty {
                 Some(ty) => {
                     if ty.includes_callable() || ty.is_bottom() {
-                        let error = error::forbidden_type_used_in_property(
+                        let error = error::forbidden_type_used_in_property_or_constant(
                             state,
                             class_name,
                             &variable,
@@ -128,7 +128,7 @@ pub fn parse_var(
 
             if let Some(ty) = &ty {
                 if ty.includes_callable() || ty.is_bottom() {
-                    let error = error::forbidden_type_used_in_property(
+                    let error = error::forbidden_type_used_in_property_or_constant(
                         state,
                         class_name,
                         &variable,

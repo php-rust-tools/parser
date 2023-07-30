@@ -70,8 +70,12 @@ fn member(state: &mut State, interface_name: &SimpleIdentifier) -> ParseResult<I
     let modifiers = modifiers::collect(state)?;
 
     if state.stream.current().kind == TokenKind::Const {
-        constants::classish(state, modifiers::interface_constant_group(modifiers)?)
-            .map(InterfaceMember::Constant)
+        constants::classish(
+            state,
+            Some(interface_name),
+            modifiers::interface_constant_group(modifiers)?,
+        )
+        .map(InterfaceMember::Constant)
     } else {
         let method = method(
             state,
