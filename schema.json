@@ -145,7 +145,8 @@
       "required": [
         "attributes",
         "body",
-        "class"
+        "class",
+        "modifiers"
       ],
       "properties": {
         "attributes": {
@@ -179,6 +180,9 @@
               "type": "null"
             }
           ]
+        },
+        "modifiers": {
+          "$ref": "#/definitions/AnonymousClassModifierGroup"
         }
       }
     },
@@ -293,6 +297,42 @@
           }
         }
       ]
+    },
+    "AnonymousClassModifier": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "Readonly"
+              ]
+            },
+            "value": {
+              "$ref": "#/definitions/Span"
+            }
+          }
+        }
+      ]
+    },
+    "AnonymousClassModifierGroup": {
+      "type": "object",
+      "required": [
+        "modifiers"
+      ],
+      "properties": {
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnonymousClassModifier"
+          }
+        }
+      }
     },
     "Argument": {
       "oneOf": [

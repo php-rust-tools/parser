@@ -267,6 +267,30 @@ impl ClassModifierGroup {
     }
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[serde(tag = "type", content = "value")]
+pub enum AnonymousClassModifier {
+    Readonly(Span),
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
+#[repr(transparent)]
+pub struct AnonymousClassModifierGroup {
+    pub modifiers: Vec<AnonymousClassModifier>,
+}
+
+impl AnonymousClassModifierGroup {
+    pub fn is_empty(&self) -> bool {
+        self.modifiers.is_empty()
+    }
+
+    pub fn has_readonly(&self) -> bool {
+        self.modifiers
+            .iter()
+            .any(|modifier| matches!(modifier, AnonymousClassModifier::Readonly { .. }))
+    }
+}
+
 #[derive(Debug, Clone, Eq, PartialEq, Deserialize, Serialize, JsonSchema)]
 #[serde(tag = "type", content = "value")]
 pub enum ConstantModifier {

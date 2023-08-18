@@ -100,7 +100,7 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
     attributes::gather_attributes(state)?;
 
     let attributes = state.get_attributes();
-
+    let modifiers = modifiers::anonymous_class_group(modifiers::collect(state)?)?;
     let class = utils::skip(state, TokenKind::Class)?;
 
     let arguments = if state.stream.current().kind == TokenKind::LeftParen {
@@ -154,6 +154,7 @@ pub fn parse_anonymous(state: &mut State, span: Option<Span>) -> ParseResult<Exp
     Ok(Expression::New(NewExpression {
         target: Box::new(Expression::AnonymousClass(AnonymousClassExpression {
             class,
+            modifiers,
             extends,
             implements,
             attributes,
