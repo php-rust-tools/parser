@@ -724,7 +724,7 @@ expressions! {
         arrays::list_expression(state)
     })
 
-    #[before(throw), current(TokenKind::New), peek(TokenKind::Class | TokenKind::Attribute)]
+    #[before(throw), current(TokenKind::New), peek(TokenKind::Class | TokenKind::Attribute | TokenKind::Readonly)]
     anonymous_class({
         classes::parse_anonymous(state, None)
     })

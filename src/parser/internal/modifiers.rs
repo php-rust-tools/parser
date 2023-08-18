@@ -1,5 +1,7 @@
 use crate::lexer::token::Span;
 use crate::lexer::token::TokenKind;
+use crate::parser::ast::modifiers::AnonymousClassModifier;
+use crate::parser::ast::modifiers::AnonymousClassModifierGroup;
 use crate::parser::ast::modifiers::ClassModifier;
 use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::modifiers::ConstantModifier;
@@ -52,6 +54,24 @@ pub fn class_group(input: Vec<(Span, TokenKind)>) -> ParseResult<ClassModifierGr
         .collect::<ParseResult<Vec<ClassModifier>>>()?;
 
     Ok(ClassModifierGroup { modifiers })
+}
+
+#[inline(always)]
+pub fn anonymous_class_group(
+    input: Vec<(Span, TokenKind)>,
+) -> ParseResult<AnonymousClassModifierGroup> {
+    let modifiers = input
+        .iter()
+        .map(|(span, token)| match token {
+            TokenKind::Readonly => Ok(AnonymousClassModifier::Readonly(*span)),
+            _ => Err(error::modifier_cannot_be_used_for_anonymous_class(
+                token.to_string(),
+                *span,
+            )),
+        })
+        .collect::<ParseResult<Vec<AnonymousClassModifier>>>()?;
+
+    Ok(AnonymousClassModifierGroup { modifiers })
 }
 
 #[inline(always)]

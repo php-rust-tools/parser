@@ -13,6 +13,7 @@ use crate::parser::ast::functions::AbstractMethod;
 use crate::parser::ast::functions::ConcreteConstructor;
 use crate::parser::ast::functions::ConcreteMethod;
 use crate::parser::ast::identifiers::SimpleIdentifier;
+use crate::parser::ast::modifiers::AnonymousClassModifierGroup;
 use crate::parser::ast::modifiers::ClassModifierGroup;
 use crate::parser::ast::properties::Property;
 use crate::parser::ast::properties::VariableProperty;
@@ -113,11 +114,12 @@ impl Node for AnonymousClassBody {
 #[derive(Debug, PartialEq, Eq, Clone, Deserialize, Serialize, JsonSchema)]
 
 pub struct AnonymousClassExpression {
-    pub attributes: Vec<AttributeGroup>,     // `#[Qux]`
-    pub class: Span,                         // `class`
-    pub extends: Option<ClassExtends>,       // `extends Foo`
-    pub implements: Option<ClassImplements>, // `implements Baz, Baz`
-    pub body: AnonymousClassBody,            // `{ ... }`
+    pub attributes: Vec<AttributeGroup>,        // `#[Qux]`
+    pub modifiers: AnonymousClassModifierGroup, // `readonly`
+    pub class: Span,                            // `class`
+    pub extends: Option<ClassExtends>,          // `extends Foo`
+    pub implements: Option<ClassImplements>,    // `implements Baz, Baz`
+    pub body: AnonymousClassBody,               // `{ ... }`
 }
 
 impl Node for AnonymousClassExpression {

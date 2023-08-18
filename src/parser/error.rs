@@ -972,6 +972,19 @@ pub fn argument_is_required(span: Span, current_span: Span) -> ParseError {
     )
 }
 
+pub fn modifier_cannot_be_used_for_anonymous_class(
+    modifier: String,
+    modifier_span: Span,
+) -> ParseError {
+    ParseError::new(
+        "E052",
+        format!("cannot use '{}' as an anonymous class modifier", modifier),
+        modifier_span,
+    )
+    .error("try removing this", modifier_span.position, modifier.len())
+    .note("only `readonly` modifier can be used on anonymous classes")
+}
+
 impl From<SyntaxError> for ParseError {
     fn from(e: SyntaxError) -> Self {
         Self {
